@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+	maxBytesLocalHeap="1G">
+
+	<!-- Defines when to stop trying to calculate the size of the cache -->
+	<sizeOfPolicy maxDepth="1000" maxDepthExceededBehavior="abort" />
+
+	<defaultCache eternal="false" timeToIdleSeconds="3000" timeToLiveSeconds="6000" overflowToDisk="false"
+		statistics="false" />
+
+	<!-- EhCache Config for Pentaho Reports -->
+	<!-- Defines the caches used by libloader. This cache holds the raw binary data loaded via libloader. -->
+	<cache name="libloader-data" eternal="false" overflowToDisk="false" timeToIdleSeconds="600" timeToLiveSeconds="600"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="false"/>
+
+	<!-- Defines the caches used by libloader. This cache holds the raw binary bundle-file data loaded via libloader. -->
+	<cache name="libloader-bundles" eternal="false" overflowToDisk="false" timeToIdleSeconds="600" timeToLiveSeconds="600"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="false"/>
+
+	<!-- Defines a cache used by libloader. This cache holds the parsed object loaded via libloader. -->
+	<cache name="libloader-factory" eternal="false" overflowToDisk="false" timeToIdleSeconds="600" timeToLiveSeconds="600"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="false"/>
+
+	<!-- Defines a cache used by libloader. This cache holds the parsed object loaded via libloader. -->
+	<cache name="report-dataset-cache" eternal="false" overflowToDisk="false" timeToIdleSeconds="300"
+		timeToLiveSeconds="600" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="false"/>
+
+</ehcache>
