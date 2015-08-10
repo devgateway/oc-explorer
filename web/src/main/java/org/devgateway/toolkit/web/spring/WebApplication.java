@@ -1,6 +1,6 @@
 package org.devgateway.toolkit.web.spring;
 
-import org.devgateway.toolkit.web.rest.controller.DummyController;
+import org.devgateway.toolkit.web.Base;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.PropertySource;
 @SpringBootApplication
 @Import({ org.devgateway.toolkit.persistence.spring.PersistenceApplication.class })
 @PropertySource("classpath:/org/devgateway/toolkit/web/application.properties")
-@ComponentScan(basePackageClasses=DummyController.class)
+@ComponentScan(basePackageClasses=Base.class)
 public class WebApplication {
 	
     public static void main(String[] args) {
