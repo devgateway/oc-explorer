@@ -16,7 +16,8 @@
 	</properties>
 
 	<modules>
-		<module>persistence</module>		
+		<module>persistence</module>	
+		<module>web</module>	
 	</modules>
 
 
@@ -64,6 +65,15 @@
 		</repository>
 	</repositories>
 
+<dependencies>
+
+		<dependency>
+				<groupId>org.apache.derby</groupId>
+				<artifactId>derby</artifactId>
+				<version>${derby.version}</version>
+		</dependency>
+		
+</dependencies>
 
 	<build>
 		<plugins>

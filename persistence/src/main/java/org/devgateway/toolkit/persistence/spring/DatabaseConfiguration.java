@@ -30,7 +30,7 @@ import org.springframework.mock.jndi.SimpleNamingContextBuilder;
  */
 @Configuration
 @EnableJpaAuditing
-@PropertySource("classpath:/org/devgateway/toolkit/application.properties")
+@PropertySource("classpath:/org/devgateway/toolkit/persistence/application.properties")
 public class DatabaseConfiguration {
 	
 	protected static Logger logger = Logger.getLogger(DatabaseConfiguration.class);

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>web</artifactId>
+	<packaging>jar</packaging>
+
+	<name>Web</name>
+	<description>Web Module</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<start-class>org.devgateway.toolkit.web.spring.WebApplication</start-class>
+		<java.version>1.8</java.version>
+	</properties>
+
+<parent>
+    <groupId>org.devgateway.toolkit</groupId>
+    <artifactId>toolkit</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+ </parent>
+
+  <repositories>
+        <repository>
+            <id>CCRS Central</id>
+            <name>DG CCRS Central Repo</name>
+            <url>http://artifactory.ampdev.net/artifactory/ccrs/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+
+    </repositories>
+
+
+	<dependencies>	
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        
+    	<dependency>
+            <groupId>org.devgateway.toolkit</groupId>
+            <artifactId>persistence</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+         
+	</dependencies>
+
+	<build>
+	<resources>
+		<resource>
+			<filtering>true</filtering>
+			<directory>src/main/java</directory>
+			<includes>
+				<include>**/*.properties</include>
+				<include>**/*.sql</include>
+				<include>**/*.xml</include>
+			</includes>
+
+		</resource>
+
+		<resource>
+			<filtering>true</filtering>
+			<directory>src/main/resources</directory>
+			<includes>
+				<include>**/*.properties</include>
+				<include>**/*.sql</include>
+				<include>**/*.xml</include>
+			</includes>
+
+		</resource>
+	</resources>
+	
+	
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${spring.boot.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<!-- Import dependency management from Spring Boot without messing messing 
+					up the project parent -->
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring.boot.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+</project>
