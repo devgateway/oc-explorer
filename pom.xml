@@ -57,14 +57,25 @@
 
 	<repositories>
 		<repository>
-			<id>CCRS Central</id>
-			<name>DG CCRS Central Repo</name>
+			<id>DGToolkit</id>
+			<name>DGToolkit</name>
 			<url>http://artifactory.ampdev.net/artifactory/dg-toolkit/</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
 	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>DGToolkit</id>
+			<name>DGToolkit</name>
+			<url>http://artifactory.ampdev.net/artifactory/dg-toolkit/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 
 <dependencies>
 
