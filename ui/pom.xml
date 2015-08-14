@@ -46,7 +46,7 @@
                         </goals>
                         <!-- Optional configuration which provides for running any npm command -->
                         <configuration>
-                            <arguments>install</arguments>
+                            <arguments>install webpack</arguments>
                         </configuration>
                     </execution>
 
@@ -59,18 +59,19 @@
                             <arguments>run build</arguments>
                         </configuration>
                     </execution>
-                    
-         
 
-                    <execution>
-                        <id>grunt build</id>
-                        <goals>
-                            <goal>grunt</goal>
-                        </goals>
-                        <configuration>
-                            <arguments>--no-color</arguments>
-                        </configuration>
-                    </execution>
+					<execution>
+						<id>webpack build</id>
+						<goals>
+							<goal>webpack</goal>
+						</goals>
+				
+						<configuration>
+							<arguments>webpack-test/entry.js webpack-test/bundle.js</arguments>
+						</configuration>
+					</execution>
+                    
+
                 </executions>
             </plugin>
         </plugins>
