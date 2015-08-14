@@ -17,7 +17,8 @@
 
 	<modules>
 		<module>persistence</module>	
-		<module>web</module>	
+		<module>web</module>
+		<module>ui</module>				
 	</modules>
 
 
