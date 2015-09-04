@@ -13,6 +13,9 @@ module.exports = {
       { test: /\.less$/, loader: "style!css!less" }
     ]
   },
+  resolve: {
+    extensions: ['', '.js', '.es6', '.jsx']
+  },
   devtool: 'source-map',
   plugins: [
     new webpack.ProvidePlugin({
