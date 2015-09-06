@@ -1,21 +1,22 @@
-import React from "react";
+import React, {Component, PropTypes} from "react";
 require('./style.less');
 
-export default class Counter extends React.Component{
-  constructor(props){
-    super(props);
-    this.state = {
-      counter: 0
-    }
-  }
+export default class Counter extends Component{
   render(){
-    var {counter} = this.state;
+    var {value, actions} = this.props;
     return (
-      <p>
-        <i className="glyphicon glyphicon-minus"></i>&nbsp;
-        {counter}&nbsp;
-        <i className="glyphicon glyphicon-plus"></i>
+      <p className="example-counter">
+        <i className="glyphicon glyphicon-minus" onClick={e => actions.decCounter()}/>&nbsp;
+        {value}&nbsp;
+        <i className="glyphicon glyphicon-plus" onClick={e => actions.incCounter()}/>
       </p>
     )
   }
 }
+
+Counter.propTypes = {
+  actions: PropTypes.shape({
+    incCounter: PropTypes.func.isRequired,
+    decCounter: PropTypes.func.isRequired
+  }).isRequired
+};
