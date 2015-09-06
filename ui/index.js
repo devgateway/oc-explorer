@@ -122,7 +122,7 @@
 	            _react2["default"].createElement(
 	              "h1",
 	              null,
-	              "I'm just on example"
+	              "I'm just an example"
 	            ),
 	            _react2["default"].createElement(
 	              "p",
