@@ -31,5 +31,11 @@ Run webpack
 
     webpack --watch
 
-You can now start working, the bundle will be rebuilt automatically
+You can now open _dev.html_ in browser start working, the bundle will be rebuilt automatically.
+
+To get the project ready for production, run
+
+    webpack --config webpack.min.config.js
+
+That will minify and optimize the scripts, use _index.html_ for production.
 
