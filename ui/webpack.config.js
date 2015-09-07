@@ -1,25 +1,9 @@
+var config = require('./webpack.dev.config.js');
 var webpack = require('webpack');
-module.exports = {
-  entry: "./index.jsx",
-  output: {
-    path: './',
-    filename: "index.js"
-  },
-  module: {
-    loaders: [
-      { test: /\.(jsx|es6)$/, loaders:['babel'], exclude: /node_modules/ },
-      { test: /\.json$/, loader: 'json' },
-      { test: /\.css$/, exclude: /\.useable\.css$/, loader: "style!css" },
-      { test: /\.less$/, loader: "style!css!less" }
-    ]
-  },
-  resolve: {
-    extensions: ['', '.js', '.es6', '.jsx']
-  },
-  devtool: 'source-map',
-  plugins: [
-    new webpack.ProvidePlugin({
-      //fetch: 'imports?this=>global!exports?global.fetch!whatwg-fetch'
-    })
-  ]
-};
+config.entry = "./index.jsx";
+config.output.filename = "index.min.js";
+delete config.devtool;
+config.plugins.push(new webpack.optimize.UglifyJsPlugin());
+config.plugins.push(new webpack.optimize.DedupePlugin());
+
+module.exports = config;
