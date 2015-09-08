@@ -121,6 +121,10 @@ Modify _webpack.dev.config.js_ so that it uses the right loader for the extensio
         /do other stuff
     }
 
+#### Tests
+Put your test cases inside a *\__tests__*(two underscores before the word _test_ and two after) folder within
+ your module's folder.
+
 #### Components
 Put your components in the _components/_ folder. Nest parent/child components when it makes sense.
 
