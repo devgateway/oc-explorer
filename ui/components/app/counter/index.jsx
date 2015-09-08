@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from "react";
+import React, {PropTypes} from "react";
+import Component from "../../pure-render-component";
 require('./style.less');
 
 export default class Counter extends Component{

@@ -1,5 +1,6 @@
 import React from "react";
 import Counter from "./counter";
+import Component from "../pure-render-component";
 require('./style.less');
 
 export default class App extends React.Component{
