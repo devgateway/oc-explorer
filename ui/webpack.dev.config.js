@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+var path = require('path');
 module.exports = {
   entry: [
     'webpack-dev-server/client?http://localhost:3000',
@@ -6,7 +7,7 @@ module.exports = {
     './index.jsx'
   ],
   output: {
-    path: __dirname,
+    path: path.join(__dirname, 'output'),
     filename: "index.js"
   },
   module: {
