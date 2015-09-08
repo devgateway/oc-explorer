@@ -55,7 +55,15 @@ Because of the chaos brought up by iojs splitting up with node and then merging 
 Since we're using immutable data structures, we can reason about whether a component needs to be updated or not
 simply by comparing shallowly its previous set of props with current ones. To make use of that, either mix
 [PureRenderMixin](https://facebook.github.io/react/docs/pure-render-mixin.html) into your components, or subclass
-_components/pure-render-component.jsx_
+_components/pure-render-component_
+
+### Mixing non-react modules
+As it is known, there are no silver bullets, so sometime you might need to use third-party
+modules in your app. When that time comes, use _components/react-ignore_, which allows you
+to "hide" a part of your app's subtree from React and do some custom manipulations with it,
+like imperatively mutating the DOM. You can use \<ReactIgnore> inside your existing components
+as well as subclass it. In case of subclassing put your logic in the _componentDidMount_ method.
+
 
 ### Async modules
 It is often when a module must not be loaded unconditionally, but rather it must be loaded async under some logic,
