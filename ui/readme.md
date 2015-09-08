@@ -37,6 +37,10 @@ To get the project ready for production, run just
 
 That will minify and optimize the scripts, use _index.html_ for production.
 
+### Debugging
+Add the "debug" key to the local storage to get debug messages
+
+    localStorage.debug = "*"
 ### Tests
 Because of the chaos brought up by iojs splitting up with node and then merging back together, some of Jest's dependencies are
  incompatible with node 0.12. So, in order to run tests you'll need to either downgrade to
