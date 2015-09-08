@@ -4,7 +4,7 @@ In order to be able to work efficiently you should familiarize yourself with the
 
 1. EcmaScript6 aka ES6 aka JS2015 aka Harmony.
 The new version of JavaScript. Any valid JS is valid ES6, but ES6 brings to the table some new features
- so it won't hurt to [familiarize](http://es6-features.org/) yourself with it
+ so it won't hurt to [familiarize](http://es6-features.org/) yourself with it.
  _Note: some of these features(ex. constants) might require a polyfill in order to work in IE9._
  _For a quick and dirty solution try [Babel polyfill](https://babeljs.io/docs/usage/polyfill/)_
 2. [React](http://facebook.github.io/react/)
