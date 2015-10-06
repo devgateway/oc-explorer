@@ -42,12 +42,7 @@ Add the "debug" key to the local storage to get debug messages
 
     localStorage.debug = "*"
 ### Tests
-Because of the chaos brought up by iojs splitting up with node and then merging back together, some of Jest's dependencies are
- incompatible with node 0.12. So, in order to run tests you'll need to either downgrade to
- [Node 0.10](https://nodejs.org/en/blog/release/v0.10.36/) or use [nvm](https://github.com/creationix/nvm)
- or [nvmw(for windows)](https://github.com/hakobera/nvmw) to run the tests with 0.10 executable.
- That's a temporary solution until iojs and node merge back together.
- Once you're done with this issue, just run
+Run
 
     npm test
 
@@ -142,4 +137,3 @@ Put your actions in _flux/actions_. Don't forget to register the constant in _co
 the action creator in _index.es6_
 ##### Stores
 Put your stores in _flux/stores_. Don't forget to import and register them in _flux/index.es6_
-
