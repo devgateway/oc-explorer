@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<body>
+<wicket:extend>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <wicket:child/>
+
+			<br/><br/><br/>
+            <div wicket:id="htmlReportPanel"></div>
+        </div>
+    </div>
+    <br/><br/>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <a class="btn btn-info col-md-2 col-md-offset-1" wicket:id="pdfDownload">
+                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                PDF Download
+            </a>
+            <a class="btn btn-info col-md-2 col-md-offset-1" wicket:id="xlsDownload">
+                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                Excel Download
+            </a>
+            <a class="btn btn-info col-md-2 col-md-offset-1" wicket:id="rtfDownload">
+                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                Word Download
+            </a>
+        </div>
+    </div>
+    <br/><br/>
+</wicket:extend>
+</body>
+</html>
+
+   

@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2015 Development Gateway, Inc and others.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the MIT License (MIT)
+ * which accompanies this distribution, and is available at
+ * https://opensource.org/licenses/MIT
+ *
+ * Contributors:
+ * Development Gateway - initial API and implementation
+ *******************************************************************************/
 package org.devgateway.toolkit.persistence.dao;
 
 import java.io.Serializable;
@@ -195,9 +206,7 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
     public String toString() {
         return "[" + username + "," + firstName + "," + lastName + "," + email + "]";
     }
-	/* (non-Javadoc)
-	 * @see org.devgateway.ccrs.persistence.dao.AbstractAuditableEntity#getParent()
-	 */
+	
 	@Override
 	public AbstractAuditableEntity getParent() {
 		return null;

@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2015 Development Gateway, Inc and others.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the MIT License (MIT)
+ * which accompanies this distribution, and is available at
+ * https://opensource.org/licenses/MIT
+ *
+ * Contributors:
+ * Development Gateway - initial API and implementation
+ *******************************************************************************/
 package org.devgateway.toolkit.persistence.dao.categories;
 
 import java.io.Serializable;
@@ -54,17 +65,13 @@ public class Role extends GenericPersistable implements Serializable, Comparable
 	public int compareTo(Role o) {
 		return this.authority.compareTo(o.getAuthority());
  	}
-	/* (non-Javadoc)
-	 * @see org.devgateway.ccrs.persistence.dao.Labelable#setLabel(java.lang.String)
-	 */
+
 	@Override
 	public void setLabel(String label) {
 		setAuthority(label);
 		
 	}
-	/* (non-Javadoc)
-	 * @see org.devgateway.ccrs.persistence.dao.Labelable#getLabel()
-	 */
+
 	@Override
 	public String getLabel() {
 		return getAuthority();

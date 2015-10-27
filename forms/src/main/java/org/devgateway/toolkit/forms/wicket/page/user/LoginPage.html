@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+<meta charset="utf-8" />
+<title>LoginPage</title>
+</head>
+<body>
+	<wicket:extend>
+        <section class="padding50">
+            <div style="clear:both; height: 50px"></div>
+        </section>
+        <div class="row">
+            <div class="col-md-2 col-md-offset-5 well">
+                <form wicket:id="loginform">
+                    <div wicket:id="username"></div>
+                    <div wicket:id="password"></div>
+                    <div wicket:id="loginFeedback"></div>
+                    <input wicket:id="submit" type="submit" class="btn btn-primary btn-block"/>
+                    <br>                    
+                    <br>
+					<input name="_spring_security_remember_me" type="hidden" value="true"/>                       
+                </form>
+            </div>
+        </div>       
+	</wicket:extend>
+</body>
+</html>

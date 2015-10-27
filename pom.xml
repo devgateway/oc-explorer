@@ -1,3 +1,14 @@
+<!--
+    Copyright (c) 2015 Development Gateway, Inc and others.
+   
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the MIT License (MIT)
+    which accompanies this distribution, and is available at
+    https://opensource.org/licenses/MIT
+   
+    Contributors:
+    Development Gateway - initial API and implementation
+ -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.devgateway.toolkit</groupId>
@@ -10,17 +21,18 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
-		<liquibase.version>3.3.3</liquibase.version>
-		<spring.boot.version>1.2.5.RELEASE</spring.boot.version>
-		<derby.version>10.11.1.1</derby.version>
+		<liquibase.version>3.4.1</liquibase.version>
+		<spring.boot.version>1.2.7.RELEASE</spring.boot.version>
+		<derby.version>10.12.1.1</derby.version>		
+		<hibernate.core.version>4.3.11.Final</hibernate.core.version>
 	</properties>
 
 	<modules>
 		<module>persistence</module>	
 		<module>web</module>
-		<module>ui</module>				
+		<module>ui</module>		
+		<module>reporting</module>		
 	</modules>
-
 
 	<inceptionYear>2015</inceptionYear>
 	<organization>
@@ -44,13 +56,13 @@
 		<connection>git@github.com:devgateway/dg-toolkit.git
         </connection>
 	  <tag>HEAD</tag>
-  </scm>
+  	</scm>
 
 
 	<distributionManagement>
 		<repository>
-			<id>ccrs-releases</id>
-			<name>ccrs-releases</name>
+			<id>dgtoolkit-releases</id>
+			<name>dgtoolkit-releases</name>
 			<url>http://artifactory.ampdev.net/artifactory/dg-toolkit-releases</url>
 		</repository>
 	</distributionManagement>
