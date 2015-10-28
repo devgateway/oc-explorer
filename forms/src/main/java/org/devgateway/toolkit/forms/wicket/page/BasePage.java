@@ -18,6 +18,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -25,16 +26,18 @@ import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.GenericWebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.markup.html.pages.RedirectPage;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.resource.JQueryResourceReference;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.security.SecurityUtil;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListGroupPage;
-import org.devgateway.toolkit.forms.wicket.page.lists.ListTestComponentsPage;
+import org.devgateway.toolkit.forms.wicket.page.lists.ListTestFormPage;
 import org.devgateway.toolkit.forms.wicket.page.user.EditUserPage;
 import org.devgateway.toolkit.forms.wicket.page.user.LogoutPage;
 import org.devgateway.toolkit.forms.wicket.styles.MainCss;
@@ -44,6 +47,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.dropdown.MenuBook
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.html.HtmlTag;
 import de.agilecoders.wicket.core.markup.html.bootstrap.image.GlyphIconType;
+import de.agilecoders.wicket.core.markup.html.bootstrap.image.IconType;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarComponents;
@@ -70,6 +74,17 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
 
 	private Navbar navbar;
+	
+	
+	public static class HALRedirectPage extends RedirectPage {
+		private static final long serialVersionUID = -750983217518258464L;
+		
+		public HALRedirectPage() {
+			super(WebApplication.get().getServletContext().getContextPath()+"/api/browser/");
+		}
+
+	}
+	
 
     /**
      * Construct.
@@ -154,9 +169,24 @@ public abstract class BasePage extends GenericWebPage<Void> {
 						new StringResourceModel("navbar.groups", this, null))
 								.setIconType(FontAwesomeIconType.tags));
 				
-				list.add(new MenuBookmarkablePageLink<ListTestComponentsPage>(ListTestComponentsPage.class, null,
+				list.add(new MenuBookmarkablePageLink<ListTestFormPage>(ListTestFormPage.class, null,
 						new StringResourceModel("navbar.testcomponents", this, null))
 								.setIconType(FontAwesomeIconType.android));
+				
+				MenuBookmarkablePageLink<HALRedirectPage> halBrowserLink = new MenuBookmarkablePageLink<HALRedirectPage>(
+						HALRedirectPage.class, null, new StringResourceModel(
+								"navbar.halbrowser", this, null)) {
+									private static final long serialVersionUID = 1L;
+
+									@Override 
+						            protected void onComponentTag(ComponentTag tag) { 
+						                super.onComponentTag(tag); 
+						                tag.put("target", "_blank"); 
+						            } 
+						        };
+			    halBrowserLink.setIconType(FontAwesomeIconType.rss).setEnabled(true);
+				
+				list.add(halBrowserLink);
 
 				return list;
 			}

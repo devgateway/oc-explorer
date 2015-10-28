@@ -12,7 +12,7 @@
 package org.devgateway.toolkit.persistence.repository;
 
 
-import org.devgateway.toolkit.persistence.dao.TestComponents;
+import org.devgateway.toolkit.persistence.dao.TestForm;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
  *
  */
 @Transactional
-public interface TestComponentsRepository extends JpaRepository<TestComponents, Long>{
+public interface TestFormRepository extends JpaRepository<TestForm, Long>{
 
 }
