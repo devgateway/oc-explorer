@@ -29,6 +29,8 @@ import org.hibernate.envers.Audited;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @Audited
@@ -43,12 +45,17 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
     private String firstName;
     private String lastName;
     private String email;
+    
+    @JsonIgnore
     private String password;
+    
     private String country;
     private String title;
     //flag if user is first time logged
     private Boolean changePassword = true;
     private Boolean enabled= true;
+    
+    @JsonIgnore
     private String secret;
 
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) @ManyToOne(fetch=FetchType.EAGER)
@@ -58,13 +65,16 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
     private Collection<? extends GrantedAuthority> authorities;
 
     @Transient
+    @JsonIgnore
     private String plainPassword;
 
     @Transient
+    @JsonIgnore
     private String plainPasswordCheck;
 
     //flag if user want to change password
     @Transient
+    @JsonIgnore
     private boolean changePass;
 
     @ManyToMany

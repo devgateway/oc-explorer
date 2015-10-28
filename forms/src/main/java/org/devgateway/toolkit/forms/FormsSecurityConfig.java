@@ -25,8 +25,8 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
-import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 
 @Configuration
 @EnableWebSecurity
@@ -60,7 +60,7 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 	 * This bean defines the same key in the {@link RememberMeAuthenticationProvider}
 	 * @return
 	 */
-	@Bean()
+	@Bean
 	public AuthenticationProvider rememberMeAuthenticationProvider() {
 		return new RememberMeAuthenticationProvider(UNIQUE_SECRET_REMEMBER_ME_KEY);
 	}
@@ -69,8 +69,8 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 	 * This bean configures the {@link TokenBasedRememberMeServices} with {@link CustomJPAUserDetailsService}
 	 * @return
 	 */
-	@Bean()
-	public TokenBasedRememberMeServices rememberMeServices() {
+	@Bean
+	public AbstractRememberMeServices rememberMeServices() {
 		TokenBasedRememberMeServices rememberMeServices = new TokenBasedRememberMeServices(
 				UNIQUE_SECRET_REMEMBER_ME_KEY, customJPAUserDetailsService);
 		rememberMeServices.setAlwaysRemember(true);
@@ -84,14 +84,13 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 				.sessionCreationPolicy(SessionCreationPolicy.NEVER).and().csrf().disable();
 		
 		//we enable http rememberMe cookie for autologin
-		http.rememberMe().key(UNIQUE_SECRET_REMEMBER_ME_KEY);
+		//http.rememberMe().key(UNIQUE_SECRET_REMEMBER_ME_KEY);
 
-		// resolved the error Refused to display * in a frame because it set 'X-Frame-Options' to 'DENY'.
-		http.headers()
-				.contentTypeOptions()
-				.xssProtection()
-				.cacheControl()
-				.httpStrictTransportSecurity()
-				.addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN));
+		// resolved the error Refused to display * in a frame because it set
+		// 'X-Frame-Options' to 'DENY'.
+		http.headers().contentTypeOptions().and().xssProtection().and().cacheControl().and()
+				.httpStrictTransportSecurity().and().frameOptions().sameOrigin();
+
+		//addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN));
 	}
 }

@@ -26,14 +26,14 @@ import org.devgateway.toolkit.forms.wicket.components.form.Select2MultiChoiceBoo
 import org.devgateway.toolkit.forms.wicket.components.form.TextAreaFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
-import org.devgateway.toolkit.forms.wicket.page.lists.ListTestComponentsPage;
+import org.devgateway.toolkit.forms.wicket.page.lists.ListTestFormPage;
 import org.devgateway.toolkit.forms.wicket.providers.GenericPersistableJpaRepositoryTextChoiceProvider;
-import org.devgateway.toolkit.persistence.dao.TestComponents;
+import org.devgateway.toolkit.persistence.dao.TestForm;
 import org.devgateway.toolkit.persistence.dao.categories.Group;
 import org.devgateway.toolkit.persistence.dao.categories.Role;
 import org.devgateway.toolkit.persistence.repository.GroupRepository;
 import org.devgateway.toolkit.persistence.repository.RoleRepository;
-import org.devgateway.toolkit.persistence.repository.TestComponentsRepository;
+import org.devgateway.toolkit.persistence.repository.TestFormRepository;
 import org.wicketstuff.annotation.mount.MountPath;
 
 /**
@@ -42,13 +42,13 @@ import org.wicketstuff.annotation.mount.MountPath;
  */
 
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_EDITOR)
-@MountPath("/testComponents")
-public class EditTestComponentsPage extends AbstractEditPage<TestComponents> {
+@MountPath("/editTestForm")
+public class EditTestFormPage extends AbstractEditPage<TestForm> {
 
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	private TestComponentsRepository testComponentsRepository;
+	private TestFormRepository testComponentsRepository;
 
 	@SpringBean
 	private RoleRepository roleRepository;
@@ -59,16 +59,16 @@ public class EditTestComponentsPage extends AbstractEditPage<TestComponents> {
 	/**
 	 * @param parameters
 	 */
-	public EditTestComponentsPage(PageParameters parameters) {
+	public EditTestFormPage(PageParameters parameters) {
 		super(parameters);
 
 		this.jpaRepository = testComponentsRepository;
-		this.listPageClass = ListTestComponentsPage.class;
+		this.listPageClass = ListTestFormPage.class;
 	}
 
 	@Override
-	protected TestComponents newInstance() {
-		return new TestComponents();
+	protected TestForm newInstance() {
+		return new TestForm();
 	}
 
 	@Override

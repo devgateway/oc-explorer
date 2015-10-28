@@ -50,7 +50,7 @@ public class SSAuthenticatedWebSession extends AuthenticatedWebSession {
 	private AuthenticationException ae;
 
 
-    @SpringBean
+    @SpringBean(required=false)
     private RememberMeServices rememberMeServices;
 
 
@@ -102,7 +102,7 @@ public class SSAuthenticatedWebSession extends AuthenticatedWebSession {
         			SecurityContextHolder.getContext());
             authenticated = authentication.isAuthenticated();
    
-            if(authenticated) rememberMeServices.loginSuccess(
+            if(authenticated && rememberMeServices!=null) rememberMeServices.loginSuccess(
             		(HttpServletRequest)RequestCycle.get().getRequest().getContainerRequest(), (HttpServletResponse)
             		RequestCycle.get().getResponse().getContainerResponse(), authentication);
             

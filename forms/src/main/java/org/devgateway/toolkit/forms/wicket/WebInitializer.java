@@ -40,8 +40,8 @@ public class WebInitializer implements ServletContextInitializer {
 	public void onStartup(ServletContext sc) throws ServletException {
 
 // AUTO configured by spring boot 1.2.x and upper
-		sc.addFilter(AbstractSecurityWebApplicationInitializer.DEFAULT_FILTER_NAME, new DelegatingFilterProxy("springSecurityFilterChain"))
-				.addMappingForUrlPatterns(null, false, "/*");
+//		sc.addFilter(AbstractSecurityWebApplicationInitializer.DEFAULT_FILTER_NAME, new DelegatingFilterProxy("springSecurityFilterChain"))
+//				.addMappingForUrlPatterns(null, false, "/*");
 
 		sc.addFilter("Spring OpenEntityManagerInViewFilter",
 				org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter.class).addMappingForUrlPatterns(null,

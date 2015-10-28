@@ -40,7 +40,7 @@ import org.hibernate.envers.Audited;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @Audited
-public class TestComponents extends AbstractAuditableEntity implements Serializable {
+public class TestForm extends AbstractAuditableEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -66,7 +66,7 @@ public class TestComponents extends AbstractAuditableEntity implements Serializa
 	private Set<FileMetadata> fileInput;
 
 
-	public TestComponents() {
+	public TestForm() {
 		// TODO Auto-generated constructor stub
 	}
 

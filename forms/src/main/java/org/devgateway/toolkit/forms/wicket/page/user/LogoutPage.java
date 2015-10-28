@@ -20,9 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.wicket.markup.html.pages.RedirectPage;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
+import org.springframework.security.web.authentication.RememberMeServices;
 import org.wicketstuff.annotation.mount.MountPath;
 
 /**
@@ -33,16 +31,15 @@ import org.wicketstuff.annotation.mount.MountPath;
 public class LogoutPage extends RedirectPage {
 	private static final long serialVersionUID = 1L;
 
-    @SpringBean
-    private AbstractRememberMeServices rememberMeServices;
-	
+	@SpringBean(required = false)
+	private RememberMeServices rememberMeServices;
+
 	public LogoutPage() {
 		super("/logout");
-		
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		
-		//we remove any remember-me cookies, we logged out so we dont want to get back in automagically
-		rememberMeServices.logout((HttpServletRequest)RequestCycle.get().getRequest().getContainerRequest(),
-				(HttpServletResponse) RequestCycle.get().getResponse().getContainerResponse(), authentication);
+
+		if (rememberMeServices != null)
+			rememberMeServices.loginFail((HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest(),
+					(HttpServletResponse) RequestCycle.get().getResponse().getContainerResponse());
+
 	}
 }

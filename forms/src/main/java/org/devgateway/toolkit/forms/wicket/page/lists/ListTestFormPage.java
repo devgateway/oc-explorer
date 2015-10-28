@@ -15,23 +15,23 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
-import org.devgateway.toolkit.forms.wicket.page.EditTestComponentsPage;
-import org.devgateway.toolkit.persistence.dao.TestComponents;
-import org.devgateway.toolkit.persistence.repository.TestComponentsRepository;
+import org.devgateway.toolkit.forms.wicket.page.EditTestFormPage;
+import org.devgateway.toolkit.persistence.dao.TestForm;
+import org.devgateway.toolkit.persistence.repository.TestFormRepository;
 import org.wicketstuff.annotation.mount.MountPath;
 
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_ADMIN)
-@MountPath(value = "/listTestComponents")
-public class ListTestComponentsPage extends AbstractListPage<TestComponents> {
+@MountPath(value = "/listTestForm")
+public class ListTestFormPage extends AbstractListPage<TestForm> {
 
 	private static final long serialVersionUID = -324298525712620234L;
 	@SpringBean
-	protected TestComponentsRepository testComponentsRepository;
+	protected TestFormRepository testComponentsRepository;
 
-	public ListTestComponentsPage(PageParameters pageParameters) {
+	public ListTestFormPage(PageParameters pageParameters) {
 		super(pageParameters);
 		this.jpaRepository = testComponentsRepository;
-		this.editPageClass = EditTestComponentsPage.class;
+		this.editPageClass = EditTestFormPage.class;
 	}
 
 }
