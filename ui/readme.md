@@ -143,3 +143,19 @@ Put your actions in _flux/actions_. Don't forget to register the constant in _co
 the action creator in _index.es6_
 ##### Stores
 Put your stores in _flux/stores_. Don't forget to import and register them in _flux/index.es6_
+
+##Troubleshooting
+If running
+
+    npm start
+
+gives you an error, and/or you had an _optional dependency failed_ error during Maven build, install Python 2 and a C++
+compiler on your system then run Maven again. For more information
+refer to [node-gyp readme](https://github.com/nodejs/node-gyp)
+
+### Workaround
+In case you don't want to/cannot install Python 2 and/or the C++ compiler, run
+
+    webpack --config webpack.dev.config.js --watch
+
+inside the _/ui/_ directory, then open _dev.html_ file.
