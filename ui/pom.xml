@@ -1,67 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ui</artifactId>
-    <packaging>jar</packaging>
+	<artifactId>ui</artifactId>
+	<packaging>war</packaging>
 
-    <name>UI</name>
-    <description>UI Module</description>
+	<name>UI</name>
+	<description>UI Module</description>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.8</java.version>
-    </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<start-class>org.devgateway.toolkit.ui.UIWebApplication</start-class>
+	</properties>
 
-    <parent>
-        <groupId>org.devgateway.toolkit</groupId>
-        <artifactId>toolkit</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
-    </parent>
+	<parent>
+		<groupId>org.devgateway.toolkit</groupId>
+		<artifactId>toolkit</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+
+		<resources>
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.properties</include>
+				</includes>
+			</resource>
+			<resource>
+				<filtering>true</filtering>
+				<directory>${project.basedir}</directory>
+				<includes>
+					<include>output/**</include>
+					<include>**/*.html</include>
+				</includes>
+				<excludes>
+					<exclude>node/**</exclude>
+					<exclude>node_modules/**</exclude>
+					<exclude>node</exclude>
+				</excludes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>0.0.26</version>
+
+				<executions>
+					<execution>
+						<id>install node and npm</id>
+						<goals>
+							<goal>install-node-and-npm</goal>
+						</goals>
+						<phase>generate-resources</phase>
+						<configuration>
+							<nodeVersion>v4.2.1</nodeVersion>
+							<npmVersion>2.14.9</npmVersion>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>npm install</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<!-- Optional configuration which provides for running any npm command -->
+						<configuration>
+							<arguments>install</arguments>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>npm run build</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<phase>generate-resources</phase>
+						<configuration>
+							<arguments>run build</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.github.eirslett</groupId>
-                <artifactId>frontend-maven-plugin</artifactId>
-                <version>0.0.26</version>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+		</plugins>
 
-                <executions>
-                    <execution>
-                        <id>install node and npm</id>
-                        <goals>
-                            <goal>install-node-and-npm</goal>
-                        </goals>
-                        <configuration>
-                            <nodeVersion>v4.2.1</nodeVersion>
-                            <npmVersion>2.14.9</npmVersion>
-                        </configuration>
-                    </execution>
+	</build>
 
-                    <execution>
-                        <id>npm install</id>
-                        <goals>
-                            <goal>npm</goal>
-                        </goals>
-                        <!-- Optional configuration which provides for running any npm command -->
-                        <configuration>
-                            <arguments>install</arguments>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>npm run build</id>
-                        <goals>
-                            <goal>npm</goal>
-                        </goals>
-                        <configuration>
-                            <arguments>run build</arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<!-- Import dependency management from Spring Boot without messing messing up the project parent -->
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring.boot.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 </project>
