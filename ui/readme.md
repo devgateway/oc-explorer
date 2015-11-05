@@ -20,9 +20,10 @@ and [polyfills](http://mts.io/2015/04/08/webpack-shims-polyfills/)
 ## Usage
 Get Node.js
 
-Install webpack globally
+Install webpack and gulp globally
 
     npm install -g webpack
+    npm install -g gulp
 
 Install module's dependencies
 
