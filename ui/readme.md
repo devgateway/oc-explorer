@@ -20,6 +20,10 @@ and [polyfills](http://mts.io/2015/04/08/webpack-shims-polyfills/)
 ## Usage
 Get Node.js
 
+Install webpack globally
+
+    npm install -g webpack
+
 Install module's dependencies
 
     npm install
