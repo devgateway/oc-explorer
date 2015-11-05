@@ -56,7 +56,14 @@
         </dependency>
 
 
-
+		<!--
+		Uncomment this if you are planning to use Spring Boot DevTools (if you don't use JRebel)
+		 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>	
+		</dependency>
+		 -->
                
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
