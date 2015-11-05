@@ -20,10 +20,6 @@ and [polyfills](http://mts.io/2015/04/08/webpack-shims-polyfills/)
 ## Usage
 Get Node.js
 
-Install webpack globally
-
-    npm install -g webpack
-
 Install module's dependencies
 
     npm install
@@ -35,9 +31,9 @@ Run
 Navigate to _http://localhost:3000/dev.html_ The browser will be automatically updated
  whenever you save some changes.
 
-To get the project ready for production, run just
+To get the project ready for production, run
 
-    webpack
+    npm run build
 
 That will minify and optimize the scripts, use _index.html_ for production.
 
