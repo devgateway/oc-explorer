@@ -25,8 +25,12 @@
       "react"
     ]
   },
-  "author": "",
-  "license": "inherit",
+  "author": "Development Gateway",
+  "license": "MIT",
+  "repository": {
+  	"type": "git",
+  	"url": "git://github.com/devgateway/dg-toolkit.git"
+},
   "dependencies": {
     "bootstrap": "^3.3.5"
   },
