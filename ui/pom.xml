@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>ui</artifactId>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<name>UI</name>
 	<description>UI Module</description>
@@ -42,15 +42,33 @@
 				<filtering>true</filtering>
 				<directory>${project.basedir}</directory>
 				<includes>
-					<include>output/**</include>
+					<include>public/**</include>
 				</includes>
 				<excludes>
-					<exclude>output/index.js</exclude>
-					<exclude>output/index.js.map</exclude>
+					<exclude>public/index.js</exclude>
+					<exclude>public/index.js.map</exclude>
 				</excludes>
 			</resource>
 		</resources>
 		<plugins>
+
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.6.1</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>public</directory>
+							<includes>
+								<include>**/*</include>								
+							</includes>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+			
+		
 			<plugin>
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
@@ -90,18 +108,34 @@
 							<arguments>run build</arguments>
 						</configuration>
 					</execution>
+				
+					<execution>
+						<id>gulp build</id>
+						<goals>
+							<goal>gulp</goal>
+						</goals>
+				
+						<!-- optional: the default phase is "generate-resources" -->
+						<phase>generate-resources</phase>				
+					</execution>
+					
 				</executions>
 			</plugin>
 
-
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.6</version>
-				<configuration>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
-				</configuration>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${spring.boot.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<!-- This will ensure a fat jar is created, will include all jar dependencies inside a /lib folder within this jar -->
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
+
 		</plugins>
 
 	</build>
