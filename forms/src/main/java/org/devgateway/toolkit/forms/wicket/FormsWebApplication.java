@@ -34,7 +34,6 @@ import org.devgateway.toolkit.forms.wicket.converters.NonNumericFilteredBigDecim
 import org.devgateway.toolkit.forms.wicket.page.BasePage;
 import org.devgateway.toolkit.forms.wicket.page.Homepage;
 import org.devgateway.toolkit.forms.wicket.page.user.LoginPage;
-import org.devgateway.toolkit.forms.wicket.styles.EmptyCss;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -111,16 +110,18 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
 	/**
 	 * configures wicket-bootstrap and installs the settings.
 	 */
-	private void configureBootstrap() {
+	private void configureBootstrap() {		
+		WicketWebjars.install(this);
+
 		final IBootstrapSettings settings = new BootstrapSettings();
 		// specify an empty bootstrap css resource so that we can have more
 		// control when do we load the bootstrap styles.
 		// By default all pages will load bootstrap.css file and there are
 		// situations (like print page) when we don't need this styles.
 		// The boostrap.css file is loaded as dependency in MainCss Instance
-		settings.setCssResourceReference(EmptyCss.INSTANCE);
-
-		WicketWebjars.install(this);
+		//settings.setCssResourceReference(EmptyCss.INSTANCE);
+		
+		settings.useCdnResources(true);
 
 		// use the default bootstrap theme
 		Bootstrap.install(this, settings);

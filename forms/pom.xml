@@ -15,7 +15,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>forms</artifactId>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <name>forms</name>
     <description>DGToolkit Forms</description>
@@ -62,7 +62,16 @@
 			<artifactId>web</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-
+		
+		<!--
+		Uncomment this if you are planning to use Spring Boot DevTools (if you don't use JRebel)
+		 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>	
+		</dependency>
+		 -->
+	
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-integration</artifactId>
@@ -116,7 +125,18 @@
 			<artifactId>cglib</artifactId>
 			<version>3.1</version>
 		</dependency>
-        
+
+		<dependency>
+			<groupId>de.agilecoders.wicket.webjars</groupId>
+			<artifactId>wicket-webjars</artifactId>
+			<version>0.4.8</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>bootstrap</artifactId>
+			<version>3.3.2</version>
+		</dependency>
 
         <dependency>
             <groupId>org.apache.wicket</groupId>
@@ -273,26 +293,19 @@
 
         <plugins>
 
-            <plugin>
-                <artifactId>maven-war-plugin</artifactId>
-                <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring.boot.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${spring.boot.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<!-- This will ensure a fat jar is created, will include all jar dependencies inside a /lib folder within this jar -->
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
