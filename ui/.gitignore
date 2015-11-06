@@ -9,4 +9,4 @@
 /node_modules/
 npm-debug.log
 /webpack-test/bundle.js
-/output/
+/public/
