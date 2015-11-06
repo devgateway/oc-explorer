@@ -109,16 +109,17 @@
 						</configuration>
 					</execution>
 				
+				<!-- 
+				This is not needed as npm invokes gulp. 
+				Uncomment if you plan to run gulp separately for some reason
 					<execution>
 						<id>gulp build</id>
 						<goals>
 							<goal>gulp</goal>
-						</goals>
-				
-						<!-- optional: the default phase is "generate-resources" -->
+						</goals>				
 						<phase>generate-resources</phase>				
-					</execution>
-					
+					</execution>					
+				-->
 				</executions>
 			</plugin>
 
