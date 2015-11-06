@@ -15,9 +15,9 @@ gulp.task("webpack", function(cb){
 });
 
 gulp.task("copy-deps", function(){
-  gulp.src(gnf(), {base:'./'}).pipe(gulp.dest('./output'));
+  gulp.src(gnf(), {base:'./'}).pipe(gulp.dest('./public'));
 });
 
 gulp.task("copy-html", function(){
-  gulp.src("index.html").pipe(gulp.dest('output/'));
+  gulp.src("index.html").pipe(gulp.dest('public/'));
 });
