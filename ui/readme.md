@@ -33,9 +33,9 @@ Navigate to _http://localhost:3000/dev.html_ The browser will be automatically u
 
 To get the project ready for production, run
 
-    npm run build
+    maven package
 
-That will minify and optimize the scripts, use _index.html_ for production.
+That will minify the script as well as package all production deps(and not the dev deps)
 
 ### Debugging
 Add the "debug" key to the local storage to get debug messages

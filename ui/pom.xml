@@ -43,12 +43,10 @@
 				<directory>${project.basedir}</directory>
 				<includes>
 					<include>output/**</include>
-					<include>**/*.html</include>
 				</includes>
 				<excludes>
-					<exclude>node/**</exclude>
-					<exclude>node_modules/**</exclude>
-					<exclude>node</exclude>
+					<exclude>output/index.js</exclude>
+					<exclude>output/index.js.map</exclude>
 				</excludes>
 			</resource>
 		</resources>

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "jest",
-    "build": "webpack"
+    "build": "gulp"
   },
   "jest": {
     "scriptPreprocessor": "./node_modules/babel-jest",
