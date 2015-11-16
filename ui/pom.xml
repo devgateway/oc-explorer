@@ -82,7 +82,7 @@
 						</goals>
 						<phase>generate-resources</phase>
 						<configuration>
-							<nodeVersion>v4.2.1</nodeVersion>
+							<nodeVersion>v4.2.2</nodeVersion>
 							<npmVersion>2.14.9</npmVersion>
 						</configuration>
 					</execution>
