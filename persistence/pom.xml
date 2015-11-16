@@ -17,7 +17,7 @@
 	<artifactId>persistence</artifactId>
 	<packaging>jar</packaging>
 
-	<name>persistence</name>
+	<name>JPA Persistence</name>
 	<description>DGToolkit Persistence</description>
 
 	<properties>
