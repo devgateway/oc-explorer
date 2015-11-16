@@ -40,6 +40,13 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
+
+        <dependency>
+            <groupId>org.devgateway.toolkit</groupId>
+            <artifactId>ui</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
 		<dependency>
 			<groupId>org.devgateway.toolkit</groupId>
 			<artifactId>reporting</artifactId>
