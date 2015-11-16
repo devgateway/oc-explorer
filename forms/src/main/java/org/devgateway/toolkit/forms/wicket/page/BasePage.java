@@ -85,6 +85,16 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
 	}
 	
+	public static class UIRedirectPage extends RedirectPage {
+		private static final long serialVersionUID = -750983217518258464L;
+		
+		public UIRedirectPage() {
+			super(WebApplication.get().getServletContext().getContextPath()+"/ui/index.html");
+		}
+
+	}
+	
+	
 
     /**
      * Construct.
@@ -187,6 +197,22 @@ public abstract class BasePage extends GenericWebPage<Void> {
 			    halBrowserLink.setIconType(FontAwesomeIconType.rss).setEnabled(true);
 				
 				list.add(halBrowserLink);
+				
+				MenuBookmarkablePageLink<UIRedirectPage> uiBrowserLink = new MenuBookmarkablePageLink<UIRedirectPage>(
+						UIRedirectPage.class, null, new StringResourceModel(
+								"navbar.ui", this, null)) {
+									private static final long serialVersionUID = 1L;
+
+									@Override 
+						            protected void onComponentTag(ComponentTag tag) { 
+						                super.onComponentTag(tag); 
+						                tag.put("target", "_blank"); 
+						            } 
+						        };
+		        uiBrowserLink.setIconType(FontAwesomeIconType.rocket).setEnabled(true);
+				
+				list.add(uiBrowserLink);
+
 
 				return list;
 			}
