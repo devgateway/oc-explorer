@@ -17,7 +17,7 @@
     <artifactId>forms</artifactId>
     <packaging>jar</packaging>
 
-    <name>forms</name>
+    <name>Wicket Forms</name>
     <description>DGToolkit Forms</description>
 
 	<parent>
