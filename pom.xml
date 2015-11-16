@@ -32,6 +32,7 @@
 		<module>web</module>
 		<module>ui</module>		
 		<module>reporting</module>		
+		<module>forms</module>
 	</modules>
 
 	<inceptionYear>2015</inceptionYear>
