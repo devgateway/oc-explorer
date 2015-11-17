@@ -159,3 +159,29 @@ In case you don't want to/cannot install Python 2 and/or the C++ compiler, run
     webpack --config webpack.dev.config.js --watch
 
 inside the _/ui/_ directory, then open _dev.html_ file.
+
+## Backend Devs
+
+### Building the UI module through Maven
+
+If you are a back-end dev you don't need node installed to be able to deploy and run the UI module.
+
+To build the module simply invoke
+
+`mvn install`
+
+This will create a fat jar project, and copy all front-end dependencies inside the jar, so you don't need dependency discovery on the front-end when the module starts up. We use the great [frontend-maven-plugin](https://github.com/eirslett/frontend-maven-plugin) to encapsulate node related tools functionality.
+
+### Running the UI module as a Spring Boot fat jar
+
+As with any other module in dg-toolkit this can be run as a java app:
+
+`java -jar target/ui-0.0.1-SNAPSHOT.jar`
+
+This will also start a tomcat server, you can view the index page using the path `/ui/index.html`
+
+### Instead of conclusion
+
+This module is special, we have done some research and strived to make out the best of both worlds, in terms of development experience (front-end and back-end). Front-end devs can run this using node (`npm start`) and simply ignore the java part while back-end devs can run this directly using spring boot or include this UI module as a Maven dependency within other spring boot project (for example the forms module here has this ui module as maven dependency).
+
+Therefore, during development, back-end devs don't need node installed and front-end devs don't need Java. Magic :)
