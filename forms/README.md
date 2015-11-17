@@ -54,7 +54,7 @@ This module is packaged as a fat jar. For testing purposes, the default configur
 
  If dependencies are included, the related module will be started along with all its services. Please note it is not required to have the Forms module as the entry point, you can exclude forms+reports completely and just use dg-toolit with for example web, persistence  and ui.
 
- ##  Running
+## Running
 
  You can run the forms module just as any module of dg-toolkit:
 
