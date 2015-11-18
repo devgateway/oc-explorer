@@ -40,6 +40,11 @@ public final class SecurityUtil {
 		return null;
 	}
 
+	/**
+	 * Returns true if the user has ROLE_ADMIN
+	 * @param p
+	 * @return
+	 */
 	public static boolean isUserAdmin(Person p) {
 		if (p == null || p.getRoles() == null)
 			return false;

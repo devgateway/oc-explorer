@@ -122,6 +122,12 @@ public class SSAuthenticatedWebSession extends AuthenticatedWebSession {
         return roles;
     }
 
+    /**
+     * Gets the Spring roles and dumps them into Wicket's {@link Roles} object, only if the user is signed in
+     * @see {@link #isSignedIn()} 
+     * @see #addRolesFromAuthentication(Roles, Authentication)
+     * @param roles
+     */
     private void getRolesIfSignedIn(Roles roles) {
         if (isSignedIn()) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();                        
@@ -129,6 +135,11 @@ public class SSAuthenticatedWebSession extends AuthenticatedWebSession {
         }
     }
 
+    /**
+     * Trivial iteration of {@link Authentication#getAuthorities()} and adding roles to Wicket {@link Roles} object
+     * @param roles
+     * @param authentication
+     */
     private void addRolesFromAuthentication(Roles roles, Authentication authentication) {
         for (GrantedAuthority authority : authentication.getAuthorities()) {
             roles.add(authority.getAuthority());
@@ -143,13 +154,4 @@ public class SSAuthenticatedWebSession extends AuthenticatedWebSession {
 		this.ae = ae;
 	}
 
-//    public List<User> getActiveUsers() {
-//        //RequestLogger is an alternative, but it keeps only session, not related principals
-//      //  List<Object> allPrincipals = sessionRegistry.getAllPrincipals();
-//        List<User> users = new ArrayList<User>(allPrincipals.size());
-//        for (Object principal : allPrincipals) {
-//            users.add((User)principal);
-//        }
-//        return users;
-//    }
 }

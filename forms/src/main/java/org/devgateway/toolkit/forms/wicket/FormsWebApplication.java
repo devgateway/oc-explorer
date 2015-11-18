@@ -41,6 +41,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.wicketstuff.annotation.mount.MountPath;
 import org.wicketstuff.annotation.scan.AnnotatedMountScanner;
 
 import com.google.javascript.jscomp.CompilationLevel;
@@ -110,7 +111,7 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
 	/**
 	 * configures wicket-bootstrap and installs the settings.
 	 */
-	private void configureBootstrap() {		
+	private void configureBootstrap() {
 		WicketWebjars.install(this);
 
 		final IBootstrapSettings settings = new BootstrapSettings();
@@ -119,8 +120,8 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
 		// By default all pages will load bootstrap.css file and there are
 		// situations (like print page) when we don't need this styles.
 		// The boostrap.css file is loaded as dependency in MainCss Instance
-		//settings.setCssResourceReference(EmptyCss.INSTANCE);
-		
+		// settings.setCssResourceReference(EmptyCss.INSTANCE);
+
 		settings.useCdnResources(true);
 
 		// use the default bootstrap theme
@@ -129,7 +130,8 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
 	}
 
 	/**
-	 * optimize wicket for a better web performance
+	 * optimize wicket for a better web performance This will be invoked if the
+	 * application is started with -Dwicket.configuration=deployment
 	 */
 	private void optimizeForWebPerformance() {
 		// add javascript files at the bottom of the page
@@ -179,8 +181,11 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
 			guard.addPattern("+*.woff2");
 		}
 
+		//this ensures that spring DI works for wicket components and pages
+		//see @SpringBean annotation
 		getComponentInstantiationListeners().add(new SpringComponentInjector(this, applicationContext));
 
+		//this will scan packages for pages with @MountPath annotations and automatically create URLs for them 
 		new AnnotatedMountScanner().scanPackage(BASE_PACKAGE_FOR_PAGES).mount(this);
 
 		getApplicationSettings().setUploadProgressUpdatesEnabled(true);
@@ -194,8 +199,8 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
 		optimizeForWebPerformance();
 
 		// watch this using the URL
-		// http://.../wicket/internal/debug/diskDataStore		
-		if(usesDevelopmentConfig())
+		// http://.../wicket/internal/debug/diskDataStore
+		if (usesDevelopmentConfig())
 			DebugDiskDataStore.register(this);
 
 		SessionFinderHolder.setSessionFinder(sessionFinderService);

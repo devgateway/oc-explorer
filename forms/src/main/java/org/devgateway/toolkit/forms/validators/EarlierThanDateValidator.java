@@ -18,6 +18,7 @@ import org.apache.wicket.validation.ValidationError;
 import java.util.Date;
 
 /**
+ * Validator to test if the date is earlier than provided high date
  * @author idobre
  * @since 5/18/15
  */

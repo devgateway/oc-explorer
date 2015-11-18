@@ -27,7 +27,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  */
 
 @Configuration
-@Order(2)
+@Order(2) //this loads the security config after the forms security (if you use them overlayed, it must pick that one first)
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override

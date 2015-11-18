@@ -21,8 +21,8 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
 /**
- * @author mpostelnicu
- *
+ * @author mpostelnicu Validates an Integer input to be a valid year Returns
+ *         errors when this is not true
  */
 public class YearValidator implements IValidator<Integer> {
 
@@ -38,22 +38,22 @@ public class YearValidator implements IValidator<Integer> {
 	public void validate(IValidatable<Integer> validatable) {
 		if (validatable.getValue() == null)
 			return;
-//this is redundant to the >2000 check..
-//		if (validatable.getValue().toString().length() > 4) {
-//			ValidationError error = new ValidationError();
-//			error.addKey(this,"fourdigits");
-//			validatable.error(error);
-//		}
+		// this is redundant to the >2000 check..
+		// if (validatable.getValue().toString().length() > 4) {
+		// ValidationError error = new ValidationError();
+		// error.addKey(this,"fourdigits");
+		// validatable.error(error);
+		// }
 
 		if (validatable.getValue() < 2000) {
 			ValidationError error = new ValidationError();
-			error.addKey(this,"after2000");
+			error.addKey(this, "after2000");
 			validatable.error(error);
 		}
 
 		if (maxCurrentYear && validatable.getValue() > Calendar.getInstance().get(Calendar.YEAR)) {
 			ValidationError error = new ValidationError();
-			error.addKey(this,"maxCurrentYear");
+			error.addKey(this, "maxCurrentYear");
 			validatable.error(error);
 		}
 	}

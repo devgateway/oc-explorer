@@ -18,6 +18,11 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
 
+/**
+ * Service to send emails to users to validate email addresses or reset passwords
+ * @author mpostelnicu
+ *
+ */
 @Component
 public class SendEmailService {
 
@@ -34,6 +39,11 @@ public class SendEmailService {
 		this.templateMessage = templateMessage;
 	}
 
+	/**
+	 * Send a validation email to the user
+	 * @param person
+	 * @param urlEnable URL with a key, to validate the user email
+	 */
 	public void sendEmailToEnable(Person person, String urlEnable) {
 
 		SimpleMailMessage msg = new SimpleMailMessage();
@@ -56,6 +66,12 @@ public class SendEmailService {
 
 	}
 
+	/**
+	 * Send a reset password email. This is UNSAFE because passwords are sent in clear text.
+	 * Nevertheless some customers will ask for these emails to be sent, so ... 
+	 * @param person
+	 * @param newPassword
+	 */
 	public void sendEmailResetPassword(Person person, String newPassword) {
 
 		SimpleMailMessage msg = new SimpleMailMessage();
