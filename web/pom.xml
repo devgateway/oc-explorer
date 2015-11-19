@@ -76,6 +76,13 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.devgateway.toolkit</groupId>
+			<artifactId>persistence-mongodb</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+
+		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
 			<version>1.4</version>
