@@ -1,4 +1,4 @@
-<!--
+<!-- 
     Copyright (c) 2015 Development Gateway, Inc and others.
    
     All rights reserved. This program and the accompanying materials
@@ -11,12 +11,12 @@
  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.devgateway.toolkit</groupId>
-	<artifactId>toolkit</artifactId>
+	<groupId>org.devgateway.ocvn</groupId>
+	<artifactId>ocvn</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>DGToolkit</name>
-	<description>DG Toolkit archetype - quick and easy way to start new projects through a working template</description>
+	<name>OCVN</name>
+	<description>OCVN Open Contracting Vietnam</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -43,7 +43,7 @@
 	</organization>
 	<issueManagement>
 		<system>JIRA</system>
-		<url>https://jira.dgfoundation.org/browse/DGTKIT/</url>
+		<url>https://jira.dgfoundation.org/browse/OCVN/</url>
 	</issueManagement>
 	<ciManagement>
 		<system>Jenkins</system>
@@ -51,11 +51,11 @@
 	</ciManagement>
 
 	<scm>
-		<url>git@github.com:devgateway/dg-toolkit.git</url>
+		<url>git@github.com:devgateway/ocvn.git</url>
 		<developerConnection>
-            scm:git:git@github.com:devgateway/dg-toolkit.git
+            scm:git:git@github.com:devgateway/ocvn.git
         </developerConnection>
-		<connection>git@github.com:devgateway/dg-toolkit.git
+		<connection>git@github.com:devgateway/ocvn.git
         </connection>
 	  <tag>HEAD</tag>
   	</scm>

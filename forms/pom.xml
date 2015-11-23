@@ -21,8 +21,8 @@
     <description>DGToolkit Forms</description>
 
 	<parent>
-	    <groupId>org.devgateway.toolkit</groupId>
-	    <artifactId>toolkit</artifactId>
+	    <groupId>org.devgateway.ocvn</groupId>
+	    <artifactId>ocvn</artifactId>
 	    <version>0.0.1-SNAPSHOT</version>
 	 </parent>
 
@@ -35,13 +35,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.devgateway.toolkit</groupId>
+            <groupId>org.devgateway.ocvn</groupId>
             <artifactId>persistence</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>org.devgateway.toolkit</groupId>
+            <groupId>org.devgateway.ocvn</groupId>
             <artifactId>persistence-mongodb</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
@@ -49,13 +49,13 @@
 
 
         <dependency>
-            <groupId>org.devgateway.toolkit</groupId>
+            <groupId>org.devgateway.ocvn</groupId>
             <artifactId>ui</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
 		<dependency>
-			<groupId>org.devgateway.toolkit</groupId>
+			<groupId>org.devgateway.ocvn</groupId>
 			<artifactId>reporting</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 			<exclusions>
@@ -72,7 +72,7 @@
 
 
 		<dependency>
-			<groupId>org.devgateway.toolkit</groupId>
+			<groupId>org.devgateway.ocvn</groupId>
 			<artifactId>web</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>

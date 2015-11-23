@@ -27,8 +27,8 @@
 	</properties>
 
 	<parent>
-	    <groupId>org.devgateway.toolkit</groupId>
-	    <artifactId>toolkit</artifactId>
+	    <groupId>org.devgateway.ocvn</groupId>
+	    <artifactId>ocvn</artifactId>
 	    <version>0.0.1-SNAPSHOT</version>
 	 </parent>
 
@@ -46,7 +46,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.devgateway.toolkit</groupId>
+			<groupId>org.devgateway.ocvn</groupId>
 			<artifactId>persistence</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
