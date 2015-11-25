@@ -1,17 +1,20 @@
 /**
  * 
  */
-package org.devgateway.ocvn.persistence.mongo;
+package org.devgateway.ocvn.persistence.mongo.ocds;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
  *
  */
+@Document
 public class Release {
 
 	@Id
@@ -21,20 +24,20 @@ public class Release {
 
 	Date date;
 
-	List<String> tag;
+	List<String> tag = new ArrayList<>();
 
 	String initiationType = "tender";
-	
+
 	Planning planning;
-	
+
 	Tender tender;
-	
+
 	Organization buyer;
-	
-	List<Award> awards;
-	
-	List<Contract> contracts;
-	
+
+	List<Award> awards = new ArrayList<>();
+
+	List<Contract> contracts = new ArrayList<>();
+
 	String language;
 
 	public String getId() {

@@ -1,5 +1,8 @@
-package org.devgateway.ocvn.persistence.mongo;
+package org.devgateway.ocvn.persistence.mongo.ocds;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
 public class Identifier {
 
 	String scheme;

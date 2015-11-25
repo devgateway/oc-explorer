@@ -1,16 +1,19 @@
 /**
  * 
  */
-package org.devgateway.ocvn.persistence.mongo;
+package org.devgateway.ocvn.persistence.mongo.ocds;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
  *
  */
+@Document
 public class Tender {
 
 	@Id
@@ -18,14 +21,14 @@ public class Tender {
 	String title;
 	String description;
 	String status;
-	List<Item> items;
+	List<Item> items=new ArrayList<>();
 	Value minValue;
 	Value value;
 	String procurementMethod;
 	String procurementMethodRationale;
 	String awardCriteria;
 	String awardCriteriaDetails;
-	List<String> submissionMethod;
+	List<String> submissionMethod=new ArrayList<>();
 	String submissionMethodDetails;
 	Period tenderPeriod;
 	Period enquiryPeriod;
@@ -33,10 +36,10 @@ public class Tender {
 	String eligibilityCriteria;
 	Period awardPeriod;
 	Integer numberOfTenders;
-	List<Organization> tenderers;
+	List<Organization> tenderers=new ArrayList<>();
 	Organization procuringEntity;
-	List<Document> documents;
-	List<Milestone> milestone;
+	List<Document> documents=new ArrayList<>();
+	List<Milestone> milestone=new ArrayList<>();
 	Amendment amendment;
 	
 	public String getId() {

@@ -11,12 +11,19 @@
  *******************************************************************************/
 package org.devgateway.toolkit.persistence.mongo.spring;
 
+import java.util.Arrays;
+
+import org.devgateway.ocvn.persistence.mongo.ocds.BigDecimal2;
 import org.devgateway.toolkit.persistence.mongo.repository.CustomerRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.mongodb.core.convert.CustomConversions;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.util.StringUtils;
 
 /**
  * Run this application only when you need access to Spring Data JPA but without
@@ -34,4 +41,27 @@ public class MongoPersistenceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MongoPersistenceApplication.class, args);
 	}
+
+	public static enum BigDecimal2ToStringConverter implements Converter<BigDecimal2, String> {
+		INSTANCE;
+
+		public String convert(BigDecimal2 source) {
+			return source == null ? null : source.toString();
+		}
+	}
+
+	public static enum StringToBigDecimal2Converter implements Converter<String, BigDecimal2> {
+		INSTANCE;
+
+		public BigDecimal2 convert(String source) {
+			return StringUtils.hasText(source) ? new BigDecimal2(source) : null;
+		}
+	}
+
+	@Bean
+	public CustomConversions customConversions() {
+		return new CustomConversions(Arrays
+				.asList(new Object[] { BigDecimal2ToStringConverter.INSTANCE, StringToBigDecimal2Converter.INSTANCE }));
+	}
+
 }

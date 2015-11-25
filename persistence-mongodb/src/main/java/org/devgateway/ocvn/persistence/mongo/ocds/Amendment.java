@@ -1,18 +1,22 @@
 /**
  * 
  */
-package org.devgateway.ocvn.persistence.mongo;
+package org.devgateway.ocvn.persistence.mongo.ocds;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
  *
  */
+@Document
 public class Amendment {
 	Date date;
-	List<Change> changes;
+	List<Change> changes=new ArrayList<>();
 	String rationale;
 
 	public class Change {

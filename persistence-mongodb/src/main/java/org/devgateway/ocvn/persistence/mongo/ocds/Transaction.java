@@ -1,16 +1,18 @@
 /**
  * 
  */
-package org.devgateway.ocvn.persistence.mongo;
+package org.devgateway.ocvn.persistence.mongo.ocds;
 
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
  *
  */
+@Document
 public class Transaction {
 
 	@Id

@@ -1,45 +1,27 @@
 /**
  * 
  */
-package org.devgateway.ocvn.persistence.mongo;
+package org.devgateway.ocvn.persistence.mongo.ocds;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
  *
  */
+@Document
 public class Item {
 	@Id
 	String id;
 	String description;
 	Classification classification;
-	List<Classification> additionalClassifications;
+	List<Classification> additionalClassifications = new ArrayList<>();
 	Integer quantity;
-	Unit unit;
-
-	public class Unit {
-		String name;
-		Value value;
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public Value getValue() {
-			return value;
-		}
-
-		public void setValue(Value value) {
-			this.value = value;
-		}
-	}
+	ItemUnit unit;
 
 	public String getId() {
 		return id;
@@ -81,11 +63,11 @@ public class Item {
 		this.quantity = quantity;
 	}
 
-	public Unit getUnit() {
+	public ItemUnit getUnit() {
 		return unit;
 	}
 
-	public void setUnit(Unit unit) {
+	public void setUnit(ItemUnit unit) {
 		this.unit = unit;
 	}
 

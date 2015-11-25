@@ -1,19 +1,23 @@
 /**
  * 
  */
-package org.devgateway.ocvn.persistence.mongo;
+package org.devgateway.ocvn.persistence.mongo.ocds;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
  *
  */
+@Document
 public class Implementation {
 
-	List<Transaction> transactions;
-	List<Milestone> milestones;
-	List<Document> documents;
+	List<Transaction> transactions = new ArrayList<>();
+	List<Milestone> milestones = new ArrayList<>();
+	List<Document> documents = new ArrayList<>();
 
 	public List<Transaction> getTransactions() {
 		return transactions;

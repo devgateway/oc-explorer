@@ -1,95 +1,129 @@
 /**
  * 
  */
-package org.devgateway.ocvn.persistence.mongo;
+package org.devgateway.ocvn.persistence.mongo.ocds;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
  *
  */
-public class Award {
+@Document
+public class Contract {
 	@Id
 	String id;
+	String awardID;
 	String title;
-	String desription;
+	String description;
 	String status;
-	Date date;
+	Period period;
 	Value value;
-	List<Organization> suppliers;
-	List<Item> items;
-	Period contractPeriod;
-	List<Document> documents;
+	List<Item> items=new ArrayList<>();
+	Date dateSigned;
+	List<Document> documents=new ArrayList<>();
 	Amendment amendment;
-	
+	Implementation implementation;
+
 	public String getId() {
 		return id;
 	}
+
 	public void setId(String id) {
 		this.id = id;
 	}
+
+	public String getAwardID() {
+		return awardID;
+	}
+
+	public void setAwardID(String awardID) {
+		this.awardID = awardID;
+	}
+
 	public String getTitle() {
 		return title;
 	}
+
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public String getDesription() {
-		return desription;
+
+	public String getDescription() {
+		return description;
 	}
-	public void setDesription(String desription) {
-		this.desription = desription;
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
+
 	public String getStatus() {
 		return status;
 	}
+
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public Date getDate() {
-		return date;
+
+	public Period getPeriod() {
+		return period;
 	}
-	public void setDate(Date date) {
-		this.date = date;
+
+	public void setPeriod(Period period) {
+		this.period = period;
 	}
+
 	public Value getValue() {
 		return value;
 	}
+
 	public void setValue(Value value) {
 		this.value = value;
 	}
-	public List<Organization> getSuppliers() {
-		return suppliers;
-	}
-	public void setSuppliers(List<Organization> suppliers) {
-		this.suppliers = suppliers;
-	}
+
 	public List<Item> getItems() {
 		return items;
 	}
+
 	public void setItems(List<Item> items) {
 		this.items = items;
 	}
-	public Period getContractPeriod() {
-		return contractPeriod;
+
+	public Date getDateSigned() {
+		return dateSigned;
 	}
-	public void setContractPeriod(Period contractPeriod) {
-		this.contractPeriod = contractPeriod;
+
+	public void setDateSigned(Date dateSigned) {
+		this.dateSigned = dateSigned;
 	}
+
 	public List<Document> getDocuments() {
 		return documents;
 	}
+
 	public void setDocuments(List<Document> documents) {
 		this.documents = documents;
 	}
+
 	public Amendment getAmendment() {
 		return amendment;
 	}
+
 	public void setAmendment(Amendment amendment) {
 		this.amendment = amendment;
 	}
+
+	public Implementation getImplementation() {
+		return implementation;
+	}
+
+	public void setImplementation(Implementation implementation) {
+		this.implementation = implementation;
+	}
+
 }

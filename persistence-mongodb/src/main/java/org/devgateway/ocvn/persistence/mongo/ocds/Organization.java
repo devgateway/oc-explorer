@@ -1,17 +1,21 @@
 /**
  * 
  */
-package org.devgateway.ocvn.persistence.mongo;
+package org.devgateway.ocvn.persistence.mongo.ocds;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
  *
  */
+@Document
 public class Organization {
 	Identifier identifier;
-	List<Identifier> additionalIdentifiers;
+	List<Identifier> additionalIdentifiers=new ArrayList<>();
 	String name;
 	Address address;
 	ContactPoint contactPoint;

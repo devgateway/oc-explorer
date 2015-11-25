@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.devgateway.ocvn.persistence.mongo;
+package org.devgateway.ocvn.persistence.mongo.ocds;
 
 import java.math.BigDecimal;
 
