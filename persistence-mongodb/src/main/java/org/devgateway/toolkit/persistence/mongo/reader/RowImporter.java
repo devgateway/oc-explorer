@@ -7,8 +7,13 @@ import java.util.List;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class RowImporter {
+
+	private final Logger logger = LoggerFactory.getLogger(VNImportService.class);
 
 	ReleaseRepository releaseRepository;
 	DecimalFormat df;
@@ -31,11 +36,16 @@ public abstract class RowImporter {
 			if (impRowNo++ < skipRows)
 				continue;
 
-			importRow(row);
+			try {
+				importRow(row);
+			} catch (Exception e) {
+				logger.error("Error importing row " + impRowNo,e);			
+				//throw e; we do not stop
+			}
 		}
 
 		releaseRepository.save(releases);
-		System.out.println("Imported " + impRowNo);
+		logger.info("Imported " + impRowNo);
 		return true;
 	}
 

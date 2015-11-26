@@ -1,11 +1,13 @@
 package org.devgateway.ocvn.persistence.mongo.ocds;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 public class Identifier {
 
 	String scheme;
+	@Id
 	String id;
 	String legalName;
 	String uri;

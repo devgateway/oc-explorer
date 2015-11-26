@@ -1,19 +1,20 @@
 /**
  * 
  */
-package org.devgateway.toolkit.persistence.mongo;
+package org.devgateway.toolkit.persistence.mongo.dao;
 
 import java.util.Date;
 import java.util.List;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Planning;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
  *
  */
-@Document
+@Document(collection="planning")
 public class VNPlanning extends Planning {
 	String bidPlanProjectPlace;
 	Date bidPlanProjectDateIssue;
@@ -25,6 +26,8 @@ public class VNPlanning extends Planning {
 	Date bidPlanProjectDateApprove;
 	String bidPlanNm;
 	String bidPlanProjectStdClsCd;
+
+	@Indexed()
 	String bidNo;
 
 	public String getBidPlanProjectPlace() {

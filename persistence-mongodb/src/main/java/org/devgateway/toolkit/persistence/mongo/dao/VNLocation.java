@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.devgateway.toolkit.persistence.mongo;
+package org.devgateway.toolkit.persistence.mongo.dao;
 
 import org.springframework.data.annotation.Id;
 

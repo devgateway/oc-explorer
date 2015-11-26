@@ -9,14 +9,14 @@ import java.util.Locale;
 import org.devgateway.ocvn.persistence.mongo.ocds.Budget;
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
 import org.devgateway.ocvn.persistence.mongo.ocds.Value;
-import org.devgateway.toolkit.persistence.mongo.VNPlanning;
+import org.devgateway.toolkit.persistence.mongo.dao.VNPlanning;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 
-public class ProcurementPlansImporter extends RowImporter {
+public class ProcurementPlansRowImporter extends RowImporter {
 
 	SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yy", new Locale("en"));
 
-	public ProcurementPlansImporter(ReleaseRepository releaseRepository, int skipRows) {
+	public ProcurementPlansRowImporter(ReleaseRepository releaseRepository, int skipRows) {
 		super(releaseRepository, skipRows);
 	}
 

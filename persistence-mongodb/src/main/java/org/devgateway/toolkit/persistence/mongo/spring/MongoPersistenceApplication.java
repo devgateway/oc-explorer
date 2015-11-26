@@ -13,15 +13,23 @@ package org.devgateway.toolkit.persistence.mongo.spring;
 
 import java.util.Arrays;
 
+import javax.annotation.PostConstruct;
+
 import org.devgateway.ocvn.persistence.mongo.ocds.BigDecimal2;
+import org.devgateway.ocvn.persistence.mongo.ocds.Release;
 import org.devgateway.toolkit.persistence.mongo.repository.CustomerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.CustomConversions;
+import org.springframework.data.mongodb.core.index.Index;
+import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.util.StringUtils;
 
@@ -37,6 +45,9 @@ import org.springframework.util.StringUtils;
 @PropertySource("classpath:/org/devgateway/toolkit/persistence/mongo/application.properties")
 @EnableMongoRepositories(basePackageClasses = CustomerRepository.class)
 public class MongoPersistenceApplication {
+	
+	@Autowired
+	private MongoTemplate mongoTemplate;
 
 	public static void main(String[] args) {
 		SpringApplication.run(MongoPersistenceApplication.class, args);
@@ -63,5 +74,14 @@ public class MongoPersistenceApplication {
 		return new CustomConversions(Arrays
 				.asList(new Object[] { BigDecimal2ToStringConverter.INSTANCE, StringToBigDecimal2Converter.INSTANCE }));
 	}
+
+	
+
+	@PostConstruct
+	public void addMongoIndex() {
+		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.bidNo", Direction.ASC));
+	}
+	
+
 
 }
