@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
+import org.devgateway.toolkit.persistence.mongo.dao.DBConstants;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ public abstract class RowImporter {
 		this.releaseRepository = releaseRepository;
 		df = new DecimalFormat();
 		df.setParseBigDecimal(true);
-		releases = new ArrayList<>(1001);
+		releases = new ArrayList<>(DBConstants.IMPORT_ROW_BATCH);
 		this.skipRows = skipRows;
 	}
 

@@ -6,7 +6,10 @@ package org.devgateway.toolkit.persistence.mongo.spring;
 import java.net.URL;
 import java.util.List;
 
+import org.devgateway.toolkit.persistence.mongo.dao.DBConstants;
 import org.devgateway.toolkit.persistence.mongo.reader.BidPlansRowImporter;
+import org.devgateway.toolkit.persistence.mongo.reader.EBidAwardRowImporter;
+import org.devgateway.toolkit.persistence.mongo.reader.OfflineAwardRowImporter;
 import org.devgateway.toolkit.persistence.mongo.reader.ProcurementPlansRowImporter;
 import org.devgateway.toolkit.persistence.mongo.reader.RowImporter;
 import org.devgateway.toolkit.persistence.mongo.reader.TenderRowImporter;
@@ -33,10 +36,11 @@ public class VNImportService {
 
 	private void importSheet(String sheetName, RowImporter importer) throws Exception {
 		logger.info("Importing " + sheetName + " using " + importer.getClass().getSimpleName());
+
 		XExcelFileReader reader = new XExcelFileReader(fis.getFile(), sheetName);
 
 		List<String[]> rows = null;
-		while (!(rows = reader.readRows(1000)).isEmpty()) {
+		while (!(rows = reader.readRows(DBConstants.IMPORT_ROW_BATCH)).isEmpty()) {
 			importer.importRows(rows);
 		}
 	}
@@ -45,6 +49,8 @@ public class VNImportService {
 		importSheet("ProcurementPlans", new ProcurementPlansRowImporter(releaseRepository, 3));
 		importSheet("BidPlans", new BidPlansRowImporter(releaseRepository, 3));
 		importSheet("Tender", new TenderRowImporter(releaseRepository, 3));
+		importSheet("eBid_Award", new EBidAwardRowImporter(releaseRepository, 3));
+		importSheet("Offline_Award", new OfflineAwardRowImporter(releaseRepository, 3));
 	}
 
 }

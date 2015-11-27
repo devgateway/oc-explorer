@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * @author mihai
  *
  */
+@Document
 public class Award {
 	@Id
 	String id;
