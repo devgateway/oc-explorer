@@ -3,14 +3,12 @@
  */
 package org.devgateway.ocvn.persistence.mongo.ocds;
 
-import org.springframework.format.annotation.NumberFormat;
-
 /**
  * @author mihai
  *
  */
 public class Value2 {
-	@NumberFormat
+	
 	BigDecimal2 amount;
 	String currency;
 

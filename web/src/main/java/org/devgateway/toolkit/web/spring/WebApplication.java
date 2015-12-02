@@ -23,7 +23,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
 @PropertySource("classpath:/org/devgateway/toolkit/web/application.properties")
-@ComponentScan("org.devgateway.toolkit")
+@ComponentScan({"org.devgateway.toolkit","org.devgateway.ocvn"})
 public class WebApplication {
 
 	public static void main(String[] args) {
