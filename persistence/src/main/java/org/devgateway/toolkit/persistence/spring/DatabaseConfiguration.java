@@ -26,12 +26,10 @@ import org.apache.derby.jdbc.ClientDriver;
 import org.apache.log4j.Logger;
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
-import org.devgateway.toolkit.persistence.dao.AuditorAwareImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.mock.jndi.SimpleNamingContextBuilder;
 
@@ -55,7 +53,7 @@ public class DatabaseConfiguration {
 	 * connection type=JNDI and name toolkitDS. To use it in PRD you need to add the
 	 * configuration to the local PRD. Edit ~/.pentaho/simple-jndi/default.properties
 	 * and add the following:
-	 * toolkitDS/type=javax.sql.DataSource
+	 * toolkitDS/type=javax.sqlf.DataSource
 	 * toolkitDS/driver=org.apache.derby.jdbc.ClientDriver
 	 * toolkitDS/user=app
 	 * toolkitDS/password=app
@@ -95,7 +93,7 @@ public class DatabaseConfiguration {
 		DataSource dataSource = new DataSource(pp);
 		
 		dataSource.setDriverClassName(ClientDriver.class.getName());
-		dataSource.setUrl("jdbc:derby://localhost//derby/toolkit;create=true");
+		dataSource.setUrl("jdbc:derby://localhost//derby/ocvn;create=true");
 		dataSource.setUsername("app");
 		dataSource.setPassword("app");
 		return dataSource;
