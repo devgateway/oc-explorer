@@ -11,20 +11,17 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms;
 
-import org.devgateway.toolkit.forms.service.CustomJPAUserDetailsService;
+import org.devgateway.toolkit.persistence.spring.CustomJPAUserDetailsService;
 import org.devgateway.toolkit.web.spring.WebSecurityConfig;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.RememberMeAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 
@@ -38,15 +35,7 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 	 */
 	private static final String UNIQUE_SECRET_REMEMBER_ME_KEY = "secret";
 
-	@Autowired
-	protected CustomJPAUserDetailsService customJPAUserDetailsService;
 
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		// we use standard password encoder for all passwords
-		StandardPasswordEncoder spe = new StandardPasswordEncoder();
-		auth.userDetailsService(customJPAUserDetailsService).passwordEncoder(spe);
-	}
 
 	/**
 	 * We ensure the superclass configuration is being applied Take note the
