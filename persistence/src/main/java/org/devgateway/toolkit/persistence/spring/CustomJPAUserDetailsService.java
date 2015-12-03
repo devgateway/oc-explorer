@@ -9,7 +9,7 @@
  * Contributors:
  * Development Gateway - initial API and implementation
  *******************************************************************************/
-package org.devgateway.toolkit.forms.service;
+package org.devgateway.toolkit.persistence.spring;
 
 import java.util.HashSet;
 import java.util.Set;

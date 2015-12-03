@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.devgateway.toolkit.web.spring;
 
+import org.devgateway.toolkit.persistence.spring.CustomJPAUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -18,31 +19,35 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
 
 /**
  * 
- * @author mpostelnicu
- * This configures the spring security for the Web project. An 
+ * @author mpostelnicu This configures the spring security for the Web project.
+ *         An
  *
  */
 
 @Configuration
-@Order(2) //this loads the security config after the forms security (if you use them overlayed, it must pick that one first)
+@Order(2) // this loads the security config after the forms security (if you use
+			// them overlayed, it must pick that one first)
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+	@Autowired
+	protected CustomJPAUserDetailsService customJPAUserDetailsService;
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/", "/home").permitAll()
-				.antMatchers("/dummy").authenticated()
-				.anyRequest().authenticated().and().formLogin()
-				.loginPage("/login").permitAll().and().logout()
+		http.authorizeRequests().antMatchers("/", "/home").permitAll().antMatchers("/dummy").authenticated()
+				.anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll().and().logout()
 				.permitAll().and().sessionManagement().and().csrf().disable();
 	}
 
 	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth)
-			throws Exception {
-		auth.inMemoryAuthentication().withUser("user").password("password")
-				.roles("USER");
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		// we use standard password encoder for all passwords
+		StandardPasswordEncoder spe = new StandardPasswordEncoder();
+		auth.userDetailsService(customJPAUserDetailsService).passwordEncoder(spe);
 	}
 }
