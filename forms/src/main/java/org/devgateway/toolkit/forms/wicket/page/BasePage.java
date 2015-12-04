@@ -47,7 +47,6 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.dropdown.MenuBook
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.html.HtmlTag;
 import de.agilecoders.wicket.core.markup.html.bootstrap.image.GlyphIconType;
-import de.agilecoders.wicket.core.markup.html.bootstrap.image.IconType;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarComponents;
@@ -182,6 +181,10 @@ public abstract class BasePage extends GenericWebPage<Void> {
 				list.add(new MenuBookmarkablePageLink<ListTestFormPage>(ListTestFormPage.class, null,
 						new StringResourceModel("navbar.testcomponents", this, null))
 								.setIconType(FontAwesomeIconType.android));
+				
+				list.add(new MenuBookmarkablePageLink<SpringEndpointsPage>(SpringEndpointsPage.class, null,
+						new StringResourceModel("navbar.springendpoints", this, null))
+								.setIconType(FontAwesomeIconType.anchor));
 				
 				MenuBookmarkablePageLink<HALRedirectPage> halBrowserLink = new MenuBookmarkablePageLink<HALRedirectPage>(
 						HALRedirectPage.class, null, new StringResourceModel(
