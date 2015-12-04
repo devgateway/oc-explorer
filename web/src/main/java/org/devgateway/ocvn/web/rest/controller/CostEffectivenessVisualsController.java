@@ -59,7 +59,7 @@ public class CostEffectivenessVisualsController {
 		return end;
 	}
 
-	@RequestMapping("/costEffectivenessAwardAmount")
+	@RequestMapping("/api/costEffectivenessAwardAmount")
 	public List<DBObject> costEffectivenessAwardAmount(@RequestParam("year") int year) {
 
 		Aggregation agg = newAggregation(
@@ -74,7 +74,7 @@ public class CostEffectivenessVisualsController {
 
 	}
 
-	@RequestMapping("/costEffectivenessTenderAmount")
+	@RequestMapping("/api/costEffectivenessTenderAmount")
 	public List<DBObject> costEffectivenessTenderAmount(@RequestParam("year") int year) {
 
 		Aggregation agg = newAggregation(
