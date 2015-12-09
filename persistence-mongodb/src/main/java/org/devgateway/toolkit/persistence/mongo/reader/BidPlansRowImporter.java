@@ -13,7 +13,7 @@ import org.devgateway.toolkit.persistence.mongo.dao.VNPlanning;
 import org.devgateway.toolkit.persistence.mongo.dao.VNTender;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 
-public class BidPlansRowImporter extends RowImporter {
+public class BidPlansRowImporter extends RowImporter<Release, ReleaseRepository> {
 
 	public BidPlansRowImporter(ReleaseRepository releaseRepository, int skipRows) {
 		super(releaseRepository, skipRows);
@@ -23,7 +23,7 @@ public class BidPlansRowImporter extends RowImporter {
 	public boolean importRow(String[] row) throws ParseException {
 
 		String projectID = row[0];
-		Release release = releaseRepository.findByBudgetProjectId(projectID);
+		Release release = repository.findByBudgetProjectId(projectID);
 		if (release == null) {
 			release = new Release();
 			VNPlanning planning = new VNPlanning();
@@ -32,7 +32,7 @@ public class BidPlansRowImporter extends RowImporter {
 			planning.setBudget(budget);
 			budget.setProjectID(row[0]);
 		}
-		releases.add(release);
+		documents.add(release);
 
 		Tender tender = release.getTender();
 		if (tender == null) {

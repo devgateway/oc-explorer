@@ -11,9 +11,13 @@ import org.devgateway.toolkit.persistence.mongo.reader.BidPlansRowImporter;
 import org.devgateway.toolkit.persistence.mongo.reader.EBidAwardRowImporter;
 import org.devgateway.toolkit.persistence.mongo.reader.OfflineAwardRowImporter;
 import org.devgateway.toolkit.persistence.mongo.reader.ProcurementPlansRowImporter;
+import org.devgateway.toolkit.persistence.mongo.reader.PublicInstitutionRowImporter;
 import org.devgateway.toolkit.persistence.mongo.reader.RowImporter;
+import org.devgateway.toolkit.persistence.mongo.reader.SupplierRowImporter;
 import org.devgateway.toolkit.persistence.mongo.reader.TenderRowImporter;
 import org.devgateway.toolkit.persistence.mongo.reader.XExcelFileReader;
+import org.devgateway.toolkit.persistence.mongo.repository.ClassificationRepository;
+import org.devgateway.toolkit.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,15 +33,22 @@ public class VNImportService {
 
 	@Autowired
 	private ReleaseRepository releaseRepository;
+	
+	@Autowired
+	private OrganizationRepository organizationRepository;
+	
+	@Autowired
+	private ClassificationRepository classificationRepository;
 
 	private final Logger logger = LoggerFactory.getLogger(VNImportService.class);
 
-	URL fis = getClass().getResource("/Prototype_Database_OCDSCore.xlsx");
+	URL prototypeDatabaseFile = getClass().getResource("/Prototype_Database_OCDSCore.xlsx");
+	URL organizationFile = getClass().getResource("/UM_PUBINSTITU_SUPPLIERS_DQA.xlsx");
 
-	private void importSheet(String sheetName, RowImporter importer) throws Exception {
+	private void importSheet(URL fileUrl, String sheetName, RowImporter<?,?> importer) throws Exception {
 		logger.info("Importing " + sheetName + " using " + importer.getClass().getSimpleName());
 
-		XExcelFileReader reader = new XExcelFileReader(fis.getFile(), sheetName);
+		XExcelFileReader reader = new XExcelFileReader(fileUrl.getFile(), sheetName);
 
 		List<String[]> rows = null;
 		while (!(rows = reader.readRows(DBConstants.IMPORT_ROW_BATCH)).isEmpty()) {
@@ -46,11 +57,13 @@ public class VNImportService {
 	}
 
 	public void importAllSheets() throws Exception {
-		importSheet("ProcurementPlans", new ProcurementPlansRowImporter(releaseRepository, 3));
-		importSheet("BidPlans", new BidPlansRowImporter(releaseRepository, 3));
-		importSheet("Tender", new TenderRowImporter(releaseRepository, 3));
-		importSheet("eBid_Award", new EBidAwardRowImporter(releaseRepository, 3));
-		importSheet("Offline_Award", new OfflineAwardRowImporter(releaseRepository, 3));
+		importSheet(organizationFile, "UM_PUB_INSTITU_MAST", new PublicInstitutionRowImporter(organizationRepository, 2));
+		importSheet(organizationFile, "UM_SUPPLIER_ENTER_MAST", new SupplierRowImporter(organizationRepository, 2));
+		importSheet(prototypeDatabaseFile, "ProcurementPlans", new ProcurementPlansRowImporter(releaseRepository, 2));
+		importSheet(prototypeDatabaseFile, "BidPlans", new BidPlansRowImporter(releaseRepository, 2));
+		importSheet(prototypeDatabaseFile, "Tender", new TenderRowImporter(releaseRepository,organizationRepository,classificationRepository, 2));
+		importSheet(prototypeDatabaseFile, "eBid_Award", new EBidAwardRowImporter(releaseRepository,organizationRepository, 2));
+		importSheet(prototypeDatabaseFile, "Offline_Award", new OfflineAwardRowImporter(releaseRepository,organizationRepository, 2));
 	}
 
 }

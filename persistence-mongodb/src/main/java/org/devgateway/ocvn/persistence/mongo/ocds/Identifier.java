@@ -12,6 +12,10 @@ public class Identifier {
 	String legalName;
 	String uri;
 
+	public String toString() {
+		return id;
+	}
+
 	public String getScheme() {
 		return scheme;
 	}

@@ -12,7 +12,7 @@ import org.devgateway.ocvn.persistence.mongo.ocds.Value;
 import org.devgateway.toolkit.persistence.mongo.dao.VNPlanning;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 
-public class ProcurementPlansRowImporter extends RowImporter {
+public class ProcurementPlansRowImporter extends RowImporter<Release, ReleaseRepository> {
 
 	SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yy", new Locale("en"));
 
@@ -24,12 +24,12 @@ public class ProcurementPlansRowImporter extends RowImporter {
 	public boolean importRow(String[] row) throws ParseException {
 
 		String projectID = row[0];
-		Release oldRelease = releaseRepository.findByBudgetProjectId(projectID);
+		Release oldRelease = repository.findByBudgetProjectId(projectID);
 		if (oldRelease != null)
 			throw new RuntimeException("Duplicate planning.budget.projectID");
 
 		Release release = new Release();
-		releases.add(release);
+		documents.add(release);
 		VNPlanning planning = new VNPlanning();
 		Budget budget = new Budget();
 		release.setPlanning(planning);
