@@ -6,6 +6,7 @@ package org.devgateway.ocvn.persistence.mongo.ocds;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -14,11 +15,20 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document
 public class Organization {
+
+	@Id
+	String id;
+
 	Identifier identifier;
-	List<Identifier> additionalIdentifiers=new ArrayList<>();
+	List<Identifier> additionalIdentifiers = new ArrayList<>();
 	String name;
 	Address address;
 	ContactPoint contactPoint;
+
+	@Override
+	public String toString() {
+		return name + " ;id=" + identifier.getId() + "; altId=" + additionalIdentifiers;
+	}
 
 	public Identifier getIdentifier() {
 		return identifier;
@@ -26,6 +36,7 @@ public class Organization {
 
 	public void setIdentifier(Identifier identifier) {
 		this.identifier = identifier;
+		this.id = identifier.getId();
 	}
 
 	public List<Identifier> getAdditionalIdentifiers() {
@@ -58,6 +69,14 @@ public class Organization {
 
 	public void setContactPoint(ContactPoint contactPoint) {
 		this.contactPoint = contactPoint;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 }

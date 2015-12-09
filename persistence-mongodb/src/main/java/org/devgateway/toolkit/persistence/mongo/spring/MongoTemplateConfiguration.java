@@ -2,6 +2,7 @@ package org.devgateway.toolkit.persistence.mongo.spring;
 
 import javax.annotation.PostConstruct;
 
+import org.devgateway.ocvn.persistence.mongo.ocds.Organization;
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,8 @@ public class MongoTemplateConfiguration {
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.bidNo", Direction.ASC));
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("awards.status", Direction.ASC));
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.tenderPeriod.startDate", Direction.ASC));
+		mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("identifier._id", Direction.ASC));
+		mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("additionalIdentifiers._id", Direction.ASC));		
 		logger.info("Added extra Mongo indexes");
 	}
 
