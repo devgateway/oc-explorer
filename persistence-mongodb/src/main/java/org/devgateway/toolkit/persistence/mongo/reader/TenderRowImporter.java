@@ -48,6 +48,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 		VNTender tender = (VNTender) release.getTender();
 		if (tender == null) {
 			tender = new VNTender();
+			tender.setId(row[0]);
 			release.setTender(tender);
 		}
 
