@@ -7,6 +7,7 @@ import org.devgateway.ocvn.persistence.mongo.ocds.Budget;
 import org.devgateway.ocvn.persistence.mongo.ocds.ItemUnit;
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
 import org.devgateway.ocvn.persistence.mongo.ocds.Tender;
+import org.devgateway.ocvn.persistence.mongo.ocds.Value;
 import org.devgateway.ocvn.persistence.mongo.ocds.Value2;
 import org.devgateway.toolkit.persistence.mongo.dao.VNItem;
 import org.devgateway.toolkit.persistence.mongo.dao.VNPlanning;
@@ -24,16 +25,23 @@ public class BidPlansRowImporter extends RowImporter<Release, ReleaseRepository>
 
 		String projectID = row[0];
 		Release release = repository.findByBudgetProjectId(projectID);
+
 		if (release == null) {
 			release = new Release();
 			VNPlanning planning = new VNPlanning();
-			Budget budget = new Budget();
 			release.setPlanning(planning);
-			planning.setBudget(budget);
-			budget.setProjectID(row[0]);
 		}
 		documents.add(release);
 
+		Budget budget = new Budget();
+		budget.setProjectID(row[0]);
+		release.getPlanning().setBudget(budget);
+		Value value = new Value();
+		value.setCurrency("VND");
+		budget.setAmount(value);
+
+		value.setAmount(new BigDecimal2(row[5]));
+		
 		Tender tender = release.getTender();
 		if (tender == null) {
 			tender = new VNTender();
@@ -44,13 +52,8 @@ public class BidPlansRowImporter extends RowImporter<Release, ReleaseRepository>
 		VNItem item = new VNItem();
 		tender.getItems().add(item);
 
-		ItemUnit unit = new ItemUnit();
-		Value2 value = new Value2();
-		value.setCurrency("VND");
 
 		value.setAmount(new BigDecimal2(row[5]));
-		unit.setValue(value);
-		item.setUnit(unit);
 		item.setDescription(row[1]);
 		item.setBidPlanItemRefNum(row[2]);
 		item.setBidPlanItemStyle(row[3]);
