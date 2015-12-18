@@ -9,6 +9,7 @@ import java.util.List;
 import org.devgateway.toolkit.persistence.mongo.dao.DBConstants;
 import org.devgateway.toolkit.persistence.mongo.reader.BidPlansRowImporter;
 import org.devgateway.toolkit.persistence.mongo.reader.EBidAwardRowImporter;
+import org.devgateway.toolkit.persistence.mongo.reader.LocationRowImporter;
 import org.devgateway.toolkit.persistence.mongo.reader.OfflineAwardRowImporter;
 import org.devgateway.toolkit.persistence.mongo.reader.ProcurementPlansRowImporter;
 import org.devgateway.toolkit.persistence.mongo.reader.PublicInstitutionRowImporter;
@@ -17,6 +18,7 @@ import org.devgateway.toolkit.persistence.mongo.reader.SupplierRowImporter;
 import org.devgateway.toolkit.persistence.mongo.reader.TenderRowImporter;
 import org.devgateway.toolkit.persistence.mongo.reader.XExcelFileReader;
 import org.devgateway.toolkit.persistence.mongo.repository.ClassificationRepository;
+import org.devgateway.toolkit.persistence.mongo.repository.LocationRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 import org.slf4j.Logger;
@@ -40,11 +42,16 @@ public class VNImportService {
 	@Autowired
 	private ClassificationRepository classificationRepository;
 
+	@Autowired
+	private LocationRepository locationRepository;
+	
 	private final Logger logger = LoggerFactory.getLogger(VNImportService.class);
 
 	URL prototypeDatabaseFile = getClass().getResource("/Prototype_Database_OCDSCore.xlsx");
 	URL organizationFile = getClass().getResource("/UM_PUBINSTITU_SUPPLIERS_DQA.xlsx");
+	URL locationFile = getClass().getResource("/Location_Table_SO.xlsx");
 
+	
 	private void importSheet(URL fileUrl, String sheetName, RowImporter<?,?> importer) throws Exception {
 		logger.info("Importing " + sheetName + " using " + importer.getClass().getSimpleName());
 
@@ -57,13 +64,15 @@ public class VNImportService {
 	}
 
 	public void importAllSheets() throws Exception {
+		importSheet(locationFile, "Sheet1", new LocationRowImporter(locationRepository, 1));
 		importSheet(organizationFile, "UM_PUB_INSTITU_MAST", new PublicInstitutionRowImporter(organizationRepository, 2));
 		importSheet(organizationFile, "UM_SUPPLIER_ENTER_MAST", new SupplierRowImporter(organizationRepository, 2));
-		importSheet(prototypeDatabaseFile, "ProcurementPlans", new ProcurementPlansRowImporter(releaseRepository, 2));
+		importSheet(prototypeDatabaseFile, "ProcurementPlans", new ProcurementPlansRowImporter(releaseRepository,locationRepository, 2));
 		importSheet(prototypeDatabaseFile, "BidPlans", new BidPlansRowImporter(releaseRepository, 2));
 		importSheet(prototypeDatabaseFile, "Tender", new TenderRowImporter(releaseRepository,organizationRepository,classificationRepository, 2));
 		importSheet(prototypeDatabaseFile, "eBid_Award", new EBidAwardRowImporter(releaseRepository,organizationRepository, 2));
 		importSheet(prototypeDatabaseFile, "Offline_Award", new OfflineAwardRowImporter(releaseRepository,organizationRepository, 2));
+		
 	}
 
 }

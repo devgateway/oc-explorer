@@ -4,20 +4,26 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Budget;
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
 import org.devgateway.ocvn.persistence.mongo.ocds.Value;
+import org.devgateway.toolkit.persistence.mongo.dao.Location;
 import org.devgateway.toolkit.persistence.mongo.dao.VNPlanning;
+import org.devgateway.toolkit.persistence.mongo.repository.LocationRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 
 public class ProcurementPlansRowImporter extends RowImporter<Release, ReleaseRepository> {
 
 	SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yy", new Locale("en"));
+	private LocationRepository locationRepository;
 
-	public ProcurementPlansRowImporter(ReleaseRepository releaseRepository, int skipRows) {
+	public ProcurementPlansRowImporter(ReleaseRepository releaseRepository, LocationRepository locationRepository,
+			int skipRows) {
 		super(releaseRepository, skipRows);
+		this.locationRepository = locationRepository;
 	}
 
 	@Override
@@ -35,7 +41,19 @@ public class ProcurementPlansRowImporter extends RowImporter<Release, ReleaseRep
 		release.setPlanning(planning);
 		planning.setBudget(budget);
 
-		planning.setBidPlanProjectPlace(row[3]);
+		// search for loations
+
+		String[] locations = row[3].split(",");
+		for (int i = 0; i < locations.length; i++) {
+			Location location = locationRepository.findByName(locations[i].trim());
+			if (location == null) {
+				location = new Location();
+				location.setName(locations[i]);
+			}
+
+			planning.getLocations().add(location);
+		}
+
 		planning.setBidPlanProjectDateIssue(row[4].isEmpty() ? null : sdf.parse(row[4]));
 		planning.setBidPlanProjectStyle(row[5]);
 		planning.setBidPlanProjectCompanyIssue(row[6]);

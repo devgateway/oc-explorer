@@ -3,6 +3,7 @@
  */
 package org.devgateway.toolkit.persistence.mongo.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document(collection="planning")
 public class VNPlanning extends Planning {
-	String bidPlanProjectPlace;
+	
 	Date bidPlanProjectDateIssue;
 	String bidPlanProjectStyle;
 	String bidPlanProjectCompanyIssue;
@@ -26,17 +27,11 @@ public class VNPlanning extends Planning {
 	Date bidPlanProjectDateApprove;
 	String bidPlanNm;
 	String bidPlanProjectStdClsCd;
+	
+	List<Location> locations=new ArrayList<>();
 
 	@Indexed()
 	String bidNo;
-
-	public String getBidPlanProjectPlace() {
-		return bidPlanProjectPlace;
-	}
-
-	public void setBidPlanProjectPlace(String bidPlanProjectPlace) {
-		this.bidPlanProjectPlace = bidPlanProjectPlace;
-	}
 
 	public Date getBidPlanProjectDateIssue() {
 		return bidPlanProjectDateIssue;
@@ -116,6 +111,14 @@ public class VNPlanning extends Planning {
 
 	public void setBidPlanProjectClassify(List<String> bidPlanProjectClassify) {
 		this.bidPlanProjectClassify = bidPlanProjectClassify;
+	}
+
+	public List<Location> getLocations() {
+		return locations;
+	}
+
+	public void setLocations(List<Location> locations) {
+		this.locations = locations;
 	}
 
 }
