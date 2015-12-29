@@ -72,32 +72,42 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 		tender.setCancelYN(row[2]);
 		tender.setModYn(row[3]);
 		tender.setBidMethod(Integer.parseInt(row[4]));
+		
 
 		String procurementMethod = null;
+		String succBidderMethodName = null;
 		switch (Integer.parseInt(row[5])) {
 		case 1:
 			procurementMethod = "open";
+			succBidderMethodName = "Đấu thầu rộng rãi";
 			break;
 		case 2:
 			procurementMethod = "selective";
+			succBidderMethodName = "Đấu thầu hạn chế";
 			break;
 		case 3:
 			procurementMethod = "limited";
+			succBidderMethodName = "Chỉ định thầu";
 			break;
 		case 4:
 			procurementMethod = "limited";
+			succBidderMethodName = "Mua sắm trực tiếp";
 			break;
 		case 5:
 			procurementMethod = "open";
+			succBidderMethodName = "Chào hàng cạnh tranh";
 			break;
-		case 6:
+		case 6: 
 			procurementMethod = "limited";
+			succBidderMethodName = "Tự thực hiện";
 			break;
 		case 7:
 			procurementMethod = "selective";
+			succBidderMethodName = "Trong trường hợp đặc biệt";
 			break;
 
 		}
+		tender.setSuccBidderMethodName(succBidderMethodName);
 		tender.setProcurementMethod(procurementMethod);
 		tender.setContrMethod(Integer.parseInt(row[6]));
 

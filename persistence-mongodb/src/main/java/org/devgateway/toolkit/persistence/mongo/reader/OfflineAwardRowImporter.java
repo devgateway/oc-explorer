@@ -67,7 +67,7 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 		// Integer.parseInt(row[4]));
 
 		if (row.length > 5)
-			award.setStatus(row[5].equals("Y") ? "active" : "");
+			award.setStatus(row[5].equals("Y") ? "active" : "unsuccessful");
 
 		if (row.length > 6)
 			award.setInelibigleYN(row[6]);
