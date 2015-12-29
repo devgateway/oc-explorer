@@ -7,6 +7,7 @@ import java.util.Date;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Organization;
 import org.devgateway.ocvn.persistence.mongo.ocds.Tender;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -22,6 +23,9 @@ public class VNTender extends Tender {
 	String cancelYN;
 	String modYn;
 	Date bidOpenDt;
+	
+	@Indexed
+	String succBidderMethodName;
 
 	public Integer getBidMethod() {
 		return bidMethod;
@@ -77,6 +81,14 @@ public class VNTender extends Tender {
 
 	public void setBidOpenDt(Date bidOpenDt) {
 		this.bidOpenDt = bidOpenDt;
+	}
+
+	public String getSuccBidderMethodName() {
+		return succBidderMethodName;
+	}
+
+	public void setSuccBidderMethodName(String succBidderMethodName) {
+		this.succBidderMethodName = succBidderMethodName;
 	}
 
 }
