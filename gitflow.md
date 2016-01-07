@@ -1,4 +1,4 @@
-# UNDG IMS (Information Management System)
+# OCVN (Open Contracting Vietnam)
 
 For Developers - guidelines to correctly use the gitflow workflow. 
 
