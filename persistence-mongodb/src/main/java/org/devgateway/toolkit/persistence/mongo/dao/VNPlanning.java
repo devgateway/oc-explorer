@@ -24,6 +24,8 @@ public class VNPlanning extends Planning {
 	String bidPlanProjectType;
 	Integer bidPlanProjectFund;
 	List<String> bidPlanProjectClassify;
+	
+	@Indexed
 	Date bidPlanProjectDateApprove;
 	String bidPlanNm;
 	String bidPlanProjectStdClsCd;
