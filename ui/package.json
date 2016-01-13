@@ -1,5 +1,5 @@
 {
-  "name": "dg-toolkit-ui",
+  "name": "ocvn",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
@@ -29,7 +29,7 @@
   "license": "MIT",
   "repository": {
   	"type": "git",
-  	"url": "git://github.com/devgateway/dg-toolkit.git"
+  	"url": "https://github.com/devgateway/ocvn.git"
 },
   "dependencies": {
     "bootstrap": "^3.3.5"
