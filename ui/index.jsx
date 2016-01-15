@@ -13,3 +13,5 @@ flux.onUpdate(state =>
 window.addEventListener("resize", debounce(function(){
   flux.actions.changeContentWidth(document.querySelector('.years-bar').offsetWidth)
 }));
+
+flux.actions.loadData();
