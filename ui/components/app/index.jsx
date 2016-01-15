@@ -2,7 +2,7 @@ import React from "react";
 import Component from "../pure-render-component";
 import {tabs} from "../../flux/stores/global-state";
 import Planning from "../planning";
-import TenderAward from "../tender-award";
+import Tender from "../tender";
 import Header from "../header";
 require('./style.less');
 
@@ -16,7 +16,7 @@ export default class App extends React.Component{
             <div className="row">
               {this.props.state.getIn(['globalState', 'tab']) == tabs.PLANNING ?
                   <Planning/> :
-                  <TenderAward/>
+                  <Tender {...this.props}/>
               }
             </div>
           </div>
