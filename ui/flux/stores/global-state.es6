@@ -7,7 +7,10 @@ var store = Store({
     return toImmutable({
       tab: store.tabs.PLANNING,
       year: 2015,
-      contentWidth: 0
+      contentWidth: 0,
+      data: {
+        costEffectiveness: []
+      }
     })
   },
 
@@ -15,6 +18,7 @@ var store = Store({
     this.on(constants.TAB_CHANGED, (state, tab) => state.set('tab', tab));
     this.on(constants.YEAR_CHANGED, (state, newYear) => state.set('year', newYear));
     this.on(constants.CONTENT_WIDTH_CHANGED, (state, newWidth) => state.set('contentWidth', newWidth));
+    this.on(constants.COST_EFFECTIVENESS_DATA_UPDATED, (state, data) => state.setIn(['data', 'costEffectiveness'], data));
   }
 });
 
