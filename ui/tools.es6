@@ -13,5 +13,4 @@ export function debounce(cb, delay = 200){
     if(null !== timeout) clearTimeout(timeout);
     timeout = setTimeout(cb, delay);
   }
-
 }
