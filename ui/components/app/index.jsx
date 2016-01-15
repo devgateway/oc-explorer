@@ -1,19 +1,24 @@
 import React from "react";
-import Counter from "./counter";
 import Component from "../pure-render-component";
+import {tabs} from "../../flux/stores/global-state";
+import Planning from "../planning";
+import Tender from "../tender";
+import Header from "../header";
 require('./style.less');
 
 export default class App extends React.Component{
   render(){
-    var {state, actions} = this.props;
     return (
-      <div className="container">
-        <div className="col-md-12">
-          <div className="jumbotron">
-            <h1>I'm just an example</h1>
-            <p>Edit or delete me in ./components/app</p>
-            <p>Documentation is in readme.md</p>
-            <Counter value={state.getIn(['globalState', 'counter'])} actions={actions}/>
+      <div className="container-fluid">
+        <Header {...this.props}/>
+        <div className="row content">
+          <div className="col-sm-offset-4 col-md-offset-2 col-sm-8 col-md-10">
+            <div className="row">
+              {this.props.state.getIn(['globalState', 'tab']) == tabs.PLANNING ?
+                  <Planning/> :
+                  <Tender {...this.props}/>
+              }
+            </div>
           </div>
         </div>
       </div>
