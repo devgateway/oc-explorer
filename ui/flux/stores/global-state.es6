@@ -1,14 +1,24 @@
 import {Store, toImmutable} from "nuclear-js";
 import constants from "../actions/constants";
+import keyMirror from "keymirror";
 
-export default Store({
+var store = Store({
   getInitialState(){
     return toImmutable({
-      counter: 0
+      tab: store.tabs.PLANNING,
+      year: 2015
     })
   },
+
   initialize(){
-    this.on(constants.INC_COUNTER, state => state.set('counter', state.get('counter') + 1));
-    this.on(constants.DEC_COUNTER, state => state.set('counter', state.get('counter') - 1));
+    this.on(constants.CHANGE_TAB, (state, tab) => state.set('tab', tab));
+    this.on(constants.CHANGE_YEAR, (state, newYear) => state.set('year', newYear));
   }
-})
+});
+
+store.tabs = keyMirror({
+  PLANNING: null,
+  TENDER_AWARD: null
+});
+
+export default store;

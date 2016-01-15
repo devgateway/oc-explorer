@@ -1,6 +1,6 @@
-import keyMirror from 'react/lib/keyMirror'
+import keyMirror from 'keymirror'
 
 export default keyMirror({
-  INC_COUNTER: null,
-  DEC_COUNTER: null
+  CHANGE_TAB: null,
+  CHANGE_YEAR: null
 })

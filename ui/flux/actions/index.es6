@@ -2,10 +2,11 @@ import dispatcher from "../dispatcher";
 import constants from "./constants";
 
 export default {
-  incCounter(){
-    dispatcher.dispatch(constants.INC_COUNTER);
+  changeTab(slug){
+    dispatcher.dispatch(constants.CHANGE_TAB, slug);
   },
-  decCounter(){
-    dispatcher.dispatch(constants.DEC_COUNTER);
+
+  changeYear(newYear){
+    dispatcher.dispatch(constants.CHANGE_YEAR, newYear);
   }
 }
