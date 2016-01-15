@@ -1,11 +1,16 @@
 import React from "react";
 import Component from "../pure-render-component";
+import CostEffectiveness from "./cost-effectiveness";
+import BiddingPeriod from "./bidding-period";
+import FundingByBidType from "./funding-by-bid-type";
 
 export default class TenderAward extends Component{
   render(){
     return (
         <div className="col-sm-12">
-          <h3>tender stub</h3>
+          <CostEffectiveness/>
+          <BiddingPeriod/>
+          <FundingByBidType/>
         </div>
     )
   }
