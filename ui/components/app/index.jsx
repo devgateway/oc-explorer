@@ -10,8 +10,8 @@ require('./style.less');
 export default class App extends React.Component{
   render(){
     var {state, actions} = this.props;
-    var navigationLink = (text, tab) =>
-        <NavigationLink text={text} actions={actions} tab={tab} active={state.getIn(['globalState', 'tab']) == tab}/>
+    var navigationLink = (text, marker, tab) =>
+        <NavigationLink text={text} actions={actions} tab={tab} marker={marker} active={state.getIn(['globalState', 'tab']) == tab}/>
     return (
       <div className="container-fluid">
         <div className="row main-title">
@@ -27,8 +27,8 @@ export default class App extends React.Component{
                 </h2>
               </section>
               <div role="navigation">
-                {navigationLink("Planning", tabs.PLANNING)}
-                {navigationLink("Tender", tabs.TENDER_AWARD)}
+                {navigationLink("Planning", 'map-marker', tabs.PLANNING)}
+                {navigationLink("Tender", 'time', tabs.TENDER_AWARD)}
               </div>
               <section className="col-sm-12">
                 <p><strong>Toolkit description</strong></p>
