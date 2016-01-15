@@ -14,17 +14,14 @@ export default class App extends React.Component{
         <NavigationLink text={text} actions={actions} tab={tab} marker={marker} active={state.getIn(['globalState', 'tab']) == tab}/>
     return (
       <div className="container-fluid">
-        <div className="row main-title">
-          <h1>Planned Procurement Visualization</h1>
-        </div>
-        <div className="row">
+        <header className="row">
           <aside className="col-sm-4 col-md-2">
             <div className="row">
               <section className="col-sm-12">
-                <h2>
+                <h1>
                   E-procurement
                   <small>Toolkit</small>
-                </h2>
+                </h1>
               </section>
               <div role="navigation">
                 {navigationLink("Planning", 'map-marker', tabs.PLANNING)}
@@ -45,20 +42,22 @@ export default class App extends React.Component{
               </section>
             </div>
           </aside>
-          <div className="col-sm-8 col-md-10">
-            <div className="row">
-              <div className="col-sm-12 years-bar" role="navigation">
-                {[2015, 2014, 2013, 2012, 2011, 2010].map(year => (
-                  <a
+          <div className="col-sm-8 col-md-10 years-bar" role="navigation">
+            {[2015, 2014, 2013, 2012, 2011, 2010].map(year => (
+                <a
                     key={year}
                     href="javascript:void(0);"
                     className={cn({active: year == state.getIn(['globalState','year'])})}
                     onClick={e => actions.changeYear(year)}
-                  >
-                    <i className="glyphicon glyphicon-ok-circle"></i> {year}
-                  </a>
-                ))}
-              </div>
+                >
+                  <i className="glyphicon glyphicon-ok-circle"></i> {year}
+                </a>
+            ))}
+          </div>
+        </header>
+        <div className="row content">
+          <div className="col-sm-offset-4 col-md-offset-2 col-sm-8 col-md-10">
+            <div className="row">
               {state.getIn(['globalState', 'tab']) == tabs.PLANNING ?
                   <Planning/> :
                   <TenderAward/>
