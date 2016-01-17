@@ -3,6 +3,7 @@ import Component from "../pure-render-component";
 import NavigationLink from "./navigation-link";
 import {tabs} from "../../flux/stores/global-state";
 import cn from "classnames";
+import {years} from "../../tools";
 require('./style.less');
 
 export default class Header extends Component{
@@ -44,7 +45,7 @@ export default class Header extends Component{
           </div>
         </aside>
         <div className="col-sm-8 col-md-10 years-bar" role="navigation">
-          {[2015, 2014, 2013, 2012, 2011, 2010].map(year => (
+          {years().reverse().map(year => (
             <a
                 key={year}
                 href="javascript:void(0);"

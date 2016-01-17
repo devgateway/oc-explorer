@@ -14,3 +14,5 @@ export function debounce(cb, delay = 200){
     timeout = setTimeout(cb, delay);
   }
 }
+
+export var years = () => [2011, 2012, 2013, 2014, 2015];

@@ -8,11 +8,13 @@ export default class Tender extends Component{
   render(){
     var {state} = this.props;
     var width = state.getIn(['globalState', 'contentWidth']);
+    var data = state.getIn(['globalState', 'data']);
+    var year = state.getIn(['globalState', 'year']);
     return (
         <div className="col-sm-12">
-          <CostEffectiveness width={width} data={state.getIn(['globalState', 'data', 'costEffectiveness'])}/>
+          <CostEffectiveness width={width} data={data.get('costEffectiveness')}/>
           <BiddingPeriod width={width}/>
-          <FundingByBidType width={width}/>
+          <FundingByBidType width={width} data={data.getIn(['bidType', year])}/>
         </div>
     )
   }

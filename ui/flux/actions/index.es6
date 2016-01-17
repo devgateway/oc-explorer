@@ -1,6 +1,6 @@
 import dispatcher from "../dispatcher";
 import constants from "./constants";
-import {fetchJson} from "../../tools";
+import {fetchJson, years} from "../../tools";
 
 export default {
   changeTab(slug){
@@ -16,7 +16,7 @@ export default {
   },
 
   loadData(){
-    Promise.all([2011, 2012, 2013, 2014, 2015].map(year =>
+    Promise.all(years().map(year =>
       Promise.all([
         fetchJson(`/api/costEffectivenessTenderAmount/${year}`),
         fetchJson(`/api/costEffectivenessAwardAmount/${year}`)
@@ -30,5 +30,9 @@ export default {
         }
       })
     )).then(dispatcher.dispatch.bind(dispatcher, constants.COST_EFFECTIVENESS_DATA_UPDATED));
+
+    years().forEach(
+        year => fetchJson(`/api/tenderPriceByOcdsTypeYear/${year}`
+    ).then(data => dispatcher.dispatch(constants.BID_TYPE_DATA_UPDATED, {year: year, data: data})))
   }
 }
