@@ -45,7 +45,7 @@ export default class Header extends Component{
           </div>
         </aside>
         <div className="col-sm-8 col-md-10 years-bar" role="navigation">
-          {years().reverse().map(year => (
+          {years().map(year => (
             <a
                 key={year}
                 href="javascript:void(0);"
