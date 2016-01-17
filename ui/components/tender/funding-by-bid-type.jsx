@@ -10,6 +10,7 @@ var chartSeries = [{
 export default class FundingByBidType extends Component{
   render(){
     var {data, width} = this.props;
+    var maxValue = data.map(x => x.totalTenderAmount).reduce((a, b) => Math.max(a,b));
     return (
         <section>
           <h4 className="page-header">Funding by bid type</h4>
@@ -20,7 +21,7 @@ export default class FundingByBidType extends Component{
               chartSeries = {chartSeries}
               x= {x => x._id}
               xScale= {"ordinal"}
-              yScale="linear"
+              yDomain={[0, maxValue]}
               margins={{top: 80, right: 100, bottom: 80, left: 200}}
           />
         </section>
