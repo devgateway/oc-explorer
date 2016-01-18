@@ -2,7 +2,8 @@ import React from "react";
 import Component from "../pure-render-component";
 import {Map, MarkerGroup} from "react-d3-map";
 import {callFunc} from "../../tools";
-//require("./style.less");
+import Popup from "./popup";
+require("./style.less");
 
 export default class Planning extends Component{
   render(){
@@ -32,7 +33,7 @@ export default class Planning extends Component{
                 markerClass= {"location"}
                 onClick={callFunc('showPopup')}
                 onCloseClick={callFunc('hidePopup')}
-                popupContent={location => location.properties.name}
+                popupContent={location => <Popup data={location.properties}/>}
             />
           </Map>
         </div>
