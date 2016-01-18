@@ -14,7 +14,7 @@ export default class Tender extends Component{
         <div className="col-sm-12">
           <CostEffectiveness width={width} data={data.get('costEffectiveness')}/>
           <BiddingPeriod width={width}/>
-          <FundingByBidType width={width} data={data.getIn(['bidType', year])}/>
+          <FundingByBidType width={width} data={data.getIn(['bidType', year], [])}/>
         </div>
     )
   }
