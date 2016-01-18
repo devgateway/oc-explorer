@@ -9,8 +9,9 @@ export default class Planning extends Component{
   render(){
     var {locations, width} = this.props;
     return (
-        <div className="col-sm-12">
+        <div className="col-sm-12 content map-content">
           <Map
+              margins={{top: 0, right: 0, bottom: 0, left: 0}}
               scale={18000}
               width={width}
               height={1000}
