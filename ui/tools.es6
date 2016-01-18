@@ -16,3 +16,5 @@ export function debounce(cb, delay = 200){
 }
 
 export var years = () => [2015, 2014, 2013, 2012, 2011];
+
+export var callFunc = name => obj => obj[name]();
