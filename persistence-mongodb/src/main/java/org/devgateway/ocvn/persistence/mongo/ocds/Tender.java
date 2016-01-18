@@ -32,6 +32,7 @@ public class Tender {
 	String awardCriteriaDetails;
 	List<String> submissionMethod=new ArrayList<>();
 	String submissionMethodDetails;
+	@Indexed
 	Period tenderPeriod;
 	Period enquiryPeriod;
 	Boolean hasEnquiries;

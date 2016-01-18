@@ -5,6 +5,7 @@ package org.devgateway.ocvn.persistence.mongo.ocds;
 
 import java.util.Date;
 
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -14,7 +15,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Period {
 
+	@Indexed
 	Date startDate;
+	@Indexed
 	Date endDate;
 
 	public Date getStartDate() {
