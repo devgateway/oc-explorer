@@ -92,8 +92,13 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>3.13</version>
 		</dependency>
-		
 
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.3</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -117,6 +122,7 @@
 				<include>**/*.sql</include>
 				<include>**/*.xml</include>
 				<include>**/*.xlsx</include>
+				<include>**/*.js</include>
 			</includes>
 
 		</resource>
