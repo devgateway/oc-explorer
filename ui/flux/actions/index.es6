@@ -16,6 +16,13 @@ export default {
   },
 
   loadData(){
+    years().forEach(
+        year => fetchJson(`/api/plannedFundingByLocation/${year}`)
+          .then(data => data.filter(location => !!location.coordinates
+              || console.warn('Invalid location!', location)))
+          .then(data => dispatcher.dispatch(constants.LOCATION_UPDATED, {year: year, data: data}))
+    );
+
     Promise.all(years().map(year =>
       Promise.all([
         fetchJson(`/api/costEffectivenessTenderAmount/${year}`),
@@ -32,7 +39,8 @@ export default {
     )).then(dispatcher.dispatch.bind(dispatcher, constants.COST_EFFECTIVENESS_DATA_UPDATED));
 
     years().forEach(
-        year => fetchJson(`/api/tenderPriceByOcdsTypeYear/${year}`
-    ).then(data => dispatcher.dispatch(constants.BID_TYPE_DATA_UPDATED, {year: year, data: data})))
+        year => fetchJson(`/api/tenderPriceByOcdsTypeYear/${year}`)
+          .then(data => dispatcher.dispatch(constants.BID_TYPE_DATA_UPDATED, {year: year, data: data}))
+    )
   }
 }
