@@ -3,6 +3,11 @@ import constants from "../actions/constants";
 import keyMirror from "keymirror";
 import {years} from "../../tools";
 
+var yearsHash = () => years().reduce((obj, year) => {
+  obj[year] = [];
+  return obj;
+}, {});
+
 var store = Store({
   getInitialState(){
     return toImmutable({
@@ -11,10 +16,8 @@ var store = Store({
       contentWidth: 0,
       data: {
         costEffectiveness: [],
-        bidType: years().reduce((obj, year) => {
-          obj[year] = [];
-          return obj;
-        }, {})
+        bidType: yearsHash(),
+        locations: yearsHash()
       }
     })
   },
@@ -25,6 +28,7 @@ var store = Store({
     this.on(constants.CONTENT_WIDTH_CHANGED, (state, newWidth) => state.set('contentWidth', newWidth));
     this.on(constants.COST_EFFECTIVENESS_DATA_UPDATED, (state, data) => state.setIn(['data', 'costEffectiveness'], data));
     this.on(constants.BID_TYPE_DATA_UPDATED, (state, {year, data}) => state.setIn(['data', 'bidType', year], data));
+    this.on(constants.LOCATION_UPDATED, (state, {year, data}) => state.setIn(['data', 'locations', year], data));
   }
 });
 
