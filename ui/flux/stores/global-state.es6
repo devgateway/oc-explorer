@@ -19,7 +19,8 @@ var store = Store({
     this.on(constants.YEAR_TOGGLED, (state, {year, selected}) => state.setIn(['selectedYears', year], selected));
     this.on(constants.CONTENT_WIDTH_CHANGED, (state, newWidth) => state.set('contentWidth', newWidth));
     this.on(constants.COST_EFFECTIVENESS_DATA_UPDATED, updateData('costEffectiveness'));
-    this.on(constants.BID_TYPE_DATA_UPDATED, updateData('bidType'));
+    this.on(constants.BID_TYPE_DATA_UPDATED,
+        (state, {year, data}) => state.setIn(['data', 'bidType', year], toImmutable(data)));
     this.on(constants.LOCATION_UPDATED, updateData('locations'));
   }
 });
