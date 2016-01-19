@@ -14,12 +14,13 @@ var store = Store({
   },
 
   initialize(){
+    var updateData = path => (state, {year, data}) => state.setIn(['data', path, year], data);
     this.on(constants.TAB_CHANGED, (state, tab) => state.set('tab', tab));
     this.on(constants.YEAR_TOGGLED, (state, {year, selected}) => state.setIn(['selectedYears', year], selected));
     this.on(constants.CONTENT_WIDTH_CHANGED, (state, newWidth) => state.set('contentWidth', newWidth));
-    this.on(constants.COST_EFFECTIVENESS_DATA_UPDATED, (state, data) => state.setIn(['data', 'costEffectiveness'], data));
-    this.on(constants.BID_TYPE_DATA_UPDATED, (state, {year, data}) => state.setIn(['data', 'bidType', year], data));
-    this.on(constants.LOCATION_UPDATED, (state, {year, data}) => state.setIn(['data', 'locations', year], data));
+    this.on(constants.COST_EFFECTIVENESS_DATA_UPDATED, updateData('costEffectiveness'));
+    this.on(constants.BID_TYPE_DATA_UPDATED, updateData('bidType'));
+    this.on(constants.LOCATION_UPDATED, updateData('locations'));
   }
 });
 
