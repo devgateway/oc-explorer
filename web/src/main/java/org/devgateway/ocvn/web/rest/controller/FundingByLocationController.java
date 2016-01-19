@@ -80,8 +80,6 @@ public class FundingByLocationController extends GenericOcvnController {
 				unwind("$planning.locations"),
 				group("planning.locations").sum("$dividedTotal").as("totalPlannedAmount"));
 	
-		System.out.println(agg.toString());
-		
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();
 		return tagCount;
