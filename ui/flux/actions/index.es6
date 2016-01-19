@@ -7,8 +7,11 @@ export default {
     dispatcher.dispatch(constants.TAB_CHANGED, slug);
   },
 
-  changeYear(newYear){
-    dispatcher.dispatch(constants.YEAR_CHANGED, newYear);
+  toggleYear(year, selected){
+    dispatcher.dispatch(constants.YEAR_TOGGLED, {
+      year: year,
+      selected: selected
+    });
   },
 
   changeContentWidth(newWidth){
