@@ -50,7 +50,7 @@ export default class App extends React.Component{
           </div>
         </aside>
         <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 years-bar" role="navigation">
-          {state.getIn(['globalState', 'selectedYears']).map((selected, year) => (
+          {globalState.get('selectedYears').map((selected, year) => (
             <a
               key={year}
               href="javascript:void(0);"
@@ -66,7 +66,10 @@ export default class App extends React.Component{
             {globalState.get('tab') == tabs.PLANNING ?
                 <Planning
                     width={globalState.get('contentWidth')}
-                    locations={globalState.getIn(['data', 'locations', globalState.get('year')], [])}
+                    locations={globalState.get('selectedYears').reduce((location, selected, year) => selected ?
+                        location.concat(globalState.getIn(['data', 'locations', year], [])) :
+                        location
+                    , [])}
                 /> :
                 <Tender {...this.props}/>
             }
