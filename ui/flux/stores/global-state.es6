@@ -3,23 +3,13 @@ import constants from "../actions/constants";
 import keyMirror from "keymirror";
 import {years} from "../../tools";
 
-var yearsHash = (fillWidth = []) => years().reduce((obj, year) => {
-  obj[year] = fillWidth;
-  return obj;
-}, {});
-
 var store = Store({
   getInitialState(){
     return toImmutable({
       tab: store.tabs.PLANNING,
-      selectedYears: yearsHash(true),
+      selectedYears: years().reduce((map, year) => map.set(year, true), toImmutable({})),
       year: 2015,
-      contentWidth: 0,
-      data: {
-        costEffectiveness: [],
-        bidType: yearsHash(),
-        locations: yearsHash()
-      }
+      contentWidth: 0
     })
   },
 
