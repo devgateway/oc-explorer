@@ -36,7 +36,9 @@ export default class App extends React.Component{
               <p><strong>Toolkit description</strong></p>
               <p>
                 <small>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dolor ex, dapibus id consectetur ut, aliquet sed ipsum. Phasellus leo massa, ullamcorper vel auctor eu, fermentum in ante. In consequat ut metus ac pretium. Fusce et lorem aliquet, pretium sapien vel, eleifend nunc.
+                  The Procurement M&E Prototype is an interactive platform for analyzing, monitoring, and evaluating
+                  information on procurement in Vietnam. All data in the dashboard are collected from the Vietnam
+                  Government eProcurement system (eGP).
                 </small>
               </p>
             </section>
