@@ -3,32 +3,24 @@ import constants from "../actions/constants";
 import keyMirror from "keymirror";
 import {years} from "../../tools";
 
-var yearsHash = () => years().reduce((obj, year) => {
-  obj[year] = [];
-  return obj;
-}, {});
-
 var store = Store({
   getInitialState(){
     return toImmutable({
       tab: store.tabs.PLANNING,
-      year: 2015,
-      contentWidth: 0,
-      data: {
-        costEffectiveness: [],
-        bidType: yearsHash(),
-        locations: yearsHash()
-      }
+      selectedYears: years().reduce((map, year) => map.set(year, true), toImmutable({})),
+      contentWidth: 0
     })
   },
 
   initialize(){
+    var updateData = path => (state, {year, data}) => state.setIn(['data', path, year], data);
     this.on(constants.TAB_CHANGED, (state, tab) => state.set('tab', tab));
-    this.on(constants.YEAR_CHANGED, (state, newYear) => state.set('year', newYear));
+    this.on(constants.YEAR_TOGGLED, (state, {year, selected}) => state.setIn(['selectedYears', year], selected));
     this.on(constants.CONTENT_WIDTH_CHANGED, (state, newWidth) => state.set('contentWidth', newWidth));
-    this.on(constants.COST_EFFECTIVENESS_DATA_UPDATED, (state, data) => state.setIn(['data', 'costEffectiveness'], data));
-    this.on(constants.BID_TYPE_DATA_UPDATED, (state, {year, data}) => state.setIn(['data', 'bidType', year], data));
-    this.on(constants.LOCATION_UPDATED, (state, {year, data}) => state.setIn(['data', 'locations', year], data));
+    this.on(constants.COST_EFFECTIVENESS_DATA_UPDATED, updateData('costEffectiveness'));
+    this.on(constants.BID_TYPE_DATA_UPDATED,
+        (state, {year, data}) => state.setIn(['data', 'bidType', year], toImmutable(data)));
+    this.on(constants.LOCATION_UPDATED, updateData('locations'));
   }
 });
 
