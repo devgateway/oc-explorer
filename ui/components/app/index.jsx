@@ -47,20 +47,20 @@ export default class App extends React.Component{
             </section>
           </div>
         </aside>
+        <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 years-bar" role="navigation">
+          {years().map(year => (
+              <a
+                  key={year}
+                  href="javascript:void(0);"
+                  className={cn({active: year == state.getIn(['globalState','year'])})}
+                  onClick={e => actions.changeYear(year)}
+              >
+                <i className="glyphicon glyphicon-ok-circle"></i> {year}
+              </a>
+          ))}
+        </div>
         <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10">
           <div className="row">
-            <div className="col-sm-12 years-bar" role="navigation">
-              {years().map(year => (
-                  <a
-                      key={year}
-                      href="javascript:void(0);"
-                      className={cn({active: year == state.getIn(['globalState','year'])})}
-                      onClick={e => actions.changeYear(year)}
-                  >
-                    <i className="glyphicon glyphicon-ok-circle"></i> {year}
-                  </a>
-              ))}
-            </div>
             {globalState.get('tab') == tabs.PLANNING ?
                 <Planning
                     width={globalState.get('contentWidth')}
