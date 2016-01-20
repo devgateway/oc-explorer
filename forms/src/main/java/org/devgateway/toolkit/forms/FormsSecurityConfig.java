@@ -48,7 +48,7 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 	public void configure(WebSecurity web) throws Exception {
 		super.configure(web);
 		web.ignoring().antMatchers("/ui/**","/api/tenderPriceByOcdsTypeYear/**", "/api/tenderPriceByVnTypeYear/**",
-				"/api/tenderBidPeriodPercentilesByYearController**","/api/ocds/release/budgetProjectId/**",
+				"/api/tenderBidPeriodPercentiles**","/api/ocds/release/budgetProjectId/**",
 				"/api/ocds/release/planningBidNo/**", "/api/plannedFundingByLocation/**",
 				"/api/costEffectivenessAwardAmount/**","/api/costEffectivenessTenderAmount/**",
 				
