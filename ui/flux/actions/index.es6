@@ -41,7 +41,12 @@ export default {
           .then(data => dispatcher.dispatch(constants.BID_TYPE_DATA_UPDATED, {year: year, data: data}))
     });
 
-    fetchJson("/api/tenderBidPeriodPercentilesByYearController")
+    fetchJson("/api/tenderBidPeriodPercentiles")
+        .then(raw => {
+          var parsed = {};
+          Object.keys(raw).forEach(key => parsed[key] = raw[key].tenderLengthDays);
+          return parsed;
+        })
         .then(dispatcher.dispatch.bind(dispatcher, constants.BID_PERIOD_DATA_UPDATED));
   }
 }
