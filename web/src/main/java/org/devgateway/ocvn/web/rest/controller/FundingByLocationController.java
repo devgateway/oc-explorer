@@ -69,16 +69,16 @@ public class FundingByLocationController extends GenericOcvnController {
 		
 		DBObject project=new BasicDBObject();
 		project.put("planning.locations", 1);
+		project.put("cntprj", new BasicDBObject("$literal",1));
 		project.put("planning.budget.amount.amount",1);
 		project.put("dividedTotal",dividedTotal);
 		
 		Aggregation agg = newAggregation(
-				match(where("planning").exists(true)
-						.and("planning.locations").exists(true).ne(null)
+				match(where("planning").exists(true).and("planning.locations").exists(true).ne(null)
 						.and("planning.bidPlanProjectDateApprove").gte(getStartDate(year)).lte(getEndDate(year))),
-				new CustomProjectionOperation(new BasicDBObject("$project",project)),
-				unwind("$planning.locations"),
-				group("planning.locations").sum("$dividedTotal").as("totalPlannedAmount"));
+				new CustomProjectionOperation(new BasicDBObject("$project", project)), unwind("$planning.locations"),
+				group("planning.locations").sum("$dividedTotal").as("totalPlannedAmount").sum("$cntprj")
+						.as("recordsCount"));
 	
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();
