@@ -20,6 +20,7 @@ import org.apache.wicket.spring.SpringWebApplicationFactory;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.web.context.ContextCleanupListener;
 import org.springframework.web.filter.DelegatingFilterProxy;
@@ -42,10 +43,12 @@ public class WebInitializer implements ServletContextInitializer {
 // AUTO configured by spring boot 1.2.x and upper
 //		sc.addFilter(AbstractSecurityWebApplicationInitializer.DEFAULT_FILTER_NAME, new DelegatingFilterProxy("springSecurityFilterChain"))
 //				.addMappingForUrlPatterns(null, false, "/*");
-
+		
 		sc.addFilter("Spring OpenEntityManagerInViewFilter",
 				org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter.class).addMappingForUrlPatterns(null,
 				false, "/*");
+		
+		
 		
 		FilterRegistration filter = sc.addFilter("wicket-filter", WicketFilter.class);
 		filter.setInitParameter(WicketFilter.APP_FACT_PARAM, SpringWebApplicationFactory.class.getName());
@@ -58,7 +61,7 @@ public class WebInitializer implements ServletContextInitializer {
 		// // Request Listener
 		// sc.addListener(new RequestContextListener());
 		//
-		sc.addListener(new ContextCleanupListener());
+		//		sc.addListener(new ContextCleanupListener());
 		//
 		sc.addListener(new HttpSessionEventPublisher());
 
