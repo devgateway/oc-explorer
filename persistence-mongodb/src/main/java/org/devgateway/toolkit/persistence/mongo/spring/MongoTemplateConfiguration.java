@@ -40,11 +40,11 @@ public class MongoTemplateConfiguration {
 		
 		ScriptOperations scriptOps = mongoTemplate.scriptOps();
 
-		URL scriptFile = getClass().getResource("/tenderBidPeriodPercentilesByYearMongo.js");
+		URL scriptFile = getClass().getResource("/tenderBidPeriodPercentilesMongo.js");
 		try {
 			String scriptText = IOUtils.toString(scriptFile);
 			ExecutableMongoScript script = new ExecutableMongoScript(scriptText);
-			scriptOps.register(new NamedMongoScript("tenderBidPeriodPercentilesByYearController", script));
+			scriptOps.register(new NamedMongoScript("tenderBidPeriodPercentiles", script));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
