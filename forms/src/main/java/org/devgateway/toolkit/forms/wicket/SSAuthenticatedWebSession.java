@@ -13,7 +13,6 @@ package org.devgateway.toolkit.forms.wicket;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
@@ -31,7 +30,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.RememberMeServices;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
 /**
  * AuthenticatedWebSession implementation using Spring Security.
@@ -57,8 +55,6 @@ public class SSAuthenticatedWebSession extends AuthenticatedWebSession {
     @SpringBean
     private AuthenticationManager authenticationManager;
 
-	private HttpSession httpSession;
-
 //    @SpringBean
 //    private SessionRegistry sessionRegistry;
 	
@@ -79,8 +75,7 @@ public class SSAuthenticatedWebSession extends AuthenticatedWebSession {
     public SSAuthenticatedWebSession(Request request) {
         super(request);
         Injector.get().inject(this);
-        ensureDependenciesNotNull();
-        this.httpSession = ((HttpServletRequest) request.getContainerRequest()).getSession();
+        ensureDependenciesNotNull();        
         if (authenticationManager == null) {
             throw new IllegalStateException("Injection of AuthenticationManager failed.");
         }
@@ -98,8 +93,8 @@ public class SSAuthenticatedWebSession extends AuthenticatedWebSession {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password));
             SecurityContextHolder.getContext().setAuthentication(authentication);      
-        	httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
-        			SecurityContextHolder.getContext());
+//        	httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+//        			SecurityContextHolder.getContext());
             authenticated = authentication.isAuthenticated();
    
             if(authenticated && rememberMeServices!=null) rememberMeServices.loginSuccess(
