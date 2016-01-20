@@ -8,7 +8,8 @@ var store = Store({
     return toImmutable({
       tab: store.tabs.PLANNING,
       selectedYears: years().reduce((map, year) => map.set(year, true), toImmutable({})),
-      contentWidth: 0
+      contentWidth: 0,
+      data: {}
     })
   },
 
@@ -21,6 +22,7 @@ var store = Store({
     this.on(constants.BID_TYPE_DATA_UPDATED,
         (state, {year, data}) => state.setIn(['data', 'bidType', year], toImmutable(data)));
     this.on(constants.LOCATION_UPDATED, updateData('locations'));
+    this.on(constants.BID_PERIOD_DATA_UPDATED, (state, data) => state.setIn(['data', 'bidPeriod'], data));
   }
 });
 
