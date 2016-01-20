@@ -8,7 +8,8 @@ var store = Store({
     return toImmutable({
       tab: store.tabs.PLANNING,
       selectedYears: years().reduce((map, year) => map.set(year, true), toImmutable({})),
-      contentWidth: 0
+      contentWidth: 0,
+      data: {}
     })
   },
 
