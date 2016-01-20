@@ -21,7 +21,10 @@ export default class Tender extends Component{
                   ceData.concat([data.getIn(['costEffectiveness', year])]) :
                   ceData
               , [])}/>
-          {/*<BiddingPeriod width={width}/>*/}
+          <BiddingPeriod
+              width={width}
+              data={data.get('bidPeriod')}
+          />
           <FundingByBidType
               width={width}
               data={data.get('bidType')
