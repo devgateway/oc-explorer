@@ -1,30 +1,29 @@
-function(year) {
-
-	
-	db.loadServerScripts();
-	
-   if(year!=undefined) { 
-		var intYear=year.replace(/'/g, ""); 	
-		var startStartDate=new Date(intYear,1,1);
-		var endStartDate=new Date(intYear,12,31);
-	   match=  { "$gte" : startStartDate , "$lte" : endStartDate }  ;
-   
+function(yearsStr) {
+   db.loadServerScripts();		
+   if(yearsStr!=undefined) {	
+	   var years=JSON.parse(yearsStr.replace(/'/g, ""));
+	   matchArray=[];
+	   for(var i in years) {                   
+		   startStartDate=new ISODate(years[i]+"-01-01T00:00:00.000Z");
+		   endStartDate=new ISODate(years[i]+"-12-31T00:00:00.000Z");
+		   matchArray.push({ "tender.tenderPeriod.startDate" : { "$gte" : startStartDate , "$lte" : endStartDate  } });
+		   match=  {  $or:  matchArray }  ;
+	   }
    }
    else 
-	  match =  { "$ne" : null};
- 
-
+	  match =  { "tender.tenderPeriod.startDate" : { $ne : null }};
    
 	var agg = db.release.aggregate(
 	[
 	{ "$match" :
 	{ 
-	    "tender.tenderPeriod.startDate" : { "$ne" : null},
-	    "tender.tenderPeriod.endDate" : { "$ne" : null},	    
-	    "tender.tenderPeriod.startDate" : match
+		$and: [
+		       {"tender.tenderPeriod.startDate" : { "$ne" : null} } , 
+		       {"tender.tenderPeriod.endDate" : { "$ne" : null} },
+		       match
+		       ]
 	    }
-	} ,
-	
+	} ,	
 	{
 	"$project" : {
 	    "_id": false,
