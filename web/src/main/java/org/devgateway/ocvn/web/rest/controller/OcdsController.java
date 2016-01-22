@@ -16,19 +16,18 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 
 import java.util.List;
 
-import javax.validation.constraints.Size;
+import javax.validation.Valid;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
+import org.devgateway.ocvn.web.rest.controller.request.OCDSReleaseRequest;
 import org.devgateway.toolkit.persistence.mongo.dao.VNPlanning;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -37,11 +36,13 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 @RestController
-@Validated
 public class OcdsController extends GenericOcvnController {
 
 	@Autowired
 	private ReleaseRepository releaseRepository;
+	
+	
+	
 	
 	@RequestMapping("/api/ocds/release/budgetProjectId/{projectId:^[a-zA-Z0-9]*$}")
 	public Release ocdsByProjectId(@PathVariable String projectId) {
@@ -64,38 +65,25 @@ public class OcdsController extends GenericOcvnController {
 
 	/**
 	 * Returns a list of OCDS Releases, order by Id, using pagination
-	 * @param bidPlanProjectDateApproveYear a multiparameter , the years that will filter {@link VNPlanning#getBidPlanProjectDateApprove()}
-	 * @param page the page number, zero indexed
-	 * @param size the page size, should be between 1 and 1000
 	 * @return the release data
 	 */
 	@RequestMapping("/api/ocds/release/all")
-	public List<Release> ocdsReleases(
-			@RequestParam(required = false) 
-			Integer[] bidPlanProjectDateApproveYear,
-			
-			@RequestParam(required = false, defaultValue = "0") 
-			@Size(min = 0, message = "page number must be positive integer, page 0 is first") 
-			Integer page,
-			
-			@RequestParam(required = false, defaultValue = "100") 
-			@Size(min = 1, max = 1000, message = "page size must be between 1 and 1000") 
-			Integer size) {
+	public List<Release> ocdsReleases(@Valid OCDSReleaseRequest releaseRequest) {
 
 		Criteria[] yearCriteria = null;
 		Criteria criteria = new Criteria();
 
-		if (bidPlanProjectDateApproveYear == null) {
+		if (releaseRequest.getBidPlanProjectDateApproveYear() == null) {
 			yearCriteria = new Criteria[1];
 			yearCriteria[0] = new Criteria();
 		} else {
-			yearCriteria = new Criteria[bidPlanProjectDateApproveYear.length];
-			for (int i = 0; i < bidPlanProjectDateApproveYear.length; i++)
-				yearCriteria[i] = where("planning.bidPlanProjectDateApprove").gte(getStartDate(bidPlanProjectDateApproveYear[i]))
-						.lte(getEndDate(bidPlanProjectDateApproveYear[i]));
+			yearCriteria = new Criteria[releaseRequest.getBidPlanProjectDateApproveYear().length];
+			for (int i = 0; i < releaseRequest.getBidPlanProjectDateApproveYear().length; i++)
+				yearCriteria[i] = where("planning.bidPlanProjectDateApprove").gte(getStartDate(releaseRequest.getBidPlanProjectDateApproveYear()[i]))
+						.lte(getEndDate(releaseRequest.getBidPlanProjectDateApproveYear()[i]));
 		}
 
-		PageRequest pageRequest = new PageRequest(page, size, Direction.ASC, "id");
+		PageRequest pageRequest = new PageRequest(releaseRequest.getPage(), releaseRequest.getSize(), Direction.ASC, "id");
 
 		List<Release> find = mongoTemplate.find(query(criteria.orOperator(yearCriteria)).with(pageRequest),
 				Release.class);
