@@ -1,6 +1,7 @@
 import React from "react";
 import Component from "../pure-render-component";
-import {Map, MarkerGroup} from "react-d3-map";
+import {Map} from "react-d3-map";
+import CircleGroup from "./circle-group";
 import {callFunc} from "../../tools";
 import Popup from "./popup";
 import {ZoomControl} from "react-d3-map-core";
@@ -29,7 +30,7 @@ export default class Planning extends Component{
               height={1000}
               center={[105, 14.5]}
           >
-            <MarkerGroup
+            <CircleGroup
                 data={{
                   "type": "FeatureCollection",
                   "features": locations.map(location => {
@@ -37,13 +38,14 @@ export default class Planning extends Component{
                       "type": "Feature",
                       "properties": {
                         "name": location.name,
-                        "amount": location.totalPlannedAmount
+                        "amount": location.totalPlannedAmount,
+                        "count": location.recordsCount
                       },
                       "geometry": location.coordinates
                     }
                   })
                 }}
-                markerClass= {"location"}
+                circleClass= {"location"}
                 onClick={callFunc('showPopup')}
                 onCloseClick={callFunc('hidePopup')}
                 popupContent={location => <Popup data={location.properties}/>}
