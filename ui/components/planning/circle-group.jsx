@@ -11,9 +11,7 @@ import {
   Map
 } from 'immutable'
 
-import {
-  Popup
-} from 'react-d3-map-core';
+import {Popup} from 'react-d3-map-core';
 
 import CircleCollection from "./circle-collection";
 
@@ -120,11 +118,7 @@ class CircleGroup extends Component {
       showPopup
     } = this.state;
 
-    const {
-      data,
-      popupContent,
-      circleClass
-    } = this.props;
+    const {data, popupContent, circleClass, popupWidth} = this.props;
 
     const {
       geoPath,
@@ -152,6 +146,7 @@ class CircleGroup extends Component {
             key= {i}
             x= {point[0]}
             y= {point[1] - 50}
+            width={popupWidth}
             contentPopup={content}
             closeClick= {onCloseClick}
           />
