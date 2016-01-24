@@ -71,27 +71,15 @@ class CircleGroup extends Component {
   }
 
   showPopup() {
-    var {
-      showPopup
-    } = this.state;
-
     var id = this.id;
     var d = this.d;
 
-    if(showPopup.keySeq().toArray().indexOf(id) !== -1) {
-      // hide popup
-      var newPopup = showPopup.delete(id);
-    } else {
-      // add a popup
-      var newPopup = showPopup.set(id, Map({
+    this.setState({
+      showPopup: OrderedMap().set(id, Map({
         xPopup: d.geometry.coordinates[0],
         yPopup: d.geometry.coordinates[1],
         data: d
-      }));
-    }
-
-    this.setState({
-      showPopup: newPopup
+      }))
     })
   }
 
