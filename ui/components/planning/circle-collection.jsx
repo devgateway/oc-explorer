@@ -43,17 +43,21 @@ export default class CircleCollection extends Component {
       if(!Array.isArray(pointData))
         pointData = [pointData];
 
+      var maxAmount = Math.max(0, ...pointData.map(data => data.properties.amount));
+
       circles = pointData.map((d, i) => {
         var x = +projection(d.geometry.coordinates)[0];
         var y = +projection(d.geometry.coordinates)[1];
         var id = x + '-' + y;
+        var amountRatio = d.properties.amount / maxAmount;
+        var green = Math.round(255 - 255 * amountRatio);
         return (
           <g
               key= {i}
               onClick={_ => onClick(this, d, i)}
           >
             <Circle
-                color="#ffff00"
+                color={`rgb(255, ${green}, 0)`}
                 id= {id}
                 data= {d}
                 x= {x}

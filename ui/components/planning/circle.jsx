@@ -51,7 +51,6 @@ Circle.defaultProps = {
 
 Circle.propTypes = {
   data: PropTypes.object.isRequired,
-  geoPath: PropTypes.func.isRequired,
   circleClass: PropTypes.string
 };
 
