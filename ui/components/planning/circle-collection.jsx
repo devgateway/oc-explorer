@@ -53,6 +53,7 @@ export default class CircleCollection extends Component {
               onClick={_ => onClick(this, d, i)}
           >
             <Circle
+                color="#ffff00"
                 id= {id}
                 data= {d}
                 x= {x}
