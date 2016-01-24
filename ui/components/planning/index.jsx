@@ -1,6 +1,7 @@
 import React from "react";
 import Component from "../pure-render-component";
-import {Map, MarkerGroup} from "react-d3-map";
+import {Map} from "react-d3-map";
+import CircleGroup from "./circle-group";
 import {callFunc} from "../../tools";
 import Popup from "./popup";
 import {ZoomControl} from "react-d3-map-core";
@@ -29,21 +30,29 @@ export default class Planning extends Component{
               height={1000}
               center={[105, 14.5]}
           >
-            <MarkerGroup
+            <CircleGroup
                 data={{
                   "type": "FeatureCollection",
-                  "features": locations.map(location => {
-                    return {
-                      "type": "Feature",
-                      "properties": {
-                        "name": location.name,
-                        "amount": location.totalPlannedAmount
-                      },
-                      "geometry": location.coordinates
-                    }
-                  })
+                  "features": locations
+                    .groupBy(location => location.get('_id'))
+                    .map(locations => locations.reduce((reducedLocation, location) => {
+                        return {
+                            "type": "Feature",
+                            "properties": {
+                              "name": location.get('name'),
+                              "amount": reducedLocation.properties.amount + location.get('totalPlannedAmount'),
+                              "count": reducedLocation.properties.count + location.get('recordsCount')
+                            },
+                            "geometry": location.get('coordinates').toJS()
+                        }
+                    }, {
+                        "properties": {
+                          "amount": 0,
+                          "count": 0
+                        }
+                    })).toArray()
                 }}
-                markerClass= {"location"}
+                circleClass= {"location"}
                 onClick={callFunc('showPopup')}
                 onCloseClick={callFunc('hidePopup')}
                 popupContent={location => <Popup data={location.properties}/>}

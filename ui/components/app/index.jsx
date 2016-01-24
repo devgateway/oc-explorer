@@ -6,6 +6,7 @@ import Tender from "../tender";
 import NavigationLink from "./navigation-link";
 import {years} from "../../tools";
 import cn from "classnames";
+import {toImmutable} from "nuclear-js";
 require('./style.less');
 
 export default class App extends React.Component{
@@ -67,9 +68,9 @@ export default class App extends React.Component{
                 <Planning
                     width={globalState.get('contentWidth')}
                     locations={globalState.get('selectedYears').reduce((location, selected, year) => selected ?
-                        location.concat(globalState.getIn(['data', 'locations', year], [])) :
+                        location.concat(globalState.getIn(['data', 'locations', year], toImmutable([]))) :
                         location
-                    , [])}
+                    , toImmutable([]))}
                 /> :
                 <Tender {...this.props}/>
             }
