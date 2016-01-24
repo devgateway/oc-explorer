@@ -18,26 +18,18 @@ class Circle extends Component {
   }
 
   _mkCircle(dom) {
-    const {
-      data,
-      circleClass,
-      geoPath,
-      r,
-      x,
-      y,
-      onMouseOut,
-      onMouseOver
-    } = this.props;
+    const {data, circleClass, r, x, y, onMouseOut, onMouseOver, color} = this.props;
 
     var circle = d3.select(dom);
 
     circle
-      .datum(data)
-      .attr('class', `${circleClass} bubble`)
-      .attr("transform", (d) => { return `translate(${x}, ${y})`})
-      .attr("r", r)
-      .on("mouseover", function (d, i) {return onMouseOver(this, d, i);})
-      .on("mouseout", function (d, i) {return onMouseOut(this, d, i);})
+        .datum(data)
+        .attr('fill', color)
+        .attr('class', `${circleClass} bubble`)
+        .attr("transform", (d) => { return `translate(${x}, ${y})`})
+        .attr("r", r)
+        .on("mouseover", function (d, i) {return onMouseOver(this, d, i);})
+        .on("mouseout", function (d, i) {return onMouseOut(this, d, i);})
 
     return circle;
   }
@@ -59,7 +51,6 @@ Circle.defaultProps = {
 
 Circle.propTypes = {
   data: PropTypes.object.isRequired,
-  geoPath: PropTypes.func.isRequired,
   circleClass: PropTypes.string
 };
 
