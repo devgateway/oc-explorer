@@ -33,17 +33,24 @@ export default class Planning extends Component{
             <CircleGroup
                 data={{
                   "type": "FeatureCollection",
-                  "features": locations.map(location => {
-                    return {
-                      "type": "Feature",
-                      "properties": {
-                        "name": location.name,
-                        "amount": location.totalPlannedAmount,
-                        "count": location.recordsCount
-                      },
-                      "geometry": location.coordinates
-                    }
-                  })
+                  "features": locations
+                    .groupBy(location => location.get('_id'))
+                    .map(locations => locations.reduce((reducedLocation, location) => {
+                        return {
+                            "type": "Feature",
+                            "properties": {
+                              "name": location.get('name'),
+                              "amount": reducedLocation.properties.amount + location.get('totalPlannedAmount'),
+                              "count": reducedLocation.properties.count + location.get('recordsCount')
+                            },
+                            "geometry": location.get('coordinates').toJS()
+                        }
+                    }, {
+                        "properties": {
+                          "amount": 0,
+                          "count": 0
+                        }
+                    })).toArray()
                 }}
                 circleClass= {"location"}
                 onClick={callFunc('showPopup')}
