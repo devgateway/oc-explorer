@@ -1,6 +1,7 @@
 import React from "react";
-import Component from "../pure-render-component";
+import Component from "../../pure-render-component";
 import {BarStackChart} from "react-d3-basic";
+require("./style.less");
 
 export default class CostEffectiveness extends Component{
   render(){
@@ -25,6 +26,7 @@ export default class CostEffectiveness extends Component{
               width={this.props.width}
               height={350}
               margins={{top: 80, right: 100, bottom: 80, left: 200}}
+              legendClassName="cost-effectiveness-legend"
           />
         </section>
     )
