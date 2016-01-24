@@ -5,11 +5,22 @@
   stroke: #333;
 }
 
-.react-d3-map-core__popup__content-wrapper{
-  width: 400px!important;
-  &, .popup_content{
-    background-color: #4b4b4b!important;
-    color: white;
+.react-d3-map-core__popup_utils{
+  foreignobject:nth-child(2) {
+    transform: translateX(380px);
+  }
+
+  .react-d3-map-core__popup__content-wrapper{
+    width: 400px!important;
+    text-align: left!important;
+    border-radius: 0!important;
+    &, .popup_content{
+      background-color: #4b4b4b!important;
+      color: white;
+      h3{
+        margin-top:0;
+      }
+    }
   }
 }
 
