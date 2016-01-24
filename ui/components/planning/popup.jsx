@@ -13,7 +13,7 @@ export default class Popup extends Component{
             </tr>
             <tr>
               <th>Total planned amount</th>
-              <td>{amount}</td>
+              <td>{amount.toLocaleString()}</td>
             </tr>
           </tbody>
         </table>
