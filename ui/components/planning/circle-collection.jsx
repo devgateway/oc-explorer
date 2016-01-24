@@ -50,17 +50,17 @@ export default class CircleCollection extends Component {
         return (
           <g
               key= {i}
-              onClick= {onClick}
-              onMouseOver= {onMouseOver}
-              onMouseOut= {onMouseOut}
+              onClick={_ => onClick(this, d, i)}
           >
             <Circle
-              id= {id}
-              data= {d}
-              x= {x}
-              y= {y}
-              r={16}
-              circleClass= {circleClass}
+                id= {id}
+                data= {d}
+                x= {x}
+                y= {y}
+                r={16}
+                circleClass= {circleClass}
+                onMouseOver= {onMouseOver}
+                onMouseOut= {onMouseOut}
             />
             <text x={x} y={y + 5} textAnchor="middle" fill="black">{toK(d.properties.count)}</text>
           </g>
