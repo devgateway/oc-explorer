@@ -11,9 +11,7 @@ import {
   Map
 } from 'immutable'
 
-import {
-  Popup
-} from 'react-d3-map-core';
+import {Popup} from 'react-d3-map-core';
 
 import CircleCollection from "./circle-collection";
 
@@ -73,27 +71,15 @@ class CircleGroup extends Component {
   }
 
   showPopup() {
-    var {
-      showPopup
-    } = this.state;
-
     var id = this.id;
     var d = this.d;
 
-    if(showPopup.keySeq().toArray().indexOf(id) !== -1) {
-      // hide popup
-      var newPopup = showPopup.delete(id);
-    } else {
-      // add a popup
-      var newPopup = showPopup.set(id, Map({
+    this.setState({
+      showPopup: OrderedMap().set(id, Map({
         xPopup: d.geometry.coordinates[0],
         yPopup: d.geometry.coordinates[1],
         data: d
-      }));
-    }
-
-    this.setState({
-      showPopup: newPopup
+      }))
     })
   }
 
@@ -120,11 +106,7 @@ class CircleGroup extends Component {
       showPopup
     } = this.state;
 
-    const {
-      data,
-      popupContent,
-      circleClass
-    } = this.props;
+    const {data, PopupComponent, circleClass} = this.props;
 
     const {
       geoPath,
@@ -136,26 +118,25 @@ class CircleGroup extends Component {
     var onMouseOut = this._onMouseOut.bind(this);
     var popup;
 
-    if(showPopup.size && popupContent) {
+    if(showPopup.size && PopupComponent) {
       popup = showPopup.keySeq().toArray().map((d, i) => {
         var xPopup = showPopup.get(d).get('xPopup');
         var yPopup = showPopup.get(d).get('yPopup');
         var popupData = showPopup.get(d).get('data');
 
         var point = projection([xPopup, yPopup])
-        var content = popupContent(popupData);
 
         var onCloseClick = this._onCloseClick.bind(this, d)
 
-        return  (
-          <Popup
-            key= {i}
-            x= {point[0]}
-            y= {point[1] - 50}
-            contentPopup={content}
-            closeClick= {onCloseClick}
+        return (
+          <PopupComponent
+              data={popupData}
+              key= {i}
+              x= {point[0]}
+              y= {point[1] - 50}
+              closeClick= {onCloseClick}
           />
-        )
+        );
       })
     }
 
