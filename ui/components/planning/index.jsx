@@ -55,8 +55,7 @@ export default class Planning extends Component{
                 circleClass= {"location"}
                 onClick={callFunc('showPopup')}
                 onCloseClick={callFunc('hidePopup')}
-                popupContent={location => <Popup data={location.properties}/>}
-                popupWidth={400}
+                PopupComponent={Popup}
             />
             <ZoomControl
                 zoomInClick={() => this.setState({scale: scale * 2})}

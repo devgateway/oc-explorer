@@ -106,7 +106,7 @@ class CircleGroup extends Component {
       showPopup
     } = this.state;
 
-    const {data, popupContent, circleClass, popupWidth} = this.props;
+    const {data, PopupComponent, circleClass} = this.props;
 
     const {
       geoPath,
@@ -118,27 +118,25 @@ class CircleGroup extends Component {
     var onMouseOut = this._onMouseOut.bind(this);
     var popup;
 
-    if(showPopup.size && popupContent) {
+    if(showPopup.size && PopupComponent) {
       popup = showPopup.keySeq().toArray().map((d, i) => {
         var xPopup = showPopup.get(d).get('xPopup');
         var yPopup = showPopup.get(d).get('yPopup');
         var popupData = showPopup.get(d).get('data');
 
         var point = projection([xPopup, yPopup])
-        var content = popupContent(popupData);
 
         var onCloseClick = this._onCloseClick.bind(this, d)
 
-        return  (
-          <Popup
-            key= {i}
-            x= {point[0]}
-            y= {point[1] - 50}
-            width={popupWidth}
-            contentPopup={content}
-            closeClick= {onCloseClick}
+        return (
+          <PopupComponent
+              data={popupData}
+              key= {i}
+              x= {point[0]}
+              y= {point[1] - 50}
+              closeClick= {onCloseClick}
           />
-        )
+        );
       })
     }
 
