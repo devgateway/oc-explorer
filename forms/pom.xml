@@ -17,8 +17,8 @@
     <artifactId>forms</artifactId>
     <packaging>jar</packaging>
 
-    <name>Wicket Forms</name>
-    <description>DGToolkit Forms</description>
+    <name>OCVN Forms</name>
+    <description>OCVN Forms</description>
 
 	<parent>
 	    <groupId>org.devgateway.ocvn</groupId>

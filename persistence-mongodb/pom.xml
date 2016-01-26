@@ -17,8 +17,8 @@
 	<artifactId>persistence-mongodb</artifactId>
 	<packaging>jar</packaging>
 
-	<name>MongoDB Persistence</name>
-	<description>MongoDB Persistence</description>
+	<name>OCVN MongoDB Persistence</name>
+	<description>OCVN MongoDB Persistence</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

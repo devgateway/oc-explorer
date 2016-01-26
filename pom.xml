@@ -47,7 +47,7 @@
 	</issueManagement>
 	<ciManagement>
 		<system>Jenkins</system>
-		<url>http://toolkit.dgstg.org/ci/</url>
+		<url>http://ocvn.dgstg.org/ci/</url>
 	</ciManagement>
 
 	<scm>
@@ -63,9 +63,9 @@
 
 	<distributionManagement>
 		<repository>
-			<id>dgtoolkit-releases</id>
-			<name>dgtoolkit-releases</name>
-			<url>http://artifactory.ampdev.net/artifactory/dg-toolkit-releases</url>
+			<id>ocvn-releases</id>
+			<name>OCVN releases</name>
+			<url>http://artifactory.ampdev.net/artifactory/ocvn</url>
 		</repository>
 	</distributionManagement>
 
@@ -77,9 +77,9 @@
         </repository>
 	
 		<repository>
-			<id>DGToolkit</id>
-			<name>DGToolkit</name>
-			<url>http://artifactory.ampdev.net/artifactory/dg-toolkit/</url>
+			<id>OCVN</id>
+			<name>OCVN</name>
+			<url>http://artifactory.ampdev.net/artifactory/ocvn/</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
@@ -94,9 +94,9 @@
         </pluginRepository>
 	
 		<pluginRepository>
-			<id>DGToolkit</id>
-			<name>DGToolkit</name>
-			<url>http://artifactory.ampdev.net/artifactory/dg-toolkit/</url>
+			<id>OCVN</id>
+			<name>OCVN</name>
+			<url>http://artifactory.ampdev.net/artifactory/ocvn/</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>

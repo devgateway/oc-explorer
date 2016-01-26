@@ -17,8 +17,8 @@
 	<artifactId>reporting</artifactId>
 	<packaging>jar</packaging>
 
-	<name>Reporting</name>
-	<description>Reporting back-end dependencies</description>
+	<name>OCVN Reporting</name>
+	<description>OCVN Reporting back-end dependencies</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

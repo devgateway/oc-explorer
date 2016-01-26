@@ -10,8 +10,8 @@
 	<artifactId>web</artifactId>
 	<packaging>jar</packaging>
 
-	<name>Web</name>
-	<description>Web Module</description>
+	<name>OCVN Web</name>
+	<description>OCVN Web Module</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -6,8 +6,8 @@
 	<artifactId>ui</artifactId>
 	<packaging>jar</packaging>
 
-	<name>UI</name>
-	<description>UI Module</description>
+	<name>OCVN UI</name>
+	<description>OCVN UI Module</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

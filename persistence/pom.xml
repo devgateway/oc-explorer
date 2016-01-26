@@ -17,8 +17,8 @@
 	<artifactId>persistence</artifactId>
 	<packaging>jar</packaging>
 
-	<name>JPA Persistence</name>
-	<description>DGToolkit Persistence</description>
+	<name>OCVN Persistence</name>
+	<description>OCVN Persistence</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
