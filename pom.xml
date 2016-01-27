@@ -65,7 +65,7 @@
 		<repository>
 			<id>ocvn-releases</id>
 			<name>OCVN releases</name>
-			<url>http://artifactory.ampdev.net/artifactory/ocvn</url>
+			<url>http://artifactory.ampdev.net/artifactory/ocvn-releases/</url>
 		</repository>
 	</distributionManagement>
 
