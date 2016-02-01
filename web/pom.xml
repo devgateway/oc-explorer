@@ -133,22 +133,8 @@
 
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-        			<executable>true</executable>
-    			</configuration>
-				
+				<artifactId>spring-boot-maven-plugin</artifactId>		
 				<version>${spring.boot.version}</version>
-				
-				
-				<executions>
-					<execution>
-						<goals>
-							<!-- This will ensure a fat jar is created, will include all jar dependencies inside a /lib folder within this jar -->
-							<goal>repackage</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
