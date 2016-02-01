@@ -8,6 +8,7 @@ module.exports = {
   ],
   output: {
     path: path.join(__dirname, 'public/ui'),
+    publicPath: "http://localhost:3000/",
     filename: "index.js"
   },
   module: {
