@@ -1,10 +1,12 @@
-import Component from "../pure-render-component";
-import {BarStackChart} from "react-d3-basic";
-import Plotly from "plotly.js";
+import Plot from "./plot";
 
-export default class CostEffectiveness extends Component{
-  componentDidMount(){
-    var years = this.props.data.map(datum => datum.year + "");
+export default class CostEffectiveness extends Plot{
+  getTitle(){
+    return  "Cost effectiveness";
+  }
+
+  getData(){
+    var years = this.props.data.map(datum => datum.year);
 
     var bidPrice = {
       x: years,
@@ -20,19 +22,15 @@ export default class CostEffectiveness extends Component{
       type: 'bar'
     };
 
-    var data = [bidPrice, diff];
-
-    var layout = {barmode: 'stack'};
-
-    this.chart = Plotly.newPlot(this.refs.chartContainer, data, layout);
+    return [bidPrice, diff];
   }
 
-  render(){
-    return (
-        <section>
-          <h4 className="page-header">Cost effectiveness</h4>
-          <div ref="chartContainer"></div>
-        </section>
-    )
+  getLayout(){
+    return {
+      barmode: "stack",
+      xaxis:{
+        type: "category"
+      }
+    }
   }
 }
