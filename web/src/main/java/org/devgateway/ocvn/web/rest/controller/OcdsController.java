@@ -83,7 +83,7 @@ public class OcdsController extends GenericOcvnController {
 						.lte(getEndDate(releaseRequest.getBidPlanProjectDateApproveYear()[i]));
 		}
 
-		PageRequest pageRequest = new PageRequest(releaseRequest.getPage(), releaseRequest.getSize(), Direction.ASC, "id");
+		PageRequest pageRequest = new PageRequest(releaseRequest.getPageNumber(), releaseRequest.getPageSize(), Direction.ASC, "id");
 
 		List<Release> find = mongoTemplate.find(query(criteria.orOperator(yearCriteria)).with(pageRequest),
 				Release.class);

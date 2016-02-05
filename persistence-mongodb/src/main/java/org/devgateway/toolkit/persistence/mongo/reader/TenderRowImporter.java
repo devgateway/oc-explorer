@@ -9,23 +9,23 @@ import org.apache.poi.ss.usermodel.DateUtil;
 import org.devgateway.ocvn.persistence.mongo.ocds.Classification;
 import org.devgateway.ocvn.persistence.mongo.ocds.Identifier;
 import org.devgateway.ocvn.persistence.mongo.ocds.Item;
-import org.devgateway.ocvn.persistence.mongo.ocds.Organization;
 import org.devgateway.ocvn.persistence.mongo.ocds.Period;
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
 import org.devgateway.ocvn.persistence.mongo.ocds.Value;
+import org.devgateway.toolkit.persistence.mongo.dao.VNOrganization;
 import org.devgateway.toolkit.persistence.mongo.dao.VNPlanning;
 import org.devgateway.toolkit.persistence.mongo.dao.VNTender;
 import org.devgateway.toolkit.persistence.mongo.repository.ClassificationRepository;
-import org.devgateway.toolkit.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationRepository;
 
 public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 
 	SimpleDateFormat sdf = new SimpleDateFormat("dd.MMM.yy", new Locale("en"));
-	private OrganizationRepository organizationRepository;
+	private VNOrganizationRepository organizationRepository;
 	private ClassificationRepository classificationRepository;
 
-	public TenderRowImporter(ReleaseRepository releaseRepository, OrganizationRepository organizationRepository,
+	public TenderRowImporter(ReleaseRepository releaseRepository, VNOrganizationRepository organizationRepository,
 			ClassificationRepository classificationRepository, int skipRows) {
 		super(releaseRepository, skipRows);
 		this.organizationRepository = organizationRepository;
@@ -118,21 +118,27 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 		tender.setTenderPeriod(period);
 		tender.setBidOpenDt(row[9].isEmpty() ? null : DateUtil.getJavaCalendar(Double.parseDouble(row[9])).getTime());
 
-		Organization procuringEntity = organizationRepository.findById(row[10]);
+		VNOrganization procuringEntity = organizationRepository.findById(row[10]);
 
 		if (procuringEntity == null) {
-			procuringEntity = new Organization();
+			procuringEntity = new VNOrganization();
+			procuringEntity.setProcuringEntity(true);
 			Identifier procuringEntityIdentifier = new Identifier();
 			procuringEntityIdentifier.setId(row[10]);
 			procuringEntity.setIdentifier(procuringEntityIdentifier);
+		} else {
+			if (procuringEntity.getProcuringEntity() == null || procuringEntity.getProcuringEntity()==false) {
+				procuringEntity.setProcuringEntity(true);
+				procuringEntity = organizationRepository.save(procuringEntity);
+			}
 		}
 
 		tender.setProcuringEntity(procuringEntity);
 
-		Organization orderInstituCd = organizationRepository.findById(row[11]);
+		VNOrganization orderInstituCd = organizationRepository.findById(row[11]);
 
 		if (orderInstituCd == null) {
-			orderInstituCd = new Organization();
+			orderInstituCd = new VNOrganization();
 			Identifier orderInstituCdIdentifier = new Identifier();
 			orderInstituCdIdentifier.setId(row[11]);
 			orderInstituCd.setIdentifier(orderInstituCdIdentifier);
