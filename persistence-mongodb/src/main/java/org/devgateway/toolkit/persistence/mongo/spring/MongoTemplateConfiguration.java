@@ -1,14 +1,13 @@
 package org.devgateway.toolkit.persistence.mongo.spring;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.URL;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.IOUtils;
-import org.devgateway.ocvn.persistence.mongo.ocds.Organization;
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
+import org.devgateway.toolkit.persistence.mongo.dao.VNOrganization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.ScriptOperations;
 import org.springframework.data.mongodb.core.index.Index;
+import org.springframework.data.mongodb.core.index.TextIndexDefinition.TextIndexDefinitionBuilder;
 import org.springframework.data.mongodb.core.script.ExecutableMongoScript;
 import org.springframework.data.mongodb.core.script.NamedMongoScript;
 
@@ -33,8 +33,10 @@ public class MongoTemplateConfiguration {
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.bidNo", Direction.ASC));
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("awards.status", Direction.ASC));
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.tenderPeriod.startDate", Direction.ASC));
-		mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("identifier._id", Direction.ASC));
-		mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("additionalIdentifiers._id", Direction.ASC));		
+		mongoTemplate.indexOps(VNOrganization.class).ensureIndex(new Index().on("identifier._id", Direction.ASC));
+		mongoTemplate.indexOps(VNOrganization.class).ensureIndex(new Index().on("additionalIdentifiers._id", Direction.ASC));
+		mongoTemplate.indexOps(VNOrganization.class)
+				.ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());
 		logger.info("Added extra Mongo indexes");
 		
 		

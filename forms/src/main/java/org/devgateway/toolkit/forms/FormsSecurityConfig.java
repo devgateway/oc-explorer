@@ -51,6 +51,7 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 				"/api/tenderBidPeriodPercentiles/**","/api/ocds/release/budgetProjectId/**",
 				"/api/ocds/release/planningBidNo/**", "/api/plannedFundingByLocation/**",
 				"/api/costEffectivenessAwardAmount/**","/api/costEffectivenessTenderAmount/**",
+				"/api/ocds/organization/procuringEntity/**","/api/ocds/organization/id/**",
 				"/api/ocds/release/all/**",
 				
 				"/img/**", "/css*/**", "/js*/**", "/assets*/**", "/wicket/resource/**/*.js",

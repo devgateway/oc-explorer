@@ -6,20 +6,20 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Identifier;
-import org.devgateway.ocvn.persistence.mongo.ocds.Organization;
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
 import org.devgateway.ocvn.persistence.mongo.ocds.Value;
 import org.devgateway.toolkit.persistence.mongo.dao.VNAward;
+import org.devgateway.toolkit.persistence.mongo.dao.VNOrganization;
 import org.devgateway.toolkit.persistence.mongo.dao.VNPlanning;
-import org.devgateway.toolkit.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationRepository;
 
 public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseRepository> {
 
 	SimpleDateFormat sdf = new SimpleDateFormat("dd.MMM.yy", new Locale("en"));
-	private OrganizationRepository organizationRepository;
+	private VNOrganizationRepository organizationRepository;
 
-	public OfflineAwardRowImporter(ReleaseRepository releaseRepository, OrganizationRepository organizationRepository,
+	public OfflineAwardRowImporter(ReleaseRepository releaseRepository, VNOrganizationRepository organizationRepository,
 			int skipRows) {
 		super(releaseRepository, skipRows);
 		this.organizationRepository = organizationRepository;
@@ -50,10 +50,10 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 			award.setValue(value);
 		}
 
-		Organization supplier = organizationRepository.findById(row[3]);
+		VNOrganization supplier = organizationRepository.findById(row[3]);
 
 		if (supplier == null) {
-			supplier = new Organization();
+			supplier = new VNOrganization();
 			Identifier supplierId = new Identifier();
 			supplierId.setId(row[3]);
 			supplier.setIdentifier(supplierId);			
