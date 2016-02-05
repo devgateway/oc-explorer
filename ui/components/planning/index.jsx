@@ -1,66 +1,47 @@
-import React from "react";
 import Component from "../pure-render-component";
-import {Map} from "react-d3-map";
-import CircleGroup from "./circle-group";
-import {callFunc} from "../../tools";
-import Popup from "./popup";
-import {ZoomControl} from "react-d3-map-core";
+import { Map, TileLayer } from 'react-leaflet';
+import Cluster from "./cluster";
+import Location from "./location";
 require("./style.less");
 
-const SCALE = 18000;
+var aggregateLocations = locations => locations
+    .groupBy(location => location.get('_id'))
+    .map(locations => locations.reduce((reducedLocation, location) => {
+        return {
+          "_id": location.get('_id'),
+          "name": location.get('name'),
+          "amount": reducedLocation.amount + location.get('totalPlannedAmount'),
+          "count": reducedLocation.count + location.get('recordsCount'),
+          "coords": location.getIn(['coordinates', 'coordinates']).toJS()
+        }
+      }, {
+        "amount": 0,
+        "count": 0
+      }))
+    .toArray();
 
 export default class Planning extends Component{
-  constructor(props){
-    super(props);
-    this.state = {
-      scale: SCALE
-    }
-  }
-
   render(){
-    var {locations, width} = this.props;
-    var {scale} = this.state;
+    var {locations} = this.props;
+    var aggregatedLocations = aggregateLocations(locations);
+    var maxAmount = Math.max(0, ...aggregatedLocations.map(location => location.amount));
     return (
         <div className="col-sm-12 content map-content">
-          <Map
-              margins={{top: 0, right: 0, bottom: 0, left: 0}}
-              scale={SCALE}
-              zoomScale={scale}
-              width={width}
-              height={1000}
-              center={[105, 14.5]}
-          >
-            <CircleGroup
-                data={{
-                  "type": "FeatureCollection",
-                  "features": locations
-                    .groupBy(location => location.get('_id'))
-                    .map(locations => locations.reduce((reducedLocation, location) => {
-                        return {
-                            "type": "Feature",
-                            "properties": {
-                              "name": location.get('name'),
-                              "amount": reducedLocation.properties.amount + location.get('totalPlannedAmount'),
-                              "count": reducedLocation.properties.count + location.get('recordsCount')
-                            },
-                            "geometry": location.get('coordinates').toJS()
-                        }
-                    }, {
-                        "properties": {
-                          "amount": 0,
-                          "count": 0
-                        }
-                    })).toArray()
-                }}
-                circleClass= {"location"}
-                onClick={callFunc('showPopup')}
-                onCloseClick={callFunc('hidePopup')}
-                PopupComponent={Popup}
+          <Map center={[14.5, 105]} zoom={5}>
+            <TileLayer
+                url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             />
-            <ZoomControl
-                zoomInClick={() => this.setState({scale: scale * 2})}
-                zoomOutClick={() => this.setState({scale: scale / 2})}
-            />
+            <Cluster maxAmount={maxAmount}>
+              {aggregatedLocations.map(location => (
+                <Location
+                    key={location._id}
+                    position={location.coords.reverse()}
+                    maxAmount={maxAmount}
+                    data={location}
+                />
+              ))}
+            </Cluster>
           </Map>
         </div>
     )

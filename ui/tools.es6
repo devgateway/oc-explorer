@@ -18,3 +18,5 @@ export function debounce(cb, delay = 200){
 export var years = () => [2015, 2014, 2013, 2012, 2011];
 
 export var identity = _ => _;
+
+export var toK = number => number >= 1000 ? Math.round(number / 1000) + "K" : number;
