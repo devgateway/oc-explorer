@@ -17,10 +17,11 @@ function clusterIcon(cluster, maxAmount){
   });
 
   var amountRatio = amount / maxAmount;
-  var green = Math.round(255 - 255 * amountRatio);
+  var green = Math.round(128 * (1 - amountRatio));
+  var shadow = 1 != cluster.getChildCount() ? `box-shadow: 0 0 5px 5px rgb(255, ${green}, 0)` : "";
   return L.divIcon({
     html: `
-      <div style="background-color: rgba(255, ${green}, 0, .8)">
+      <div style="background-color: rgba(255, ${green}, 0, .8);${shadow}">
         <span>
           ${toK(count)}
         </span>
