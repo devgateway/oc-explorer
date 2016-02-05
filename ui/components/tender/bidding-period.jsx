@@ -20,7 +20,7 @@ class BoxAndWhiskers extends Component{
               height={boxPlotHeight}
               orientation="horizontal"
               min={0}
-              max={max + 50}
+              max={max}
               stats={{
                 whiskerLow: min,
                 quartile1: q1,
@@ -44,7 +44,7 @@ export default class BiddingPeriod extends Component{
               width= {this.props.width}
               height= {350}
               data={data}
-              xDomain={[0, data.max + 50]}
+              xDomain={[0, data.max]}
               xScale="linear"
               yDomain={[0]}
           >

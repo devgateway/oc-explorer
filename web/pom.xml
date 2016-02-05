@@ -21,7 +21,7 @@
 	<parent>
 		<groupId>org.devgateway.ocvn</groupId>
 		<artifactId>ocvn</artifactId>
-		<version>0.0.4-SNAPSHOT</version>
+		<version>0.0.7-SNAPSHOT</version>
 	</parent>
 
 	<repositories>
@@ -79,13 +79,13 @@
 		<dependency>
 			<groupId>org.devgateway.ocvn</groupId>
 			<artifactId>persistence</artifactId>
-			<version>0.0.4-SNAPSHOT</version>
+			<version>0.0.7-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.devgateway.ocvn</groupId>
 			<artifactId>persistence-mongodb</artifactId>
-			<version>0.0.4-SNAPSHOT</version>
+			<version>0.0.7-SNAPSHOT</version>
 		</dependency>
 
 
@@ -133,16 +133,8 @@
 
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<artifactId>spring-boot-maven-plugin</artifactId>		
 				<version>${spring.boot.version}</version>
-				<executions>
-					<execution>
-						<goals>
-							<!-- This will ensure a fat jar is created, will include all jar dependencies inside a /lib folder within this jar -->
-							<goal>repackage</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
