@@ -20,9 +20,8 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 import java.util.Arrays;
 import java.util.List;
 
+import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
-import org.springframework.data.mongodb.core.aggregation.AggregationOperationContext;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,20 +38,6 @@ import com.mongodb.DBObject;
 @RestController
 public class FundingByLocationController extends GenericOcvnController {
 	
-	public class CustomProjectionOperation implements AggregationOperation {
-	    private DBObject operation;
-
-	    public CustomProjectionOperation (DBObject operation) {
-	        this.operation = operation;
-	    }
-
-	    @Override
-	    public DBObject toDBObject(AggregationOperationContext context) {
-	        return context.getMappedObject(operation);
-	    }
-	}
-	
-
 	@RequestMapping("/api/plannedFundingByLocation/{year:^\\d{4}$}")
 	public List<DBObject> plannedFundingByLocation(@PathVariable Integer year) {
 
@@ -76,7 +61,7 @@ public class FundingByLocationController extends GenericOcvnController {
 		Aggregation agg = newAggregation(
 				match(where("planning").exists(true).and("planning.locations").exists(true).ne(null)
 						.and("planning.bidPlanProjectDateApprove").gte(getStartDate(year)).lte(getEndDate(year))),
-				new CustomProjectionOperation(new BasicDBObject("$project", project)), unwind("$planning.locations"),
+				new CustomOperation(new BasicDBObject("$project", project)), unwind("$planning.locations"),
 				group("planning.locations").sum("$dividedTotal").as("totalPlannedAmount").sum("$cntprj")
 						.as("recordsCount"));
 	
