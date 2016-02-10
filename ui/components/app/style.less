@@ -1,3 +1,5 @@
+@red: #cc3c3b;
+
 .content{
   margin-top: 2em;
 }
@@ -13,22 +15,39 @@ aside {
   height: auto;
   background-color: #f2f2f2;
   box-shadow: #333 1px 4px 10px;
-  @media all and (max-width: 1700px) {
-    h1 {
-      font-size: 28px;
-    }
-  }
-  @media all and (max-width: 1450px) {
-    h1 {
-      font-size: 24px;
-    }
-  }
-  h1 small {
-    display: block;
-  }
+
   section.col-sm-12 {
     padding: 15px 20px 15px 20px;
     border-bottom: 1px solid #ccc;
+  }
+
+  section.branding{
+    background-color: @red;
+    h1, small{
+      color: white;
+    }
+
+    h1 small{
+      text-transform: uppercase;
+    }
+
+    @media all and (max-width: 1700px) {
+      h1 {
+        font-size: 28px;
+      }
+    }
+    @media all and (max-width: 1450px) {
+      h1 {
+        font-size: 24px;
+      }
+    }
+    h1 small {
+      display: block;
+    }
+  }
+
+  section.description strong{
+    color: @red;
   }
 
   section.faq {
@@ -59,11 +78,16 @@ aside {
       border-right: none;
     }
     &.active {
-      color: #333;
+      color: @red;
       background-color: #f2f2f2;
       .glyphicon {
         visibility: visible;
       }
     }
   }
+}
+
+.thick-red-line{
+  background-color: @red;
+  height: 5vh;
 }
