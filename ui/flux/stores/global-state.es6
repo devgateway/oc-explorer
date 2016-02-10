@@ -6,7 +6,7 @@ import {years, identity} from "../../tools";
 var store = Store({
   getInitialState(){
     return toImmutable({
-      tab: store.tabs.PLANNING,
+      tab: store.tabs.OVERVIEW,
       selectedYears: years().reduce((map, year) => map.set(year, true), toImmutable({})),
       contentWidth: 0,
       data: {}
@@ -26,6 +26,7 @@ var store = Store({
 });
 
 store.tabs = keyMirror({
+  OVERVIEW: null,
   PLANNING: null,
   TENDER_AWARD: null
 });
