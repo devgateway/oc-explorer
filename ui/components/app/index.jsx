@@ -23,7 +23,7 @@ export default class App extends React.Component{
       <div className="container-fluid">
         <aside className="col-xs-4 col-md-3 col-lg-2">
           <div className="row">
-            <section className="col-sm-12">
+            <section className="col-sm-12 branding">
               <h1>
                 E-procurement
                 <small>Toolkit</small>
@@ -33,7 +33,7 @@ export default class App extends React.Component{
               {navigationLink("Planning", 'map-marker', tabs.PLANNING)}
               {navigationLink("Tender", 'time', tabs.TENDER_AWARD)}
             </div>
-            <section className="col-sm-12">
+            <section className="col-sm-12 description">
               <p><strong>Toolkit description</strong></p>
               <p>
                 <small>
@@ -74,6 +74,7 @@ export default class App extends React.Component{
                 /> :
                 <Tender {...this.props}/>
             }
+            <div className="col-sm-12 thick-red-line"></div>
           </div>
         </div>
       </div>
