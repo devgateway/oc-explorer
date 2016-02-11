@@ -21,6 +21,7 @@ public class Tender {
 	String id;
 	String title;
 	String description;
+	@Indexed
 	String status;
 	List<Item> items=new ArrayList<>();
 	Value minValue;
