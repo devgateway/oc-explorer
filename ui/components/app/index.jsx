@@ -68,7 +68,7 @@ export default class App extends React.Component{
           <div className="row">
             {function(tab, props){
               switch(tab){
-                case tabs.OVERVIEW: return <Overview/>;
+                case tabs.OVERVIEW: return <Overview {...props}/>;
                 case tabs.PLANNING: return (
                     <Planning
                         width={globalState.get('contentWidth')}
