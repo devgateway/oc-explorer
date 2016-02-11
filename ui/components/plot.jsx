@@ -1,5 +1,5 @@
 import Plotly from "plotly.js";
-import Component from "../pure-render-component";
+import Component from "./pure-render-component";
 
 export default class Plot extends Component{
   componentDidMount(){
