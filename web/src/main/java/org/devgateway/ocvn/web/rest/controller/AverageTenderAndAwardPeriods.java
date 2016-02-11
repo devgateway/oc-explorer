@@ -120,12 +120,21 @@ public class AverageTenderAndAwardPeriods extends GenericOcvnController {
 		
 		DBObject sort= new BasicDBObject();
 		sort.put(Fields.UNDERSCORE_ID,1);
+		
+		DBObject project2 = new BasicDBObject();
+		project2.put("awards", 1);
+		project2.put("tender.tenderPeriod.endDate", 1);
+		
+		
 
-		Aggregation agg = newAggregation(project("awards", "tender.tenderPeriod.endDate"), unwind("$awards"),
+		Aggregation agg = newAggregation(new CustomOperation(new BasicDBObject("$project",project2)),
+				unwind("$awards"),
 				match(where("tender.tenderPeriod.endDate").exists(true).and("awards.date").exists(true)),
 				new CustomOperation(new BasicDBObject("$project", project)),
 				new CustomOperation(new BasicDBObject("$group", group)),
 				new CustomOperation(new BasicDBObject("$sort", sort)));
+		
+		System.out.println(agg);
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> list = results.getMappedResults();
