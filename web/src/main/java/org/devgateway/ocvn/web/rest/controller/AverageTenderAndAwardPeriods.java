@@ -122,7 +122,7 @@ public class AverageTenderAndAwardPeriods extends GenericOcvnController {
 		
 		DBObject project2 = new BasicDBObject();
 		project2.put("awards.date", 1);
-		//project2.put("awards.status", 1);
+		project2.put("awards.status", 1);
 		project2.put("tender.tenderPeriod.endDate", 1);
 		
 		
@@ -130,7 +130,7 @@ public class AverageTenderAndAwardPeriods extends GenericOcvnController {
 		Aggregation agg = newAggregation(
 				unwind("$awards"),
 				new CustomOperation(new BasicDBObject("$project",project2)),
-				match(where("tender.tenderPeriod.endDate").exists(true).and("awards.date").exists(true)),
+				match(where("tender.tenderPeriod.endDate").exists(true).and("awards.date").exists(true).and("awards.status").is("active")),
 				new CustomOperation(new BasicDBObject("$project", project)),
 				new CustomOperation(new BasicDBObject("$group", group)),
 				new CustomOperation(new BasicDBObject("$sort", sort)));
