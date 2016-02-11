@@ -22,6 +22,7 @@ var store = Store({
     this.on(constants.BID_TYPE_DATA_UPDATED, updateData('bidType', toImmutable));
     this.on(constants.LOCATION_UPDATED, updateData('locations', toImmutable));
     this.on(constants.BID_PERIOD_DATA_UPDATED, (state, data) => state.setIn(['data', 'bidPeriod'], data));
+    this.on(constants.OVERVIEW_DATA_UPDATED, (state, data) => state.setIn(['data', 'overview'], data));
   }
 });
 
