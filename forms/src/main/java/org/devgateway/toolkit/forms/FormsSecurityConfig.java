@@ -56,6 +56,8 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 				"/api/countBidPlansByYear/**",
 				"/api/countTendersByYear/**",
 				"/api/countAwardsByYear/**",
+				"/api/averageTenderPeriod**",
+				"/api/averageAwardPeriod**",
 				"/img/**", "/css*/**", "/js*/**", "/assets*/**", "/wicket/resource/**/*.js",
 				"/wicket/resource/**/*.css", "/wicket/resource/**/*.png", "/wicket/resource/**/*.jpg",
 				"/wicket/resource/**/*.gif", "/login/**", "/resources/**", "/resources/public/**");
