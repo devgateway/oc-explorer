@@ -1,4 +1,4 @@
-import Plot from "./plot";
+import Plot from "../plot";
 
 export default class FundingByBidType extends Plot {
   getTitle() {

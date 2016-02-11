@@ -6,7 +6,7 @@ import {years, identity} from "../../tools";
 var store = Store({
   getInitialState(){
     return toImmutable({
-      tab: store.tabs.PLANNING,
+      tab: store.tabs.OVERVIEW,
       selectedYears: years().reduce((map, year) => map.set(year, true), toImmutable({})),
       contentWidth: 0,
       data: {}
@@ -22,10 +22,12 @@ var store = Store({
     this.on(constants.BID_TYPE_DATA_UPDATED, updateData('bidType', toImmutable));
     this.on(constants.LOCATION_UPDATED, updateData('locations', toImmutable));
     this.on(constants.BID_PERIOD_DATA_UPDATED, (state, data) => state.setIn(['data', 'bidPeriod'], data));
+    this.on(constants.OVERVIEW_DATA_UPDATED, (state, data) => state.setIn(['data', 'overview'], data));
   }
 });
 
 store.tabs = keyMirror({
+  OVERVIEW: null,
   PLANNING: null,
   TENDER_AWARD: null
 });

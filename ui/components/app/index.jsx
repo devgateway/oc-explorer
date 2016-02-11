@@ -1,6 +1,7 @@
 import React from "react";
 import Component from "../pure-render-component";
 import {tabs} from "../../flux/stores/global-state";
+import Overview from "../overview";
 import Planning from "../planning";
 import Tender from "../tender";
 import NavigationLink from "./navigation-link";
@@ -30,6 +31,7 @@ export default class App extends React.Component{
               </h1>
             </section>
             <div role="navigation">
+              {navigationLink("Overview", 'search', tabs.OVERVIEW)}
               {navigationLink("Planning", 'map-marker', tabs.PLANNING)}
               {navigationLink("Tender", 'time', tabs.TENDER_AWARD)}
             </div>
@@ -64,16 +66,21 @@ export default class App extends React.Component{
         </div>
         <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10">
           <div className="row">
-            {globalState.get('tab') == tabs.PLANNING ?
-                <Planning
-                    width={globalState.get('contentWidth')}
-                    locations={globalState.get('selectedYears').reduce((location, selected, year) => selected ?
+            {function(tab, props){
+              switch(tab){
+                case tabs.OVERVIEW: return <Overview {...props}/>;
+                case tabs.PLANNING: return (
+                    <Planning
+                        width={globalState.get('contentWidth')}
+                        locations={globalState.get('selectedYears').reduce((location, selected, year) => selected ?
                         location.concat(globalState.getIn(['data', 'locations', year], toImmutable([]))) :
                         location
                     , toImmutable([]))}
-                /> :
-                <Tender {...this.props}/>
-            }
+                    />
+                );
+                default: return <Tender {...props}/>
+              }
+            }(globalState.get('tab'), this.props)}
             <div className="col-sm-12 thick-red-line"></div>
           </div>
         </div>

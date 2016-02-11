@@ -1,4 +1,4 @@
-import Plot from "./plot";
+import Plot from "../plot";
 
 export default class CostEffectiveness extends Plot{
   getTitle(){

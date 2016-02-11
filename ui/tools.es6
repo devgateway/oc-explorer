@@ -5,6 +5,8 @@
  */
 export var callFunc = funcName => obj => obj[funcName]();
 
+export var pluck = fieldName => obj => obj[fieldName];
+
 export var fetchJson = url => fetch(url, {credentials: 'same-origin'}).then(callFunc('json'))
 
 export function debounce(cb, delay = 200){

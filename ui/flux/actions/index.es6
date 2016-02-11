@@ -19,6 +19,16 @@ export default {
   },
 
   loadData(){
+    Promise.all([
+      fetchJson('/api/countBidPlansByYear'),
+      fetchJson('/api/countTendersByYear'),
+      fetchJson('/api/countAwardsByYear')
+    ]).then(([bidplans, tenders, awards]) => dispatcher.dispatch(constants.OVERVIEW_DATA_UPDATED, {
+      bidplans: bidplans,
+      tenders: tenders,
+      awards: awards
+    }));
+
     years().forEach(year => {
       fetchJson(`/api/plannedFundingByLocation/${year}`)
           .then(data => data.filter(location => !!location.coordinates || console.warn('Invalid location!', location)))
