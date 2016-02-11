@@ -11,12 +11,11 @@
  *******************************************************************************/
 package org.devgateway.ocvn.web.rest.controller;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 import java.util.Arrays;
@@ -134,7 +133,6 @@ public class AverageTenderAndAwardPeriods extends GenericOcvnController {
 				new CustomOperation(new BasicDBObject("$group", group)),
 				new CustomOperation(new BasicDBObject("$sort", sort)));
 		
-		System.out.println(agg);
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> list = results.getMappedResults();
