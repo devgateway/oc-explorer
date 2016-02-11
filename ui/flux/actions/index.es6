@@ -37,7 +37,7 @@ export default {
         }
       }).then(data => dispatcher.dispatch(constants.COST_EFFECTIVENESS_DATA_UPDATED, {year: year, data: data}));
 
-      fetchJson(`/api/tenderPriceByOcdsTypeYear/${year}`)
+      fetchJson(`/api/tenderPriceByVnTypeYear/${year}`)
           .then(data => dispatcher.dispatch(constants.BID_TYPE_DATA_UPDATED, {year: year, data: data}))
     });
 
