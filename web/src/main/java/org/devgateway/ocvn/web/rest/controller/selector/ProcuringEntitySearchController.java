@@ -9,12 +9,13 @@
  * Contributors:
  * Development Gateway - initial API and implementation
  *******************************************************************************/
-package org.devgateway.ocvn.web.rest.controller;
+package org.devgateway.ocvn.web.rest.controller.selector;
 
 import java.util.List;
 
 import javax.validation.Valid;
 
+import org.devgateway.ocvn.web.rest.controller.GenericOcvnController;
 import org.devgateway.ocvn.web.rest.controller.request.ProcuringEntitySearchRequest;
 import org.devgateway.toolkit.persistence.mongo.dao.VNOrganization;
 import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationRepository;
