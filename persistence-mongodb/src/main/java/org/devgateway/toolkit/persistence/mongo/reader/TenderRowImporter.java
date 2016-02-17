@@ -126,6 +126,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 			Identifier procuringEntityIdentifier = new Identifier();
 			procuringEntityIdentifier.setId(row[10]);
 			procuringEntity.setIdentifier(procuringEntityIdentifier);
+			procuringEntity = organizationRepository.save(procuringEntity);
 		} else {
 			if (procuringEntity.getProcuringEntity() == null || procuringEntity.getProcuringEntity()==false) {
 				procuringEntity.setProcuringEntity(true);
@@ -142,6 +143,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 			Identifier orderInstituCdIdentifier = new Identifier();
 			orderInstituCdIdentifier.setId(row[11]);
 			orderInstituCd.setIdentifier(orderInstituCdIdentifier);
+			orderInstituCd = organizationRepository.save(orderInstituCd);
 		}
 		tender.setOrderIntituCd(orderInstituCd);
 
@@ -161,10 +163,31 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 			// we set classification for all items within this tender. If none
 			// are found, we create a fake item and add only this classification
 			for (Item item : tender.getItems()) {
-				Classification classification = classificationRepository.findById(row[21]);
+				String classificationId=row[21].trim();
+				Classification classification = classificationRepository.findById(classificationId);
 				if (classification == null) {
 					classification = new Classification();
-					classification.setId(row[21]);
+					classification.setId(classificationId);
+
+					switch (classificationId) {
+					case "1":
+						classification.setDescription("Hàng hóa");
+						break;
+					case "3":
+						classification.setDescription("Xây lắp");
+						break;
+					case "5":
+						classification.setDescription("Tư vấn");
+						break;
+					case "10":
+						classification.setDescription("EPC");
+						break;
+					default:
+						classification.setDescription("Undefined");
+						break;
+					}
+					classification = classificationRepository.save(classification);
+
 				}
 				item.setClassification(classification);
 			}
