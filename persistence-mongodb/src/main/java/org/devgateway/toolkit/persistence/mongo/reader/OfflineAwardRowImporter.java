@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.devgateway.ocvn.persistence.mongo.ocds.Identifier;
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
 import org.devgateway.ocvn.persistence.mongo.ocds.Value;
@@ -56,7 +57,8 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 			supplier = new VNOrganization();
 			Identifier supplierId = new Identifier();
 			supplierId.setId(row[3]);
-			supplier.setIdentifier(supplierId);			
+			supplier.setIdentifier(supplierId);		
+			supplier = organizationRepository.save(supplier);
 		}
 
 		award.getSuppliers().add(supplier);
@@ -81,12 +83,15 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 		if (row.length > 9)
 			award.setBidSuccMethod(row[9].isEmpty() ? null : Integer.parseInt(row[9]));
 
-		if (row.length > 10) {
+		if (row.length > 10 && row[10]!=null && !row[10].isEmpty()) {
 			Value value2 = new Value();
 			value2.setCurrency("VND");
 			value2.setAmount(new BigDecimal(row[10]));
 			award.setValue(value2);
 		}
+		
+		if (row.length > 11)
+			award.setDate(row[11].isEmpty() ? null : DateUtil.getJavaCalendar(Double.parseDouble(row[11])).getTime());
 
 		return true;
 	}

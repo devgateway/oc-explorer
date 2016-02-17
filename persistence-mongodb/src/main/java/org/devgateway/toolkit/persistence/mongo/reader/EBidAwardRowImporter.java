@@ -55,6 +55,7 @@ public class EBidAwardRowImporter extends RowImporter<Release, ReleaseRepository
 			Identifier supplierId = new Identifier();
 			supplierId.setId(row[2]);
 			supplier.setIdentifier(supplierId);
+			supplier = organizationRepository.save(supplier);
 		}
 		
 		award.getSuppliers().add(supplier);

@@ -43,7 +43,7 @@ public class CostEffectivenessVisualsController extends GenericOcvnController {
 		Aggregation agg = newAggregation(
 				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)
 						.and("tender.tenderPeriod.endDate").gte(getStartDate(year)).lte(getEndDate(year))),
-				unwind("$awards"), match(where("awards.status").is("active")),
+				unwind("$awards"), match(where("awards.status").is("active").and("awards.value").exists(true)),
 				group().sum("$awards.value.amount").as("totalAwardAmount"));
 	
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
