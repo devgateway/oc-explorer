@@ -2,6 +2,7 @@ import React from "react";
 import Component from "../pure-render-component";
 import CostEffectiveness from "./cost-effectiveness";
 import FundingByBidType from "./funding-by-bid-type";
+import BiddingPeriod from "./bidding-period";
 import {toImmutable} from "nuclear-js";
 
 export default class Tender extends Component{
