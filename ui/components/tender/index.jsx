@@ -22,12 +22,10 @@ export default class Tender extends Component{
                   ceData
               , [])}/>
 
-          {/*data.has('bidPeriod') ?
-              <BiddingPeriod
-                  width={width}
-                  data={data.get('bidPeriod')}
-              />
-          : null*/}
+          <BiddingPeriod
+              width={width}
+              data={data.get('bidPeriod')}
+          />
 
           {data.has('bidType') ?
             <FundingByBidType
