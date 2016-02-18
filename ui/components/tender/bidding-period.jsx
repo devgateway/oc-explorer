@@ -4,7 +4,7 @@ import {pluck} from "../../tools";
 
 export default class BiddingPeriod extends Plot{
   getTitle() {
-    return "Overview chart"
+    return "Bidding period"
   }
 
   getData(){
