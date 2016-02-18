@@ -50,5 +50,21 @@ export default {
       fetchJson(`/api/tenderPriceByVnTypeYear/${year}`)
           .then(data => dispatcher.dispatch(constants.BID_TYPE_DATA_UPDATED, {year: year, data: data}))
     });
+
+    Promise.all([
+        fetchJson('/api/averageTenderPeriod'),
+        fetchJson('/api/averageAwardPeriod')
+    ]).then(([tenders, awards]) => {
+      var awardsHash = awards.reduce((obj, award) => {
+        obj[award._id] = award.averageAwardDays
+        return obj;
+      }, {});
+      return tenders.map(tender => ({
+          year: tender._id,
+          tender: tender.averageTenderDays,
+          award: awardsHash[tender._id] || 0
+        })
+      )
+    }).then(data => dispatcher.dispatch(constants.BID_PERIOD_DATA_UPDATED, data));
   }
 }
