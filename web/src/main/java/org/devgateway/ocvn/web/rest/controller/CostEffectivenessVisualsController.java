@@ -14,6 +14,7 @@ package org.devgateway.ocvn.web.rest.controller;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -23,9 +24,11 @@ import javax.validation.Valid;
 
 import org.devgateway.ocvn.web.rest.controller.request.UniversalFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
+import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,14 +50,17 @@ public class CostEffectivenessVisualsController extends GenericOcvnController {
 		DBObject project = new BasicDBObject();
 		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.endDate"));
 		project.put("awards.value.amount", 1);
+		
 
 		
 		Aggregation agg = newAggregation(
-				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true))
-						//.and("tender.tenderPeriod.endDate").gte(getStartDate(year)).lte(getEndDate(year)))
+				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)
+				.andOperator(getBidTypeIdFilterCriteria(filter)))
 						,unwind("$awards"), match(where("awards.status").is("active").and("awards.value").exists(true)),
-				new CustomOperation(new BasicDBObject("$project", project)),
-				group("$year").sum("$awards.value.amount").as("totalAwardAmount"));
+						new CustomProjectionOperation(project),
+				group("$year").sum("$awards.value.amount").as("totalAwardAmount"),
+				sort(Direction.ASC,Fields.UNDERSCORE_ID)
+				);
 	
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();
@@ -68,13 +74,16 @@ public class CostEffectivenessVisualsController extends GenericOcvnController {
 		DBObject project = new BasicDBObject();
 		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.endDate"));
 		project.put("tender.value.amount", 1);
+		project.put("tender.items",1);
 
 		
 		Aggregation agg = newAggregation(
 				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),
-				//		.and("tender.tenderPeriod.endDate").gte(getStartDate(year)).lte(getEndDate(year))),
-				new CustomOperation(new BasicDBObject("$project", project)),
-				group("$year").sum("$tender.value.amount").as("totalTenderAmount"));
+				new CustomProjectionOperation(project),
+				match(getBidTypeIdFilterCriteria(filter)),
+				group("$year").sum("$tender.value.amount").as("totalTenderAmount"),
+				sort(Direction.ASC,Fields.UNDERSCORE_ID)
+				);
 		
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);

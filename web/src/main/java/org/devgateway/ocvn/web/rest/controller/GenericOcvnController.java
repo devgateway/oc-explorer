@@ -3,13 +3,21 @@
  */
 package org.devgateway.ocvn.web.rest.controller;
 
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+
 import java.util.Calendar;
 import java.util.Date;
 
+import org.devgateway.ocvn.web.rest.controller.request.UniversalFilterPagingRequest;
+import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Fields;
+import org.springframework.data.mongodb.core.query.Criteria;
+
+import com.mongodb.BasicDBObject;
 
 /**
  * @author mpostelnicu
@@ -21,7 +29,7 @@ public class GenericOcvnController {
 	
 	@Autowired
 	protected MongoTemplate mongoTemplate;
-
+	
 	protected Date getStartDate(int year) {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, year);
@@ -38,4 +46,16 @@ public class GenericOcvnController {
 		Date end = cal.getTime();
 		return end;
 	}
+	
+	protected Criteria getBidTypeIdFilterCriteria(UniversalFilterPagingRequest filter) {
+		// bidTypeFilter
+		Criteria bidTypeCriteria = null;
+		if (filter.getBidTypeId() == null)
+			bidTypeCriteria = new Criteria();
+		else
+			bidTypeCriteria = where("tender.items.classification._id").in(filter.getBidTypeId().toArray());
+
+		return bidTypeCriteria;
+	}
+	
 }

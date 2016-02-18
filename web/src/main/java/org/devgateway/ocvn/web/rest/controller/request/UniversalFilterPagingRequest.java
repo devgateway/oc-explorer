@@ -10,7 +10,7 @@ import cz.jirutka.validator.collection.constraints.EachRange;
 
 /**
  * @author mihai
- *
+ * Filtering bean applied to all endpoints
  */
 public class UniversalFilterPagingRequest extends GenericPagingRequest {
 
@@ -30,4 +30,38 @@ public class UniversalFilterPagingRequest extends GenericPagingRequest {
 		super();
 	}
 
+	public List<Integer> getYear() {
+		return year;
+	}
+
+	public void setYear(List<Integer> year) {
+		this.year = year;
+	}
+
+	public List<String> getBidTypeId() {
+		return bidTypeId;
+	}
+
+	public void setBidTypeId(List<String> bidTypeId) {
+		this.bidTypeId = bidTypeId;
+	}
+
+	public List<String> getProcuringEntityId() {
+		return procuringEntityId;
+	}
+
+	public void setProcuringEntityId(List<String> procuringEntityId) {
+		this.procuringEntityId = procuringEntityId;
+	}
+
+	public List<String> getBidSelectionMethod() {
+		return bidSelectionMethod;
+	}
+
+	public void setBidSelectionMethod(List<String> bidSelectionMethod) {
+		this.bidSelectionMethod = bidSelectionMethod;
+	}
+
+	
+	
 }
