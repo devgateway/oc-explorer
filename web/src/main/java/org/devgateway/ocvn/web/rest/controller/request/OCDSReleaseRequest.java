@@ -1,6 +1,10 @@
 package org.devgateway.ocvn.web.rest.controller.request;
 
+import java.util.List;
+
 import org.devgateway.toolkit.persistence.mongo.dao.VNPlanning;
+
+import cz.jirutka.validator.collection.constraints.EachRange;
 
 /**
  * 
@@ -16,16 +20,17 @@ public class OCDSReleaseRequest extends GenericPagingRequest {
 		super();
 	}
 
-	Integer[] bidPlanProjectDateApproveYear;
+	@EachRange(min=1900,max=2200)
+	List<Integer> bidPlanProjectDateApproveYear;
 
-
-	public Integer[] getBidPlanProjectDateApproveYear() {
+	public List<Integer> getBidPlanProjectDateApproveYear() {
 		return bidPlanProjectDateApproveYear;
 	}
 
-	public void setBidPlanProjectDateApproveYear(Integer[] bidPlanProjectDateApproveYear) {
+	public void setBidPlanProjectDateApproveYear(List<Integer> bidPlanProjectDateApproveYear) {
 		this.bidPlanProjectDateApproveYear = bidPlanProjectDateApproveYear;
 	}
+
 
 
 

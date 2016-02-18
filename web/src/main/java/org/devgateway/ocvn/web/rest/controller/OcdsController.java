@@ -77,10 +77,10 @@ public class OcdsController extends GenericOcvnController {
 			yearCriteria = new Criteria[1];
 			yearCriteria[0] = new Criteria();
 		} else {
-			yearCriteria = new Criteria[releaseRequest.getBidPlanProjectDateApproveYear().length];
-			for (int i = 0; i < releaseRequest.getBidPlanProjectDateApproveYear().length; i++)
-				yearCriteria[i] = where("planning.bidPlanProjectDateApprove").gte(getStartDate(releaseRequest.getBidPlanProjectDateApproveYear()[i]))
-						.lte(getEndDate(releaseRequest.getBidPlanProjectDateApproveYear()[i]));
+			yearCriteria = new Criteria[releaseRequest.getBidPlanProjectDateApproveYear().size()];
+			for (int i = 0; i < releaseRequest.getBidPlanProjectDateApproveYear().size(); i++)
+				yearCriteria[i] = where("planning.bidPlanProjectDateApprove").gte(getStartDate(releaseRequest.getBidPlanProjectDateApproveYear().get(i)))
+						.lte(getEndDate(releaseRequest.getBidPlanProjectDateApproveYear().get(i)));
 		}
 
 		PageRequest pageRequest = new PageRequest(releaseRequest.getPageNumber(), releaseRequest.getPageSize(), Direction.ASC, "id");
