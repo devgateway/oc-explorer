@@ -1,61 +1,45 @@
 import React from "react";
-import Component from "../pure-render-component";
-import {Chart, Bar} from "react-d3-shape";
-import XAxis from "react-d3-core/lib/axis/xaxis";
-import XGrid from "react-d3-core/lib/grid/xgrid";
-import BoxPlot from "react-boxplot";
+import Plot from "../plot";
+import {pluck} from "../../tools";
 
-var ensurePos = maybePos => maybePos >= 0 ? maybePos : 0;
-
-class BoxAndWhiskers extends Component{
-  render(){
-    var boxPlotHeight = 25;
-    var {data, width, height, margins} = this.props;
-    var {max, median, min, q1, q3} = data;
-    var translateY = (height - margins.top - margins.bottom - boxPlotHeight ) / 2;
-    return (
-        <g transform={`translate(0, ${translateY})`}>
-          <BoxPlot
-              width={ensurePos(width - margins.left - margins.right)}
-              height={boxPlotHeight}
-              orientation="horizontal"
-              min={0}
-              max={max}
-              stats={{
-                whiskerLow: min,
-                quartile1: q1,
-                quartile2: median,
-                quartile3: q3,
-                whiskerHigh: max
-            }}
-          />
-        </g>
-    )
+export default class BiddingPeriod extends Plot{
+  getTitle() {
+    return "Overview chart"
   }
-}
 
-export default class BiddingPeriod extends Component{
-  render(){
-    var {data} = this.props;
-    return (
-        <section>
-          <h4 className="page-header">Bidding period</h4>
-          <Chart
-              width= {this.props.width}
-              height= {350}
-              data={data}
-              xDomain={[0, data.max]}
-              xScale="linear"
-              yDomain={[0]}
-          >
-            <BoxAndWhiskers
-                key={0}
-                data={data}
-            />
-            <XGrid/>
-            <XAxis/>
-          </Chart>
-        </section>
-    )
+  getData(){
+    if(!this.props.data) return [];
+    var years = this.props.data.map(pluck('year'));
+    return [{
+      x: this.props.data.map(pluck('tender')),
+      y: years,
+      name: "Tender",
+      type: "bar",
+      orientation: 'h'
+    }, {
+      x: this.props.data.map(pluck('award')),
+      y: years,
+      name: "Award",
+      type: "bar",
+      orientation: 'h'
+    }];
+  }
+
+  getLayout(){
+    return {
+      barmode: "stack",
+      xaxis: {
+        title: "Years",
+        titlefont: {
+          color: "#cc3c3b"
+        }
+      },
+      yaxis: {
+        title: "Days",
+        titlefont: {
+          color: "#cc3c3b"
+        }
+      }
+    }
   }
 }
