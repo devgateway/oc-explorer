@@ -3,6 +3,7 @@ import Component from "../pure-render-component";
 import CostEffectiveness from "./cost-effectiveness";
 import FundingByBidType from "./funding-by-bid-type";
 import BiddingPeriod from "./bidding-period";
+import Cancelled from "./cancelled";
 import {toImmutable} from "nuclear-js";
 
 export default class Tender extends Component{
@@ -48,6 +49,11 @@ export default class Tender extends Component{
                 }
             />
           : null}
+
+          <Cancelled
+              width={width}
+              data={data.get('cancelled')}
+          />
         </div>
     )
   }

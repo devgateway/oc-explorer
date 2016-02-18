@@ -66,5 +66,8 @@ export default {
         })
       )
     }).then(data => dispatcher.dispatch(constants.BID_PERIOD_DATA_UPDATED, data));
+
+    fetchJson('/api/totalCancelledTendersByYear')
+        .then(data => dispatcher.dispatch(constants.CANCELLED_DATA_UPDATED, data))
   }
 }
