@@ -29,13 +29,13 @@ export default class BiddingPeriod extends Plot{
     return {
       barmode: "stack",
       xaxis: {
-        title: "Years",
+        title: "Days",
         titlefont: {
           color: "#cc3c3b"
         }
       },
       yaxis: {
-        title: "Days",
+        title: "Years",
         titlefont: {
           color: "#cc3c3b"
         }
