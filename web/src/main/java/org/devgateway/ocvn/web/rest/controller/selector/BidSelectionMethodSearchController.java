@@ -40,7 +40,7 @@ public class BidSelectionMethodSearchController extends GenericOcvnController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping("/api/ocds/bidSelectionMethods")
+	@RequestMapping("/api/ocds/bidSelectionMethod/all")
 	public List<DBObject> bidSelectionMethods() {
 
 		DBObject project = new BasicDBObject("tender.succBidderMethodName", 1);

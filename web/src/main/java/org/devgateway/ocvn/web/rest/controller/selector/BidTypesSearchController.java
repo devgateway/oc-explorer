@@ -33,8 +33,8 @@ public class BidTypesSearchController extends GenericOcvnController {
 	@Autowired
 	ClassificationRepository classificationRepository;
 	
-	@RequestMapping("/api/ocds/bidTypes")
-	public List<Classification> bidSelectionMethods() {
+	@RequestMapping("/api/ocds/bidType/all")
+	public List<Classification> bidTypes() {
 
 		return classificationRepository.findAll(new Sort(Direction.ASC,"description"));
 
