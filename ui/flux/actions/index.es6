@@ -66,5 +66,9 @@ export default {
         })
       )
     }).then(data => dispatcher.dispatch(constants.BID_PERIOD_DATA_UPDATED, data));
+
+    Promise.resolve(
+        [{"_id":2010,"totalCancelledTendersAmount":4.401766E9},{"_id":2011,"totalCancelledTendersAmount":3.0435778033E10},{"_id":2012,"totalCancelledTendersAmount":2.34826483068E11},{"_id":2013,"totalCancelledTendersAmount":1.30228748521E11},{"_id":2014,"totalCancelledTendersAmount":2.67683186352E11},{"_id":2015,"totalCancelledTendersAmount":2.688935000512E12}]
+    ).then(data => dispatcher.dispatch(constants.CANCELLED_DATA_UPDATED, data))
   }
 }
