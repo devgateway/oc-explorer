@@ -48,7 +48,6 @@ public class GenericOcvnController {
 	}
 	
 	protected Criteria getBidTypeIdFilterCriteria(UniversalFilterPagingRequest filter) {
-		// bidTypeFilter
 		Criteria bidTypeCriteria = null;
 		if (filter.getBidTypeId() == null)
 			bidTypeCriteria = new Criteria();
@@ -58,4 +57,14 @@ public class GenericOcvnController {
 		return bidTypeCriteria;
 	}
 	
+	protected Criteria getProcuringEntityCriteria(UniversalFilterPagingRequest filter) {
+		Criteria criteria = null;
+		if (filter.getProcuringEntityId() == null)
+			criteria = new Criteria();
+		else
+			criteria = where("tender.procuringEntity._id").in(filter.getProcuringEntityId().toArray());
+
+		return criteria;
+	}
+
 }
