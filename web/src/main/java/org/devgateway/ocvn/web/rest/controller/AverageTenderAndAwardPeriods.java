@@ -21,6 +21,9 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.validation.Valid;
+
+import org.devgateway.ocvn.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -59,7 +62,7 @@ public class AverageTenderAndAwardPeriods extends GenericOcvnController {
 	 * @return
 	 */
 	@RequestMapping("/api/averageTenderPeriod")
-	public List<DBObject> averageTenderPeriod() {
+	public List<DBObject> averageTenderPeriod(@Valid DefaultFilterPagingRequest filter) {
 
 		DBObject year = new BasicDBObject("$year", "$tender.tenderPeriod.startDate");
 
@@ -77,6 +80,7 @@ public class AverageTenderAndAwardPeriods extends GenericOcvnController {
 		Aggregation agg = newAggregation(
 				match(where("tender.tenderPeriod.startDate").exists(true).and("tender.tenderPeriod.endDate")
 						.exists(true)),
+				getFilterOperation(filter),
 				new CustomOperation(new BasicDBObject("$project", project)),
 				group("$year").avg("$tenderLengthDays").as("averageTenderDays"),
 				sort(Direction.ASC, Fields.UNDERSCORE_ID));
@@ -100,7 +104,7 @@ public class AverageTenderAndAwardPeriods extends GenericOcvnController {
 	 * @return
 	 */
 	@RequestMapping("/api/averageAwardPeriod")
-	public List<DBObject> averageAwardPeriod() {
+	public List<DBObject> averageAwardPeriod(@Valid DefaultFilterPagingRequest filter) {
 		DBObject year = new BasicDBObject("$year", "$awards.date");
 
 		DBObject awardLengthDays = new BasicDBObject("$divide",
@@ -129,8 +133,9 @@ public class AverageTenderAndAwardPeriods extends GenericOcvnController {
 
 		Aggregation agg = newAggregation(
 				unwind("$awards"),
+				getFilterOperation(filter),
 				new CustomOperation(new BasicDBObject("$project",project2)),
-				match(where("tender.tenderPeriod.endDate").exists(true).and("awards.date").exists(true).and("awards.status").is("active")),
+				match(where("tender.tenderPeriod.endDate").exists(true).and("awards.date").exists(true).and("awards.status").is("active")),				
 				new CustomOperation(new BasicDBObject("$project", project)),
 				new CustomOperation(new BasicDBObject("$group", group)),
 				new CustomOperation(new BasicDBObject("$sort", sort)));

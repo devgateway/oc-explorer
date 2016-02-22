@@ -12,10 +12,9 @@ import cz.jirutka.validator.collection.constraints.EachRange;
  * @author mihai
  * Filtering bean applied to all endpoints
  */
-public class UniversalFilterPagingRequest extends GenericPagingRequest {
+public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
-	@EachRange(min = 1900, max = 2200)
-	List<Integer> year;
+
 
 	@EachPattern(regexp = "^[a-zA-Z0-9]*$")
 	List<String> bidTypeId;
@@ -23,20 +22,12 @@ public class UniversalFilterPagingRequest extends GenericPagingRequest {
 	@EachPattern(regexp = "^[a-zA-Z0-9]*$")
 	List<String> procuringEntityId;
 	
-	@EachPattern(regexp = "^[a-zA-Z0-9]*$")
 	List<String> bidSelectionMethod;
 
-	public UniversalFilterPagingRequest() {
+	public DefaultFilterPagingRequest() {
 		super();
 	}
 
-	public List<Integer> getYear() {
-		return year;
-	}
-
-	public void setYear(List<Integer> year) {
-		this.year = year;
-	}
 
 	public List<String> getBidTypeId() {
 		return bidTypeId;

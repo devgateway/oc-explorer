@@ -22,8 +22,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.devgateway.ocvn.web.rest.controller.request.UniversalFilterPagingRequest;
-import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
+import org.devgateway.ocvn.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -45,7 +44,7 @@ public class CostEffectivenessVisualsController extends GenericOcvnController {
 
 
 	@RequestMapping("/api/costEffectivenessAwardAmount")
-	public List<DBObject> costEffectivenessAwardAmount(@Valid UniversalFilterPagingRequest filter) {
+	public List<DBObject> costEffectivenessAwardAmount(@Valid DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
 		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.endDate"));
@@ -54,8 +53,8 @@ public class CostEffectivenessVisualsController extends GenericOcvnController {
 
 		
 		Aggregation agg = newAggregation(
-				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)
-				.andOperator(getBidTypeIdFilterCriteria(filter)).andOperator(getProcuringEntityCriteria(filter)))
+				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),
+						getFilterOperation(filter)
 						,unwind("$awards"), match(where("awards.status").is("active").and("awards.value").exists(true)),
 						new CustomProjectionOperation(project),
 				group("$year").sum("$awards.value.amount").as("totalAwardAmount"),
@@ -69,7 +68,7 @@ public class CostEffectivenessVisualsController extends GenericOcvnController {
 	}
 
 	@RequestMapping("/api/costEffectivenessTenderAmount")
-	public List<DBObject> costEffectivenessTenderAmount(@Valid UniversalFilterPagingRequest filter) {
+	public List<DBObject> costEffectivenessTenderAmount(@Valid DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
 		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.endDate"));
@@ -81,7 +80,7 @@ public class CostEffectivenessVisualsController extends GenericOcvnController {
 		Aggregation agg = newAggregation(
 				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),
 				new CustomProjectionOperation(project),
-				match(getBidTypeIdFilterCriteria(filter).andOperator(getProcuringEntityCriteria(filter))),
+				getFilterOperation(filter),
 				group("$year").sum("$tender.value.amount").as("totalTenderAmount"),
 				sort(Direction.ASC,Fields.UNDERSCORE_ID)
 				);
