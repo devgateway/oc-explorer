@@ -27,12 +27,15 @@ There are 4 main types of filters, all of them are multivalue
 - procuringEntityId - this is the _id_ of the procuring entity, all procuring entities are available here `/api/ocds/organization/procuringEntity/all`
 - bidSelectionMethod - this is the bid selection method text, since OCDS does not allow an ID here we cannot create one, so we'll just use the text, all values are available here `/api/ocds/bidSelectionMethod/all`
 
+For endpoints that may return a lot of data there are two additional filter options
+- pageSize - this is the number of items one page will return - default is 100. Max is 1000.
+- pageNumber - this is the page number to display, first page is 0.
 
 ## Selectors
 
 - Bid Selection Method - `/api/ocds/bidSelectionMethod/all`
 - Bid Types - `/api/ocds/bidType/all`
-- Organizations - `/api/ocds/organization/id/[organizationId]`
+- Display Organization details, by Id - `/api/ocds/organization/id/[organizationId]`
 - Procuring Entity Search - `/api/ocds/organization/procuringEntity/all?text=[serachText]&pageNumber=[pageNo]&pageSize=[pageSize]`. All parameters are optional.
 
 ## Access to raw OCDS data
