@@ -23,6 +23,15 @@ This will start everything, including an embedded Tomcat Web server and all the 
 
 ## Access to raw OCDS data
 
+### A word about format for filters
+
+There are 4 main types of filters, all of them are multivalue
+- year - this is just the year. Example: 2014
+- bidTypeId - this is the _dd_ of the Bid Type object, all entities are available here `/api/ocds/bidType/all`. Example: 10
+- procuringEntityId - this is the _id_ of the procuring entity, all procuring entities are available here `/api/ocds/organization/procuringEntity/all`
+- bidSelectionMethod - this is the bid selection method text, since OCDS does not allow an ID here we cannot create one, so we'll just use the text, all values are available here `/api/ocds/bidSelectionMethod/all`
+
+
 ### Display all OCDS data, paginated
 
 `/api/ocds/release/all?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]&year=[year1]&year=[year2]...&pageNumber=[pageNo]&pageSize=[pageSize]`
@@ -43,9 +52,9 @@ Example: `/api/ocds/release/budgetProjectId/41067`
 Example: `/api/ocds/release/planningBidNo/20100300191`
 
 
-## Visualisation Endpoints
+## Visualization Endpoints
 
-### Visualisation 1 - Cost Effectiveness
+### Visualization 1 - Cost Effectiveness
 
 #### Endpoint 1 - Cost Effectiveness Award Amount
 
@@ -56,7 +65,7 @@ Example: `/api/ocds/release/planningBidNo/20100300191`
 
 `/api/costEffectivenessTenderAmount?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]`
 
-### Visualisation 2 - Planned Locations
+### Visualization 2 - Planned Locations
 
 `/api/costEffectivenessTenderAmount?procuringEntityId=[proc1]&procuringEntityId=[proc2]`
 
@@ -90,3 +99,13 @@ Example: `/api/ocds/release/planningBidNo/20100300191`
 #### Endpoint 3 - Count of Awards Per Year
 
 `/api/countAwardsByYear?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]`
+
+### Visualization 6 - Timeline Chart
+
+#### Endpoint 1 - Average Tender Period
+
+`/api/averageTenderPeriod?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]`
+
+#### Endpoint 2 - Average Award Period
+
+`/api/averageAwardPeriod?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]`
