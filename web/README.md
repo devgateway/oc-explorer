@@ -17,13 +17,9 @@ Because it gets packaged as a fat jar, starting it is piece of cake:
 
 This will start everything, including an embedded Tomcat Web server and all the services attached it.
 
-
-
 # Endpoints
 
-## Access to raw OCDS data
-
-### A word about format for filters
+## A word about format for filters
 
 There are 4 main types of filters, all of them are multivalue
 - year - this is just the year. Example: 2014
@@ -31,6 +27,15 @@ There are 4 main types of filters, all of them are multivalue
 - procuringEntityId - this is the _id_ of the procuring entity, all procuring entities are available here `/api/ocds/organization/procuringEntity/all`
 - bidSelectionMethod - this is the bid selection method text, since OCDS does not allow an ID here we cannot create one, so we'll just use the text, all values are available here `/api/ocds/bidSelectionMethod/all`
 
+
+## Selectors
+
+- Bid Selection Method - `/api/ocds/bidSelectionMethod/all`
+- Bid Types - `/api/ocds/bidType/all`
+- Organizations - `/api/ocds/organization/id/[organizationId]`
+- Procuring Entity Search - `/api/ocds/organization/procuringEntity/all?text=[serachText]&pageNumber=[pageNo]&pageSize=[pageSize]`. All parameters are optional.
+
+## Access to raw OCDS data
 
 ### Display all OCDS data, paginated
 
