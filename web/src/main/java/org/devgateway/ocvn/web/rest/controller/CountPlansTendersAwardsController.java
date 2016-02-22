@@ -57,7 +57,7 @@ public class CountPlansTendersAwardsController extends GenericOcvnController {
 		project.put("year", new BasicDBObject("$year", "$planning.bidPlanProjectDateApprove"));
 
 		Aggregation agg = newAggregation(match(where("planning.bidPlanProjectDateApprove").exists(true)),
-				getFilterOperation(filter),
+				getMatchDefaultFilterOperation(filter),
 				new CustomOperation(new BasicDBObject("$project", project)), group("$year").count().as("count"),
 				sort(Direction.ASC, "_id"));
 
@@ -82,7 +82,7 @@ public class CountPlansTendersAwardsController extends GenericOcvnController {
 		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
 
 		Aggregation agg = newAggregation(match(where("tender.tenderPeriod.startDate").exists(true)),
-				getFilterOperation(filter),
+				getMatchDefaultFilterOperation(filter),
 				new CustomOperation(new BasicDBObject("$project", project)), group("$year").count().as("count"),
 				sort(Direction.ASC, "_id"));
 		
@@ -116,7 +116,7 @@ public class CountPlansTendersAwardsController extends GenericOcvnController {
 		sort.put("_id", 1);
 
 		Aggregation agg = newAggregation(match(where("awards.0").exists(true)), 
-				getFilterOperation(filter),
+				getMatchDefaultFilterOperation(filter),
 				project("awards"), unwind("$awards"),
 				match(where("awards.date").exists(true)), new CustomOperation(new BasicDBObject("$project", project)),
 				new CustomOperation(new BasicDBObject("$group", group)),

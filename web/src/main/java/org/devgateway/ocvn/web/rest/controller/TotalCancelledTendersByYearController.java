@@ -54,7 +54,7 @@ public class TotalCancelledTendersByYearController extends GenericOcvnController
 
 		Aggregation agg = newAggregation(
 				match(where("tender.status").is("cancelled")),
-				getFilterOperation(filter),		
+				getMatchDefaultFilterOperation(filter),		
 				new CustomOperation(new BasicDBObject("$project", project)),
 				group("$year").sum("$tender.value.amount").as("totalCancelledTendersAmount"),
 				sort(Direction.ASC, Fields.UNDERSCORE_ID));

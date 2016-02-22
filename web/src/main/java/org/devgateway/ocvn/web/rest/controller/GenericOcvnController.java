@@ -102,9 +102,13 @@ public class GenericOcvnController {
 		return criteria;
 	}
 	
-	protected MatchOperation getFilterOperation(DefaultFilterPagingRequest filter) {
-		return match(new Criteria().andOperator(getBidTypeIdFilterCriteria(filter),
-				getProcuringEntityIdCriteria(filter), getBidSelectionMethod(filter)));
+	protected Criteria getDefaultFilterCriteria(DefaultFilterPagingRequest filter) {
+		return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter),
+				getProcuringEntityIdCriteria(filter), getBidSelectionMethod(filter));
+	}
+	
+	protected MatchOperation getMatchDefaultFilterOperation(DefaultFilterPagingRequest filter) {
+		return match(getDefaultFilterCriteria(filter));
 	}
 
 }

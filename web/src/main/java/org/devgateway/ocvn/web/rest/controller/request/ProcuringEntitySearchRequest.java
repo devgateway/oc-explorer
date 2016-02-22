@@ -3,7 +3,6 @@
  */
 package org.devgateway.ocvn.web.rest.controller.request;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -12,8 +11,7 @@ import javax.validation.constraints.Size;
  */
 public class ProcuringEntitySearchRequest extends GenericPagingRequest {
 
-	@Size(min=3, max=30)
-	@NotNull
+	@Size(min=3, max=30)	
 	String text;
 	
 	public ProcuringEntitySearchRequest() {

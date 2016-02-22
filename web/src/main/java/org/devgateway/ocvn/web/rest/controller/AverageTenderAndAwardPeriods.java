@@ -80,7 +80,7 @@ public class AverageTenderAndAwardPeriods extends GenericOcvnController {
 		Aggregation agg = newAggregation(
 				match(where("tender.tenderPeriod.startDate").exists(true).and("tender.tenderPeriod.endDate")
 						.exists(true)),
-				getFilterOperation(filter),
+				getMatchDefaultFilterOperation(filter),
 				new CustomOperation(new BasicDBObject("$project", project)),
 				group("$year").avg("$tenderLengthDays").as("averageTenderDays"),
 				sort(Direction.ASC, Fields.UNDERSCORE_ID));
@@ -133,7 +133,7 @@ public class AverageTenderAndAwardPeriods extends GenericOcvnController {
 
 		Aggregation agg = newAggregation(
 				unwind("$awards"),
-				getFilterOperation(filter),
+				getMatchDefaultFilterOperation(filter),
 				new CustomOperation(new BasicDBObject("$project",project2)),
 				match(where("tender.tenderPeriod.endDate").exists(true).and("awards.date").exists(true).and("awards.status").is("active")),				
 				new CustomOperation(new BasicDBObject("$project", project)),

@@ -39,7 +39,7 @@ public class TenderPriceByTypeYearController extends GenericOcvnController {
 		
 		Aggregation agg = newAggregation(
 				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),
-				getFilterOperation(filter),
+				getMatchDefaultFilterOperation(filter),
 				new CustomProjectionOperation(project),
 				group("year","tender.procurementMethod").sum("$tender.value.amount").as("totalTenderAmount"),
 				sort(Direction.ASC,"year")
@@ -62,7 +62,7 @@ public class TenderPriceByTypeYearController extends GenericOcvnController {
 		
 		Aggregation agg = newAggregation(
 				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),
-				getFilterOperation(filter),
+				getMatchDefaultFilterOperation(filter),
 				new CustomProjectionOperation(project),
 				group("year","tender.succBidderMethodName").sum("$tender.value.amount").as("totalTenderAmount"),
 				sort(Direction.ASC,"year"));
