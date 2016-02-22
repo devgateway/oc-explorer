@@ -45,10 +45,8 @@ export default class App extends React.Component{
                 </small>
               </p>
             </section>
-            <section className="col-sm-12 faq">
-              <strong>
-                Frequently Asked Questions
-              </strong>
+            <section className="col-sm-12 filters">
+              Filter the data
             </section>
           </div>
         </aside>
