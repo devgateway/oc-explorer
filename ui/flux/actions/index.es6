@@ -69,5 +69,9 @@ export default {
 
     fetchJson('/api/totalCancelledTendersByYear')
         .then(data => dispatcher.dispatch(constants.CANCELLED_DATA_UPDATED, data))
+  },
+
+  toggleFiltersBox(open){
+    dispatcher.dispatch(constants.FILTER_BOX_TOGGLED, open);
   }
 }

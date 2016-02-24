@@ -9,5 +9,6 @@ export default keyMirror({
   LOCATION_UPDATED: null,
   BID_PERIOD_DATA_UPDATED: null,
   OVERVIEW_DATA_UPDATED: null,
-  CANCELLED_DATA_UPDATED: null
+  CANCELLED_DATA_UPDATED: null,
+  FILTER_BOX_TOGGLED: null
 })

@@ -6,6 +6,7 @@ import {years, identity} from "../../tools";
 var store = Store({
   getInitialState(){
     return toImmutable({
+      filtersBoxOpen: false,
       tab: store.tabs.OVERVIEW,
       selectedYears: years().reduce((map, year) => map.set(year, true), toImmutable({})),
       contentWidth: 0,
@@ -26,6 +27,7 @@ var store = Store({
     this.on(constants.BID_PERIOD_DATA_UPDATED, updateData('bidPeriod'));
     this.on(constants.OVERVIEW_DATA_UPDATED, updateData('overview'));
     this.on(constants.CANCELLED_DATA_UPDATED, updateData('cancelled'));
+    this.on(constants.FILTER_BOX_TOGGLED, (state, open) => state.set('filtersBoxOpen', open))
   }
 });
 
