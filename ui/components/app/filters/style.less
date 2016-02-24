@@ -1,0 +1,40 @@
+section.filters{
+  cursor: pointer;
+  position: relative;
+  transition: background-color .4s ease-in-out;
+  .text{
+    text-transform: uppercase;
+    color: #c13f47;
+  }
+
+  .box{
+    position: absolute;
+    left: 101%;
+    top: 0;
+    width: 300px;
+    height: 300px;
+    margin-top: -125px;
+    background: white;
+    border: 1px solid black;
+    transform: scaleY(.00001) translateX(-50%);
+    transform-origin: 50% 50%;
+    opacity: 0;
+    transition: transform .4s ease-in-out, opacity .4s ease-in-out;
+  }
+
+  .arrow .glyphicon{
+    transform: rotateZ(0);
+    transition: transform .4s ease-in-out;
+  }
+
+  &.open{
+    background-color: white;
+    .box{
+      transform: scaleY(1) translateX(0);
+      opacity: 1;
+    }
+    .arrow .glyphicon{
+      transform: rotate(-180deg)
+    }
+  }
+}
