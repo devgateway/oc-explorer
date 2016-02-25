@@ -87,7 +87,7 @@ public class GenericOcvnController {
 	
 	
 	/**
-	 * Appends the bid selection method to the filter, this will filter based on tender.succBidderMethodName.
+	 * Appends the bid selection method to the filter, this will filter based on tender.procurementMethodDetails.
 	 * It accepts multiple elements
 	 * @param filter
 	 * @return the {@link Criteria} for this filter
@@ -97,7 +97,7 @@ public class GenericOcvnController {
 		if (filter.getBidSelectionMethod() == null)
 			criteria = new Criteria();
 		else
-			criteria = where("tender.succBidderMethodName").in(filter.getBidSelectionMethod().toArray());
+			criteria = where("tender.procurementMethodDetails").in(filter.getBidSelectionMethod().toArray());
 
 		return criteria;
 	}

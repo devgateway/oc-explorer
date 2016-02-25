@@ -57,14 +57,14 @@ public class TenderPriceByTypeYearController extends GenericOcvnController {
 		
 		DBObject project = new BasicDBObject();
 		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.endDate"));
-		project.put("tender.succBidderMethodName", 1);
+		project.put("tender.procurementMethodDetails", 1);
 		project.put("tender.value", 1);
 		
 		Aggregation agg = newAggregation(
 				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),
 				getMatchDefaultFilterOperation(filter),
 				new CustomProjectionOperation(project),
-				group("year","tender.succBidderMethodName").sum("$tender.value.amount").as("totalTenderAmount"),
+				group("year","tender.procurementMethodDetails").sum("$tender.value.amount").as("totalTenderAmount"),
 				sort(Direction.ASC,"year"));
 		
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
