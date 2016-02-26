@@ -33,6 +33,7 @@ public class MongoTemplateConfiguration {
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.bidNo", Direction.ASC));
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("awards.status", Direction.ASC));
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.tenderPeriod.startDate", Direction.ASC));
+		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.items.classification._id", Direction.ASC));
 		mongoTemplate.indexOps(VNOrganization.class).ensureIndex(new Index().on("identifier._id", Direction.ASC));
 		mongoTemplate.indexOps(VNOrganization.class).ensureIndex(new Index().on("additionalIdentifiers._id", Direction.ASC));
 		mongoTemplate.indexOps(VNOrganization.class)

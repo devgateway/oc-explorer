@@ -20,6 +20,7 @@ import javax.validation.Valid;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
 import org.devgateway.ocvn.web.rest.controller.request.OCDSReleaseRequest;
+import org.devgateway.ocvn.web.rest.controller.request.YearFilterPangingRequest;
 import org.devgateway.toolkit.persistence.mongo.dao.VNPlanning;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,24 +69,24 @@ public class OcdsController extends GenericOcvnController {
 	 * @return the release data
 	 */
 	@RequestMapping("/api/ocds/release/all")
-	public List<Release> ocdsReleases(@Valid OCDSReleaseRequest releaseRequest) {
+	public List<Release> ocdsReleases(@Valid YearFilterPangingRequest releaseRequest) {
 
 		Criteria[] yearCriteria = null;
 		Criteria criteria = new Criteria();
 
-		if (releaseRequest.getBidPlanProjectDateApproveYear() == null) {
+		if (releaseRequest.getYear() == null) {
 			yearCriteria = new Criteria[1];
 			yearCriteria[0] = new Criteria();
 		} else {
-			yearCriteria = new Criteria[releaseRequest.getBidPlanProjectDateApproveYear().length];
-			for (int i = 0; i < releaseRequest.getBidPlanProjectDateApproveYear().length; i++)
-				yearCriteria[i] = where("planning.bidPlanProjectDateApprove").gte(getStartDate(releaseRequest.getBidPlanProjectDateApproveYear()[i]))
-						.lte(getEndDate(releaseRequest.getBidPlanProjectDateApproveYear()[i]));
+			yearCriteria = new Criteria[releaseRequest.getYear().size()];
+			for (int i = 0; i < releaseRequest.getYear().size(); i++)
+				yearCriteria[i] = where("planning.bidPlanProjectDateApprove").gte(getStartDate(releaseRequest.getYear().get(i)))
+						.lte(getEndDate(releaseRequest.getYear().get(i)));
 		}
 
 		PageRequest pageRequest = new PageRequest(releaseRequest.getPageNumber(), releaseRequest.getPageSize(), Direction.ASC, "id");
 
-		List<Release> find = mongoTemplate.find(query(criteria.orOperator(yearCriteria)).with(pageRequest),
+		List<Release> find = mongoTemplate.find(query(criteria.orOperator(yearCriteria).andOperator(getDefaultFilterCriteria(releaseRequest))).with(pageRequest),
 				Release.class);
 
 		return find;

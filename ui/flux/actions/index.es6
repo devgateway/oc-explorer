@@ -29,27 +29,29 @@ export default {
       awards: awards
     }));
 
-    years().forEach(year => {
-      fetchJson(`/api/plannedFundingByLocation/${year}`)
-          .then(data => data.filter(location => !!location.coordinates || console.warn('Invalid location!', location)))
-          .then(data => dispatcher.dispatch(constants.LOCATION_UPDATED, {year: year, data: data}));
+    fetchJson('/api/plannedFundingByLocation/').then(data => dispatcher.dispatch(constants.LOCATION_UPDATED, data));
 
-      Promise.all([
-        fetchJson(`/api/costEffectivenessTenderAmount/${year}`),
-        fetchJson(`/api/costEffectivenessAwardAmount/${year}`)
-      ]).then(([tenderResponse, awardResponse]) => {
-        var tender = tenderResponse[0].totalTenderAmount;
-        var award = awardResponse[0].totalAwardAmount;
-        return {
-          year: year,
-          tender: tender,
-          diff: tender - award
-        }
-      }).then(data => dispatcher.dispatch(constants.COST_EFFECTIVENESS_DATA_UPDATED, {year: year, data: data}));
+    Promise.all([
+      fetchJson('/api/costEffectivenessTenderAmount/'),
+      fetchJson('/api/costEffectivenessAwardAmount/')
+    ]).then(([tenderResponse, awardResponse]) => {
+      var response2obj = (field, arr) => arr.reduce((obj, elem) => {
+        obj[elem._id] = elem[field];
+        return obj;
+      }, {});
 
-      fetchJson(`/api/tenderPriceByVnTypeYear/${year}`)
-          .then(data => dispatcher.dispatch(constants.BID_TYPE_DATA_UPDATED, {year: year, data: data}))
+      var tender = response2obj('totalTenderAmount', tenderResponse);
+      var award = response2obj('totalAwardAmount', awardResponse);
+      dispatcher.dispatch(constants.COST_EFFECTIVENESS_DATA_UPDATED,
+          Object.keys(tender).map(year => ({
+            year: year,
+            tender: tender[year],
+            diff: tender[year] - award[year]
+          }))
+      );
     });
+
+    fetchJson('/api/tenderPriceByVnTypeYear').then(data => dispatcher.dispatch(constants.BID_TYPE_DATA_UPDATED, data));
 
     Promise.all([
         fetchJson('/api/averageTenderPeriod'),

@@ -21,6 +21,9 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
+import org.devgateway.ocvn.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -48,12 +51,13 @@ public class CountPlansTendersAwardsController extends GenericOcvnController {
 	 * @return
 	 */
 	@RequestMapping("/api/countBidPlansByYear")
-	public List<DBObject> countBidPlansByYear() {
+	public List<DBObject> countBidPlansByYear(@Valid DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
 		project.put("year", new BasicDBObject("$year", "$planning.bidPlanProjectDateApprove"));
 
 		Aggregation agg = newAggregation(match(where("planning.bidPlanProjectDateApprove").exists(true)),
+				getMatchDefaultFilterOperation(filter),
 				new CustomOperation(new BasicDBObject("$project", project)), group("$year").count().as("count"),
 				sort(Direction.ASC, "_id"));
 
@@ -72,14 +76,17 @@ public class CountPlansTendersAwardsController extends GenericOcvnController {
 	 * @return
 	 */
 	@RequestMapping("/api/countTendersByYear")
-	public List<DBObject> countTendersByYear() {
+	public List<DBObject> countTendersByYear(@Valid DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
 		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
 
 		Aggregation agg = newAggregation(match(where("tender.tenderPeriod.startDate").exists(true)),
+				getMatchDefaultFilterOperation(filter),
 				new CustomOperation(new BasicDBObject("$project", project)), group("$year").count().as("count"),
 				sort(Direction.ASC, "_id"));
+		
+		System.out.println(agg.toString());
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();
@@ -95,7 +102,7 @@ public class CountPlansTendersAwardsController extends GenericOcvnController {
 	 * @return
 	 */
 	@RequestMapping("/api/countAwardsByYear")
-	public List<DBObject> countAwardsByYear() {
+	public List<DBObject> countAwardsByYear(@Valid DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
 		project.put("year", new BasicDBObject("$year", "$awards.date"));
@@ -108,7 +115,9 @@ public class CountPlansTendersAwardsController extends GenericOcvnController {
 		DBObject sort = new BasicDBObject();
 		sort.put("_id", 1);
 
-		Aggregation agg = newAggregation(match(where("awards.0").exists(true)), project("awards"), unwind("$awards"),
+		Aggregation agg = newAggregation(match(where("awards.0").exists(true)), 
+				getMatchDefaultFilterOperation(filter),
+				project("awards"), unwind("$awards"),
 				match(where("awards.date").exists(true)), new CustomOperation(new BasicDBObject("$project", project)),
 				new CustomOperation(new BasicDBObject("$group", group)),
 				new CustomOperation(new BasicDBObject("$sort", sort)));

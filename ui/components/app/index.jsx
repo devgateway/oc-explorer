@@ -69,10 +69,7 @@ export default class App extends React.Component{
                 case tabs.PLANNING: return (
                     <Planning
                         width={globalState.get('contentWidth')}
-                        locations={globalState.get('selectedYears').reduce((location, selected, year) => selected ?
-                        location.concat(globalState.getIn(['data', 'locations', year], toImmutable([]))) :
-                        location
-                    , toImmutable([]))}
+                        locations={globalState.getIn(['data', 'locations'])}
                     />
                 );
                 default: return <Tender {...props}/>
