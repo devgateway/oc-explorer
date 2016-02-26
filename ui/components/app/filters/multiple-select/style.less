@@ -16,8 +16,9 @@ section.filters .field{
   }
 
   .options{
-    transition: transform .4s ease-in-out;
+    transition: transform .4s ease-in-out, margin .4s ease-in-out;
     transform: translateY(-100%);
+    margin-bottom: -25%;
   }
 
   &.open{
@@ -27,6 +28,7 @@ section.filters .field{
 
     .options{
       transform: translateY(0%);
+      margin-bottom: 0;
     }
   }
 }

@@ -1,6 +1,6 @@
 import dispatcher from "../dispatcher";
 import constants from "./constants";
-import {fetchJson, years} from "../../tools";
+import {fetchJson, identity} from "../../tools";
 
 export default {
   changeTab(slug){
@@ -72,10 +72,14 @@ export default {
     fetchJson('/api/totalCancelledTendersByYear')
         .then(data => dispatcher.dispatch(constants.CANCELLED_DATA_UPDATED, data))
 
-    fetchJson('/api/ocds/bidType/all').then(data => dispatcher.dispatch(constants.FILTERS_DATA_UPDATED, {
+    Promise.all([
+      fetchJson('/api/ocds/bidType/all'),
+      fetchJson('/api/ocds/bidSelectionMethod/all')
+    ])
+    .then(([bidTypes, bidSelectionMethods]) => dispatcher.dispatch(constants.FILTERS_DATA_UPDATED, {
       bidTypes: {
         open: true,
-        options: data.reduce((accum, bidType) => {
+        options: bidTypes.reduce((accum, bidType) => {
           var {id} = bidType;
           accum[id] = {
             id: id,
@@ -84,6 +88,19 @@ export default {
           };
           return accum;
         }, {})
+      },
+      bidSelectionMethods: {
+        open: true,
+        options: bidSelectionMethods
+            .filter(method => !!method._id)
+            .reduce((accum, {_id}) => {
+              accum[_id] = {
+                id: _id,
+                description: _id,
+                selected: false
+              };
+              return accum;
+            }, {})
       }
     }));
   },

@@ -23,6 +23,12 @@ export default class Filters extends Component{
             </div>
             <div className="box" onClick={e => e.stopPropagation()}>
               <MultipleSelect title="Bid type" slug="bidTypes" state={filters.get('bidTypes')} actions={actions}/>
+              <MultipleSelect
+                  title="Bid selection method"
+                  slug="bidSelectionMethods"
+                  state={filters.get('bidSelectionMethods')}
+                  actions={actions}
+              />
             </div>
           </div>
         </section>
