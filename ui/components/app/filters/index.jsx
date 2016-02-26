@@ -1,11 +1,14 @@
 import Component from "../../pure-render-component";
 import style from "./style.less";
 import cn from "classnames";
+import MultipleSelect from "./multiple-select";
 
 export default class Filters extends Component{
   render(){
     var {actions, state} = this.props;
-    var open = state.getIn(['globalState', 'filtersBoxOpen']);
+    var globalState = state.get('globalState');
+    var open = globalState.get('filtersBoxOpen');
+    var filters = globalState.get('filters');
     return (
         <section
             onClick={e => actions.toggleFiltersBox(!open)}
@@ -18,8 +21,8 @@ export default class Filters extends Component{
             <div className="col-sm-1 end arrow">
               <i className="glyphicon glyphicon-menu-right"></i>
             </div>
-            <div className="box">
-              here be box
+            <div className="box" onClick={e => e.stopPropagation()}>
+              <MultipleSelect title="Bid type" slug="bidTypes" state={filters.get('bidTypes')} actions={actions}/>
             </div>
           </div>
         </section>

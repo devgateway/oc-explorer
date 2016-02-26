@@ -14,12 +14,23 @@ section.filters{
     width: 300px;
     height: 300px;
     margin-top: -125px;
+    padding: 20px;
     background: white;
     border: 1px solid black;
-    transform: scaleY(.00001) translateX(-50%);
-    transform-origin: 50% 50%;
+    transform: scaleY(.00001) scaleX(.5) translateX(-150%);
+    transform-origin: 0% 50%;
     opacity: 0;
     transition: transform .4s ease-in-out, opacity .4s ease-in-out;
+    section{
+      header{
+        color: #c13f47;
+        text-transform: uppercase;
+        font-weight: bold;
+        .count{
+          color: #262626;
+        }
+      }
+    }
   }
 
   .arrow .glyphicon{
@@ -30,7 +41,7 @@ section.filters{
   &.open{
     background-color: white;
     .box{
-      transform: scaleY(1) translateX(0);
+      transform: scaleY(1) scaleX(1) translateX(0);
       opacity: 1;
     }
     .arrow .glyphicon{
