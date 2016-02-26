@@ -73,11 +73,15 @@ export default {
     fetchJson('/api/ocds/bidTypes').then(data => dispatcher.dispatch(constants.FILTERS_DATA_UPDATED, {
       bidTypes: {
         open: true,
-        options: data.map(bidType => ({
-          id: bidType.id,
-          description: bidType.description,
-          selected: false
-        }))
+        options: data.reduce((accum, bidType) => {
+          var {id} = bidType;
+          accum[id] = {
+            id: id,
+            description: bidType.description,
+            selected: false
+          };
+          return accum;
+        })
       }
     }));
   },
