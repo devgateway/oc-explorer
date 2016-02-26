@@ -19,6 +19,16 @@ export default {
   },
 
   loadData(){
+    fetchJson('/api/ocds/bidTypes').then(data => dispatcher.dispatch(constants.FILTERS_DATA_UPDATED, {
+      bidTypes: {
+        open: true,
+        options: data.map(bidType => ({
+          id: bidType.id,
+          description: bidType.description,
+          selected: false
+        }))
+      }
+    }));
     Promise.all([
       fetchJson('/api/countBidPlansByYear'),
       fetchJson('/api/countTendersByYear'),

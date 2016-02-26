@@ -10,5 +10,6 @@ export default keyMirror({
   BID_PERIOD_DATA_UPDATED: null,
   OVERVIEW_DATA_UPDATED: null,
   CANCELLED_DATA_UPDATED: null,
-  FILTER_BOX_TOGGLED: null
+  FILTER_BOX_TOGGLED: null,
+  FILTERS_DATA_UPDATED: null
 })
