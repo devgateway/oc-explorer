@@ -13,8 +13,6 @@ package org.devgateway.toolkit.forms.wicket.page.edit;
 
 import javax.persistence.EntityManager;
 
-import nl.dries.wicket.hibernate.dozer.DozerModel;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.ComponentTag;
@@ -41,13 +39,13 @@ import org.devgateway.toolkit.forms.wicket.components.form.BootstrapSubmitButton
 import org.devgateway.toolkit.forms.wicket.components.form.GenericBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.page.BasePage;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
-import org.devgateway.toolkit.reporting.spring.util.ReportsCacheService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationMessage;
 import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapForm;
 import de.agilecoders.wicket.core.util.Attributes;
+import nl.dries.wicket.hibernate.dozer.DozerModel;
 
 /**
  * @author mpostelnicu
@@ -106,8 +104,6 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
      protected EntityManager entityManager;
 	
 		
-	@SpringBean
-	protected ReportsCacheService reportsCacheService;
 	 
 
 	public GenericBootstrapValidationVisitor getBootstrapValidationVisitor(AjaxRequestTarget target) {
@@ -224,8 +220,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
 			//clears session and detaches all entities that are currently attached
 			entityManager.clear();
 			
-			//we flush the mondrian cache to ensure it gets rebuilt
-			reportsCacheService.flushCache();
+
 			
 			// only redirect if redirect is true
 			if (redirectToSelf) {
