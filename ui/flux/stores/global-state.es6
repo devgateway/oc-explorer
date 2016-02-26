@@ -2,6 +2,7 @@ import {Store, toImmutable} from "nuclear-js";
 import constants from "../actions/constants";
 import keyMirror from "keymirror";
 import {years, identity} from "../../tools";
+import actions from "../actions";
 
 var store = Store({
   getInitialState(){
@@ -31,8 +32,11 @@ var store = Store({
     this.on(constants.FILTER_BOX_TOGGLED, (state, open) => state.set('filtersBoxOpen', open));
     this.on(constants.FILTERS_DATA_UPDATED, (state, data) => state.set('filters', toImmutable(data)));
     this.on(constants.FILTER_TOGGLED, (state, {slug, open}) => state.setIn(['filters', slug, 'open'], open));
-    this.on(constants.FILTER_OPTIONS_TOGGLED, (state, {slug, option, selected}) =>
-        state.setIn(['filters', slug, 'options', option, 'selected'], selected));
+    this.on(constants.FILTER_OPTIONS_TOGGLED, (state, {slug, option, selected}) => {
+      var newState = state.setIn(['filters', slug, 'options', option, 'selected'], selected);
+      actions.loadData(state.get('filters').toJS());
+      return newState;
+    })
   }
 });
 

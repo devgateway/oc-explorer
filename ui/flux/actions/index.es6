@@ -2,6 +2,8 @@ import dispatcher from "../dispatcher";
 import constants from "./constants";
 import {fetchJson, identity} from "../../tools";
 
+var addFilters = filters => url => null === filters ? url : url;
+
 export default {
   changeTab(slug){
     dispatcher.dispatch(constants.TAB_CHANGED, slug);
@@ -18,7 +20,8 @@ export default {
     dispatcher.dispatch(constants.CONTENT_WIDTH_CHANGED, newWidth);
   },
 
-  loadData(){
+  loadData(filters = null){
+    debugger;
     Promise.all([
       fetchJson('/api/countBidPlansByYear'),
       fetchJson('/api/countTendersByYear'),
@@ -71,12 +74,14 @@ export default {
 
     fetchJson('/api/totalCancelledTendersByYear')
         .then(data => dispatcher.dispatch(constants.CANCELLED_DATA_UPDATED, data))
+  },
 
+  bootstrap(){
+    this.loadData();
     Promise.all([
       fetchJson('/api/ocds/bidType/all'),
       fetchJson('/api/ocds/bidSelectionMethod/all')
-    ])
-    .then(([bidTypes, bidSelectionMethods]) => dispatcher.dispatch(constants.FILTERS_DATA_UPDATED, {
+    ]).then(([bidTypes, bidSelectionMethods]) => dispatcher.dispatch(constants.FILTERS_DATA_UPDATED, {
       bidTypes: {
         open: true,
         options: bidTypes.reduce((accum, bidType) => {
