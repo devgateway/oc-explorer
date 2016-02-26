@@ -95,5 +95,13 @@ export default {
       slug: slug,
       open: open
     })
+  },
+
+  toggleFilterOption(slug, option, selected){
+    dispatcher.dispatch(constants.FILTER_OPTIONS_TOGGLED, {
+      slug: slug,
+      option: option,
+      selected: selected
+    })
   }
 }
