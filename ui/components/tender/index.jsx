@@ -18,10 +18,7 @@ export default class Tender extends Component{
         <div className="col-sm-12 content">
           <CostEffectiveness
               width={width}
-              data={selectedYears.reduce((ceData, selected, year) => selected && data.hasIn(['costEffectiveness', year]) ?
-                  ceData.concat([data.getIn(['costEffectiveness', year])]) :
-                  ceData
-              , [])}/>
+              data={data.get('costEffectiveness')}/>
 
           <BiddingPeriod
               width={width}
