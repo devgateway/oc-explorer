@@ -72,7 +72,7 @@ export default {
     fetchJson('/api/totalCancelledTendersByYear')
         .then(data => dispatcher.dispatch(constants.CANCELLED_DATA_UPDATED, data))
 
-    fetchJson('/api/ocds/bidTypes').then(data => dispatcher.dispatch(constants.FILTERS_DATA_UPDATED, {
+    fetchJson('/api/ocds/bidType/all').then(data => dispatcher.dispatch(constants.FILTERS_DATA_UPDATED, {
       bidTypes: {
         open: true,
         options: data.reduce((accum, bidType) => {

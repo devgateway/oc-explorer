@@ -19,8 +19,12 @@ export default class MultipleSelect extends Component{
           <section className="options">
             {options.map(option => (
                 <div className="checkbox" key={option.get('id')}>
-                  <label onClick={e => actions.toggleFilterOption(slug, option.get('id'), !option.get('selected'))}>
-                    <input type="checkbox" value={option.get('selected')}/> {option.get('description')}
+                  <label>
+                    <input
+                        type="checkbox"
+                        value={option.get('selected')}
+                        onChange={e => actions.toggleFilterOption(slug, option.get('id'), !option.get('selected'))}
+                    /> {option.get('description')}
                   </label>
                 </div>
             )).toArray()}
