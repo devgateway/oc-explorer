@@ -39,7 +39,7 @@ export default {
         obj[elem._id] = elem[field];
         return obj;
       }, {});
-      
+
       var tender = response2obj('totalTenderAmount', tenderResponse);
       var award = response2obj('totalAwardAmount', awardResponse);
       dispatcher.dispatch(constants.COST_EFFECTIVENESS_DATA_UPDATED,
@@ -51,10 +51,7 @@ export default {
       );
     });
 
-    // years().forEach(year => {
-    //   fetchJson(`/api/tenderPriceByVnTypeYear/${year}`)
-    //       .then(data => dispatcher.dispatch(constants.BID_TYPE_DATA_UPDATED, {year: year, data: data}))
-    // });
+    fetchJson('/api/tenderPriceByVnTypeYear').then(data => dispatcher.dispatch(constants.BID_TYPE_DATA_UPDATED, data));
 
     Promise.all([
         fetchJson('/api/averageTenderPeriod'),

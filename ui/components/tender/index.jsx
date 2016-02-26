@@ -29,14 +29,10 @@ export default class Tender extends Component{
             <FundingByBidType
                 width={width}
                 data={data.get('bidType')
-                    .reduce((data, yearData, year) => selectedYears.get(year) ?
-                        data.concat(yearData) :
-                        data
-                    , toImmutable([]))
-                    .groupBy(bidType => bidType.get('_id'))
+                    .groupBy(bidType => bidType.get('succBidderMethodName'))
                     .map(bidTypes => bidTypes.reduce((reducedBidType, bidType) => {
                       return {
-                        _id: bidType.get('_id') || "unspecified",
+                        _id: bidType.get('succBidderMethodName') || "unspecified",
                         totalTenderAmount: reducedBidType.totalTenderAmount + bidType.get('totalTenderAmount')
                       }
                     }, {
