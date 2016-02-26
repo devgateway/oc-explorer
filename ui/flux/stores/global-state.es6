@@ -34,7 +34,7 @@ var store = Store({
     this.on(constants.FILTER_TOGGLED, (state, {slug, open}) => state.setIn(['filters', slug, 'open'], open));
     this.on(constants.FILTER_OPTIONS_TOGGLED, (state, {slug, option, selected}) => {
       var newState = state.setIn(['filters', slug, 'options', option, 'selected'], selected);
-      actions.loadData(state.get('filters').toJS());
+      actions.loadData(newState.get('filters').toJS());
       return newState;
     })
   }

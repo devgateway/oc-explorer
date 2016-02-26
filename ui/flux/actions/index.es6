@@ -1,8 +1,17 @@
 import dispatcher from "../dispatcher";
 import constants from "./constants";
 import {fetchJson, identity} from "../../tools";
+import URI from "urijs";
 
-var addFilters = filters => url => null === filters ? url : url;
+var options2arr = options => Object.keys(options)
+    .filter(key => options[key].selected)
+    .map(identity);
+
+var addFilters = (filters, url) => null === filters ? url :
+    new URI(url).addSearch({
+      bidTypeId: options2arr(filters.bidTypes.options),
+      bidSelectionMethod: options2arr(filters.bidSelectionMethods.options)
+    }).toString();
 
 export default {
   changeTab(slug){
@@ -21,22 +30,22 @@ export default {
   },
 
   loadData(filters = null){
-    debugger;
+    var load = url => fetchJson(addFilters(filters, url));
     Promise.all([
-      fetchJson('/api/countBidPlansByYear'),
-      fetchJson('/api/countTendersByYear'),
-      fetchJson('/api/countAwardsByYear')
+      load('/api/countBidPlansByYear'),
+      load('/api/countTendersByYear'),
+      load('/api/countAwardsByYear')
     ]).then(([bidplans, tenders, awards]) => dispatcher.dispatch(constants.OVERVIEW_DATA_UPDATED, {
       bidplans: bidplans,
       tenders: tenders,
       awards: awards
     }));
 
-    fetchJson('/api/plannedFundingByLocation/').then(data => dispatcher.dispatch(constants.LOCATION_UPDATED, data));
+    load('/api/plannedFundingByLocation/').then(data => dispatcher.dispatch(constants.LOCATION_UPDATED, data));
 
     Promise.all([
-      fetchJson('/api/costEffectivenessTenderAmount/'),
-      fetchJson('/api/costEffectivenessAwardAmount/')
+      load('/api/costEffectivenessTenderAmount/'),
+      load('/api/costEffectivenessAwardAmount/')
     ]).then(([tenderResponse, awardResponse]) => {
       var response2obj = (field, arr) => arr.reduce((obj, elem) => {
         obj[elem._id] = elem[field];
@@ -54,11 +63,11 @@ export default {
       );
     });
 
-    fetchJson('/api/tenderPriceByVnTypeYear').then(data => dispatcher.dispatch(constants.BID_TYPE_DATA_UPDATED, data));
+    load('/api/tenderPriceByVnTypeYear').then(data => dispatcher.dispatch(constants.BID_TYPE_DATA_UPDATED, data));
 
     Promise.all([
-        fetchJson('/api/averageTenderPeriod'),
-        fetchJson('/api/averageAwardPeriod')
+        load('/api/averageTenderPeriod'),
+        load('/api/averageAwardPeriod')
     ]).then(([tenders, awards]) => {
       var awardsHash = awards.reduce((obj, award) => {
         obj[award._id] = award.averageAwardDays
@@ -72,7 +81,7 @@ export default {
       )
     }).then(data => dispatcher.dispatch(constants.BID_PERIOD_DATA_UPDATED, data));
 
-    fetchJson('/api/totalCancelledTendersByYear')
+    load('/api/totalCancelledTendersByYear')
         .then(data => dispatcher.dispatch(constants.CANCELLED_DATA_UPDATED, data))
   },
 
