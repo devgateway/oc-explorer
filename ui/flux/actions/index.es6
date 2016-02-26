@@ -51,12 +51,23 @@ export default {
           .then(data => dispatcher.dispatch(constants.BID_TYPE_DATA_UPDATED, {year: year, data: data}))
     });
 
-    fetchJson("/api/tenderBidPeriodPercentiles")
-        .then(raw => {
-          var parsed = {};
-          Object.keys(raw).forEach(key => parsed[key] = raw[key].tenderLengthDays);
-          return parsed;
+    Promise.all([
+        fetchJson('/api/averageTenderPeriod'),
+        fetchJson('/api/averageAwardPeriod')
+    ]).then(([tenders, awards]) => {
+      var awardsHash = awards.reduce((obj, award) => {
+        obj[award._id] = award.averageAwardDays
+        return obj;
+      }, {});
+      return tenders.map(tender => ({
+          year: tender._id,
+          tender: tender.averageTenderDays,
+          award: awardsHash[tender._id] || 0
         })
-        .then(dispatcher.dispatch.bind(dispatcher, constants.BID_PERIOD_DATA_UPDATED));
+      )
+    }).then(data => dispatcher.dispatch(constants.BID_PERIOD_DATA_UPDATED, data));
+
+    fetchJson('/api/totalCancelledTendersByYear')
+        .then(data => dispatcher.dispatch(constants.CANCELLED_DATA_UPDATED, data))
   }
 }
