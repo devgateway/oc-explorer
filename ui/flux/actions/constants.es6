@@ -11,5 +11,6 @@ export default keyMirror({
   OVERVIEW_DATA_UPDATED: null,
   CANCELLED_DATA_UPDATED: null,
   FILTER_BOX_TOGGLED: null,
-  FILTERS_DATA_UPDATED: null
+  FILTERS_DATA_UPDATED: null,
+  FILTER_TOGGLED: null
 })

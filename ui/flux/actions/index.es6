@@ -19,16 +19,6 @@ export default {
   },
 
   loadData(){
-    fetchJson('/api/ocds/bidTypes').then(data => dispatcher.dispatch(constants.FILTERS_DATA_UPDATED, {
-      bidTypes: {
-        open: true,
-        options: data.map(bidType => ({
-          id: bidType.id,
-          description: bidType.description,
-          selected: false
-        }))
-      }
-    }));
     Promise.all([
       fetchJson('/api/countBidPlansByYear'),
       fetchJson('/api/countTendersByYear'),
@@ -79,9 +69,27 @@ export default {
 
     fetchJson('/api/totalCancelledTendersByYear')
         .then(data => dispatcher.dispatch(constants.CANCELLED_DATA_UPDATED, data))
+
+    fetchJson('/api/ocds/bidTypes').then(data => dispatcher.dispatch(constants.FILTERS_DATA_UPDATED, {
+      bidTypes: {
+        open: true,
+        options: data.map(bidType => ({
+          id: bidType.id,
+          description: bidType.description,
+          selected: false
+        }))
+      }
+    }));
   },
 
   toggleFiltersBox(open){
     dispatcher.dispatch(constants.FILTER_BOX_TOGGLED, open);
+  },
+
+  toggleFilter(slug, open){
+    dispatcher.dispatch(constants.FILTER_TOGGLED, {
+      slug: slug,
+      open: open
+    })
   }
 }
