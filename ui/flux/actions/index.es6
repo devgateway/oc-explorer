@@ -30,9 +30,7 @@ export default {
     }));
 
     years().forEach(year => {
-      fetchJson(`/api/plannedFundingByLocation/${year}`)
-          .then(data => data.filter(location => !!location.coordinates || console.warn('Invalid location!', location)))
-          .then(data => dispatcher.dispatch(constants.LOCATION_UPDATED, {year: year, data: data}));
+      fetchJson('/api/plannedFundingByLocation/').then(data => dispatcher.dispatch(constants.LOCATION_UPDATED, data));
 
       Promise.all([
         fetchJson(`/api/costEffectivenessTenderAmount/${year}`),
