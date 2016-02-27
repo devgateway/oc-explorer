@@ -40,20 +40,30 @@ import com.mongodb.DBObject;
 @RestController
 public class TenLargestAwardsController extends GenericOcvnController {
 
+	/**
+	 * db.release.aggregate( [ {$match: {"awards.value.amount": {$exists:
+	 * true}}}, {$unwind:"$awards"},
+	 * {$project:{_id:0,"planning.bidNo":1,"awards.date":1,
+	 * "awards.suppliers.name":1,"awards.value":1, "planning.budget":1}},
+	 * {$sort: {"awards.value.amount":-1}}, {$limit:10} ] )
+	 * 
+	 * @return
+	 */
+
 	@RequestMapping("/api/topTenLargestAwards")
 	public List<DBObject> topTenLargestAwards() {
 
 		BasicDBObject project = new BasicDBObject();
 		project.put(Fields.UNDERSCORE_ID, 0);
 		project.put("planning.bidNo", 1);
-		project.put("awards.date",1);
-		project.put("awards.suppliers.name",1);
-		project.put("awards.value",1);
-		project.put("planning.budget",1);
-		
+		project.put("awards.date", 1);
+		project.put("awards.suppliers.name", 1);
+		project.put("awards.value", 1);
+		project.put("planning.budget", 1);
+
 		Aggregation agg = newAggregation(match(where("awards.value.amount").exists(true)), unwind("$awards"),
 				new CustomOperation(new BasicDBObject("$project", project)),
-				sort(Direction.DESC, "awards.value.amount"), limit(10));		
+				sort(Direction.DESC, "awards.value.amount"), limit(10));
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();
