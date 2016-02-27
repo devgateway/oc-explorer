@@ -14,7 +14,6 @@ package org.devgateway.ocvn.web.rest.controller;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
@@ -38,7 +37,7 @@ import com.mongodb.DBObject;
  *
  */
 @RestController
-public class TenLargestAwardsController extends GenericOcvnController {
+public class TopTenController extends GenericOcvnController {
 
 	/**
 	 * db.release.aggregate( [ {$match: {"awards.value.amount": {$exists:
@@ -64,6 +63,34 @@ public class TenLargestAwardsController extends GenericOcvnController {
 		Aggregation agg = newAggregation(match(where("awards.value.amount").exists(true)), unwind("$awards"),
 				new CustomOperation(new BasicDBObject("$project", project)),
 				sort(Direction.DESC, "awards.value.amount"), limit(10));
+
+		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+		List<DBObject> tagCount = results.getMappedResults();
+		return tagCount;
+
+	}
+
+	/**
+	 * db.release.aggregate( [ {$match: {"tender.value.amount": {$exists:
+	 * true}}}, {$project:{_id:0,"planning.bidNo":1,"tender.value":1,
+	 * "tender.tenderPeriod":1,"tender.procuringEntity.name":1}}, {$sort:
+	 * {"tender.value.amount":-1}}, {$limit:10} ] )
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/api/topTenLargestTenders")
+	public List<DBObject> topTenLargestTenders() {
+
+		BasicDBObject project = new BasicDBObject();
+		project.put(Fields.UNDERSCORE_ID, 0);
+		project.put("planning.bidNo", 1);
+		project.put("tender.value", 1);
+		project.put("tender.tenderPeriod", 1);
+		project.put("tender.procuringEntity.name", 1);
+
+		Aggregation agg = newAggregation(match(where("tender.value.amount").exists(true)),
+				new CustomOperation(new BasicDBObject("$project", project)),
+				sort(Direction.DESC, "tender.value.amount"), limit(10));
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();
