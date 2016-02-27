@@ -60,6 +60,7 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 				"/api/averageTenderPeriod**",
 				"/api/ocds/bidSelectionMethods**",
 				"/api/topTenLargestAwards**",
+				"/api/topTenLargestTenders**",
 				"/api/averageAwardPeriod**",
 				"/api/ocds/bidTypes**",
 				"/img/**", "/css*/**", "/js*/**", "/assets*/**", "/wicket/resource/**/*.js",
