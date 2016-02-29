@@ -1,4 +1,4 @@
-function(yearsStr) {
+function(yearsStr,procuringEntityIdStr,bidTypeIdStr,bidSelectionMethod) {
    db.loadServerScripts();		
    if(yearsStr!=undefined) {	
 	   var years=JSON.parse(yearsStr.replace(/'/g, ""));
@@ -13,6 +13,23 @@ function(yearsStr) {
    else 
 	  match =  { "tender.tenderPeriod.startDate" : { $ne : null }};
    
+   if(procuringEntityIdStr!=undefined) {	
+	   matchProcuringEntityId= {"tender.procuringEntity._id" : {$in : procuringEntityIdStr.split(",") }  };
+   } else
+	   matchProcuringEntityId={};
+   
+   if(bidTypeIdStr!=undefined) {	
+	   matchBidTypeId= {"tender.items.classification._id" : {$in : bidTypeIdStr.split(",") }  };
+   } else
+	   matchBidTypeId={};
+   
+   if(bidSelectionMethod!=undefined) {	
+	   matchBidSelectionMethod= {"tender.succBidderMethodName" : {$in : bidSelectionMethod.split(",") }  };
+   } else
+	   matchBidSelectionMethod={};
+   
+   
+   
 	var agg = db.release.aggregate(
 	[
 	{ "$match" :
@@ -20,7 +37,7 @@ function(yearsStr) {
 		$and: [
 		       {"tender.tenderPeriod.startDate" : { "$ne" : null} } , 
 		       {"tender.tenderPeriod.endDate" : { "$ne" : null} },
-		       match
+		       match, matchProcuringEntityId, matchBidTypeId, matchBidSelectionMethod
 		       ]
 	    }
 	} ,	

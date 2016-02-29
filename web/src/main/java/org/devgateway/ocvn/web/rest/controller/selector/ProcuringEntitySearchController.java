@@ -61,13 +61,18 @@ public class ProcuringEntitySearchController extends GenericOcvnController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("/api/ocds/organization/procuringEntity/searchText")
+	@RequestMapping("/api/ocds/organization/procuringEntity/all")
 	public List<VNOrganization> procuringEntitySearchText(@Valid ProcuringEntitySearchRequest request) {
 		
 		PageRequest pageRequest = new PageRequest(request.getPageNumber(), request.getPageSize());
  
-		Query query = TextQuery.queryText(new TextCriteria().matching(request.getText())).sortByScore().with(pageRequest);
-		query.addCriteria(Criteria.where("procuringEntity").is(true));
+		Query query = null;
+		
+		if (request.getText() == null)
+			query = new Query();
+		else
+			query = TextQuery.queryText(new TextCriteria().matching(request.getText())).sortByScore();
+		query.addCriteria(Criteria.where("procuringEntity").is(true)).with(pageRequest);
 
 		List<VNOrganization> orgs = mongoTemplate.find(query, VNOrganization.class);
 

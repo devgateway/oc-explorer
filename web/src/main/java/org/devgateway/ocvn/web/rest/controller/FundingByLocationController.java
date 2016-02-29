@@ -14,16 +14,20 @@ package org.devgateway.ocvn.web.rest.controller;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 import java.util.Arrays;
 import java.util.List;
 
+import javax.validation.Valid;
+
+import org.devgateway.ocvn.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,8 +42,8 @@ import com.mongodb.DBObject;
 @RestController
 public class FundingByLocationController extends GenericOcvnController {
 	
-	@RequestMapping("/api/plannedFundingByLocation/{year:^\\d{4}$}")
-	public List<DBObject> plannedFundingByLocation(@PathVariable Integer year) {
+	@RequestMapping("/api/plannedFundingByLocation")
+	public List<DBObject> plannedFundingByLocation(@Valid DefaultFilterPagingRequest filter) {
 
 		DBObject vars=new BasicDBObject();
 		vars.put("numberOfLocations", new BasicDBObject("$size","$planning.locations"));
@@ -57,13 +61,16 @@ public class FundingByLocationController extends GenericOcvnController {
 		project.put("cntprj", new BasicDBObject("$literal",1));
 		project.put("planning.budget.amount.amount",1);
 		project.put("dividedTotal",dividedTotal);
+		project.put("year", new BasicDBObject("$year", "$planning.bidPlanProjectDateApprove"));
+
 		
 		Aggregation agg = newAggregation(
-				match(where("planning").exists(true).and("planning.locations").exists(true).ne(null)
-						.and("planning.bidPlanProjectDateApprove").gte(getStartDate(year)).lte(getEndDate(year))),
+				match(where("planning").exists(true).and("planning.locations.0").exists(true)
+						.andOperator(getProcuringEntityIdCriteria(filter))),
 				new CustomOperation(new BasicDBObject("$project", project)), unwind("$planning.locations"),
-				group("planning.locations").sum("$dividedTotal").as("totalPlannedAmount").sum("$cntprj")
-						.as("recordsCount"));
+				group("year", "planning.locations").sum("$dividedTotal").as("totalPlannedAmount").sum("$cntprj")
+						.as("recordsCount"),
+				sort(Direction.ASC, "year"));	
 	
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();

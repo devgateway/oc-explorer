@@ -35,18 +35,18 @@ import com.mongodb.DBObject;
 public class BidSelectionMethodSearchController extends GenericOcvnController {
 
 	/**
-	 * db.release.aggregate([ {$project : {"tender.succBidderMethodName":1} },
-	 * {$group: {_id: "$tender.succBidderMethodName" }} ])
+	 * db.release.aggregate([ {$project : {"tender.procurementMethodDetails":1} },
+	 * {$group: {_id: "$tender.procurementMethodDetails" }} ])
 	 * 
 	 * @return
 	 */
-	@RequestMapping("/api/ocds/bidSelectionMethods")
+	@RequestMapping("/api/ocds/bidSelectionMethod/all")
 	public List<DBObject> bidSelectionMethods() {
 
-		DBObject project = new BasicDBObject("tender.succBidderMethodName", 1);
+		DBObject project = new BasicDBObject("tender.procurementMethodDetails", 1);
 
 		Aggregation agg = newAggregation(new CustomOperation(new BasicDBObject("$project", project)),
-				group("$tender.succBidderMethodName"));
+				group("$tender.procurementMethodDetails"));
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 

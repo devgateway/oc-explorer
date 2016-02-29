@@ -14,15 +14,14 @@ var store = Store({
   },
 
   initialize(){
-    var updateDataByYear = (path, pipe = identity) => (state, {year, data}) => state.setIn(['data', path, year], pipe(data));
-    var updateData = path => (state, data) => state.setIn(['data', path], data);
+    var updateData = (path, pipe = identity) => (state, data) => state.setIn(['data', path], pipe(data));
 
     this.on(constants.TAB_CHANGED, (state, tab) => state.set('tab', tab));
     this.on(constants.YEAR_TOGGLED, (state, {year, selected}) => state.setIn(['selectedYears', year], selected));
     this.on(constants.CONTENT_WIDTH_CHANGED, (state, newWidth) => state.set('contentWidth', newWidth));
-    this.on(constants.COST_EFFECTIVENESS_DATA_UPDATED, updateDataByYear('costEffectiveness'));
-    this.on(constants.BID_TYPE_DATA_UPDATED, updateDataByYear('bidType', toImmutable));
-    this.on(constants.LOCATION_UPDATED, updateDataByYear('locations', toImmutable));
+    this.on(constants.COST_EFFECTIVENESS_DATA_UPDATED, updateData('costEffectiveness'));
+    this.on(constants.BID_TYPE_DATA_UPDATED, updateData('bidType', toImmutable));
+    this.on(constants.LOCATION_UPDATED, updateData('locations', toImmutable));
     this.on(constants.BID_PERIOD_DATA_UPDATED, updateData('bidPeriod'));
     this.on(constants.OVERVIEW_DATA_UPDATED, updateData('overview'));
     this.on(constants.CANCELLED_DATA_UPDATED, updateData('cancelled'));

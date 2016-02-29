@@ -19,6 +19,9 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
+import org.devgateway.ocvn.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -40,7 +43,7 @@ public class TotalCancelledTendersByYearController extends GenericOcvnController
 
 
 	@RequestMapping("/api/totalCancelledTendersByYear")
-	public List<DBObject> totalCancelledTendersByYear() {
+	public List<DBObject> totalCancelledTendersByYear(@Valid DefaultFilterPagingRequest filter) {
 
 		DBObject year = new BasicDBObject("$year", "$tender.tenderPeriod.startDate");
 
@@ -51,7 +54,7 @@ public class TotalCancelledTendersByYearController extends GenericOcvnController
 
 		Aggregation agg = newAggregation(
 				match(where("tender.status").is("cancelled")),
-						
+				getMatchDefaultFilterOperation(filter),		
 				new CustomOperation(new BasicDBObject("$project", project)),
 				group("$year").sum("$tender.value.amount").as("totalCancelledTendersAmount"),
 				sort(Direction.ASC, Fields.UNDERSCORE_ID));

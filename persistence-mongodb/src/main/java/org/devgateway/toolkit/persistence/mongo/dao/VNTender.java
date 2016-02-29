@@ -24,8 +24,6 @@ public class VNTender extends Tender {
 	String modYn;
 	Date bidOpenDt;
 	
-	@Indexed
-	String succBidderMethodName;
 
 	public Integer getBidMethod() {
 		return bidMethod;
@@ -83,12 +81,5 @@ public class VNTender extends Tender {
 		this.bidOpenDt = bidOpenDt;
 	}
 
-	public String getSuccBidderMethodName() {
-		return succBidderMethodName;
-	}
-
-	public void setSuccBidderMethodName(String succBidderMethodName) {
-		this.succBidderMethodName = succBidderMethodName;
-	}
 
 }
