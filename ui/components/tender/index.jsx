@@ -29,10 +29,10 @@ export default class Tender extends Component{
             <FundingByBidType
                 width={width}
                 data={data.get('bidType')
-                    .groupBy(bidType => bidType.get('succBidderMethodName'))
+                    .groupBy(bidType => bidType.get('procurementMethodDetails'))
                     .map(bidTypes => bidTypes.reduce((reducedBidType, bidType) => {
                       return {
-                        _id: bidType.get('succBidderMethodName') || "unspecified",
+                        _id: bidType.get('procurementMethodDetails') || "unspecified",
                         totalTenderAmount: reducedBidType.totalTenderAmount + bidType.get('totalTenderAmount')
                       }
                     }, {

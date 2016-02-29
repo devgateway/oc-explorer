@@ -8,6 +8,7 @@ import NavigationLink from "./navigation-link";
 import {years} from "../../tools";
 import cn from "classnames";
 import {toImmutable} from "nuclear-js";
+import Filters from "./filters";
 require('./style.less');
 
 export default class App extends React.Component{
@@ -45,11 +46,7 @@ export default class App extends React.Component{
                 </small>
               </p>
             </section>
-            <section className="col-sm-12 faq">
-              <strong>
-                Frequently Asked Questions
-              </strong>
-            </section>
+            <Filters {...this.props}/>
           </div>
         </aside>
         <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 years-bar" role="navigation">

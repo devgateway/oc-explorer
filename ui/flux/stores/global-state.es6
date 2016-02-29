@@ -2,14 +2,19 @@ import {Store, toImmutable} from "nuclear-js";
 import constants from "../actions/constants";
 import keyMirror from "keymirror";
 import {years, identity} from "../../tools";
+import actions from "../actions";
 
 var store = Store({
   getInitialState(){
     return toImmutable({
+      filtersBoxOpen: false,
       tab: store.tabs.OVERVIEW,
       selectedYears: years().reduce((map, year) => map.set(year, true), toImmutable({})),
       contentWidth: 0,
-      data: {}
+      data: {},
+      procuringEntityQuery: "",
+      filters: {
+      }
     })
   },
 
@@ -25,6 +30,17 @@ var store = Store({
     this.on(constants.BID_PERIOD_DATA_UPDATED, updateData('bidPeriod'));
     this.on(constants.OVERVIEW_DATA_UPDATED, updateData('overview'));
     this.on(constants.CANCELLED_DATA_UPDATED, updateData('cancelled'));
+    this.on(constants.FILTER_BOX_TOGGLED, (state, open) => state.set('filtersBoxOpen', open));
+    this.on(constants.FILTERS_DATA_UPDATED, (state, data) => state.set('filters', toImmutable(data)));
+    this.on(constants.FILTER_TOGGLED, (state, {slug, open}) => state.setIn(['filters', slug, 'open'], open));
+    this.on(constants.FILTER_OPTIONS_TOGGLED, (state, {slug, option, selected}) => {
+      var newState = state.setIn(['filters', slug, 'options', option, 'selected'], selected);
+      actions.loadData(newState.get('filters').toJS());
+      return newState;
+    });
+    this.on(constants.PROCURING_ENTITY_QUERY_UPDATED, (state, newQuery) => state.set('procuringEntityQuery', newQuery));
+    this.on(constants.PROCURING_ENTITIES_UPDATED, (state, procuringEntities) =>
+        state.setIn(['filters', 'procuringEntities', 'options'], toImmutable(procuringEntities)))
   }
 });
 
