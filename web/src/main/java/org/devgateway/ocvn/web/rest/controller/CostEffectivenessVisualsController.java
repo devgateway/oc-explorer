@@ -49,6 +49,7 @@ public class CostEffectivenessVisualsController extends GenericOcvnController {
 		DBObject project = new BasicDBObject();
 		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.endDate"));
 		project.put("awards.value.amount", 1);
+		project.put("tender.procurementMethodDetails",1);
 		
 
 		
@@ -75,12 +76,11 @@ public class CostEffectivenessVisualsController extends GenericOcvnController {
 		project.put("tender.value.amount", 1);
 		project.put("tender.items",1);
 		project.put("tender.procuringEntity", 1);
-
 		
 		Aggregation agg = newAggregation(
-				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),
-				new CustomProjectionOperation(project),
+				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),				
 				getMatchDefaultFilterOperation(filter),
+				new CustomProjectionOperation(project),
 				group("$year").sum("$tender.value.amount").as("totalTenderAmount"),
 				sort(Direction.ASC,Fields.UNDERSCORE_ID)
 				);
