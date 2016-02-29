@@ -2,6 +2,7 @@ import Component from "../../pure-render-component";
 import style from "./style.less";
 import cn from "classnames";
 import MultipleSelect from "./multiple-select";
+import TypeAhead from "./type-ahead";
 
 export default class Filters extends Component{
   render(){
@@ -27,6 +28,12 @@ export default class Filters extends Component{
                   title="Bid selection method"
                   slug="bidSelectionMethods"
                   state={filters.get('bidSelectionMethods')}
+                  actions={actions}
+              />
+              <TypeAhead
+                  slug="procuringEntities"
+                  query={globalState.get('procuringEntityQuery')}
+                  state={filters.get('procuringEntities')}
                   actions={actions}
               />
             </div>
