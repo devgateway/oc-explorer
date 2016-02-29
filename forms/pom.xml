@@ -29,8 +29,12 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <wicket.version>6.21.0</wicket.version>
-        <wicket.bootstrap.version>0.9.8</wicket.bootstrap.version>
+        <wicket.version>6.22.0</wicket.version>
+        <wicket.bootstrap.version>0.9.16</wicket.bootstrap.version>
+        <zt.zip.version>1.9</zt.zip.version>
+        <wicket.select2.version>2.3</wicket.select2.version>
+        <poi.version>3.13</poi.version>
+        <wicket.webjars.version>0.4.8</wicket.webjars.version>
     </properties>
 
     <dependencies>
@@ -46,30 +50,11 @@
             <version>0.0.7-SNAPSHOT</version>
         </dependency>
 
-
-
         <dependency>
             <groupId>org.devgateway.ocvn</groupId>
             <artifactId>ui</artifactId>
             <version>0.0.7-SNAPSHOT</version>
         </dependency>
-
-		<dependency>
-			<groupId>org.devgateway.ocvn</groupId>
-			<artifactId>reporting</artifactId>
-			<version>0.0.7-SNAPSHOT</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>bcprov-jdk14</artifactId>
-					<groupId>bouncycastle</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>bcprov-jdk14</artifactId>
-					<groupId>org.bouncycastle</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
 
 		<dependency>
 			<groupId>org.devgateway.ocvn</groupId>
@@ -143,14 +128,9 @@
 		<dependency>
 			<groupId>de.agilecoders.wicket.webjars</groupId>
 			<artifactId>wicket-webjars</artifactId>
-			<version>0.4.8</version>
+			<version>${wicket.webjars.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>bootstrap</artifactId>
-			<version>3.3.2</version>
-		</dependency>
 
         <dependency>
             <groupId>org.apache.wicket</groupId>
@@ -182,7 +162,7 @@
         <dependency>
             <groupId>org.zeroturnaround</groupId>
             <artifactId>zt-zip</artifactId>
-            <version>1.8</version>
+            <version>${zt.zip.version}</version>
             <type>jar</type>
         </dependency>
 
@@ -208,7 +188,7 @@
         <dependency>
             <groupId>com.vaynberg.wicket.select2</groupId>
             <artifactId>wicket-select2</artifactId>
-            <version>2.3</version>
+            <version>${wicket.select2.version}</version>
         </dependency>
 
         <dependency>
@@ -253,22 +233,7 @@
             <artifactId>wicket-bootstrap-less</artifactId>
             <version>${wicket.bootstrap.version}</version>
         </dependency>
-
-        <!-- LOGGING DEPENDENCIES - LOG4J -->
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.10</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.opencsv</groupId>
-            <artifactId>opencsv</artifactId>
-            <version>2.0</version>
-        </dependency>
+         
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
@@ -277,11 +242,9 @@
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
-            <version>3.11</version>
+            <version>${poi.version}</version>
         </dependency>
     </dependencies>
-
-
 
     <build>
 
