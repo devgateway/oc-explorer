@@ -19,7 +19,7 @@ import org.devgateway.toolkit.persistence.mongo.reader.TenderRowImporter;
 import org.devgateway.toolkit.persistence.mongo.reader.XExcelFileReader;
 import org.devgateway.toolkit.persistence.mongo.repository.ClassificationRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.LocationRepository;
-import org.devgateway.toolkit.persistence.mongo.repository.OrganizationRepository;
+import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class VNImportService {
 	private ReleaseRepository releaseRepository;
 	
 	@Autowired
-	private OrganizationRepository organizationRepository;
+	private VNOrganizationRepository organizationRepository;
 	
 	@Autowired
 	private ClassificationRepository classificationRepository;

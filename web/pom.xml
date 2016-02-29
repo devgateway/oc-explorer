@@ -55,6 +55,11 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
+		<dependency>
+		    <groupId>cz.jirutka.validator</groupId>
+		    <artifactId>validator-collection</artifactId>
+		    <version>2.1.6</version>
+		</dependency>
 
 
 		<dependency>

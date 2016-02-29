@@ -1,3 +1,5 @@
+@red: #cc3c3b;
+
 .content{
   margin-top: 2em;
 }
@@ -7,40 +9,53 @@
 }
 
 aside {
+  z-index: 1;
   position: fixed!important;
   top: 0;
   bottom: 0;
   height: auto;
   background-color: #f2f2f2;
   box-shadow: #333 1px 4px 10px;
-  @media all and (max-width: 1700px) {
-    h1 {
-      font-size: 28px;
-    }
-  }
-  @media all and (max-width: 1450px) {
-    h1 {
-      font-size: 24px;
-    }
-  }
-  h1 small {
-    display: block;
-  }
+
   section.col-sm-12 {
     padding: 15px 20px 15px 20px;
     border-bottom: 1px solid #ccc;
   }
 
-  section.faq {
-    text-transform: uppercase;
-    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  section.branding{
+    background-color: @red;
+    h1, small{
+      color: white;
+    }
+
+    h1 small{
+      text-transform: uppercase;
+    }
+
+    @media all and (max-width: 1700px) {
+      h1 {
+        font-size: 28px;
+      }
+    }
+    @media all and (max-width: 1450px) {
+      h1 {
+        font-size: 24px;
+      }
+    }
+    h1 small {
+      display: block;
+    }
+  }
+
+  section.description strong{
+    color: @red;
   }
 }
 
 .years-bar {
   position: fixed;
   top: 0;
-  z-index: 10;
+  z-index: 1002;
   padding-left: 5px;
   padding-right: 0;
   display: table;
@@ -59,11 +74,16 @@ aside {
       border-right: none;
     }
     &.active {
-      color: #333;
+      color: @red;
       background-color: #f2f2f2;
       .glyphicon {
         visibility: visible;
       }
     }
   }
+}
+
+.thick-red-line{
+  background-color: @red;
+  height: 5vh;
 }

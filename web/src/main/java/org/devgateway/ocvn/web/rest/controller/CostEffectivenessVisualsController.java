@@ -14,18 +14,24 @@ package org.devgateway.ocvn.web.rest.controller;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
+import org.devgateway.ocvn.web.rest.controller.request.DefaultFilterPagingRequest;
+import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
 /**
@@ -37,14 +43,24 @@ import com.mongodb.DBObject;
 public class CostEffectivenessVisualsController extends GenericOcvnController {
 
 
-	@RequestMapping("/api/costEffectivenessAwardAmount/{year:^\\d{4}$}")
-	public List<DBObject> costEffectivenessAwardAmount(@PathVariable Integer year) {
+	@RequestMapping("/api/costEffectivenessAwardAmount")
+	public List<DBObject> costEffectivenessAwardAmount(@Valid DefaultFilterPagingRequest filter) {
 
+		DBObject project = new BasicDBObject();
+		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.endDate"));
+		project.put("awards.value.amount", 1);
+		project.put("tender.procurementMethodDetails",1);
+		
+
+		
 		Aggregation agg = newAggregation(
-				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)
-						.and("tender.tenderPeriod.endDate").gte(getStartDate(year)).lte(getEndDate(year))),
-				unwind("$awards"), match(where("awards.status").is("active")),
-				group().sum("$awards.value.amount").as("totalAwardAmount"));
+				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),
+						getMatchDefaultFilterOperation(filter)
+						,unwind("$awards"), match(where("awards.status").is("active").and("awards.value").exists(true)),
+						new CustomProjectionOperation(project),
+				group("$year").sum("$awards.value.amount").as("totalAwardAmount"),
+				sort(Direction.ASC,Fields.UNDERSCORE_ID)
+				);
 	
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();
@@ -52,13 +68,22 @@ public class CostEffectivenessVisualsController extends GenericOcvnController {
 
 	}
 
-	@RequestMapping("/api/costEffectivenessTenderAmount/{year:^\\d{4}$}")
-	public List<DBObject> costEffectivenessTenderAmount(@PathVariable Integer year) {
+	@RequestMapping("/api/costEffectivenessTenderAmount")
+	public List<DBObject> costEffectivenessTenderAmount(@Valid DefaultFilterPagingRequest filter) {
 
+		DBObject project = new BasicDBObject();
+		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.endDate"));
+		project.put("tender.value.amount", 1);
+		project.put("tender.items",1);
+		project.put("tender.procuringEntity", 1);
+		
 		Aggregation agg = newAggregation(
-				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)
-						.and("tender.tenderPeriod.endDate").gte(getStartDate(year)).lte(getEndDate(year))),
-				group().sum("$tender.value.amount").as("totalTenderAmount"));
+				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),				
+				getMatchDefaultFilterOperation(filter),
+				new CustomProjectionOperation(project),
+				group("$year").sum("$tender.value.amount").as("totalTenderAmount"),
+				sort(Direction.ASC,Fields.UNDERSCORE_ID)
+				);
 		
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);

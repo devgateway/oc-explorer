@@ -8,16 +8,16 @@ import java.text.ParseException;
 import org.devgateway.ocvn.persistence.mongo.ocds.Address;
 import org.devgateway.ocvn.persistence.mongo.ocds.ContactPoint;
 import org.devgateway.ocvn.persistence.mongo.ocds.Identifier;
-import org.devgateway.ocvn.persistence.mongo.ocds.Organization;
-import org.devgateway.toolkit.persistence.mongo.repository.OrganizationRepository;
+import org.devgateway.toolkit.persistence.mongo.dao.VNOrganization;
+import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationRepository;
 
 /**
  * @author mihai
  *
  */
-public class PublicInstitutionRowImporter extends RowImporter<Organization, OrganizationRepository> {
+public class PublicInstitutionRowImporter extends RowImporter<VNOrganization, VNOrganizationRepository> {
 
-	public PublicInstitutionRowImporter(OrganizationRepository repository, int skipRows) {
+	public PublicInstitutionRowImporter(VNOrganizationRepository repository, int skipRows) {
 		super(repository, skipRows);
 	}
 
@@ -25,10 +25,10 @@ public class PublicInstitutionRowImporter extends RowImporter<Organization, Orga
 	public boolean importRow(String[] row) throws ParseException {
 		if (row[0] == null || row[0].isEmpty())
 			throw new RuntimeException("Main identifier empty!");
-		Organization organization = repository.findById(row[0]);
+		VNOrganization organization = repository.findById(row[0]);
 		if (organization != null)
 			throw new RuntimeException("Duplicate identifer for organization " + organization);
-		organization = new Organization();
+		organization = new VNOrganization();
 		Identifier identifier = new Identifier();
 
 		identifier.setId(row[0]);

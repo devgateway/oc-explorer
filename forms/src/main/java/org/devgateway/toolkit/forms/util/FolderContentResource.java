@@ -18,7 +18,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceStreamResource;
 import org.apache.wicket.util.resource.FileResourceStream;
-import org.devgateway.toolkit.forms.wicket.page.reports.AbstractReportPage;
 
 /**
  * This is a simple resource that allows us to one file within a folder, the

@@ -9,23 +9,23 @@ import org.apache.poi.ss.usermodel.DateUtil;
 import org.devgateway.ocvn.persistence.mongo.ocds.Classification;
 import org.devgateway.ocvn.persistence.mongo.ocds.Identifier;
 import org.devgateway.ocvn.persistence.mongo.ocds.Item;
-import org.devgateway.ocvn.persistence.mongo.ocds.Organization;
 import org.devgateway.ocvn.persistence.mongo.ocds.Period;
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
 import org.devgateway.ocvn.persistence.mongo.ocds.Value;
+import org.devgateway.toolkit.persistence.mongo.dao.VNOrganization;
 import org.devgateway.toolkit.persistence.mongo.dao.VNPlanning;
 import org.devgateway.toolkit.persistence.mongo.dao.VNTender;
 import org.devgateway.toolkit.persistence.mongo.repository.ClassificationRepository;
-import org.devgateway.toolkit.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationRepository;
 
 public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 
 	SimpleDateFormat sdf = new SimpleDateFormat("dd.MMM.yy", new Locale("en"));
-	private OrganizationRepository organizationRepository;
+	private VNOrganizationRepository organizationRepository;
 	private ClassificationRepository classificationRepository;
 
-	public TenderRowImporter(ReleaseRepository releaseRepository, OrganizationRepository organizationRepository,
+	public TenderRowImporter(ReleaseRepository releaseRepository, VNOrganizationRepository organizationRepository,
 			ClassificationRepository classificationRepository, int skipRows) {
 		super(releaseRepository, skipRows);
 		this.organizationRepository = organizationRepository;
@@ -75,39 +75,39 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 		
 
 		String procurementMethod = null;
-		String succBidderMethodName = null;
+		String procurementMethodDetails = null;
 		switch (Integer.parseInt(row[5])) {
 		case 1:
 			procurementMethod = "open";
-			succBidderMethodName = "Đấu thầu rộng rãi";
+			procurementMethodDetails = "Đấu thầu rộng rãi";
 			break;
 		case 2:
 			procurementMethod = "selective";
-			succBidderMethodName = "Đấu thầu hạn chế";
+			procurementMethodDetails = "Đấu thầu hạn chế";
 			break;
 		case 3:
 			procurementMethod = "limited";
-			succBidderMethodName = "Chỉ định thầu";
+			procurementMethodDetails = "Chỉ định thầu";
 			break;
 		case 4:
 			procurementMethod = "limited";
-			succBidderMethodName = "Mua sắm trực tiếp";
+			procurementMethodDetails = "Mua sắm trực tiếp";
 			break;
 		case 5:
 			procurementMethod = "open";
-			succBidderMethodName = "Chào hàng cạnh tranh";
+			procurementMethodDetails = "Chào hàng cạnh tranh";
 			break;
 		case 6: 
 			procurementMethod = "limited";
-			succBidderMethodName = "Tự thực hiện";
+			procurementMethodDetails = "Tự thực hiện";
 			break;
 		case 7:
 			procurementMethod = "selective";
-			succBidderMethodName = "Trong trường hợp đặc biệt";
+			procurementMethodDetails = "Trong trường hợp đặc biệt";
 			break;
 
 		}
-		tender.setSuccBidderMethodName(succBidderMethodName);
+		tender.setProcurementMethodDetails(procurementMethodDetails);
 		tender.setProcurementMethod(procurementMethod);
 		tender.setContrMethod(Integer.parseInt(row[6]));
 
@@ -118,24 +118,32 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 		tender.setTenderPeriod(period);
 		tender.setBidOpenDt(row[9].isEmpty() ? null : DateUtil.getJavaCalendar(Double.parseDouble(row[9])).getTime());
 
-		Organization procuringEntity = organizationRepository.findById(row[10]);
+		VNOrganization procuringEntity = organizationRepository.findById(row[10]);
 
 		if (procuringEntity == null) {
-			procuringEntity = new Organization();
+			procuringEntity = new VNOrganization();
+			procuringEntity.setProcuringEntity(true);
 			Identifier procuringEntityIdentifier = new Identifier();
 			procuringEntityIdentifier.setId(row[10]);
 			procuringEntity.setIdentifier(procuringEntityIdentifier);
+			procuringEntity = organizationRepository.save(procuringEntity);
+		} else {
+			if (procuringEntity.getProcuringEntity() == null || procuringEntity.getProcuringEntity()==false) {
+				procuringEntity.setProcuringEntity(true);
+				procuringEntity = organizationRepository.save(procuringEntity);
+			}
 		}
 
 		tender.setProcuringEntity(procuringEntity);
 
-		Organization orderInstituCd = organizationRepository.findById(row[11]);
+		VNOrganization orderInstituCd = organizationRepository.findById(row[11]);
 
 		if (orderInstituCd == null) {
-			orderInstituCd = new Organization();
+			orderInstituCd = new VNOrganization();
 			Identifier orderInstituCdIdentifier = new Identifier();
 			orderInstituCdIdentifier.setId(row[11]);
 			orderInstituCd.setIdentifier(orderInstituCdIdentifier);
+			orderInstituCd = organizationRepository.save(orderInstituCd);
 		}
 		tender.setOrderIntituCd(orderInstituCd);
 
@@ -155,10 +163,31 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 			// we set classification for all items within this tender. If none
 			// are found, we create a fake item and add only this classification
 			for (Item item : tender.getItems()) {
-				Classification classification = classificationRepository.findById(row[21]);
+				String classificationId=row[21].trim();
+				Classification classification = classificationRepository.findById(classificationId);
 				if (classification == null) {
 					classification = new Classification();
-					classification.setId(row[21]);
+					classification.setId(classificationId);
+
+					switch (classificationId) {
+					case "1":
+						classification.setDescription("Hàng hóa");
+						break;
+					case "3":
+						classification.setDescription("Xây lắp");
+						break;
+					case "5":
+						classification.setDescription("Tư vấn");
+						break;
+					case "10":
+						classification.setDescription("EPC");
+						break;
+					default:
+						classification.setDescription("Undefined");
+						break;
+					}
+					classification = classificationRepository.save(classification);
+
 				}
 				item.setClassification(classification);
 			}

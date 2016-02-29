@@ -21,12 +21,15 @@ public class Tender {
 	String id;
 	String title;
 	String description;
+	@Indexed
 	String status;
 	List<Item> items=new ArrayList<>();
 	Value minValue;
 	Value value;
 	@Indexed
 	String procurementMethod;
+	@Indexed
+	String procurementMethodDetails;
 	String procurementMethodRationale;
 	String awardCriteria;
 	String awardCriteriaDetails;
@@ -188,6 +191,12 @@ public class Tender {
 	}
 	public void setAmendment(Amendment amendment) {
 		this.amendment = amendment;
+	}
+	public String getProcurementMethodDetails() {
+		return procurementMethodDetails;
+	}
+	public void setProcurementMethodDetails(String procurementMethodDetails) {
+		this.procurementMethodDetails = procurementMethodDetails;
 	}
 	
 	
