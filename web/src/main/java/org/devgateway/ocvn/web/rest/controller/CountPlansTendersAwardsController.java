@@ -86,7 +86,6 @@ public class CountPlansTendersAwardsController extends GenericOcvnController {
 				new CustomOperation(new BasicDBObject("$project", project)), group("$year").count().as("count"),
 				sort(Direction.ASC, "_id"));
 		
-		System.out.println(agg.toString());
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();

@@ -70,8 +70,7 @@ public class FundingByLocationController extends GenericOcvnController {
 				new CustomOperation(new BasicDBObject("$project", project)), unwind("$planning.locations"),
 				group("year", "planning.locations").sum("$dividedTotal").as("totalPlannedAmount").sum("$cntprj")
 						.as("recordsCount"),
-				sort(Direction.ASC, "year"));
-		System.out.println(agg);
+				sort(Direction.ASC, "year"));	
 	
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();
