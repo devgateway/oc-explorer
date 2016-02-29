@@ -10,7 +10,8 @@ var options2arr = options => Object.keys(options)
 var addFilters = (filters, url) => null === filters ? url :
     new URI(url).addSearch({
       bidTypeId: options2arr(filters.bidTypes.options),
-      bidSelectionMethod: options2arr(filters.bidSelectionMethods.options)
+      bidSelectionMethod: options2arr(filters.bidSelectionMethods.options),
+      procuringEntityId: options2arr(filters.procuringEntities.options)
     }).toString();
 
 export default {
@@ -147,7 +148,13 @@ export default {
     dispatcher.dispatch(constants.PROCURING_ENTITY_QUERY_UPDATED, newQuery);
     if(newQuery.length >= 3){
       fetchJson(new URI('/api/ocds/organization/procuringEntity/all').addSearch('text', newQuery).toString())
-          .then(data => dispatcher.dispatch(constants.PROCURING_ENTITIES_UPDATED, data));
+          .then(data => {
+            dispatcher.dispatch(constants.PROCURING_ENTITIES_UPDATED, data.reduce((accum, procuringEntity) => {
+              var {id} = procuringEntity;
+              accum[id] = procuringEntity;
+              return accum;
+            }, {}))
+          });
     }
   }
 }
