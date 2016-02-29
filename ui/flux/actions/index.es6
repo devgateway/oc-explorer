@@ -47,6 +47,7 @@ export default {
       load('/api/costEffectivenessTenderAmount/'),
       load('/api/costEffectivenessAwardAmount/')
     ]).then(([tenderResponse, awardResponse]) => {
+
       var response2obj = (field, arr) => arr.reduce((obj, elem) => {
         obj[elem._id] = elem[field];
         return obj;
@@ -115,6 +116,10 @@ export default {
               };
               return accum;
             }, {})
+      },
+      procuringEntities: {
+        open: true,
+        options: []
       }
     }));
   },
@@ -136,5 +141,13 @@ export default {
       option: option,
       selected: selected
     })
+  },
+
+  updateProcuringEntityQuery(newQuery){
+    dispatcher.dispatch(constants.PROCURING_ENTITY_QUERY_UPDATED, newQuery);
+    if(newQuery.length >= 3){
+      fetchJson(new URI('/api/ocds/organization/procuringEntity/all').addSearch('text', newQuery).toString())
+          .then(data => dispatcher.dispatch(constants.PROCURING_ENTITIES_UPDATED, data));
+    }
   }
 }

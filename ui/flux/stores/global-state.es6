@@ -12,6 +12,7 @@ var store = Store({
       selectedYears: years().reduce((map, year) => map.set(year, true), toImmutable({})),
       contentWidth: 0,
       data: {},
+      procuringEntityQuery: "",
       filters: {
       }
     })
@@ -36,7 +37,10 @@ var store = Store({
       var newState = state.setIn(['filters', slug, 'options', option, 'selected'], selected);
       actions.loadData(newState.get('filters').toJS());
       return newState;
-    })
+    });
+    this.on(constants.PROCURING_ENTITY_QUERY_UPDATED, (state, newQuery) => state.set('procuringEntityQuery', newQuery));
+    this.on(constants.PROCURING_ENTITIES_UPDATED, (state, procuringEntities) =>
+        state.setIn(['filters', 'procuringEntities', 'options'], toImmutable(procuringEntities)))
   }
 });
 
