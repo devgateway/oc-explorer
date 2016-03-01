@@ -25,7 +25,9 @@ public class Award {
 	@Indexed
 	String status;
 	
+	@Indexed
 	Date date;
+	@Indexed
 	Value value;
 	List<Organization> suppliers=new ArrayList<>();
 	List<Item> items=new ArrayList<>();
