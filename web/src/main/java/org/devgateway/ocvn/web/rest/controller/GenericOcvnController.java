@@ -8,6 +8,10 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.annotation.PostConstruct;
 
 import org.devgateway.ocvn.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.slf4j.Logger;
@@ -22,6 +26,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
  *
  */
 public class GenericOcvnController {
+	
+	protected Map<String,Object> filterProjectMap;
 
 	protected final Logger logger = LoggerFactory.getLogger(GenericOcvnController.class);
 	
@@ -85,6 +91,13 @@ public class GenericOcvnController {
 		return criteria;
 	}
 	
+	@PostConstruct
+	protected void init() {
+		filterProjectMap = new ConcurrentHashMap<>();
+		filterProjectMap.put("tender.procuringEntity", 1);
+		filterProjectMap.put("tender.items.classification", 1);
+		filterProjectMap.put("tender.procurementMethodDetails", 1);
+	}
 	
 	/**
 	 * Appends the bid selection method to the filter, this will filter based on tender.procurementMethodDetails.
