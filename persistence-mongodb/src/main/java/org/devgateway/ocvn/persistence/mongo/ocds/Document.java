@@ -20,7 +20,9 @@ public class Document {
 	String title;
 	String description;
 	String url;
+	
 	Date datePublished;
+	
 	Date dateModified;
 	String format;
 	String language;

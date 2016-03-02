@@ -34,6 +34,8 @@ public class EBidAwardRowImporter extends RowImporter<Release, ReleaseRepository
 
 		if (release == null) {
 			release = new Release();
+			release.setOcid("ocvn-bidno-"+row[0]);
+			release.getTag().add("award");
 			VNPlanning planning = new VNPlanning();
 			release.setPlanning(planning);
 			planning.setBidNo(row[0]);
@@ -41,6 +43,7 @@ public class EBidAwardRowImporter extends RowImporter<Release, ReleaseRepository
 		documents.add(release);
 
 		VNAward award = new VNAward();
+		award.setId(release.getOcid()+"-award-"+release.getAwards().size());
 		release.getAwards().add(award);
 
 		Value value = new Value();

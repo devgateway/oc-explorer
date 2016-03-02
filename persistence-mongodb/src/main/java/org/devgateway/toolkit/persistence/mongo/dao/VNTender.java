@@ -7,7 +7,6 @@ import java.util.Date;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Organization;
 import org.devgateway.ocvn.persistence.mongo.ocds.Tender;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -22,6 +21,7 @@ public class VNTender extends Tender {
 	String approveState;
 	String cancelYN;
 	String modYn;
+	
 	Date bidOpenDt;
 	
 

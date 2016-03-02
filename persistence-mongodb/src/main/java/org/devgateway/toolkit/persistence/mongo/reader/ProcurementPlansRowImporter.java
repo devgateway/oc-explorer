@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Budget;
@@ -35,6 +34,8 @@ public class ProcurementPlansRowImporter extends RowImporter<Release, ReleaseRep
 			throw new RuntimeException("Duplicate planning.budget.projectID");
 
 		Release release = new Release();
+		release.setOcid("ocvn-prjid-"+projectID);
+		release.getTag().add("planning");
 		documents.add(release);
 		VNPlanning planning = new VNPlanning();
 		Budget budget = new Budget();

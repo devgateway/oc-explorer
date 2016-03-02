@@ -15,6 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document
 public class Amendment {
+	
 	Date date;
 	List<Change> changes=new ArrayList<>();
 	String rationale;

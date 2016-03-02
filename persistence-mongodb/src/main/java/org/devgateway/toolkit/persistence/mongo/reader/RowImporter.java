@@ -5,7 +5,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.devgateway.toolkit.persistence.mongo.dao.DBConstants;
 import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +26,7 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 		this.repository = repository;
 		df = new DecimalFormat();
 		df.setParseBigDecimal(true);
-		documents = new ArrayList<>(DBConstants.IMPORT_ROW_BATCH);
+		documents = new ArrayList<>();
 		this.skipRows = skipRows;
 	}
 
