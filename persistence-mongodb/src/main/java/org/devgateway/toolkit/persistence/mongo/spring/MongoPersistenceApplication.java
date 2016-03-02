@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.BigDecimal2;
-import org.devgateway.toolkit.persistence.mongo.repository.CustomerRepository;
+import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -35,7 +35,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @SpringBootApplication
 @ComponentScan("org.devgateway.toolkit")
 @PropertySource("classpath:/org/devgateway/toolkit/persistence/mongo/application.properties")
-@EnableMongoRepositories(basePackageClasses = CustomerRepository.class)
+@EnableMongoRepositories(basePackageClasses = ReleaseRepository.class)
 public class MongoPersistenceApplication {
 
 	public static void main(String[] args) {
@@ -79,6 +79,11 @@ public class MongoPersistenceApplication {
 		return new CustomConversions(Arrays
 				.asList(new Object[] { BigDecimal2ToDoubleConverter.INSTANCE, DoubleToBigDecimal2Converter.INSTANCE,
 						BigDecimalToDoubleConverter.INSTANCE, DoubleToBigDecimalConverter.INSTANCE }));
+	}
+	
+	@Bean
+	public CascadeSaveMongoEventListener cascadeSaveMongoEventListener() {
+	    return new CascadeSaveMongoEventListener();
 	}
 
 }

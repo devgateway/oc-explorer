@@ -11,10 +11,11 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.components.form;
 
-import de.agilecoders.wicket.core.util.Attributes;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.model.IModel;
+
+import de.agilecoders.wicket.core.util.Attributes;
 
 public class PasswordFieldBootstrapFormComponent extends GenericBootstrapFormComponent<String, PasswordTextField> {
 	private static final long serialVersionUID = -2865390099361839324L;

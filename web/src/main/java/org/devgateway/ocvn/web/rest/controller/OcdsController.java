@@ -19,7 +19,6 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
-import org.devgateway.ocvn.web.rest.controller.request.OCDSReleaseRequest;
 import org.devgateway.ocvn.web.rest.controller.request.YearFilterPangingRequest;
 import org.devgateway.toolkit.persistence.mongo.dao.VNPlanning;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;

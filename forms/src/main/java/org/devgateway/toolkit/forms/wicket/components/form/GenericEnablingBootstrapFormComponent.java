@@ -14,13 +14,13 @@
  */
 package org.devgateway.toolkit.forms.wicket.components.form;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author mpostelnicu {@link GenericBootstrapFormComponent} that can show and
