@@ -60,7 +60,8 @@ public class ProcurementPlansRowImporter extends RowImporter<Release, ReleaseRep
 		planning.setBidPlanProjectCompanyIssue(row[6]);
 		planning.setBidPlanProjectType(row[7]);
 		planning.setBidPlanProjectFund(Integer.parseInt(row[8]));
-		planning.setBidPlanProjectClassify(Arrays.asList(row[9].split(", ")));
+		if(!row[9].trim().isEmpty()) 
+			planning.setBidPlanProjectClassify(Arrays.asList(row[9].trim().split(", ")));
 		planning.setBidPlanProjectDateApprove(row[10].isEmpty() ? null : sdf.parse(row[10]));
 		planning.setBidPlanNm(row[11]);
 		planning.setBidPlanProjectStdClsCd(row[12]);

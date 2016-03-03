@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.convert.CustomConversions;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
@@ -36,6 +37,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @ComponentScan("org.devgateway.toolkit")
 @PropertySource("classpath:/org/devgateway/toolkit/persistence/mongo/application.properties")
 @EnableMongoRepositories(basePackageClasses = ReleaseRepository.class)
+@EnableMongoAuditing
 public class MongoPersistenceApplication {
 
 	public static void main(String[] args) {
@@ -81,9 +83,5 @@ public class MongoPersistenceApplication {
 						BigDecimalToDoubleConverter.INSTANCE, DoubleToBigDecimalConverter.INSTANCE }));
 	}
 	
-	@Bean
-	public CascadeSaveMongoEventListener cascadeSaveMongoEventListener() {
-	    return new CascadeSaveMongoEventListener();
-	}
 
 }
