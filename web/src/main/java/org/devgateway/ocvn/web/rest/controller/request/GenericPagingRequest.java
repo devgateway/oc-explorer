@@ -39,4 +39,8 @@ public class GenericPagingRequest {
 	public void setPageSize(Integer size) {
 		this.pageSize = size;
 	}
+	
+	public Integer getSkip() {
+		return pageNumber*pageSize;
+	}
 }
