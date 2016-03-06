@@ -20,7 +20,9 @@ public class Milestone {
 	String id;
 	String title;
 	String description;
+	
 	Date dueDate;
+	
 	Date dateModified;
 	String status;
 	List<Document> documents=new ArrayList<>();

@@ -11,14 +11,16 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.styles;
 
-import com.google.common.collect.Lists;
-import de.agilecoders.wicket.core.markup.html.themes.bootstrap.BootstrapCssReference;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeCssReference;
+import java.util.List;
+
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
 
-import java.util.List;
+import com.google.common.collect.Lists;
+
+import de.agilecoders.wicket.core.markup.html.themes.bootstrap.BootstrapCssReference;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeCssReference;
 
 /**
  * @author idobre

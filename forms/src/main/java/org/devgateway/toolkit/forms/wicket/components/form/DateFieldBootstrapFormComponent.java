@@ -14,17 +14,18 @@
  */
 package org.devgateway.toolkit.forms.wicket.components.form;
 
-import de.agilecoders.wicket.core.util.Attributes;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.DateTextField;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.DateTextFieldConfig;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.DateTextFieldConfig.View;
+import java.util.Date;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 
-import java.util.Date;
+import de.agilecoders.wicket.core.util.Attributes;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.DateTextField;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.DateTextFieldConfig;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.DateTextFieldConfig.View;
 
 /**
  * @author mpostelnicu

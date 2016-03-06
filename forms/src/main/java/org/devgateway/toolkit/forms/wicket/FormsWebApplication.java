@@ -41,7 +41,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.wicketstuff.annotation.mount.MountPath;
 import org.wicketstuff.annotation.scan.AnnotatedMountScanner;
 
 import com.google.javascript.jscomp.CompilationLevel;

@@ -43,6 +43,7 @@ public class Tender {
 	Period awardPeriod;
 	Integer numberOfTenders;
 	List<Organization> tenderers=new ArrayList<>();
+	
 	Organization procuringEntity;
 	List<Document> documents=new ArrayList<>();
 	List<Milestone> milestone=new ArrayList<>();

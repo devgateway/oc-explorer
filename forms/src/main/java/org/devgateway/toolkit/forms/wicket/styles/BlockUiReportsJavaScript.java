@@ -11,13 +11,14 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.styles;
 
-import com.google.common.collect.Lists;
+import java.util.List;
+
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.resource.JQueryResourceReference;
 
-import java.util.List;
+import com.google.common.collect.Lists;
 
 /**
  * @author idobre

@@ -18,6 +18,7 @@ public class Transaction {
 	@Id
 	String id;
 	String source;
+	
 	Date date;
 	Value amount;
 	Identifier providerOrganization;

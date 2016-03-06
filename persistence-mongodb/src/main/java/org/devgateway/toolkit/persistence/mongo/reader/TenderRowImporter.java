@@ -27,9 +27,10 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 
 	public TenderRowImporter(ReleaseRepository releaseRepository, VNOrganizationRepository organizationRepository,
 			ClassificationRepository classificationRepository, int skipRows) {
-		super(releaseRepository, skipRows);
+		super(releaseRepository,skipRows);
 		this.organizationRepository = organizationRepository;
 		this.classificationRepository = classificationRepository;
+		
 	}
 
 	@Override
@@ -39,6 +40,8 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 
 		if (release == null) {
 			release = new Release();
+			release.setOcid("ocvn-bidno-"+row[0]);
+			release.getTag().add("tender");
 			VNPlanning planning = new VNPlanning();
 			release.setPlanning(planning);
 			planning.setBidNo(row[0]);
@@ -48,8 +51,8 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 		VNTender tender = (VNTender) release.getTender();
 		if (tender == null) {
 			tender = new VNTender();
-			tender.setId(row[0]);
-			release.setTender(tender);
+			tender.setId(release.getId());
+			release.setTender(tender);			
 		}
 
 		String status = null;

@@ -19,11 +19,8 @@ import org.apache.wicket.protocol.http.WicketFilter;
 import org.apache.wicket.spring.SpringWebApplicationFactory;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
-import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
-import org.springframework.web.context.ContextCleanupListener;
-import org.springframework.web.filter.DelegatingFilterProxy;
+import org.springframework.web.context.request.RequestContextListener;
 
 /**
  * This class is the replacement of the web.xml. It registers the wicket filter
@@ -59,7 +56,7 @@ public class WebInitializer implements ServletContextInitializer {
 		filter.addMappingForUrlPatterns(null, false, "/*");
 
 		// // Request Listener
-		// sc.addListener(new RequestContextListener());
+		sc.addListener(new RequestContextListener());
 		//
 		//		sc.addListener(new ContextCleanupListener());
 		//

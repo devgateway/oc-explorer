@@ -14,15 +14,15 @@
  */
 package org.devgateway.toolkit.forms.wicket.components.form;
 
-import com.vaynberg.wicket.select2.ChoiceProvider;
-import com.vaynberg.wicket.select2.Select2MultiChoice;
-
-import de.agilecoders.wicket.core.util.Attributes;
+import java.util.Collection;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.model.IModel;
 
-import java.util.Collection;
+import com.vaynberg.wicket.select2.ChoiceProvider;
+import com.vaynberg.wicket.select2.Select2MultiChoice;
+
+import de.agilecoders.wicket.core.util.Attributes;
 
 /**
  * @author mpostelnicu

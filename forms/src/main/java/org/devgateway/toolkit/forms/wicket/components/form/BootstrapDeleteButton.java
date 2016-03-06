@@ -14,10 +14,6 @@
  */
 package org.devgateway.toolkit.forms.wicket.components.form;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeIconType;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.ladda.LaddaAjaxButton;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxCallListener;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -28,6 +24,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.devgateway.toolkit.forms.wicket.components.ComponentUtil;
 import org.devgateway.toolkit.forms.wicket.events.EditingDisabledEvent;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeIconType;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.ladda.LaddaAjaxButton;
 
 /**
  * @author mpostelnicu

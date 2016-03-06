@@ -18,6 +18,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection="planning")
 public class VNPlanning extends Planning {
 	
+	
 	Date bidPlanProjectDateIssue;
 	String bidPlanProjectStyle;
 	String bidPlanProjectCompanyIssue;
@@ -25,7 +26,7 @@ public class VNPlanning extends Planning {
 	Integer bidPlanProjectFund;
 	List<String> bidPlanProjectClassify;
 	
-	@Indexed
+	@Indexed	
 	Date bidPlanProjectDateApprove;
 	String bidPlanNm;
 	String bidPlanProjectStdClsCd;

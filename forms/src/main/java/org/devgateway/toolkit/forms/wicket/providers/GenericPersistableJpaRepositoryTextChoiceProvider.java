@@ -19,7 +19,6 @@ import java.util.Collection;
 import org.apache.wicket.model.IModel;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.devgateway.toolkit.persistence.dao.Labelable;
-import org.devgateway.toolkit.persistence.dao.Searchable;
 import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepository;
 
 /**

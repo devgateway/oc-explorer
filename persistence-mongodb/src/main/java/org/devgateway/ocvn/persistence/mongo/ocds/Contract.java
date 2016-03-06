@@ -25,6 +25,7 @@ public class Contract {
 	Period period;
 	Value value;
 	List<Item> items=new ArrayList<>();
+	
 	Date dateSigned;
 	List<Document> documents=new ArrayList<>();
 	Amendment amendment;

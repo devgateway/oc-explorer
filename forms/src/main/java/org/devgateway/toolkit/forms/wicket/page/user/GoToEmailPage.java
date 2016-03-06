@@ -16,10 +16,9 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.devgateway.toolkit.forms.wicket.page.BasePage;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapForm;
-
-import org.devgateway.toolkit.forms.wicket.page.BasePage;
 
 
 public class GoToEmailPage extends BasePage {

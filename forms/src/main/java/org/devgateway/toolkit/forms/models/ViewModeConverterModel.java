@@ -11,14 +11,14 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.models;
 
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Date;
+
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.forms.wicket.components.form.GenericBootstrapFormComponent;
-
-import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Date;
 
 /**
  * @author mpostelnicu Converter for {@link GenericBootstrapFormComponent}

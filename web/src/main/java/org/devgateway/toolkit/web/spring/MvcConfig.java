@@ -11,20 +11,40 @@
  *******************************************************************************/
 package org.devgateway.toolkit.web.spring;
 
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
+
+import org.devgateway.ocvn.web.rest.serializers.GeoJsonPointSerializer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 @Configuration
 public class MvcConfig extends WebMvcConfigurerAdapter {
-    
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/home").setViewName("home");
-        registry.addViewController("/").setViewName("home");
-        registry.addViewController("/hello").setViewName("hello");
-        registry.addViewController("/login").setViewName("login");
-    }
-    
+
+	@Override
+	public void addViewControllers(ViewControllerRegistry registry) {
+		registry.addViewController("/home").setViewName("home");
+		registry.addViewController("/").setViewName("home");
+		registry.addViewController("/hello").setViewName("hello");
+		registry.addViewController("/login").setViewName("login");
+	}
+
+	@Bean
+	public Jackson2ObjectMapperBuilder objectMapperBuilder() {
+		Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
+
+		SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+		dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+		builder.serializationInclusion(Include.NON_EMPTY).dateFormat(dateFormatGmt);
+		builder.serializerByType(GeoJsonPoint.class, new GeoJsonPointSerializer());
+
+		return builder;
+	}
 
 }

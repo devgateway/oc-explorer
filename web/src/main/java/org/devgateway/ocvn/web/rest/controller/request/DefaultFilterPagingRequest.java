@@ -6,7 +6,6 @@ package org.devgateway.ocvn.web.rest.controller.request;
 import java.util.List;
 
 import cz.jirutka.validator.collection.constraints.EachPattern;
-import cz.jirutka.validator.collection.constraints.EachRange;
 
 /**
  * @author mihai

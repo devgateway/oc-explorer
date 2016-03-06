@@ -11,17 +11,18 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.providers;
 
-import com.vaynberg.wicket.select2.ChoiceProvider;
-import com.vaynberg.wicket.select2.Response;
-import org.apache.log4j.Logger;
-import org.json.JSONException;
-import org.json.JSONWriter;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.json.JSONException;
+import org.json.JSONWriter;
+
+import com.vaynberg.wicket.select2.ChoiceProvider;
+import com.vaynberg.wicket.select2.Response;
 
 /**
  * @author idobre

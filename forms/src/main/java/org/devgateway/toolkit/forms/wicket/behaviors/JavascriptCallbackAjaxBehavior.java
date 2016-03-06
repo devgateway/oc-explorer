@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.behaviors;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 

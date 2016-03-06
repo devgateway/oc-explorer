@@ -33,6 +33,8 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 
 		if (release == null) {
 			release = new Release();
+			release.getTag().add("award");
+			release.setOcid("ocvn-bidno-"+row[0]);
 			VNPlanning planning = new VNPlanning();
 			release.setPlanning(planning);
 			planning.setBidNo(row[0]);
@@ -40,6 +42,8 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 		documents.add(release);
 
 		VNAward award = new VNAward();
+		award.setId(release.getOcid()+"-award-"+release.getAwards().size());
+		
 		release.getAwards().add(award);
 
 		award.setTitle(row[1]);
