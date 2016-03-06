@@ -57,7 +57,7 @@ public class CheckBoxBootstrapFormComponent extends GenericEnablingBootstrapForm
 
 	@Override
 	public String getUpdateEvent() {
-		return "onclick";
+		return "click";
 	}
 
     public Boolean getIsFloatedInput() {

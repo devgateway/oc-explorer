@@ -17,6 +17,7 @@ package org.devgateway.toolkit.forms.wicket.components.form;
 import de.agilecoders.wicket.core.util.Attributes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.DateTextField;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.DateTextFieldConfig;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.DateTextFieldConfig.TodayButton;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.DateTextFieldConfig.View;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
@@ -61,14 +62,16 @@ public class DateFieldBootstrapFormComponent extends GenericBootstrapFormCompone
     @Override
     protected TextField<Date> inputField(String id, IModel<Date> model) {
         DateTextFieldConfig config = new DateTextFieldConfig().withView(View.Year).
-                withFormat(DEFAULT_FORMAT).autoClose(true).calendarWeeks(true).forceParse(false).highlightToday(true);
+                withFormat(DEFAULT_FORMAT).autoClose(true).
+                calendarWeeks(true).forceParse(false).highlightToday(true).clearButton(true).
+                allowKeyboardNavigation(true).showTodayButton(TodayButton.LINKED).withView(View.Decade);
 
         return new DateTextField(id, initFieldModel(), config);
     }
 
 	@Override
 	public String getUpdateEvent() {
-		return "onchange";
+		return "change";
 	}
 
 	/* (non-Javadoc)

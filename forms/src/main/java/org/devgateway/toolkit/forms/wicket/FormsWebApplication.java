@@ -27,7 +27,8 @@ import org.apache.wicket.request.resource.caching.FilenameWithVersionResourceCac
 import org.apache.wicket.request.resource.caching.NoOpResourceCachingStrategy;
 import org.apache.wicket.request.resource.caching.version.CachingResourceVersion;
 import org.apache.wicket.serialize.java.DeflatedJavaSerializer;
-import org.apache.wicket.settings.IRequestCycleSettings;
+import org.apache.wicket.settings.ApplicationSettings;
+import org.apache.wicket.settings.RequestCycleSettings.RenderStrategy;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.devgateway.toolkit.forms.service.SessionFinderService;
 import org.devgateway.toolkit.forms.wicket.converters.NonNumericFilteredBigDecimalConverter;
@@ -41,7 +42,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.wicketstuff.annotation.mount.MountPath;
 import org.wicketstuff.annotation.scan.AnnotatedMountScanner;
 
 import com.google.javascript.jscomp.CompilationLevel;
@@ -153,7 +153,7 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
 			getResourceSettings().setCachingStrategy(new NoOpResourceCachingStrategy());
 		}
 
-		getRequestCycleSettings().setRenderStrategy(IRequestCycleSettings.RenderStrategy.ONE_PASS_RENDER);
+		getRequestCycleSettings().setRenderStrategy(RenderStrategy.ONE_PASS_RENDER);
 	}
 
 	@Override

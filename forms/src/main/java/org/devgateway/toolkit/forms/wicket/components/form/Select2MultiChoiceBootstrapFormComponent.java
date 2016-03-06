@@ -14,15 +14,15 @@
  */
 package org.devgateway.toolkit.forms.wicket.components.form;
 
-import com.vaynberg.wicket.select2.ChoiceProvider;
-import com.vaynberg.wicket.select2.Select2MultiChoice;
-
-import de.agilecoders.wicket.core.util.Attributes;
+import java.util.Collection;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.model.IModel;
+import org.wicketstuff.select2.AjaxSettings;
+import org.wicketstuff.select2.ChoiceProvider;
+import org.wicketstuff.select2.Select2MultiChoice;
 
-import java.util.Collection;
+import de.agilecoders.wicket.core.util.Attributes;
 
 /**
  * @author mpostelnicu
@@ -30,14 +30,13 @@ import java.util.Collection;
  */
 public class Select2MultiChoiceBootstrapFormComponent<TYPE> extends GenericBootstrapFormComponent<Collection<TYPE>, Select2MultiChoice<TYPE>> {
 	private static final long serialVersionUID = 7177558191815237814L;
-	private ChoiceProvider<TYPE> choiceProvider;
 
     private Boolean isFloatedInput = false;
 
 	public Select2MultiChoiceBootstrapFormComponent(String id, IModel<String> labelModel, IModel<Collection<TYPE>> model,
 			ChoiceProvider<TYPE> choiceProvider) {
 		super(id, labelModel, model);
-		this.choiceProvider=choiceProvider;
+		provider(choiceProvider);
 	}
 	
 
@@ -49,17 +48,17 @@ public class Select2MultiChoiceBootstrapFormComponent<TYPE> extends GenericBoots
 
 	public Select2MultiChoiceBootstrapFormComponent(String id, IModel<String> labelModel, ChoiceProvider<TYPE> choiceProvider) {
 		super(id,labelModel,null);
-		this.choiceProvider=choiceProvider;
+		provider(choiceProvider);
 	}
 
     public Select2MultiChoiceBootstrapFormComponent(String id, ChoiceProvider<TYPE> choiceProvider,IModel<Collection<TYPE>> model) {
         super(id,model);
-        this.choiceProvider=choiceProvider;
+        provider(choiceProvider);
     }
 
 	public Select2MultiChoiceBootstrapFormComponent(String id, ChoiceProvider<TYPE> choiceProvider) {
 		super(id);
-		this.choiceProvider=choiceProvider;
+		provider(choiceProvider);
 	}
 
 	@Override
@@ -72,22 +71,22 @@ public class Select2MultiChoiceBootstrapFormComponent<TYPE> extends GenericBoots
 	
 	@Override
 	public String getUpdateEvent() {
-		return "onchange";
+		return "change";
 	}
 	
 	
-	/* (non-Javadoc)
-	 * @see org.devgateway.toolkit.forms.wicket.components.form.GenericBootstrapFormComponent#onConfigure()
-	 */
+	
 	@Override
 	protected void onInitialize() {
-		super.onInitialize();
-		field.setProvider(choiceProvider);
-		field.getSettings().setAllowClear(true);
-		field.getSettings().setPlaceholder("");
-		field.getSettings().setDropdownAutoWidth(true);
+		field.getSettings().setPlaceholder("Click to select");
+		field.getSettings().setAllowClear(true);		
+		field.getSettings().setCloseOnSelect(true);
+		field.getSettings().setDropdownAutoWidth(true);		
 		field.getSettings().setEscapeMarkup("function (m) {return m;}");
+		super.onInitialize();
+
 	}
+	
 
     @Override
     protected void onComponentTag(ComponentTag tag) {

@@ -20,7 +20,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.DateFieldBootstrapFormComponent;
-import org.devgateway.toolkit.forms.wicket.components.form.FileInputBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.Select2ChoiceBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.Select2MultiChoiceBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.TextAreaFieldBootstrapFormComponent;
@@ -97,8 +96,8 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
 		DateFieldBootstrapFormComponent date=new DateFieldBootstrapFormComponent("date");
 		editForm.add(date);
 		
-		FileInputBootstrapFormComponent fileInput=new FileInputBootstrapFormComponent("fileInput");
-		editForm.add(fileInput);
+//		FileInputBootstrapFormComponent fileInput=new FileInputBootstrapFormComponent("fileInput");
+//		editForm.add(fileInput);
 	}
 
 }

@@ -106,7 +106,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
      protected EntityManager entityManager;
 	
 		
-	@SpringBean
+	@SpringBean(required=false)
 	protected ReportsCacheService reportsCacheService;
 	 
 
@@ -225,7 +225,8 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
 			entityManager.clear();
 			
 			//we flush the mondrian cache to ensure it gets rebuilt
-			reportsCacheService.flushCache();
+			if(reportsCacheService!=null)
+				reportsCacheService.flushCache();
 			
 			// only redirect if redirect is true
 			if (redirectToSelf) {
