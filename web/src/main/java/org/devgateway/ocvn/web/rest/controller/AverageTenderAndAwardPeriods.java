@@ -13,6 +13,7 @@ package org.devgateway.ocvn.web.rest.controller;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
@@ -60,13 +61,12 @@ public class AverageTenderAndAwardPeriods extends GenericOcvnController {
 		project.put(Fields.UNDERSCORE_ID, 0);
 		project.put("year", year);
 		project.put("tenderLengthDays", tenderLengthDays);
-		project.putAll(filterProjectMap);
 		
 		Aggregation agg = newAggregation(
 				match(where("tender.tenderPeriod.startDate").exists(true).and("tender.tenderPeriod.endDate")
 						.exists(true).andOperator(getDefaultFilterCriteria(filter))),
 				new CustomOperation(new BasicDBObject("$project", project)),
-				getTopXFilterOperation(filter,"$year").avg("$tenderLengthDays").as("averageTenderDays"),
+				group("$year").avg("$tenderLengthDays").as("averageTenderDays"),
 				sort(Direction.DESC,"averageTenderDays"),
 				skip(filter.getSkip()),
 				limit(filter.getPageSize())
@@ -94,7 +94,7 @@ public class AverageTenderAndAwardPeriods extends GenericOcvnController {
 		project.put("awards.date", 1);
 		project.put("awards.status", 1);
 		project.put("tender.tenderPeriod.endDate", 1);
-		project.putAll(filterProjectMap);
+		
 		
 	
 		DBObject group = new BasicDBObject();
@@ -113,7 +113,7 @@ public class AverageTenderAndAwardPeriods extends GenericOcvnController {
 				match(where("awards.date").exists(true)
 						.and("awards.status").is("active").andOperator(getDefaultFilterCriteria(filter))), 				
 				new CustomOperation(new BasicDBObject("$project", project)),
-				getTopXFilterOperation(filter,  group),
+				new CustomOperation(new BasicDBObject("$group", group)),
 				new CustomOperation(new BasicDBObject("$sort", sort)),
 				skip(filter.getSkip()),
 				limit(filter.getPageSize())

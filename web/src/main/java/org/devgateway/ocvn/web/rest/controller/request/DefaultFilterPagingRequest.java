@@ -23,7 +23,7 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 	
 	List<String> bidSelectionMethod;
 	
-	String groupByCategory;
+	
 
 	public DefaultFilterPagingRequest() {
 		super();
@@ -54,14 +54,4 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 		this.bidSelectionMethod = bidSelectionMethod;
 	}
 
-
-	public String getGroupByCategory() {
-		return groupByCategory;
-	}
-
-
-	public void setGroupByCategory(String groupByParamName) {
-		this.groupByCategory = groupByParamName;
-	}
-		
 }

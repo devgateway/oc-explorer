@@ -18,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.PostConstruct;
 
 import org.devgateway.ocvn.web.rest.controller.request.DefaultFilterPagingRequest;
+import org.devgateway.ocvn.web.rest.controller.request.GroupingFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -141,17 +142,19 @@ public class GenericOcvnController {
 	 * @param existingGroupBy
 	 * @return
 	 */
-	protected GroupOperation getTopXFilterOperation(DefaultFilterPagingRequest filter, String... existingGroupBy) {
+	protected GroupOperation getTopXFilterOperation(GroupingFilterPagingRequest filter, String... existingGroupBy) {
 		List<String> groupBy = new ArrayList<>();
 		if (filter.getGroupByCategory() == null)
 			groupBy.addAll(Arrays.asList(existingGroupBy));
 
-		groupBy.add(getGroupByCategory(filter));
+		if(filter.getGroupByCategory()!=null) 
+			groupBy.add(getGroupByCategory(filter));
 		
 		return group(groupBy.toArray(new String[0]));
 	}
 	
-	protected AggregationOperation getTopXFilterOperation(DefaultFilterPagingRequest filter, DBObject group) {
+	@Deprecated
+	protected AggregationOperation getTopXFilterOperation(GroupingFilterPagingRequest filter, DBObject group) {
 		if (filter.getGroupByCategory() != null) {
 			group.removeField(Fields.UNDERSCORE_ID);
 			group.put(Fields.UNDERSCORE_ID, "$"+getGroupByCategory(filter));
@@ -159,7 +162,7 @@ public class GenericOcvnController {
 		return new CustomOperation(new BasicDBObject("$group", group));
 	}
 	
-	private String getGroupByCategory(DefaultFilterPagingRequest filter) {
+	private String getGroupByCategory(GroupingFilterPagingRequest filter) {
 		if ("bidSelectionMethod".equals(filter.getGroupByCategory()))
 			return "tender.procurementMethodDetails";
 		else if ("bidTypeId".equals(filter.getGroupByCategory()))
