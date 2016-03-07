@@ -22,6 +22,8 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 	List<String> procuringEntityId;
 	
 	List<String> bidSelectionMethod;
+	
+	
 
 	public DefaultFilterPagingRequest() {
 		super();
@@ -52,6 +54,4 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 		this.bidSelectionMethod = bidSelectionMethod;
 	}
 
-	
-	
 }

@@ -117,3 +117,17 @@ Example: `/api/ocds/release/planningBidNo/20100300191`
 #### Endpoint 2 - Average Award Period
 
 `/api/averageAwardPeriod?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]`
+
+
+#### Special use of Endpoint 2 - Cost Effectiveness Tender Amount - to calculate the largest values in the given category. You can use the same endpoint, but with an additional parameter (see last one)
+
+`/api/costEffectivenessTenderAmount?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]&groupByCategory=[category]`
+
+When `groupByCategory` is used, the behavior of the endpoint will change, in that it will group results by the values of the category specified by groupByCategory. The categories are among the filter types: "bidTypeId", "procuringEntityId", "bidSelectionMethod". 
+
+A valid use of the filter would then be 
+`/api/costEffectivenessTenderAmount?groupByCategory=bidSelectionMethod` - this would return the tender amounts grouped by bidSelectionMethod and ordered descending. If you just want to get the top 3, you can pass the pageSize parameter.
+
+`/api/costEffectivenessTenderAmount?groupByCategory=bidSelectionMethod&pageSize=3`
+
+We re-used the Endpoint 2 to get this info to ensure the same filtering criteria and grouping calculations used by the Endpoint 2 are used also by the grouping. 

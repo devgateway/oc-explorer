@@ -11,11 +11,12 @@
  *******************************************************************************/
 package org.devgateway.ocvn.web.rest.controller;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -28,6 +29,7 @@ import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -54,12 +56,15 @@ public class CountPlansTendersAwardsController extends GenericOcvnController {
 	public List<DBObject> countBidPlansByYear(@Valid DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
-		project.put("year", new BasicDBObject("$year", "$planning.bidPlanProjectDateApprove"));
+		project.put("year", new BasicDBObject("$year", "$planning.bidPlanProjectDateApprove"));	
 
 		Aggregation agg = newAggregation(match(where("planning.bidPlanProjectDateApprove").exists(true)),
 				getMatchDefaultFilterOperation(filter),
-				new CustomOperation(new BasicDBObject("$project", project)), group("$year").count().as("count"),
-				sort(Direction.ASC, "_id"));
+				new CustomOperation(new BasicDBObject("$project", project)),
+				 group("$year").count().as("count"),
+				sort(Direction.DESC,Fields.UNDERSCORE_ID),
+				skip(filter.getSkip()),
+				limit(filter.getPageSize()));
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();
@@ -79,12 +84,14 @@ public class CountPlansTendersAwardsController extends GenericOcvnController {
 	public List<DBObject> countTendersByYear(@Valid DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
-		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));	
 
 		Aggregation agg = newAggregation(match(where("tender.tenderPeriod.startDate").exists(true)),
 				getMatchDefaultFilterOperation(filter),
-				new CustomOperation(new BasicDBObject("$project", project)), group("$year").count().as("count"),
-				sort(Direction.ASC, "_id"));
+				new CustomOperation(new BasicDBObject("$project", project)),group("$year").count().as("count"),
+				sort(Direction.DESC,Fields.UNDERSCORE_ID),
+				skip(filter.getSkip()),
+				limit(filter.getPageSize()));
 		
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
@@ -103,23 +110,30 @@ public class CountPlansTendersAwardsController extends GenericOcvnController {
 	@RequestMapping("/api/countAwardsByYear")
 	public List<DBObject> countAwardsByYear(@Valid DefaultFilterPagingRequest filter) {
 
+		
+		DBObject project0 = new BasicDBObject();
+		project0.put("awards",1);
+		
 		DBObject project = new BasicDBObject();
 		project.put("year", new BasicDBObject("$year", "$awards.date"));
-		project.put("_id", 0);
+		project.put(Fields.UNDERSCORE_ID, 0);
 
 		DBObject group = new BasicDBObject();
-		group.put("_id", "$year");
+		group.put(Fields.UNDERSCORE_ID, "$year");
 		group.put("count", new BasicDBObject("$sum", 1));
 
 		DBObject sort = new BasicDBObject();
-		sort.put("_id", 1);
+		sort.put("count", -1);
 
 		Aggregation agg = newAggregation(match(where("awards.0").exists(true)), 
 				getMatchDefaultFilterOperation(filter),
-				project("awards"), unwind("$awards"),
-				match(where("awards.date").exists(true)), new CustomOperation(new BasicDBObject("$project", project)),
+				new CustomOperation(new BasicDBObject("$project", project0)), unwind("$awards"),
+				match(where("awards.date").exists(true)), new CustomOperation(new BasicDBObject("$project", project)),				
 				new CustomOperation(new BasicDBObject("$group", group)),
-				new CustomOperation(new BasicDBObject("$sort", sort)));
+				new CustomOperation(new BasicDBObject("$sort", sort)),
+				skip(filter.getSkip()),
+				limit(filter.getPageSize())
+				);
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();

@@ -11,10 +11,12 @@
  *******************************************************************************/
 package org.devgateway.ocvn.web.rest.controller;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -68,9 +70,12 @@ public class FundingByLocationController extends GenericOcvnController {
 				match(where("planning").exists(true).and("planning.locations.0").exists(true)
 						.andOperator(getProcuringEntityIdCriteria(filter))),
 				new CustomOperation(new BasicDBObject("$project", project)), unwind("$planning.locations"),
-				group("year", "planning.locations").sum("$dividedTotal").as("totalPlannedAmount").sum("$cntprj")
+				group("year", "planning.locations")
+				.sum("$dividedTotal").as("totalPlannedAmount").sum("$cntprj")
 						.as("recordsCount"),
-				sort(Direction.ASC, "year"));	
+						sort(Direction.DESC,"totalPlannedAmount"),
+						skip(filter.getSkip()),
+						limit(filter.getPageSize()));
 	
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();
