@@ -17,16 +17,19 @@ export default class Tender extends Component{
     return (
         <div className="col-sm-12 content">
           <CostEffectiveness
+              years={globalState.get('selectedYears')}
               width={width}
               data={data.get('costEffectiveness')}/>
 
           <BiddingPeriod
+              years={globalState.get('selectedYears')}
               width={width}
               data={data.get('bidPeriod')}
           />
 
           {data.has('bidType') ?
             <FundingByBidType
+                years={globalState.get('selectedYears')}
                 width={width}
                 data={data.get('bidType')
                     .groupBy(bidType => bidType.get('procurementMethodDetails'))
@@ -44,6 +47,7 @@ export default class Tender extends Component{
           : null}
 
           <Cancelled
+              years={globalState.get('selectedYears')}
               width={width}
               data={data.get('cancelled')}
           />
