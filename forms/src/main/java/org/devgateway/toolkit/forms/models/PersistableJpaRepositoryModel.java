@@ -11,12 +11,12 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.models;
 
-import nl.dries.wicket.hibernate.dozer.DozerModel;
-
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.devgateway.toolkit.forms.wicket.providers.SortableJpaRepositoryDataProvider;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import nl.dries.wicket.hibernate.dozer.DozerModel;
 
 
 /**

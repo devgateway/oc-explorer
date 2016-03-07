@@ -5,9 +5,13 @@ package org.devgateway.ocvn.persistence.mongo.ocds;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -20,15 +24,18 @@ public class Release {
 	@Id
 	String id;
 
+	@Indexed
 	String ocid;
 
+	@CreatedDate
 	Date date;
 
-	List<String> tag = new ArrayList<>();
+	Set<String> tag = new HashSet<>();
 
 	String initiationType = "tender";
 
 	Planning planning;
+
 
 	Tender tender;
 
@@ -38,8 +45,9 @@ public class Release {
 
 	List<Contract> contracts = new ArrayList<>();
 
-	String language;
-
+	String language="en";	
+	
+	
 	public String getId() {
 		return id;
 	}
@@ -64,13 +72,7 @@ public class Release {
 		this.date = date;
 	}
 
-	public List<String> getTag() {
-		return tag;
-	}
-
-	public void setTag(List<String> tag) {
-		this.tag = tag;
-	}
+	
 
 	public String getInitiationType() {
 		return initiationType;
@@ -126,6 +128,14 @@ public class Release {
 
 	public void setLanguage(String language) {
 		this.language = language;
+	}
+
+	public Set<String> getTag() {
+		return tag;
+	}
+
+	public void setTag(Set<String> tag) {
+		this.tag = tag;
 	}
 
 }

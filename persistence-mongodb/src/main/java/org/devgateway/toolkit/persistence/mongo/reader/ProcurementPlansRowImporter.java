@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Budget;
@@ -35,6 +34,8 @@ public class ProcurementPlansRowImporter extends RowImporter<Release, ReleaseRep
 			throw new RuntimeException("Duplicate planning.budget.projectID");
 
 		Release release = new Release();
+		release.setOcid("ocvn-prjid-"+projectID);
+		release.getTag().add("planning");
 		documents.add(release);
 		VNPlanning planning = new VNPlanning();
 		Budget budget = new Budget();
@@ -59,7 +60,8 @@ public class ProcurementPlansRowImporter extends RowImporter<Release, ReleaseRep
 		planning.setBidPlanProjectCompanyIssue(row[6]);
 		planning.setBidPlanProjectType(row[7]);
 		planning.setBidPlanProjectFund(Integer.parseInt(row[8]));
-		planning.setBidPlanProjectClassify(Arrays.asList(row[9].split(", ")));
+		if(!row[9].trim().isEmpty()) 
+			planning.setBidPlanProjectClassify(Arrays.asList(row[9].trim().split(", ")));
 		planning.setBidPlanProjectDateApprove(row[10].isEmpty() ? null : sdf.parse(row[10]));
 		planning.setBidPlanNm(row[11]);
 		planning.setBidPlanProjectStdClsCd(row[12]);

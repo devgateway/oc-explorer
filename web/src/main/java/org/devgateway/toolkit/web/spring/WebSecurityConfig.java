@@ -67,4 +67,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		StandardPasswordEncoder spe = new StandardPasswordEncoder();
 		auth.userDetailsService(customJPAUserDetailsService).passwordEncoder(spe);
 	}
+	
+	
 }
