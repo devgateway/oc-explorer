@@ -29,9 +29,9 @@ export default class Tender extends Component{
 
           {data.has('bidType') ?
             <FundingByBidType
-                years={globalState.get('selectedYears')}
                 width={width}
                 data={data.get('bidType')
+                    .filter(bidType => globalState.getIn(['selectedYears', bidType.get('year')], false))
                     .groupBy(bidType => bidType.get('procurementMethodDetails'))
                     .map(bidTypes => bidTypes.reduce((reducedBidType, bidType) => {
                       return {
