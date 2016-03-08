@@ -64,7 +64,7 @@ public class VNImportService {
 			importer.importRows(rows);
 			rowNo+=DBConstants.IMPORT_ROW_BATCH;
 			if(rowNo%5000 ==0 ) 
-				logger.info("Import Speed "+ rowNo*1000/(System.currentTimeMillis()-startTime));
+				logger.info("Import Speed "+ rowNo*1000/(System.currentTimeMillis()-startTime)+" rows per second.");
 		}
 	}
 
@@ -77,7 +77,6 @@ public class VNImportService {
 		importSheet(prototypeDatabaseFile, "Tender", new TenderRowImporter(releaseRepository,organizationRepository,classificationRepository, 2));
 		importSheet(prototypeDatabaseFile, "eBid_Award", new EBidAwardRowImporter(releaseRepository,organizationRepository, 2));
 		importSheet(prototypeDatabaseFile, "Offline_Award", new OfflineAwardRowImporter(releaseRepository,organizationRepository, 2));
-		
 	}
 
 }
