@@ -42,6 +42,8 @@ export default {
       awards: awards
     }));
 
+    load('/api/topTenLargestTenders').then(data => dispatcher.dispatch(constants.TOP_TENDERS_DATA_UPDATED, data));
+
     load('/api/plannedFundingByLocation/').then(data => dispatcher.dispatch(constants.LOCATION_UPDATED, data));
 
     Promise.all([
