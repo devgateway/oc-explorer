@@ -1,5 +1,6 @@
 import Component from "../pure-render-component";
 import OverviewChart from "./overview-chart";
+import AwardsTable from "./awards-table";
 
 export default class Overview extends Component{
   render(){
@@ -17,6 +18,7 @@ export default class Overview extends Component{
     return (
         <div className="col-sm-12 content">
           <OverviewChart width={width} data={filteredOverviewData}/>
+          <AwardsTable data={data.get('topAwards')}/>
         </div>
     )
   }
