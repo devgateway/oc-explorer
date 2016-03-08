@@ -1,4 +1,4 @@
-import Component from "../../pure-render-component";
+import Component from "../pure-render-component";
 const DATE_FORMAT = {
   year: 'numeric',
   month: 'short',
