@@ -1,10 +1,12 @@
 package org.devgateway.toolkit.persistence.mongo.reader;
 
-import java.text.DecimalFormat;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +18,6 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 
 	protected R repository;
 
-	protected DecimalFormat df;
 	protected int skipRows;
 	protected int cursorRowNo = 0;
 	protected int importedRows = 0;
@@ -24,12 +25,53 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 
 	public RowImporter(R repository, int skipRows) {
 		this.repository = repository;
-		df = new DecimalFormat();
-		df.setParseBigDecimal(true);
 		documents = new ArrayList<>();
 		this.skipRows = skipRows;
 	}
 
+	/**
+	 * Returns a double number, checking the {@link NumberFormatException} and
+	 * wrapping the error into a {@link RuntimeException} that can be thrown
+	 * later
+	 * 
+	 * @param string
+	 * @return
+	 */
+	public Double getDouble(String string) {
+		try {
+			return Double.parseDouble(string);
+		} catch (NumberFormatException e) {
+			throw new RuntimeException("Cell value " + string + " is not a valid number.");
+		}
+	}
+	
+	public BigDecimal getDecimal(String string) {
+		try {
+			return new BigDecimal(string);
+		} catch (NumberFormatException e) {
+			throw new RuntimeException("Cell value " + string + " is not a valid decimal.");
+		}
+	}
+	
+	
+	public Integer getInteger(String string) {
+		try {
+			return Integer.parseInt(string);
+		} catch (NumberFormatException e) {
+			throw new RuntimeException("Cell value " + string + " is not a valid integer.");
+		}
+	}
+	
+	
+	public Date getExcelDate(String string) {
+		try {
+			return DateUtil.getJavaCalendar(Double.parseDouble(string)).getTime();
+		} catch (NumberFormatException e) {
+			throw new RuntimeException("Cell value " + string + " is not a valid Excel date.");
+		}
+	}
+	
+	
 	public boolean importRows(List<String[]> rows) throws ParseException {
 		documents.clear();
 

@@ -40,7 +40,8 @@ public class BidPlansRowImporter extends RowImporter<Release, ReleaseRepository>
 		value.setCurrency("VND");
 		budget.setAmount(value);
 
-		value.setAmount(new BigDecimal2(row[5]));
+		//decimal2
+		value.setAmount(getDecimal(row[5]));
 		
 		Tender tender = release.getTender();
 		if (tender == null) {
@@ -55,7 +56,8 @@ public class BidPlansRowImporter extends RowImporter<Release, ReleaseRepository>
 		tender.getItems().add(item);
 
 
-		value.setAmount(new BigDecimal2(row[5]));
+		//decimal2
+		value.setAmount(getDecimal(row[5]));
 		item.setDescription(row[1]);
 		item.setBidPlanItemRefNum(row[2]);
 		item.setBidPlanItemStyle(row[3]);

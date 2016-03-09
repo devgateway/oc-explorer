@@ -1,11 +1,7 @@
 package org.devgateway.toolkit.persistence.mongo.reader;
 
-import java.math.BigDecimal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 
-import org.apache.poi.ss.usermodel.DateUtil;
 import org.devgateway.ocvn.persistence.mongo.ocds.Identifier;
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
 import org.devgateway.ocvn.persistence.mongo.ocds.Value;
@@ -16,8 +12,6 @@ import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationRepository;
 
 public class EBidAwardRowImporter extends RowImporter<Release, ReleaseRepository> {
-
-	SimpleDateFormat sdf = new SimpleDateFormat("dd.MMM.yy", new Locale("en"));
 
 	protected VNOrganizationRepository organizationRepository;
 
@@ -48,7 +42,7 @@ public class EBidAwardRowImporter extends RowImporter<Release, ReleaseRepository
 
 		Value value = new Value();
 		value.setCurrency("VND");
-		value.setAmount(new BigDecimal(row[1]));
+		value.setAmount(getDecimal(row[1]));
 		award.setValue(value);
 
 		VNOrganization supplier = organizationRepository.findById(row[2]);
@@ -65,7 +59,7 @@ public class EBidAwardRowImporter extends RowImporter<Release, ReleaseRepository
 
 		award.setContractTime(row[3]);
 
-		award.setBidOpenRank(row[4].isEmpty() ? null : Integer.parseInt(row[4]));
+		award.setBidOpenRank(row[4].isEmpty() ? null : getInteger(row[4]));
 
 		if (row.length > 5)
 			award.setStatus(row[5].equals("Y") ? "active" : "unsuccessful");
@@ -77,7 +71,7 @@ public class EBidAwardRowImporter extends RowImporter<Release, ReleaseRepository
 			award.setIneligibleRson(row[7]);
 
 		if (row.length > 8)
-			award.setDate(row[8].isEmpty() ? null : DateUtil.getJavaCalendar(Double.parseDouble(row[8])).getTime());
+			award.setDate(row[8].isEmpty() ? null : getExcelDate(row[8]));
 
 		return true;
 	}

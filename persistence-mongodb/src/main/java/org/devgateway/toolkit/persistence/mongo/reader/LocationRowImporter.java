@@ -24,7 +24,7 @@ public class LocationRowImporter extends RowImporter<Location, LocationRepositor
 
 		location.setName(row[0]);
 
-		GeoJsonPoint coordinates = new GeoJsonPoint(Double.parseDouble(row[2]), Double.parseDouble(row[1]));
+		GeoJsonPoint coordinates = new GeoJsonPoint(getDouble(row[2]), getDouble(row[1]));
 		location.setCoordinates(coordinates);
 		location.setId(row[3]);
 

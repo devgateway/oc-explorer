@@ -2,8 +2,6 @@ package org.devgateway.toolkit.persistence.mongo.reader;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.devgateway.ocvn.persistence.mongo.ocds.Identifier;
@@ -17,7 +15,6 @@ import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationReposit
 
 public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseRepository> {
 
-	SimpleDateFormat sdf = new SimpleDateFormat("dd.MMM.yy", new Locale("en"));
 	private VNOrganizationRepository organizationRepository;
 
 	public OfflineAwardRowImporter(ReleaseRepository releaseRepository, VNOrganizationRepository organizationRepository,
