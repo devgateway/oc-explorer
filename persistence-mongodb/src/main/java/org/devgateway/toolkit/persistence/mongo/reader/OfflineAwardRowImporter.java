@@ -1,9 +1,7 @@
 package org.devgateway.toolkit.persistence.mongo.reader;
 
-import java.math.BigDecimal;
 import java.text.ParseException;
 
-import org.apache.poi.ss.usermodel.DateUtil;
 import org.devgateway.ocvn.persistence.mongo.ocds.Identifier;
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
 import org.devgateway.ocvn.persistence.mongo.ocds.Value;
@@ -48,7 +46,7 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 		if (!row[2].isEmpty()) {
 			Value value = new Value();
 			value.setCurrency("VND");
-			value.setAmount(new BigDecimal(row[2]));
+			value.setAmount(getDecimal(row[2]));
 			award.setValue(value);
 		}
 
@@ -79,20 +77,20 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 			award.setIneligibleRson(row[7]);
 
 		if (row.length > 8)
-			award.setBidType(row[8].isEmpty() ? null : Integer.parseInt(row[8]));
+			award.setBidType(row[8].isEmpty() ? null : getInteger(row[8]));
 
 		if (row.length > 9)
-			award.setBidSuccMethod(row[9].isEmpty() ? null : Integer.parseInt(row[9]));
+			award.setBidSuccMethod(row[9].isEmpty() ? null : getInteger(row[9]));
 
 		if (row.length > 10 && row[10]!=null && !row[10].isEmpty()) {
 			Value value2 = new Value();
 			value2.setCurrency("VND");
-			value2.setAmount(new BigDecimal(row[10]));
+			value2.setAmount(getDecimal(row[10]));
 			award.setValue(value2);
 		}
 		
 		if (row.length > 11)
-			award.setDate(row[11].isEmpty() ? null : DateUtil.getJavaCalendar(Double.parseDouble(row[11])).getTime());
+			award.setDate(row[11].isEmpty() ? null :  getExcelDate(row[11]));
 
 		return true;
 	}

@@ -2,7 +2,6 @@ package org.devgateway.toolkit.persistence.mongo.reader;
 
 import java.text.ParseException;
 
-import org.devgateway.ocvn.persistence.mongo.ocds.BigDecimal2;
 import org.devgateway.ocvn.persistence.mongo.ocds.Budget;
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
 import org.devgateway.ocvn.persistence.mongo.ocds.Tender;

@@ -2,6 +2,7 @@ package org.devgateway.toolkit.persistence.mongo.reader;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +18,8 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 	private final Logger logger = LoggerFactory.getLogger(VNImportService.class);
 
 	protected R repository;
+	
+
 
 	protected int skipRows;
 	protected int cursorRowNo = 0;
@@ -45,6 +48,7 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 		}
 	}
 	
+	
 	public BigDecimal getDecimal(String string) {
 		try {
 			return new BigDecimal(string);
@@ -63,6 +67,15 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 	}
 	
 	
+	public Date getDateFromString(SimpleDateFormat sdf,String string) {
+		try {
+			return sdf.parse(string);
+		} catch (ParseException e) {
+			throw new RuntimeException(
+					"Cell value " + string + " is not a valid date. Use format " + sdf.getNumberFormat().toString());
+		}
+	}
+
 	public Date getExcelDate(String string) {
 		try {
 			return DateUtil.getJavaCalendar(Double.parseDouble(string)).getTime();
