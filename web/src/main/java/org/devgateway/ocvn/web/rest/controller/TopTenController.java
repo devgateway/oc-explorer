@@ -20,6 +20,9 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
+import org.devgateway.ocvn.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -50,7 +53,7 @@ public class TopTenController extends GenericOcvnController {
 	 */
 
 	@RequestMapping("/api/topTenLargestAwards")
-	public List<DBObject> topTenLargestAwards() {
+	public List<DBObject> topTenLargestAwards(@Valid YearFilterPagingRequest filter) {
 
 		BasicDBObject project = new BasicDBObject();
 		project.put(Fields.UNDERSCORE_ID, 0);
@@ -60,9 +63,14 @@ public class TopTenController extends GenericOcvnController {
 		project.put("awards.value", 1);
 		project.put("planning.budget", 1);
 
-		Aggregation agg = newAggregation(match(where("awards.value.amount").exists(true)), unwind("$awards"),
+		Aggregation agg = newAggregation(
+				match(where("awards.value.amount").exists(true).and("awards.status").is("active")
+						.andOperator(getDefaultFilterCriteria(filter))),
+				unwind("$awards"), 
+				match(getYearFilterCriteria("awards.date", filter)),				
 				new CustomOperation(new BasicDBObject("$project", project)),
 				sort(Direction.DESC, "awards.value.amount"), limit(10));
+
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();
@@ -79,7 +87,7 @@ public class TopTenController extends GenericOcvnController {
 	 * @return
 	 */
 	@RequestMapping("/api/topTenLargestTenders")
-	public List<DBObject> topTenLargestTenders() {
+	public List<DBObject> topTenLargestTenders(@Valid YearFilterPagingRequest filter) {
 
 		BasicDBObject project = new BasicDBObject();
 		project.put(Fields.UNDERSCORE_ID, 0);
@@ -88,9 +96,10 @@ public class TopTenController extends GenericOcvnController {
 		project.put("tender.tenderPeriod", 1);
 		project.put("tender.procuringEntity.name", 1);
 
-		Aggregation agg = newAggregation(match(where("tender.value.amount").exists(true)),
+		Aggregation agg = newAggregation(match(where("tender.value.amount").exists(true).andOperator(getDefaultFilterCriteria(filter))),
+				match(getYearFilterCriteria("tender.tenderPeriod.startDate", filter)),
 				new CustomOperation(new BasicDBObject("$project", project)),
-				sort(Direction.DESC, "tender.value.amount"), limit(10));
+				sort(Direction.DESC, "tender.value.amount"), limit(10));	
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();
