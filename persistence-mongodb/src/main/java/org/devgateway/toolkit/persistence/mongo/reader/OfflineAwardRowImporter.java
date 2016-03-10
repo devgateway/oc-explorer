@@ -32,9 +32,9 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 			release.setOcid("ocvn-bidno-"+row[0]);
 			VNPlanning planning = new VNPlanning();
 			release.setPlanning(planning);
-			planning.setBidNo(row[0]);
+			planning.setBidNo(row[0]);			
 		}
-		documents.add(release);
+
 
 		VNAward award = new VNAward();
 		award.setId(release.getOcid()+"-award-"+release.getAwards().size());
@@ -91,6 +91,12 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 		
 		if (row.length > 11)
 			award.setDate(row[11].isEmpty() ? null :  getExcelDate(row[11]));
+
+		
+		if(release.getId()==null) 
+			release=repository.save(release);
+		else 
+			documents.add(release);
 
 		return true;
 	}

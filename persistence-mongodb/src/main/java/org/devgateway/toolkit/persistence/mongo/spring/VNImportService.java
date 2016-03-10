@@ -51,8 +51,11 @@ public class VNImportService {
 	URL organizationFile = getClass().getResource("/UM_PUBINSTITU_SUPPLIERS_DQA.xlsx");
 	URL locationFile = getClass().getResource("/Location_Table_SO.xlsx");
 
-	
 	private void importSheet(URL fileUrl, String sheetName, RowImporter<?,?> importer) throws Exception {
+		importSheet(fileUrl, sheetName, importer,DBConstants.IMPORT_ROW_BATCH);
+	}
+	
+	private void importSheet(URL fileUrl, String sheetName, RowImporter<?,?> importer, int importRowBatch) throws Exception {
 		logger.info("Importing " + sheetName + " using " + importer.getClass().getSimpleName());
 
 		XExcelFileReader reader = new XExcelFileReader(fileUrl.getFile(), sheetName);
@@ -60,18 +63,18 @@ public class VNImportService {
 		List<String[]> rows = null;
 		long startTime=System.currentTimeMillis();
 		long rowNo=0;
-		while (!(rows = reader.readRows(DBConstants.IMPORT_ROW_BATCH)).isEmpty()) {
+		while (!(rows = reader.readRows(importRowBatch)).isEmpty()) {
 			importer.importRows(rows);
-			rowNo+=DBConstants.IMPORT_ROW_BATCH;
-			if(rowNo%5000 ==0 ) 
+			rowNo+=importRowBatch;
+			if(rowNo%10000 ==0 ) 
 				logger.info("Import Speed "+ rowNo*1000/(System.currentTimeMillis()-startTime)+" rows per second.");
 		}
 	}
 
 	public void importAllSheets() throws Exception {
-		importSheet(locationFile, "Sheet1", new LocationRowImporter(locationRepository, 1));
-		importSheet(organizationFile, "UM_PUB_INSTITU_MAST", new PublicInstitutionRowImporter(organizationRepository, 2));
-		importSheet(organizationFile, "UM_SUPPLIER_ENTER_MAST", new SupplierRowImporter(organizationRepository, 2));
+		importSheet(locationFile, "Sheet1", new LocationRowImporter(locationRepository, 1),1);
+		importSheet(organizationFile, "UM_PUB_INSTITU_MAST", new PublicInstitutionRowImporter(organizationRepository, 2),1);
+		importSheet(organizationFile, "UM_SUPPLIER_ENTER_MAST", new SupplierRowImporter(organizationRepository, 2),1);
 		importSheet(prototypeDatabaseFile, "ProcurementPlans", new ProcurementPlansRowImporter(releaseRepository,locationRepository, 2));
 		importSheet(prototypeDatabaseFile, "BidPlans", new BidPlansRowImporter(releaseRepository, 2));
 		importSheet(prototypeDatabaseFile, "Tender", new TenderRowImporter(releaseRepository,organizationRepository,classificationRepository, 2));

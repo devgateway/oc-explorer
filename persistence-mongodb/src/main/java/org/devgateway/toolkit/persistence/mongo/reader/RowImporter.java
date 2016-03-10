@@ -102,7 +102,7 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 		}
 
 		repository.save(documents);
-		//logger.info("Imported " + importedRows);
+		logger.debug("Finished importing " + importedRows+" rows.");
 		return true;
 	}
 

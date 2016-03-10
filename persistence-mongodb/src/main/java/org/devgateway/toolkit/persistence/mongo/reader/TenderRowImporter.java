@@ -42,9 +42,8 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 			release.getTag().add("tender");
 			VNPlanning planning = new VNPlanning();
 			release.setPlanning(planning);
-			planning.setBidNo(row[0]);
+			planning.setBidNo(row[0]);		
 		}
-		documents.add(release);
 
 		VNTender tender = (VNTender) release.getTender();
 		if (tender == null) {
@@ -195,6 +194,12 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 
 		}
 
+		
+		if(release.getId()==null) 
+			release=repository.save(release);
+		else 
+			documents.add(release);
+		
 		return true;
 	}
 }

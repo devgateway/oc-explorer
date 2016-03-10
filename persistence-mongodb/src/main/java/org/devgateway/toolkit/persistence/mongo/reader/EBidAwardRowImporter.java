@@ -32,9 +32,9 @@ public class EBidAwardRowImporter extends RowImporter<Release, ReleaseRepository
 			release.getTag().add("award");
 			VNPlanning planning = new VNPlanning();
 			release.setPlanning(planning);
-			planning.setBidNo(row[0]);
+			planning.setBidNo(row[0]);			
 		}
-		documents.add(release);
+		
 
 		VNAward award = new VNAward();
 		award.setId(release.getOcid()+"-award-"+release.getAwards().size());
@@ -73,6 +73,11 @@ public class EBidAwardRowImporter extends RowImporter<Release, ReleaseRepository
 		if (row.length > 8)
 			award.setDate(row[8].isEmpty() ? null : getExcelDate(row[8]));
 
+		if(release.getId()==null) 
+			release=repository.save(release);
+		else
+			documents.add(release);
+		
 		return true;
 	}
 }
