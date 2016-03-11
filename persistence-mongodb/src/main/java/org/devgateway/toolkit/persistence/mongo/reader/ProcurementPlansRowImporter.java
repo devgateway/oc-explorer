@@ -12,6 +12,7 @@ import org.devgateway.toolkit.persistence.mongo.dao.Location;
 import org.devgateway.toolkit.persistence.mongo.dao.VNPlanning;
 import org.devgateway.toolkit.persistence.mongo.repository.LocationRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 
 public class ProcurementPlansRowImporter extends RowImporter<Release, ReleaseRepository> {
 	private LocationRepository locationRepository;

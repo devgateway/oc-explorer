@@ -19,7 +19,7 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 
 	protected R repository;
 	
-
+	protected VNImportService importService;
 
 	protected int skipRows;
 	protected int cursorRowNo = 0;

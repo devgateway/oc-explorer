@@ -24,6 +24,9 @@ import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationReposit
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.ScriptOperations;
+import org.springframework.data.mongodb.core.script.ExecutableMongoScript;
 import org.springframework.stereotype.Service;
 
 /**
@@ -44,6 +47,11 @@ public class VNImportService {
 
 	@Autowired
 	private LocationRepository locationRepository;
+	
+	@Autowired
+	private MongoTemplate mongoTemplate;
+	
+	private StringBuffer msgBuffer;
 		
 	private final Logger logger = LoggerFactory.getLogger(VNImportService.class);
 
@@ -55,8 +63,28 @@ public class VNImportService {
 		importSheet(fileUrl, sheetName, importer,DBConstants.IMPORT_ROW_BATCH);
 	}
 	
+	/**
+	 * Delete all data without dropping indexes
+	 */
+	private void purgeDatabase() {
+		logMessage("Purging database...");
+		ScriptOperations scriptOps = mongoTemplate.scriptOps();
+		ExecutableMongoScript echoScript = new ExecutableMongoScript("db.release.remove({});db.location.remove({});db.organization.remove({});") ;
+		scriptOps.execute(echoScript); 
+		logMessage("Database purged.");
+	}
+ 	
+	/**
+	 * Log the message to logger but also to a stringbuffer to display online if needed
+	 * @param message
+	 */
+	private void logMessage(String message) {
+		logger.info(message);
+		msgBuffer.append(message);
+	}
+	
 	private void importSheet(URL fileUrl, String sheetName, RowImporter<?,?> importer, int importRowBatch) throws Exception {
-		logger.info("Importing " + sheetName + " using " + importer.getClass().getSimpleName());
+		logMessage("Importing " + sheetName + " using " + importer.getClass().getSimpleName());
 
 		XExcelFileReader reader = new XExcelFileReader(fileUrl.getFile(), sheetName);
 
@@ -67,11 +95,13 @@ public class VNImportService {
 			importer.importRows(rows);
 			rowNo+=importRowBatch;
 			if(rowNo%10000 ==0 ) 
-				logger.info("Import Speed "+ rowNo*1000/(System.currentTimeMillis()-startTime)+" rows per second.");
+				logMessage("Import Speed "+ rowNo*1000/(System.currentTimeMillis()-startTime)+" rows per second.");
 		}
 	}
 
 	public void importAllSheets() throws Exception {
+		msgBuffer=new StringBuffer();
+		purgeDatabase();		
 		importSheet(locationFile, "Sheet1", new LocationRowImporter(locationRepository, 1),1);
 		importSheet(organizationFile, "UM_PUB_INSTITU_MAST", new PublicInstitutionRowImporter(organizationRepository, 2),1);
 		importSheet(organizationFile, "UM_SUPPLIER_ENTER_MAST", new SupplierRowImporter(organizationRepository, 2),1);
