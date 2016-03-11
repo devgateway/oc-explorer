@@ -23,7 +23,7 @@ export default class TendersTable extends Component{
             </thead>
             <tbody>
               {this.props.data.map(entry => (
-                  <tr>
+                  <tr key={entry.planning.bidNo}>
                     <td>{entry.planning.bidNo}</td>
                     <td>{entry.awards.value.amount} {entry.awards.value.currency}</td>
                     <td>
