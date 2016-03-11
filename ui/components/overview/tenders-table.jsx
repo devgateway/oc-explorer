@@ -23,7 +23,7 @@ export default class TendersTable extends Component{
             </thead>
             <tbody>
               {this.props.data.map(entry => (
-                  <tr>
+                  <tr key={entry.planning.bidNo}>
                     <td>{entry.planning.bidNo}</td>
                     <td>{new Date(entry.tender.tenderPeriod.startDate).toLocaleDateString(undefined, DATE_FORMAT)}</td>
                     <td>{new Date(entry.tender.tenderPeriod.endDate).toLocaleDateString(undefined, DATE_FORMAT)}</td>
