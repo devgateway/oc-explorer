@@ -1,4 +1,5 @@
-import Component from "../pure-render-component";
+import Component from "../../pure-render-component";
+import "./style.less";
 const DATE_FORMAT = {
   year: 'numeric',
   month: 'short',
@@ -27,7 +28,7 @@ export default class TendersTable extends Component{
                     <td>{entry.planning.bidNo}</td>
                     <td>{new Date(entry.tender.tenderPeriod.startDate).toLocaleDateString(undefined, DATE_FORMAT)}</td>
                     <td>{new Date(entry.tender.tenderPeriod.endDate).toLocaleDateString(undefined, DATE_FORMAT)}</td>
-                    <td>{entry.tender.procuringEntity.name}</td>
+                    <td className="procuring-entity-title">{entry.tender.procuringEntity.name}</td>
                     <td>{entry.tender.value.amount} {entry.tender.value.currency}</td>
                   </tr>
               ))}

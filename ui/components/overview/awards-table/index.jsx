@@ -1,5 +1,6 @@
-import Component from "../pure-render-component";
-import {pluck} from "../../tools";
+import Component from "../../pure-render-component";
+import {pluck} from "../../../tools";
+import style from "./style.less";
 const DATE_FORMAT = {
   year: 'numeric',
   month: 'short',
@@ -12,7 +13,7 @@ export default class TendersTable extends Component{
     return (
         <section>
           <h4 className="page-header">Top 10 largest awards</h4>
-          <table className="table tenders-table">
+          <table className="table awards-table">
             <thead>
               <tr>
                 <th>Number</th>
@@ -26,7 +27,7 @@ export default class TendersTable extends Component{
                   <tr key={entry.planning.bidNo}>
                     <td>{entry.planning.bidNo}</td>
                     <td>{entry.awards.value.amount} {entry.awards.value.currency}</td>
-                    <td>
+                    <td className="supplier-name">
                       {entry.awards.suppliers.map(pluck('name')).join(', ')}
                     </td>
                     <td>{new Date(entry.awards.date).toLocaleDateString(undefined, DATE_FORMAT)}</td>
