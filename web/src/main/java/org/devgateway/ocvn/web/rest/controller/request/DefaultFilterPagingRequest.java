@@ -23,6 +23,12 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 	
 	List<String> bidSelectionMethod;
 	
+	/**
+	 * This parameter will invert (negate) all existing filtering parameters. So
+	 * A IN B turns into A NOT IN B. 
+	 * A IN B AND AN IN C turns into A NOT IN B AND A NOT IN C
+	 */
+	Boolean invert=false;
 	
 
 	public DefaultFilterPagingRequest() {
@@ -52,6 +58,16 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
 	public void setBidSelectionMethod(List<String> bidSelectionMethod) {
 		this.bidSelectionMethod = bidSelectionMethod;
+	}
+
+
+	public Boolean getInvert() {
+		return invert;
+	}
+
+
+	public void setInvert(Boolean invert) {
+		this.invert = invert;
 	}
 
 }
