@@ -19,8 +19,12 @@ export default class Overview extends Component{
     return (
         <div className="col-sm-12 content">
           <OverviewChart width={width} data={filteredOverviewData}/>
-          <AwardsTable data={data.get('topAwards')}/>
-          <TendersTable data={data.get('topTenders')}/>
+          <div className="col-sm-6">
+            <TendersTable data={data.get('topTenders')}/>
+          </div>
+          <div className="col-sm-6">
+            <AwardsTable data={data.get('topAwards')}/>
+          </div>
         </div>
     )
   }
