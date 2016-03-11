@@ -1,5 +1,6 @@
 import Component from "../pure-render-component";
 import OverviewChart from "./overview-chart";
+import TendersTable from "./tenders-table";
 import AwardsTable from "./awards-table";
 
 export default class Overview extends Component{
@@ -7,7 +8,7 @@ export default class Overview extends Component{
     var globalState = this.props.state.get('globalState');
     var data = globalState.get('data');
     var width = globalState.get('contentWidth');
-    var years = globalState.get('selectedYears');
+    var years = globalState.getIn(['filters', 'years']);
     var overviewData = data.get('overview', null);
     if(overviewData){
       var filteredOverviewData = {};
@@ -19,6 +20,7 @@ export default class Overview extends Component{
         <div className="col-sm-12 content">
           <OverviewChart width={width} data={filteredOverviewData}/>
           <AwardsTable data={data.get('topAwards')}/>
+          <TendersTable data={data.get('topTenders')}/>
         </div>
     )
   }

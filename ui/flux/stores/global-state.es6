@@ -1,7 +1,7 @@
 import {Store, toImmutable} from "nuclear-js";
 import constants from "../actions/constants";
 import keyMirror from "keymirror";
-import {years, identity} from "../../tools";
+import {identity} from "../../tools";
 import actions from "../actions";
 
 var store = Store({
@@ -22,7 +22,11 @@ var store = Store({
     var updateData = (path, pipe = identity) => (state, data) => state.setIn(['data', path], pipe(data));
 
     this.on(constants.TAB_CHANGED, (state, tab) => state.set('tab', tab));
-    this.on(constants.YEAR_TOGGLED, (state, {year, selected}) => state.setIn(['selectedYears', year], selected));
+    this.on(constants.YEAR_TOGGLED, (state, {year, selected}) => {
+      var newState = state.setIn(['filters', 'years', year], selected);
+      actions.loadServerSideYearFilteredData(newState.get('filters').toJS());
+      return newState;
+    });
     this.on(constants.CONTENT_WIDTH_CHANGED, (state, newWidth) => state.set('contentWidth', newWidth));
     this.on(constants.COST_EFFECTIVENESS_DATA_UPDATED, updateData('costEffectiveness'));
     this.on(constants.BID_TYPE_DATA_UPDATED, updateData('bidType', toImmutable));
@@ -30,6 +34,7 @@ var store = Store({
     this.on(constants.BID_PERIOD_DATA_UPDATED, updateData('bidPeriod'));
     this.on(constants.OVERVIEW_DATA_UPDATED, updateData('overview'));
     this.on(constants.CANCELLED_DATA_UPDATED, updateData('cancelled'));
+    this.on(constants.TOP_TENDERS_DATA_UPDATED, updateData('topTenders'));
     this.on(constants.TOP_AWARDS_DATA_UPDATED, updateData('topAwards'));
     this.on(constants.FILTER_BOX_TOGGLED, (state, open) => state.set('filtersBoxOpen', open));
     this.on(constants.FILTERS_DATA_UPDATED, (state, data) => state.set('filters', toImmutable(data)));

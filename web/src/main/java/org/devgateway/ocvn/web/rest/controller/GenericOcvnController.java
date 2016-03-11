@@ -19,6 +19,7 @@ import javax.annotation.PostConstruct;
 
 import org.devgateway.ocvn.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocvn.web.rest.controller.request.GroupingFilterPagingRequest;
+import org.devgateway.ocvn.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,6 +110,23 @@ public class GenericOcvnController {
 		filterProjectMap.put("tender.procuringEntity", 1);
 		filterProjectMap.put("tender.items.classification", 1);
 		filterProjectMap.put("tender.procurementMethodDetails", 1);
+	}
+	
+	
+	protected Criteria getYearFilterCriteria(String dateProperty,YearFilterPagingRequest filter) {
+		Criteria[] yearCriteria = null;
+		Criteria criteria = new Criteria();
+
+		if (filter.getYear() == null) {
+			yearCriteria = new Criteria[1];
+			yearCriteria[0] = new Criteria();
+		} else {
+			yearCriteria = new Criteria[filter.getYear().size()];
+			for (int i = 0; i < filter.getYear().size(); i++)
+				yearCriteria[i] = where(dateProperty).gte(getStartDate(filter.getYear().get(i)))
+						.lte(getEndDate(filter.getYear().get(i)));
+		}
+		return criteria.orOperator(yearCriteria);
 	}
 	
 	/**

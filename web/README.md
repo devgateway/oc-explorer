@@ -118,8 +118,19 @@ Example: `/api/ocds/release/planningBidNo/20100300191`
 
 `/api/averageAwardPeriod?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]`
 
+## Visualization 7 Largest Tenders/Awards
 
-#### Special use of Endpoint 2 - Cost Effectiveness Tender Amount - to calculate the largest values in the given category. You can use the same endpoint, but with an additional parameter (see last one)
+### Endpoint 1 - Top 10 largest tenders
+
+`/api/topTenLargestTenders?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]&year=[year1]...`
+
+### Endpoint 2 - Top 10 largest awards
+
+`/api/topTenLargestAwards?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]&year=[year1]...`
+
+## Special Use of Cost Effectiveness Tender Amount Endpoint to derive the ordering of comparison charts
+
+It is used to calculate the largest values in the given category. You can use the same endpoint, but with an additional parameter (see last one)
 
 `/api/costEffectivenessTenderAmount?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]&groupByCategory=[category]`
 

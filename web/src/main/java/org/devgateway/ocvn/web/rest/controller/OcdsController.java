@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.devgateway.ocvn.web.rest.controller;
 
-import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
 import java.util.ArrayList;
@@ -22,13 +21,12 @@ import javax.validation.Valid;
 import org.devgateway.ocvn.persistence.mongo.ocds.Publisher;
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
 import org.devgateway.ocvn.persistence.mongo.ocds.ReleasePackage;
-import org.devgateway.ocvn.web.rest.controller.request.YearFilterPangingRequest;
+import org.devgateway.ocvn.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.dao.VNPlanning;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -120,25 +118,13 @@ public class OcdsController extends GenericOcvnController {
 	 * @return the release data
 	 */
 	@RequestMapping("/api/ocds/release/all")
-	public List<Release> ocdsReleases(@Valid YearFilterPangingRequest releaseRequest) {
-
-		Criteria[] yearCriteria = null;
-		Criteria criteria = new Criteria();
-
-		if (releaseRequest.getYear() == null) {
-			yearCriteria = new Criteria[1];
-			yearCriteria[0] = new Criteria();
-		} else {
-			yearCriteria = new Criteria[releaseRequest.getYear().size()];
-			for (int i = 0; i < releaseRequest.getYear().size(); i++)
-				yearCriteria[i] = where("planning.bidPlanProjectDateApprove").gte(getStartDate(releaseRequest.getYear().get(i)))
-						.lte(getEndDate(releaseRequest.getYear().get(i)));
-		}
+	public List<Release> ocdsReleases(@Valid YearFilterPagingRequest releaseRequest) {
 
 		PageRequest pageRequest = new PageRequest(releaseRequest.getPageNumber(), releaseRequest.getPageSize(), Direction.ASC, "id");
 
-		List<Release> find = mongoTemplate.find(query(criteria.orOperator(yearCriteria).andOperator(getDefaultFilterCriteria(releaseRequest))).with(pageRequest),
-				Release.class);
+		List<Release> find = mongoTemplate
+				.find(query(getYearFilterCriteria("planning.bidPlanProjectDateApprove", releaseRequest)
+						.andOperator(getDefaultFilterCriteria(releaseRequest))).with(pageRequest), Release.class);
 
 		return find;
 
@@ -147,7 +133,7 @@ public class OcdsController extends GenericOcvnController {
 	
 
 	@RequestMapping("/api/ocds/package/all")
-	public List<ReleasePackage> ocdsPackages(@Valid YearFilterPangingRequest releaseRequest) {
+	public List<ReleasePackage> ocdsPackages(@Valid YearFilterPagingRequest releaseRequest) {
 		List<Release> ocdsReleases = ocdsReleases(releaseRequest);
 		List<ReleasePackage> releasePackages=new ArrayList<>(ocdsReleases.size());
 		for(Release release: ocdsReleases) 
