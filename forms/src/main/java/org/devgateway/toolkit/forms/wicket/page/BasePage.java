@@ -38,6 +38,7 @@ import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.security.SecurityUtil;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListGroupPage;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListTestFormPage;
+import org.devgateway.toolkit.forms.wicket.page.lists.ListVietnamImportSourceFiles;
 import org.devgateway.toolkit.forms.wicket.page.user.EditUserPage;
 import org.devgateway.toolkit.forms.wicket.page.user.LogoutPage;
 import org.devgateway.toolkit.forms.wicket.styles.MainCss;
@@ -181,6 +182,11 @@ public abstract class BasePage extends GenericWebPage<Void> {
 				list.add(new MenuBookmarkablePageLink<ListTestFormPage>(ListTestFormPage.class, null,
 						new StringResourceModel("navbar.testcomponents", this, null))
 								.setIconType(FontAwesomeIconType.android));
+
+				list.add(new MenuBookmarkablePageLink<ListVietnamImportSourceFiles>(ListVietnamImportSourceFiles.class, null,
+						new StringResourceModel("navbar.importfiles", this, null))
+								.setIconType(FontAwesomeIconType.upload));
+				
 				
 				list.add(new MenuBookmarkablePageLink<SpringEndpointsPage>(SpringEndpointsPage.class, null,
 						new StringResourceModel("navbar.springendpoints", this, null))

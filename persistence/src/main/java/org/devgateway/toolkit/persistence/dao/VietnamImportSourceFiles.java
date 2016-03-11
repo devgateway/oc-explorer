@@ -27,6 +27,11 @@ public class VietnamImportSourceFiles extends AbstractAuditableEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private String name;
+	
+	private String description;
+	
 
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
@@ -79,7 +84,27 @@ public class VietnamImportSourceFiles extends AbstractAuditableEntity {
 	public void setLocationsFile(Set<FileMetadata> locationFile) {
 		this.locationsFile = locationFile;
 	}
-	
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	public String getDescription() {
+		return description;
+	}
+
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	
 
 }

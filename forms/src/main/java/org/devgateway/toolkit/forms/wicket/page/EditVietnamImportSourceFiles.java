@@ -19,7 +19,10 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.components.form.FileInputBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.TextAreaFieldBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
+import org.devgateway.toolkit.forms.wicket.page.lists.ListVietnamImportSourceFiles;
 import org.devgateway.toolkit.persistence.dao.VietnamImportSourceFiles;
 import org.devgateway.toolkit.persistence.repository.VietnamImportSourceFilesRepository;
 import org.wicketstuff.annotation.mount.MountPath;
@@ -30,7 +33,7 @@ import org.wicketstuff.annotation.mount.MountPath;
  */
 
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_EDITOR)
-@MountPath("/importSourceFiles")
+@MountPath("/editImportSourceFiles")
 public class EditVietnamImportSourceFiles extends AbstractEditPage<VietnamImportSourceFiles> {
 
 	private static final long serialVersionUID = 1L;
@@ -45,7 +48,8 @@ public class EditVietnamImportSourceFiles extends AbstractEditPage<VietnamImport
 		super(parameters);
 
 		this.jpaRepository = vietnamImportSourceFilesRepository;
-		this.listPageClass=Homepage.class;
+		this.listPageClass=ListVietnamImportSourceFiles.class;
+
 	}
 
 	@Override
@@ -56,19 +60,30 @@ public class EditVietnamImportSourceFiles extends AbstractEditPage<VietnamImport
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
+		
+
+		TextFieldBootstrapFormComponent<String> name = new TextFieldBootstrapFormComponent<>("name");
+		name.required();
+		editForm.add(name);
+
+		TextAreaFieldBootstrapFormComponent<String> description = new TextAreaFieldBootstrapFormComponent<>("description");		
+		editForm.add(description);		
 
 		FileInputBootstrapFormComponent prototypeDatabaseFile = new FileInputBootstrapFormComponent(
 				"prototypeDatabaseFile");
 		prototypeDatabaseFile.maxFiles(1);
+		prototypeDatabaseFile.required();
 		editForm.add(prototypeDatabaseFile);
 
 		FileInputBootstrapFormComponent publicInstitutionsSuppliersFile = new FileInputBootstrapFormComponent(
 				"publicInstitutionsSuppliersFile");
 		publicInstitutionsSuppliersFile.maxFiles(1);
+		publicInstitutionsSuppliersFile.required();
 		editForm.add(publicInstitutionsSuppliersFile);
 
 		FileInputBootstrapFormComponent locationsFile = new FileInputBootstrapFormComponent("locationsFile");
 		locationsFile.maxFiles(1);
+		locationsFile.required();
 		editForm.add(locationsFile);
 
 	}
