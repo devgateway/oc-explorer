@@ -25,8 +25,11 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 	
 	/**
 	 * This parameter will invert (negate) all existing filtering parameters. So
-	 * A IN B turns into A NOT IN B. 
-	 * A IN B AND AN IN C turns into A NOT IN B AND A NOT IN C
+	 * A IN B turns into A NOT IN B. A IN B AND AN IN C turns into A NOT IN B
+	 * AND A NOT IN C. So this is NOT exactly a logical *not*, the correct way
+	 * would be !(A && B) = !A || !B. Which is not what we do here, but we
+	 * actually dont use multiple parameters anywhere, so it should not matter
+	 * now
 	 */
 	Boolean invert=false;
 	
