@@ -35,6 +35,7 @@ export default {
   loadServerSideYearFilteredData(filters = null){
     var load = url => fetchJson(addFilters(filters, url));
     load('/api/topTenLargestTenders').then(data => dispatcher.dispatch(constants.TOP_TENDERS_DATA_UPDATED, data));
+    load('/api/topTenLargestAwards').then(data => dispatcher.dispatch(constants.TOP_AWARDS_DATA_UPDATED, data));
   },
 
   loadData(filters = null){
