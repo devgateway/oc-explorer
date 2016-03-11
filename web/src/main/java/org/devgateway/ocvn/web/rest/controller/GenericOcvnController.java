@@ -80,28 +80,24 @@ public class GenericOcvnController {
 	 * @return the {@link Criteria} for this filter
 	 */
 	protected Criteria getBidTypeIdFilterCriteria(DefaultFilterPagingRequest filter) {
-		Criteria bidTypeCriteria = null;
-		if (filter.getBidTypeId() == null)
-			bidTypeCriteria = new Criteria();
-		else
-			bidTypeCriteria = where("tender.items.classification._id").in(filter.getBidTypeId().toArray());
-
-		return bidTypeCriteria;
+		return createFilterCriteria("tender.items.classification._id", filter.getBidTypeId(), filter);
 	}
 	
+	private Criteria createFilterCriteria(String filterName, List<String> filterValues,
+			DefaultFilterPagingRequest filter) {
+		if (filterValues == null)
+			return new Criteria();
+		return filter.getInvert() ? where(filterName).not().in(filterValues.toArray())
+				: where(filterName).in(filterValues.toArray());
+	}
+
 	/**
 	 * Appends the procuring entity id for this filter, this will fitler based on tender.procuringEntity._id
 	 * @param filter
 	 * @return the {@link Criteria} for this filter
 	 */
 	protected Criteria getProcuringEntityIdCriteria(DefaultFilterPagingRequest filter) {
-		Criteria criteria = null;
-		if (filter.getProcuringEntityId() == null)
-			criteria = new Criteria();
-		else
-			criteria = where("tender.procuringEntity._id").in(filter.getProcuringEntityId().toArray());
-
-		return criteria;
+	 		return createFilterCriteria("tender.procuringEntity._id", filter.getProcuringEntityId(), filter);
 	}
 	
 	@PostConstruct
@@ -126,7 +122,8 @@ public class GenericOcvnController {
 				yearCriteria[i] = where(dateProperty).gte(getStartDate(filter.getYear().get(i)))
 						.lte(getEndDate(filter.getYear().get(i)));
 		}
-		return criteria.orOperator(yearCriteria);
+		
+		return filter.getInvert() ? criteria.norOperator(yearCriteria) : criteria.orOperator(yearCriteria);
 	}
 	
 	/**
@@ -136,13 +133,7 @@ public class GenericOcvnController {
 	 * @return the {@link Criteria} for this filter
 	 */
 	protected Criteria getBidSelectionMethod(DefaultFilterPagingRequest filter) {
-		Criteria criteria = null;
-		if (filter.getBidSelectionMethod() == null)
-			criteria = new Criteria();
-		else
-			criteria = where("tender.procurementMethodDetails").in(filter.getBidSelectionMethod().toArray());
-
-		return criteria;
+		return createFilterCriteria("tender.procurementMethodDetails", filter.getBidSelectionMethod(), filter);
 	}
 	
 	protected Criteria getDefaultFilterCriteria(DefaultFilterPagingRequest filter) {

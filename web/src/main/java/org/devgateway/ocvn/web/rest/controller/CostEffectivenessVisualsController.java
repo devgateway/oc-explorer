@@ -75,8 +75,7 @@ public class CostEffectivenessVisualsController extends GenericOcvnController {
 		DBObject project = new BasicDBObject();
 		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.endDate"));
 		project.put("tender.value.amount", 1);		
-		project.putAll(filterProjectMap);
-		
+		project.putAll(filterProjectMap);		
 		
 		Aggregation agg = newAggregation(
 				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),				
@@ -87,7 +86,6 @@ public class CostEffectivenessVisualsController extends GenericOcvnController {
 				skip(filter.getSkip()),
 				limit(filter.getPageSize())
 				);
-		
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();
