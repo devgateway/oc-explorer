@@ -7,7 +7,7 @@ export default class Overview extends Component{
     var globalState = this.props.state.get('globalState');
     var data = globalState.get('data');
     var width = globalState.get('contentWidth');
-    var years = globalState.get('selectedYears');
+    var years = globalState.getIn(['filters', 'years']);
     var overviewData = data.get('overview', null);
     if(overviewData){
       var filteredOverviewData = {};

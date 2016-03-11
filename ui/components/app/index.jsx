@@ -50,7 +50,7 @@ export default class App extends React.Component{
           </div>
         </aside>
         <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 years-bar" role="navigation">
-          {globalState.get('selectedYears').map((selected, year) => (
+          {globalState.hasIn(['filters', 'years']) && globalState.getIn(['filters', 'years']).map((selected, year) => (
             <a
               key={year}
               href="javascript:void(0);"
@@ -69,7 +69,7 @@ export default class App extends React.Component{
                 case tabs.PLANNING: return (
                     <Planning
                         width={globalState.get('contentWidth')}
-                        years={globalState.get('selectedYears')}
+                        years={globalState.getIn(['filters', 'years'])}
                         locations={globalState.getIn(['data', 'locations'])}
                     />
                 );

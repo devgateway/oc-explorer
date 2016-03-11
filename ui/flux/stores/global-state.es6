@@ -1,7 +1,7 @@
 import {Store, toImmutable} from "nuclear-js";
 import constants from "../actions/constants";
 import keyMirror from "keymirror";
-import {years, identity} from "../../tools";
+import {identity} from "../../tools";
 import actions from "../actions";
 
 var store = Store({
@@ -9,7 +9,6 @@ var store = Store({
     return toImmutable({
       filtersBoxOpen: false,
       tab: store.tabs.OVERVIEW,
-      selectedYears: years().reduce((map, year) => map.set(year, true), toImmutable({})),
       contentWidth: 0,
       data: {},
       procuringEntityQuery: "",
@@ -22,7 +21,11 @@ var store = Store({
     var updateData = (path, pipe = identity) => (state, data) => state.setIn(['data', path], pipe(data));
 
     this.on(constants.TAB_CHANGED, (state, tab) => state.set('tab', tab));
-    this.on(constants.YEAR_TOGGLED, (state, {year, selected}) => state.setIn(['selectedYears', year], selected));
+    this.on(constants.YEAR_TOGGLED, (state, {year, selected}) => {
+      var newState = state.setIn(['filters', 'years', year], selected);
+      actions.loadServerSideYearFilteredData(newState.get('filters').toJS());
+      return newState;
+    });
     this.on(constants.CONTENT_WIDTH_CHANGED, (state, newWidth) => state.set('contentWidth', newWidth));
     this.on(constants.COST_EFFECTIVENESS_DATA_UPDATED, updateData('costEffectiveness'));
     this.on(constants.BID_TYPE_DATA_UPDATED, updateData('bidType', toImmutable));
