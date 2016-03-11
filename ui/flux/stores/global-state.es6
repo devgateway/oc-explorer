@@ -9,7 +9,6 @@ var store = Store({
     return toImmutable({
       filtersBoxOpen: false,
       tab: store.tabs.OVERVIEW,
-      selectedYears: years().reduce((map, year) => map.set(year, true), toImmutable({})),
       contentWidth: 0,
       data: {},
       procuringEntityQuery: "",
