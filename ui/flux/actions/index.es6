@@ -1,7 +1,8 @@
 import dispatcher from "../dispatcher";
 import constants from "./constants";
-import {fetchJson, identity} from "../../tools";
+import {fetchJson, years, identity} from "../../tools";
 import URI from "urijs";
+import {toImmutable} from "nuclear-js";
 
 var options2arr = options => Object.keys(options)
     .filter(key => options[key].selected)
@@ -11,7 +12,8 @@ var addFilters = (filters, url) => null === filters ? url :
     new URI(url).addSearch({
       bidTypeId: options2arr(filters.bidTypes.options),
       bidSelectionMethod: options2arr(filters.bidSelectionMethods.options),
-      procuringEntityId: options2arr(filters.procuringEntities.options)
+      procuringEntityId: options2arr(filters.procuringEntities.options),
+      year: Object.keys(filters.years).filter(year => filters.years[year])
     }).toString();
 
 export default {
@@ -30,8 +32,14 @@ export default {
     dispatcher.dispatch(constants.CONTENT_WIDTH_CHANGED, newWidth);
   },
 
+  loadServerSideYearFilteredData(filters = null){
+    var load = url => fetchJson(addFilters(filters, url));
+    load('/api/topTenLargestTenders').then(data => dispatcher.dispatch(constants.TOP_TENDERS_DATA_UPDATED, data));
+  },
+
   loadData(filters = null){
     var load = url => fetchJson(addFilters(filters, url));
+    this.loadServerSideYearFilteredData(filters);
     Promise.all([
       load('/api/countBidPlansByYear'),
       load('/api/countTendersByYear'),
@@ -93,6 +101,7 @@ export default {
       fetchJson('/api/ocds/bidType/all'),
       fetchJson('/api/ocds/bidSelectionMethod/all')
     ]).then(([bidTypes, bidSelectionMethods]) => dispatcher.dispatch(constants.FILTERS_DATA_UPDATED, {
+      years: years().reduce((map, year) => map.set(year, true), toImmutable({})),
       bidTypes: {
         open: true,
         options: bidTypes.reduce((accum, bidType) => {
