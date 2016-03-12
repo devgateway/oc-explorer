@@ -116,6 +116,11 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
         addPendingFilesComponent();
         addFileUploadFeedbackComponent();
         addBootstrapFileInputComponent();
+        
+        bootstrapFileInput.withShowUpload(true)
+        .withShowRemove(false)
+        .withShowPreview(true)
+        .withShowCaption(true);
     }
 
     public boolean isVisibleAlreadyUploadedFiles() {
@@ -416,10 +421,7 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
             }
         };
 
-        bootstrapFileInput.withShowUpload(true)
-                .withShowRemove(false)
-                .withShowPreview(true)
-                .withShowCaption(true);
+
         add(bootstrapFileInput);
 
         // there are situation when we want to display the upload file component only to admins
