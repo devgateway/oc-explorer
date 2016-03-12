@@ -27,7 +27,7 @@
 		<joda.time.version>2.7</joda.time.version>
 		<jadira.usertype.version>3.2.0.GA</jadira.usertype.version>
 		<ehcache.version>2.6.11</ehcache.version>	
-		<dozer.hibernate.model.version>0.3.5-06032016</dozer.hibernate.model.version>	
+		<dozer.hibernate.model.version>0.3.5-06032016</dozer.hibernate.model.version>			
 	</properties>
 
 <parent>
@@ -53,7 +53,24 @@
 	    <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-rest</artifactId>
-        </dependency>
+            <exclusions>
+            	<exclusion>
+            		<artifactId>spring-boot-starter-tomcat</artifactId>
+            		<groupId>org.springframework.boot</groupId>
+            	</exclusion>
+            </exclusions>
+	    </dependency>
+
+	<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jetty</artifactId>
+	</dependency>
+
+	  <dependency>
+	        <groupId>com.zaxxer</groupId>
+	        <artifactId>HikariCP</artifactId>	        
+	        <scope>compile</scope>
+	    </dependency>
 
 
 		<!--
@@ -72,6 +89,10 @@
 				<exclusion>
 					<artifactId>hibernate-entitymanager</artifactId>
 					<groupId>org.hibernate</groupId>				
+				</exclusion>
+				<exclusion>
+					<artifactId>tomcat-jdbc</artifactId>
+					<groupId>org.apache.tomcat</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>
