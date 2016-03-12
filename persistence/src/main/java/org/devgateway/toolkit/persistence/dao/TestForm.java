@@ -48,6 +48,9 @@ public class TestForm extends AbstractAuditableEntity implements Serializable {
 
 	@Column(length = DBConstants.MAX_DEFAULT_TEXT_LENGTH)
 	private String textArea;
+	
+	@Column(length = DBConstants.MAX_DEFAULT_TEXT_LENGTH)
+	private String summernote;
 
 	private Boolean checkbox;
 	
@@ -149,6 +152,14 @@ public class TestForm extends AbstractAuditableEntity implements Serializable {
 
 	public void setDateTime(Date dateTime) {
 		this.dateTime = dateTime;
+	}
+
+	public String getSummernote() {
+		return summernote;
+	}
+
+	public void setSummernote(String summernote) {
+		this.summernote = summernote;
 	}
 
 
