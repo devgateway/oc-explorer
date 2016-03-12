@@ -35,6 +35,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
@@ -115,6 +116,11 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
         addPendingFilesComponent();
         addFileUploadFeedbackComponent();
         addBootstrapFileInputComponent();
+        
+        bootstrapFileInput.withShowUpload(true)
+        .withShowRemove(false)
+        .withShowPreview(true)
+        .withShowCaption(true);
     }
 
     public boolean isVisibleAlreadyUploadedFiles() {
@@ -383,7 +389,7 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
                                     FileInputBootstrapFormComponentWrapper.this, null).getString());
                         } else {
                             FileInputBootstrapFormComponentWrapper.this.fatal(new StringResourceModel("tooManyFiles",
-                                    FileInputBootstrapFormComponentWrapper.this, null, maxFiles).getString());
+                                    FileInputBootstrapFormComponentWrapper.this,Model.of(maxFiles)).getString());
                         }
                         FileInputBootstrapFormComponentWrapper.this.invalid();
                     } else {
@@ -415,10 +421,7 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
             }
         };
 
-        bootstrapFileInput.withShowUpload(true)
-                .withShowRemove(false)
-                .withShowPreview(true)
-                .withShowCaption(true);
+
         add(bootstrapFileInput);
 
         // there are situation when we want to display the upload file component only to admins
@@ -438,7 +441,7 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
     }
 
     @Override
-    protected void convertInput() {
+	public void convertInput() {
         final Collection<FileMetadata> modelObject = filesModel;
 
         setConvertedInput((T) modelObject);

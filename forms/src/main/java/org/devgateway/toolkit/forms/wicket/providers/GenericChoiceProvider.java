@@ -11,17 +11,15 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.providers;
 
-import com.vaynberg.wicket.select2.ChoiceProvider;
-import com.vaynberg.wicket.select2.Response;
-import org.apache.log4j.Logger;
-import org.json.JSONException;
-import org.json.JSONWriter;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.wicketstuff.select2.ChoiceProvider;
+import org.wicketstuff.select2.Response;
 
 /**
  * @author idobre
@@ -29,8 +27,10 @@ import java.util.Map;
  *
  * This is a ChoiceProvider for "non-persistable" list of elements
  */
-public class GenericChoiceProvider<T> extends ChoiceProvider<T> {
-    private static final Logger logger = Logger.getLogger(GenericChoiceProvider.class);
+public abstract class GenericChoiceProvider<T> extends ChoiceProvider<T> {
+	private static final long serialVersionUID = 1L;
+
+	private static final Logger logger = Logger.getLogger(GenericChoiceProvider.class);
 
     /**
      * all elements are identified by and id which in this case is the String representation of the T object (see @toJson function)
@@ -54,19 +54,20 @@ public class GenericChoiceProvider<T> extends ChoiceProvider<T> {
         if (bagOfElements != null && bagOfElements.values() != null && bagOfElements.values().size() > 0) {
             for (final T el : bagOfElements.values()) {
                 // the elements should implement the method toString in order to filter them
-                if (el.toString().toLowerCase().contains(term.toLowerCase())) {
+                if (term==null || el.toString().toLowerCase().contains(term.toLowerCase())) {
                     ret.add(el);
                 }
             }
         }
-
+        response.setHasMore(false);
         response.addAll(ret);
     }
 
-    @Override
-    public void toJson(final T choice, final JSONWriter writer) throws JSONException {
-        writer.key("id").value(choice.toString()).key("text").value(choice.toString());
-    }
+//    @Override
+//    protected void toJson(T choice, org.apache.wicket.ajax.json.JSONWriter writer) {
+//    	 writer.key("id").value(choice.toString()).key("text").value(choice.toString());
+//    }
+    
 
     @Override
     public Collection<T> toChoices(final Collection<String> ids) {

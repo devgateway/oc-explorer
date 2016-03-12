@@ -103,7 +103,7 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 	}
 
 	public String getUpdateEvent() {
-		return "onblur";
+		return "blur";
 	}
 
 	public GenericBootstrapFormComponent<TYPE, FIELD> type(Class<?> clazz) {
