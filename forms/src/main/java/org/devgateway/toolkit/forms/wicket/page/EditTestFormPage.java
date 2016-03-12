@@ -25,6 +25,7 @@ import org.devgateway.toolkit.forms.wicket.components.form.DateTimeFieldBootstra
 import org.devgateway.toolkit.forms.wicket.components.form.FileInputBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.Select2ChoiceBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.Select2MultiChoiceBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.SummernoteBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.TextAreaFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
@@ -85,6 +86,11 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
 		textArea.required();
 		editForm.add(textArea);
 
+		SummernoteBootstrapFormComponent summernote = new SummernoteBootstrapFormComponent("summernote");
+		summernote.required();
+		editForm.add(summernote);
+
+		
 		Select2ChoiceBootstrapFormComponent<Group> entitySelect = new Select2ChoiceBootstrapFormComponent<Group>(
 				"entitySelect", new GenericPersistableJpaRepositoryTextChoiceProvider<Group>(groupRepository));
 		editForm.add(entitySelect);
