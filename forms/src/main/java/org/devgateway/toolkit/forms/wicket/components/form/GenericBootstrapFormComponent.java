@@ -76,7 +76,7 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 	 * use this behavior for choices/groups that are not one component in the html but many.
 	 */
 	protected void getAjaxFormChoiceComponentUpdatingBehavior() {
-		field.add(new AjaxFormChoiceComponentUpdatingBehavior() {
+		updatingBehaviorComponent().add(new AjaxFormChoiceComponentUpdatingBehavior() {
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
 				GenericBootstrapFormComponent.this.onUpdate(target);
@@ -84,8 +84,21 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 		});
 	}
 
+	/**
+	 * This is the component that has to be updated with the
+	 * {@link #getAjaxFormChoiceComponentUpdatingBehavior()} or with
+	 * {@link #getAjaxFormComponentUpdatingBehavior()}. It usuall is the field,
+	 * but the field may be a wrapper, in which case you should override this
+	 * and provide the wrapped field.
+	 * 
+	 * @return
+	 */
+	protected FormComponent<TYPE> updatingBehaviorComponent() {
+		return field;
+	}
+	
 	protected void getAjaxFormComponentUpdatingBehavior () {
-		field.add(new AjaxFormComponentUpdatingBehavior(getUpdateEvent()) {
+		updatingBehaviorComponent().add(new AjaxFormComponentUpdatingBehavior(getUpdateEvent()) {
 
 			private static final long serialVersionUID = -2696538086634114609L;
 

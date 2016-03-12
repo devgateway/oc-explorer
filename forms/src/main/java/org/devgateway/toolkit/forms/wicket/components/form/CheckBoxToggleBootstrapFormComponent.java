@@ -15,6 +15,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 
 import de.agilecoders.wicket.core.util.Attributes;
@@ -59,28 +60,12 @@ public class CheckBoxToggleBootstrapFormComponent extends GenericEnablingBootstr
 		}
 	}
 
-	/**
-	 * We need to put this on the wrapped {@link CheckBox}
-	 */
+	
 	@Override
-	protected void getAjaxFormComponentUpdatingBehavior() {
-		wrappedCheckbox.add(new AjaxFormComponentUpdatingBehavior(getUpdateEvent()) {
-
-			private static final long serialVersionUID = -2696538086634114609L;
-
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				target.add(border);
-				CheckBoxToggleBootstrapFormComponent.this.onUpdate(target);
-			}
-
-			@Override
-			protected void onError(AjaxRequestTarget target, RuntimeException e) {
-				target.add(border);
-			}
-		});
+	protected FormComponent<Boolean> updatingBehaviorComponent() {
+		return wrappedCheckbox;
 	}
-
+	
 	@Override
 	protected BootstrapToggle inputField(String id, IModel<Boolean> model) {
 
