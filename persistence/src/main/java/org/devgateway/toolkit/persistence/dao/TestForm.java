@@ -63,6 +63,8 @@ public class TestForm extends AbstractAuditableEntity implements Serializable {
 	
 	private Date date;
 	
+	private Date dateTime;
+	
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	private Set<FileMetadata> fileInput;
@@ -139,6 +141,14 @@ public class TestForm extends AbstractAuditableEntity implements Serializable {
 
 	public void setCheckbox2(Boolean checkbox2) {
 		this.checkbox2 = checkbox2;
+	}
+
+	public Date getDateTime() {
+		return dateTime;
+	}
+
+	public void setDateTime(Date dateTime) {
+		this.dateTime = dateTime;
 	}
 
 
