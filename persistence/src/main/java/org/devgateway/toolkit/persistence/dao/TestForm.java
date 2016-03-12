@@ -50,6 +50,8 @@ public class TestForm extends AbstractAuditableEntity implements Serializable {
 	private String textArea;
 
 	private Boolean checkbox;
+	
+	private Boolean checkbox2;
 
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@ManyToOne
@@ -129,6 +131,14 @@ public class TestForm extends AbstractAuditableEntity implements Serializable {
 
 	public void setFileInput(Set<FileMetadata> fileInput) {
 		this.fileInput = fileInput;
+	}
+
+	public Boolean getCheckbox2() {
+		return checkbox2;
+	}
+
+	public void setCheckbox2(Boolean checkbox2) {
+		this.checkbox2 = checkbox2;
 	}
 
 

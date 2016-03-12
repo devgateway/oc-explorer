@@ -18,7 +18,8 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
-import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxPickerBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxToggleBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.DateFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.FileInputBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.Select2ChoiceBootstrapFormComponent;
@@ -91,8 +92,12 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
 				"entityMultiSelect", new GenericPersistableJpaRepositoryTextChoiceProvider<Role>(roleRepository));
 		editForm.add(entityMultiSelect);
 
-		CheckBoxBootstrapFormComponent checkbox = new CheckBoxBootstrapFormComponent("checkbox");
+		CheckBoxPickerBootstrapFormComponent checkbox = new CheckBoxPickerBootstrapFormComponent("checkbox");		
 		editForm.add(checkbox);
+		
+		CheckBoxToggleBootstrapFormComponent checkbox2 = new CheckBoxToggleBootstrapFormComponent("checkbox2");
+		//checkbox2.setVisibilityAllowed(false);
+		editForm.add(checkbox2);
 		
 		DateFieldBootstrapFormComponent date=new DateFieldBootstrapFormComponent("date");
 		editForm.add(date);
