@@ -30,7 +30,7 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
 	private StringValidator validator=WebConstants.StringValidators.maximumLengthValidatorTextArea;
 
 
-	private SummernoteConfig summernoteConfig; 
+	private SummernoteConfig config; 
 	
 	/**
 	 * 
@@ -57,15 +57,15 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
 	@Override
 	protected SummernoteEditor inputField(String id, IModel<String> model) {
 
-		summernoteConfig = new SummernoteConfig();
+		config = new SummernoteConfig();
 		
 		//this enabled for demo purposes, but it stores the files in volatile disk dir
-		summernoteConfig.useStorageId(FormsWebApplication.STORAGE_ID);
+		config.useStorageId(FormsWebApplication.STORAGE_ID);
 		
-		summernoteConfig.withHeight(50);
-		summernoteConfig.withAirMode(false);
+		config.withHeight(50);
+		config.withAirMode(false);
 
-		SummernoteEditor summernoteEditor = new SummernoteEditor(id, initFieldModel(), summernoteConfig);
+		SummernoteEditor summernoteEditor = new SummernoteEditor(id, initFieldModel(), config);
 
 		return summernoteEditor;
 	}
@@ -76,4 +76,8 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
     	super.onInitialize();
     	getField().add(validator);
     }
+
+	public SummernoteConfig getConfig() {
+		return config;
+	}
 }
