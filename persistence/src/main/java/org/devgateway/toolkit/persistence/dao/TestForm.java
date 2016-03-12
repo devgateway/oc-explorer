@@ -54,7 +54,9 @@ public class TestForm extends AbstractAuditableEntity implements Serializable {
 
 	private Boolean checkbox;
 	
-	private Boolean checkbox2;
+	private Boolean checkboxPicker;
+	
+	private Boolean checkboxToggle;
 
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@ManyToOne
@@ -138,13 +140,7 @@ public class TestForm extends AbstractAuditableEntity implements Serializable {
 		this.fileInput = fileInput;
 	}
 
-	public Boolean getCheckbox2() {
-		return checkbox2;
-	}
 
-	public void setCheckbox2(Boolean checkbox2) {
-		this.checkbox2 = checkbox2;
-	}
 
 	public Date getDateTime() {
 		return dateTime;
@@ -160,6 +156,22 @@ public class TestForm extends AbstractAuditableEntity implements Serializable {
 
 	public void setSummernote(String summernote) {
 		this.summernote = summernote;
+	}
+
+	public Boolean getCheckboxPicker() {
+		return checkboxPicker;
+	}
+
+	public void setCheckboxPicker(Boolean checkboxPicker) {
+		this.checkboxPicker = checkboxPicker;
+	}
+
+	public Boolean getCheckboxToggle() {
+		return checkboxToggle;
+	}
+
+	public void setCheckboxToggle(Boolean checkboxToggle) {
+		this.checkboxToggle = checkboxToggle;
 	}
 
 
