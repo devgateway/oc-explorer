@@ -21,6 +21,7 @@ import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxPickerBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxToggleBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.DateFieldBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.DateTimeFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.FileInputBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.Select2ChoiceBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.Select2MultiChoiceBootstrapFormComponent;
@@ -96,11 +97,13 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
 		editForm.add(checkbox);
 		
 		CheckBoxToggleBootstrapFormComponent checkbox2 = new CheckBoxToggleBootstrapFormComponent("checkbox2");
-		//checkbox2.setVisibilityAllowed(false);
 		editForm.add(checkbox2);
 		
 		DateFieldBootstrapFormComponent date=new DateFieldBootstrapFormComponent("date");
 		editForm.add(date);
+		
+		DateTimeFieldBootstrapFormComponent dateTime=new DateTimeFieldBootstrapFormComponent("dateTime");
+		editForm.add(dateTime);
 		
 		FileInputBootstrapFormComponent fileInput=new FileInputBootstrapFormComponent("fileInput");
 		editForm.add(fileInput);
