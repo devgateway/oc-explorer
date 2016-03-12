@@ -140,35 +140,23 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 
 	public GenericBootstrapFormComponent(String id, IModel<String> labelModel, IModel<TYPE> model) {
 		super(id, model);
-
 		this.labelModel=labelModel;
 		setOutputMarkupId(true);
 		setOutputMarkupPlaceholderTag(true);
+		
 		border=new FormGroup("enclosing-field-group");
 		border.setOutputMarkupId(true);
+		add(border);
+		
 		field = inputField("field", model);
 		field.setVisibilityAllowed(!ComponentUtil.isViewMode());
-
-
-		border.add(field);
-		
-
-		add(border);
-
-
-		tooltipLabel=new TooltipLabel("tooltipLabel", id);
-		border.add(tooltipLabel);
-
-		field.setLabel(labelModel);
 		field.setOutputMarkupId(true);
 		sizeBehavior=new InputBehavior(InputBehavior.Size.Medium);
 		field.add(sizeBehavior);
+		border.add(field);
 
-		if ((field instanceof RadioGroup) || (field instanceof CheckGroup)) {
-			getAjaxFormChoiceComponentUpdatingBehavior();
-		} else {
-			getAjaxFormComponentUpdatingBehavior();
-		}
+		tooltipLabel=new TooltipLabel("tooltipLabel", id);
+		border.add(tooltipLabel);
 	}
 
 	@Override
@@ -207,6 +195,13 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 	protected void onInitialize() {
 		super.onInitialize();
 
+		field.setLabel(labelModel);
+		
+		if ((field instanceof RadioGroup) || (field instanceof CheckGroup)) {
+			getAjaxFormChoiceComponentUpdatingBehavior();
+		} else {
+			getAjaxFormComponentUpdatingBehavior();
+		}
 		
 		viewModeField=new Label("viewModeField", new ViewModeConverterModel<TYPE>(getModel()));
 		viewModeField.setEscapeModelStrings(false);
