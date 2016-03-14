@@ -16,9 +16,9 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 
 	private VNOrganizationRepository organizationRepository;
 
-	public OfflineAwardRowImporter(ReleaseRepository releaseRepository, VNOrganizationRepository organizationRepository,
+	public OfflineAwardRowImporter(ReleaseRepository releaseRepository, VNImportService importService,VNOrganizationRepository organizationRepository,
 			int skipRows) {
-		super(releaseRepository, skipRows);
+		super(releaseRepository, importService, skipRows);
 		this.organizationRepository = organizationRepository;
 	}
 

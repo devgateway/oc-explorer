@@ -16,6 +16,7 @@ import org.devgateway.toolkit.persistence.mongo.dao.VNTender;
 import org.devgateway.toolkit.persistence.mongo.repository.ClassificationRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationRepository;
+import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 
 public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 
@@ -23,9 +24,9 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 	private VNOrganizationRepository organizationRepository;
 	private ClassificationRepository classificationRepository;
 
-	public TenderRowImporter(ReleaseRepository releaseRepository, VNOrganizationRepository organizationRepository,
+	public TenderRowImporter(ReleaseRepository releaseRepository, VNImportService importService, VNOrganizationRepository organizationRepository,
 			ClassificationRepository classificationRepository, int skipRows) {
-		super(releaseRepository,skipRows);
+		super(releaseRepository,importService,skipRows);
 		this.organizationRepository = organizationRepository;
 		this.classificationRepository = classificationRepository;
 		

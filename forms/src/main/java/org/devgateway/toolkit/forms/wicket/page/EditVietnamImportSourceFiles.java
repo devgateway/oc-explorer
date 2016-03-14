@@ -32,7 +32,7 @@ import org.wicketstuff.annotation.mount.MountPath;
  *
  */
 
-@AuthorizeInstantiation(SecurityConstants.Roles.ROLE_EDITOR)
+@AuthorizeInstantiation(SecurityConstants.Roles.ROLE_ADMIN)
 @MountPath("/editImportSourceFiles")
 public class EditVietnamImportSourceFiles extends AbstractEditPage<VietnamImportSourceFiles> {
 

@@ -21,9 +21,9 @@ public class ProcurementPlansRowImporter extends RowImporter<Release, ReleaseRep
 	SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yy", new Locale("en"));
 
 	
-	public ProcurementPlansRowImporter(ReleaseRepository releaseRepository, LocationRepository locationRepository,
+	public ProcurementPlansRowImporter(ReleaseRepository releaseRepository, VNImportService importService, LocationRepository locationRepository,
 			int skipRows) {
-		super(releaseRepository, skipRows);
+		super(releaseRepository, importService, skipRows);
 		this.locationRepository = locationRepository;
 	}
 

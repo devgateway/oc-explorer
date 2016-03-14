@@ -8,7 +8,9 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -21,12 +23,14 @@ import org.hibernate.envers.Audited;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @Audited
-public class VietnamImportSourceFiles extends AbstractAuditableEntity {
+@Table(indexes= {@Index(columnList="name")})
+public class VietnamImportSourceFiles extends AbstractAuditableEntity implements Labelable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	
 	private String name;
 	
@@ -34,15 +38,15 @@ public class VietnamImportSourceFiles extends AbstractAuditableEntity {
 	
 
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private Set<FileMetadata> prototypeDatabaseFile;
 
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private Set<FileMetadata> publicInstitutionsSuppliersFile;
 
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private Set<FileMetadata> locationsFile;
 
 
@@ -103,6 +107,23 @@ public class VietnamImportSourceFiles extends AbstractAuditableEntity {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+
+	@Override
+	public void setLabel(String label) {
+		this.name = label;
+	}
+
+
+	@Override
+	public String getLabel() {
+		return name;
+	}
+	
+	@Override
+	public String toString() {
+		return name;
 	}
 
 	

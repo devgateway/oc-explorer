@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<body>
+	<wicket:extend>
+		<div class="col-md-8 col-md-offset-2">
+
+			<form wicket:id="form" role="form">
+				<div class="form-group">
+					<div class="row">
+
+						<div wicket:id="sourceFiles"></div>
+
+					</div>
+					<div class="row">
+						<div wicket:id="fileTypes"></div>
+					</div>
+
+					<div class="row">
+						Import Results:
+						<blockquote>
+							<span wicket:id="logText"
+								style="white-space: pre-wrap; font-family: monospace;"></span>
+						</blockquote>
+					</div>
+
+					<div class="row">
+
+						<button wicket:id="import" type="button">Import</button>
+						<button wicket:id="done" type="button">Done</button>
+					</div>
+				</div>
+			</form>
+			
+		
+		</div>
+	</wicket:extend>
+</body>
+</html>

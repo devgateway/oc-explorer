@@ -26,8 +26,9 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 	protected int importedRows = 0;
 	protected List<T> documents;
 
-	public RowImporter(R repository, int skipRows) {
+	public RowImporter(R repository, VNImportService importService, int skipRows) {
 		this.repository = repository;
+		this.importService=importService;
 		documents = new ArrayList<>();
 		this.skipRows = skipRows;
 	}
@@ -96,7 +97,7 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 				importRow(row);
 				importedRows++;
 			} catch (Exception e) {
-				logger.error("Error importing row " + cursorRowNo + ". "+ e);
+				importService.logMessage("Error importing row " + cursorRowNo + ". "+ e);
 				// throw e; we do not stop
 			}
 		}

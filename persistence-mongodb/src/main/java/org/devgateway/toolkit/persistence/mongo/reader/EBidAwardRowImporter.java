@@ -10,14 +10,15 @@ import org.devgateway.toolkit.persistence.mongo.dao.VNOrganization;
 import org.devgateway.toolkit.persistence.mongo.dao.VNPlanning;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationRepository;
+import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 
 public class EBidAwardRowImporter extends RowImporter<Release, ReleaseRepository> {
 
 	protected VNOrganizationRepository organizationRepository;
 
-	public EBidAwardRowImporter(ReleaseRepository releaseRepository, VNOrganizationRepository organizationRepository,
+	public EBidAwardRowImporter(ReleaseRepository releaseRepository, VNImportService importService, VNOrganizationRepository organizationRepository,
 			int skipRows) {
-		super(releaseRepository, skipRows);
+		super(releaseRepository, importService, skipRows);
 		this.organizationRepository = organizationRepository;
 	}
 

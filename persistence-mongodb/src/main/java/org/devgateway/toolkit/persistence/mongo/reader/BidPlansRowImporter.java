@@ -10,11 +10,12 @@ import org.devgateway.toolkit.persistence.mongo.dao.VNItem;
 import org.devgateway.toolkit.persistence.mongo.dao.VNPlanning;
 import org.devgateway.toolkit.persistence.mongo.dao.VNTender;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 
 public class BidPlansRowImporter extends RowImporter<Release, ReleaseRepository> {
 
-	public BidPlansRowImporter(ReleaseRepository releaseRepository, int skipRows) {
-		super(releaseRepository, skipRows);
+	public BidPlansRowImporter(ReleaseRepository releaseRepository,VNImportService importService, int skipRows) {
+		super(releaseRepository, importService, skipRows);
 	}
 
 	@Override
