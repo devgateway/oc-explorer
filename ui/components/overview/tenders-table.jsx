@@ -1,5 +1,4 @@
-import Component from "../../pure-render-component";
-import "./style.less";
+import Component from "../pure-render-component";
 const DATE_FORMAT = {
   year: 'numeric',
   month: 'short',
@@ -12,7 +11,7 @@ export default class TendersTable extends Component{
     return (
         <section>
           <h4 className="page-header">Top 10 largest tenders</h4>
-          <table className="table tenders-table">
+          <table className="table table-striped table-hover tenders-table">
             <thead>
               <tr>
                 <th>Number</th>
