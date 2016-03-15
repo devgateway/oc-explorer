@@ -77,21 +77,8 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
 
 	@Autowired
 	private SessionFinderService sessionFinderService;
-//	
-//	@Override
-//	public Executor getAsyncExecutor() {
-//		ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-//		taskExecutor.setMaxPoolSize(1);
-//		taskExecutor.setThreadNamePrefix("VNImportServiceExecutor-");
-//		taskExecutor.initialize();
-//		return taskExecutor;
-//	}
-//
-//	@Override
-//	public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
-//		return new SimpleAsyncUncaughtExceptionHandler();
-//	}
 	
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(FormsWebApplication.class, args);

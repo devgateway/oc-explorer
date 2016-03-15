@@ -6,11 +6,12 @@ package org.devgateway.toolkit.forms.wicket.page;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -18,8 +19,8 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.validation.ValidationError;
+import org.devgateway.ocvn.forms.wicket.components.LogLabel;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.components.form.Select2ChoiceBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.Select2MultiChoiceBootstrapFormComponent;
@@ -30,10 +31,10 @@ import org.devgateway.toolkit.persistence.dao.VietnamImportSourceFiles;
 import org.devgateway.toolkit.persistence.mongo.dao.ImportFileTypes;
 import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 import org.devgateway.toolkit.persistence.repository.VietnamImportSourceFilesRepository;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.wicketstuff.annotation.mount.MountPath;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons.Type;
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapForm;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeIconType;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.ladda.LaddaAjaxButton;
@@ -52,6 +53,12 @@ public class VietnamImportPage extends BasePage {
 	
 	@SpringBean
 	private VNImportService vnImportService;
+	
+	@SpringBean(name="getAsyncExecutor")
+	private Executor asyncExecutor;
+	
+	@SpringBean
+	private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
 	private static final long serialVersionUID = 1L;
 	private BootstrapForm<VietnamImportBean> importForm;
@@ -63,6 +70,10 @@ public class VietnamImportPage extends BasePage {
 	private Label logText;
 
 	private LaddaAjaxButton doneButton;
+
+	private Select2MultiChoiceBootstrapFormComponent<String> fileTypes;
+
+	private TransparentWebMarkupContainer importContainer;
 	/**
 	 * @param parameters
 	 */
@@ -122,6 +133,10 @@ public class VietnamImportPage extends BasePage {
 
 	protected void addLogText() {
 		
+		importContainer = new TransparentWebMarkupContainer("importContainer");
+		importContainer.setOutputMarkupId(true);
+		importForm.add(importContainer);
+		
 		AbstractReadOnlyModel<String> logTextModel=new AbstractReadOnlyModel<String>() {
 			private static final long serialVersionUID = 1L;
 
@@ -131,16 +146,18 @@ public class VietnamImportPage extends BasePage {
 			}
 		};
 		
-		logText = new Label("logText",logTextModel);
-		logText.add(new AjaxSelfUpdatingTimerBehavior(Duration.ONE_SECOND));
-		logText.setOutputMarkupId(true);
-		logText.setOutputMarkupPlaceholderTag(true);
-		//logText.setVisibilityAllowed(false);
-		importForm.add(logText);		
+		logText = new LogLabel("logText",logTextModel) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onPostProcessTarget(AjaxRequestTarget target) {
+			}
+		};				
+		importContainer.add(logText);		
 	}
 	
 	protected void addFileTypesSelect() {
-		Select2MultiChoiceBootstrapFormComponent<String> fileTypes= new Select2MultiChoiceBootstrapFormComponent<String>(
+		fileTypes = new Select2MultiChoiceBootstrapFormComponent<String>(
 				"fileTypes", new GenericChoiceProvider<String>(ImportFileTypes.allFileTypes));
 		fileTypes.required();
 		importForm.add(fileTypes);
@@ -158,7 +175,7 @@ public class VietnamImportPage extends BasePage {
 		doneButton.setDefaultFormProcessing(false);
 		doneButton.setLabel(Model.of("Done"));
 		doneButton.setDefaultFormProcessing(false);
-		doneButton.setIconType(FontAwesomeIconType.thumbs_up);
+		doneButton.setIconType(FontAwesomeIconType.thumbs_up);	
 		importForm.add(doneButton);		
 	}
 	
@@ -170,7 +187,8 @@ public class VietnamImportPage extends BasePage {
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				send(getPage(), Broadcast.BREADTH, new EditingDisabledEvent());	
 				//logText.setVisibilityAllowed(true);
-				target.add(logText);				
+				importContainer.setVisibilityAllowed(true);
+				target.add(importContainer);				
 				target.add(form);		
 				
 				try {
@@ -197,7 +215,7 @@ public class VietnamImportPage extends BasePage {
 				target.add(form);
 				target.add(feedbackPanel);
 			}
-		};
+		};		
 		importButton.setLabel(Model.of("Start import process"));
 		importButton.setIconType(FontAwesomeIconType.hourglass_start);
 		importForm.add(importButton);		
@@ -216,7 +234,25 @@ public class VietnamImportPage extends BasePage {
 		addLogText();
 		addDoneButton();
 		
+		switchFieldsBasedOnExecutorAvailability(null);
 
+	}
+	
+	private void switchFieldsBasedOnExecutorAvailability(AjaxRequestTarget target) {
+		
+		boolean enabled=threadPoolTaskExecutor.getActiveCount()==0;
+		
+		importContainer.setVisibilityAllowed(!enabled);
+		sourceFiles.setEnabled(enabled);
+		fileTypes.setEnabled(enabled);
+		importButton.setEnabled(enabled);
+		
+		if(target!=null) {
+			target.add(sourceFiles);
+			target.add(fileTypes);
+			target.add(importButton);;
+		}
+			
 	}
 
 }

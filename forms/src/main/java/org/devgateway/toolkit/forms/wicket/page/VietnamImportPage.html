@@ -15,16 +15,20 @@
 						<div wicket:id="fileTypes"></div>
 					</div>
 
+					
+					<div class="row" wicket:id="importContainer">
+					Import Log:		
+					<blockquote>								
+							<div wicket:id="logText"
+								style="white-space: pre-wrap; font-family: monospace; font-size: smaller;"></div>
+							<footer>Refreshed every 5 seconds</footer>
+					</blockquote>								
+					</div>
 					<div class="row">
-						Import Results:
-						<blockquote>
-							<span wicket:id="logText"
-								style="white-space: pre-wrap; font-family: monospace;"></span>
-						</blockquote>
+						<hr/>
 					</div>
 
 					<div class="row">
-
 						<button wicket:id="import" type="button">Import</button>
 						<button wicket:id="done" type="button">Done</button>
 					</div>

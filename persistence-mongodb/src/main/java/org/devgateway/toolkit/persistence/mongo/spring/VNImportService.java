@@ -11,6 +11,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
 import org.apache.commons.io.FileUtils;
 import org.devgateway.toolkit.persistence.dao.FileMetadata;
 import org.devgateway.toolkit.persistence.dao.VietnamImportSourceFiles;
@@ -36,6 +38,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.ScriptOperations;
 import org.springframework.data.mongodb.core.script.ExecutableMongoScript;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.google.common.io.Files;
@@ -45,6 +48,7 @@ import com.google.common.io.Files;
  *         Vietnam input data format
  */
 @Service
+@Transactional
 public class VNImportService {
 
 	@Autowired
@@ -62,7 +66,7 @@ public class VNImportService {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
-	private StringBuffer msgBuffer = new StringBuffer();
+	private StringBuffer msgBuffer = new StringBuffer();	
 
 	private final Logger logger = LoggerFactory.getLogger(VNImportService.class);
 
@@ -70,9 +74,10 @@ public class VNImportService {
 	public static final String ORGS_FILE_NAME = "orgs";
 	public static final String DATABASE_FILE_NAME = "database";
 
-	URL prototypeDatabaseFile = getClass().getResource("/Prototype_Database_OCDSCore.xlsx");
-	URL organizationFile = getClass().getResource("/UM_PUBINSTITU_SUPPLIERS_DQA.xlsx");
-	URL locationFile = getClass().getResource("/Location_Table_SO.xlsx");
+	//TODO: remove these
+//	URL prototypeDatabaseFile = getClass().getResource("/Prototype_Database_OCDSCore.xlsx");
+//	URL organizationFile = getClass().getResource("/UM_PUBINSTITU_SUPPLIERS_DQA.xlsx");
+//	URL locationFile = getClass().getResource("/Location_Table_SO.xlsx");
 
 	private void importSheet(URL fileUrl, String sheetName, RowImporter<?, ?> importer) throws Exception {
 		importSheet(fileUrl, sheetName, importer, DBConstants.IMPORT_ROW_BATCH);
@@ -103,7 +108,7 @@ public class VNImportService {
 
 	private void importSheet(URL fileUrl, String sheetName, RowImporter<?, ?> importer, int importRowBatch)
 			throws Exception {
-		logMessage("Importing " + sheetName + " using " + importer.getClass().getSimpleName());
+		logMessage("<b>Importing " + sheetName + " using " + importer.getClass().getSimpleName()+"</b>");
 
 		XExcelFileReader reader = new XExcelFileReader(fileUrl.getFile(), sheetName);
 
@@ -119,6 +124,13 @@ public class VNImportService {
 		}
 	}
 
+	/**
+	 * Extracts the files from the given {@link VietnamImportSourceFiles} object, creates a temp dir and drops them there.
+	 * @param files
+	 * @return the path of the temp dir created, that contains the files save from {@link VietnamImportSourceFiles}
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	private String saveSourceFilesToTempDir(VietnamImportSourceFiles files) throws FileNotFoundException, IOException {
 		File tempDir = Files.createTempDir();
 		Set<FileMetadata> prototypeDatabaseFile = files.getPrototypeDatabaseFile();
@@ -141,7 +153,8 @@ public class VNImportService {
 		return tempDir.toURI().toURL().toString();
 	}
 
-
+	
+	@Async
 	public void importAllSheets(List<String> fileTypes, VietnamImportSourceFiles files, Boolean purgeDatabase) throws InterruptedException  {
 
 		String tempDirPath = null;
@@ -184,6 +197,8 @@ public class VNImportService {
 				importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "Offline_Award",
 						new OfflineAwardRowImporter(releaseRepository, this, organizationRepository, 2));
 
+			logMessage("<b>IMPORT PROCESS COMPLETED.</b>");
+			
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			e.printStackTrace();

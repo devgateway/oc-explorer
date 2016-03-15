@@ -97,7 +97,7 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 				importRow(row);
 				importedRows++;
 			} catch (Exception e) {
-				importService.logMessage("Error importing row " + cursorRowNo + ". "+ e);
+				importService.logMessage("		<font style='color:red'>Error importing row " + cursorRowNo + ". "+ e+"</font>");
 				// throw e; we do not stop
 			}
 		}
