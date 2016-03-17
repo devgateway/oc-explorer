@@ -6,13 +6,12 @@ package org.devgateway.toolkit.forms.wicket.page;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -22,6 +21,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.ValidationError;
 import org.devgateway.ocvn.forms.wicket.components.LogLabel;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
+import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.Select2ChoiceBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.Select2MultiChoiceBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.events.EditingDisabledEvent;
@@ -54,9 +54,6 @@ public class VietnamImportPage extends BasePage {
 	@SpringBean
 	private VNImportService vnImportService;
 	
-	@SpringBean(name="getAsyncExecutor")
-	private Executor asyncExecutor;
-	
 	@SpringBean
 	private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
@@ -67,13 +64,17 @@ public class VietnamImportPage extends BasePage {
 
 	private LaddaAjaxButton importButton;
 
-	private Label logText;
+	private LogLabel logText;
 
 	private LaddaAjaxButton doneButton;
 
 	private Select2MultiChoiceBootstrapFormComponent<String> fileTypes;
 
 	private TransparentWebMarkupContainer importContainer;
+
+	private WebMarkupContainer spinner;
+
+	private CheckBoxBootstrapFormComponent dropData;
 	/**
 	 * @param parameters
 	 */
@@ -87,7 +88,9 @@ public class VietnamImportPage extends BasePage {
 		private VietnamImportSourceFiles sourceFiles;
 
 		private List<String> fileTypes=new ArrayList<>(ImportFileTypes.allFileTypes);
-
+		
+		private Boolean dropData=true;
+		
 		public List<String> getFileTypes() {
 			return fileTypes;
 		}
@@ -104,7 +107,17 @@ public class VietnamImportPage extends BasePage {
 			this.sourceFiles = sourceFiles;
 		}
 
+		public Boolean getDropData() {
+			return dropData;
+		}
+
+		public void setDropData(Boolean dropData) {
+			this.dropData = dropData;
+		}
+
 	}
+	
+	
 
 	public class EditForm extends BootstrapForm<VietnamImportBean> {
 		public EditForm(String componentId) {
@@ -151,10 +164,26 @@ public class VietnamImportPage extends BasePage {
 
 			@Override
 			protected void onPostProcessTarget(AjaxRequestTarget target) {
+				if(threadPoolTaskExecutor.getActiveCount()==0) {
+					getSelfUpdatingBehavior().stop(target);
+					spinner.setVisibilityAllowed(false);
+					target.add(spinner);;
+				}
 			}
 		};				
-		importContainer.add(logText);		
+		importContainer.add(logText);
+		
+		spinner = new WebMarkupContainer("spinner");
+		spinner.setOutputMarkupId(true);
+		importContainer.add(spinner);
 	}
+	
+	
+	protected void addDropData() {
+		dropData= new CheckBoxBootstrapFormComponent("dropData");
+		importForm.add(dropData);
+	}
+	
 	
 	protected void addFileTypesSelect() {
 		fileTypes = new Select2MultiChoiceBootstrapFormComponent<String>(
@@ -186,13 +215,18 @@ public class VietnamImportPage extends BasePage {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				send(getPage(), Broadcast.BREADTH, new EditingDisabledEvent());	
-				//logText.setVisibilityAllowed(true);
+				logText.getSelfUpdatingBehavior().restart(target);
 				importContainer.setVisibilityAllowed(true);
 				target.add(importContainer);				
 				target.add(form);		
 				
 				try {
-					vnImportService.importAllSheets(importForm.getModelObject().getFileTypes(),importForm.getModelObject().getSourceFiles(),true);
+					
+					vnImportService.importAllSheets(importForm.getModelObject().getFileTypes(),
+							importForm.getModelObject().getSourceFiles().getPrototypeDatabaseFile().iterator().next().getContent().getBytes(),
+							importForm.getModelObject().getSourceFiles().getLocationsFile().iterator().next().getContent().getBytes(),
+							importForm.getModelObject().getSourceFiles().getPublicInstitutionsSuppliersFile().iterator().next().getContent().getBytes(),							
+							importForm.getModelObject().getDropData());
 				} catch (Exception e) {
 					logger.error(e);
 					e.printStackTrace();
@@ -233,6 +267,7 @@ public class VietnamImportPage extends BasePage {
 		addImportButton();		
 		addLogText();
 		addDoneButton();
+		addDropData();
 		
 		switchFieldsBasedOnExecutorAvailability(null);
 

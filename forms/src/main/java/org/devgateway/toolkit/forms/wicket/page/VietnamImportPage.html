@@ -2,7 +2,7 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <body>
 	<wicket:extend>
-		<div class="col-md-8 col-md-offset-2">
+
 
 			<form wicket:id="form" role="form">
 				<div class="form-group">
@@ -15,14 +15,18 @@
 						<div wicket:id="fileTypes"></div>
 					</div>
 
+					<div class="row">
+						<div wicket:id="dropData"></div>
+					</div>
+
 					
 					<div class="row" wicket:id="importContainer">
 					Import Log:		
 					<blockquote>								
-							<div wicket:id="logText"
-								style="white-space: pre-wrap; font-family: monospace; font-size: smaller;"></div>
-							<footer>Refreshed every 5 seconds</footer>
+							<div wicket:id="logText" class="log-text"></div>
+							<footer>Refreshed every 5 seconds</footer>							
 					</blockquote>								
+							<i wicket:id="spinner" class="fa fa-cog fa-spin fa-3x fa-fw margin-bottom"></i>
 					</div>
 					<div class="row">
 						<hr/>
@@ -34,9 +38,6 @@
 					</div>
 				</div>
 			</form>
-			
-		
-		</div>
 	</wicket:extend>
 </body>
 </html>
