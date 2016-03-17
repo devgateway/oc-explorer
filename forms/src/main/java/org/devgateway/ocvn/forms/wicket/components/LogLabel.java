@@ -26,6 +26,8 @@ public class LogLabel extends Label implements IAjaxIndicatorAware {
 	private AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
 	private Duration refreshInterval=Duration.seconds(5);
 
+	private AjaxSelfUpdatingTimerBehavior selfUpdatingBehavior;
+
 	/**
 	 * @param id
 	 */
@@ -83,7 +85,7 @@ public class LogLabel extends Label implements IAjaxIndicatorAware {
 		setOutputMarkupPlaceholderTag(true);
 		setEscapeModelStrings(false);
 		
-		add(new AjaxSelfUpdatingTimerBehavior(refreshInterval) { 
+		add(selfUpdatingBehavior=new AjaxSelfUpdatingTimerBehavior(refreshInterval) { 
 			private static final long serialVersionUID = 1L;
 			@Override
 			protected void onPostProcessTarget(AjaxRequestTarget target) {
@@ -94,6 +96,10 @@ public class LogLabel extends Label implements IAjaxIndicatorAware {
 
 	protected void onPostProcessTarget(AjaxRequestTarget target) {	
 		
+	}
+
+	public AjaxSelfUpdatingTimerBehavior getSelfUpdatingBehavior() {
+		return selfUpdatingBehavior;
 	}
 
 }
