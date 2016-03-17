@@ -7,14 +7,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.List;
-import java.util.Set;
-
-import javax.transaction.Transactional;
 
 import org.apache.commons.io.FileUtils;
-import org.devgateway.toolkit.persistence.dao.FileMetadata;
 import org.devgateway.toolkit.persistence.dao.VietnamImportSourceFiles;
 import org.devgateway.toolkit.persistence.mongo.dao.DBConstants;
 import org.devgateway.toolkit.persistence.mongo.dao.ImportFileTypes;
@@ -40,6 +38,7 @@ import org.springframework.data.mongodb.core.ScriptOperations;
 import org.springframework.data.mongodb.core.script.ExecutableMongoScript;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.io.Files;
 
@@ -106,21 +105,29 @@ public class VNImportService {
 		msgBuffer.append(message).append("\r\n");
 	}
 
-	private void importSheet(URL fileUrl, String sheetName, RowImporter<?, ?> importer, int importRowBatch)
-			throws Exception {
+	private void importSheet(URL fileUrl, String sheetName, RowImporter<?, ?> importer, int importRowBatch) {
 		logMessage("<b>Importing " + sheetName + " using " + importer.getClass().getSimpleName()+"</b>");
 
-		XExcelFileReader reader = new XExcelFileReader(fileUrl.getFile(), sheetName);
+		XExcelFileReader reader =null;
+		try {
+			reader = new XExcelFileReader(fileUrl.getFile(), sheetName);
 
-		List<String[]> rows = null;
-		long startTime = System.currentTimeMillis();
-		long rowNo = 0;
-		while (!(rows = reader.readRows(importRowBatch)).isEmpty()) {
-			importer.importRows(rows);
-			rowNo += importRowBatch;
-			if (rowNo % 10000 == 0)
-				logMessage("Import Speed " + rowNo * 1000 / (System.currentTimeMillis() - startTime)
-						+ " rows per second.");
+			List<String[]> rows = null;
+			long startTime = System.currentTimeMillis();
+			long rowNo = 0;
+			while (!(rows = reader.readRows(importRowBatch)).isEmpty()) {
+				importer.importRows(rows);
+				rowNo += importRowBatch;
+				if (rowNo % 10000 == 0)
+					logMessage("Import Speed " + rowNo * 1000 / (System.currentTimeMillis() - startTime)
+							+ " rows per second.");
+			}
+
+		} catch (Exception e) {
+			logMessage(e.getMessage());
+			e.printStackTrace();
+		} finally {
+			reader.close();
 		}
 	}
 
@@ -130,24 +137,21 @@ public class VNImportService {
 	 * @return the path of the temp dir created, that contains the files save from {@link VietnamImportSourceFiles}
 	 * @throws FileNotFoundException
 	 * @throws IOException
-	 */
-	private String saveSourceFilesToTempDir(VietnamImportSourceFiles files) throws FileNotFoundException, IOException {
+	 */	
+	private String saveSourceFilesToTempDir(byte[] prototypeDatabase, byte[] locations, byte[] publicInstitutionsSuppliers) throws FileNotFoundException, IOException {
 		File tempDir = Files.createTempDir();
-		Set<FileMetadata> prototypeDatabaseFile = files.getPrototypeDatabaseFile();
 		FileOutputStream prototypeDatabaseOutputStream = new FileOutputStream(new File(tempDir, DATABASE_FILE_NAME));
-		prototypeDatabaseOutputStream.write(prototypeDatabaseFile.iterator().next().getContent().getBytes());
+		prototypeDatabaseOutputStream.write(prototypeDatabase);
 		prototypeDatabaseOutputStream.close();
 
-		Set<FileMetadata> locationsFile = files.getLocationsFile();
-		FileOutputStream locationsOutputStream = new FileOutputStream(new File(tempDir, LOCATIONS_FILE_NAME));
-		locationsOutputStream.write(locationsFile.iterator().next().getContent().getBytes());
+			FileOutputStream locationsOutputStream = new FileOutputStream(new File(tempDir, LOCATIONS_FILE_NAME));
+		locationsOutputStream.write(locations);
 		locationsOutputStream.close();
 
-		Set<FileMetadata> publicInstitutionsSuppliersFile = files.getPublicInstitutionsSuppliersFile();
 		FileOutputStream publicInstitutionsSuppliersOutputStream = new FileOutputStream(
 				new File(tempDir, ORGS_FILE_NAME));
 		publicInstitutionsSuppliersOutputStream
-				.write(publicInstitutionsSuppliersFile.iterator().next().getContent().getBytes());
+				.write(publicInstitutionsSuppliers);
 		publicInstitutionsSuppliersOutputStream.close();
 
 		return tempDir.toURI().toURL().toString();
@@ -155,7 +159,7 @@ public class VNImportService {
 
 	
 	@Async
-	public void importAllSheets(List<String> fileTypes, VietnamImportSourceFiles files, Boolean purgeDatabase) throws InterruptedException  {
+	public void importAllSheets(List<String> fileTypes, byte[] prototypeDatabase, byte[] locations, byte[] publicInstitutionsSuppliers, Boolean purgeDatabase) throws InterruptedException  {
 
 		String tempDirPath = null;
 		try {
@@ -163,7 +167,7 @@ public class VNImportService {
 			if (purgeDatabase)
 				purgeDatabase();
 
-			tempDirPath = saveSourceFilesToTempDir(files);
+			tempDirPath = saveSourceFilesToTempDir( prototypeDatabase, locations,  publicInstitutionsSuppliers);
 
 			if (fileTypes.contains(ImportFileTypes.LOCATIONS))
 				importSheet(new URL(tempDirPath + LOCATIONS_FILE_NAME), "Sheet1",
@@ -205,8 +209,11 @@ public class VNImportService {
 		} finally {
 			if (tempDirPath != null)
 				try {
-					FileUtils.deleteDirectory(new File(tempDirPath));
+					FileUtils.deleteDirectory(Paths.get(new URL(tempDirPath).toURI()).toFile());
 				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (URISyntaxException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
