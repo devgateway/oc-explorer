@@ -185,7 +185,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
 				list.add(new MenuBookmarkablePageLink<ListVietnamImportSourceFiles>(ListVietnamImportSourceFiles.class, null,
 						new StringResourceModel("navbar.importfiles", this, null))
-								.setIconType(FontAwesomeIconType.upload));
+								.setIconType(FontAwesomeIconType.file_archive_o));
 				
 				list.add(new MenuBookmarkablePageLink<VietnamImportPage>(VietnamImportPage.class, null,
 						new StringResourceModel("navbar.import", this, null))
@@ -226,7 +226,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 						                tag.put("target", "_blank"); 
 						            } 
 						        };
-		        uiBrowserLink.setIconType(FontAwesomeIconType.rocket).setEnabled(true);
+		        uiBrowserLink.setIconType(FontAwesomeIconType.dashboard).setEnabled(true);
 				
 				list.add(uiBrowserLink);
 
