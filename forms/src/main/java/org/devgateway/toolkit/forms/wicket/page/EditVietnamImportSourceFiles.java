@@ -14,7 +14,11 @@
  */
 package org.devgateway.toolkit.forms.wicket.page;
 
+import java.io.File;
+import java.net.URISyntaxException;
+
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.link.DownloadLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
@@ -69,6 +73,8 @@ public class EditVietnamImportSourceFiles extends AbstractEditPage<VietnamImport
 		TextAreaFieldBootstrapFormComponent<String> description = new TextAreaFieldBootstrapFormComponent<>("description");		
 		editForm.add(description);		
 
+		
+		
 		FileInputBootstrapFormComponent prototypeDatabaseFile = new FileInputBootstrapFormComponent(
 				"prototypeDatabaseFile");
 		prototypeDatabaseFile.maxFiles(1);
@@ -80,11 +86,27 @@ public class EditVietnamImportSourceFiles extends AbstractEditPage<VietnamImport
 		publicInstitutionsSuppliersFile.maxFiles(1);
 		publicInstitutionsSuppliersFile.required();
 		editForm.add(publicInstitutionsSuppliersFile);
-
+		
+		try {
+		
+		DownloadLink locationsTemplate=new DownloadLink("locationsTemplate", new File(getClass().getResource("/templates/Location_Table_SO.xlsx").toURI()));		
+		editForm.add(locationsTemplate);
+		
+		DownloadLink suppliersTemplate=new DownloadLink("suppliersTemplate", new File(getClass().getResource("/templates/UM_PUBINSTITU_SUPPLIERS_DQA.xlsx").toURI()));		
+		editForm.add(suppliersTemplate);
+		
+		DownloadLink prototypeDatabase=new DownloadLink("prototypeDatabase", new File(getClass().getResource("/templates/Prototype_Database_OCDSCore.xlsx").toURI()));		
+		editForm.add(prototypeDatabase);
+		
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		
 		FileInputBootstrapFormComponent locationsFile = new FileInputBootstrapFormComponent("locationsFile");
 		locationsFile.maxFiles(1);
 		locationsFile.required();
 		editForm.add(locationsFile);
+		
 
 	}
 
