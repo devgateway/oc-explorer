@@ -8,7 +8,7 @@ public final class ImportFileTypes {
 
 	public static final String LOCATIONS="Locations";
 	
-	public static final String PUBLIC_INSTITUTIONS="Public Intitutions";
+	public static final String PUBLIC_INSTITUTIONS="Public Institutions";
 	
 	public static final String SUPPLIERS="Suppliers";
 	
