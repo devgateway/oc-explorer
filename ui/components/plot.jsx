@@ -1,4 +1,4 @@
-import Plotly from "plotly.js";
+require("script!plotly.js/dist/plotly.min.js");
 import Component from "./pure-render-component";
 
 export default class Plot extends Component{
