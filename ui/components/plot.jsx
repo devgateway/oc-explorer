@@ -1,5 +1,8 @@
-require("script!plotly.js/dist/plotly.min.js");
 import Component from "./pure-render-component";
+import Plotly from "plotly.js/lib/core";
+Plotly.register([
+    require('plotly.js/lib/bar')
+]);
 
 export default class Plot extends Component{
   componentDidMount(){
