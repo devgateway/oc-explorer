@@ -2,7 +2,6 @@ package org.devgateway.toolkit.persistence.mongo.reader;
 
 import java.text.ParseException;
 
-import org.devgateway.ocvn.persistence.mongo.ocds.BigDecimal2;
 import org.devgateway.ocvn.persistence.mongo.ocds.Budget;
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
 import org.devgateway.ocvn.persistence.mongo.ocds.Tender;
@@ -11,11 +10,12 @@ import org.devgateway.toolkit.persistence.mongo.dao.VNItem;
 import org.devgateway.toolkit.persistence.mongo.dao.VNPlanning;
 import org.devgateway.toolkit.persistence.mongo.dao.VNTender;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 
 public class BidPlansRowImporter extends RowImporter<Release, ReleaseRepository> {
 
-	public BidPlansRowImporter(ReleaseRepository releaseRepository, int skipRows) {
-		super(releaseRepository, skipRows);
+	public BidPlansRowImporter(ReleaseRepository releaseRepository,VNImportService importService, int skipRows) {
+		super(releaseRepository, importService, skipRows);
 	}
 
 	@Override
@@ -40,7 +40,8 @@ public class BidPlansRowImporter extends RowImporter<Release, ReleaseRepository>
 		value.setCurrency("VND");
 		budget.setAmount(value);
 
-		value.setAmount(new BigDecimal2(row[5]));
+		//decimal2
+		value.setAmount(getDecimal(row[5]));
 		
 		Tender tender = release.getTender();
 		if (tender == null) {
@@ -55,7 +56,8 @@ public class BidPlansRowImporter extends RowImporter<Release, ReleaseRepository>
 		tender.getItems().add(item);
 
 
-		value.setAmount(new BigDecimal2(row[5]));
+		//decimal2
+		value.setAmount(getDecimal(row[5]));
 		item.setDescription(row[1]);
 		item.setBidPlanItemRefNum(row[2]);
 		item.setBidPlanItemStyle(row[3]);

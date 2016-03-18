@@ -27,7 +27,7 @@ public class Organization {
 
 	@Override
 	public String toString() {
-		return name + " ;id=" + identifier.getId() + "; altId=" + additionalIdentifiers;
+		return name + " with id=" + identifier.getId();
 	}
 
 	public Identifier getIdentifier() {

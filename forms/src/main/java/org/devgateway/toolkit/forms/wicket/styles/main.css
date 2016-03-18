@@ -20,6 +20,11 @@ html, body {
     font-size: 100%;
 }
 
+.jumbotron-icon { 
+	font-size: 14px;
+	
+}
+
 a {
     -webkit-transition: color 0.2s ease;
     -moz-transition: color 0.2s ease;
@@ -29,42 +34,16 @@ a, a:focus, a:hover, a:active {
     outline: 0 !important;
     text-decoration: none;
 }
-h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-    font-family: 'Open Sans';
+
+
+.jumbo-icon-link {
+	display: inline-block;
+	text-align: center;	
+	padding: 10px;
 }
-h1 {
-    color: #ffffff;
-    display: inline-block;
-    font-size: 45px;
-    line-height: 25px;
-    margin-right: 10px;
-    margin-left: 18px;
-    font-weight: bolder;
-    padding-bottom: 11px;
-}
-h2 {
-    color: #d0dfee;
-    display: inline;
-    font-size: 24px;
-}
-h1, h2, h3 {
-    margin-bottom: 10px;
-    margin-top: 10px;
-}
-h3.budget {
-    padding: 20px;
-}
-h3.budget span {
-    font-weight: bold
-}
-p + h1, p + h2, p + h3, p + h4, p + h5, p + h6 {
-    margin-top: 1.5em;
-}
-p {
-    margin: 0.85em 0;
-}
-p img {
-    margin: 0;
+
+.jumbo-icon-txt {
+	display: block; 
 }
 
 form.print-view {
@@ -1151,9 +1130,15 @@ label {
 .navbar-default .navbar-nav > li.menu-search {
     width: 200px;
 }
-/* footer */
 
-footer {
+.log-text {
+ 	white-space: pre-wrap;
+ 	font-family: monospace;
+ 	font-size: smaller;	
+}
+
+/* footer */
+.footer {
     width: 100%;
     background: #00589e;
     font-family: 'Open Sans';

@@ -10,6 +10,7 @@ import org.devgateway.ocvn.persistence.mongo.ocds.ContactPoint;
 import org.devgateway.ocvn.persistence.mongo.ocds.Identifier;
 import org.devgateway.toolkit.persistence.mongo.dao.VNOrganization;
 import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationRepository;
+import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 
 /**
  * @author mihai
@@ -17,8 +18,8 @@ import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationReposit
  */
 public class SupplierRowImporter extends RowImporter<VNOrganization, VNOrganizationRepository> {
 
-	public SupplierRowImporter(VNOrganizationRepository repository, int skipRows) {
-		super(repository, skipRows);
+	public SupplierRowImporter(VNOrganizationRepository repository,VNImportService importService, int skipRows) {
+		super(repository, importService, skipRows);
 	}
 
 	@Override

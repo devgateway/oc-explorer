@@ -37,7 +37,8 @@ import org.apache.wicket.resource.JQueryResourceReference;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.security.SecurityUtil;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListGroupPage;
-import org.devgateway.toolkit.forms.wicket.page.lists.ListTestFormPage;
+import org.devgateway.toolkit.forms.wicket.page.lists.ListUserPage;
+import org.devgateway.toolkit.forms.wicket.page.lists.ListVietnamImportSourceFiles;
 import org.devgateway.toolkit.forms.wicket.page.user.EditUserPage;
 import org.devgateway.toolkit.forms.wicket.page.user.LogoutPage;
 import org.devgateway.toolkit.forms.wicket.styles.MainCss;
@@ -178,28 +179,41 @@ public abstract class BasePage extends GenericWebPage<Void> {
 						new StringResourceModel("navbar.groups", this, null))
 								.setIconType(FontAwesomeIconType.tags));
 				
-				list.add(new MenuBookmarkablePageLink<ListTestFormPage>(ListTestFormPage.class, null,
-						new StringResourceModel("navbar.testcomponents", this, null))
-								.setIconType(FontAwesomeIconType.android));
+//				list.add(new MenuBookmarkablePageLink<ListTestFormPage>(ListTestFormPage.class, null,
+//						new StringResourceModel("navbar.testcomponents", this, null))
+//								.setIconType(FontAwesomeIconType.android));
+
+				list.add(new MenuBookmarkablePageLink<ListVietnamImportSourceFiles>(ListVietnamImportSourceFiles.class, null,
+						new StringResourceModel("navbar.importfiles", this, null))
+								.setIconType(FontAwesomeIconType.file_archive_o));
+				
+				list.add(new MenuBookmarkablePageLink<VietnamImportPage>(VietnamImportPage.class, null,
+						new StringResourceModel("navbar.import", this, null))
+								.setIconType(FontAwesomeIconType.cloud_upload));
+				
+				
+				list.add(new MenuBookmarkablePageLink<ListUserPage>(ListUserPage.class, null,
+						new StringResourceModel("navbar.users", this, null))
+								.setIconType(FontAwesomeIconType.users));
 				
 				list.add(new MenuBookmarkablePageLink<SpringEndpointsPage>(SpringEndpointsPage.class, null,
 						new StringResourceModel("navbar.springendpoints", this, null))
 								.setIconType(FontAwesomeIconType.anchor));
 				
-				MenuBookmarkablePageLink<HALRedirectPage> halBrowserLink = new MenuBookmarkablePageLink<HALRedirectPage>(
-						HALRedirectPage.class, null, new StringResourceModel(
-								"navbar.halbrowser", this, null)) {
-									private static final long serialVersionUID = 1L;
-
-									@Override 
-						            protected void onComponentTag(ComponentTag tag) { 
-						                super.onComponentTag(tag); 
-						                tag.put("target", "_blank"); 
-						            } 
-						        };
-			    halBrowserLink.setIconType(FontAwesomeIconType.rss).setEnabled(true);
+//				MenuBookmarkablePageLink<HALRedirectPage> halBrowserLink = new MenuBookmarkablePageLink<HALRedirectPage>(
+//						HALRedirectPage.class, null, new StringResourceModel(
+//								"navbar.halbrowser", this, null)) {
+//									private static final long serialVersionUID = 1L;
+//
+//									@Override 
+//						            protected void onComponentTag(ComponentTag tag) { 
+//						                super.onComponentTag(tag); 
+//						                tag.put("target", "_blank"); 
+//						            } 
+//						        };
+//			    halBrowserLink.setIconType(FontAwesomeIconType.rss).setEnabled(true);
 				
-				list.add(halBrowserLink);
+//				list.add(halBrowserLink);
 				
 				MenuBookmarkablePageLink<UIRedirectPage> uiBrowserLink = new MenuBookmarkablePageLink<UIRedirectPage>(
 						UIRedirectPage.class, null, new StringResourceModel(
@@ -212,7 +226,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 						                tag.put("target", "_blank"); 
 						            } 
 						        };
-		        uiBrowserLink.setIconType(FontAwesomeIconType.rocket).setEnabled(true);
+		        uiBrowserLink.setIconType(FontAwesomeIconType.dashboard).setEnabled(true);
 				
 				list.add(uiBrowserLink);
 
