@@ -14,13 +14,12 @@
  */
 package org.devgateway.toolkit.forms.wicket.page;
 
-import java.io.File;
-import java.net.URISyntaxException;
-
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.markup.html.link.DownloadLink;
+import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.devgateway.ocvn.forms.xlsx.RootXlsx;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.components.form.FileInputBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.TextAreaFieldBootstrapFormComponent;
@@ -87,20 +86,19 @@ public class EditVietnamImportSourceFiles extends AbstractEditPage<VietnamImport
 		publicInstitutionsSuppliersFile.required();
 		editForm.add(publicInstitutionsSuppliersFile);
 		
-		try {
-		
-		DownloadLink locationsTemplate=new DownloadLink("locationsTemplate", new File(getClass().getResource("/templates/Location_Table_SO.xlsx").toURI()));		
+	
+		ResourceLink locationsTemplate = new ResourceLink("locationsTemplate",
+				new PackageResourceReference(RootXlsx.class, "Location_Table_SO.xlsx"));
 		editForm.add(locationsTemplate);
-		
-		DownloadLink suppliersTemplate=new DownloadLink("suppliersTemplate", new File(getClass().getResource("/templates/UM_PUBINSTITU_SUPPLIERS_DQA.xlsx").toURI()));		
+
+		ResourceLink suppliersTemplate = new ResourceLink("suppliersTemplate",
+				new PackageResourceReference(RootXlsx.class, "UM_PUBINSTITU_SUPPLIERS_DQA.xlsx"));
 		editForm.add(suppliersTemplate);
-		
-		DownloadLink prototypeDatabase=new DownloadLink("prototypeDatabase", new File(getClass().getResource("/templates/Prototype_Database_OCDSCore.xlsx").toURI()));		
+
+		ResourceLink prototypeDatabase = new ResourceLink("prototypeDatabase",
+				new PackageResourceReference(RootXlsx.class, "Prototype_Database_OCDSCore.xlsx"));
 		editForm.add(prototypeDatabase);
 		
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
 		
 		FileInputBootstrapFormComponent locationsFile = new FileInputBootstrapFormComponent("locationsFile");
 		locationsFile.maxFiles(1);

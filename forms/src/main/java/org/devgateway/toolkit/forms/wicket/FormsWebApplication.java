@@ -180,6 +180,7 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
 		if (packageResourceGuard instanceof SecurePackageResourceGuard) {
 			SecurePackageResourceGuard guard = (SecurePackageResourceGuard) packageResourceGuard;
 			guard.addPattern("+*.woff2");
+			guard.addPattern("+*.xlsx");
 		}
 
 		//this ensures that spring DI works for wicket components and pages
