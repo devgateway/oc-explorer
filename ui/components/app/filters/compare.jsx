@@ -22,11 +22,15 @@ export default class ComparisionCriteria extends Component{
               <label>
                 Comparison criteria
                 &nbsp;
-                <select class="form-control">
+                <select
+                    className="form-control"
+                    value={globalState.get('compareBy')}
+                    onChange={e => actions.updateComparisonCriteria(e.target.value)}
+                >
                   <option value="">None</option>
-                  <option>Bid Type</option>
-                  <option>Bid Selection Method</option>
-                  <option>Procuring Entity</option>
+                  <option value="bidTypeId">Bid Type</option>
+                  <option value="bidSelectionMethod">Bid Selection Method</option>
+                  <option value="procuringEntityId">Procuring Entity</option>
                 </select>
               </label>
             </div>
