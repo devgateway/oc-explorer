@@ -7,8 +7,10 @@ delete config.devtool;
 config.plugins = config.plugins.filter(function(plugin){
   return !(plugin instanceof webpack.HotModuleReplacementPlugin);
 }).concat([
-  new webpack.optimize.UglifyJsPlugin(),
-  new webpack.optimize.DedupePlugin()
+  new webpack.optimize.DedupePlugin(),
+  new webpack.optimize.UglifyJsPlugin({
+    sourceMap: false
+  })
 ]);
 
 module.exports = config;
