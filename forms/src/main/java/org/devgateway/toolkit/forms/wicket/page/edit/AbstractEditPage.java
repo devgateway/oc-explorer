@@ -383,7 +383,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		
+		 
 		//we cant do anything if we dont have a jparepository here
 		if (jpaRepository == null) {
 			throw new NullJpaRepositoryException();

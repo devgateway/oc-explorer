@@ -9,10 +9,10 @@
 
     <body>
       	<wicket:container wicket:id="scripts-container"/>
-        <div class="container-fluid">
+        <div class="container">
             <header wicket:id="header"></header>
-            <div class="row">
-                <div align="center">
+            <div class="page-header">
+                <div class="text-center">
                     <h3 wicket:id="pageTitle"></h3>
                 </div>
             </div>
@@ -20,14 +20,14 @@
             <div class="main-container">
                 <wicket:child />
                 <div class="row">
-                    <div class="col-md-10 col-md-offset-1">
                         <span wicket:id="feedback" class="feedbackPanel"></span>
-                    </div>
                 </div>
             </div>
 
-            <footer class="footer" wicket:id="footer"></footer>
+        
         </div>
+        
+            <footer class="footer" wicket:id="footer"></footer>
      
     </body>
 </html>

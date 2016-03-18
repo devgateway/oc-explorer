@@ -3,18 +3,18 @@
 <body>
 <wicket:extend>
 	<div class="row">
-		<div class="col-md-12">
+		<div>
 			<form wicket:id="editForm" role="form">
 				<div class="form-group">
 					<wicket:child/>
 				</div>
 
-				<div class="col-md-6 col-md-offset-3">
+				<div class="row">
 					<div class="action-btns-wrapper">
-						<button wicket:id="delete" type="button" class="btn btn-form-action">Delete</button>
 						<span wicket:id="extraButtons"></span>
+						<button wicket:id="save" type="button" class="btn btn-green btn-form-action">Save</button>
+						<button wicket:id="delete" type="button" class="btn btn-form-action">Delete</button>
 						<button wicket:id="cancel" type="button" class="btn btn-grey btn-form-action">Cancel</button>
-						<button wicket:id="save" type="button" class="btn btn-green btn-form-action">Save &amp; Submit</button>
 					</div>
 				</div>
 			</form>

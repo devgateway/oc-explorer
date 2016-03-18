@@ -4,12 +4,13 @@ import java.text.ParseException;
 
 import org.devgateway.toolkit.persistence.mongo.dao.Location;
 import org.devgateway.toolkit.persistence.mongo.repository.LocationRepository;
+import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 
 public class LocationRowImporter extends RowImporter<Location, LocationRepository> {
 
-	public LocationRowImporter(LocationRepository locationRepository, int skipRows) {
-		super(locationRepository, skipRows);
+	public LocationRowImporter(LocationRepository locationRepository,VNImportService importService, int skipRows) {
+		super(locationRepository, importService, skipRows);
 	}
 
 	@Override
@@ -24,7 +25,7 @@ public class LocationRowImporter extends RowImporter<Location, LocationRepositor
 
 		location.setName(row[0]);
 
-		GeoJsonPoint coordinates = new GeoJsonPoint(Double.parseDouble(row[2]), Double.parseDouble(row[1]));
+		GeoJsonPoint coordinates = new GeoJsonPoint(getDouble(row[2]), getDouble(row[1]));
 		location.setCoordinates(coordinates);
 		location.setId(row[3]);
 

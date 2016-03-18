@@ -25,6 +25,6 @@ public class TestVietnamDataImportPrototypeDatabase {
 	@Test
 	public void testImport() throws Exception {
 
-		importService.importAllSheets();
+	//	importService.importAllSheets();
 	}
 }

@@ -11,30 +11,41 @@
     Development Gateway - initial API and implementation
  -->
 
-<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
-	maxBytesLocalHeap="1G">
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
 
-	<!-- Defines when to stop trying to calculate the size of the cache -->
-	<sizeOfPolicy maxDepth="1000" maxDepthExceededBehavior="abort" />
+	<defaultCache eternal="false" timeToIdleSeconds="600" timeToLiveSeconds="600" overflowToDisk="false" maxEntriesLocalHeap="1000000"
+		statistics="false"/>
+		
 
-	<defaultCache eternal="false" timeToIdleSeconds="3000" timeToLiveSeconds="6000" overflowToDisk="false"
-		statistics="true" />
+	<!-- mongodb -->		
+	<cache name="organizations" eternal="false" overflowToDisk="false" timeToIdleSeconds="600" timeToLiveSeconds="600"  maxEntriesLocalHeap="1000000"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="false"/>
+
+	<cache name="locations" eternal="false" overflowToDisk="false" timeToIdleSeconds="600" timeToLiveSeconds="600"  maxEntriesLocalHeap="1000000"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="false"/>		
+
+	<cache name="releases" eternal="false" overflowToDisk="false" timeToIdleSeconds="600" timeToLiveSeconds="600"  maxEntriesLocalHeap="1000000"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="false"/>		
+
+	<cache name="classifications" eternal="false" overflowToDisk="false" timeToIdleSeconds="600" timeToLiveSeconds="600"  maxEntriesLocalHeap="1000000"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="false"/>		
+
 
 	<!-- EhCache Config for Pentaho Reports -->
 	<!-- Defines the caches used by libloader. This cache holds the raw binary data loaded via libloader. -->
-	<cache name="libloader-data" eternal="false" overflowToDisk="false" timeToIdleSeconds="600" timeToLiveSeconds="600"
-		diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="true"/>
+	<cache name="libloader-data" eternal="false" overflowToDisk="false" timeToIdleSeconds="600" timeToLiveSeconds="600"  maxEntriesLocalHeap="1000000"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="false"/>
 
 	<!-- Defines the caches used by libloader. This cache holds the raw binary bundle-file data loaded via libloader. -->
-	<cache name="libloader-bundles" eternal="false" overflowToDisk="false" timeToIdleSeconds="600" timeToLiveSeconds="600"
-		diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="true"/>
+	<cache name="libloader-bundles" eternal="false" overflowToDisk="false" timeToIdleSeconds="600" timeToLiveSeconds="600"  maxEntriesLocalHeap="1000000"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="false"/>
 
 	<!-- Defines a cache used by libloader. This cache holds the parsed object loaded via libloader. -->
-	<cache name="libloader-factory" eternal="false" overflowToDisk="false" timeToIdleSeconds="600" timeToLiveSeconds="600"
-		diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="true"/>
+	<cache name="libloader-factory" eternal="false" overflowToDisk="false" timeToIdleSeconds="600" timeToLiveSeconds="600"  maxEntriesLocalHeap="1000000"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="false"/>
 
 	<!-- Defines a cache used by libloader. This cache holds the parsed object loaded via libloader. -->
-	<cache name="report-dataset-cache" eternal="false" overflowToDisk="false" timeToIdleSeconds="300"
-		timeToLiveSeconds="600" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="true"/>
+	<cache name="report-dataset-cache" eternal="false" overflowToDisk="false" timeToIdleSeconds="300"  maxEntriesLocalHeap="1000000"
+		timeToLiveSeconds="600" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="false"/>
 
 </ehcache>

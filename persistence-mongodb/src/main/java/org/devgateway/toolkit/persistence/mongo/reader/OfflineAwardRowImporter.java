@@ -1,11 +1,7 @@
 package org.devgateway.toolkit.persistence.mongo.reader;
 
-import java.math.BigDecimal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 
-import org.apache.poi.ss.usermodel.DateUtil;
 import org.devgateway.ocvn.persistence.mongo.ocds.Identifier;
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
 import org.devgateway.ocvn.persistence.mongo.ocds.Value;
@@ -14,15 +10,15 @@ import org.devgateway.toolkit.persistence.mongo.dao.VNOrganization;
 import org.devgateway.toolkit.persistence.mongo.dao.VNPlanning;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationRepository;
+import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 
 public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseRepository> {
 
-	SimpleDateFormat sdf = new SimpleDateFormat("dd.MMM.yy", new Locale("en"));
 	private VNOrganizationRepository organizationRepository;
 
-	public OfflineAwardRowImporter(ReleaseRepository releaseRepository, VNOrganizationRepository organizationRepository,
+	public OfflineAwardRowImporter(ReleaseRepository releaseRepository, VNImportService importService,VNOrganizationRepository organizationRepository,
 			int skipRows) {
-		super(releaseRepository, skipRows);
+		super(releaseRepository, importService, skipRows);
 		this.organizationRepository = organizationRepository;
 	}
 
@@ -37,9 +33,9 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 			release.setOcid("ocvn-bidno-"+row[0]);
 			VNPlanning planning = new VNPlanning();
 			release.setPlanning(planning);
-			planning.setBidNo(row[0]);
+			planning.setBidNo(row[0]);			
 		}
-		documents.add(release);
+
 
 		VNAward award = new VNAward();
 		award.setId(release.getOcid()+"-award-"+release.getAwards().size());
@@ -51,7 +47,7 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 		if (!row[2].isEmpty()) {
 			Value value = new Value();
 			value.setCurrency("VND");
-			value.setAmount(new BigDecimal(row[2]));
+			value.setAmount(getDecimal(row[2]));
 			award.setValue(value);
 		}
 
@@ -82,20 +78,26 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 			award.setIneligibleRson(row[7]);
 
 		if (row.length > 8)
-			award.setBidType(row[8].isEmpty() ? null : Integer.parseInt(row[8]));
+			award.setBidType(row[8].isEmpty() ? null : getInteger(row[8]));
 
 		if (row.length > 9)
-			award.setBidSuccMethod(row[9].isEmpty() ? null : Integer.parseInt(row[9]));
+			award.setBidSuccMethod(row[9].isEmpty() ? null : getInteger(row[9]));
 
 		if (row.length > 10 && row[10]!=null && !row[10].isEmpty()) {
 			Value value2 = new Value();
 			value2.setCurrency("VND");
-			value2.setAmount(new BigDecimal(row[10]));
+			value2.setAmount(getDecimal(row[10]));
 			award.setValue(value2);
 		}
 		
 		if (row.length > 11)
-			award.setDate(row[11].isEmpty() ? null : DateUtil.getJavaCalendar(Double.parseDouble(row[11])).getTime());
+			award.setDate(row[11].isEmpty() ? null :  getExcelDate(row[11]));
+
+		
+		if(release.getId()==null) 
+			release=repository.save(release);
+		else 
+			documents.add(release);
 
 		return true;
 	}
