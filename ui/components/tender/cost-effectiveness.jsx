@@ -30,8 +30,11 @@ export default class CostEffectiveness extends Plot{
   getLayout(){
     return {
       barmode: "stack",
-      xaxis:{
+      xaxis: {
         type: "category"
+      },
+      yaxis: {
+        range: this.props.yAxisRange
       }
     }
   }

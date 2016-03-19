@@ -6,6 +6,7 @@ import BiddingPeriod from "./bidding-period";
 import Cancelled from "./cancelled";
 import {toImmutable} from "nuclear-js";
 import Comparison from "../comparison";
+import {pluck} from "../../tools";
 
 var sortByYear = (a, b) => {
   if(a.year < b.year) return -1;
@@ -20,12 +21,21 @@ export default class Tender extends Component{
     var width = globalState.get('contentWidth');
     var data = globalState.get('data');
     if(globalState.get('compareBy')){
+      var costEffectivenessData = globalState.getIn(['comparisonData', 'costEffectiveness']);
+      if(!costEffectivenessData) return null;
+      var minValue = Math.min.apply(Math, costEffectivenessData.map(datum =>
+          Math.min.apply(Math, datum.map(pluck('tender')))
+      ));
+      var maxValue = Math.max.apply(Math, costEffectivenessData.map(datum =>
+          Math.min.apply(Math, datum.map(pluck('tender')))
+      ));
       return (
           <Comparison
             years={selectedYears}
             width={width}
-            data={globalState.getIn(['comparisonData', 'costEffectiveness'])}
+            data={costEffectivenessData}
             Component={CostEffectiveness}
+            yAxisRange={[minValue, maxValue]}
           />
       )
     } else {
