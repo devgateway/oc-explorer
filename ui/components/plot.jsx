@@ -20,11 +20,11 @@ export default class Plot extends Component{
   }
 
   render(){
-    return (
+    return this.props.dontWrap ?
+        <div ref="chartContainer"></div> :
         <section>
           <h4 className="page-header">{this.getTitle()}</h4>
           <div ref="chartContainer"></div>
         </section>
-    )
   }
 }
