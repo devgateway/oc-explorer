@@ -135,8 +135,8 @@ export default {
     }));
   },
 
-  toggleFiltersBox(open){
-    dispatcher.dispatch(constants.FILTER_BOX_TOGGLED, open);
+  setFiltersBox(slug){
+    dispatcher.dispatch(constants.FILTER_BOX_CHANGED, slug);
   },
 
   toggleFilter(slug, open){
@@ -156,7 +156,7 @@ export default {
 
   updateProcuringEntityQuery(newQuery){
     dispatcher.dispatch(constants.PROCURING_ENTITY_QUERY_UPDATED, newQuery);
-    if(newQuery.length >= 3){
+    if (newQuery.length >= 3) {
       fetchJson(new URI('/api/ocds/organization/procuringEntity/all').addSearch('text', newQuery).toString())
           .then(data => {
             dispatcher.dispatch(constants.PROCURING_ENTITIES_UPDATED, data.reduce((accum, procuringEntity) => {
@@ -166,5 +166,9 @@ export default {
             }, {}))
           });
     }
+  },
+
+  updateComparisonCriteria(criteria){
+    dispatcher.dispatch(constants.COMPARISON_CRITERIA_UPDATED, criteria);
   }
 }

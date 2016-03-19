@@ -8,11 +8,11 @@ export default class Filters extends Component{
   render(){
     var {actions, state} = this.props;
     var globalState = state.get('globalState');
-    var open = globalState.get('filtersBoxOpen');
+    var open = 'filters' == globalState.get('filtersBox');
     var filters = globalState.get('filters');
     return (
         <section
-            onClick={e => actions.toggleFiltersBox(!open)}
+            onClick={e => actions.setFiltersBox(open ? "" : "filters")}
             className={cn("col-sm-12 filters", {open: open})}
         >
           <div className="row">
