@@ -53,8 +53,10 @@ var store = Store({
       return newState;
     });
     this.on(constants.OVERVIEW_COMPARISON_DATA_UPDATED, (state, data) => state.setIn(['comparisonData', 'overview'], data));
-    this.on(constants.COST_EFFECTIVENESS_OVERVIEW_DATA_UPDATED, (state, data) =>
+    this.on(constants.COST_EFFECTIVENESS_COMPARISON_DATA_UPDATED, (state, data) =>
         state.setIn(['comparisonData', 'costEffectiveness'], data));
+    this.on(constants.BID_PERIOD_COMPARISON_DATA_UPDATED, (state, data) =>
+        state.setIn(['comparisonData', 'bidPeriod'], data));
   }
 });
 

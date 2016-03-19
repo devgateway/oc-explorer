@@ -34,6 +34,19 @@ var transformCostEffectivenessData = ([tenderResponse, awardResponse]) => {
   }))
 };
 
+var transformBidPeriodData = ([tenders, awards]) => {
+  var awardsHash = awards.reduce((obj, award) => {
+    obj[award._id] = award.averageAwardDays
+    return obj;
+  }, {});
+  return tenders.map(tender => ({
+        year: tender._id,
+        tender: tender.averageTenderDays,
+        award: awardsHash[tender._id] || 0
+      })
+  )
+}
+
 export default {
   changeTab(slug){
     dispatcher.dispatch(constants.TAB_CHANGED, slug);
@@ -78,23 +91,12 @@ export default {
         .then(transformCostEffectivenessData)
         .then(data => dispatcher.dispatch(constants.COST_EFFECTIVENESS_DATA_UPDATED, data));
 
-    load(endpoints.TENDER_PRICE_BY_VN_TYPE_YEAR).then(data => dispatcher.dispatch(constants.BID_TYPE_DATA_UPDATED, data));
-
     Promise.all([
-        load(endpoints.AVERAGE_TENDER_PERIOD),
-        load(endpoints.AVERAGE_AWARD_PERIOD)
-    ]).then(([tenders, awards]) => {
-      var awardsHash = awards.reduce((obj, award) => {
-        obj[award._id] = award.averageAwardDays
-        return obj;
-      }, {});
-      return tenders.map(tender => ({
-          year: tender._id,
-          tender: tender.averageTenderDays,
-          award: awardsHash[tender._id] || 0
-        })
-      )
-    }).then(data => dispatcher.dispatch(constants.BID_PERIOD_DATA_UPDATED, data));
+      load(endpoints.AVERAGE_TENDER_PERIOD),
+      load(endpoints.AVERAGE_AWARD_PERIOD)
+    ]).then(transformBidPeriodData).then(data => dispatcher.dispatch(constants.BID_PERIOD_DATA_UPDATED, data));
+
+    load(endpoints.TENDER_PRICE_BY_VN_TYPE_YEAR).then(data => dispatcher.dispatch(constants.BID_TYPE_DATA_UPDATED, data));
 
     load(endpoints.TOTAL_CANCELLED_TENDERS_BY_YEAR)
         .then(data => dispatcher.dispatch(constants.CANCELLED_DATA_UPDATED, data));
@@ -174,8 +176,13 @@ export default {
         load(endpoints.COST_EFFECTIVENESS_TENDER_AMOUNT),
         load(endpoints.COST_EFFECTIVENESS_AWARD_AMOUNT)
       ]).then(data => regroup(data).map(transformCostEffectivenessData))
-          .then(data => dispatcher.dispatch(constants.COST_EFFECTIVENESS_OVERVIEW_DATA_UPDATED, data));
-      
+          .then(data => dispatcher.dispatch(constants.COST_EFFECTIVENESS_COMPARISON_DATA_UPDATED, data));
+
+      Promise.all([
+        load(endpoints.AVERAGE_TENDER_PERIOD),
+        load(endpoints.AVERAGE_AWARD_PERIOD)
+      ]).then(data => regroup(data).map(transformBidPeriodData))
+          .then(data => dispatcher.dispatch(constants.BID_PERIOD_COMPARISON_DATA_UPDATED, data));
     });
   },
 

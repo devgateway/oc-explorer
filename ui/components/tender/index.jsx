@@ -51,6 +51,31 @@ export default class Tender extends Component{
     }
   }
 
+  getBiddingPeriod(){
+    var globalState = this.props.state.get('globalState');
+    var selectedYears = globalState.getIn(['filters', 'years']);
+    var width = globalState.get('contentWidth');
+    var data = globalState.get('data');
+    if(globalState.get('compareBy')){
+      return (
+          <Comparison
+              years={selectedYears}
+              width={width}
+              data={globalState.getIn(['comparisonData', 'bidPeriod'])}
+              Component={BiddingPeriod}
+          />
+      )
+    } else {
+      return (
+          <BiddingPeriod
+              years={selectedYears}
+              width={width}
+              data={data.get('bidPeriod')}
+          />
+      )
+    }
+  }
+
   render(){
     var {state} = this.props;
     var globalState = state.get('globalState');
@@ -60,12 +85,7 @@ export default class Tender extends Component{
     return (
         <div className="col-sm-12 content">
           {this.getCostEffectiveness()}
-
-          <BiddingPeriod
-              years={selectedYears}
-              width={width}
-              data={data.get('bidPeriod')}
-          />
+          {this.getBiddingPeriod()}
 
           {data.has('bidType') ?
             <FundingByBidType
