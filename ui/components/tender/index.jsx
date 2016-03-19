@@ -14,6 +14,19 @@ var sortByYear = (a, b) => {
   if(a.year < b.year) return 1;
 };
 
+var filterBidTypeData = years => data => data
+    .filter(bidType => years.get(bidType.get('year'), false))
+    .groupBy(bidType => bidType.get('procurementMethodDetails'))
+    .map(bidTypes => bidTypes.reduce((reducedBidType, bidType) => {
+      return {
+        _id: bidType.get('procurementMethodDetails') || "unspecified",
+        totalTenderAmount: reducedBidType.totalTenderAmount + bidType.get('totalTenderAmount')
+      }
+    }, {
+      totalTenderAmount: 0
+    }))
+    .toArray();
+
 export default class Tender extends Component{
   getCostEffectiveness(){
     var globalState = this.props.state.get('globalState');
@@ -86,6 +99,42 @@ export default class Tender extends Component{
     }
   }
 
+  getBidType(){
+    var globalState = this.props.state.get('globalState');
+    var selectedYears = globalState.getIn(['filters', 'years']);
+    var width = globalState.get('contentWidth');
+    var data = globalState.get('data');
+    if(globalState.get('compareBy')){
+      var bidTypeData = globalState.getIn(['comparisonData', 'bidType']);
+      if(!bidTypeData) return null;
+      var filteredBidTypeData = bidTypeData.map(filterBidTypeData(selectedYears));
+      var minValue = Math.min.apply(Math, filteredBidTypeData.map(datum =>
+          Math.min.apply(Math, datum.map(pluck("totalTenderAmount")))
+      ));
+      var maxValue = Math.max.apply(Math, filteredBidTypeData.map(datum =>
+          Math.max.apply(Math, datum.map(pluck("totalTenderAmount")))
+      ));
+      return (
+          <Comparison
+            years={selectedYears}
+            width={width}
+            data={filteredBidTypeData}
+            Component={FundingByBidType}
+            yAxisRange={[minValue, maxValue]}
+          />
+      )
+    } else {
+      var bidTypeData = data.get('bidType');
+      if(!bidTypeData) return null;
+      return (
+          <FundingByBidType
+              width={width}
+              data={filterBidTypeData(selectedYears)(bidTypeData)}
+          />
+      )
+    }
+  }
+
   render(){
     var {state} = this.props;
     var globalState = state.get('globalState');
@@ -96,25 +145,7 @@ export default class Tender extends Component{
         <div className="col-sm-12 content">
           {this.getCostEffectiveness()}
           {this.getBiddingPeriod()}
-
-          {data.has('bidType') ?
-            <FundingByBidType
-                width={width}
-                data={data.get('bidType')
-                    .filter(bidType => globalState.getIn(['filters', 'years', bidType.get('year')], false))
-                    .groupBy(bidType => bidType.get('procurementMethodDetails'))
-                    .map(bidTypes => bidTypes.reduce((reducedBidType, bidType) => {
-                      return {
-                        _id: bidType.get('procurementMethodDetails') || "unspecified",
-                        totalTenderAmount: reducedBidType.totalTenderAmount + bidType.get('totalTenderAmount')
-                      }
-                    }, {
-                      totalTenderAmount: 0
-                    }))
-                    .toArray()
-                }
-            />
-          : null}
+          {this.getBidType()}
 
           <Cancelled
               years={selectedYears}
