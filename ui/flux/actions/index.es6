@@ -3,6 +3,7 @@ import constants from "./constants";
 import {fetchJson, years, identity} from "../../tools";
 import URI from "urijs";
 import {toImmutable} from "nuclear-js";
+import * as endpoints from "./endpoints";
 
 var options2arr = options => Object.keys(options)
     .filter(key => options[key].selected)
@@ -42,20 +43,20 @@ export default {
     var load = url => fetchJson(addFilters(filters, url));
     this.loadServerSideYearFilteredData(filters);
     Promise.all([
-      load('/api/countBidPlansByYear'),
-      load('/api/countTendersByYear'),
-      load('/api/countAwardsByYear')
+      load(endpoints.COUNT_BID_PLANTS_BY_YEAR),
+      load(endpoints.COUNT_TENDERS_BY_YEAR),
+      load(endpoints.COUNT_AWARDS_BY_YEAR)
     ]).then(([bidplans, tenders, awards]) => dispatcher.dispatch(constants.OVERVIEW_DATA_UPDATED, {
       bidplans: bidplans,
       tenders: tenders,
       awards: awards
     }));
 
-    load('/api/plannedFundingByLocation/').then(data => dispatcher.dispatch(constants.LOCATION_UPDATED, data));
+    load(endpoints.PLANNED_FUNDING_BY_LOCATION).then(data => dispatcher.dispatch(constants.LOCATION_UPDATED, data));
 
     Promise.all([
-      load('/api/costEffectivenessTenderAmount/'),
-      load('/api/costEffectivenessAwardAmount/')
+      load(endpoints.COST_EFFECTIVENESS_TENDER_AMOUNT),
+      load(endpoints.COST_EFFECTIVENESS_AWARD_AMOUNT)
     ]).then(([tenderResponse, awardResponse]) => {
 
       var response2obj = (field, arr) => arr.reduce((obj, elem) => {
@@ -74,11 +75,11 @@ export default {
       );
     });
 
-    load('/api/tenderPriceByVnTypeYear').then(data => dispatcher.dispatch(constants.BID_TYPE_DATA_UPDATED, data));
+    load(endpoints.TENDER_PRICE_BY_VN_TYPE_YEAR).then(data => dispatcher.dispatch(constants.BID_TYPE_DATA_UPDATED, data));
 
     Promise.all([
-        load('/api/averageTenderPeriod'),
-        load('/api/averageAwardPeriod')
+        load(endpoints.AVERAGE_TENDER_PERIOD),
+        load(endpoints.AVERAGE_AWARD_PERIOD)
     ]).then(([tenders, awards]) => {
       var awardsHash = awards.reduce((obj, award) => {
         obj[award._id] = award.averageAwardDays
@@ -92,8 +93,8 @@ export default {
       )
     }).then(data => dispatcher.dispatch(constants.BID_PERIOD_DATA_UPDATED, data));
 
-    load('/api/totalCancelledTendersByYear')
-        .then(data => dispatcher.dispatch(constants.CANCELLED_DATA_UPDATED, data))
+    load(endpoints.TOTAL_CANCELLED_TENDERS_BY_YEAR)
+        .then(data => dispatcher.dispatch(constants.CANCELLED_DATA_UPDATED, data));
   },
 
   bootstrap(){
