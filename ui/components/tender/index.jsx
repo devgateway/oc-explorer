@@ -135,6 +135,40 @@ export default class Tender extends Component{
     }
   }
 
+  getCancelled(){
+    var globalState = this.props.state.get('globalState');
+    var selectedYears = globalState.getIn(['filters', 'years']);
+    var width = globalState.get('contentWidth');
+    var data = globalState.get('data');
+    if(globalState.get('compareBy')) {
+      var cancelledData = globalState.getIn(['comparisonData', 'cancelled']);
+      if(!cancelledData) return null;
+      var minValue = Math.min.apply(Math, cancelledData.map(datum =>
+          Math.min.apply(Math, datum.map(pluck("totalCancelledTendersAmount")))
+      ));
+      var maxValue = Math.max.apply(Math, cancelledData.map(datum =>
+          Math.max.apply(Math, datum.map(pluck("totalCancelledTendersAmount")))
+      ));
+      return (
+          <Comparison
+              years={selectedYears}
+              width={width}
+              data={cancelledData}
+              Component={Cancelled}
+              yAxisRange={[minValue, maxValue]}
+          />
+      )
+    } else {
+      return (
+          <Cancelled
+              years={selectedYears}
+              width={width}
+              data={data.get('cancelled')}
+          />
+      )
+    }
+  }
+
   render(){
     var {state} = this.props;
     var globalState = state.get('globalState');
@@ -146,12 +180,7 @@ export default class Tender extends Component{
           {this.getCostEffectiveness()}
           {this.getBiddingPeriod()}
           {this.getBidType()}
-
-          <Cancelled
-              years={selectedYears}
-              width={width}
-              data={data.get('cancelled')}
-          />
+          {this.getCancelled()}
         </div>
     )
   }

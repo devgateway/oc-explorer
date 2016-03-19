@@ -186,6 +186,9 @@ export default {
 
       load(endpoints.TENDER_PRICE_BY_VN_TYPE_YEAR).then(data =>
           dispatcher.dispatch(constants.BID_TYPE_COMPARISON_DATA_UPDATED, data));
+
+      load(endpoints.TOTAL_CANCELLED_TENDERS_BY_YEAR)
+          .then(data => dispatcher.dispatch(constants.CANCELLED_COMPARISON_DATA_UPDATED, data));
     });
   },
 

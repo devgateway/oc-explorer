@@ -59,6 +59,8 @@ var store = Store({
         state.setIn(['comparisonData', 'bidPeriod'], data));
     this.on(constants.BID_TYPE_COMPARISON_DATA_UPDATED, (state, data) =>
         state.setIn(['comparisonData', 'bidType'], data.map(toImmutable)))
+    this.on(constants.CANCELLED_COMPARISON_DATA_UPDATED, (state, data) =>
+        state.setIn(['comparisonData', 'cancelled'], data))
   }
 });
 
