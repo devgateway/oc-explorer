@@ -19,6 +19,21 @@ var addFilters = (filters, url) => null === filters ? url :
 
 var regroup = ([head, ...tail]) => head.map((el, index) => [el].concat(tail.map(pluck(index))));
 
+var transformCostEffectivenessData = ([tenderResponse, awardResponse]) => {
+  var response2obj = (field, arr) => arr.reduce((obj, elem) => {
+    obj[elem._id] = elem[field];
+    return obj;
+  }, {});
+
+  var tender = response2obj('totalTenderAmount', tenderResponse);
+  var award = response2obj('totalAwardAmount', awardResponse);
+  return Object.keys(tender).map(year => ({
+    year: year,
+    tender: tender[year],
+    diff: tender[year] - award[year]
+  }))
+};
+
 export default {
   changeTab(slug){
     dispatcher.dispatch(constants.TAB_CHANGED, slug);
@@ -59,23 +74,9 @@ export default {
     Promise.all([
       load(endpoints.COST_EFFECTIVENESS_TENDER_AMOUNT),
       load(endpoints.COST_EFFECTIVENESS_AWARD_AMOUNT)
-    ]).then(([tenderResponse, awardResponse]) => {
-
-      var response2obj = (field, arr) => arr.reduce((obj, elem) => {
-        obj[elem._id] = elem[field];
-        return obj;
-      }, {});
-
-      var tender = response2obj('totalTenderAmount', tenderResponse);
-      var award = response2obj('totalAwardAmount', awardResponse);
-      dispatcher.dispatch(constants.COST_EFFECTIVENESS_DATA_UPDATED,
-          Object.keys(tender).map(year => ({
-            year: year,
-            tender: tender[year],
-            diff: tender[year] - award[year]
-          }))
-      );
-    });
+    ])
+        .then(transformCostEffectivenessData)
+        .then(data => dispatcher.dispatch(constants.COST_EFFECTIVENESS_DATA_UPDATED, data));
 
     load(endpoints.TENDER_PRICE_BY_VN_TYPE_YEAR).then(data => dispatcher.dispatch(constants.BID_TYPE_DATA_UPDATED, data));
 
@@ -168,6 +169,13 @@ export default {
           awards: awards
         }
       })).then(data => dispatcher.dispatch(constants.OVERVIEW_COMPARISON_DATA_UPDATED, data));
+
+      Promise.all([
+        load(endpoints.COST_EFFECTIVENESS_TENDER_AMOUNT),
+        load(endpoints.COST_EFFECTIVENESS_AWARD_AMOUNT)
+      ]).then(data => regroup(data).map(transformCostEffectivenessData))
+          .then(data => dispatcher.dispatch(constants.COST_EFFECTIVENESS_OVERVIEW_DATA_UPDATED, data));
+      
     });
   },
 

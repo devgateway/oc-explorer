@@ -5,21 +5,42 @@ import FundingByBidType from "./funding-by-bid-type";
 import BiddingPeriod from "./bidding-period";
 import Cancelled from "./cancelled";
 import {toImmutable} from "nuclear-js";
+import Comparison from "../comparison";
 
 export default class Tender extends Component{
+  getCostEffectiveness(){
+    var globalState = this.props.state.get('globalState');
+    var selectedYears = globalState.getIn(['filters', 'years']);
+    var width = globalState.get('contentWidth');
+    var data = globalState.get('data');
+    if(globalState.get('compareBy')){
+      return (
+          <Comparison
+            years={selectedYears}
+            width={width}
+            data={globalState.getIn(['comparisonData', 'costEffectiveness'])}
+            Component={CostEffectiveness}
+          />
+      )
+    } else {
+      return (
+          <CostEffectiveness
+              years={selectedYears}
+              width={width}
+              data={data.get('costEffectiveness')}/>
+      )
+    }
+  }
+
   render(){
     var {state} = this.props;
     var globalState = state.get('globalState');
     var selectedYears = globalState.getIn(['filters', 'years']);
     var width = globalState.get('contentWidth');
     var data = globalState.get('data');
-    var year = globalState.get('year');
     return (
         <div className="col-sm-12 content">
-          <CostEffectiveness
-              years={selectedYears}
-              width={width}
-              data={data.get('costEffectiveness')}/>
+          {this.getCostEffectiveness()}
 
           <BiddingPeriod
               years={selectedYears}

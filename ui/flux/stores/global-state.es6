@@ -53,6 +53,8 @@ var store = Store({
       return newState;
     });
     this.on(constants.OVERVIEW_COMPARISON_DATA_UPDATED, (state, data) => state.setIn(['comparisonData', 'overview'], data));
+    this.on(constants.COST_EFFECTIVENESS_OVERVIEW_DATA_UPDATED, (state, data) =>
+        state.setIn(['comparisonData', 'costEffectiveness'], data));
   }
 });
 
