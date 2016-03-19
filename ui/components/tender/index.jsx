@@ -20,24 +20,11 @@ export default class Tender extends Component{
     var width = globalState.get('contentWidth');
     var data = globalState.get('data');
     if(globalState.get('compareBy')){
-      var rawData = globalState.getIn(['comparisonData', 'costEffectiveness']);
-      if(!rawData) return;
-      var processedData = rawData.map(rawDatum => {
-        var hasYear = year => rawDatum.some(datum => datum.year == year);
-        var missingYears = selectedYears.filter((selected, year) => selected && !hasYear(year));
-        return rawDatum.concat(missingYears.map((_, year) => {
-          return {
-            year: year,
-            tender: 0,
-            diff: 0
-          }
-        }).toArray()).sort(sortByYear);
-      });
       return (
           <Comparison
             years={selectedYears}
             width={width}
-            data={processedData}
+            data={globalState.getIn(['comparisonData', 'costEffectiveness'])}
             Component={CostEffectiveness}
           />
       )
