@@ -3,6 +3,7 @@ import OverviewChart from "./overview-chart";
 import TendersTable from "./tenders-table";
 import AwardsTable from "./awards-table";
 import Comparison from "../comparison";
+import {pluck} from "../../tools";
 
 var filterByYears = years => overviewData => {
   var filteredOverviewData = {};
@@ -22,12 +23,24 @@ export default class Overview extends Component{
     if(globalState.get('compareBy')){
       var overviewData = globalState.getIn(['comparisonData', 'overview'])
       if(!overviewData) return null;
+      var filteredOverviewData = overviewData.map(filter);
+      var minValue = Math.min.apply(Math, filteredOverviewData.map(datum =>
+        Math.min.apply(Math, Object.keys(datum).map(key =>
+          Math.min.apply(Math, datum[key].map(pluck('count')))
+        ))
+      ));
+      var maxValue = Math.max.apply(Math, filteredOverviewData.map(datum =>
+          Math.max.apply(Math, Object.keys(datum).map(key =>
+              Math.max.apply(Math, datum[key].map(pluck('count'))))
+          )
+      ));
       return (
           <Comparison
               width={width}
-              data={overviewData.map(filter)}
+              data={filteredOverviewData}
               Component={OverviewChart}
               title="Overview chart"
+              yAxisRange={[minValue, maxValue]}
           />
       );
     } else {

@@ -31,7 +31,8 @@ export default class OverviewPlot extends Plot{
         title: "Count",
         titlefont: {
           color: "#cc3c3b"
-        }
+        },
+        range: this.props.yAxisRange
       }
     }
   }
