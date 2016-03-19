@@ -9,7 +9,7 @@ export default class Comparison extends Component{
           <h4 className="page-header">{title}</h4>
           {data.map(datum => (
               <div className="col-xs-3">
-                <Component data={datum} width={width} dontWrap={true}/>
+                <Component {...this.props} data={datum} dontWrap={true}/>
               </div>
             )
           )}
