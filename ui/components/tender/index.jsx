@@ -7,6 +7,12 @@ import Cancelled from "./cancelled";
 import {toImmutable} from "nuclear-js";
 import Comparison from "../comparison";
 
+var sortByYear = (a, b) => {
+  if(a.year < b.year) return -1;
+  if(a.year == b.year) return 0;
+  if(a.year < b.year) return 1;
+};
+
 export default class Tender extends Component{
   getCostEffectiveness(){
     var globalState = this.props.state.get('globalState');
@@ -14,11 +20,24 @@ export default class Tender extends Component{
     var width = globalState.get('contentWidth');
     var data = globalState.get('data');
     if(globalState.get('compareBy')){
+      var rawData = globalState.getIn(['comparisonData', 'costEffectiveness']);
+      if(!rawData) return;
+      var processedData = rawData.map(rawDatum => {
+        var hasYear = year => rawDatum.some(datum => datum.year == year);
+        var missingYears = selectedYears.filter((selected, year) => selected && !hasYear(year));
+        return rawDatum.concat(missingYears.map((_, year) => {
+          return {
+            year: year,
+            tender: 0,
+            diff: 0
+          }
+        }).toArray()).sort(sortByYear);
+      });
       return (
           <Comparison
             years={selectedYears}
             width={width}
-            data={globalState.getIn(['comparisonData', 'costEffectiveness'])}
+            data={processedData}
             Component={CostEffectiveness}
           />
       )
