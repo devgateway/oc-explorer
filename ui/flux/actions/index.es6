@@ -167,7 +167,7 @@ export default {
           tenders: tenders,
           awards: awards
         }
-      })).then(data => console.log(data));
+      })).then(data => dispatcher.dispatch(constants.OVERVIEW_COMPARISON_DATA_UPDATED, data));
     });
   },
 

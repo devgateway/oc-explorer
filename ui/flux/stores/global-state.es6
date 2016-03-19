@@ -12,9 +12,9 @@ var store = Store({
       tab: store.tabs.OVERVIEW,
       contentWidth: 0,
       data: {},
+      comparisonData: {},
       procuringEntityQuery: "",
-      filters: {
-      }
+      filters: {}
     })
   },
 
@@ -52,6 +52,7 @@ var store = Store({
       actions.loadComparisonData(newState.get('compareBy'), newState.get('filters').toJS());
       return newState;
     });
+    this.on(constants.OVERVIEW_COMPARISON_DATA_UPDATED, (state, data) => state.setIn(['comparisonData', 'overview'], data));
   }
 });
 
