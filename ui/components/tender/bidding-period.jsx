@@ -34,7 +34,8 @@ export default class BiddingPeriod extends Plot{
         title: "Days",
         titlefont: {
           color: "#cc3c3b"
-        }
+        },
+        range: this.props.xAxisRange
       },
       yaxis: {
         title: "Years",

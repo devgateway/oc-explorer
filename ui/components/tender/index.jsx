@@ -27,7 +27,7 @@ export default class Tender extends Component{
           Math.min.apply(Math, datum.map(pluck('tender')))
       ));
       var maxValue = Math.max.apply(Math, costEffectivenessData.map(datum =>
-          Math.min.apply(Math, datum.map(pluck('tender')))
+          Math.max.apply(Math, datum.map(pluck('tender')))
       ));
       return (
           <Comparison
@@ -54,12 +54,25 @@ export default class Tender extends Component{
     var width = globalState.get('contentWidth');
     var data = globalState.get('data');
     if(globalState.get('compareBy')){
+      var bidPeriodData = globalState.getIn(['comparisonData', 'bidPeriod']);
+      if(!bidPeriodData) return null;
+      var minValue = Math.min.apply(Math, bidPeriodData.map(datum =>
+          Math.min.apply(Math, ["award", "tender"].map(key =>
+              Math.min.apply(Math, datum.map(pluck(key)))
+          ))
+      ));
+      var maxValue = Math.max.apply(Math, bidPeriodData.map(datum =>
+          Math.max.apply(Math, ["award", "tender"].map(key =>
+              Math.max.apply(Math, datum.map(pluck(key)))
+          ))
+      ));
       return (
           <Comparison
               years={selectedYears}
               width={width}
-              data={globalState.getIn(['comparisonData', 'bidPeriod'])}
+              data={bidPeriodData}
               Component={BiddingPeriod}
+              xAxisRange={[minValue, maxValue]}
           />
       )
     } else {
