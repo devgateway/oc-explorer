@@ -47,7 +47,11 @@ var store = Store({
     this.on(constants.PROCURING_ENTITY_QUERY_UPDATED, (state, newQuery) => state.set('procuringEntityQuery', newQuery));
     this.on(constants.PROCURING_ENTITIES_UPDATED, (state, procuringEntities) =>
         state.setIn(['filters', 'procuringEntities', 'options'], toImmutable(procuringEntities)));
-    this.on(constants.COMPARISON_CRITERIA_UPDATED, (state, criteria) => state.set('compareBy', criteria));
+    this.on(constants.COMPARISON_CRITERIA_UPDATED, (state, criteria) => {
+      var newState = state.set('compareBy', criteria);
+      actions.loadComparisonData(newState.get('compareBy'), newState.get('filters').toJS());
+      return newState;
+    });
   }
 });
 

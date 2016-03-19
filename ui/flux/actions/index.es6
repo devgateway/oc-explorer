@@ -1,6 +1,6 @@
 import dispatcher from "../dispatcher";
 import constants from "./constants";
-import {fetchJson, years, identity} from "../../tools";
+import {fetchJson, pluck, years, identity} from "../../tools";
 import URI from "urijs";
 import {toImmutable} from "nuclear-js";
 import * as endpoints from "./endpoints";
@@ -16,6 +16,8 @@ var addFilters = (filters, url) => null === filters ? url :
       procuringEntityId: options2arr(filters.procuringEntities.options),
       year: Object.keys(filters.years).filter(year => filters.years[year])
     }).toString();
+
+var regroup = ([head, ...tail]) => head.map((el, index) => [el].concat(tail.map(pluck(index))));
 
 export default {
   changeTab(slug){
@@ -43,7 +45,7 @@ export default {
     var load = url => fetchJson(addFilters(filters, url));
     this.loadServerSideYearFilteredData(filters);
     Promise.all([
-      load(endpoints.COUNT_BID_PLANTS_BY_YEAR),
+      load(endpoints.COUNT_BID_PLANS_BY_YEAR),
       load(endpoints.COUNT_TENDERS_BY_YEAR),
       load(endpoints.COUNT_AWARDS_BY_YEAR)
     ]).then(([bidplans, tenders, awards]) => dispatcher.dispatch(constants.OVERVIEW_DATA_UPDATED, {
@@ -134,6 +136,39 @@ export default {
         options: []
       }
     }));
+  },
+
+  loadComparisonData(criteria, filters){
+    if("none" == criteria) return;
+    var comparisonUrl = new URI(endpoints.COST_EFFECTIVENESS_TENDER_AMOUNT).addSearch({
+      groupByCategory: criteria,
+      pageSize: 3
+    }).toString();
+    fetchJson(addFilters(filters, comparisonUrl)).then(comparisonData => {
+      var addComparisionFilters = url => {
+        var uri = new URI(addFilters(filters, url));
+        var criteriaValues = comparisonData.map(pluck("bidTypeId" == criteria ? "0" : "_id"));
+        return criteriaValues
+            .map(criteriaValue => uri.clone().addSearch(criteria, criteriaValue).toString())
+            .concat([
+              uri.clone().addSearch(criteria, criteriaValues).addSearch('invert', 'true').toString()
+            ]);
+      };
+
+      var load = url => Promise.all(addComparisionFilters(url).map(fetchJson));
+
+      Promise.all([
+          load(endpoints.COUNT_BID_PLANS_BY_YEAR),
+          load(endpoints.COUNT_TENDERS_BY_YEAR),
+          load(endpoints.COUNT_AWARDS_BY_YEAR)
+      ]).then(data => regroup(data).map(([bidplans, tenders, awards]) => {
+        return {
+          bidplans: bidplans,
+          tenders: tenders,
+          awards: awards
+        }
+      })).then(data => console.log(data));
+    });
   },
 
   setFiltersBox(slug){

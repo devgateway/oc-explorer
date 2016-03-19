@@ -1,5 +1,5 @@
 const API_ROOT = '/api';
-export const COUNT_BID_PLANTS_BY_YEAR = API_ROOT + '/countBidPlansByYear';
+export const COUNT_BID_PLANS_BY_YEAR = API_ROOT + '/countBidPlansByYear';
 export const COUNT_TENDERS_BY_YEAR = API_ROOT + '/countTendersByYear';
 export const COUNT_AWARDS_BY_YEAR = API_ROOT + '/countAwardsByYear';
 export const PLANNED_FUNDING_BY_LOCATION = API_ROOT + '/plannedFundingByLocation/';
