@@ -2,18 +2,15 @@ import Component from "./pure-render-component";
 
 export default class Comparison extends Component{
   render(){
-    var {data, width, Component, title} = this.props;
+    var {data, Component, title} = this.props;
     if(!data) return null;
     return (
-        <section>
-          <h4 className="page-header">{title}</h4>
-          {data.map(datum => (
-              <div className="col-xs-3">
-                <Component {...this.props} data={datum} dontWrap={true}/>
-              </div>
-            )
-          )}
-        </section>
+        <div>
+          <h3 className="page-header">{title}</h3>
+          {data.map((datum, index) => (
+             <Component {...this.props} key={index} data={datum} pageHeaderTitle={false} title={index}/>
+          ))}
+        </div>
     )
   }
 }

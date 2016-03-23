@@ -2,10 +2,6 @@ import Plot from "../plot";
 import {pluck} from "../../tools";
 
 export default class OverviewPlot extends Plot{
-  getTitle() {
-    return "Overview chart"
-  }
-
   getData(){
     var {data} = this.props;
     return null == data ? [] : Object.keys(data).map(key => {

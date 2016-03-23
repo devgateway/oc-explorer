@@ -47,7 +47,7 @@ export default class Overview extends Component{
       var overviewData = data.get('overview', null);
       if(!overviewData) return null;
       var filteredOverviewData = filter(overviewData);
-      return <OverviewChart width={width} data={filteredOverviewData}/>;
+      return <OverviewChart title="Overview chart" width={width} data={filteredOverviewData}/>;
     }
   }
 
