@@ -1,4 +1,4 @@
-# DG Toolkit
+# UI Module
 ## Prerequisites
 In order to be able to work efficiently you should familiarize yourself with the following technologies:
 
