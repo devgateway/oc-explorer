@@ -4,14 +4,14 @@ import {pluck} from "../../tools";
 export default class OverviewPlot extends Plot{
   getData(){
     var {data} = this.props;
-    return null == data ? [] : Object.keys(data).map(key => {
+    return data ? ['award', 'bidplan', 'tender'].map(key => {
       return {
-        x: data[key].map(pluck('_id')),
-        y: data[key].map(pluck('count')),
+        x: data.map(pluck('year')),
+        y: data.map(pluck(key)),
         type: 'scatter',
         name: key
       }
-    });
+    }) : [];
   }
 
   getLayout(){
