@@ -19,6 +19,7 @@ export default class App extends React.Component{
 
   render(){
     var {state, actions} = this.props;
+    var width = state.getIn(['globalState', 'contentWidth']);
     var navigationLink = (text, marker, tab) =>
         <NavigationLink text={text} actions={actions} tab={tab} marker={marker} active={state.getIn(['globalState', 'tab']) == tab}/>
     var globalState = state.get('globalState');
@@ -66,8 +67,14 @@ export default class App extends React.Component{
         <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10">
           <div className="row">
             {function(tab, props){
+              var {state, actions} = props;
               switch(tab){
-                case tabs.OVERVIEW: return <Overview {...props}/>;
+                case tabs.OVERVIEW:
+                  return <Overview
+                      actions={actions}
+                      state={state.get('overview')}
+                      width={width}
+                  />;
                 case tabs.PLANNING: return (
                     <Planning
                         width={globalState.get('contentWidth')}

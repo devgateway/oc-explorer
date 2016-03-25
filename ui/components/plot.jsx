@@ -4,9 +4,14 @@ Plotly.register([
     require('plotly.js/lib/bar')
 ]);
 
-export default class Plot extends Component{
+class Plot extends Component{
   componentDidMount(){
-    Plotly.newPlot(this.refs.chartContainer, this.getData(), this.getLayout());
+    var {pageHeaderTitle, title, xAxisRange, yAxisRange} = this.props;
+    var layout = this.getLayout();
+    if(!pageHeaderTitle) layout.title = title;
+    if(xAxisRange) layout.xaxis.range = xAxisRange;
+    if(yAxisRange) layout.yaxis.range = yAxisRange;
+    Plotly.newPlot(this.refs.chartContainer, this.getData(), layout);
   }
 
   componentDidUpdate(prevProps){
@@ -20,11 +25,18 @@ export default class Plot extends Component{
   }
 
   render(){
+    var {pageHeaderTitle, title} = this.props;
     return (
         <section>
-          <h4 className="page-header">{this.getTitle()}</h4>
+          {pageHeaderTitle && <h4 className="page-header">{title}</h4>}
           <div ref="chartContainer"></div>
         </section>
     )
   }
 }
+
+Plot.defaultProps = {
+  pageHeaderTitle: true
+}
+
+export default Plot;

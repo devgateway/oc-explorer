@@ -1,8 +1,9 @@
 import dispatcher from "../dispatcher";
 import constants from "./constants";
-import {fetchJson, years, identity} from "../../tools";
+import {fetchJson, pluck, years, identity} from "../../tools";
 import URI from "urijs";
 import {toImmutable} from "nuclear-js";
+import * as endpoints from "./endpoints";
 
 var options2arr = options => Object.keys(options)
     .filter(key => options[key].selected)
@@ -15,6 +16,36 @@ var addFilters = (filters, url) => null === filters ? url :
       procuringEntityId: options2arr(filters.procuringEntities.options),
       year: Object.keys(filters.years).filter(year => filters.years[year])
     }).toString();
+
+var regroup = ([head, ...tail]) => head.map((el, index) => [el].concat(tail.map(pluck(index))));
+
+var transformCostEffectivenessData = ([tenderResponse, awardResponse]) => {
+  var response2obj = (field, arr) => arr.reduce((obj, elem) => {
+    obj[elem._id] = elem[field];
+    return obj;
+  }, {});
+
+  var tender = response2obj('totalTenderAmount', tenderResponse);
+  var award = response2obj('totalAwardAmount', awardResponse);
+  return Object.keys(tender).map(year => ({
+    year: year,
+    tender: tender[year],
+    diff: tender[year] - award[year]
+  }))
+};
+
+var transformBidPeriodData = ([tenders, awards]) => {
+  var awardsHash = awards.reduce((obj, award) => {
+    obj[award._id] = award.averageAwardDays
+    return obj;
+  }, {});
+  return tenders.map(tender => ({
+        year: tender._id,
+        tender: tender.averageTenderDays,
+        award: awardsHash[tender._id] || 0
+      })
+  )
+}
 
 export default {
   changeTab(slug){
@@ -42,58 +73,33 @@ export default {
     var load = url => fetchJson(addFilters(filters, url));
     this.loadServerSideYearFilteredData(filters);
     Promise.all([
-      load('/api/countBidPlansByYear'),
-      load('/api/countTendersByYear'),
-      load('/api/countAwardsByYear')
+      load(endpoints.COUNT_BID_PLANS_BY_YEAR),
+      load(endpoints.COUNT_TENDERS_BY_YEAR),
+      load(endpoints.COUNT_AWARDS_BY_YEAR)
     ]).then(([bidplans, tenders, awards]) => dispatcher.dispatch(constants.OVERVIEW_DATA_UPDATED, {
       bidplans: bidplans,
       tenders: tenders,
       awards: awards
     }));
 
-    load('/api/plannedFundingByLocation/').then(data => dispatcher.dispatch(constants.LOCATION_UPDATED, data));
+    load(endpoints.PLANNED_FUNDING_BY_LOCATION).then(data => dispatcher.dispatch(constants.LOCATION_UPDATED, data));
 
     Promise.all([
-      load('/api/costEffectivenessTenderAmount/'),
-      load('/api/costEffectivenessAwardAmount/')
-    ]).then(([tenderResponse, awardResponse]) => {
-
-      var response2obj = (field, arr) => arr.reduce((obj, elem) => {
-        obj[elem._id] = elem[field];
-        return obj;
-      }, {});
-
-      var tender = response2obj('totalTenderAmount', tenderResponse);
-      var award = response2obj('totalAwardAmount', awardResponse);
-      dispatcher.dispatch(constants.COST_EFFECTIVENESS_DATA_UPDATED,
-          Object.keys(tender).map(year => ({
-            year: year,
-            tender: tender[year],
-            diff: tender[year] - award[year]
-          }))
-      );
-    });
-
-    load('/api/tenderPriceByVnTypeYear').then(data => dispatcher.dispatch(constants.BID_TYPE_DATA_UPDATED, data));
+      load(endpoints.COST_EFFECTIVENESS_TENDER_AMOUNT),
+      load(endpoints.COST_EFFECTIVENESS_AWARD_AMOUNT)
+    ])
+        .then(transformCostEffectivenessData)
+        .then(data => dispatcher.dispatch(constants.COST_EFFECTIVENESS_DATA_UPDATED, data));
 
     Promise.all([
-        load('/api/averageTenderPeriod'),
-        load('/api/averageAwardPeriod')
-    ]).then(([tenders, awards]) => {
-      var awardsHash = awards.reduce((obj, award) => {
-        obj[award._id] = award.averageAwardDays
-        return obj;
-      }, {});
-      return tenders.map(tender => ({
-          year: tender._id,
-          tender: tender.averageTenderDays,
-          award: awardsHash[tender._id] || 0
-        })
-      )
-    }).then(data => dispatcher.dispatch(constants.BID_PERIOD_DATA_UPDATED, data));
+      load(endpoints.AVERAGE_TENDER_PERIOD),
+      load(endpoints.AVERAGE_AWARD_PERIOD)
+    ]).then(transformBidPeriodData).then(data => dispatcher.dispatch(constants.BID_PERIOD_DATA_UPDATED, data));
 
-    load('/api/totalCancelledTendersByYear')
-        .then(data => dispatcher.dispatch(constants.CANCELLED_DATA_UPDATED, data))
+    load(endpoints.TENDER_PRICE_BY_VN_TYPE_YEAR).then(data => dispatcher.dispatch(constants.BID_TYPE_DATA_UPDATED, data));
+
+    load(endpoints.TOTAL_CANCELLED_TENDERS_BY_YEAR)
+        .then(data => dispatcher.dispatch(constants.CANCELLED_DATA_UPDATED, data));
   },
 
   bootstrap(){
@@ -133,6 +139,57 @@ export default {
         options: []
       }
     }));
+  },
+
+  loadComparisonData(criteria, filters){
+    if("none" == criteria) return;
+    var comparisonUrl = new URI(endpoints.COST_EFFECTIVENESS_TENDER_AMOUNT).addSearch({
+      groupByCategory: criteria,
+      pageSize: 3
+    }).toString();
+    fetchJson(addFilters(filters, comparisonUrl)).then(comparisonData => {
+      var addComparisionFilters = url => {
+        var uri = new URI(addFilters(filters, url));
+        var criteriaValues = comparisonData.map(pluck("bidTypeId" == criteria ? "0" : "_id"));
+        return criteriaValues
+            .map(criteriaValue => uri.clone().addSearch(criteria, criteriaValue).toString())
+            .concat([
+              uri.clone().addSearch(criteria, criteriaValues).addSearch('invert', 'true').toString()
+            ]);
+      };
+
+      var load = url => Promise.all(addComparisionFilters(url).map(fetchJson));
+
+      Promise.all([
+          load(endpoints.COUNT_BID_PLANS_BY_YEAR),
+          load(endpoints.COUNT_TENDERS_BY_YEAR),
+          load(endpoints.COUNT_AWARDS_BY_YEAR)
+      ]).then(data => regroup(data).map(([bidplans, tenders, awards]) => {
+        return {
+          bidplans: bidplans,
+          tenders: tenders,
+          awards: awards
+        }
+      })).then(data => dispatcher.dispatch(constants.OVERVIEW_COMPARISON_DATA_UPDATED, data));
+
+      Promise.all([
+        load(endpoints.COST_EFFECTIVENESS_TENDER_AMOUNT),
+        load(endpoints.COST_EFFECTIVENESS_AWARD_AMOUNT)
+      ]).then(data => regroup(data).map(transformCostEffectivenessData))
+          .then(data => dispatcher.dispatch(constants.COST_EFFECTIVENESS_COMPARISON_DATA_UPDATED, data));
+
+      Promise.all([
+        load(endpoints.AVERAGE_TENDER_PERIOD),
+        load(endpoints.AVERAGE_AWARD_PERIOD)
+      ]).then(data => regroup(data).map(transformBidPeriodData))
+          .then(data => dispatcher.dispatch(constants.BID_PERIOD_COMPARISON_DATA_UPDATED, data));
+
+      load(endpoints.TENDER_PRICE_BY_VN_TYPE_YEAR).then(data =>
+          dispatcher.dispatch(constants.BID_TYPE_COMPARISON_DATA_UPDATED, data));
+
+      load(endpoints.TOTAL_CANCELLED_TENDERS_BY_YEAR)
+          .then(data => dispatcher.dispatch(constants.CANCELLED_COMPARISON_DATA_UPDATED, data));
+    });
   },
 
   setFiltersBox(slug){

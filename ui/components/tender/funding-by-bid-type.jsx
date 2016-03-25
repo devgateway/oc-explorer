@@ -13,5 +13,11 @@ export default class FundingByBidType extends Plot {
     }];
   }
 
-  getLayout(){}
+  getLayout(){
+    return {
+      yaxis: {
+        range: this.props.yAxisRange
+      }
+    }
+  }
 }

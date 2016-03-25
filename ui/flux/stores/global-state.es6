@@ -12,9 +12,9 @@ var store = Store({
       tab: store.tabs.OVERVIEW,
       contentWidth: 0,
       data: {},
+      comparisonData: {},
       procuringEntityQuery: "",
-      filters: {
-      }
+      filters: {}
     })
   },
 
@@ -47,7 +47,20 @@ var store = Store({
     this.on(constants.PROCURING_ENTITY_QUERY_UPDATED, (state, newQuery) => state.set('procuringEntityQuery', newQuery));
     this.on(constants.PROCURING_ENTITIES_UPDATED, (state, procuringEntities) =>
         state.setIn(['filters', 'procuringEntities', 'options'], toImmutable(procuringEntities)));
-    this.on(constants.COMPARISON_CRITERIA_UPDATED, (state, criteria) => state.set('compareBy', criteria));
+    this.on(constants.COMPARISON_CRITERIA_UPDATED, (state, criteria) => {
+      var newState = state.set('compareBy', criteria);
+      actions.loadComparisonData(newState.get('compareBy'), newState.get('filters').toJS());
+      return newState;
+    });
+    this.on(constants.OVERVIEW_COMPARISON_DATA_UPDATED, (state, data) => state.setIn(['comparisonData', 'overview'], data));
+    this.on(constants.COST_EFFECTIVENESS_COMPARISON_DATA_UPDATED, (state, data) =>
+        state.setIn(['comparisonData', 'costEffectiveness'], data));
+    this.on(constants.BID_PERIOD_COMPARISON_DATA_UPDATED, (state, data) =>
+        state.setIn(['comparisonData', 'bidPeriod'], data));
+    this.on(constants.BID_TYPE_COMPARISON_DATA_UPDATED, (state, data) =>
+        state.setIn(['comparisonData', 'bidType'], data.map(toImmutable)))
+    this.on(constants.CANCELLED_COMPARISON_DATA_UPDATED, (state, data) =>
+        state.setIn(['comparisonData', 'cancelled'], data))
   }
 });
 
