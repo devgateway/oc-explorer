@@ -1,6 +1,6 @@
-# dg-toolkit web module
+# Web module
 
-This module provides REST endpoints for the services needed, as well as basic security. It depends on the **persistence** module.
+This module provides REST endpoints for the services needed, as well as basic security. It depends on the **persistence** module and on the **persitence-mongodb**.
 
 It also provides full authentication and security using Spring Security.
 The module is packaged as a jar and can be deployed as a [fat jar](http://docs.spring.io/spring-boot/docs/current/reference/html/howto-build.html).
