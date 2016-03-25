@@ -1,10 +1,6 @@
-# dg-toolkit
+# Open Contracting Vietnam
 
-[![Build Status](https://travis-ci.org/devgateway/dg-toolkit.svg?branch=master)](https://travis-ci.org/devgateway/dg-toolkit)
-
-This project has the aim of creating a boilerplate template for small and medium sized DG projects.
-
-It is created as a mavenized multi-module project. Each module can be started independently of the rest. All modules are based on [Spring Boot](http://projects.spring.io/spring-boot/) templates. Modules currently present:
+This is a mavenized multi-module project. Each module can be started independently of the rest. All modules are based on [Spring Boot](http://projects.spring.io/spring-boot/) templates. Modules currently present:
 
 # Modules
 
