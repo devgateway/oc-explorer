@@ -6,9 +6,11 @@ Plotly.register([
 
 class Plot extends Component{
   componentDidMount(){
-    var {pageHeaderTitle, title} = this.props;
+    var {pageHeaderTitle, title, xAxisRange, yAxisRange} = this.props;
     var layout = this.getLayout();
     if(!pageHeaderTitle) layout.title = title;
+    if(xAxisRange) layout.xaxis.range = xAxisRange;
+    if(yAxisRange) layout.yaxis.range = yAxisRange;
     Plotly.newPlot(this.refs.chartContainer, this.getData(), layout);
   }
 
