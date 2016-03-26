@@ -14,10 +14,12 @@
  */
 package org.devgateway.toolkit.forms.wicket.page;
 
+import java.io.File;
+import java.net.URISyntaxException;
+
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.markup.html.link.ResourceLink;
+import org.apache.wicket.markup.html.link.DownloadLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.devgateway.ocvn.forms.xlsx.RootXlsx;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
@@ -86,19 +88,25 @@ public class EditVietnamImportSourceFiles extends AbstractEditPage<VietnamImport
 		publicInstitutionsSuppliersFile.required();
 		editForm.add(publicInstitutionsSuppliersFile);
 		
-	
-		ResourceLink locationsTemplate = new ResourceLink("locationsTemplate",
-				new PackageResourceReference(RootXlsx.class, "Location_Table_SO.xlsx"));
-		editForm.add(locationsTemplate);
+		try {
+			DownloadLink locationsTemplate = new DownloadLink("locationsTemplate",
+					new File(RootXlsx.class.getResource("Location_Table_SO.xlsx").toURI()));
 
-		ResourceLink suppliersTemplate = new ResourceLink("suppliersTemplate",
-				new PackageResourceReference(RootXlsx.class, "UM_PUBINSTITU_SUPPLIERS_DQA.xlsx"));
-		editForm.add(suppliersTemplate);
+			editForm.add(locationsTemplate);
 
-		ResourceLink prototypeDatabase = new ResourceLink("prototypeDatabase",
-				new PackageResourceReference(RootXlsx.class, "Prototype_Database_OCDSCore.xlsx"));
-		editForm.add(prototypeDatabase);
-		
+			DownloadLink suppliersTemplate = new DownloadLink("suppliersTemplate",
+					new File(RootXlsx.class.getResource("UM_PUBINSTITU_SUPPLIERS_DQA.xlsx").toURI()));
+			editForm.add(suppliersTemplate);
+
+			DownloadLink prototypeDatabase = new DownloadLink("prototypeDatabase",
+					new File(RootXlsx.class.getResource("Prototype_Database_OCDSCore.xlsx").toURI()));
+
+			editForm.add(prototypeDatabase);
+
+		} catch (URISyntaxException e) {
+			logger.error(e);
+			e.printStackTrace();
+		}
 		
 		FileInputBootstrapFormComponent locationsFile = new FileInputBootstrapFormComponent("locationsFile");
 		locationsFile.maxFiles(1);
