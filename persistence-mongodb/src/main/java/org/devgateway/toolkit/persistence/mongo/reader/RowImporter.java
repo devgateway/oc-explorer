@@ -85,12 +85,17 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 		}
 	}
 	
+	private boolean isRowEmpty(String[] row ) {
+		for(int i=0;i<row.length;i++)
+			if(!row[i].trim().isEmpty()) return false;
+		return true;
+	}
 	
 	public boolean importRows(List<String[]> rows) throws ParseException {
 		documents.clear();
 
 		for (String[] row : rows) {
-			if (cursorRowNo++ < skipRows)
+			if (cursorRowNo++ < skipRows || isRowEmpty(row))
 				continue;
 
 			try {
