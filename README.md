@@ -1,10 +1,26 @@
-# Open Contracting Vietnam
+# Open Contracting Vietnam (OCVN)
+
+## Presentation
 
 [![Build Status](https://travis-ci.org/devgateway/ocvn.svg?branch=develop)](https://travis-ci.org/devgateway/ocvn)
 
-This is a mavenized multi-module project. Each module can be started independently of the rest. All modules are based on [Spring Boot](http://projects.spring.io/spring-boot/) templates. Modules currently present:
+OCVN is a project that allows importing the Vietnam public procurement data, available in the common MS Excel format, into a native [Open Contracting Data Standard (OCDS)](http://standard.open-contracting.org/) NoSQL storage, andt then run visual data analytics (display a _live_ dashboard with charts, maps and data tables as well as custom comparison charts). Since the data is natively stored in OCDS, it can be readily exported in this format without any transformation required, and with great throughtput. 
 
-# Modules
+The project uses the following technologies
+- [Spring Framework](https://projects.spring.io/spring-framework/) - for security, service oriented architecture and REST API.
+- [JPA persistenece](http://hibernate.org/orm/) for temporarily storing and organizing the MS Excel Files containin the raw data.
+- [MongoDB](https://www.mongodb.org/) - as the native OCDS NoSQL datastore. We have implemented the whole OCDS 1.0 standard schema and all data used in analytics/maps as well as raw OCDS export is stored directly into this format in MongoDB. 
+- [Apache Wicket](http://wicket.apache.org/) - for the admin interface that runs the upload/import process of raw data
+- [React](https://facebook.github.io/react/) - for integrating the dashboards/map technologies
+- [Plot.ly](https://plot.ly/) - as the chart library
+- [Leaflet](http://leafletjs.com/) - as the mapping library
+
+
+## Architecure
+
+This is a mavenized multi-module project. It is built on the open source [dg-toolkit](https://github.com/devgateway/dg-toolkit) architecture. Each module can be started independently of the rest. All modules are based on [Spring Boot](http://projects.spring.io/spring-boot/) templates.
+
+### Modules
 
 - [persistence](https://github.com/devgateway/ocvn/tree/master/persistence) - this is a module responsible with [JPA 2.0](https://en.wikipedia.org/wiki/Java_Persistence_API) data persistence. It is also provides [HATEOAS](https://en.wikipedia.org/wiki/HATEOAS) services on top of the existing entities.
  
@@ -16,7 +32,7 @@ This is a mavenized multi-module project. Each module can be started independent
 
 - [ui](https://github.com/devgateway/ocvn/tree/master/ui) - this module is a template for building front-end functionality. It is supposed to work in conjunction with the **web** module as the back-end. It is based on [React](https://facebook.github.io/react/) and [NuclearJS](https://optimizely.github.io/nuclear-js/). The Maven build integration is assured by [frontend-maven-plugin](https://github.com/eirslett/frontend-maven-plugin) which invokes [npm](https://www.npmjs.com/) and [webpack](https://webpack.github.io/). The UI module can be used by both UI developers, with no need of knowledge or Java/Maven local setup and by the back-end developers, with no need to have [node](https://nodejs.org/) installed on their system.
 
-# Building
+### Building
 
 As prerequisites, we need Java 8 and Maven 3.3.x.
 In order to build the project, invoke:
@@ -27,7 +43,7 @@ mvn install
 
 inside the root project folder.
 
-# Debugging
+### Debugging
 
 You can import dg-toolkit as a Maven project inside your favorite IDE, it should work in IDEA/STS/Eclipse but you will need Maven 3.3.x.
 
@@ -38,7 +54,7 @@ This dependency is already included in the pom.xml of the modules, uncomment it 
 
 If you have JRebel license, then don't use spring-boot-devtools. Best is to start the modules by invokingn Debug As->Spring Boot App
 
-## Debugging fat jars
+### Debugging fat jars
 
 [Fat jars](http://docs.spring.io/spring-boot/docs/current/reference/html/howto-build.html) are the way to go when it comes to java micro-services these days. While the pre-built maven project can be easily debugged as described above, a already packaged jar requires remote debugging. You can start the fat jar with remote debugging parameters by invoking:
 
