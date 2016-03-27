@@ -4,7 +4,9 @@
 
 ## Presentation
 
-OCVN is a project that allows importing the Vietnam public procurement data, available in the common MS Excel format, into a native [Open Contracting Data Standard (OCDS)](http://standard.open-contracting.org/) NoSQL storage, andt then run visual data analytics (display a _live_ dashboard with charts, maps and data tables as well as custom comparison charts). Since the data is natively stored in OCDS, it can be readily exported in this format without any transformation required, and with great throughtput. 
+OCVN is a project that allows importing the Vietnam public procurement data, available in the common MS Excel format, into a native [Open Contracting Data Standard (OCDS)](http://standard.open-contracting.org/) NoSQL storage, and then run visual data analytics (display a *live* dashboard with charts, maps and data tables as well as custom comparison charts). Since the data is natively stored in OCDS, it can be readily exported in this format without any transformation required, and with great throughtput. 
+
+Find out more about the OCVN goals [here](http://www.developmentgateway.org/2015/11/12/open-contracting-vietnam/).
 
 The project uses open source technologies exclusively, with the following list of key components:
 
