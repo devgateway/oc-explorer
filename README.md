@@ -11,7 +11,7 @@ Find out more about the OCVN goals [here](http://www.developmentgateway.org/2015
 The project uses open source technologies exclusively, with the following list of key components:
 
 - [Spring Framework](https://projects.spring.io/spring-framework/) - for security, service oriented architecture and REST API.
-- [JPA persistence](http://hibernate.org/orm/) for temporarily storing and organizing the MS Excel Files containin the raw data.
+- [JPA persistence](http://hibernate.org/orm/) for temporarily storing and organizing the MS Excel Files containing the raw data.
 - [Apache POI](https://poi.apache.org/) for reading the native MS Excel input dataset.
 - [MongoDB](https://www.mongodb.org/) - as the native OCDS NoSQL datastore. We have implemented the whole OCDS 1.0 standard schema and all data used in analytics/maps as well as raw OCDS export is stored directly into this format in MongoDB. 
 - [Apache Wicket](http://wicket.apache.org/) - for the admin interface that runs the upload/import process of raw data
@@ -59,7 +59,7 @@ You can import dg-toolkit as a Maven project inside your favorite IDE, it should
 Since all the modules are Spring Boot, debugging in STS is really easy. In Spring Boot 1.3 and later there is something called [spring-boot-devtools](https://spring.io/blog/2015/06/17/devtools-in-spring-boot-1-3).
 This dependency is already included in the pom.xml of the modules, uncomment it if you plan to use it. If you do, then in STS you can do Debug As->Spring DevTools Client.
 
-If you have JRebel license, then don't use spring-boot-devtools. Best is to start the modules by invokingn Debug As->Spring Boot App
+If you have JRebel license, then don't use spring-boot-devtools. Best is to start the modules by invoking Debug As->Spring Boot App
 
 ### Debugging fat jars
 
