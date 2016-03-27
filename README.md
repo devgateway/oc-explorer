@@ -4,7 +4,7 @@
 
 ## Presentation
 
-OCVN is a project that allows importing the Vietnam public procurement data, available in the common MS Excel format, into a native [Open Contracting Data Standard (OCDS)](http://standard.open-contracting.org/) NoSQL storage, and then run visual data analytics (display a *live* dashboard with charts, maps and data tables as well as custom comparison charts). Since the data is natively stored in OCDS, it can be readily exported in this format without any transformation required, and with great throughtput. 
+OCVN is a project that allows importing the Vietnam public procurement data, available in the common MS Excel format, into a native [Open Contracting Data Standard (OCDS)](http://standard.open-contracting.org/) NoSQL storage, and then run visual data analytics (display a *live* dashboard with charts, maps and data tables as well as custom comparison charts). Since the data is natively stored in the OCDS format, it can be readily exported in this format without any transformation required, and with great throughput. 
 
 Find out more about the OCVN goals [here](http://www.developmentgateway.org/2015/11/12/open-contracting-vietnam/).
 
@@ -12,6 +12,7 @@ The project uses open source technologies exclusively, with the following list o
 
 - [Spring Framework](https://projects.spring.io/spring-framework/) - for security, service oriented architecture and REST API.
 - [JPA persistence](http://hibernate.org/orm/) for temporarily storing and organizing the MS Excel Files containin the raw data.
+- [Apache POI](https://poi.apache.org/) for reading the native MS Excel input dataset.
 - [MongoDB](https://www.mongodb.org/) - as the native OCDS NoSQL datastore. We have implemented the whole OCDS 1.0 standard schema and all data used in analytics/maps as well as raw OCDS export is stored directly into this format in MongoDB. 
 - [Apache Wicket](http://wicket.apache.org/) - for the admin interface that runs the upload/import process of raw data
 - [React](https://facebook.github.io/react/) - for integrating the dashboard/map/filter technologies
@@ -47,7 +48,7 @@ In order to build the project, invoke:
 mvn install
 ```
 
-inside the root project folder.
+isnide the root project folder.
 
 ### Debugging
 
