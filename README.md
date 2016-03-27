@@ -1,5 +1,7 @@
 # Open Contracting Vietnam
 
+[![Build Status](https://travis-ci.org/devgateway/ocvn.svg?branch=develop)](https://travis-ci.org/devgateway/ocvn)
+
 This is a mavenized multi-module project. Each module can be started independently of the rest. All modules are based on [Spring Boot](http://projects.spring.io/spring-boot/) templates. Modules currently present:
 
 # Modules
