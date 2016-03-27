@@ -6,21 +6,23 @@
 
 OCVN is a project that allows importing the Vietnam public procurement data, available in the common MS Excel format, into a native [Open Contracting Data Standard (OCDS)](http://standard.open-contracting.org/) NoSQL storage, andt then run visual data analytics (display a _live_ dashboard with charts, maps and data tables as well as custom comparison charts). Since the data is natively stored in OCDS, it can be readily exported in this format without any transformation required, and with great throughtput. 
 
-The project uses the following technologies:
+The project uses open source technologies exclusively, with the following list of key components:
+
 - [Spring Framework](https://projects.spring.io/spring-framework/) - for security, service oriented architecture and REST API.
 - [JPA persistence](http://hibernate.org/orm/) for temporarily storing and organizing the MS Excel Files containin the raw data.
 - [MongoDB](https://www.mongodb.org/) - as the native OCDS NoSQL datastore. We have implemented the whole OCDS 1.0 standard schema and all data used in analytics/maps as well as raw OCDS export is stored directly into this format in MongoDB. 
 - [Apache Wicket](http://wicket.apache.org/) - for the admin interface that runs the upload/import process of raw data
-- [React](https://facebook.github.io/react/) - for integrating the dashboards/map technologies
+- [React](https://facebook.github.io/react/) - for integrating the dashboard/map/filter technologies
 - [Plot.ly](https://plot.ly/) - as the chart library
-- [Leaflet](http://leafletjs.com/) - as the mapping library
+- [Leaflet](http://leafletjs.com/) - as the map library
 
+The project's source code is licensed under the open source [MIT](https://opensource.org/licenses/MIT) license.
 
-## Architecure
+## Architecture
 
 This is a mavenized multi-module project. It is built on the open source [dg-toolkit](https://github.com/devgateway/dg-toolkit) architecture. Each module can be started independently of the rest. All modules are based on [Spring Boot](http://projects.spring.io/spring-boot/) templates. 
 
-The project uses [the gitflow workflow](https://github.com/devgateway/ocvn/blob/develop/gitflow.md) to bake releases.
+The project uses [the gitflow workflow](https://github.com/devgateway/ocvn/blob/develop/gitflow.md) to drive the software release process.
 
 ### Modules
 
