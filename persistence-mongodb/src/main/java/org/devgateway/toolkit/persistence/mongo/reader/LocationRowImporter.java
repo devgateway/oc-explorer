@@ -7,6 +7,11 @@ import org.devgateway.toolkit.persistence.mongo.repository.LocationRepository;
 import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 
+/**
+ * Specific {@link RowImporter} for {@link Location}, in the custom Excel format provided by Vietnam
+ * @author mihai
+ * @see Location
+ */
 public class LocationRowImporter extends RowImporter<Location, LocationRepository> {
 
 	public LocationRowImporter(LocationRepository locationRepository,VNImportService importService, int skipRows) {

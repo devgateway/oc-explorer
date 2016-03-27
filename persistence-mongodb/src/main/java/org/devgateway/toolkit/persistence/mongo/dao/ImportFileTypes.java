@@ -4,6 +4,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * 
+ * @author mihai
+ * Specific data types found in Vietnam data mapping files used for data import into OCDS
+ */
 public final class ImportFileTypes {
 
 	public static final String LOCATIONS="Locations";

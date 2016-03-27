@@ -12,7 +12,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
- *
+ * Custom location object used for displaying {@link VNPlanning} entities on the map.
+ * This deviates away from OCDS standard, so we have added it to the subentity
  */
 @Document
 public class Location {

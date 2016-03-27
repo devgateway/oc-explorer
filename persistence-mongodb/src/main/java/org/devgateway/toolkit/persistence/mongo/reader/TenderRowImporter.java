@@ -18,6 +18,11 @@ import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationRepository;
 import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 
+/**
+ * Specific {@link RowImporter} for Tenders, in the custom Excel format provided by Vietnam
+ * @author mihai
+ * @see VNTender
+ */
 public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 
 	SimpleDateFormat sdf = new SimpleDateFormat("dd.MMM.yy", new Locale("en"));

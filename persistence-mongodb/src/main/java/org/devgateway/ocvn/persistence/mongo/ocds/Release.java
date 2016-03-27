@@ -16,7 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
- *
+ * Release OCDS Entity http://standard.open-contracting.org/latest/en/schema/release/
  */
 @Document
 public class Release {

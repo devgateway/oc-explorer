@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
- *
+ * Address OCDS entity http://standard.open-contracting.org/latest/en/schema/reference/#address
  */
 @Document
 public class Address {

@@ -4,10 +4,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 
+ * @author mihai OCDS Package Metadata
+ *         http://standard.open-contracting.org/latest/en/schema/reference/#
+ *         package-metadata
+ */
 public class ReleasePackage {
 
 	String uri;
-	
+
 	Date publishedDate;
 
 	Publisher publisher;
@@ -16,7 +22,7 @@ public class ReleasePackage {
 
 	String publicationPolicy;
 
-	List<Release> releases=new ArrayList<>();
+	List<Release> releases = new ArrayList<>();
 
 	public String getUri() {
 		return uri;

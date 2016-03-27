@@ -13,6 +13,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+/**
+ * Generic superclass for importing rows from the vietnam excel data sources
+ * @author mihai
+ *
+ * @param <T> - the type of OCDS/dervied entity to be imported
+ * @param <R> - the main repository that is able to save <T>
+ */
 public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 
 	private final Logger logger = LoggerFactory.getLogger(VNImportService.class);

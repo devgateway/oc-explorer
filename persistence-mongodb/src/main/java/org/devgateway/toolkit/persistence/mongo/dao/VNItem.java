@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
- *
+ * Extension of {@link Item} to allow extra Vietnam-specific fields
  */
 @Document(collection="item")
 public class VNItem extends Item {

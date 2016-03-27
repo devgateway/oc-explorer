@@ -14,7 +14,8 @@ import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 
 /**
  * @author mihai
- *
+ * Specific {@link RowImporter} for Public Institutions, in the custom Excel format provided by Vietnam
+ * @see VNOrganization
  */
 public class PublicInstitutionRowImporter extends RowImporter<VNOrganization, VNOrganizationRepository> {
 

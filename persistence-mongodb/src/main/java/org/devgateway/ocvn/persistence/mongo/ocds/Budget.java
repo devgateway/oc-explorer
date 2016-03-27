@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
- *
+ * Budget OCDS Entity http://standard.open-contracting.org/latest/en/schema/reference/#budget
  */
 @Document
 public class Budget {

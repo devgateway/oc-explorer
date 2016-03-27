@@ -12,6 +12,12 @@ import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationRepository;
 import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 
+/**
+ * Specific {@link RowImporter} for eBid Awards {@link VNAward} in the custom Excel format provided by Vietnam
+ * @author mihai
+ * @see VNAward
+ *
+ */
 public class EBidAwardRowImporter extends RowImporter<Release, ReleaseRepository> {
 
 	protected VNOrganizationRepository organizationRepository;

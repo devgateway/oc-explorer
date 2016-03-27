@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
- *
+ * Extension of {@link Planning} to allow extra Vietnam-specific fields
  */
 @Document(collection="planning")
 public class VNPlanning extends Planning {

@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
- *
+ * Milestone OCDS entity http://standard.open-contracting.org/latest/en/schema/reference/#milestone
  */
 @Document
 public class Milestone {

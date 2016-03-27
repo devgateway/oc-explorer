@@ -9,7 +9,7 @@ import org.springframework.data.annotation.Id;
 
 /**
  * @author mihai
- *
+ * Document OCDS Entity http://standard.open-contracting.org/latest/en/schema/reference/#document
  */
 @org.springframework.data.mongodb.core.mapping.Document
 public class Document {

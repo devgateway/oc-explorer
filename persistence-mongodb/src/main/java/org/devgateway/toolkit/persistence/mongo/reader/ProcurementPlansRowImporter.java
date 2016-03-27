@@ -14,6 +14,12 @@ import org.devgateway.toolkit.persistence.mongo.repository.LocationRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 
+/**
+ * 
+ * @author mihai
+ * Specific {@link RowImporter} for Procurement Plans, in the custom Excel format provided by Vietnam
+ * @see VNPlanning
+ */
 public class ProcurementPlansRowImporter extends RowImporter<Release, ReleaseRepository> {
 	private LocationRepository locationRepository;
 

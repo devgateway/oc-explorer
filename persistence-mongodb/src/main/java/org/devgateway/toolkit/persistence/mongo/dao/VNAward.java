@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
- *
+ * Extension of {@link Award} to allow extra Vietnam-specific fields
  */
 @Document(collection = "award")
 public class VNAward extends Award {

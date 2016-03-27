@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
- *
+ * Organization OCDS entity http://standard.open-contracting.org/latest/en/schema/reference/#organization
  */
 @Document
 public class Organization {

@@ -12,6 +12,11 @@ import org.devgateway.toolkit.persistence.mongo.dao.VNTender;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 
+/**
+ * @author mihai
+ * Specific {@link RowImporter} for Bid Plans in the custom Excel format provided by Vietnam 
+ * @see VNPlanning
+ */
 public class BidPlansRowImporter extends RowImporter<Release, ReleaseRepository> {
 
 	public BidPlansRowImporter(ReleaseRepository releaseRepository,VNImportService importService, int skipRows) {

@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 /**
  * @author mihai
- *
+ * Value OCDS Entity http://standard.open-contracting.org/latest/en/schema/reference/#value
  */
 public class Value {
 	BigDecimal amount;

@@ -13,7 +13,6 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.devgateway.toolkit.persistence.dao.VietnamImportSourceFiles;
 import org.devgateway.toolkit.persistence.mongo.dao.DBConstants;
 import org.devgateway.toolkit.persistence.mongo.dao.ImportFileTypes;
 import org.devgateway.toolkit.persistence.mongo.reader.BidPlansRowImporter;
