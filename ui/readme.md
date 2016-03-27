@@ -174,7 +174,7 @@ This will create a fat jar project, and copy all front-end dependencies inside t
 
 ### Running the UI module as a Spring Boot fat jar
 
-As with any other module in dg-toolkit this can be run as a java app:
+As with any other module in OCVN this can be run as a java app:
 
 `java -jar target/ui-0.0.1-SNAPSHOT.jar`
 
