@@ -9,13 +9,9 @@ dispatcher.registerStores({
   globalState: globalStateStore
 });
 
-var ensureObject = maybeObject => "object" == typeof maybeObject ? maybeObject : {};
-
 var ensureArray = maybeArray => Array.isArray(maybeArray) ? maybeArray : [];
 
 var obj2arr = obj => Object.keys(obj).map(key => obj[key]);
-
-var getSg = pl => pl.replace(/s$/, "");
 
 var getSelectedYears = [
   ['globalState', 'filters', 'years'],
@@ -26,7 +22,7 @@ var yearOnly = year => ({
   year: year
 });
 
-var mkDataGetter = ({path, getFillerDatum = yearOnly}) => [
+var mkDataGetter = ({path, getFillerDatum = yearOnly, horizontal = false}) => [
   ['globalState', 'compareBy'],
   ['globalState', 'data', path],
   ['globalState', 'comparisonData', path],
@@ -41,13 +37,18 @@ var mkDataGetter = ({path, getFillerDatum = yearOnly}) => [
       return obj2arr(dataByYear);
     };
     if(compare){
-      var data = ensureArray(comparisonData).map(parse);
-      var maxValue = Math.max.apply(Math, data.map(datum =>
-          Math.max.apply(Math, Object.keys(datum).filter(key => key !='year').map(key => datum[key])))
-      );
+      var arrOfData = ensureArray(comparisonData).map(parse);
+      //we have an array of arrays of objects if certain fields, we need the max value of those fields
+      var maxValue = Math.max.apply(Math, arrOfData.map(data =>
+        //dive one more level in
+        Math.max.apply(Math, data.map(datum =>
+          //get all the keys of the object, throw away "year", then find the max associated values
+          Math.max.apply(Math, Object.keys(datum).filter(key => "year" != key).map(key => datum[key] || 0))
+        ))
+      ));
       return {
-        yAxisRange: [0, maxValue],
-        data: data
+        [horizontal ? 'xAxisRange' : 'yAxisRange']: [0, maxValue],
+        data: arrOfData
       }
     } else {
       return parse(ensureArray(rawData));
@@ -74,47 +75,34 @@ var getOverview = [
     }
 ];
 
-var getCostEffectiveness = [
-  ['globalState', 'compareBy'],
-  ['globalState', 'data', 'costEffectiveness'],
-  ['globalState', 'comparisonData', 'costEffectiveness'],
-  getSelectedYears,
-  (compare, rawData, comparisonData, years) => {
-    var parse = data => {
-      var dataByYear = [];
-      years.forEach(year => dataByYear[year] = {
-        year: year,
-        tender: 0,
-        diff: 0
-      });
-      data.forEach(datum => {
-        if(dataByYear[+datum.year]) dataByYear[+datum.year] = datum
-      });
-      return obj2arr(dataByYear);
-    };
-    if(compare){
-      var data = ensureArray(comparisonData).map(parse);
-      var maxValue = Math.max.apply(Math, data.map(({diff, tender}) => Math.max(diff, tender)));
-      return {
-        data: data,
-        yAxisrange: [0, maxValue]
-      };
-    } else {
-      return parse(ensureArray(rawData));
+var getCostEffectiveness = mkDataGetter({
+  path: "costEffectiveness",
+  getFillerDatum(year){
+    return {
+      year: year,
+      tender: 0,
+      diff: 0
     }
   }
-]
+});
+
+var getBidPeriod = mkDataGetter({
+  path: "bidPeriod",
+  horizontal: true
+});
 
 var getTender = [
     ['globalState', 'compareBy'],
     getCostEffectiveness,
-    (compare, costEffectiveness) => {
+    getBidPeriod,
+    (compare, costEffectiveness, bidPeriod) => {
       return {
         compare: compare,
-        costEffectiveness: costEffectiveness
+        costEffectiveness: costEffectiveness,
+        bidPeriod: bidPeriod
       }
     }
-]
+];
 
 var getGlobalState = [
     [],

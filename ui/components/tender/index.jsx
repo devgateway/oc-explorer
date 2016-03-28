@@ -28,39 +28,6 @@ var filterBidTypeData = years => data => data
     .toArray();
 
 export default class Tender extends Component{
-  getCostEffectiveness(){
-    var globalState = this.props.state.get('globalState');
-    var selectedYears = globalState.getIn(['filters', 'years']);
-    var width = globalState.get('contentWidth');
-    var data = globalState.get('data');
-    if(globalState.get('compareBy')){
-      var costEffectivenessData = globalState.getIn(['comparisonData', 'costEffectiveness']);
-      if(!costEffectivenessData) return null;
-      var minValue = Math.min.apply(Math, costEffectivenessData.map(datum =>
-          Math.min.apply(Math, datum.map(pluck('tender')))
-      ));
-      var maxValue = Math.max.apply(Math, costEffectivenessData.map(datum =>
-          Math.max.apply(Math, datum.map(pluck('tender')))
-      ));
-      return (
-          <Comparison
-            years={selectedYears}
-            width={width}
-            data={costEffectivenessData}
-            Component={CostEffectiveness}
-            yAxisRange={[minValue, maxValue]}
-          />
-      )
-    } else {
-      return (
-          <CostEffectiveness
-              years={selectedYears}
-              width={width}
-              data={data.get('costEffectiveness')}/>
-      )
-    }
-  }
-
   getBiddingPeriod(){
     var globalState = this.props.state.get('globalState');
     var selectedYears = globalState.getIn(['filters', 'years']);
@@ -170,8 +137,8 @@ export default class Tender extends Component{
   }
 
   render(){
-    var {state} = this.props;
-    var {compare, costEffectiveness} = state;
+    var {state, width} = this.props;
+    var {compare, costEffectiveness, bidPeriod} = state;
     return (
         <div className="col-sm-12 content">
           {compare ?
@@ -186,6 +153,21 @@ export default class Tender extends Component{
                 title="Cost effectiveness"
                 data={costEffectiveness}
                 width={width}
+              />
+          }
+
+          {compare ?
+              <Comparison
+                  width={width}
+                  state={bidPeriod}
+                  Component={BiddingPeriod}
+                  title="Bid period"
+              />
+              :
+              <BiddingPeriod
+                  title="Bid period"
+                  data={bidPeriod}
+                  width={width}
               />
           }
         </div>
