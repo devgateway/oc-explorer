@@ -22,37 +22,19 @@ var getSelectedYears = [
   years => years ? years.filter(identity).keySeq().toArray() : []
 ];
 
-var mkDataGetter = ({path, sanityCheck}) => [
+var yearOnly = year => ({
+  year: year
+});
+
+var mkDataGetter = ({path, getFillerDatum = yearOnly}) => [
   ['globalState', 'compareBy'],
   ['globalState', 'data', path],
   ['globalState', 'comparisonData', path],
   getSelectedYears,
   (compare, rawData, comparisonData, years) => {
-    if(compare){
-
-    } else {
-      return parse(sanityCheck(rawData));
-    }
-  }
-];
-
-var getOverviewData = mkDataGetter({
-  path: "overview",
-  sanityCheck: ensureObject
-});
-
-var getOverviewData = [
-  ['globalState', 'compareBy'],
-  ['globalState', 'data', 'overview'],
-  ['globalState', 'comparisonData', 'overview'],
-  getSelectedYears,
-  (compare, rawData, comparisonData, years) => {
-    console.log(rawData);
     var parse = data => {
       var dataByYear = [];
-      years.forEach(year => dataByYear[year] = {
-        year: year
-      });
+      years.forEach(year => dataByYear[year] = getFillerDatum(year));
       data.forEach(datum => {
         if(dataByYear[+datum.year]) dataByYear[+datum.year] = datum
       });
@@ -60,7 +42,9 @@ var getOverviewData = [
     };
     if(compare){
       var data = ensureArray(comparisonData).map(parse);
-      var maxValue = Math.max.apply(Math, data.map(({award, bidplan, tender}) => Math.max(award, bidplan, tender)));
+      var maxValue = Math.max.apply(Math, data.map(datum =>
+          Math.max.apply(Math, Object.keys(datum).filter(key => key !='year').map(key => datum[key])))
+      );
       return {
         yAxisRange: [0, maxValue],
         data: data
@@ -70,6 +54,10 @@ var getOverviewData = [
     }
   }
 ];
+
+var getOverviewData = mkDataGetter({
+  path: "overview"
+});
 
 var getOverview = [
     ['globalState', 'compareBy'],
