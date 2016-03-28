@@ -82,7 +82,13 @@ export default class App extends React.Component{
                         locations={globalState.getIn(['data', 'locations'])}
                     />
                 );
-                default: return <Tender {...props}/>
+                default: return (
+                    <Tender
+                        actions={actions}
+                        state={state.get('tender')}
+                        width={width}
+                    />
+                )
               }
             }(globalState.get('tab'), this.props)}
             <div className="col-sm-12 thick-red-line"></div>

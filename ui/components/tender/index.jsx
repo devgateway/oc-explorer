@@ -171,10 +171,30 @@ export default class Tender extends Component{
 
   render(){
     var {state} = this.props;
+    var {compare, costEffectiveness} = state;
+    return (
+        <div className="col-sm-12 content">
+          {compare ?
+              <Comparison
+                  width={width}
+                  state={costEffectiveness}
+                  Component={CostEffectiveness}
+                  title="Cost effectiveness"
+              />
+          :
+              <CostEffectiveness
+                title="Cost effectiveness"
+                data={costEffectiveness}
+                width={width}
+              />
+          }
+        </div>
+    )
     var globalState = state.get('globalState');
     var selectedYears = globalState.getIn(['filters', 'years']);
     var width = globalState.get('contentWidth');
     var data = globalState.get('data');
+
     return (
         <div className="col-sm-12 content">
           {this.getCostEffectiveness()}

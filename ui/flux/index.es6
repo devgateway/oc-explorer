@@ -22,7 +22,6 @@ var getSelectedYears = [
   years => years ? years.filter(identity).keySeq().toArray() : []
 ];
 
-
 var getOverviewData = [
   ['globalState', 'compareBy'],
   ['globalState', 'data', 'overview'],
@@ -69,9 +68,53 @@ var getOverview = [
     }
 ];
 
+var getCostEffectiveness = [
+  ['globalState', 'compareBy'],
+  ['globalState', 'data', 'costEffectiveness'],
+  ['globalState', 'comparisonData', 'costEffectiveness'],
+  getSelectedYears,
+  (compare, rawData, comparisonData, years) => {
+    var parse = data => {
+      var dataByYear = [];
+      years.forEach(year => dataByYear[year] = {
+        year: year,
+        tender: 0,
+        diff: 0
+      });
+      data.forEach(datum => {
+        if(dataByYear[+datum.year]) dataByYear[+datum.year] = datum
+      });
+      return obj2arr(dataByYear);
+    };
+    if(compare){
+      var data = ensureArray(comparisonData).map(parse);
+      var maxValue = Math.max.apply(Math, data.map(({diff, tender}) => Math.max(diff, tender)));
+      return {
+        data: data,
+        yAxisrange: [0, maxValue]
+      };
+    } else {
+      return parse(ensureArray(rawData));
+    }
+  }
+]
+
+var getTender = [
+    ['globalState', 'compareBy'],
+    getCostEffectiveness,
+    (compare, costEffectiveness) => {
+      return {
+        compare: compare,
+        costEffectiveness: costEffectiveness
+      }
+    }
+]
+
 var getGlobalState = [
     [],
-    state => state.set('overview', dispatcher.evaluate(getOverview))
+    state => state
+        .set('overview', dispatcher.evaluate(getOverview))
+        .set('tender', dispatcher.evaluate(getTender))
 ];
 
 export default {
