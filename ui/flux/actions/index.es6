@@ -17,14 +17,17 @@ var addFilters = (filters, url) => null === filters ? url :
       year: Object.keys(filters.years).filter(year => filters.years[year])
     }).toString();
 
+/*
+  Given [[1,2,3], ['a','b','c']] will produce [[1, 'a'], [2, 'b'], [3, 'c']]
+ */
 var regroup = ([head, ...tail]) => head.map((el, index) => [el].concat(tail.map(pluck(index))));
 
-var transformCostEffectivenessData = ([tenderResponse, awardResponse]) => {
-  var response2obj = (field, arr) => arr.reduce((obj, elem) => {
-    obj[elem._id] = elem[field];
-    return obj;
-  }, {});
+var response2obj = (field, arr) => arr.reduce((obj, elem) => {
+  obj[elem._id] = elem[field];
+  return obj;
+}, {});
 
+var transformCostEffectivenessData = ([tenderResponse, awardResponse]) => {
   var tender = response2obj('totalTenderAmount', tenderResponse);
   var award = response2obj('totalAwardAmount', awardResponse);
   return Object.keys(tender).map(year => ({
@@ -35,17 +38,14 @@ var transformCostEffectivenessData = ([tenderResponse, awardResponse]) => {
 };
 
 var transformBidPeriodData = ([tenders, awards]) => {
-  var awardsHash = awards.reduce((obj, award) => {
-    obj[award._id] = award.averageAwardDays
-    return obj;
-  }, {});
+  var awardsHash = response2obj('averageAwardDays', awards);
   return tenders.map(tender => ({
-        year: tender._id,
-        tender: tender.averageTenderDays,
-        award: awardsHash[tender._id] || 0
-      })
+      year: tender._id,
+      tender: tender.averageTenderDays,
+      award: awardsHash[tender._id] || 0
+    })
   )
-}
+};
 
 export default {
   changeTab(slug){
