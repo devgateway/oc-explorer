@@ -27,10 +27,17 @@ export default class CostEffectiveness extends Plot{
     return {
       barmode: "stack",
       xaxis: {
-        type: "category"
+        title: "Years",
+        type: "category",
+        titlefont: {
+          color: "#cc3c3b"
+        }
       },
       yaxis: {
-        range: this.props.yAxisRange
+        title: "Amount",
+        titlefont: {
+          color: "#cc3c3b"
+        }
       }
     }
   }
