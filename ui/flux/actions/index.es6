@@ -165,7 +165,8 @@ export default {
       pageSize: 3
     }).toString();
     fetchJson(addFilters(filters, comparisonUrl)).then(comparisonData => {
-      var addComparisionFilters = url => {
+      dispatcher.dispatch(constants.COMPARISON_CRITERIA_NAMES_UPDATED, comparisonData.map(pluck('_id')));
+      var addComparisonFilters = url => {
         var uri = new URI(addFilters(filters, url));
         var criteriaValues = comparisonData.map(pluck("bidTypeId" == criteria ? "0" : "_id"));
         return criteriaValues
@@ -175,7 +176,7 @@ export default {
             ]);
       };
 
-      var load = url => Promise.all(addComparisionFilters(url).map(fetchJson));
+      var load = url => Promise.all(addComparisonFilters(url).map(fetchJson));
 
       Promise.all([
           load(endpoints.COUNT_BID_PLANS_BY_YEAR),

@@ -32,7 +32,8 @@ var mkDataGetter = ({path, getFillerDatum = yearOnly, horizontal = false, getMax
   ['globalState', 'data', path],
   ['globalState', 'comparisonData', path],
   getSelectedYears,
-  (compare, rawData, comparisonData, years) => {
+  ['globalState', 'comparisonCriteriaNames'],
+  (compare, rawData, comparisonData, years, comparisonCriteriaNames) => {
     var parse = data => {
       var dataByYear = [];
       years.forEach(year => dataByYear[year] = getFillerDatum(year));
@@ -47,6 +48,7 @@ var mkDataGetter = ({path, getFillerDatum = yearOnly, horizontal = false, getMax
         Math.max.apply(Math, data.map(getMaxField))
       ));
       return {
+        criteriaNames: comparisonCriteriaNames,
         [horizontal ? 'xAxisRange' : 'yAxisRange']: [0, maxValue],
         data: arrOfData
       }
@@ -106,7 +108,8 @@ var getBidType = [
   ['globalState', 'data', 'bidType'],
   ['globalState', 'comparisonData', 'bidType'],
   ['globalState', 'filters', 'years'],
-  (compare, rawData, comparisonData, rawYears) => {
+  ['globalState', 'comparisonCriteriaNames'],
+  (compare, rawData, comparisonData, rawYears, comparisonCriteriaNames) => {
     var years = ensureList(rawYears);
     var collectCats = arrOfData => arrOfData.reduce((cats, data) => data
       .filter(bidType => years.get(bidType.get('year')), false)
@@ -135,6 +138,7 @@ var getBidType = [
           Math.max.apply(Math, data.map(pluck('totalTenderAmount')))
       ));
       return {
+        criteriaNames: comparisonCriteriaNames,
         yAxisRange: [0, maxValue],
         data: arrOfData
       }

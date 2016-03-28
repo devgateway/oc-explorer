@@ -3,7 +3,7 @@ import Component from "./pure-render-component";
 export default class Comparison extends Component{
   render(){
     var {state, Component, title, width} = this.props;
-    var {data, yAxisRange, xAxisRange} = state;
+    var {data, yAxisRange, xAxisRange, criteriaNames} = state;
     return (
         <div>
           <h3 className="page-header">{title}</h3>
@@ -14,7 +14,7 @@ export default class Comparison extends Component{
                  xAxisRange={xAxisRange}
                  data={datum}
                  pageHeaderTitle={false}
-                 title={index}
+                 title={criteriaNames[index] || "Other"}
                  width={width}
              />
           ))}
