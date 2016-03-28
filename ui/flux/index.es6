@@ -22,7 +22,10 @@ var yearOnly = year => ({
   year: year
 });
 
-var mkDataGetter = ({path, getFillerDatum = yearOnly, horizontal = false}) => [
+var maxFieldExceptYear = datum =>
+    Math.max.apply(Math, Object.keys(datum).filter(key => "year" != key).map(key => datum[key] || 0));
+
+var mkDataGetter = ({path, getFillerDatum = yearOnly, horizontal = false, getMaxField =  maxFieldExceptYear}) => [
   ['globalState', 'compareBy'],
   ['globalState', 'data', path],
   ['globalState', 'comparisonData', path],
@@ -38,13 +41,8 @@ var mkDataGetter = ({path, getFillerDatum = yearOnly, horizontal = false}) => [
     };
     if(compare){
       var arrOfData = ensureArray(comparisonData).map(parse);
-      //we have an array of arrays of objects if certain fields, we need the max value of those fields
       var maxValue = Math.max.apply(Math, arrOfData.map(data =>
-        //dive one more level in
-        Math.max.apply(Math, data.map(datum =>
-          //get all the keys of the object, throw away "year", then find the max associated values
-          Math.max.apply(Math, Object.keys(datum).filter(key => "year" != key).map(key => datum[key] || 0))
-        ))
+        Math.max.apply(Math, data.map(getMaxField))
       ));
       return {
         [horizontal ? 'xAxisRange' : 'yAxisRange']: [0, maxValue],
@@ -83,12 +81,18 @@ var getCostEffectiveness = mkDataGetter({
       tender: 0,
       diff: 0
     }
+  },
+  getMaxField({tender, diff}){
+    return tender + diff;
   }
 });
 
 var getBidPeriod = mkDataGetter({
   path: "bidPeriod",
-  horizontal: true
+  horizontal: true,
+  getMaxField({tender, award}){
+    return tender + award;
+  }
 });
 
 var getTender = [
