@@ -165,7 +165,7 @@ export default {
       pageSize: 3
     }).toString();
     fetchJson(addFilters(filters, comparisonUrl)).then(comparisonData => {
-      dispatcher.dispatch(constants.COMPARISON_CRITERIA_NAMES_UPDATED, comparisonData.map(pluck('_id')));
+      dispatcher.dispatch(constants.COMPARISON_CRITERIA_NAMES_UPDATED, comparisonData);
       var addComparisonFilters = url => {
         var uri = new URI(addFilters(filters, url));
         var criteriaValues = comparisonData.map(pluck("bidTypeId" == criteria ? "0" : "_id"));

@@ -27,13 +27,25 @@ var yearOnly = year => ({
 var maxFieldExceptYear = datum =>
     Math.max.apply(Math, Object.keys(datum).filter(key => "year" != key).map(key => datum[key] || 0));
 
+var getCriteriaNames = (compare, comparisonCriteriaNames, filters) => {
+  switch(compare){
+    case "bidTypeId":
+      return ensureArray(comparisonCriteriaNames).map(name =>
+          filters.getIn(['bidTypes', 'options']).find(bidType => bidType.get('id') == name[0]).get('description')
+      );
+    default:
+      return ensureArray(comparisonCriteriaNames).map(pluck('_id'));
+  }
+}
+
 var mkDataGetter = ({path, getFillerDatum = yearOnly, horizontal = false, getMaxField =  maxFieldExceptYear}) => [
   ['globalState', 'compareBy'],
   ['globalState', 'data', path],
   ['globalState', 'comparisonData', path],
   getSelectedYears,
   ['globalState', 'comparisonCriteriaNames'],
-  (compare, rawData, comparisonData, years, comparisonCriteriaNames) => {
+  ['globalState', 'filters'],
+  (compare, rawData, comparisonData, years, comparisonCriteriaNames, filters) => {
     var parse = data => {
       var dataByYear = [];
       years.forEach(year => dataByYear[year] = getFillerDatum(year));
@@ -48,7 +60,7 @@ var mkDataGetter = ({path, getFillerDatum = yearOnly, horizontal = false, getMax
         Math.max.apply(Math, data.map(getMaxField))
       ));
       return {
-        criteriaNames: comparisonCriteriaNames,
+        criteriaNames: getCriteriaNames(compare, comparisonCriteriaNames, filters),
         [horizontal ? 'xAxisRange' : 'yAxisRange']: [0, maxValue],
         data: arrOfData
       }
@@ -109,7 +121,8 @@ var getBidType = [
   ['globalState', 'comparisonData', 'bidType'],
   ['globalState', 'filters', 'years'],
   ['globalState', 'comparisonCriteriaNames'],
-  (compare, rawData, comparisonData, rawYears, comparisonCriteriaNames) => {
+  ['globalState', 'filters'],
+  (compare, rawData, comparisonData, rawYears, comparisonCriteriaNames, filters) => {
     var years = ensureList(rawYears);
     var collectCats = arrOfData => arrOfData.reduce((cats, data) => data
       .filter(bidType => years.get(bidType.get('year')), false)
@@ -138,7 +151,7 @@ var getBidType = [
           Math.max.apply(Math, data.map(pluck('totalTenderAmount')))
       ));
       return {
-        criteriaNames: comparisonCriteriaNames,
+        criteriaNames: getCriteriaNames(compare, comparisonCriteriaNames, filters),
         yAxisRange: [0, maxValue],
         data: arrOfData
       }
