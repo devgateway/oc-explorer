@@ -2,7 +2,7 @@ import Component from "./pure-render-component";
 
 export default class Comparison extends Component{
   render(){
-    var {state, Component, title} = this.props;
+    var {state, Component, title, width} = this.props;
     var {data, yAxisRange, xAxisRange} = state;
     if(!data) return null;
     return (
@@ -16,6 +16,7 @@ export default class Comparison extends Component{
                  data={datum}
                  pageHeaderTitle={false}
                  title={index}
+                 width={width}
              />
           ))}
         </div>
