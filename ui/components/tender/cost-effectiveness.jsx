@@ -4,7 +4,7 @@ import {pluck} from "../../tools";
 export default class CostEffectiveness extends Plot{
   getData(){
     var {data} = this.props;
-    var years = data.map(pluck('year'))
+    var years = data.map(pluck('year'));
 
     var bidPrice = {
       x: years,
@@ -15,7 +15,7 @@ export default class CostEffectiveness extends Plot{
 
     var diff = {
       x: years,
-      y: data.map(pluck('tender')),
+      y: data.map(pluck('diff')),
       name: 'Difference',
       type: 'bar'
     };
