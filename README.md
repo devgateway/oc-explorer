@@ -23,6 +23,8 @@ The project's source code is licensed under the open source [MIT](https://openso
 
 ## Architecture
 
+![OCVN Architecture](ocvn.mmd.png)
+
 This is a mavenized multi-module project. It is built on the open source [dg-toolkit](https://github.com/devgateway/dg-toolkit) architecture. Each module can be started independently of the rest. All modules are based on [Spring Boot](http://projects.spring.io/spring-boot/) templates. 
 
 The project uses [the gitflow workflow](https://github.com/devgateway/ocvn/blob/develop/gitflow.md) to drive the software release process.
