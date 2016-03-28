@@ -22,22 +22,40 @@ var getSelectedYears = [
   years => years ? years.filter(identity).keySeq().toArray() : []
 ];
 
+var mkDataGetter = ({path, sanityCheck}) => [
+  ['globalState', 'compareBy'],
+  ['globalState', 'data', path],
+  ['globalState', 'comparisonData', path],
+  getSelectedYears,
+  (compare, rawData, comparisonData, years) => {
+    if(compare){
+
+    } else {
+      return parse(sanityCheck(rawData));
+    }
+  }
+];
+
+var getOverviewData = mkDataGetter({
+  path: "overview",
+  sanityCheck: ensureObject
+});
+
 var getOverviewData = [
   ['globalState', 'compareBy'],
   ['globalState', 'data', 'overview'],
   ['globalState', 'comparisonData', 'overview'],
   getSelectedYears,
   (compare, rawData, comparisonData, years) => {
+    console.log(rawData);
     var parse = data => {
       var dataByYear = [];
       years.forEach(year => dataByYear[year] = {
         year: year
       });
-      Object.keys(data).forEach(key =>
-        data[key].forEach(({_id, count}) => {
-          if(dataByYear[_id]) dataByYear[_id][getSg(key)] = count;
-        })
-      );
+      data.forEach(datum => {
+        if(dataByYear[+datum.year]) dataByYear[+datum.year] = datum
+      });
       return obj2arr(dataByYear);
     };
     if(compare){
@@ -48,7 +66,7 @@ var getOverviewData = [
         data: data
       }
     } else {
-      return parse(ensureObject(rawData));
+      return parse(ensureArray(rawData));
     }
   }
 ];

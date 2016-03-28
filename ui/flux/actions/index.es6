@@ -20,12 +20,25 @@ var addFilters = (filters, url) => null === filters ? url :
 /*
   Given [[1,2,3], ['a','b','c']] will produce [[1, 'a'], [2, 'b'], [3, 'c']]
  */
-var regroup = ([head, ...tail]) => head.map((el, index) => [el].concat(tail.map(pluck(index))));
+var transpose = ([head, ...tail]) => head.map((el, index) => [el].concat(tail.map(pluck(index))));
 
 var response2obj = (field, arr) => arr.reduce((obj, elem) => {
   obj[elem._id] = elem[field];
   return obj;
 }, {});
+
+
+var transformOverviewData = ([bidplansResponse, tendersResponse, awardsResponse]) => {
+  var bidplans = response2obj('count', bidplansResponse);
+  var tenders = response2obj('count', tendersResponse);
+  var awards = response2obj('count', awardsResponse);
+  return Object.keys(tenders).map(year => ({
+    year: year,
+    bidplan: bidplans[year],
+    tender: tenders[year],
+    award: awards[year]
+  }));
+};
 
 var transformCostEffectivenessData = ([tenderResponse, awardResponse]) => {
   var tender = response2obj('totalTenderAmount', tenderResponse);
@@ -76,11 +89,9 @@ export default {
       load(endpoints.COUNT_BID_PLANS_BY_YEAR),
       load(endpoints.COUNT_TENDERS_BY_YEAR),
       load(endpoints.COUNT_AWARDS_BY_YEAR)
-    ]).then(([bidplans, tenders, awards]) => dispatcher.dispatch(constants.OVERVIEW_DATA_UPDATED, {
-      bidplans: bidplans,
-      tenders: tenders,
-      awards: awards
-    }));
+    ])
+        .then(transformOverviewData)
+        .then(data => dispatcher.dispatch(constants.OVERVIEW_DATA_UPDATED, data));
 
     load(endpoints.PLANNED_FUNDING_BY_LOCATION).then(data => dispatcher.dispatch(constants.LOCATION_UPDATED, data));
 
@@ -164,24 +175,22 @@ export default {
           load(endpoints.COUNT_BID_PLANS_BY_YEAR),
           load(endpoints.COUNT_TENDERS_BY_YEAR),
           load(endpoints.COUNT_AWARDS_BY_YEAR)
-      ]).then(data => regroup(data).map(([bidplans, tenders, awards]) => {
-        return {
-          bidplans: bidplans,
-          tenders: tenders,
-          awards: awards
-        }
-      })).then(data => dispatcher.dispatch(constants.OVERVIEW_COMPARISON_DATA_UPDATED, data));
+      ])
+          .then(data => transpose(data).map(transformOverviewData))
+          .then(data => dispatcher.dispatch(constants.OVERVIEW_COMPARISON_DATA_UPDATED, data));
 
       Promise.all([
         load(endpoints.COST_EFFECTIVENESS_TENDER_AMOUNT),
         load(endpoints.COST_EFFECTIVENESS_AWARD_AMOUNT)
-      ]).then(data => regroup(data).map(transformCostEffectivenessData))
+      ])
+          .then(data => transpose(data).map(transformCostEffectivenessData))
           .then(data => dispatcher.dispatch(constants.COST_EFFECTIVENESS_COMPARISON_DATA_UPDATED, data));
 
       Promise.all([
         load(endpoints.AVERAGE_TENDER_PERIOD),
         load(endpoints.AVERAGE_AWARD_PERIOD)
-      ]).then(data => regroup(data).map(transformBidPeriodData))
+      ])
+          .then(data => transpose(data).map(transformBidPeriodData))
           .then(data => dispatcher.dispatch(constants.BID_PERIOD_COMPARISON_DATA_UPDATED, data));
 
       load(endpoints.TENDER_PRICE_BY_VN_TYPE_YEAR).then(data =>
