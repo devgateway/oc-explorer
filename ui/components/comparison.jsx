@@ -4,7 +4,6 @@ export default class Comparison extends Component{
   render(){
     var {state, Component, title, width} = this.props;
     var {data, yAxisRange, xAxisRange} = state;
-    if(!data) return null;
     return (
         <div>
           <h3 className="page-header">{title}</h3>

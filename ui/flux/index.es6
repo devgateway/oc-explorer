@@ -2,14 +2,16 @@ import dispatcher from "./dispatcher";
 import actions from "./actions";
 import globalStateStore from "./stores/global-state";
 import {toImmutable} from "nuclear-js";
-import {Map} from "immutable";
-import {pluck, identity} from '../tools';
+import {Map, List} from "immutable";
+import {identity, pluck} from '../tools';
 
 dispatcher.registerStores({
   globalState: globalStateStore
 });
 
 var ensureArray = maybeArray => Array.isArray(maybeArray) ? maybeArray : [];
+
+var ensureList = maybeList => maybeList || List();
 
 var obj2arr = obj => Object.keys(obj).map(key => obj[key]);
 
@@ -99,16 +101,63 @@ var getCancelled = mkDataGetter({
   path: "cancelled"
 });
 
+var getBidType = [
+  ['globalState', 'compareBy'],
+  ['globalState', 'data', 'bidType'],
+  ['globalState', 'comparisonData', 'bidType'],
+  ['globalState', 'filters', 'years'],
+  (compare, rawData, comparisonData, rawYears) => {
+    var years = ensureList(rawYears);
+    var collectCats = arrOfData => arrOfData.reduce((cats, data) => data
+      .filter(bidType => years.get(bidType.get('year')), false)
+      .groupBy(bidType => bidType.get('procurementMethodDetails'))
+      .reduce((cats, bidTypes) => {
+        var name = bidTypes.getIn([0, 'procurementMethodDetails']) || 'unspecified';
+        return cats.set(name, Map({
+          _id: name,
+          totalTenderAmount: 0
+        }))
+      }, cats)
+    , Map());
+
+    var parse = cats => data => data
+      .reduce((cats, datum) => {
+        var name = datum.get('procurementMethodDetails') || 'unspecified';
+        var path = [name, 'totalTenderAmount'];
+        return cats.setIn(path, cats.getIn(path) + datum.get('totalTenderAmount'));
+      }, cats)
+      .toList().toJS()
+
+    if (compare) {
+      var cats = collectCats(ensureArray(comparisonData));
+      var arrOfData = ensureArray(comparisonData).map(parse(cats));
+      var maxValue = Math.max.apply(Math, arrOfData.map(data =>
+          Math.max.apply(Math, data.map(pluck('totalTenderAmount')))
+      ));
+      return {
+        yAxisRange: [0, maxValue],
+        data: arrOfData
+      }
+    } else {
+      var data = ensureList(rawData);
+      var cats = collectCats([data]);
+      return parse(cats)(data);
+    }
+  }
+];
+
 var getTender = [
     ['globalState', 'compareBy'],
     getCostEffectiveness,
     getBidPeriod,
+    getBidType,
     getCancelled,
-    (compare, costEffectiveness, bidPeriod, cancelled) => {
+    (compare, costEffectiveness, bidPeriod, bidType, cancelled) => {
       return {
         compare: compare,
         costEffectiveness: costEffectiveness,
         bidPeriod: bidPeriod,
+        bidType: bidType,
         cancelled: cancelled
       }
     }

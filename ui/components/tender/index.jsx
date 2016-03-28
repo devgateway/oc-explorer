@@ -8,19 +8,6 @@ import {toImmutable} from "nuclear-js";
 import Comparison from "../comparison";
 import {pluck} from "../../tools";
 
-var filterBidTypeData = years => data => data
-    .filter(bidType => years.get(bidType.get('year'), false))
-    .groupBy(bidType => bidType.get('procurementMethodDetails'))
-    .map(bidTypes => bidTypes.reduce((reducedBidType, bidType) => {
-      return {
-        _id: bidType.get('procurementMethodDetails') || "unspecified",
-        totalTenderAmount: reducedBidType.totalTenderAmount + bidType.get('totalTenderAmount')
-      }
-    }, {
-      totalTenderAmount: 0
-    }))
-    .toArray();
-
 export default class Tender extends Component{
   getBiddingPeriod(){
     var globalState = this.props.state.get('globalState');
@@ -132,7 +119,7 @@ export default class Tender extends Component{
 
   render(){
     var {state, width} = this.props;
-    var {compare, costEffectiveness, bidPeriod, cancelled} = state;
+    var {compare, costEffectiveness, bidPeriod, bidType, cancelled} = state;
     return (
         <div className="col-sm-12 content">
           {compare ?
@@ -161,6 +148,21 @@ export default class Tender extends Component{
               <BiddingPeriod
                   title="Bid period"
                   data={bidPeriod}
+                  width={width}
+              />
+          }
+
+          {compare ?
+              <Comparison
+                  width={width}
+                  state={bidType}
+                  Component={FundingByBidType}
+                  title="Funding by bid type"
+              />
+              :
+              <FundingByBidType
+                  title="Funding by bid type"
+                  data={bidType}
                   width={width}
               />
           }
