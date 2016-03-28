@@ -8,59 +8,7 @@ import {toImmutable} from "nuclear-js";
 import Comparison from "../comparison";
 import {pluck} from "../../tools";
 
-var sortByYear = (a, b) => {
-  if(a.year < b.year) return -1;
-  if(a.year == b.year) return 0;
-  if(a.year < b.year) return 1;
-};
-
-var filterBidTypeData = years => data => data
-    .filter(bidType => years.get(bidType.get('year'), false))
-    .groupBy(bidType => bidType.get('procurementMethodDetails'))
-    .map(bidTypes => bidTypes.reduce((reducedBidType, bidType) => {
-      return {
-        _id: bidType.get('procurementMethodDetails') || "unspecified",
-        totalTenderAmount: reducedBidType.totalTenderAmount + bidType.get('totalTenderAmount')
-      }
-    }, {
-      totalTenderAmount: 0
-    }))
-    .toArray();
-
 export default class Tender extends Component{
-  getCostEffectiveness(){
-    var globalState = this.props.state.get('globalState');
-    var selectedYears = globalState.getIn(['filters', 'years']);
-    var width = globalState.get('contentWidth');
-    var data = globalState.get('data');
-    if(globalState.get('compareBy')){
-      var costEffectivenessData = globalState.getIn(['comparisonData', 'costEffectiveness']);
-      if(!costEffectivenessData) return null;
-      var minValue = Math.min.apply(Math, costEffectivenessData.map(datum =>
-          Math.min.apply(Math, datum.map(pluck('tender')))
-      ));
-      var maxValue = Math.max.apply(Math, costEffectivenessData.map(datum =>
-          Math.max.apply(Math, datum.map(pluck('tender')))
-      ));
-      return (
-          <Comparison
-            years={selectedYears}
-            width={width}
-            data={costEffectivenessData}
-            Component={CostEffectiveness}
-            yAxisRange={[minValue, maxValue]}
-          />
-      )
-    } else {
-      return (
-          <CostEffectiveness
-              years={selectedYears}
-              width={width}
-              data={data.get('costEffectiveness')}/>
-      )
-    }
-  }
-
   getBiddingPeriod(){
     var globalState = this.props.state.get('globalState');
     var selectedYears = globalState.getIn(['filters', 'years']);
@@ -170,15 +118,74 @@ export default class Tender extends Component{
   }
 
   render(){
-    var {state} = this.props;
-    var globalState = state.get('globalState');
-    var selectedYears = globalState.getIn(['filters', 'years']);
-    var width = globalState.get('contentWidth');
-    var data = globalState.get('data');
+    var {state, width} = this.props;
+    var {compare, costEffectiveness, bidPeriod, bidType, cancelled} = state;
     return (
         <div className="col-sm-12 content">
-          {this.getCostEffectiveness()}
-          {this.getBiddingPeriod()}
+          {compare ?
+              <Comparison
+                  width={width}
+                  state={costEffectiveness}
+                  Component={CostEffectiveness}
+                  title="Cost effectiveness"
+              />
+          :
+              <CostEffectiveness
+                title="Cost effectiveness"
+                data={costEffectiveness}
+                width={width}
+              />
+          }
+
+          {compare ?
+              <Comparison
+                  width={width}
+                  state={bidPeriod}
+                  Component={BiddingPeriod}
+                  title="Bid period"
+              />
+              :
+              <BiddingPeriod
+                  title="Bid period"
+                  data={bidPeriod}
+                  width={width}
+              />
+          }
+
+          {compare ?
+              <Comparison
+                  width={width}
+                  state={bidType}
+                  Component={FundingByBidType}
+                  title="Funding by bid type"
+              />
+              :
+              <FundingByBidType
+                  title="Funding by bid type"
+                  data={bidType}
+                  width={width}
+              />
+          }
+
+          {compare ?
+              <Comparison
+                  width={width}
+                  state={cancelled}
+                  Component={Cancelled}
+                  title="Cancelled funding"
+              />
+              :
+              <Cancelled
+                  title="Cancelled funding"
+                  data={cancelled}
+                  width={width}
+              />
+          }
+        </div>
+    );
+
+    return (
+        <div className="col-sm-12 content">
           {this.getBidType()}
           {this.getCancelled()}
         </div>

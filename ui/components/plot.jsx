@@ -5,13 +5,17 @@ Plotly.register([
 ]);
 
 class Plot extends Component{
-  componentDidMount(){
+  getDecoratedLayout(){
     var {pageHeaderTitle, title, xAxisRange, yAxisRange} = this.props;
     var layout = this.getLayout();
     if(!pageHeaderTitle) layout.title = title;
     if(xAxisRange) layout.xaxis.range = xAxisRange;
     if(yAxisRange) layout.yaxis.range = yAxisRange;
-    Plotly.newPlot(this.refs.chartContainer, this.getData(), layout);
+    return layout;
+  }
+
+  componentDidMount(){
+    Plotly.newPlot(this.refs.chartContainer, this.getData(), this.getDecoratedLayout());
   }
 
   componentDidUpdate(prevProps){
@@ -21,6 +25,9 @@ class Plot extends Component{
       //TODO: more efficient and non-redundant updates
       this.refs.chartContainer.data = this.getData();
       Plotly.redraw(this.refs.chartContainer);
+    }
+    if(['pageHeaderTitle', 'title', 'xAxisRange', 'yAxisRange'].some(prop => prevProps[prop] != this.props[prop])){
+      Plotly.relayout(this.refs.chartContainer, this.getDecoratedLayout());
     }
   }
 

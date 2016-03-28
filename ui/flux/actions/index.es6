@@ -17,14 +17,30 @@ var addFilters = (filters, url) => null === filters ? url :
       year: Object.keys(filters.years).filter(year => filters.years[year])
     }).toString();
 
-var regroup = ([head, ...tail]) => head.map((el, index) => [el].concat(tail.map(pluck(index))));
+/*
+  Given [[1,2,3], ['a','b','c']] will produce [[1, 'a'], [2, 'b'], [3, 'c']]
+ */
+var transpose = ([head, ...tail]) => head.map((el, index) => [el].concat(tail.map(pluck(index))));
+
+var response2obj = (field, arr) => arr.reduce((obj, elem) => {
+  obj[elem._id] = elem[field];
+  return obj;
+}, {});
+
+
+var transformOverviewData = ([bidplansResponse, tendersResponse, awardsResponse]) => {
+  var bidplans = response2obj('count', bidplansResponse);
+  var tenders = response2obj('count', tendersResponse);
+  var awards = response2obj('count', awardsResponse);
+  return Object.keys(tenders).map(year => ({
+    year: year,
+    bidplan: bidplans[year],
+    tender: tenders[year],
+    award: awards[year]
+  }));
+};
 
 var transformCostEffectivenessData = ([tenderResponse, awardResponse]) => {
-  var response2obj = (field, arr) => arr.reduce((obj, elem) => {
-    obj[elem._id] = elem[field];
-    return obj;
-  }, {});
-
   var tender = response2obj('totalTenderAmount', tenderResponse);
   var award = response2obj('totalAwardAmount', awardResponse);
   return Object.keys(tender).map(year => ({
@@ -35,17 +51,19 @@ var transformCostEffectivenessData = ([tenderResponse, awardResponse]) => {
 };
 
 var transformBidPeriodData = ([tenders, awards]) => {
-  var awardsHash = awards.reduce((obj, award) => {
-    obj[award._id] = award.averageAwardDays
-    return obj;
-  }, {});
+  var awardsHash = response2obj('averageAwardDays', awards);
   return tenders.map(tender => ({
-        year: tender._id,
-        tender: tender.averageTenderDays,
-        award: awardsHash[tender._id] || 0
-      })
+      year: tender._id,
+      tender: tender.averageTenderDays,
+      award: awardsHash[tender._id] || 0
+    })
   )
-}
+};
+
+var transformCancelledData = raw => raw.map(({_id, totalCancelledTendersAmount}) => ({
+  year: _id,
+  count: totalCancelledTendersAmount
+}));
 
 export default {
   changeTab(slug){
@@ -76,11 +94,9 @@ export default {
       load(endpoints.COUNT_BID_PLANS_BY_YEAR),
       load(endpoints.COUNT_TENDERS_BY_YEAR),
       load(endpoints.COUNT_AWARDS_BY_YEAR)
-    ]).then(([bidplans, tenders, awards]) => dispatcher.dispatch(constants.OVERVIEW_DATA_UPDATED, {
-      bidplans: bidplans,
-      tenders: tenders,
-      awards: awards
-    }));
+    ])
+        .then(transformOverviewData)
+        .then(data => dispatcher.dispatch(constants.OVERVIEW_DATA_UPDATED, data));
 
     load(endpoints.PLANNED_FUNDING_BY_LOCATION).then(data => dispatcher.dispatch(constants.LOCATION_UPDATED, data));
 
@@ -99,6 +115,7 @@ export default {
     load(endpoints.TENDER_PRICE_BY_VN_TYPE_YEAR).then(data => dispatcher.dispatch(constants.BID_TYPE_DATA_UPDATED, data));
 
     load(endpoints.TOTAL_CANCELLED_TENDERS_BY_YEAR)
+        .then(transformCancelledData)
         .then(data => dispatcher.dispatch(constants.CANCELLED_DATA_UPDATED, data));
   },
 
@@ -148,7 +165,8 @@ export default {
       pageSize: 3
     }).toString();
     fetchJson(addFilters(filters, comparisonUrl)).then(comparisonData => {
-      var addComparisionFilters = url => {
+      dispatcher.dispatch(constants.COMPARISON_CRITERIA_NAMES_UPDATED, comparisonData.map(pluck('_id')));
+      var addComparisonFilters = url => {
         var uri = new URI(addFilters(filters, url));
         var criteriaValues = comparisonData.map(pluck("bidTypeId" == criteria ? "0" : "_id"));
         return criteriaValues
@@ -158,36 +176,35 @@ export default {
             ]);
       };
 
-      var load = url => Promise.all(addComparisionFilters(url).map(fetchJson));
+      var load = url => Promise.all(addComparisonFilters(url).map(fetchJson));
 
       Promise.all([
           load(endpoints.COUNT_BID_PLANS_BY_YEAR),
           load(endpoints.COUNT_TENDERS_BY_YEAR),
           load(endpoints.COUNT_AWARDS_BY_YEAR)
-      ]).then(data => regroup(data).map(([bidplans, tenders, awards]) => {
-        return {
-          bidplans: bidplans,
-          tenders: tenders,
-          awards: awards
-        }
-      })).then(data => dispatcher.dispatch(constants.OVERVIEW_COMPARISON_DATA_UPDATED, data));
+      ])
+          .then(data => transpose(data).map(transformOverviewData))
+          .then(data => dispatcher.dispatch(constants.OVERVIEW_COMPARISON_DATA_UPDATED, data));
 
       Promise.all([
         load(endpoints.COST_EFFECTIVENESS_TENDER_AMOUNT),
         load(endpoints.COST_EFFECTIVENESS_AWARD_AMOUNT)
-      ]).then(data => regroup(data).map(transformCostEffectivenessData))
+      ])
+          .then(data => transpose(data).map(transformCostEffectivenessData))
           .then(data => dispatcher.dispatch(constants.COST_EFFECTIVENESS_COMPARISON_DATA_UPDATED, data));
 
       Promise.all([
         load(endpoints.AVERAGE_TENDER_PERIOD),
         load(endpoints.AVERAGE_AWARD_PERIOD)
-      ]).then(data => regroup(data).map(transformBidPeriodData))
+      ])
+          .then(data => transpose(data).map(transformBidPeriodData))
           .then(data => dispatcher.dispatch(constants.BID_PERIOD_COMPARISON_DATA_UPDATED, data));
 
       load(endpoints.TENDER_PRICE_BY_VN_TYPE_YEAR).then(data =>
           dispatcher.dispatch(constants.BID_TYPE_COMPARISON_DATA_UPDATED, data));
 
       load(endpoints.TOTAL_CANCELLED_TENDERS_BY_YEAR)
+          .then(data => data.map(transformCancelledData))
           .then(data => dispatcher.dispatch(constants.CANCELLED_COMPARISON_DATA_UPDATED, data));
     });
   },
