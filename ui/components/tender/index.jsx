@@ -8,12 +8,6 @@ import {toImmutable} from "nuclear-js";
 import Comparison from "../comparison";
 import {pluck} from "../../tools";
 
-var sortByYear = (a, b) => {
-  if(a.year < b.year) return -1;
-  if(a.year == b.year) return 0;
-  if(a.year < b.year) return 1;
-};
-
 var filterBidTypeData = years => data => data
     .filter(bidType => years.get(bidType.get('year'), false))
     .groupBy(bidType => bidType.get('procurementMethodDetails'))
@@ -138,7 +132,7 @@ export default class Tender extends Component{
 
   render(){
     var {state, width} = this.props;
-    var {compare, costEffectiveness, bidPeriod} = state;
+    var {compare, costEffectiveness, bidPeriod, cancelled} = state;
     return (
         <div className="col-sm-12 content">
           {compare ?
@@ -170,17 +164,26 @@ export default class Tender extends Component{
                   width={width}
               />
           }
+
+          {compare ?
+              <Comparison
+                  width={width}
+                  state={cancelled}
+                  Component={Cancelled}
+                  title="Cancelled funding"
+              />
+              :
+              <Cancelled
+                  title="Cancelled funding"
+                  data={cancelled}
+                  width={width}
+              />
+          }
         </div>
-    )
-    var globalState = state.get('globalState');
-    var selectedYears = globalState.getIn(['filters', 'years']);
-    var width = globalState.get('contentWidth');
-    var data = globalState.get('data');
+    );
 
     return (
         <div className="col-sm-12 content">
-          {this.getCostEffectiveness()}
-          {this.getBiddingPeriod()}
           {this.getBidType()}
           {this.getCancelled()}
         </div>

@@ -95,15 +95,21 @@ var getBidPeriod = mkDataGetter({
   }
 });
 
+var getCancelled = mkDataGetter({
+  path: "cancelled"
+});
+
 var getTender = [
     ['globalState', 'compareBy'],
     getCostEffectiveness,
     getBidPeriod,
-    (compare, costEffectiveness, bidPeriod) => {
+    getCancelled,
+    (compare, costEffectiveness, bidPeriod, cancelled) => {
       return {
         compare: compare,
         costEffectiveness: costEffectiveness,
-        bidPeriod: bidPeriod
+        bidPeriod: bidPeriod,
+        cancelled: cancelled
       }
     }
 ];

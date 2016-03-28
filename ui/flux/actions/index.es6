@@ -60,6 +60,11 @@ var transformBidPeriodData = ([tenders, awards]) => {
   )
 };
 
+var transformCancelledData = raw => raw.map(({_id, totalCancelledTendersAmount}) => ({
+  year: _id,
+  count: totalCancelledTendersAmount
+}));
+
 export default {
   changeTab(slug){
     dispatcher.dispatch(constants.TAB_CHANGED, slug);
@@ -110,6 +115,7 @@ export default {
     load(endpoints.TENDER_PRICE_BY_VN_TYPE_YEAR).then(data => dispatcher.dispatch(constants.BID_TYPE_DATA_UPDATED, data));
 
     load(endpoints.TOTAL_CANCELLED_TENDERS_BY_YEAR)
+        .then(transformCancelledData)
         .then(data => dispatcher.dispatch(constants.CANCELLED_DATA_UPDATED, data));
   },
 
@@ -197,6 +203,7 @@ export default {
           dispatcher.dispatch(constants.BID_TYPE_COMPARISON_DATA_UPDATED, data));
 
       load(endpoints.TOTAL_CANCELLED_TENDERS_BY_YEAR)
+          .then(data => data.map(transformCancelledData))
           .then(data => dispatcher.dispatch(constants.CANCELLED_COMPARISON_DATA_UPDATED, data));
     });
   },
