@@ -23,24 +23,26 @@ export default class TypeAhead extends Component{
           <section className="options">
             <input
                 type="text"
+                className="input-sm form-control search"
+                placeholder="type search query"
                 value={query}
                 onChange={e => actions.updateProcuringEntityQuery(e.target.value)}
             />
+            {haveQuery ?
+                <div className="result-count">{pluralizeResults(totalOptions)}</div>
+                : null}
+            {options.map(option => (
+                <div className="checkbox" >
+                  <label key={option.get('id')}>
+                    <input
+                        type="checkbox"
+                        value={option.get('selected')}
+                        onChange={e => actions.toggleFilterOption(slug, option.get('id'), !option.get('selected'))}
+                    /> {option.get('name')}
+                  </label>
+                </div>
+            )).toArray()}
           </section>
-          {haveQuery ?
-            <div>{pluralizeResults(totalOptions)}</div>
-          : null}
-          {options.map(option => (
-              <div className="checkbox" key={option.get('id')}>
-                <label>
-                  <input
-                      type="checkbox"
-                      value={option.get('selected')}
-                      onChange={e => actions.toggleFilterOption(slug, option.get('id'), !option.get('selected'))}
-                  /> {option.get('name')}
-                </label>
-              </div>
-          )).toArray()}
         </section>
     )
   }
