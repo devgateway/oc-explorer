@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
- *
+ * Organization OCDS entity http://standard.open-contracting.org/latest/en/schema/reference/#organization
  */
 @Document
 public class Organization {
@@ -27,7 +27,7 @@ public class Organization {
 
 	@Override
 	public String toString() {
-		return name + " ;id=" + identifier.getId() + "; altId=" + additionalIdentifiers;
+		return name + " with id=" + identifier.getId();
 	}
 
 	public Identifier getIdentifier() {

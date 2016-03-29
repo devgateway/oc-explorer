@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
- *
+ * Planning OCDS ENtity http://standard.open-contracting.org/latest/en/schema/reference/#planning
  */
 @Document
 public class Planning {

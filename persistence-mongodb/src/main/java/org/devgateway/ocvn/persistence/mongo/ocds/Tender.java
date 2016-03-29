@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
- *
+ * Tender OCDS Entity http://standard.open-contracting.org/latest/en/schema/reference/#tender
  */
 @Document
 public class Tender {

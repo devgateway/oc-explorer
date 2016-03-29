@@ -3,23 +3,36 @@
  */
 package org.devgateway.ocvn.web.rest.controller;
 
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
 
 import org.devgateway.ocvn.web.rest.controller.request.DefaultFilterPagingRequest;
+import org.devgateway.ocvn.web.rest.controller.request.GroupingFilterPagingRequest;
+import org.devgateway.ocvn.web.rest.controller.request.YearFilterPagingRequest;
+import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.aggregation.Fields;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
 /**
  * @author mpostelnicu
@@ -67,28 +80,24 @@ public class GenericOcvnController {
 	 * @return the {@link Criteria} for this filter
 	 */
 	protected Criteria getBidTypeIdFilterCriteria(DefaultFilterPagingRequest filter) {
-		Criteria bidTypeCriteria = null;
-		if (filter.getBidTypeId() == null)
-			bidTypeCriteria = new Criteria();
-		else
-			bidTypeCriteria = where("tender.items.classification._id").in(filter.getBidTypeId().toArray());
-
-		return bidTypeCriteria;
+		return createFilterCriteria("tender.items.classification._id", filter.getBidTypeId(), filter);
 	}
 	
+	private Criteria createFilterCriteria(String filterName, List<String> filterValues,
+			DefaultFilterPagingRequest filter) {
+		if (filterValues == null)
+			return new Criteria();
+		return filter.getInvert() ? where(filterName).not().in(filterValues.toArray())
+				: where(filterName).in(filterValues.toArray());
+	}
+
 	/**
 	 * Appends the procuring entity id for this filter, this will fitler based on tender.procuringEntity._id
 	 * @param filter
 	 * @return the {@link Criteria} for this filter
 	 */
 	protected Criteria getProcuringEntityIdCriteria(DefaultFilterPagingRequest filter) {
-		Criteria criteria = null;
-		if (filter.getProcuringEntityId() == null)
-			criteria = new Criteria();
-		else
-			criteria = where("tender.procuringEntity._id").in(filter.getProcuringEntityId().toArray());
-
-		return criteria;
+	 		return createFilterCriteria("tender.procuringEntity._id", filter.getProcuringEntityId(), filter);
 	}
 	
 	@PostConstruct
@@ -99,6 +108,24 @@ public class GenericOcvnController {
 		filterProjectMap.put("tender.procurementMethodDetails", 1);
 	}
 	
+	
+	protected Criteria getYearFilterCriteria(String dateProperty,YearFilterPagingRequest filter) {
+		Criteria[] yearCriteria = null;
+		Criteria criteria = new Criteria();
+
+		if (filter.getYear() == null) {
+			yearCriteria = new Criteria[1];
+			yearCriteria[0] = new Criteria();
+		} else {
+			yearCriteria = new Criteria[filter.getYear().size()];
+			for (int i = 0; i < filter.getYear().size(); i++)
+				yearCriteria[i] = where(dateProperty).gte(getStartDate(filter.getYear().get(i)))
+						.lte(getEndDate(filter.getYear().get(i)));
+		}
+		
+		return filter.getInvert() ? criteria.norOperator(yearCriteria) : criteria.orOperator(yearCriteria);
+	}
+	
 	/**
 	 * Appends the bid selection method to the filter, this will filter based on tender.procurementMethodDetails.
 	 * It accepts multiple elements
@@ -106,13 +133,7 @@ public class GenericOcvnController {
 	 * @return the {@link Criteria} for this filter
 	 */
 	protected Criteria getBidSelectionMethod(DefaultFilterPagingRequest filter) {
-		Criteria criteria = null;
-		if (filter.getBidSelectionMethod() == null)
-			criteria = new Criteria();
-		else
-			criteria = where("tender.procurementMethodDetails").in(filter.getBidSelectionMethod().toArray());
-
-		return criteria;
+		return createFilterCriteria("tender.procurementMethodDetails", filter.getBidSelectionMethod(), filter);
 	}
 	
 	protected Criteria getDefaultFilterCriteria(DefaultFilterPagingRequest filter) {
@@ -124,4 +145,42 @@ public class GenericOcvnController {
 		return match(getDefaultFilterCriteria(filter));
 	}
 
+	/**
+	 * Creates a groupby expression that takes into account the filter. It will only use one of the filter options as groupby and ignores the rest.
+	 * @param filter
+	 * @param existingGroupBy
+	 * @return
+	 */
+	protected GroupOperation getTopXFilterOperation(GroupingFilterPagingRequest filter, String... existingGroupBy) {
+		List<String> groupBy = new ArrayList<>();
+		if (filter.getGroupByCategory() == null)
+			groupBy.addAll(Arrays.asList(existingGroupBy));
+
+		if(filter.getGroupByCategory()!=null) 
+			groupBy.add(getGroupByCategory(filter));
+		
+		return group(groupBy.toArray(new String[0]));
+	}
+	
+	@Deprecated
+	protected AggregationOperation getTopXFilterOperation(GroupingFilterPagingRequest filter, DBObject group) {
+		if (filter.getGroupByCategory() != null) {
+			group.removeField(Fields.UNDERSCORE_ID);
+			group.put(Fields.UNDERSCORE_ID, "$"+getGroupByCategory(filter));
+		}
+		return new CustomOperation(new BasicDBObject("$group", group));
+	}
+	
+	private String getGroupByCategory(GroupingFilterPagingRequest filter) {
+		if ("bidSelectionMethod".equals(filter.getGroupByCategory()))
+			return "tender.procurementMethodDetails";
+		else if ("bidTypeId".equals(filter.getGroupByCategory()))
+			return "tender.items.classification._id";
+		else if ("procuringEntityId".equals(filter.getGroupByCategory()))
+			return "tender.procuringEntity._id";
+		return null;
+	}
+	
+
+		
 }

@@ -4,7 +4,13 @@ config.entry = "./index.jsx";
 config.output.filename = "index.min.js";
 delete config.output.publicPath;
 delete config.devtool;
-config.plugins.push(new webpack.optimize.UglifyJsPlugin());
-config.plugins.push(new webpack.optimize.DedupePlugin());
+config.plugins = config.plugins.filter(function(plugin){
+  return !(plugin instanceof webpack.HotModuleReplacementPlugin);
+}).concat([
+  new webpack.optimize.DedupePlugin(),
+  new webpack.optimize.UglifyJsPlugin({
+    sourceMap: false
+  })
+]);
 
 module.exports = config;

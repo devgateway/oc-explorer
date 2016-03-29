@@ -126,6 +126,7 @@ public abstract class AbstractJpaRepositoryTextChoiceProvider<T extends GenericP
             return getTextSearchableRepository().findAll(pageRequest);
 	}
 
+
 	@Override
 	public Collection<T> toChoices(Collection<String> ids) {
 		ArrayList<String> idsList = new ArrayList<>();

@@ -1,23 +1,33 @@
 import Component from "../pure-render-component";
 import OverviewChart from "./overview-chart";
+import TendersTable from "./tenders-table";
+import AwardsTable from "./awards-table";
+import Comparison from "../comparison";
+import {pluck} from "../../tools";
 
 export default class Overview extends Component{
   render(){
-    var globalState = this.props.state.get('globalState');
-    var data = globalState.get('data');
-    var width = globalState.get('contentWidth');
-    var years = globalState.get('selectedYears');
-    var overviewData = data.get('overview', null);
-    if(overviewData){
-      var filteredOverviewData = {};
-      Object.keys(overviewData).forEach(key =>
-          filteredOverviewData[key] = overviewData[key].filter(({_id}) => years.get(_id, false))
-      );
-    }
+    var {width, state} = this.props;
+    var {compare, overview, topTenders, topAwards} = state;
     return (
         <div className="col-sm-12 content">
-          <OverviewChart width={width} data={filteredOverviewData}/>
+          {compare ?
+              <Comparison
+                  width={width}
+                  state={overview}
+                  Component={OverviewChart}
+                  title="Overview chart"
+              />
+          :
+              <OverviewChart
+                  width={width}
+                  data={overview}
+                  title="Overview chart"
+              />
+          }
+          <TendersTable data={topTenders}/>
+          <AwardsTable data={topAwards}/>
         </div>
-    )
+    );
   }
 }

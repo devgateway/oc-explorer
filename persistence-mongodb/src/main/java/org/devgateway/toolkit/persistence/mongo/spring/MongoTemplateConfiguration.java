@@ -30,6 +30,8 @@ public class MongoTemplateConfiguration {
 
 	@PostConstruct
 	public void mongoPostInit() {
+		
+		//initialize some extra indexes
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.bidNo", Direction.ASC));
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("awards.status", Direction.ASC));
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("awards.value.amount", Direction.ASC));
@@ -44,8 +46,9 @@ public class MongoTemplateConfiguration {
 		logger.info("Added extra Mongo indexes");
 		
 		
-		ScriptOperations scriptOps = mongoTemplate.scriptOps();
+		ScriptOperations scriptOps = mongoTemplate.scriptOps();				
 
+		//add script to calculate the percentiles endpoint
 		URL scriptFile = getClass().getResource("/tenderBidPeriodPercentilesMongo.js");
 		try {
 			String scriptText = IOUtils.toString(scriptFile);
@@ -56,6 +59,7 @@ public class MongoTemplateConfiguration {
 		}
 
 		
+		//add general mongo system helper methods
 		URL systemScriptFile = getClass().getResource("/mongoSystemScripts.js");
 		try {
 			String systemScriptFileText = IOUtils.toString(systemScriptFile);

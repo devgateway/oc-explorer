@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
- *
+ * Transaction OCDS Entity http://standard.open-contracting.org/latest/en/schema/reference/#transaction
  */
 @Document
 public class Transaction {

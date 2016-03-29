@@ -11,7 +11,7 @@ import cz.jirutka.validator.collection.constraints.EachRange;
  * @author mpostelnicu
  *
  */
-public class YearFilterPangingRequest extends DefaultFilterPagingRequest {
+public class YearFilterPagingRequest extends DefaultFilterPagingRequest {
 
 	@EachRange(min = 1900, max = 2200)
 	List<Integer> year;
@@ -19,7 +19,7 @@ public class YearFilterPangingRequest extends DefaultFilterPagingRequest {
 	/**
 	 * 
 	 */
-	public YearFilterPangingRequest() {
+	public YearFilterPagingRequest() {
 		super();
 	}
 

@@ -6,3 +6,7 @@
 /output/
 npm-debug.log
 /webpack-test/bundle.js
+*.iml
+.idea
+/target
+rebel.xml

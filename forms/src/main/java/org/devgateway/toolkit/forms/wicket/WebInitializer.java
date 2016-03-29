@@ -11,14 +11,19 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket;
 
+import java.util.concurrent.Executor;
+
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.apache.wicket.spring.SpringWebApplicationFactory;
+import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
+import org.springframework.aop.interceptor.SimpleAsyncUncaughtExceptionHandler;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.web.context.request.RequestContextListener;
 
@@ -33,6 +38,9 @@ import org.springframework.web.context.request.RequestContextListener;
 public class WebInitializer implements ServletContextInitializer {
 
 	private static final String PARAM_APP_BEAN = "applicationBean";
+	
+	
+	
 
 	@Override
 	public void onStartup(ServletContext sc) throws ServletException {

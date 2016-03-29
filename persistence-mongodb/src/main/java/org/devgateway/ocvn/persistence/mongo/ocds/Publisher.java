@@ -1,5 +1,10 @@
 package org.devgateway.ocvn.persistence.mongo.ocds;
 
+/**
+ * 
+ * @author mihai
+ * Publisher OCDS entity http://standard.open-contracting.org/latest/en/schema/reference/#publisher
+ */
 public class Publisher {
 
 	String name;

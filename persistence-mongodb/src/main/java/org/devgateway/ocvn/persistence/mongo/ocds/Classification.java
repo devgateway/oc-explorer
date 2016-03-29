@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
- *
+ * Classification OCDS Entity http://standard.open-contracting.org/latest/en/schema/reference/#classification
  */
 @Document
 public class Classification {

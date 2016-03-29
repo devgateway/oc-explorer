@@ -1,11 +1,9 @@
 package org.devgateway.toolkit.persistence.mongo.reader;
 
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-import org.apache.poi.ss.usermodel.DateUtil;
 import org.devgateway.ocvn.persistence.mongo.ocds.Classification;
 import org.devgateway.ocvn.persistence.mongo.ocds.Identifier;
 import org.devgateway.ocvn.persistence.mongo.ocds.Item;
@@ -18,16 +16,22 @@ import org.devgateway.toolkit.persistence.mongo.dao.VNTender;
 import org.devgateway.toolkit.persistence.mongo.repository.ClassificationRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationRepository;
+import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 
+/**
+ * Specific {@link RowImporter} for Tenders, in the custom Excel format provided by Vietnam
+ * @author mihai
+ * @see VNTender
+ */
 public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 
 	SimpleDateFormat sdf = new SimpleDateFormat("dd.MMM.yy", new Locale("en"));
 	private VNOrganizationRepository organizationRepository;
 	private ClassificationRepository classificationRepository;
 
-	public TenderRowImporter(ReleaseRepository releaseRepository, VNOrganizationRepository organizationRepository,
+	public TenderRowImporter(ReleaseRepository releaseRepository, VNImportService importService, VNOrganizationRepository organizationRepository,
 			ClassificationRepository classificationRepository, int skipRows) {
-		super(releaseRepository,skipRows);
+		super(releaseRepository,importService,skipRows);
 		this.organizationRepository = organizationRepository;
 		this.classificationRepository = classificationRepository;
 		
@@ -44,9 +48,8 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 			release.getTag().add("tender");
 			VNPlanning planning = new VNPlanning();
 			release.setPlanning(planning);
-			planning.setBidNo(row[0]);
+			planning.setBidNo(row[0]);		
 		}
-		documents.add(release);
 
 		VNTender tender = (VNTender) release.getTender();
 		if (tender == null) {
@@ -74,12 +77,12 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 		tender.setApproveState(row[1]);
 		tender.setCancelYN(row[2]);
 		tender.setModYn(row[3]);
-		tender.setBidMethod(Integer.parseInt(row[4]));
+		tender.setBidMethod(getInteger(row[4]));
 		
 
 		String procurementMethod = null;
 		String procurementMethodDetails = null;
-		switch (Integer.parseInt(row[5])) {
+		switch (getInteger(row[5])) {
 		case 1:
 			procurementMethod = "open";
 			procurementMethodDetails = "Đấu thầu rộng rãi";
@@ -112,14 +115,14 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 		}
 		tender.setProcurementMethodDetails(procurementMethodDetails);
 		tender.setProcurementMethod(procurementMethod);
-		tender.setContrMethod(Integer.parseInt(row[6]));
+		tender.setContrMethod(getInteger(row[6]));
 
 		Period period = new Period();
 
-		period.setStartDate(row[7].isEmpty() ? null : DateUtil.getJavaCalendar(Double.parseDouble(row[7])).getTime());
-		period.setEndDate(row[8].isEmpty() ? null : DateUtil.getJavaCalendar(Double.parseDouble(row[8])).getTime());
+		period.setStartDate(row[7].isEmpty() ? null : getExcelDate(row[7]));
+		period.setEndDate(row[8].isEmpty() ? null :getExcelDate(row[8]));
 		tender.setTenderPeriod(period);
-		tender.setBidOpenDt(row[9].isEmpty() ? null : DateUtil.getJavaCalendar(Double.parseDouble(row[9])).getTime());
+		tender.setBidOpenDt(row[9].isEmpty() ? null : getExcelDate(row[9]));
 
 		VNOrganization procuringEntity = organizationRepository.findById(row[10]);
 
@@ -153,7 +156,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 		if (row.length > 12 && !row[12].isEmpty()) {
 			Value value = new Value();
 			value.setCurrency("VND");
-			value.setAmount(new BigDecimal(row[12]));
+			value.setAmount(getDecimal(row[12]));
 			tender.setValue(value);
 		}
 
@@ -197,6 +200,12 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 
 		}
 
+		
+		if(release.getId()==null) 
+			release=repository.save(release);
+		else 
+			documents.add(release);
+		
 		return true;
 	}
 }

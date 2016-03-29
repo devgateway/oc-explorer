@@ -26,6 +26,7 @@ import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.convert.CustomConversions;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
+
 /**
  * Run this application only when you need access to Spring Data JPA but without
  * Wicket frontend
@@ -82,6 +83,6 @@ public class MongoPersistenceApplication {
 				.asList(new Object[] { BigDecimal2ToDoubleConverter.INSTANCE, DoubleToBigDecimal2Converter.INSTANCE,
 						BigDecimalToDoubleConverter.INSTANCE, DoubleToBigDecimalConverter.INSTANCE }));
 	}
-	
+
 
 }

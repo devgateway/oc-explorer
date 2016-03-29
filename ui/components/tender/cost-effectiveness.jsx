@@ -1,25 +1,21 @@
 import Plot from "../plot";
+import {pluck} from "../../tools";
 
 export default class CostEffectiveness extends Plot{
-  getTitle(){
-    return  "Cost effectiveness";
-  }
-
   getData(){
-    var {years, data} = this.props;
-    var filteredData = data.filter(({year}) => years.get(+year, false));
-    var filteredYears = filteredData.map(datum => datum.year);
+    var {data} = this.props;
+    var years = data.map(pluck('year'));
 
     var bidPrice = {
-      x: filteredYears,
-      y: filteredData.map(datum => datum.tender),
+      x: years,
+      y: data.map(pluck('tender')),
       name: 'Bid price',
       type: 'bar'
     };
 
     var diff = {
-      x: filteredYears,
-      y: filteredData.map(datum => datum.diff),
+      x: years,
+      y: data.map(pluck('diff')),
       name: 'Difference',
       type: 'bar'
     };
@@ -30,8 +26,18 @@ export default class CostEffectiveness extends Plot{
   getLayout(){
     return {
       barmode: "stack",
-      xaxis:{
-        type: "category"
+      xaxis: {
+        title: "Years",
+        type: "category",
+        titlefont: {
+          color: "#cc3c3b"
+        }
+      },
+      yaxis: {
+        title: "Amount",
+        titlefont: {
+          color: "#cc3c3b"
+        }
       }
     }
   }

@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
- *
+ * Award OCDS entity http://standard.open-contracting.org/latest/en/schema/reference/#award
  */
 @Document
 public class Award {

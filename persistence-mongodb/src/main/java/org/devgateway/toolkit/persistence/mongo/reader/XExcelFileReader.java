@@ -1,5 +1,6 @@
 package org.devgateway.toolkit.persistence.mongo.reader;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,7 @@ public class XExcelFileReader {
 	 * @throws Exception
 	 */
 	public XExcelFileReader(String excelPath, String sheetName) throws Exception {
-		opcPkg = OPCPackage.open(excelPath, PackageAccess.READ);
+		opcPkg = OPCPackage.open(excelPath, PackageAccess.READ);		
 		this.stringsTable = new ReadOnlySharedStringsTable(opcPkg);
 
 		XSSFReader xssfReader = new XSSFReader(opcPkg);
@@ -137,11 +138,14 @@ public class XExcelFileReader {
 		return value;
 	}
 
-	@Override
-	protected void finalize() throws Throwable {
-		if (opcPkg != null)
-			opcPkg.close();
-		super.finalize();
+	public void close() {
+		if(opcPkg!=null)
+			try {
+				opcPkg.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 
 }

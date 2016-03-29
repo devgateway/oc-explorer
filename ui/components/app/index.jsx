@@ -9,6 +9,7 @@ import {years} from "../../tools";
 import cn from "classnames";
 import {toImmutable} from "nuclear-js";
 import Filters from "./filters";
+import ComparisonCriteria from "./filters/compare";
 require('./style.less');
 
 export default class App extends React.Component{
@@ -18,6 +19,7 @@ export default class App extends React.Component{
 
   render(){
     var {state, actions} = this.props;
+    var width = state.getIn(['globalState', 'contentWidth']);
     var navigationLink = (text, marker, tab) =>
         <NavigationLink text={text} actions={actions} tab={tab} marker={marker} active={state.getIn(['globalState', 'tab']) == tab}/>
     var globalState = state.get('globalState');
@@ -47,10 +49,11 @@ export default class App extends React.Component{
               </p>
             </section>
             <Filters {...this.props}/>
+            <ComparisonCriteria {...this.props}/>
           </div>
         </aside>
         <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 years-bar" role="navigation">
-          {globalState.get('selectedYears').map((selected, year) => (
+          {globalState.hasIn(['filters', 'years']) && globalState.getIn(['filters', 'years']).map((selected, year) => (
             <a
               key={year}
               href="javascript:void(0);"
@@ -64,16 +67,28 @@ export default class App extends React.Component{
         <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10">
           <div className="row">
             {function(tab, props){
+              var {state, actions} = props;
               switch(tab){
-                case tabs.OVERVIEW: return <Overview {...props}/>;
+                case tabs.OVERVIEW:
+                  return <Overview
+                      actions={actions}
+                      state={state.get('overview')}
+                      width={width}
+                  />;
                 case tabs.PLANNING: return (
                     <Planning
                         width={globalState.get('contentWidth')}
-                        years={globalState.get('selectedYears')}
+                        years={globalState.getIn(['filters', 'years'])}
                         locations={globalState.getIn(['data', 'locations'])}
                     />
                 );
-                default: return <Tender {...props}/>
+                default: return (
+                    <Tender
+                        actions={actions}
+                        state={state.get('tender')}
+                        width={width}
+                    />
+                )
               }
             }(globalState.get('tab'), this.props)}
             <div className="col-sm-12 thick-red-line"></div>
