@@ -54,7 +54,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 		VNTender tender = (VNTender) release.getTender();
 		if (tender == null) {
 			tender = new VNTender();
-			tender.setId(release.getId());
+			tender.setId(release.getOcid());
 			release.setTender(tender);			
 		}
 
@@ -162,7 +162,8 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 
 		if (row.length > 21 && !row[21].isEmpty()) {
 			if (tender.getItems().isEmpty()) {
-				Item item = new Item();
+				Item item = new Item();		
+				item.setId(Integer.toString(tender.getItems().size()));
 				tender.getItems().add(item);
 			}
 
@@ -173,7 +174,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 				Classification classification = classificationRepository.findById(classificationId);
 				if (classification == null) {
 					classification = new Classification();
-					classification.setId(classificationId);
+					classification.setId(classificationId);					
 
 					switch (classificationId) {
 					case "1":
