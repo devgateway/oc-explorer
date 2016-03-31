@@ -51,7 +51,7 @@ public class BidPlansRowImporter extends RowImporter<Release, ReleaseRepository>
 		Tender tender = release.getTender();
 		if (tender == null) {
 			tender = new VNTender();
-			tender.setId(release.getId());
+			tender.setId(release.getOcid());
 			release.setTender(tender);
 		}
 
