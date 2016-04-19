@@ -34,10 +34,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EntityScan(basePackageClasses = GenericPersistable.class)
 @PropertySource("classpath:/org/devgateway/toolkit/persistence/application.properties")
 @ComponentScan("org.devgateway.toolkit")
-public final class PersistenceApplication {
-
-	private PersistenceApplication() {		
-	}
+public class PersistenceApplication {
 	
 	public static void main(final String[] args) {
 		SpringApplication.run(PersistenceApplication.class, args);
