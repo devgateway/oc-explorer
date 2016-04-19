@@ -27,9 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 @NoRepositoryBean
 @Transactional
 public interface TextSearchableRepository<T, ID extends Serializable> extends JpaRepository<T, ID> {
-	
+
 	@Override
 	Page<T> findAll(Pageable pageable);
-	
-    Page<T> searchText(String code, Pageable page);
+
+	Page<T> searchText(String code, Pageable page);
 }

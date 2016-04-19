@@ -34,34 +34,35 @@ public class DateTimeFieldBootstrapFormComponent extends GenericBootstrapFormCom
 	private static final long serialVersionUID = 6829640010904041758L;
 
 	public static final String DEFAULT_FORMAT = "dd/MM/yyyy HH:mm:ss";
-	
+
 	private DatetimePickerConfig config;
 
-    private Boolean isFloatedInput = false;
-	
+	private Boolean isFloatedInput = false;
+
 	/**
 	 * @param id
 	 * @param labelModel
 	 * @param model
 	 */
-	public DateTimeFieldBootstrapFormComponent(String id, IModel<String> labelModel, IModel<Date> model) {
+	public DateTimeFieldBootstrapFormComponent(final String id, final IModel<String> labelModel,
+			final IModel<Date> model) {
 		super(id, labelModel, model);
 	}
 
-	public DateTimeFieldBootstrapFormComponent(String id) {
+	public DateTimeFieldBootstrapFormComponent(final String id) {
 		super(id);
 	}
-	
+
 	/**
 	 * @param id
 	 * @param model
 	 */
-	public DateTimeFieldBootstrapFormComponent(String id, IModel<Date> model) {
+	public DateTimeFieldBootstrapFormComponent(final String id, final IModel<Date> model) {
 		super(id, model);
 	}
 
 	@Override
-	protected DatetimePicker inputField(String id, IModel<Date> model) {
+	protected DatetimePicker inputField(final String id, final IModel<Date> model) {
 		config = new DatetimePickerConfig().withFormat(DEFAULT_FORMAT);
 		return new DatetimePicker("field", initFieldModel(), config);
 	}
@@ -71,41 +72,44 @@ public class DateTimeFieldBootstrapFormComponent extends GenericBootstrapFormCom
 		return "update";
 	}
 
-	/* (non-Javadoc)
-	 * @see org.devgateway.toolkit.forms.wicket.components.form.GenericBootstrapFormComponent#onConfigure()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.devgateway.toolkit.forms.wicket.components.form.
+	 * GenericBootstrapFormComponent#onConfigure()
 	 */
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		
+
 		border.add(new AttributeModifier("style", "position:relative;"));
-	
+
 		IndicatingAjaxLink<String> clearDateLink = new IndicatingAjaxLink<String>("clearDate") {
 			private static final long serialVersionUID = -1705495886974891511L;
+
 			@Override
-			public void onClick(AjaxRequestTarget target) {
+			public void onClick(final AjaxRequestTarget target) {
 				DateTimeFieldBootstrapFormComponent.this.field.setModelObject(null);
 				target.add(DateTimeFieldBootstrapFormComponent.this.field);
-			}	
+			}
 		};
 		border.add(clearDateLink);
 	}
 
-    @Override
-    protected void onComponentTag(ComponentTag tag) {    	
-    	super.onComponentTag(tag);
+	@Override
+	protected void onComponentTag(final ComponentTag tag) {
+		super.onComponentTag(tag);
 
-        
-        if(isFloatedInput) {
-            Attributes.addClass(tag, "floated-input");
-        }
-    }
+		if (isFloatedInput) {
+			Attributes.addClass(tag, "floated-input");
+		}
+	}
 
-    public Boolean getIsFloatedInput() {
-        return isFloatedInput;
-    }
+	public Boolean getIsFloatedInput() {
+		return isFloatedInput;
+	}
 
-    public void setIsFloatedInput(Boolean isFloatedInput) {
-        this.isFloatedInput = isFloatedInput;
-    }
+	public void setIsFloatedInput(final Boolean isFloatedInput) {
+		this.isFloatedInput = isFloatedInput;
+	}
 }

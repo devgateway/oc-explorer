@@ -84,7 +84,7 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
 	@Autowired
 	private SessionFinderService sessionFinderService;
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		SpringApplication.run(FormsWebApplication.class, args);
 	}
 
@@ -219,8 +219,9 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
 
 		// watch this using the URL
 		// http://.../wicket/internal/debug/diskDataStore
-		if (usesDevelopmentConfig())
+		if (usesDevelopmentConfig()) {
 			DebugDiskDataStore.register(this);
+		}
 
 		SessionFinderHolder.setSessionFinder(sessionFinderService);
 	}

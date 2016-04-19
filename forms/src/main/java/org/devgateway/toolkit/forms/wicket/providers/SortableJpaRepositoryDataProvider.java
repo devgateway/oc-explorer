@@ -29,60 +29,60 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * @author mpostelnicu
  *
- * Smart generic {@link SortableDataProvider} that binds to {@link JpaRepository}
+ *         Smart generic {@link SortableDataProvider} that binds to
+ *         {@link JpaRepository}
  */
-public class SortableJpaRepositoryDataProvider<T extends GenericPersistable>
-        extends SortableDataProvider<T, String> {
+public class SortableJpaRepositoryDataProvider<T extends GenericPersistable> extends SortableDataProvider<T, String> {
 
-    private static final long serialVersionUID = 6507887810859971417L;
+	private static final long serialVersionUID = 6507887810859971417L;
 
-    protected JpaRepository<T, Long> jpaRepository;
+	protected JpaRepository<T, Long> jpaRepository;
 
-    /**
-     * Always provide a proxy jpaRepository here! For example one coming from a {@link SpringBean}
-     *
-     * @param jpaRepository
-     */
-    public SortableJpaRepositoryDataProvider(
-            JpaRepository<T, Long> jpaRepository) {
-        this.jpaRepository = jpaRepository;
-    }
+	/**
+	 * Always provide a proxy jpaRepository here! For example one coming from a
+	 * {@link SpringBean}
+	 *
+	 * @param jpaRepository
+	 */
+	public SortableJpaRepositoryDataProvider(final JpaRepository<T, Long> jpaRepository) {
+		this.jpaRepository = jpaRepository;
+	}
 
-    /**
-     * Translates from a {@link SortParam} to a Spring {@link Sort}
-     *
-     * @return
-     */
-    protected Sort translateSort() {
-        if(getSort()==null) return null;
-        return new Sort(getSort().isAscending() ? Direction.ASC
-                : Direction.DESC, getSort().getProperty());
-    }
+	/**
+	 * Translates from a {@link SortParam} to a Spring {@link Sort}
+	 *
+	 * @return
+	 */
+	protected Sort translateSort() {
+		if (getSort() == null) {
+			return null;
+		}
+		return new Sort(getSort().isAscending() ? Direction.ASC : Direction.DESC, getSort().getProperty());
+	}
 
-    /**
-     * @see SortableDataProvider#iterator(long, long)
-     */
-    @Override
-    public Iterator<? extends T> iterator(long first, long count) {
-        int page = (int)((double) first /  WebConstants.PAGE_SIZE);
-        Page<T> findAll = jpaRepository.findAll(
-                new PageRequest(page, WebConstants.PAGE_SIZE, translateSort()));
-        return findAll.iterator();
-    }
+	/**
+	 * @see SortableDataProvider#iterator(long, long)
+	 */
+	@Override
+	public Iterator<? extends T> iterator(final long first, final long count) {
+		int page = (int) ((double) first / WebConstants.PAGE_SIZE);
+		Page<T> findAll = jpaRepository.findAll(new PageRequest(page, WebConstants.PAGE_SIZE, translateSort()));
+		return findAll.iterator();
+	}
 
-    @Override
-    public long size() {
-        return jpaRepository.count();
-    }
+	@Override
+	public long size() {
+		return jpaRepository.count();
+	}
 
-    /**
-     * This ensures that the object is detached and reloaded after
-     * deserialization of the page, since the
-     * {@link PersistableJpaRepositoryModel} is also loadabledetachable
-     */
-    @Override
-    public IModel<T> model(T object) {
-        return new PersistableJpaRepositoryModel<T>(object, jpaRepository);
-    }
+	/**
+	 * This ensures that the object is detached and reloaded after
+	 * deserialization of the page, since the
+	 * {@link PersistableJpaRepositoryModel} is also loadabledetachable
+	 */
+	@Override
+	public IModel<T> model(final T object) {
+		return new PersistableJpaRepositoryModel<T>(object, jpaRepository);
+	}
 
 }

@@ -50,7 +50,7 @@ public class RevisionsPage extends BasePage {
 	/**
 	 * @param parameters
 	 */
-	public RevisionsPage(PageParameters parameters) {
+	public RevisionsPage(final PageParameters parameters) {
 		super(parameters);
 
 		final long entityId = parameters.get(WebConstants.PARAM_ID).toLong();
@@ -62,7 +62,6 @@ public class RevisionsPage extends BasePage {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		
 
 		AuditReader reader = AuditReaderFactory.get(entityManager);
 
@@ -81,14 +80,14 @@ public class RevisionsPage extends BasePage {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(ListItem<DefaultRevisionEntity> item) {
+			protected void populateItem(final ListItem<DefaultRevisionEntity> item) {
 				final PageParameters pp = new PageParameters();
 				pp.set(WebConstants.PARAM_REVISION_ID, item.getModelObject().getId());
 				pp.set(WebConstants.PARAM_ID, entityId);
 
 				item.add(new Label("revisionNumber", new PropertyModel<Integer>(item.getModel(), "id")));
-				item.add(DateLabel.forDatePattern("revisionDate", new PropertyModel<Date>(item.getModel(),
-						"revisionDate"), "yyyy/MM/dd @HH:mm:ss z"));
+				item.add(DateLabel.forDatePattern("revisionDate",
+						new PropertyModel<Date>(item.getModel(), "revisionDate"), "yyyy/MM/dd @HH:mm:ss z"));
 			}
 		});
 	}

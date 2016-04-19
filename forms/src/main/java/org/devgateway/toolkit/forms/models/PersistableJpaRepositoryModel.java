@@ -11,12 +11,12 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.models;
 
-import nl.dries.wicket.hibernate.dozer.DozerModel;
-
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.devgateway.toolkit.forms.wicket.providers.SortableJpaRepositoryDataProvider;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import nl.dries.wicket.hibernate.dozer.DozerModel;
 
 
 /**
@@ -49,29 +49,22 @@ public class PersistableJpaRepositoryModel<T extends GenericPersistable> extends
 
     }
     
-    @Override
-    public int hashCode()
-    {
-        return Long.valueOf(id).hashCode();
-    }
-    
-    @SuppressWarnings("unchecked")
 	@Override
-    public boolean equals(final Object obj)
-    {
-        if (obj == this)
-        {
-            return true;
-        }
-        else if (obj == null)
-        {
-            return false;
-        }
-        else if (obj instanceof PersistableJpaRepositoryModel)
-        {
-        	PersistableJpaRepositoryModel<T> other = (PersistableJpaRepositoryModel<T>)obj;
-            return other.id == id;
-        }
-        return false;
-    }
+	public int hashCode() {
+		return Long.valueOf(id).hashCode();
+	}
+    
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj == this) {
+			return true;
+		} else if (obj == null) {
+			return false;
+		} else if (obj instanceof PersistableJpaRepositoryModel) {
+			PersistableJpaRepositoryModel<T> other = (PersistableJpaRepositoryModel<T>) obj;
+			return other.id == id;
+		}
+		return false;
+	}
 }

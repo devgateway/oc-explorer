@@ -10,7 +10,7 @@ public class Customer extends GenericMongoPersistable {
 	public Customer() {
 	}
 
-	public Customer(String firstName, String lastName) {
+	public Customer(final String firstName, final String lastName) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}
@@ -20,12 +20,11 @@ public class Customer extends GenericMongoPersistable {
 		return String.format("Customer[id=%s, firstName='%s', lastName='%s']", id, firstName, lastName);
 	}
 
-	
 	public String getFirstName() {
 		return firstName;
 	}
 
-	public void setFirstName(String firstName) {
+	public void setFirstName(final String firstName) {
 		this.firstName = firstName;
 	}
 
@@ -33,7 +32,7 @@ public class Customer extends GenericMongoPersistable {
 		return lastName;
 	}
 
-	public void setLastName(String lastName) {
+	public void setLastName(final String lastName) {
 		this.lastName = lastName;
 	}
 

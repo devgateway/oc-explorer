@@ -34,13 +34,13 @@ public class ListGroupPage extends AbstractListPage<Group> {
 	@SpringBean
 	protected GroupRepository groupRepository;
 
-	public ListGroupPage(PageParameters pageParameters) {
+	public ListGroupPage(final PageParameters pageParameters) {
 		super(pageParameters);
 		this.jpaRepository = groupRepository;
 		this.editPageClass = EditGroupPage.class;
-		columns.add(new PropertyColumn<Group, String>(new Model<String>(
-				(new StringResourceModel("name", ListGroupPage.this, null))
-						.getString()), "label", "label"));
+		columns.add(new PropertyColumn<Group, String>(
+				new Model<String>((new StringResourceModel("name", ListGroupPage.this, null)).getString()), "label",
+				"label"));
 	}
 
 }
