@@ -27,7 +27,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.editor.SummernoteE
  * 
  */
 public class SummernoteBootstrapFormComponent extends GenericBootstrapFormComponent<String, SummernoteEditor> {
-	private StringValidator validator=WebConstants.StringValidators.maximumLengthValidatorTextArea;
+	private StringValidator validator=WebConstants.StringValidators.MAXIMUM_LENGTH_VALIDATOR_ONE_LINE_TEXTAREA;
 
 
 	private SummernoteConfig config; 

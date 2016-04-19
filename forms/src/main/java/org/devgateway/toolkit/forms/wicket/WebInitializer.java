@@ -19,11 +19,7 @@ import org.apache.wicket.protocol.http.WicketFilter;
 import org.apache.wicket.spring.SpringWebApplicationFactory;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
-import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
-import org.springframework.web.context.ContextCleanupListener;
-import org.springframework.web.filter.DelegatingFilterProxy;
 
 /**
  * This class is the replacement of the web.xml. It registers the wicket filter
@@ -38,12 +34,13 @@ public class WebInitializer implements ServletContextInitializer {
 	private static final String PARAM_APP_BEAN = "applicationBean";
 
 	@Override
-	public void onStartup(ServletContext sc) throws ServletException {
+	public void onStartup(final ServletContext sc) throws ServletException {
 
-// AUTO configured by spring boot 1.2.x and upper
-//		sc.addFilter(AbstractSecurityWebApplicationInitializer.DEFAULT_FILTER_NAME, new DelegatingFilterProxy("springSecurityFilterChain"))
-//				.addMappingForUrlPatterns(null, false, "/*");
-		
+		// AUTO configured by spring boot 1.2.x and upper
+		// sc.addFilter(AbstractSecurityWebApplicationInitializer.DEFAULT_FILTER_NAME,
+		// new DelegatingFilterProxy("springSecurityFilterChain"))
+		// .addMappingForUrlPatterns(null, false, "/*");
+
 		sc.addFilter("Spring OpenEntityManagerInViewFilter",
 				org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter.class).addMappingForUrlPatterns(null,
 				false, "/*");

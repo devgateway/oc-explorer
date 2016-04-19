@@ -26,7 +26,7 @@ import java.util.Date;
  *         {@link WebConstants#PARAM_VIEW_MODE} is true in the browser and will
  *         convert the model object to something printable (string-like)
  */
-public class ViewModeConverterModel<T> extends AbstractReadOnlyModel<String>{
+public class ViewModeConverterModel<T> extends AbstractReadOnlyModel<String> {
 
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
@@ -39,7 +39,7 @@ public class ViewModeConverterModel<T> extends AbstractReadOnlyModel<String>{
 	/**
 	 * 
 	 */
-	public ViewModeConverterModel(IModel<T> originalModel) {
+	public ViewModeConverterModel(final IModel<T> originalModel) {
 		this.originalModel = originalModel;
 	}
 
@@ -63,8 +63,8 @@ public class ViewModeConverterModel<T> extends AbstractReadOnlyModel<String>{
 		// for collections that are empty, we return empty
 		if (object instanceof Collection<?>) {
 			if (((Collection<?>) object).size() == 0) {
-                return "";
-            }
+				return "";
+			}
 		}
 
 		// convert date to a nicer format

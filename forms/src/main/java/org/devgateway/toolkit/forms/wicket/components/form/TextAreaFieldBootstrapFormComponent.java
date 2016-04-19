@@ -24,7 +24,7 @@ import org.devgateway.toolkit.forms.WebConstants;
  * 
  */
 public class TextAreaFieldBootstrapFormComponent<TYPE> extends GenericBootstrapFormComponent<TYPE, TextArea<TYPE>> {
-	private StringValidator validator=WebConstants.StringValidators.maximumLengthValidatorTextArea;
+	private StringValidator validator=WebConstants.StringValidators.MAXIMUM_LENGTH_VALIDATOR_ONE_LINE_TEXTAREA;
 
 
 	/**

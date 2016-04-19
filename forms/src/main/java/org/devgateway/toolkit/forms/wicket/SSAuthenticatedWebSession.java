@@ -48,7 +48,7 @@ public class SSAuthenticatedWebSession extends AuthenticatedWebSession {
 	private AuthenticationException ae;
 
 
-    @SpringBean(required=false)
+	@SpringBean(required = false)
     private RememberMeServices rememberMeServices;
 
 
@@ -72,7 +72,7 @@ public class SSAuthenticatedWebSession extends AuthenticatedWebSession {
 		}
 	}
 
-    public SSAuthenticatedWebSession(Request request) {
+    public SSAuthenticatedWebSession(final Request request) {
         super(request);
         Injector.get().inject(this);
         ensureDependenciesNotNull();        
@@ -87,7 +87,7 @@ public class SSAuthenticatedWebSession extends AuthenticatedWebSession {
     }
     
     @Override
-    public boolean authenticate(String username, String password) {
+    public boolean authenticate(final String username, final String password) {
         boolean authenticated;
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -97,9 +97,11 @@ public class SSAuthenticatedWebSession extends AuthenticatedWebSession {
 //        			SecurityContextHolder.getContext());
             authenticated = authentication.isAuthenticated();
    
-            if(authenticated && rememberMeServices!=null) rememberMeServices.loginSuccess(
-            		(HttpServletRequest)RequestCycle.get().getRequest().getContainerRequest(), (HttpServletResponse)
-            		RequestCycle.get().getResponse().getContainerResponse(), authentication);
+			if (authenticated && rememberMeServices != null) {
+				rememberMeServices.loginSuccess(
+						(HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest(),
+						(HttpServletResponse) RequestCycle.get().getResponse().getContainerResponse(), authentication);
+			}
             
         } catch (AuthenticationException e) {
         	this.setAe(e);
@@ -123,19 +125,19 @@ public class SSAuthenticatedWebSession extends AuthenticatedWebSession {
      * @see #addRolesFromAuthentication(Roles, Authentication)
      * @param roles
      */
-    private void getRolesIfSignedIn(Roles roles) {
-        if (isSignedIn()) {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();                        
-            addRolesFromAuthentication(roles, authentication);
-        }
-    }
+	private void getRolesIfSignedIn(final Roles roles) {
+		if (isSignedIn()) {
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			addRolesFromAuthentication(roles, authentication);
+		}
+	}
 
     /**
      * Trivial iteration of {@link Authentication#getAuthorities()} and adding roles to Wicket {@link Roles} object
      * @param roles
      * @param authentication
      */
-    private void addRolesFromAuthentication(Roles roles, Authentication authentication) {
+    private void addRolesFromAuthentication(final Roles roles, final Authentication authentication) {
         for (GrantedAuthority authority : authentication.getAuthorities()) {
             roles.add(authority.getAuthority());
         }
@@ -145,7 +147,7 @@ public class SSAuthenticatedWebSession extends AuthenticatedWebSession {
 		return ae;
 	}
 
-	public void setAe(AuthenticationException ae) {
+	public void setAe(final AuthenticationException ae) {
 		this.ae = ae;
 	}
 

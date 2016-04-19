@@ -41,7 +41,7 @@ public class SessionFinderService implements SessionFinder {
 	 * .lang.Class)
 	 */
 	@Override
-	public Session getHibernateSession(Class<?> clazz) {
+	public Session getHibernateSession(final Class<?> clazz) {
 		return em.unwrap(Session.class);
 	}
 

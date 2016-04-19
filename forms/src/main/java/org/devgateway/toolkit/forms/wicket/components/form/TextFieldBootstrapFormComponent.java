@@ -30,7 +30,7 @@ import de.agilecoders.wicket.core.util.Attributes;
  */
 public class TextFieldBootstrapFormComponent<TYPE> extends GenericBootstrapFormComponent<TYPE, TextField<TYPE>> {
 	private static final long serialVersionUID = 8062663141536130313L;
-	private StringValidator validator=WebConstants.StringValidators.maximumLengthValidatorOneLineText;
+	private StringValidator validator=WebConstants.StringValidators.MAXIMUM_LENGTH_VALIDATOR_ONE_LINE_TEXT;
 	private Boolean isFloatedInput = false;
 
 

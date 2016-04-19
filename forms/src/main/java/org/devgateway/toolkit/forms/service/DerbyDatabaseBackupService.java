@@ -37,16 +37,16 @@ import org.zeroturnaround.zip.ZipUtil;
 @Service
 public class DerbyDatabaseBackupService {
 
-	private static final Logger logger = Logger.getLogger(DerbyDatabaseBackupService.class);
+	private static final Logger LOGGER = Logger.getLogger(DerbyDatabaseBackupService.class);
 	public static final String DATABASE_PRODUCT_NAME_APACHE_DERBY = "Apache Derby";
-	public static final String ARCHIVE_SUFFIX=".zip";
+	public static final String ARCHIVE_SUFFIX = ".zip";
 	
 	@Autowired
 	private DataSource datasource;
 	
 	private String lastBackupURL;
 
-	protected String databaseName="sample";
+	protected String databaseName = "sample";
 
 	/**
 	 * Invokes backup database. This is invoked by Spring {@link Scheduled}
@@ -60,14 +60,16 @@ public class DerbyDatabaseBackupService {
 		try {
 			databaseProductName = datasource.getConnection().getMetaData().getDatabaseProductName();
 		} catch (SQLException e) {
-			logger.error("Cannot read databaseProductName from Connection!"
+			LOGGER.error("Cannot read databaseProductName from Connection!"
 					+ DerbyDatabaseBackupService.class.getCanonicalName() + " cannot continue!" + e);
 			return;
 		}
-		if (DATABASE_PRODUCT_NAME_APACHE_DERBY.equals(databaseProductName))
+		if (DATABASE_PRODUCT_NAME_APACHE_DERBY.equals(databaseProductName)) {
 			backupDerbyDatabase();
-		else
-			throw new RuntimeException("Scheduled database backup for unsupported database type " + databaseProductName);
+		} else {
+			throw new RuntimeException(
+					"Scheduled database backup for unsupported database type " + databaseProductName);
+		}
 	}
 
 	/**
@@ -81,21 +83,22 @@ public class DerbyDatabaseBackupService {
 	 * @return the backup url to be used by the backup procedure
 	 * @throws UnknownHostException
 	 */
-	private String createBackupURL(String backupPath) {
+	private String createBackupURL(final String backupPath) {
 		java.text.SimpleDateFormat todaysDate = new java.text.SimpleDateFormat("yyyyMMdd-HHmmss");
 		String parent = null;
 		Path originalPath = Paths.get(backupPath);
 		Path filePath = originalPath.getFileName();
-		if (filePath != null)
+		if (filePath != null) {
 			parent = filePath.toString();
-		else
+		} else {
 			try {
 				// fall back to hostname instead
 				parent = InetAddress.getLocalHost().getHostName();
 			} catch (UnknownHostException e) {
-				logger.debug("Cannot get localhost/hostname! " + e);
+				LOGGER.debug("Cannot get localhost/hostname! " + e);
 				return null;
 			}
+		}
 		
 		String backupURL = backupPath + "/" + parent + "-" + databaseName + "-"
 				+ todaysDate.format((java.util.Calendar.getInstance()).getTime());
@@ -109,10 +112,11 @@ public class DerbyDatabaseBackupService {
 	 * @return the backupURL
 	 */
 	private String createBackupURL() {
-		String backupHomeString=System.getProperty("backup.home");
-		if(backupHomeString==null)
+		String backupHomeString = System.getProperty("backup.home");
+		if (backupHomeString == null) {
 			backupHomeString = System.getProperty("derby.system.home") != null ? System
 				.getProperty("derby.system.home") : System.getProperty("user.dir");
+		}
 
 		String backupURL = createBackupURL(backupHomeString);
 		return backupURL;
@@ -136,13 +140,13 @@ public class DerbyDatabaseBackupService {
 			cs.setString(1, lastBackupURL);
 			cs.execute();
 		} catch (SQLException e) {
-			logger.error("Cannot perform database backup!", e);
+			LOGGER.error("Cannot perform database backup!", e);
 			return;
 		} finally {
 			try {
 				cs.close();
 			} catch (SQLException e) {
-				logger.error("Error closing backup connection ", e);
+				LOGGER.error("Error closing backup connection ", e);
 				return;
 			}
 		}
@@ -154,10 +158,10 @@ public class DerbyDatabaseBackupService {
 		try {
 			FileUtils.deleteDirectory(backupURLFile);
 		} catch (IOException e) {
-			logger.error("Cannot delete temporary backup directory", e);
+			LOGGER.error("Cannot delete temporary backup directory", e);
 		}
 
-		logger.info("Backed up database to " + lastBackupURL + ARCHIVE_SUFFIX);
+		LOGGER.info("Backed up database to " + lastBackupURL + ARCHIVE_SUFFIX);
 	}
 	
 	public String getLastBackupURL() {

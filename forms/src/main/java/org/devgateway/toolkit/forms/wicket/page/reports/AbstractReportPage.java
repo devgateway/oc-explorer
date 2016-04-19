@@ -110,15 +110,14 @@ public abstract class AbstractReportPage extends BasePage {
 	public class ReportDownloadLink extends Link<Void> {
 
 		private OutputType outputType;
-		private Map<OutputType,String> outputExtension=new HashMap<>();
-		
+		private Map<OutputType, String> outputExtension = new HashMap<>();
 		
 		public ReportDownloadLink(String id, OutputType outputType) {
 			super(id);
-			this.outputType=outputType;
+			this.outputType = outputType;
 			outputExtension.put(OutputType.PDF, ".pdf");
 			outputExtension.put(OutputType.EXCEL, ".xls");
-            outputExtension.put(OutputType.RTF, ".doc");
+			outputExtension.put(OutputType.RTF, ".doc");
 			setOutputMarkupId(true);
 			setOutputMarkupPlaceholderTag(true);
 		}

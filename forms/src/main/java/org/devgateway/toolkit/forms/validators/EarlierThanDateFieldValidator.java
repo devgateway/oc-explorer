@@ -37,15 +37,16 @@ public class EarlierThanDateFieldValidator implements IValidator<Date> {
 	 * chronologically after the current's
 	 * {@link DateFieldBootstrapFormComponent} validator
 	 */
-	public EarlierThanDateFieldValidator(DateFieldBootstrapFormComponent highDate) {
+	public EarlierThanDateFieldValidator(final DateFieldBootstrapFormComponent highDate) {
 		this.highDate = highDate;
 	}
 
 	@Override
-	public void validate(IValidatable<Date> validatable) {
+	public void validate(final IValidatable<Date> validatable) {
 		highDate.getField().validate();
-		if (!highDate.getField().isValid())
+		if (!highDate.getField().isValid()) {
 			return;
+		}
 
 		Date endDate = (Date) highDate.getField().getConvertedInput();
 
