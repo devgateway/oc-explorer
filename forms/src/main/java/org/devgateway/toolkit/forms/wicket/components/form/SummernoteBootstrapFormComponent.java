@@ -27,55 +27,55 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.editor.SummernoteE
  * 
  */
 public class SummernoteBootstrapFormComponent extends GenericBootstrapFormComponent<String, SummernoteEditor> {
-	private StringValidator validator=WebConstants.StringValidators.MAXIMUM_LENGTH_VALIDATOR_ONE_LINE_TEXTAREA;
+	private static final int SUMMERNOTE_HEIGHT = 50;
 
+	private StringValidator validator = WebConstants.StringValidators.MAXIMUM_LENGTH_VALIDATOR_ONE_LINE_TEXTAREA;
 
-	private SummernoteConfig config; 
-	
+	private SummernoteConfig config;
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7822733988194369835L;
 
-	public SummernoteBootstrapFormComponent(String id, IModel<String> labelModel, IModel<String> model) {
+	public SummernoteBootstrapFormComponent(final String id, final IModel<String> labelModel,
+			final IModel<String> model) {
 		super(id, labelModel, model);
 	}
-	
-	public SummernoteBootstrapFormComponent(String id, IModel<String> labelModel) {
+
+	public SummernoteBootstrapFormComponent(final String id, final IModel<String> labelModel) {
 		super(id, labelModel, null);
 	}
-	
-	
 
 	/**
 	 * @param id
 	 */
-	public SummernoteBootstrapFormComponent(String id) {
+	public SummernoteBootstrapFormComponent(final String id) {
 		super(id);
 	}
 
 	@Override
-	protected SummernoteEditor inputField(String id, IModel<String> model) {
+	protected SummernoteEditor inputField(final String id, final IModel<String> model) {
 
 		config = new SummernoteConfig();
-		
-		//this enabled for demo purposes, but it stores the files in volatile disk dir
+
+		// this enabled for demo purposes, but it stores the files in volatile
+		// disk dir
 		config.useStorageId(FormsWebApplication.STORAGE_ID);
-		
-		config.withHeight(50);
+
+		config.withHeight(SUMMERNOTE_HEIGHT);
 		config.withAirMode(false);
 
 		SummernoteEditor summernoteEditor = new SummernoteEditor(id, initFieldModel(), config);
 
 		return summernoteEditor;
 	}
-	
 
-    @Override
-    protected void onInitialize() {
-    	super.onInitialize();
-    	getField().add(validator);
-    }
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		getField().add(validator);
+	}
 
 	public SummernoteConfig getConfig() {
 		return config;

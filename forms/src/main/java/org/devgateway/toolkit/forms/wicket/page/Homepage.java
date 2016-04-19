@@ -33,7 +33,7 @@ public class Homepage extends BasePage {
 	/**
 	 * @param parameters
 	 */
-	public Homepage(PageParameters parameters) {
+	public Homepage(final PageParameters parameters) {
 		super(parameters);
 		// TODO Auto-generated constructor stub
 	}

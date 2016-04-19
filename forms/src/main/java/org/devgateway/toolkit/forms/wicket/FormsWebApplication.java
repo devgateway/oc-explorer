@@ -219,8 +219,9 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
 
 		// watch this using the URL
 		// http://.../wicket/internal/debug/diskDataStore
-		if (usesDevelopmentConfig())
+		if (usesDevelopmentConfig()) {
 			DebugDiskDataStore.register(this);
+		}
 
 		SessionFinderHolder.setSessionFinder(sessionFinderService);
 	}

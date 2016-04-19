@@ -26,15 +26,14 @@ public class Header extends Panel {
 
 	protected static Logger logger = Logger.getLogger(Header.class);
 
-    protected WebMarkupContainer countryBar;
+	protected WebMarkupContainer countryBar;
 
-    public Header(String markupId) {
-        this(markupId, null);
-    }
+	public Header(final String markupId) {
+		this(markupId, null);
+	}
 
-    public Header(String markupId, final PageParameters parameters) {
-        super(markupId);
-    }
+	public Header(final String markupId, final PageParameters parameters) {
+		super(markupId);
+	}
 
-    
 }

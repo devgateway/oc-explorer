@@ -26,14 +26,16 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeIc
  * @author mpostelnicu
  * 
  */
-public class CheckBoxPickerBootstrapFormComponent extends GenericEnablingBootstrapFormComponent<Boolean, BootstrapCheckBoxPicker> {
+public class CheckBoxPickerBootstrapFormComponent
+		extends GenericEnablingBootstrapFormComponent<Boolean, BootstrapCheckBoxPicker> {
 	private static final long serialVersionUID = -4032850928243673675L;
 
 	private Boolean isFloatedInput = false;
 
 	private BootstrapCheckBoxPickerConfig config;
 
-	public CheckBoxPickerBootstrapFormComponent(String id, IModel<String> labelModel, IModel<Boolean> model) {
+	public CheckBoxPickerBootstrapFormComponent(final String id, final IModel<String> labelModel,
+			final IModel<Boolean> model) {
 		super(id, labelModel, model);
 	}
 
@@ -41,25 +43,25 @@ public class CheckBoxPickerBootstrapFormComponent extends GenericEnablingBootstr
 	 * @param id
 	 * @param model
 	 */
-	public CheckBoxPickerBootstrapFormComponent(String id, IModel<Boolean> model) {
+	public CheckBoxPickerBootstrapFormComponent(final String id, final IModel<Boolean> model) {
 		super(id, model);
 	}
 
-	public CheckBoxPickerBootstrapFormComponent(String id) {
+	public CheckBoxPickerBootstrapFormComponent(final String id) {
 		super(id);
 	}
 
 	@Override
-	protected void onComponentTag(ComponentTag tag) {
+	protected void onComponentTag(final ComponentTag tag) {
 		super.onComponentTag(tag);
 
-		if(isFloatedInput) {
+		if (isFloatedInput) {
 			Attributes.addClass(tag, "floated-input");
 		}
 	}
 
 	@Override
-	protected BootstrapCheckBoxPicker inputField(String id, IModel<Boolean> model) {
+	protected BootstrapCheckBoxPicker inputField(final String id, final IModel<Boolean> model) {
 
 		config = new BootstrapCheckBoxPickerConfig().withOnClass("btn-info").withOffClass("btn-warning")
 				.withOnIcon(FontAwesomeIconType.thumbs_up).withOffIcon(FontAwesomeIconType.thumbs_down)
@@ -70,7 +72,7 @@ public class CheckBoxPickerBootstrapFormComponent extends GenericEnablingBootstr
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
+			protected void onUpdate(final AjaxRequestTarget target) {
 				CheckBoxPickerBootstrapFormComponent.this.onUpdate(target);
 			}
 		});
@@ -83,16 +85,16 @@ public class CheckBoxPickerBootstrapFormComponent extends GenericEnablingBootstr
 		return "click";
 	}
 
-    public Boolean getIsFloatedInput() {
-        return isFloatedInput;
-    }
+	public Boolean getIsFloatedInput() {
+		return isFloatedInput;
+	}
 
-    public void setIsFloatedInput(Boolean isFloatedInput) {
-        this.isFloatedInput = isFloatedInput;
-    }
+	public void setIsFloatedInput(final Boolean isFloatedInput) {
+		this.isFloatedInput = isFloatedInput;
+	}
 
 	@Override
-	protected boolean boundComponentsVisibilityAllowed(Boolean selectedValue) {
+	protected boolean boundComponentsVisibilityAllowed(final Boolean selectedValue) {
 		return selectedValue;
 	}
 

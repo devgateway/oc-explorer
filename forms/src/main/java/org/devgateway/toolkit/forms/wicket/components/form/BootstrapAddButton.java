@@ -37,8 +37,8 @@ public abstract class BootstrapAddButton extends LaddaAjaxButton {
 	 * @param id
 	 * @param model
 	 */
-	public BootstrapAddButton(String id, IModel<String> model) {
-		super(id, model,Buttons.Type.Info);
+	public BootstrapAddButton(final String id, final IModel<String> model) {
+		super(id, model, Buttons.Type.Info);
 		setIconType(FontAwesomeIconType.save);	
 		setDefaultFormProcessing(false);
 		setIconType(FontAwesomeIconType.plus).setSize(Size.Medium).setLabel(model);
@@ -50,7 +50,7 @@ public abstract class BootstrapAddButton extends LaddaAjaxButton {
 	protected abstract void onSubmit(AjaxRequestTarget target, Form<?> form);
 	
 	@Override
-	public void onEvent(IEvent<?> event) {
+	public void onEvent(final IEvent<?> event) {
         ComponentUtil.enableDisableEvent(this, event);
 	}
 	

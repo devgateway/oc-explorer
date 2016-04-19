@@ -25,12 +25,14 @@ import de.agilecoders.wicket.core.util.Attributes;
  * @author idobre
  * @since 11/13/14
  *
- * Multi-file upload file component. We use FileInputBootstrapFormComponentWrapper
- * since BootstrapFileInput it's not actually a FormComponent
+ *        Multi-file upload file component. We use
+ *        FileInputBootstrapFormComponentWrapper since BootstrapFileInput it's
+ *        not actually a FormComponent
  * @see FileInputBootstrapFormComponentWrapper
  */
 public class FileInputBootstrapFormComponent extends
-        GenericBootstrapFormComponent<Collection<FileMetadata>, FileInputBootstrapFormComponentWrapper<Collection<FileMetadata>>> {
+		GenericBootstrapFormComponent<Collection<FileMetadata>, 
+		FileInputBootstrapFormComponentWrapper<Collection<FileMetadata>>> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -42,7 +44,7 @@ public class FileInputBootstrapFormComponent extends
 	 * @param id
 	 * @param model
 	 */
-	public FileInputBootstrapFormComponent(String id, IModel<Collection<FileMetadata>> model) {
+	public FileInputBootstrapFormComponent(final String id, final IModel<Collection<FileMetadata>> model) {
 		super(id, model);
 	}
 
@@ -51,53 +53,55 @@ public class FileInputBootstrapFormComponent extends
 	 * @param labelModel
 	 * @param model
 	 */
-	public FileInputBootstrapFormComponent(String id, IModel<String> labelModel, IModel<Collection<FileMetadata>> model) {
+	public FileInputBootstrapFormComponent(final String id, final IModel<String> labelModel,
+			final IModel<Collection<FileMetadata>> model) {
 		super(id, labelModel, model);
 	}
 
 	/**
 	 * @param id
 	 */
-	public FileInputBootstrapFormComponent(String id) {
+	public FileInputBootstrapFormComponent(final String id) {
 		super(id);
 	}
 
 	@Override
-	protected void getAjaxFormComponentUpdatingBehavior () {
+	protected void getAjaxFormComponentUpdatingBehavior() {
 		// do nothing;
 	}
 
-	public FileInputBootstrapFormComponent maxFiles(int maxFiles) {
-        field.maxFiles(maxFiles);
-        return this;
-    }
-
-    @Override
-    protected FileInputBootstrapFormComponentWrapper<Collection<FileMetadata>> inputField(String id, IModel<Collection<FileMetadata>> model) {
-		fileInputBootstrapFormComponentWrapper = new FileInputBootstrapFormComponentWrapper<>(id, initFieldModel());
-
-        return fileInputBootstrapFormComponentWrapper;
-    }
+	public FileInputBootstrapFormComponent maxFiles(final int maxFiles) {
+		field.maxFiles(maxFiles);
+		return this;
+	}
 
 	@Override
-	protected void onComponentTag(ComponentTag tag) {
+	protected FileInputBootstrapFormComponentWrapper<Collection<FileMetadata>> inputField(final String id,
+			final IModel<Collection<FileMetadata>> model) {
+		fileInputBootstrapFormComponentWrapper = new FileInputBootstrapFormComponentWrapper<>(id, initFieldModel());
+
+		return fileInputBootstrapFormComponentWrapper;
+	}
+
+	@Override
+	protected void onComponentTag(final ComponentTag tag) {
 		super.onComponentTag(tag);
 
-		if(getIsFloatedInput()) {
+		if (getIsFloatedInput()) {
 			Attributes.addClass(tag, "floated-input");
 		}
 	}
 
 	@Override
-	public void onEvent(IEvent<?> event) {
+	public void onEvent(final IEvent<?> event) {
 		ComponentUtil.enableDisableEvent(this, event);
 	}
 
-	public void setVisibleOnlyToAdmin(Boolean visibleOnlyToAdmin) {
+	public void setVisibleOnlyToAdmin(final Boolean visibleOnlyToAdmin) {
 		fileInputBootstrapFormComponentWrapper.setVisibleOnlyToAdmin(visibleOnlyToAdmin);
 	}
-	
-	public void setDisableDeleteButton(Boolean disableDeleteButton) {
+
+	public void setDisableDeleteButton(final Boolean disableDeleteButton) {
 		fileInputBootstrapFormComponentWrapper.setDisableDeleteButton(disableDeleteButton);
 	}
 
@@ -105,11 +109,12 @@ public class FileInputBootstrapFormComponent extends
 		return isFloatedInput;
 	}
 
-	public void setIsFloatedInput(Boolean isFloatedInput) {
+	public void setIsFloatedInput(final Boolean isFloatedInput) {
 		this.isFloatedInput = isFloatedInput;
 	}
 
-	public FileInputBootstrapFormComponentWrapper<Collection<FileMetadata>> getFileInputBootstrapFormComponentWrapper() {
+	public FileInputBootstrapFormComponentWrapper<Collection<FileMetadata>> 
+	getFileInputBootstrapFormComponentWrapper() {
 		return fileInputBootstrapFormComponentWrapper;
 	}
 }
