@@ -15,17 +15,20 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
  * Generic superclass for importing rows from the vietnam excel data sources
+ * 
  * @author mihai
  *
- * @param <T> - the type of OCDS/dervied entity to be imported
- * @param <R> - the main repository that is able to save <T>
+ * @param <T>
+ *            - the type of OCDS/dervied entity to be imported
+ * @param <R>
+ *            - the main repository that is able to save <T>
  */
 public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 
 	private final Logger logger = LoggerFactory.getLogger(VNImportService.class);
 
 	protected R repository;
-	
+
 	protected VNImportService importService;
 
 	protected int skipRows;
@@ -33,9 +36,9 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 	protected int importedRows = 0;
 	protected List<T> documents;
 
-	public RowImporter(R repository, VNImportService importService, int skipRows) {
+	public RowImporter(final R repository, final VNImportService importService, final int skipRows) {
 		this.repository = repository;
-		this.importService=importService;
+		this.importService = importService;
 		documents = new ArrayList<>();
 		this.skipRows = skipRows;
 	}
@@ -48,34 +51,31 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 	 * @param string
 	 * @return
 	 */
-	public Double getDouble(String string) {
+	public Double getDouble(final String string) {
 		try {
 			return Double.parseDouble(string);
 		} catch (NumberFormatException e) {
 			throw new RuntimeException("Cell value " + string + " is not a valid number.");
 		}
 	}
-	
-	
-	public BigDecimal getDecimal(String string) {
+
+	public BigDecimal getDecimal(final String string) {
 		try {
 			return new BigDecimal(string);
 		} catch (NumberFormatException e) {
 			throw new RuntimeException("Cell value " + string + " is not a valid decimal.");
 		}
 	}
-	
-	
-	public Integer getInteger(String string) {
+
+	public Integer getInteger(final String string) {
 		try {
 			return Integer.parseInt(string);
 		} catch (NumberFormatException e) {
 			throw new RuntimeException("Cell value " + string + " is not a valid integer.");
 		}
 	}
-	
-	
-	public Date getDateFromString(SimpleDateFormat sdf,String string) {
+
+	public Date getDateFromString(final SimpleDateFormat sdf, final String string) {
 		try {
 			return sdf.parse(string);
 		} catch (ParseException e) {
@@ -84,38 +84,43 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 		}
 	}
 
-	public Date getExcelDate(String string) {
+	public Date getExcelDate(final String string) {
 		try {
 			return DateUtil.getJavaCalendar(Double.parseDouble(string)).getTime();
 		} catch (NumberFormatException e) {
 			throw new RuntimeException("Cell value " + string + " is not a valid Excel date.");
 		}
 	}
-	
-	private boolean isRowEmpty(String[] row ) {
-		for(int i=0;i<row.length;i++)
-			if(!row[i].trim().isEmpty()) return false;
+
+	private boolean isRowEmpty(final String[] row) {
+		for (int i = 0; i < row.length; i++) {
+			if (!row[i].trim().isEmpty()) {
+				return false;
+			}
+		}
 		return true;
 	}
-	
-	public boolean importRows(List<String[]> rows) throws ParseException {
+
+	public boolean importRows(final List<String[]> rows) throws ParseException {
 		documents.clear();
 
 		for (String[] row : rows) {
-			if (cursorRowNo++ < skipRows || isRowEmpty(row))
+			if (cursorRowNo++ < skipRows || isRowEmpty(row)) {
 				continue;
+			}
 
 			try {
 				importRow(row);
 				importedRows++;
 			} catch (Exception e) {
-				importService.logMessage("	<font style='color:red'>Error importing row " + cursorRowNo + ". "+ e+"</font>");
+				importService.logMessage(
+						"	<font style='color:red'>Error importing row " + cursorRowNo + ". " + e + "</font>");
 				// throw e; we do not stop
 			}
 		}
 
 		repository.save(documents);
-		logger.debug("Finished importing " + importedRows+" rows.");
+		logger.debug("Finished importing " + importedRows + " rows.");
 		return true;
 	}
 

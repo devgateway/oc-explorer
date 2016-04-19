@@ -46,8 +46,8 @@ public class XExcelFileReader {
 	 * @param sheetName
 	 * @throws Exception
 	 */
-	public XExcelFileReader(String excelPath, String sheetName) throws Exception {
-		opcPkg = OPCPackage.open(excelPath, PackageAccess.READ);		
+	public XExcelFileReader(final String excelPath, final String sheetName) throws Exception {
+		opcPkg = OPCPackage.open(excelPath, PackageAccess.READ);
 		this.stringsTable = new ReadOnlySharedStringsTable(opcPkg);
 
 		XSSFReader xssfReader = new XSSFReader(opcPkg);
@@ -56,9 +56,10 @@ public class XExcelFileReader {
 		InputStream inputStream = null;
 		XSSFReader.SheetIterator it = (XSSFReader.SheetIterator) xssfReader.getSheetsData();
 		while (it.hasNext()) {
-			InputStream tempStream = (InputStream) it.next();
-			if (!it.getSheetName().equals(sheetName))
+			InputStream tempStream = it.next();
+			if (!it.getSheetName().equals(sheetName)) {
 				continue;
+			}
 			inputStream = tempStream;
 			break;
 		}
@@ -68,8 +69,9 @@ public class XExcelFileReader {
 		while (xmlReader.hasNext()) {
 			xmlReader.next();
 			if (xmlReader.isStartElement()) {
-				if (xmlReader.getLocalName().equals("sheetData"))
+				if (xmlReader.getLocalName().equals("sheetData")) {
 					break;
+				}
 			}
 		}
 	}
@@ -78,7 +80,7 @@ public class XExcelFileReader {
 		return rowNum;
 	}
 
-	public List<String[]> readRows(int batchSize) throws XMLStreamException {
+	public List<String[]> readRows(final int batchSize) throws XMLStreamException {
 		String elementName = "row";
 		List<String[]> dataRows = new ArrayList<String[]>();
 		if (batchSize > 0) {
@@ -88,8 +90,9 @@ public class XExcelFileReader {
 					if (xmlReader.getLocalName().equals(elementName)) {
 						rowNum++;
 						dataRows.add(getDataRow());
-						if (dataRows.size() == batchSize)
+						if (dataRows.size() == batchSize) {
 							break;
+						}
 					}
 				}
 			}
@@ -118,7 +121,7 @@ public class XExcelFileReader {
 		return rowValues.toArray(new String[rowValues.size()]);
 	}
 
-	private String getCellValue(String cellType) throws XMLStreamException {
+	private String getCellValue(final String cellType) throws XMLStreamException {
 		String value = ""; // by default
 		while (xmlReader.hasNext()) {
 			xmlReader.next();
@@ -139,13 +142,14 @@ public class XExcelFileReader {
 	}
 
 	public void close() {
-		if(opcPkg!=null)
+		if (opcPkg != null) {
 			try {
 				opcPkg.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
 	}
 
 }

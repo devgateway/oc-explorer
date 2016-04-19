@@ -19,8 +19,6 @@ import org.apache.wicket.model.IModel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapCheckbox;
 import de.agilecoders.wicket.core.util.Attributes;
 
-import de.agilecoders.wicket.core.util.Attributes;
-
 /**
  * @author mpostelnicu
  * 

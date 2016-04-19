@@ -13,23 +13,26 @@ import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationReposit
 import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 
 /**
- * @author mihai
- * Specific {@link RowImporter} for Public Institutions, in the custom Excel format provided by Vietnam
+ * @author mihai Specific {@link RowImporter} for Public Institutions, in the
+ *         custom Excel format provided by Vietnam
  * @see VNOrganization
  */
 public class PublicInstitutionRowImporter extends RowImporter<VNOrganization, VNOrganizationRepository> {
 
-	public PublicInstitutionRowImporter(VNOrganizationRepository repository,VNImportService importService,int skipRows) {
+	public PublicInstitutionRowImporter(final VNOrganizationRepository repository, final VNImportService importService,
+			final int skipRows) {
 		super(repository, importService, skipRows);
 	}
 
 	@Override
-	public boolean importRow(String[] row) throws ParseException {
-		if (row[0] == null || row[0].isEmpty())
+	public boolean importRow(final String[] row) throws ParseException {
+		if (row[0] == null || row[0].isEmpty()) {
 			throw new RuntimeException("Main identifier empty!");
+		}
 		VNOrganization organization = repository.findById(row[0]);
-		if (organization != null)
+		if (organization != null) {
 			throw new RuntimeException("Duplicate identifer for organization " + organization);
+		}
 		organization = new VNOrganization();
 		Identifier identifier = new Identifier();
 

@@ -11,8 +11,9 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- * @author mihai
- * Tender OCDS Entity http://standard.open-contracting.org/latest/en/schema/reference/#tender
+ * @author mihai Tender OCDS Entity
+ *         http://standard.open-contracting.org/latest/en/schema/reference/#
+ *         tender
  */
 @Document
 public class Tender {
@@ -23,7 +24,7 @@ public class Tender {
 	String description;
 	@Indexed
 	String status;
-	List<Item> items=new ArrayList<>();
+	List<Item> items = new ArrayList<>();
 	Value minValue;
 	Value value;
 	@Indexed
@@ -33,7 +34,7 @@ public class Tender {
 	String procurementMethodRationale;
 	String awardCriteria;
 	String awardCriteriaDetails;
-	List<String> submissionMethod=new ArrayList<>();
+	List<String> submissionMethod = new ArrayList<>();
 	String submissionMethodDetails;
 	@Indexed
 	Period tenderPeriod;
@@ -42,164 +43,211 @@ public class Tender {
 	String eligibilityCriteria;
 	Period awardPeriod;
 	Integer numberOfTenders;
-	List<Organization> tenderers=new ArrayList<>();
-	
+	List<Organization> tenderers = new ArrayList<>();
+
 	Organization procuringEntity;
-	List<Document> documents=new ArrayList<>();
-	List<Milestone> milestone=new ArrayList<>();
+	List<Document> documents = new ArrayList<>();
+	List<Milestone> milestone = new ArrayList<>();
 	Amendment amendment;
-	
+
 	public String getId() {
 		return id;
 	}
-	public void setId(String id) {
+
+	public void setId(final String id) {
 		this.id = id;
 	}
+
 	public String getTitle() {
 		return title;
 	}
-	public void setTitle(String title) {
+
+	public void setTitle(final String title) {
 		this.title = title;
 	}
+
 	public String getDescription() {
 		return description;
 	}
-	public void setDescription(String description) {
+
+	public void setDescription(final String description) {
 		this.description = description;
 	}
+
 	public String getStatus() {
 		return status;
 	}
-	public void setStatus(String status) {
+
+	public void setStatus(final String status) {
 		this.status = status;
 	}
+
 	public List<Item> getItems() {
 		return items;
 	}
-	public void setItems(List<Item> items) {
+
+	public void setItems(final List<Item> items) {
 		this.items = items;
 	}
+
 	public Value getMinValue() {
 		return minValue;
 	}
-	public void setMinValue(Value minValue) {
+
+	public void setMinValue(final Value minValue) {
 		this.minValue = minValue;
 	}
+
 	public Value getValue() {
 		return value;
 	}
-	public void setValue(Value value) {
+
+	public void setValue(final Value value) {
 		this.value = value;
 	}
+
 	public String getProcurementMethod() {
 		return procurementMethod;
 	}
-	public void setProcurementMethod(String procurementMethod) {
+
+	public void setProcurementMethod(final String procurementMethod) {
 		this.procurementMethod = procurementMethod;
 	}
+
 	public String getProcurementMethodRationale() {
 		return procurementMethodRationale;
 	}
-	public void setProcurementMethodRationale(String procurementMethodRationale) {
+
+	public void setProcurementMethodRationale(final String procurementMethodRationale) {
 		this.procurementMethodRationale = procurementMethodRationale;
 	}
+
 	public String getAwardCriteria() {
 		return awardCriteria;
 	}
-	public void setAwardCriteria(String awardCriteria) {
+
+	public void setAwardCriteria(final String awardCriteria) {
 		this.awardCriteria = awardCriteria;
 	}
+
 	public String getAwardCriteriaDetails() {
 		return awardCriteriaDetails;
 	}
-	public void setAwardCriteriaDetails(String awardCriteriaDetails) {
+
+	public void setAwardCriteriaDetails(final String awardCriteriaDetails) {
 		this.awardCriteriaDetails = awardCriteriaDetails;
 	}
+
 	public List<String> getSubmissionMethod() {
 		return submissionMethod;
 	}
-	public void setSubmissionMethod(List<String> submissionMethod) {
+
+	public void setSubmissionMethod(final List<String> submissionMethod) {
 		this.submissionMethod = submissionMethod;
 	}
+
 	public String getSubmissionMethodDetails() {
 		return submissionMethodDetails;
 	}
-	public void setSubmissionMethodDetails(String submissionMethodDetails) {
+
+	public void setSubmissionMethodDetails(final String submissionMethodDetails) {
 		this.submissionMethodDetails = submissionMethodDetails;
 	}
+
 	public Period getTenderPeriod() {
 		return tenderPeriod;
 	}
-	public void setTenderPeriod(Period tenderPeriod) {
+
+	public void setTenderPeriod(final Period tenderPeriod) {
 		this.tenderPeriod = tenderPeriod;
 	}
+
 	public Period getEnquiryPeriod() {
 		return enquiryPeriod;
 	}
-	public void setEnquiryPeriod(Period enquiryPeriod) {
+
+	public void setEnquiryPeriod(final Period enquiryPeriod) {
 		this.enquiryPeriod = enquiryPeriod;
 	}
+
 	public Boolean getHasEnquiries() {
 		return hasEnquiries;
 	}
-	public void setHasEnquiries(Boolean hasEnquiries) {
+
+	public void setHasEnquiries(final Boolean hasEnquiries) {
 		this.hasEnquiries = hasEnquiries;
 	}
+
 	public String getEligibilityCriteria() {
 		return eligibilityCriteria;
 	}
-	public void setEligibilityCriteria(String eligibilityCriteria) {
+
+	public void setEligibilityCriteria(final String eligibilityCriteria) {
 		this.eligibilityCriteria = eligibilityCriteria;
 	}
+
 	public Period getAwardPeriod() {
 		return awardPeriod;
 	}
-	public void setAwardPeriod(Period awardPeriod) {
+
+	public void setAwardPeriod(final Period awardPeriod) {
 		this.awardPeriod = awardPeriod;
 	}
+
 	public Integer getNumberOfTenders() {
 		return numberOfTenders;
 	}
-	public void setNumberOfTenders(Integer numberOfTenders) {
+
+	public void setNumberOfTenders(final Integer numberOfTenders) {
 		this.numberOfTenders = numberOfTenders;
 	}
+
 	public List<Organization> getTenderers() {
 		return tenderers;
 	}
-	public void setTenderers(List<Organization> tenderers) {
+
+	public void setTenderers(final List<Organization> tenderers) {
 		this.tenderers = tenderers;
 	}
+
 	public Organization getProcuringEntity() {
 		return procuringEntity;
 	}
-	public void setProcuringEntity(Organization procuringEntity) {
+
+	public void setProcuringEntity(final Organization procuringEntity) {
 		this.procuringEntity = procuringEntity;
 	}
+
 	public List<Document> getDocuments() {
 		return documents;
 	}
-	public void setDocuments(List<Document> documents) {
+
+	public void setDocuments(final List<Document> documents) {
 		this.documents = documents;
 	}
+
 	public List<Milestone> getMilestone() {
 		return milestone;
 	}
-	public void setMilestone(List<Milestone> milestone) {
+
+	public void setMilestone(final List<Milestone> milestone) {
 		this.milestone = milestone;
 	}
+
 	public Amendment getAmendment() {
 		return amendment;
 	}
-	public void setAmendment(Amendment amendment) {
+
+	public void setAmendment(final Amendment amendment) {
 		this.amendment = amendment;
 	}
+
 	public String getProcurementMethodDetails() {
 		return procurementMethodDetails;
 	}
-	public void setProcurementMethodDetails(String procurementMethodDetails) {
+
+	public void setProcurementMethodDetails(final String procurementMethodDetails) {
 		this.procurementMethodDetails = procurementMethodDetails;
 	}
-	
-	
-	
+
 }

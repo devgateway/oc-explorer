@@ -9,20 +9,21 @@ import java.util.List;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- * @author mihai
- * Planning OCDS ENtity http://standard.open-contracting.org/latest/en/schema/reference/#planning
+ * @author mihai Planning OCDS ENtity
+ *         http://standard.open-contracting.org/latest/en/schema/reference/#
+ *         planning
  */
 @Document
 public class Planning {
 	Budget budget;
 	String rationale;
-	List<Document> documents=new ArrayList<>();
+	List<Document> documents = new ArrayList<>();
 
 	public Budget getBudget() {
 		return budget;
 	}
 
-	public void setBudget(Budget budget) {
+	public void setBudget(final Budget budget) {
 		this.budget = budget;
 	}
 
@@ -30,7 +31,7 @@ public class Planning {
 		return rationale;
 	}
 
-	public void setRationale(String rationale) {
+	public void setRationale(final String rationale) {
 		this.rationale = rationale;
 	}
 
@@ -38,7 +39,7 @@ public class Planning {
 		return documents;
 	}
 
-	public void setDocuments(List<Document> documents) {
+	public void setDocuments(final List<Document> documents) {
 		this.documents = documents;
 	}
 }

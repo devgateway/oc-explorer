@@ -6,15 +6,14 @@ package org.devgateway.toolkit.persistence.mongo.dao;
 import java.util.Date;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Organization;
-import org.devgateway.ocvn.persistence.mongo.ocds.Planning;
 import org.devgateway.ocvn.persistence.mongo.ocds.Tender;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- * @author mihai
- * Extension of {@link Tender} to allow extra Vietnam-specific fields
+ * @author mihai Extension of {@link Tender} to allow extra Vietnam-specific
+ *         fields
  */
-@Document(collection="tender")
+@Document(collection = "tender")
 public class VNTender extends Tender {
 	Integer bidMethod;
 	Integer contrMethod;
@@ -22,15 +21,14 @@ public class VNTender extends Tender {
 	String approveState;
 	String cancelYN;
 	String modYn;
-	
+
 	Date bidOpenDt;
-	
 
 	public Integer getBidMethod() {
 		return bidMethod;
 	}
 
-	public void setBidMethod(Integer bidMethod) {
+	public void setBidMethod(final Integer bidMethod) {
 		this.bidMethod = bidMethod;
 	}
 
@@ -38,7 +36,7 @@ public class VNTender extends Tender {
 		return contrMethod;
 	}
 
-	public void setContrMethod(Integer contrMethod) {
+	public void setContrMethod(final Integer contrMethod) {
 		this.contrMethod = contrMethod;
 	}
 
@@ -46,7 +44,7 @@ public class VNTender extends Tender {
 		return orderIntituCd;
 	}
 
-	public void setOrderIntituCd(Organization orderIntituCd) {
+	public void setOrderIntituCd(final Organization orderIntituCd) {
 		this.orderIntituCd = orderIntituCd;
 	}
 
@@ -54,7 +52,7 @@ public class VNTender extends Tender {
 		return approveState;
 	}
 
-	public void setApproveState(String approveState) {
+	public void setApproveState(final String approveState) {
 		this.approveState = approveState;
 	}
 
@@ -62,7 +60,7 @@ public class VNTender extends Tender {
 		return cancelYN;
 	}
 
-	public void setCancelYN(String cancelYN) {
+	public void setCancelYN(final String cancelYN) {
 		this.cancelYN = cancelYN;
 	}
 
@@ -70,7 +68,7 @@ public class VNTender extends Tender {
 		return modYn;
 	}
 
-	public void setModYn(String modYn) {
+	public void setModYn(final String modYn) {
 		this.modYn = modYn;
 	}
 
@@ -78,9 +76,8 @@ public class VNTender extends Tender {
 		return bidOpenDt;
 	}
 
-	public void setBidOpenDt(Date bidOpenDt) {
+	public void setBidOpenDt(final Date bidOpenDt) {
 		this.bidOpenDt = bidOpenDt;
 	}
-
 
 }

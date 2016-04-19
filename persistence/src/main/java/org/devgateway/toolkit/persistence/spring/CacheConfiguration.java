@@ -50,7 +50,8 @@ public class CacheConfiguration {
 	@Bean(destroyMethod = "dispose", initMethod = "init")
 	@DependsOn(value = { "ehCacheCacheManager", "mbeanServer" })
 	public ManagementService ehCacheManagementService() {
-		ManagementService managementService = new ManagementService(ehCacheCacheManager().getObject() , mbeanServer, true, true, true, true);
+		ManagementService managementService = new ManagementService(ehCacheCacheManager().getObject(), mbeanServer,
+				true, true, true, true);
 		return managementService;
 	}
 

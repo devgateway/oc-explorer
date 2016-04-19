@@ -12,13 +12,13 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface LocationRepository extends MongoRepository<Location, String> {
 
 	@Cacheable
-	public Location findByName(String name);
-	
-	@Override
-	@CacheEvict(allEntries=true)
-	public <S extends Location> List<S> save(Iterable<S> entites);
+	Location findByName(String name);
 
 	@Override
-	@CacheEvict(allEntries=true)
-	public <S extends Location> S save(S entity);	
+	@CacheEvict(allEntries = true)
+	<S extends Location> List<S> save(Iterable<S> entites);
+
+	@Override
+	@CacheEvict(allEntries = true)
+	<S extends Location> S save(S entity);
 }

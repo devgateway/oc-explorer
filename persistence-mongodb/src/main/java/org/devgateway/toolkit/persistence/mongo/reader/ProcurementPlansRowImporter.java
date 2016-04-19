@@ -16,33 +16,32 @@ import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 
 /**
  * 
- * @author mihai
- * Specific {@link RowImporter} for Procurement Plans, in the custom Excel format provided by Vietnam
+ * @author mihai Specific {@link RowImporter} for Procurement Plans, in the
+ *         custom Excel format provided by Vietnam
  * @see VNPlanning
  */
 public class ProcurementPlansRowImporter extends RowImporter<Release, ReleaseRepository> {
 	private LocationRepository locationRepository;
 
-
 	SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yy", new Locale("en"));
 
-	
-	public ProcurementPlansRowImporter(ReleaseRepository releaseRepository, VNImportService importService, LocationRepository locationRepository,
-			int skipRows) {
+	public ProcurementPlansRowImporter(final ReleaseRepository releaseRepository, final VNImportService importService,
+			final LocationRepository locationRepository, final int skipRows) {
 		super(releaseRepository, importService, skipRows);
 		this.locationRepository = locationRepository;
 	}
 
 	@Override
-	public boolean importRow(String[] row) throws ParseException {
+	public boolean importRow(final String[] row) throws ParseException {
 
 		String projectID = row[0];
 		Release oldRelease = repository.findByBudgetProjectId(projectID);
-		if (oldRelease != null)
+		if (oldRelease != null) {
 			throw new RuntimeException("Duplicate planning.budget.projectID");
+		}
 
 		Release release = new Release();
-		release.setOcid("ocvn-prjid-"+projectID);
+		release.setOcid("ocvn-prjid-" + projectID);
 		release.getTag().add("planning");
 		documents.add(release);
 		VNPlanning planning = new VNPlanning();
@@ -63,18 +62,20 @@ public class ProcurementPlansRowImporter extends RowImporter<Release, ReleaseRep
 			planning.getLocations().add(location);
 		}
 
-		planning.setBidPlanProjectDateIssue(row[4].isEmpty() ? null : getDateFromString(sdf,row[4]));
+		planning.setBidPlanProjectDateIssue(row[4].isEmpty() ? null : getDateFromString(sdf, row[4]));
 		planning.setBidPlanProjectStyle(row[5]);
 		planning.setBidPlanProjectCompanyIssue(row[6]);
 		planning.setBidPlanProjectType(row[7]);
 		planning.setBidPlanProjectFund(getInteger(row[8]));
-		if(!row[9].trim().isEmpty()) 
+		if (!row[9].trim().isEmpty()) {
 			planning.setBidPlanProjectClassify(Arrays.asList(row[9].trim().split(", ")));
-		planning.setBidPlanProjectDateApprove(row[10].isEmpty() ? null : getDateFromString(sdf,row[10]));
+		}
+		planning.setBidPlanProjectDateApprove(row[10].isEmpty() ? null : getDateFromString(sdf, row[10]));
 		planning.setBidPlanNm(row[11]);
 		planning.setBidPlanProjectStdClsCd(row[12]);
-		if (row.length > 13)
+		if (row.length > 13) {
 			planning.setBidNo(row[13]);
+		}
 
 		budget.setProjectID(row[0]);
 		budget.setProject(row[1]);

@@ -8,22 +8,26 @@ import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 
 /**
- * Specific {@link RowImporter} for {@link Location}, in the custom Excel format provided by Vietnam
+ * Specific {@link RowImporter} for {@link Location}, in the custom Excel format
+ * provided by Vietnam
+ * 
  * @author mihai
  * @see Location
  */
 public class LocationRowImporter extends RowImporter<Location, LocationRepository> {
 
-	public LocationRowImporter(LocationRepository locationRepository,VNImportService importService, int skipRows) {
+	public LocationRowImporter(final LocationRepository locationRepository, final VNImportService importService,
+			final int skipRows) {
 		super(locationRepository, importService, skipRows);
 	}
 
 	@Override
-	public boolean importRow(String[] row) throws ParseException {
+	public boolean importRow(final String[] row) throws ParseException {
 
 		Location location = repository.findByName(row[0]);
-		if (location != null)
+		if (location != null) {
 			throw new RuntimeException("Duplicate location name " + row[0]);
+		}
 
 		location = new Location();
 		documents.add(location);

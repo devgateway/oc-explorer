@@ -12,10 +12,10 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface ClassificationRepository extends MongoRepository<Classification, String> {
 
 	@Cacheable
-	public Classification findById(String id);
-	
+	Classification findById(String id);
+
 	@Override
-	@CacheEvict(allEntries=true)
-	public <S extends Classification> List<S> save(Iterable<S> entites);
-	
+	@CacheEvict(allEntries = true)
+	<S extends Classification> List<S> save(Iterable<S> entites);
+
 }

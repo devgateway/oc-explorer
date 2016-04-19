@@ -11,8 +11,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- * @author mihai
- * Milestone OCDS entity http://standard.open-contracting.org/latest/en/schema/reference/#milestone
+ * @author mihai Milestone OCDS entity
+ *         http://standard.open-contracting.org/latest/en/schema/reference/#
+ *         milestone
  */
 @Document
 public class Milestone {
@@ -20,18 +21,18 @@ public class Milestone {
 	String id;
 	String title;
 	String description;
-	
+
 	Date dueDate;
-	
+
 	Date dateModified;
 	String status;
-	List<Document> documents=new ArrayList<>();
+	List<Document> documents = new ArrayList<>();
 
 	public String getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(final String id) {
 		this.id = id;
 	}
 
@@ -39,7 +40,7 @@ public class Milestone {
 		return title;
 	}
 
-	public void setTitle(String title) {
+	public void setTitle(final String title) {
 		this.title = title;
 	}
 
@@ -47,7 +48,7 @@ public class Milestone {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -55,7 +56,7 @@ public class Milestone {
 		return dueDate;
 	}
 
-	public void setDueDate(Date dueDate) {
+	public void setDueDate(final Date dueDate) {
 		this.dueDate = dueDate;
 	}
 
@@ -63,7 +64,7 @@ public class Milestone {
 		return dateModified;
 	}
 
-	public void setDateModified(Date dateModified) {
+	public void setDateModified(final Date dateModified) {
 		this.dateModified = dateModified;
 	}
 
@@ -71,7 +72,7 @@ public class Milestone {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(final String status) {
 		this.status = status;
 	}
 
@@ -79,7 +80,7 @@ public class Milestone {
 		return documents;
 	}
 
-	public void setDocuments(List<Document> documents) {
+	public void setDocuments(final List<Document> documents) {
 		this.documents = documents;
 	}
 }

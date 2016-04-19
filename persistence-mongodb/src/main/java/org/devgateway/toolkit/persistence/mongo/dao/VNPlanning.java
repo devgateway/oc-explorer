@@ -12,26 +12,25 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- * @author mihai
- * Extension of {@link Planning} to allow extra Vietnam-specific fields
+ * @author mihai Extension of {@link Planning} to allow extra Vietnam-specific
+ *         fields
  */
-@Document(collection="planning")
+@Document(collection = "planning")
 public class VNPlanning extends Planning {
-	
-	
+
 	Date bidPlanProjectDateIssue;
 	String bidPlanProjectStyle;
 	String bidPlanProjectCompanyIssue;
 	String bidPlanProjectType;
 	Integer bidPlanProjectFund;
 	List<String> bidPlanProjectClassify;
-	
-	@Indexed	
+
+	@Indexed
 	Date bidPlanProjectDateApprove;
 	String bidPlanNm;
 	String bidPlanProjectStdClsCd;
-	
-	List<Location> locations=new ArrayList<>();
+
+	List<Location> locations = new ArrayList<>();
 
 	@Indexed()
 	String bidNo;
@@ -40,7 +39,7 @@ public class VNPlanning extends Planning {
 		return bidPlanProjectDateIssue;
 	}
 
-	public void setBidPlanProjectDateIssue(Date bidPlanProjectDateIssue) {
+	public void setBidPlanProjectDateIssue(final Date bidPlanProjectDateIssue) {
 		this.bidPlanProjectDateIssue = bidPlanProjectDateIssue;
 	}
 
@@ -48,7 +47,7 @@ public class VNPlanning extends Planning {
 		return bidPlanProjectStyle;
 	}
 
-	public void setBidPlanProjectStyle(String bidPlanProjectStyle) {
+	public void setBidPlanProjectStyle(final String bidPlanProjectStyle) {
 		this.bidPlanProjectStyle = bidPlanProjectStyle;
 	}
 
@@ -56,7 +55,7 @@ public class VNPlanning extends Planning {
 		return bidPlanProjectCompanyIssue;
 	}
 
-	public void setBidPlanProjectCompanyIssue(String bidPlanProjectCompanyIssue) {
+	public void setBidPlanProjectCompanyIssue(final String bidPlanProjectCompanyIssue) {
 		this.bidPlanProjectCompanyIssue = bidPlanProjectCompanyIssue;
 	}
 
@@ -64,7 +63,7 @@ public class VNPlanning extends Planning {
 		return bidPlanProjectType;
 	}
 
-	public void setBidPlanProjectType(String bidPlanProjectType) {
+	public void setBidPlanProjectType(final String bidPlanProjectType) {
 		this.bidPlanProjectType = bidPlanProjectType;
 	}
 
@@ -72,7 +71,7 @@ public class VNPlanning extends Planning {
 		return bidPlanProjectFund;
 	}
 
-	public void setBidPlanProjectFund(Integer bidPlanProjectFund) {
+	public void setBidPlanProjectFund(final Integer bidPlanProjectFund) {
 		this.bidPlanProjectFund = bidPlanProjectFund;
 	}
 
@@ -80,7 +79,7 @@ public class VNPlanning extends Planning {
 		return bidPlanProjectDateApprove;
 	}
 
-	public void setBidPlanProjectDateApprove(Date bidPlanProjectDateApprove) {
+	public void setBidPlanProjectDateApprove(final Date bidPlanProjectDateApprove) {
 		this.bidPlanProjectDateApprove = bidPlanProjectDateApprove;
 	}
 
@@ -88,7 +87,7 @@ public class VNPlanning extends Planning {
 		return bidPlanNm;
 	}
 
-	public void setBidPlanNm(String bidPlanNm) {
+	public void setBidPlanNm(final String bidPlanNm) {
 		this.bidPlanNm = bidPlanNm;
 	}
 
@@ -96,7 +95,7 @@ public class VNPlanning extends Planning {
 		return bidPlanProjectStdClsCd;
 	}
 
-	public void setBidPlanProjectStdClsCd(String bidPlanProjectStdClsCd) {
+	public void setBidPlanProjectStdClsCd(final String bidPlanProjectStdClsCd) {
 		this.bidPlanProjectStdClsCd = bidPlanProjectStdClsCd;
 	}
 
@@ -104,7 +103,7 @@ public class VNPlanning extends Planning {
 		return bidNo;
 	}
 
-	public void setBidNo(String bidNo) {
+	public void setBidNo(final String bidNo) {
 		this.bidNo = bidNo;
 	}
 
@@ -112,7 +111,7 @@ public class VNPlanning extends Planning {
 		return bidPlanProjectClassify;
 	}
 
-	public void setBidPlanProjectClassify(List<String> bidPlanProjectClassify) {
+	public void setBidPlanProjectClassify(final List<String> bidPlanProjectClassify) {
 		this.bidPlanProjectClassify = bidPlanProjectClassify;
 	}
 
@@ -120,7 +119,7 @@ public class VNPlanning extends Planning {
 		return locations;
 	}
 
-	public void setLocations(List<Location> locations) {
+	public void setLocations(final List<Location> locations) {
 		this.locations = locations;
 	}
 

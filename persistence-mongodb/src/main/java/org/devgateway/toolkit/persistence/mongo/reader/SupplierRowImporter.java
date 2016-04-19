@@ -13,23 +13,26 @@ import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationReposit
 import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 
 /**
- * @author mihai
- * Specific {@link RowImporter} for Suppliers, in the custom Excel format provided by Vietnam
+ * @author mihai Specific {@link RowImporter} for Suppliers, in the custom Excel
+ *         format provided by Vietnam
  * @see VNOrganization
  */
 public class SupplierRowImporter extends RowImporter<VNOrganization, VNOrganizationRepository> {
 
-	public SupplierRowImporter(VNOrganizationRepository repository,VNImportService importService, int skipRows) {
+	public SupplierRowImporter(final VNOrganizationRepository repository, final VNImportService importService,
+			final int skipRows) {
 		super(repository, importService, skipRows);
 	}
 
 	@Override
-	public boolean importRow(String[] row) throws ParseException {
-		if (row[0] == null || row[0].isEmpty())
+	public boolean importRow(final String[] row) throws ParseException {
+		if (row[0] == null || row[0].isEmpty()) {
 			throw new RuntimeException("Main identifier empty!");
+		}
 		VNOrganization organization = repository.findById(row[0]);
-		if (organization != null)
+		if (organization != null) {
 			throw new RuntimeException("Duplicate identifer for organization " + organization);
+		}
 		organization = new VNOrganization();
 		Identifier identifier = new Identifier();
 
@@ -43,9 +46,9 @@ public class SupplierRowImporter extends RowImporter<VNOrganization, VNOrganizat
 
 		organization.setAddress(address);
 
-		ContactPoint cp = new ContactPoint();		
+		ContactPoint cp = new ContactPoint();
 		cp.setTelephone(row[20]);
-		cp.setFaxNumber(row[21]);		
+		cp.setFaxNumber(row[21]);
 		cp.setUrl(row[22]);
 
 		organization.setContactPoint(cp);

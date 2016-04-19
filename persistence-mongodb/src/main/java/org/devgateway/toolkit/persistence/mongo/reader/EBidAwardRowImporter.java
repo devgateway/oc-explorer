@@ -14,38 +14,39 @@ import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationReposit
 import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 
 /**
- * Specific {@link RowImporter} for eBid Awards {@link VNAward} in the custom Excel format provided by Vietnam
+ * Specific {@link RowImporter} for eBid Awards {@link VNAward} in the custom
+ * Excel format provided by Vietnam
+ * 
  * @author mihai
  * @see VNAward
  *
  */
 public class EBidAwardRowImporter extends RowImporter<Release, ReleaseRepository> {
-	
+
 	protected VNOrganizationRepository organizationRepository;
 
-	public EBidAwardRowImporter(ReleaseRepository releaseRepository, VNImportService importService, VNOrganizationRepository organizationRepository,
-			int skipRows) {
+	public EBidAwardRowImporter(final ReleaseRepository releaseRepository, final VNImportService importService,
+			final VNOrganizationRepository organizationRepository, final int skipRows) {
 		super(releaseRepository, importService, skipRows);
 		this.organizationRepository = organizationRepository;
 	}
 
 	@Override
-	public boolean importRow(String[] row) throws ParseException {
+	public boolean importRow(final String[] row) throws ParseException {
 
 		Release release = repository.findByPlanningBidNo(row[0]);
 
 		if (release == null) {
 			release = new Release();
-			release.setOcid("ocvn-bidno-"+row[0]);
+			release.setOcid("ocvn-bidno-" + row[0]);
 			release.getTag().add("award");
 			VNPlanning planning = new VNPlanning();
 			release.setPlanning(planning);
-			planning.setBidNo(row[0]);			
+			planning.setBidNo(row[0]);
 		}
-		
 
 		VNAward award = new VNAward();
-		award.setId(release.getOcid()+"-award-"+release.getAwards().size());
+		award.setId(release.getOcid() + "-award-" + release.getAwards().size());
 		release.getAwards().add(award);
 
 		Value value = new Value();
@@ -62,24 +63,28 @@ public class EBidAwardRowImporter extends RowImporter<Release, ReleaseRepository
 			supplier.setIdentifier(supplierId);
 			supplier = organizationRepository.save(supplier);
 		}
-		
+
 		award.getSuppliers().add(supplier);
 
 		award.setContractTime(row[3]);
 
 		award.setBidOpenRank(row[4].isEmpty() ? null : getInteger(row[4]));
 
-		if (row.length > 5)
+		if (row.length > 5) {
 			award.setStatus(row[5].equals("Y") ? OCDSConst.Awards.STATUS_ACTIVE : OCDSConst.Awards.STATUS_UNSUCCESSFUL);
+		}
 
-		if (row.length > 6)
+		if (row.length > 6) {
 			award.setInelibigleYN(row[6]);
+		}
 
-		if (row.length > 7)
+		if (row.length > 7) {
 			award.setIneligibleRson(row[7]);
+		}
 
-		if (row.length > 8)
+		if (row.length > 8) {
 			award.setDate(row[8].isEmpty() ? null : getExcelDate(row[8]));
+		}
 
 		// For unsuccessful awards (in both eBid and Offline bid tabs), map the
 		// information on the bidder (supplier) to tender.tenderers for that
@@ -91,14 +96,13 @@ public class EBidAwardRowImporter extends RowImporter<Release, ReleaseRepository
 			}
 			release.getTender().setNumberOfTenders(release.getTender().getTenderers().size());
 		}
-		
-		if(release.getId()==null) 
-			release=repository.save(release);
-		else
+
+		if (release.getId() == null) {
+			release = repository.save(release);
+		} else {
 			documents.add(release);
-		
-		
-		
+		}
+
 		return true;
 	}
 }

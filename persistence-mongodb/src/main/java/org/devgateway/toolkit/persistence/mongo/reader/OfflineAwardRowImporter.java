@@ -14,7 +14,9 @@ import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationReposit
 import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 
 /**
- * Specific {@link RowImporter} for Offline Awards, in the custom Excel format provided by Vietnam
+ * Specific {@link RowImporter} for Offline Awards, in the custom Excel format
+ * provided by Vietnam
+ * 
  * @author mihai
  * @see VNAward
  */
@@ -22,30 +24,29 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 
 	private VNOrganizationRepository organizationRepository;
 
-	public OfflineAwardRowImporter(ReleaseRepository releaseRepository, VNImportService importService,VNOrganizationRepository organizationRepository,
-			int skipRows) {
+	public OfflineAwardRowImporter(final ReleaseRepository releaseRepository, final VNImportService importService,
+			final VNOrganizationRepository organizationRepository, final int skipRows) {
 		super(releaseRepository, importService, skipRows);
 		this.organizationRepository = organizationRepository;
 	}
 
 	@Override
-	public boolean importRow(String[] row) throws ParseException {
+	public boolean importRow(final String[] row) throws ParseException {
 
 		Release release = repository.findByPlanningBidNo(row[0]);
 
 		if (release == null) {
 			release = new Release();
 			release.getTag().add("award");
-			release.setOcid("ocvn-bidno-"+row[0]);
+			release.setOcid("ocvn-bidno-" + row[0]);
 			VNPlanning planning = new VNPlanning();
 			release.setPlanning(planning);
-			planning.setBidNo(row[0]);			
+			planning.setBidNo(row[0]);
 		}
 
-
 		VNAward award = new VNAward();
-		award.setId(release.getOcid()+"-award-"+release.getAwards().size());
-		
+		award.setId(release.getOcid() + "-award-" + release.getAwards().size());
+
 		release.getAwards().add(award);
 
 		award.setTitle(row[1]);
@@ -63,7 +64,7 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 			supplier = new VNOrganization();
 			Identifier supplierId = new Identifier();
 			supplierId.setId(row[3]);
-			supplier.setIdentifier(supplierId);		
+			supplier.setIdentifier(supplierId);
 			supplier = organizationRepository.save(supplier);
 		}
 
@@ -74,32 +75,37 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 		// award.setBidOpenRank(row[4].isEmpty() ? null :
 		// Integer.parseInt(row[4]));
 
-		if (row.length > 5)
-			award.setStatus(row[5].equals("Y") ? OCDSConst.Awards.STATUS_ACTIVE: OCDSConst.Awards.STATUS_UNSUCCESSFUL);
+		if (row.length > 5) {
+			award.setStatus(row[5].equals("Y") ? OCDSConst.Awards.STATUS_ACTIVE : OCDSConst.Awards.STATUS_UNSUCCESSFUL);
+		}
 
-		if (row.length > 6)
+		if (row.length > 6) {
 			award.setInelibigleYN(row[6]);
+		}
 
-		if (row.length > 7)
+		if (row.length > 7) {
 			award.setIneligibleRson(row[7]);
+		}
 
-		if (row.length > 8)
+		if (row.length > 8) {
 			award.setBidType(row[8].isEmpty() ? null : getInteger(row[8]));
+		}
 
-		if (row.length > 9)
+		if (row.length > 9) {
 			award.setBidSuccMethod(row[9].isEmpty() ? null : getInteger(row[9]));
+		}
 
-		if (row.length > 10 && row[10]!=null && !row[10].isEmpty()) {
+		if (row.length > 10 && row[10] != null && !row[10].isEmpty()) {
 			Value value2 = new Value();
 			value2.setCurrency("VND");
 			value2.setAmount(getDecimal(row[10]));
 			award.setValue(value2);
 		}
-		
-		if (row.length > 11)
-			award.setDate(row[11].isEmpty() ? null :  getExcelDate(row[11]));
 
-		
+		if (row.length > 11) {
+			award.setDate(row[11].isEmpty() ? null : getExcelDate(row[11]));
+		}
+
 		// For unsuccessful awards (in both eBid and Offline bid tabs), map the
 		// information on the bidder (supplier) to tender.tenderers for that
 		// BID_NO
@@ -110,11 +116,12 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 			}
 			release.getTender().setNumberOfTenders(release.getTender().getTenderers().size());
 		}
-		
-		if(release.getId()==null) 
-			release=repository.save(release);
-		else 
+
+		if (release.getId() == null) {
+			release = repository.save(release);
+		} else {
 			documents.add(release);
+		}
 
 		return true;
 	}

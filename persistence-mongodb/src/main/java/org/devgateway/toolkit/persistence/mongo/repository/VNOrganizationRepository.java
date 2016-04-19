@@ -13,16 +13,17 @@ import org.springframework.data.mongodb.repository.Query;
 public interface VNOrganizationRepository extends MongoRepository<VNOrganization, String> {
 
 	@Cacheable
-	//@Query(value = "{ $or : [ { 'identifier._id' : ?0 }, { 'additionalIdentifiers._id' : ?0 }]}")
+	// @Query(value = "{ $or : [ { 'identifier._id' : ?0 }, {
+	// 'additionalIdentifiers._id' : ?0 }]}")
 	@Query(value = "{ 'identifier._id' : ?0 }")
-	public VNOrganization findById(String id);
+	VNOrganization findById(String id);
 
 	@Override
-	@CacheEvict(allEntries=true)	
-	public <S extends VNOrganization> S save(S entity);
+	@CacheEvict(allEntries = true)
+	<S extends VNOrganization> S save(S entity);
 
-	@Override	
-	@CacheEvict(allEntries=true)
-	public <S extends VNOrganization> List<S> save(Iterable<S> entites);
+	@Override
+	@CacheEvict(allEntries = true)
+	<S extends VNOrganization> List<S> save(Iterable<S> entites);
 
 }

@@ -14,24 +14,27 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.time.Duration;
 
 /**
- * A special label to display log files interactively on the page, with nice {@link IAjaxIndicatorAware}
- * spinner
+ * A special label to display log files interactively on the page, with nice
+ * {@link IAjaxIndicatorAware} spinner
+ * 
  * @author mpostelnicu
  * 
  */
 public class LogLabel extends Label implements IAjaxIndicatorAware {
 
+	private static final int REFRESH_INTERVAL = 5;
+
 	private static final long serialVersionUID = 1L;
 
 	private AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
-	private Duration refreshInterval=Duration.seconds(5);
+	private Duration refreshInterval = Duration.seconds(REFRESH_INTERVAL);
 
 	private AjaxSelfUpdatingTimerBehavior selfUpdatingBehavior;
 
 	/**
 	 * @param id
 	 */
-	public LogLabel(String id) {
+	public LogLabel(final String id) {
 		super(id);
 	}
 
@@ -39,7 +42,7 @@ public class LogLabel extends Label implements IAjaxIndicatorAware {
 	 * @param id
 	 * @param label
 	 */
-	public LogLabel(String id, String label) {
+	public LogLabel(final String id, final String label) {
 		super(id, label);
 	}
 
@@ -47,7 +50,7 @@ public class LogLabel extends Label implements IAjaxIndicatorAware {
 	 * @param id
 	 * @param label
 	 */
-	public LogLabel(String id, Serializable label) {
+	public LogLabel(final String id, final Serializable label) {
 		super(id, label);
 	}
 
@@ -55,9 +58,9 @@ public class LogLabel extends Label implements IAjaxIndicatorAware {
 	 * @param id
 	 * @param model
 	 */
-	public LogLabel(String id, IModel<?> model) {
+	public LogLabel(final String id, final IModel<?> model) {
 		super(id, model);
-		
+
 	}
 
 	/*
@@ -70,13 +73,12 @@ public class LogLabel extends Label implements IAjaxIndicatorAware {
 	public String getAjaxIndicatorMarkupId() {
 		return indicatorAppender.getMarkupId();
 	}
-	
-	public LogLabel refreshInterval(Duration duration) {
-		refreshInterval=duration;
+
+	public LogLabel refreshInterval(final Duration duration) {
+		refreshInterval = duration;
 		return this;
 	}
-	
-	
+
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
@@ -84,18 +86,20 @@ public class LogLabel extends Label implements IAjaxIndicatorAware {
 		setOutputMarkupId(true);
 		setOutputMarkupPlaceholderTag(true);
 		setEscapeModelStrings(false);
-		
-		add(selfUpdatingBehavior=new AjaxSelfUpdatingTimerBehavior(refreshInterval) { 
+
+		selfUpdatingBehavior = new AjaxSelfUpdatingTimerBehavior(refreshInterval) {
 			private static final long serialVersionUID = 1L;
+
 			@Override
-			protected void onPostProcessTarget(AjaxRequestTarget target) {
+			protected void onPostProcessTarget(final AjaxRequestTarget target) {
 				LogLabel.this.onPostProcessTarget(target);
 			}
-		});
+		};
+		add(selfUpdatingBehavior);
 	}
 
-	protected void onPostProcessTarget(AjaxRequestTarget target) {	
-		
+	protected void onPostProcessTarget(final AjaxRequestTarget target) {
+
 	}
 
 	public AjaxSelfUpdatingTimerBehavior getSelfUpdatingBehavior() {

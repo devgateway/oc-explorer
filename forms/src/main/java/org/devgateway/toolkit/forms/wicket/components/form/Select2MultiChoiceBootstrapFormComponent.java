@@ -33,27 +33,28 @@ public class Select2MultiChoiceBootstrapFormComponent<TYPE>
 
 	private Boolean isFloatedInput = false;
 
-	public Select2MultiChoiceBootstrapFormComponent(final String id, final IModel<String> labelModel, final IModel<Collection<TYPE>> model,
-			final ChoiceProvider<TYPE> choiceProvider) {
+	public Select2MultiChoiceBootstrapFormComponent(final String id, final IModel<String> labelModel,
+			final IModel<Collection<TYPE>> model, final ChoiceProvider<TYPE> choiceProvider) {
 		super(id, labelModel, model);
 		provider(choiceProvider);
 	}
 
-	
 	public Select2MultiChoiceBootstrapFormComponent<TYPE> provider(final ChoiceProvider<TYPE> choiceProvider) {
 		field.setProvider(choiceProvider);
 		return this;
 	}
 
-	public Select2MultiChoiceBootstrapFormComponent(final String id, final IModel<String> labelModel, final ChoiceProvider<TYPE> choiceProvider) {
-		super(id,labelModel,null);
+	public Select2MultiChoiceBootstrapFormComponent(final String id, final IModel<String> labelModel,
+			final ChoiceProvider<TYPE> choiceProvider) {
+		super(id, labelModel, null);
 		provider(choiceProvider);
 	}
 
-    public Select2MultiChoiceBootstrapFormComponent(final String id, final ChoiceProvider<TYPE> choiceProvider,final IModel<Collection<TYPE>> model) {
-        super(id,model);
-        provider(choiceProvider);
-    }
+	public Select2MultiChoiceBootstrapFormComponent(final String id, final ChoiceProvider<TYPE> choiceProvider,
+			final IModel<Collection<TYPE>> model) {
+		super(id, model);
+		provider(choiceProvider);
+	}
 
 	public Select2MultiChoiceBootstrapFormComponent(final String id, final ChoiceProvider<TYPE> choiceProvider) {
 		super(id);
@@ -83,9 +84,9 @@ public class Select2MultiChoiceBootstrapFormComponent<TYPE>
 
 	}
 
-    @Override
-    protected void onComponentTag(final ComponentTag tag) {
-        super.onComponentTag(tag);
+	@Override
+	protected void onComponentTag(final ComponentTag tag) {
+		super.onComponentTag(tag);
 
 		if (isFloatedInput) {
 			Attributes.addClass(tag, "floated-input");
@@ -96,7 +97,7 @@ public class Select2MultiChoiceBootstrapFormComponent<TYPE>
 		return isFloatedInput;
 	}
 
-    public void setIsFloatedInput(final Boolean isFloatedInput) {
-        this.isFloatedInput = isFloatedInput;
-    }
+	public void setIsFloatedInput(final Boolean isFloatedInput) {
+		this.isFloatedInput = isFloatedInput;
+	}
 }

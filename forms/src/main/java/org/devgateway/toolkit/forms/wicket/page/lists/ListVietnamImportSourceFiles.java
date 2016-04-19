@@ -30,14 +30,17 @@ public class ListVietnamImportSourceFiles extends AbstractListPage<VietnamImport
 	@SpringBean
 	protected VietnamImportSourceFilesRepository vietnamImportSourceFilesRepository;
 
-	public ListVietnamImportSourceFiles(PageParameters pageParameters) {
+	public ListVietnamImportSourceFiles(final PageParameters pageParameters) {
 		super(pageParameters);
 		this.jpaRepository = vietnamImportSourceFilesRepository;
 		this.editPageClass = EditVietnamImportSourceFiles.class;
-		
-		columns.add(new PropertyColumn<VietnamImportSourceFiles,String>(new Model<String>("Batch Name"), "name", "name"));
-		columns.add(new PropertyColumn<VietnamImportSourceFiles,String>(new Model<String>("Created"), "created", "created"));
-		columns.add(new PropertyColumn<VietnamImportSourceFiles,String>(new Model<String>("Updated"), "lastUpdated", "lastUpdated"));
+
+		columns.add(
+				new PropertyColumn<VietnamImportSourceFiles, String>(new Model<String>("Batch Name"), "name", "name"));
+		columns.add(new PropertyColumn<VietnamImportSourceFiles, String>(new Model<String>("Created"), "created",
+				"created"));
+		columns.add(new PropertyColumn<VietnamImportSourceFiles, String>(new Model<String>("Updated"), "lastUpdated",
+				"lastUpdated"));
 	}
 
 }

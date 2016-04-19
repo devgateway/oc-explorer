@@ -15,8 +15,8 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- * @author mihai
- * Release OCDS Entity http://standard.open-contracting.org/latest/en/schema/release/
+ * @author mihai Release OCDS Entity
+ *         http://standard.open-contracting.org/latest/en/schema/release/
  */
 @Document
 public class Release {
@@ -36,7 +36,6 @@ public class Release {
 
 	Planning planning;
 
-
 	Tender tender;
 
 	Organization buyer;
@@ -45,14 +44,13 @@ public class Release {
 
 	List<Contract> contracts = new ArrayList<>();
 
-	String language="en";	
-	
-	
+	String language = "en";
+
 	public String getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(final String id) {
 		this.id = id;
 	}
 
@@ -60,7 +58,7 @@ public class Release {
 		return ocid;
 	}
 
-	public void setOcid(String ocid) {
+	public void setOcid(final String ocid) {
 		this.ocid = ocid;
 	}
 
@@ -68,17 +66,15 @@ public class Release {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(final Date date) {
 		this.date = date;
 	}
-
-	
 
 	public String getInitiationType() {
 		return initiationType;
 	}
 
-	public void setInitiationType(String initiationType) {
+	public void setInitiationType(final String initiationType) {
 		this.initiationType = initiationType;
 	}
 
@@ -86,7 +82,7 @@ public class Release {
 		return planning;
 	}
 
-	public void setPlanning(Planning planning) {
+	public void setPlanning(final Planning planning) {
 		this.planning = planning;
 	}
 
@@ -94,7 +90,7 @@ public class Release {
 		return tender;
 	}
 
-	public void setTender(Tender tender) {
+	public void setTender(final Tender tender) {
 		this.tender = tender;
 	}
 
@@ -102,7 +98,7 @@ public class Release {
 		return buyer;
 	}
 
-	public void setBuyer(Organization buyer) {
+	public void setBuyer(final Organization buyer) {
 		this.buyer = buyer;
 	}
 
@@ -110,7 +106,7 @@ public class Release {
 		return awards;
 	}
 
-	public void setAwards(List<Award> awards) {
+	public void setAwards(final List<Award> awards) {
 		this.awards = awards;
 	}
 
@@ -118,7 +114,7 @@ public class Release {
 		return contracts;
 	}
 
-	public void setContracts(List<Contract> contracts) {
+	public void setContracts(final List<Contract> contracts) {
 		this.contracts = contracts;
 	}
 
@@ -126,7 +122,7 @@ public class Release {
 		return language;
 	}
 
-	public void setLanguage(String language) {
+	public void setLanguage(final String language) {
 		this.language = language;
 	}
 
@@ -134,7 +130,7 @@ public class Release {
 		return tag;
 	}
 
-	public void setTag(Set<String> tag) {
+	public void setTag(final Set<String> tag) {
 		this.tag = tag;
 	}
 

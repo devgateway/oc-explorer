@@ -7,10 +7,10 @@ import org.devgateway.ocvn.persistence.mongo.ocds.Item;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- * @author mihai
- * Extension of {@link Item} to allow extra Vietnam-specific fields
+ * @author mihai Extension of {@link Item} to allow extra Vietnam-specific
+ *         fields
  */
-@Document(collection="item")
+@Document(collection = "item")
 public class VNItem extends Item {
 	String bidPlanItemRefNum;
 	String bidPlanItemStyle;
@@ -22,7 +22,7 @@ public class VNItem extends Item {
 		return bidPlanItemRefNum;
 	}
 
-	public void setBidPlanItemRefNum(String bidPlanItemRefNum) {
+	public void setBidPlanItemRefNum(final String bidPlanItemRefNum) {
 		this.bidPlanItemRefNum = bidPlanItemRefNum;
 	}
 
@@ -30,7 +30,7 @@ public class VNItem extends Item {
 		return bidPlanItemStyle;
 	}
 
-	public void setBidPlanItemStyle(String bidPlanItemStyle) {
+	public void setBidPlanItemStyle(final String bidPlanItemStyle) {
 		this.bidPlanItemStyle = bidPlanItemStyle;
 	}
 
@@ -38,7 +38,7 @@ public class VNItem extends Item {
 		return bidPlanItemFund;
 	}
 
-	public void setBidPlanItemFund(String bidPlanItemFund) {
+	public void setBidPlanItemFund(final String bidPlanItemFund) {
 		this.bidPlanItemFund = bidPlanItemFund;
 	}
 
@@ -46,7 +46,7 @@ public class VNItem extends Item {
 		return bidPlanItemMethodSelect;
 	}
 
-	public void setBidPlanItemMethodSelect(String bidPlanItemMethodSelect) {
+	public void setBidPlanItemMethodSelect(final String bidPlanItemMethodSelect) {
 		this.bidPlanItemMethodSelect = bidPlanItemMethodSelect;
 	}
 
@@ -54,7 +54,7 @@ public class VNItem extends Item {
 		return bidPlanItemMethod;
 	}
 
-	public void setBidPlanItemMethod(String bidPlanItemMethod) {
+	public void setBidPlanItemMethod(final String bidPlanItemMethod) {
 		this.bidPlanItemMethod = bidPlanItemMethod;
 	}
 

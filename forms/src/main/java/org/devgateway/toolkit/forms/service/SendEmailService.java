@@ -78,10 +78,9 @@ public class SendEmailService {
 		msg.setTo(person.getEmail());
 		msg.setFrom("support@developmentgateway.org");
 		msg.setSubject("Recover your password");
-		msg.setText("Dear " + person.getFirstName() + " "+ person.getLastName() + ",\n\n"
-				+ "These are your new login credentials for E-Procurement Toolkit.\n\n"
-				+ "Username: " + person.getUsername() + "\n" 
-				+ "Password: " + newPassword + "\n\n"
+		msg.setText("Dear " + person.getFirstName() + " " + person.getLastName() + ",\n\n"
+				+ "These are your new login credentials for E-Procurement Toolkit.\n\n" + "Username: "
+				+ person.getUsername() + "\n" + "Password: " + newPassword + "\n\n"
 				+ "At login, you will be prompted to change your password to one of your choice.\n\n" + "Thank you,\n"
 				+ "DG Team");
 		try {

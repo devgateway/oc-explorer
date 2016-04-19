@@ -11,8 +11,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- * @author mihai
- * Contract OCDS entity http://standard.open-contracting.org/latest/en/schema/reference/#contract
+ * @author mihai Contract OCDS entity
+ *         http://standard.open-contracting.org/latest/en/schema/reference/#
+ *         contract
  */
 @Document
 public class Contract {
@@ -24,10 +25,10 @@ public class Contract {
 	String status;
 	Period period;
 	Value value;
-	List<Item> items=new ArrayList<>();
-	
+	List<Item> items = new ArrayList<>();
+
 	Date dateSigned;
-	List<Document> documents=new ArrayList<>();
+	List<Document> documents = new ArrayList<>();
 	Amendment amendment;
 	Implementation implementation;
 
@@ -35,7 +36,7 @@ public class Contract {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(final String id) {
 		this.id = id;
 	}
 
@@ -43,7 +44,7 @@ public class Contract {
 		return awardID;
 	}
 
-	public void setAwardID(String awardID) {
+	public void setAwardID(final String awardID) {
 		this.awardID = awardID;
 	}
 
@@ -51,7 +52,7 @@ public class Contract {
 		return title;
 	}
 
-	public void setTitle(String title) {
+	public void setTitle(final String title) {
 		this.title = title;
 	}
 
@@ -59,7 +60,7 @@ public class Contract {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -67,7 +68,7 @@ public class Contract {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(final String status) {
 		this.status = status;
 	}
 
@@ -75,7 +76,7 @@ public class Contract {
 		return period;
 	}
 
-	public void setPeriod(Period period) {
+	public void setPeriod(final Period period) {
 		this.period = period;
 	}
 
@@ -83,7 +84,7 @@ public class Contract {
 		return value;
 	}
 
-	public void setValue(Value value) {
+	public void setValue(final Value value) {
 		this.value = value;
 	}
 
@@ -91,7 +92,7 @@ public class Contract {
 		return items;
 	}
 
-	public void setItems(List<Item> items) {
+	public void setItems(final List<Item> items) {
 		this.items = items;
 	}
 
@@ -99,7 +100,7 @@ public class Contract {
 		return dateSigned;
 	}
 
-	public void setDateSigned(Date dateSigned) {
+	public void setDateSigned(final Date dateSigned) {
 		this.dateSigned = dateSigned;
 	}
 
@@ -107,7 +108,7 @@ public class Contract {
 		return documents;
 	}
 
-	public void setDocuments(List<Document> documents) {
+	public void setDocuments(final List<Document> documents) {
 		this.documents = documents;
 	}
 
@@ -115,7 +116,7 @@ public class Contract {
 		return amendment;
 	}
 
-	public void setAmendment(Amendment amendment) {
+	public void setAmendment(final Amendment amendment) {
 		this.amendment = amendment;
 	}
 
@@ -123,7 +124,7 @@ public class Contract {
 		return implementation;
 	}
 
-	public void setImplementation(Implementation implementation) {
+	public void setImplementation(final Implementation implementation) {
 		this.implementation = implementation;
 	}
 

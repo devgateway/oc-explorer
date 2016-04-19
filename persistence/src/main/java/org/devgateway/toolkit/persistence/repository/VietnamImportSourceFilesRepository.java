@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.devgateway.toolkit.persistence.repository;
 
-
 import org.devgateway.toolkit.persistence.dao.VietnamImportSourceFiles;
 import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepository;
 import org.springframework.data.domain.Page;
@@ -25,9 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
  *
  */
 @Transactional
-public interface VietnamImportSourceFilesRepository extends TextSearchableRepository<VietnamImportSourceFiles, Long>{
+public interface VietnamImportSourceFilesRepository extends TextSearchableRepository<VietnamImportSourceFiles, Long> {
 
 	@Override
 	@Query("select a from  #{#entityName} a where lower(a.name) like %?1%")
-    Page<VietnamImportSourceFiles> searchText(String code, Pageable page);
+	Page<VietnamImportSourceFiles> searchText(String code, Pageable page);
 }

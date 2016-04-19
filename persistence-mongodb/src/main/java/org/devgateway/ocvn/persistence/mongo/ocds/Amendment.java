@@ -10,14 +10,15 @@ import java.util.List;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- * @author mihai
- * Amendment OCDS entity http://standard.open-contracting.org/latest/en/schema/reference/#amendment
+ * @author mihai Amendment OCDS entity
+ *         http://standard.open-contracting.org/latest/en/schema/reference/#
+ *         amendment
  */
 @Document
 public class Amendment {
-	
+
 	Date date;
-	List<Change> changes=new ArrayList<>();
+	List<Change> changes = new ArrayList<>();
 	String rationale;
 
 	public class Change {
@@ -28,7 +29,7 @@ public class Amendment {
 			return property;
 		}
 
-		public void setProperty(String property) {
+		public void setProperty(final String property) {
 			this.property = property;
 		}
 
@@ -36,7 +37,7 @@ public class Amendment {
 			return former_value;
 		}
 
-		public void setFormer_value(String former_value) {
+		public void setFormer_value(final String former_value) {
 			this.former_value = former_value;
 		}
 
@@ -46,7 +47,7 @@ public class Amendment {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(final Date date) {
 		this.date = date;
 	}
 
@@ -54,7 +55,7 @@ public class Amendment {
 		return changes;
 	}
 
-	public void setChanges(List<Change> changes) {
+	public void setChanges(final List<Change> changes) {
 		this.changes = changes;
 	}
 
@@ -62,7 +63,7 @@ public class Amendment {
 		return rationale;
 	}
 
-	public void setRationale(String rationale) {
+	public void setRationale(final String rationale) {
 		this.rationale = rationale;
 	}
 }

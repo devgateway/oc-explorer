@@ -50,10 +50,10 @@ public class VietnamImportPage extends BasePage {
 
 	@SpringBean
 	private VietnamImportSourceFilesRepository sourceFilesRepository;
-	
+
 	@SpringBean
 	private VNImportService vnImportService;
-	
+
 	@SpringBean
 	private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
@@ -75,6 +75,7 @@ public class VietnamImportPage extends BasePage {
 	private WebMarkupContainer spinner;
 
 	private CheckBoxBootstrapFormComponent dropData;
+
 	/**
 	 * @param parameters
 	 */
@@ -87,10 +88,10 @@ public class VietnamImportPage extends BasePage {
 
 		private VietnamImportSourceFiles sourceFiles;
 
-		private List<String> fileTypes=new ArrayList<>(ImportFileTypes.allFileTypes);
-		
-		private Boolean dropData=true;
-		
+		private List<String> fileTypes = new ArrayList<>(ImportFileTypes.ALL_FILE_TYPES);
+
+		private Boolean dropData = true;
+
 		public List<String> getFileTypes() {
 			return fileTypes;
 		}
@@ -116,8 +117,6 @@ public class VietnamImportPage extends BasePage {
 		}
 
 	}
-	
-	
 
 	public class EditForm extends BootstrapForm<VietnamImportBean> {
 		public EditForm(final String componentId) {
@@ -130,14 +129,14 @@ public class VietnamImportPage extends BasePage {
 	}
 
 	protected void addForm() {
-		importForm = new BootstrapForm<VietnamImportBean>("form", new CompoundPropertyModel<>(new DozerModel<>(new VietnamImportBean())));
+		importForm = new BootstrapForm<VietnamImportBean>("form",
+				new CompoundPropertyModel<>(new DozerModel<>(new VietnamImportBean())));
 		importForm.setOutputMarkupId(true);
 		add(importForm);
 	}
 
 	protected void addSourceFilesSelect() {
-		sourceFiles = new Select2ChoiceBootstrapFormComponent<VietnamImportSourceFiles>(
-				"sourceFiles",
+		sourceFiles = new Select2ChoiceBootstrapFormComponent<VietnamImportSourceFiles>("sourceFiles",
 				new GenericPersistableJpaRepositoryTextChoiceProvider<VietnamImportSourceFiles>(sourceFilesRepository));
 		sourceFiles.required();
 		importForm.add(sourceFiles);
@@ -145,12 +144,12 @@ public class VietnamImportPage extends BasePage {
 	}
 
 	protected void addLogText() {
-		
+
 		importContainer = new TransparentWebMarkupContainer("importContainer");
 		importContainer.setOutputMarkupId(true);
 		importForm.add(importContainer);
-		
-		AbstractReadOnlyModel<String> logTextModel=new AbstractReadOnlyModel<String>() {
+
+		AbstractReadOnlyModel<String> logTextModel = new AbstractReadOnlyModel<String>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -158,36 +157,34 @@ public class VietnamImportPage extends BasePage {
 				return vnImportService.getMsgBuffer().toString();
 			}
 		};
-		
-		logText = new LogLabel("logText",logTextModel) {
+
+		logText = new LogLabel("logText", logTextModel) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onPostProcessTarget(final AjaxRequestTarget target) {
-				if(threadPoolTaskExecutor.getActiveCount()==0) {
+				if (threadPoolTaskExecutor.getActiveCount() == 0) {
 					getSelfUpdatingBehavior().stop(target);
 					spinner.setVisibilityAllowed(false);
-					target.add(spinner);;
+					target.add(spinner);
 				}
 			}
-		};				
+		};
 		importContainer.add(logText);
-		
+
 		spinner = new WebMarkupContainer("spinner");
 		spinner.setOutputMarkupId(true);
 		importContainer.add(spinner);
 	}
-	
-	
+
 	protected void addDropData() {
-		dropData= new CheckBoxBootstrapFormComponent("dropData");
+		dropData = new CheckBoxBootstrapFormComponent("dropData");
 		importForm.add(dropData);
 	}
-	
-	
+
 	protected void addFileTypesSelect() {
-		fileTypes = new Select2MultiChoiceBootstrapFormComponent<String>(
-				"fileTypes", new GenericChoiceProvider<String>(ImportFileTypes.allFileTypes){
+		fileTypes = new Select2MultiChoiceBootstrapFormComponent<String>("fileTypes",
+				new GenericChoiceProvider<String>(ImportFileTypes.ALL_FILE_TYPES) {
 
 					@Override
 					public String getDisplayValue(final String arg0) {
@@ -198,12 +195,12 @@ public class VietnamImportPage extends BasePage {
 					public String getIdValue(final String arg0) {
 						return arg0;
 					}
-					
+
 				});
 		fileTypes.required();
 		importForm.add(fileTypes);
 	}
-	
+
 	protected void addDoneButton() {
 		doneButton = new LaddaAjaxButton("done", Type.Default) {
 			private static final long serialVersionUID = 1L;
@@ -216,28 +213,31 @@ public class VietnamImportPage extends BasePage {
 		doneButton.setDefaultFormProcessing(false);
 		doneButton.setLabel(Model.of("Done"));
 		doneButton.setDefaultFormProcessing(false);
-		doneButton.setIconType(FontAwesomeIconType.thumbs_up);	
-		importForm.add(doneButton);		
+		doneButton.setIconType(FontAwesomeIconType.thumbs_up);
+		importForm.add(doneButton);
 	}
-	
+
 	protected void addImportButton() {
 		importButton = new LaddaAjaxButton("import", Type.Danger) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
-				send(getPage(), Broadcast.BREADTH, new EditingDisabledEvent());	
+				send(getPage(), Broadcast.BREADTH, new EditingDisabledEvent());
 				logText.getSelfUpdatingBehavior().restart(target);
 				importContainer.setVisibilityAllowed(true);
-				target.add(importContainer);				
-				target.add(form);		
-				
+				target.add(importContainer);
+				target.add(form);
+
 				try {
-					
+
 					vnImportService.importAllSheets(importForm.getModelObject().getFileTypes(),
-							importForm.getModelObject().getSourceFiles().getPrototypeDatabaseFile().iterator().next().getContent().getBytes(),
-							importForm.getModelObject().getSourceFiles().getLocationsFile().iterator().next().getContent().getBytes(),
-							importForm.getModelObject().getSourceFiles().getPublicInstitutionsSuppliersFile().iterator().next().getContent().getBytes(),							
+							importForm.getModelObject().getSourceFiles().getPrototypeDatabaseFile().iterator().next()
+									.getContent().getBytes(),
+							importForm.getModelObject().getSourceFiles().getLocationsFile().iterator().next()
+									.getContent().getBytes(),
+							importForm.getModelObject().getSourceFiles().getPublicInstitutionsSuppliersFile().iterator()
+									.next().getContent().getBytes(),
 							importForm.getModelObject().getDropData());
 				} catch (Exception e) {
 					logger.error(e);
@@ -248,58 +248,57 @@ public class VietnamImportPage extends BasePage {
 					this.setEnabled(false);
 					target.add(this);
 				}
-				
-				
+
 			}
-			
+
 			@Override
 			protected void onError(final AjaxRequestTarget target, final Form<?> form) {
 				ValidationError error = new ValidationError();
 				error.addKey("formHasErrors");
 				error(error);
-				
+
 				target.add(form);
 				target.add(feedbackPanel);
 			}
-		};		
+		};
 		importButton.setLabel(Model.of("Start import process"));
 		importButton.setIconType(FontAwesomeIconType.hourglass_start);
-		importForm.add(importButton);		
+		importForm.add(importButton);
 	}
 
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		
+
 		vnImportService.newMsgBuffer();
 
 		addForm();
 		addSourceFilesSelect();
 		addFileTypesSelect();
-		addImportButton();		
+		addImportButton();
 		addLogText();
 		addDoneButton();
 		addDropData();
-		
+
 		switchFieldsBasedOnExecutorAvailability(null);
 
 	}
-	
+
 	private void switchFieldsBasedOnExecutorAvailability(final AjaxRequestTarget target) {
-		
-		boolean enabled=threadPoolTaskExecutor.getActiveCount()==0;
-		
+
+		boolean enabled = threadPoolTaskExecutor.getActiveCount() == 0;
+
 		importContainer.setVisibilityAllowed(!enabled);
 		sourceFiles.setEnabled(enabled);
 		fileTypes.setEnabled(enabled);
 		importButton.setEnabled(enabled);
-		
-		if(target!=null) {
+
+		if (target != null) {
 			target.add(sourceFiles);
 			target.add(fileTypes);
-			target.add(importButton);;
+			target.add(importButton);
 		}
-			
+
 	}
 
 }

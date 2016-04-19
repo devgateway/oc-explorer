@@ -64,7 +64,7 @@ public class VNImportService {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
-	private StringBuffer msgBuffer = new StringBuffer();	
+	private StringBuffer msgBuffer = new StringBuffer();
 
 	private final Logger logger = LoggerFactory.getLogger(VNImportService.class);
 
@@ -72,12 +72,14 @@ public class VNImportService {
 	public static final String ORGS_FILE_NAME = "orgs";
 	public static final String DATABASE_FILE_NAME = "database";
 
-	//TODO: remove these
-//	URL prototypeDatabaseFile = getClass().getResource("/Prototype_Database_OCDSCore.xlsx");
-//	URL organizationFile = getClass().getResource("/UM_PUBINSTITU_SUPPLIERS_DQA.xlsx");
-//	URL locationFile = getClass().getResource("/Location_Table_SO.xlsx");
+	// TODO: remove these
+	// URL prototypeDatabaseFile =
+	// getClass().getResource("/Prototype_Database_OCDSCore.xlsx");
+	// URL organizationFile =
+	// getClass().getResource("/UM_PUBINSTITU_SUPPLIERS_DQA.xlsx");
+	// URL locationFile = getClass().getResource("/Location_Table_SO.xlsx");
 
-	private void importSheet(URL fileUrl, String sheetName, RowImporter<?, ?> importer) throws Exception {
+	private void importSheet(final URL fileUrl, final String sheetName, final RowImporter<?, ?> importer) throws Exception {
 		importSheet(fileUrl, sheetName, importer, DBConstants.IMPORT_ROW_BATCH);
 	}
 
@@ -99,15 +101,15 @@ public class VNImportService {
 	 * 
 	 * @param message
 	 */
-	public void logMessage(String message) {
+	public void logMessage(final String message) {
 		logger.info(message);
 		msgBuffer.append(message).append("\r\n");
 	}
 
-	private void importSheet(URL fileUrl, String sheetName, RowImporter<?, ?> importer, int importRowBatch) {
-		logMessage("<b>Importing " + sheetName + " using " + importer.getClass().getSimpleName()+"</b>");
+	private void importSheet(final URL fileUrl, final String sheetName, final RowImporter<?, ?> importer, final int importRowBatch) {
+		logMessage("<b>Importing " + sheetName + " using " + importer.getClass().getSimpleName() + "</b>");
 
-		XExcelFileReader reader =null;
+		XExcelFileReader reader = null;
 		try {
 			reader = new XExcelFileReader(fileUrl.getFile(), sheetName);
 
@@ -117,9 +119,10 @@ public class VNImportService {
 			while (!(rows = reader.readRows(importRowBatch)).isEmpty()) {
 				importer.importRows(rows);
 				rowNo += importRowBatch;
-				if (rowNo % 10000 == 0)
+				if (rowNo % 10000 == 0) {
 					logMessage("Import Speed " + rowNo * 1000 / (System.currentTimeMillis() - startTime)
 							+ " rows per second.");
+				}
 			}
 
 		} catch (Exception e) {
@@ -131,82 +134,94 @@ public class VNImportService {
 	}
 
 	/**
-	 * Extracts the files from the given {@link VietnamImportSourceFiles} object, creates a temp dir and drops them there.
+	 * Extracts the files from the given {@link VietnamImportSourceFiles}
+	 * object, creates a temp dir and drops them there.
+	 * 
 	 * @param files
-	 * @return the path of the temp dir created, that contains the files save from {@link VietnamImportSourceFiles}
+	 * @return the path of the temp dir created, that contains the files save
+	 *         from {@link VietnamImportSourceFiles}
 	 * @throws FileNotFoundException
 	 * @throws IOException
-	 */	
-	private String saveSourceFilesToTempDir(byte[] prototypeDatabase, byte[] locations, byte[] publicInstitutionsSuppliers) throws FileNotFoundException, IOException {
+	 */
+	private String saveSourceFilesToTempDir(final byte[] prototypeDatabase, final byte[] locations,
+			final byte[] publicInstitutionsSuppliers) throws FileNotFoundException, IOException {
 		File tempDir = Files.createTempDir();
 		FileOutputStream prototypeDatabaseOutputStream = new FileOutputStream(new File(tempDir, DATABASE_FILE_NAME));
 		prototypeDatabaseOutputStream.write(prototypeDatabase);
 		prototypeDatabaseOutputStream.close();
 
-			FileOutputStream locationsOutputStream = new FileOutputStream(new File(tempDir, LOCATIONS_FILE_NAME));
+		FileOutputStream locationsOutputStream = new FileOutputStream(new File(tempDir, LOCATIONS_FILE_NAME));
 		locationsOutputStream.write(locations);
 		locationsOutputStream.close();
 
 		FileOutputStream publicInstitutionsSuppliersOutputStream = new FileOutputStream(
 				new File(tempDir, ORGS_FILE_NAME));
-		publicInstitutionsSuppliersOutputStream
-				.write(publicInstitutionsSuppliers);
+		publicInstitutionsSuppliersOutputStream.write(publicInstitutionsSuppliers);
 		publicInstitutionsSuppliersOutputStream.close();
 
 		return tempDir.toURI().toURL().toString();
 	}
 
-	
 	@Async
-	public void importAllSheets(List<String> fileTypes, byte[] prototypeDatabase, byte[] locations, byte[] publicInstitutionsSuppliers, Boolean purgeDatabase) throws InterruptedException  {
+	public void importAllSheets(final List<String> fileTypes, final byte[] prototypeDatabase, final byte[] locations,
+			final byte[] publicInstitutionsSuppliers, final Boolean purgeDatabase) throws InterruptedException {
 
 		String tempDirPath = null;
 		try {
 			newMsgBuffer();
-			if (purgeDatabase)
+			if (purgeDatabase) {
 				purgeDatabase();
+			}
 
-			tempDirPath = saveSourceFilesToTempDir( prototypeDatabase, locations,  publicInstitutionsSuppliers);
+			tempDirPath = saveSourceFilesToTempDir(prototypeDatabase, locations, publicInstitutionsSuppliers);
 
-			if (fileTypes.contains(ImportFileTypes.LOCATIONS))
+			if (fileTypes.contains(ImportFileTypes.LOCATIONS)) {
 				importSheet(new URL(tempDirPath + LOCATIONS_FILE_NAME), "Sheet1",
-						new LocationRowImporter(locationRepository,this, 1), 1);
+						new LocationRowImporter(locationRepository, this, 1), 1);
+			}
 
-			if (fileTypes.contains(ImportFileTypes.PUBLIC_INSTITUTIONS))
+			if (fileTypes.contains(ImportFileTypes.PUBLIC_INSTITUTIONS)) {
 				importSheet(new URL(tempDirPath + ORGS_FILE_NAME), "UM_PUB_INSTITU_MAST",
-						new PublicInstitutionRowImporter(organizationRepository,this, 2), 1);
+						new PublicInstitutionRowImporter(organizationRepository, this, 2), 1);
+			}
 
-			if (fileTypes.contains(ImportFileTypes.SUPPLIERS))
+			if (fileTypes.contains(ImportFileTypes.SUPPLIERS)) {
 				importSheet(new URL(tempDirPath + ORGS_FILE_NAME), "UM_SUPPLIER_ENTER_MAST",
-						new SupplierRowImporter(organizationRepository,this, 2), 1);
+						new SupplierRowImporter(organizationRepository, this, 2), 1);
+			}
 
-			if (fileTypes.contains(ImportFileTypes.PROCUREMENT_PLANS))
+			if (fileTypes.contains(ImportFileTypes.PROCUREMENT_PLANS)) {
 				importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "ProcurementPlans",
-						new ProcurementPlansRowImporter(releaseRepository, this,locationRepository, 2));
+						new ProcurementPlansRowImporter(releaseRepository, this, locationRepository, 2));
+			}
 
-			if (fileTypes.contains(ImportFileTypes.BID_PLANS))
+			if (fileTypes.contains(ImportFileTypes.BID_PLANS)) {
 				importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "BidPlans",
 						new BidPlansRowImporter(releaseRepository, this, 2));
+			}
 
-			if (fileTypes.contains(ImportFileTypes.TENDERS))
-				importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "Tender",
-						new TenderRowImporter(releaseRepository, this,organizationRepository, classificationRepository, 2));
+			if (fileTypes.contains(ImportFileTypes.TENDERS)) {
+				importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "Tender", new TenderRowImporter(
+						releaseRepository, this, organizationRepository, classificationRepository, 2));
+			}
 
-			if (fileTypes.contains(ImportFileTypes.EBID_AWARDS))
+			if (fileTypes.contains(ImportFileTypes.EBID_AWARDS)) {
 				importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "eBid_Award",
 						new EBidAwardRowImporter(releaseRepository, this, organizationRepository, 2));
+			}
 
-			if (fileTypes.contains(ImportFileTypes.OFFLINE_AWARDS))
+			if (fileTypes.contains(ImportFileTypes.OFFLINE_AWARDS)) {
 				importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "Offline_Award",
 						new OfflineAwardRowImporter(releaseRepository, this, organizationRepository, 2));
+			}
 
 			logMessage("<b>IMPORT PROCESS COMPLETED.</b>");
-			
+
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			e.printStackTrace();
 		} finally {
-			if (tempDirPath != null)
+			if (tempDirPath != null) {
 				try {
 					FileUtils.deleteDirectory(Paths.get(new URL(tempDirPath).toURI()).toFile());
 				} catch (IOException e) {
@@ -216,13 +231,14 @@ public class VNImportService {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			}
 		}
 	}
 
 	public StringBuffer getMsgBuffer() {
 		return msgBuffer;
 	}
-	
+
 	public void newMsgBuffer() {
 		msgBuffer = new StringBuffer();
 	}

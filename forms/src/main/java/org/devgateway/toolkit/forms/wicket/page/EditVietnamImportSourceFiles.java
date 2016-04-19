@@ -49,11 +49,11 @@ public class EditVietnamImportSourceFiles extends AbstractEditPage<VietnamImport
 	/**
 	 * @param parameters
 	 */
-	public EditVietnamImportSourceFiles(PageParameters parameters) {
+	public EditVietnamImportSourceFiles(final PageParameters parameters) {
 		super(parameters);
 
 		this.jpaRepository = vietnamImportSourceFilesRepository;
-		this.listPageClass=ListVietnamImportSourceFiles.class;
+		this.listPageClass = ListVietnamImportSourceFiles.class;
 
 	}
 
@@ -71,9 +71,9 @@ public class EditVietnamImportSourceFiles extends AbstractEditPage<VietnamImport
 		name.required();
 		editForm.add(name);
 
-		TextAreaFieldBootstrapFormComponent<String> description = new TextAreaFieldBootstrapFormComponent<>("description");		
-		editForm.add(description);		
-
+		TextAreaFieldBootstrapFormComponent<String> description = new TextAreaFieldBootstrapFormComponent<>(
+				"description");
+		editForm.add(description);
 		
 		
 		FileInputBootstrapFormComponent prototypeDatabaseFile = new FileInputBootstrapFormComponent(

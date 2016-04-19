@@ -100,10 +100,10 @@ public class DateFieldBootstrapFormComponent extends GenericBootstrapFormCompone
     protected void onComponentTag(final ComponentTag tag) {
         super.onComponentTag(tag);
 
-        if(isFloatedInput) {
-            Attributes.addClass(tag, "floated-input");
-        }
-    }
+		if (isFloatedInput) {
+			Attributes.addClass(tag, "floated-input");
+		}
+	}
 
     public Boolean getIsFloatedInput() {
         return isFloatedInput;

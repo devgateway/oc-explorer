@@ -18,8 +18,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import nl.dries.wicket.hibernate.dozer.DozerModel;
 
-import nl.dries.wicket.hibernate.dozer.DozerModel;
-
 
 /**
  * USE THIS ONLY FOR {@link SortableJpaRepositoryDataProvider}S

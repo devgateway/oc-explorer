@@ -19,7 +19,9 @@ import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationReposit
 import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 
 /**
- * Specific {@link RowImporter} for Tenders, in the custom Excel format provided by Vietnam
+ * Specific {@link RowImporter} for Tenders, in the custom Excel format provided
+ * by Vietnam
+ * 
  * @author mihai
  * @see VNTender
  */
@@ -29,56 +31,62 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 	private VNOrganizationRepository organizationRepository;
 	private ClassificationRepository classificationRepository;
 
-	public TenderRowImporter(ReleaseRepository releaseRepository, VNImportService importService, VNOrganizationRepository organizationRepository,
-			ClassificationRepository classificationRepository, int skipRows) {
-		super(releaseRepository,importService,skipRows);
+	public TenderRowImporter(final ReleaseRepository releaseRepository, final VNImportService importService,
+			final VNOrganizationRepository organizationRepository,
+			final ClassificationRepository classificationRepository, final int skipRows) {
+		super(releaseRepository, importService, skipRows);
 		this.organizationRepository = organizationRepository;
 		this.classificationRepository = classificationRepository;
-		
+
 	}
 
 	@Override
-	public boolean importRow(String[] row) throws ParseException {
+	public boolean importRow(final String[] row) throws ParseException {
 
 		Release release = repository.findByPlanningBidNo(row[0]);
 
 		if (release == null) {
 			release = new Release();
-			release.setOcid("ocvn-bidno-"+row[0]);
+			release.setOcid("ocvn-bidno-" + row[0]);
 			release.getTag().add("tender");
 			VNPlanning planning = new VNPlanning();
 			release.setPlanning(planning);
-			planning.setBidNo(row[0]);		
+			planning.setBidNo(row[0]);
 		}
 
 		VNTender tender = (VNTender) release.getTender();
 		if (tender == null) {
 			tender = new VNTender();
 			tender.setId(release.getOcid());
-			release.setTender(tender);			
+			release.setTender(tender);
 		}
 
 		String status = null;
-		if (row[1].equals("Y") && (row[2].equals("N") || row[2].isEmpty()) && (row[3].equals("N") || row[3].isEmpty()))
+		if (row[1].equals("Y") && (row[2].equals("N") || row[2].isEmpty())
+				&& (row[3].equals("N") || row[3].isEmpty())) {
 			status = "active";
+		}
 
-		if (row[1].isEmpty() && (row[2].isEmpty()) && (row[3].isEmpty()))
+		if (row[1].isEmpty() && (row[2].isEmpty()) && (row[3].isEmpty())) {
 			status = "planned";
+		}
 
-		if (row[1].isEmpty() && (row[2].equals("N")) && (row[3].equals("N") || row[3].isEmpty()))
+		if (row[1].isEmpty() && (row[2].equals("N")) && (row[3].equals("N") || row[3].isEmpty())) {
 			status = "planned";
+		}
 
-		if (row[1].equals("Y") && (row[2].equals("Y")) && (row[3].equals("N") || row[3].isEmpty()))
+		if (row[1].equals("Y") && (row[2].equals("Y")) && (row[3].equals("N") || row[3].isEmpty())) {
 			status = "cancelled";
+		}
 
-		if (row[1].isEmpty() && (row[2].equals("Y")) && (row[3].equals("N") || row[3].isEmpty()))
+		if (row[1].isEmpty() && (row[2].equals("Y")) && (row[3].equals("N") || row[3].isEmpty())) {
 			status = "cancelled";
+		}
 		tender.setStatus(status);
 		tender.setApproveState(row[1]);
 		tender.setCancelYN(row[2]);
 		tender.setModYn(row[3]);
 		tender.setBidMethod(getInteger(row[4]));
-		
 
 		String procurementMethod = null;
 		String procurementMethodDetails = null;
@@ -103,7 +111,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 			procurementMethod = "open";
 			procurementMethodDetails = "Chào hàng cạnh tranh";
 			break;
-		case 6: 
+		case 6:
 			procurementMethod = "limited";
 			procurementMethodDetails = "Tự thực hiện";
 			break;
@@ -120,7 +128,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 		Period period = new Period();
 
 		period.setStartDate(row[7].isEmpty() ? null : getExcelDate(row[7]));
-		period.setEndDate(row[8].isEmpty() ? null :getExcelDate(row[8]));
+		period.setEndDate(row[8].isEmpty() ? null : getExcelDate(row[8]));
 		tender.setTenderPeriod(period);
 		tender.setBidOpenDt(row[9].isEmpty() ? null : getExcelDate(row[9]));
 
@@ -134,7 +142,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 			procuringEntity.setIdentifier(procuringEntityIdentifier);
 			procuringEntity = organizationRepository.save(procuringEntity);
 		} else {
-			if (procuringEntity.getProcuringEntity() == null || procuringEntity.getProcuringEntity()==false) {
+			if (procuringEntity.getProcuringEntity() == null || procuringEntity.getProcuringEntity() == false) {
 				procuringEntity.setProcuringEntity(true);
 				procuringEntity = organizationRepository.save(procuringEntity);
 			}
@@ -162,7 +170,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 
 		if (row.length > 21 && !row[21].isEmpty()) {
 			if (tender.getItems().isEmpty()) {
-				Item item = new Item();		
+				Item item = new Item();
 				item.setId(Integer.toString(tender.getItems().size()));
 				tender.getItems().add(item);
 			}
@@ -170,11 +178,11 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 			// we set classification for all items within this tender. If none
 			// are found, we create a fake item and add only this classification
 			for (Item item : tender.getItems()) {
-				String classificationId=row[21].trim();
+				String classificationId = row[21].trim();
 				Classification classification = classificationRepository.findById(classificationId);
 				if (classification == null) {
 					classification = new Classification();
-					classification.setId(classificationId);					
+					classification.setId(classificationId);
 
 					switch (classificationId) {
 					case "1":
@@ -201,12 +209,12 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 
 		}
 
-		
-		if(release.getId()==null) 
-			release=repository.save(release);
-		else 
+		if (release.getId() == null) {
+			release = repository.save(release);
+		} else {
 			documents.add(release);
-		
+		}
+
 		return true;
 	}
 }
