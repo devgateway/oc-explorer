@@ -19,7 +19,6 @@ import java.util.Collection;
 import org.apache.wicket.model.IModel;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.devgateway.toolkit.persistence.dao.Labelable;
-import org.devgateway.toolkit.persistence.dao.Searchable;
 import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepository;
 
 /**
@@ -47,7 +46,7 @@ public class GenericPersistableJpaRepositoryTextChoiceProvider<T extends Generic
 	 * @see com.vaynberg.wicket.select2.TextChoiceProvider#getDisplayText(java.lang.Object)
 	 */
 	@Override
-	public String getDisplayText(T choice) {
+	public String getDisplayValue(T choice) {
 		if (addNewElements && choice.getId() == null) {
 			return choice.toString() + " ---> (press enter to create new element)";
 		}

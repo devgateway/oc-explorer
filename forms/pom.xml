@@ -29,12 +29,11 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <wicket.version>6.22.0</wicket.version>
-        <wicket.bootstrap.version>0.9.16</wicket.bootstrap.version>
+        <wicket.version>7.2.0</wicket.version>
+        <wicket.bootstrap.version>0.10.6</wicket.bootstrap.version>
         <zt.zip.version>1.9</zt.zip.version>
-        <wicket.select2.version>2.3</wicket.select2.version>
         <poi.version>3.13</poi.version>
-        <wicket.webjars.version>0.4.8</wicket.webjars.version>
+        <wicket.webjars.version>0.5.3</wicket.webjars.version>
     </properties>
 
     <dependencies>
@@ -100,10 +99,22 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jetty</artifactId>
+		</dependency>
+        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -124,7 +135,7 @@
         
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <artifactId>spring-boot-starter-jetty</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -204,11 +215,11 @@
             <version>${wicket.bootstrap.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.vaynberg.wicket.select2</groupId>
-            <artifactId>wicket-select2</artifactId>
-            <version>${wicket.select2.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>org.wicketstuff</groupId>
+			<artifactId>wicketstuff-select2</artifactId>
+			<version>${wicket.version}</version>
+		</dependency>
 
         <dependency>
             <groupId>org.wicketstuff</groupId>
@@ -222,18 +233,7 @@
             </exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>org.wicketstuff</groupId>
-            <artifactId>wicketstuff-tinymce</artifactId>
-            <version>${wicket.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.wicket</groupId>
-                    <artifactId>wicket</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
+      
         <dependency>
             <groupId>com.yahoo.platform.yui</groupId>
             <artifactId>yuicompressor</artifactId>

@@ -76,7 +76,7 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 	 * use this behavior for choices/groups that are not one component in the html but many.
 	 */
 	protected void getAjaxFormChoiceComponentUpdatingBehavior() {
-		field.add(new AjaxFormChoiceComponentUpdatingBehavior() {
+		updatingBehaviorComponent().add(new AjaxFormChoiceComponentUpdatingBehavior() {
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
 				GenericBootstrapFormComponent.this.onUpdate(target);
@@ -84,8 +84,21 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 		});
 	}
 
+	/**
+	 * This is the component that has to be updated with the
+	 * {@link #getAjaxFormChoiceComponentUpdatingBehavior()} or with
+	 * {@link #getAjaxFormComponentUpdatingBehavior()}. It usuall is the field,
+	 * but the field may be a wrapper, in which case you should override this
+	 * and provide the wrapped field.
+	 * 
+	 * @return
+	 */
+	protected FormComponent<TYPE> updatingBehaviorComponent() {
+		return field;
+	}
+	
 	protected void getAjaxFormComponentUpdatingBehavior () {
-		field.add(new AjaxFormComponentUpdatingBehavior(getUpdateEvent()) {
+		updatingBehaviorComponent().add(new AjaxFormComponentUpdatingBehavior(getUpdateEvent()) {
 
 			private static final long serialVersionUID = -2696538086634114609L;
 
@@ -103,7 +116,7 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 	}
 
 	public String getUpdateEvent() {
-		return "onblur";
+		return "blur";
 	}
 
 	public GenericBootstrapFormComponent<TYPE, FIELD> type(Class<?> clazz) {
@@ -140,35 +153,23 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 
 	public GenericBootstrapFormComponent(String id, IModel<String> labelModel, IModel<TYPE> model) {
 		super(id, model);
-
 		this.labelModel=labelModel;
 		setOutputMarkupId(true);
 		setOutputMarkupPlaceholderTag(true);
+		
 		border=new FormGroup("enclosing-field-group");
 		border.setOutputMarkupId(true);
+		add(border);
+		
 		field = inputField("field", model);
 		field.setVisibilityAllowed(!ComponentUtil.isViewMode());
-
-
-		border.add(field);
-		
-
-		add(border);
-
-
-		tooltipLabel=new TooltipLabel("tooltipLabel", id);
-		border.add(tooltipLabel);
-
-		field.setLabel(labelModel);
 		field.setOutputMarkupId(true);
 		sizeBehavior=new InputBehavior(InputBehavior.Size.Medium);
 		field.add(sizeBehavior);
+		border.add(field);
 
-		if ((field instanceof RadioGroup) || (field instanceof CheckGroup)) {
-			getAjaxFormChoiceComponentUpdatingBehavior();
-		} else {
-			getAjaxFormComponentUpdatingBehavior();
-		}
+		tooltipLabel=new TooltipLabel("tooltipLabel", id);
+		border.add(tooltipLabel);
 	}
 
 	@Override
@@ -207,6 +208,13 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 	protected void onInitialize() {
 		super.onInitialize();
 
+		field.setLabel(labelModel);
+		
+		if ((field instanceof RadioGroup) || (field instanceof CheckGroup)) {
+			getAjaxFormChoiceComponentUpdatingBehavior();
+		} else {
+			getAjaxFormComponentUpdatingBehavior();
+		}
 		
 		viewModeField=new Label("viewModeField", new ViewModeConverterModel<TYPE>(getModel()));
 		viewModeField.setEscapeModelStrings(false);

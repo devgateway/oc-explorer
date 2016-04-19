@@ -56,6 +56,6 @@ public class BootstrapPagingNavigation extends AjaxPagingNavigation {
         }));
 
         // Do not mask disabled link by em tag.
-        ((AbstractLink) loopItem.get("pageLink")).setBeforeDisabledLink("").setAfterDisabledLink("");
+        //((AbstractLink) loopItem.get("pageLink")).setBeforeDisabledLink("").setAfterDisabledLink("");
     }
 }

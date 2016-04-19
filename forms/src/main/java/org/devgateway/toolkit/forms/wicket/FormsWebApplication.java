@@ -27,8 +27,9 @@ import org.apache.wicket.request.resource.caching.FilenameWithVersionResourceCac
 import org.apache.wicket.request.resource.caching.NoOpResourceCachingStrategy;
 import org.apache.wicket.request.resource.caching.version.CachingResourceVersion;
 import org.apache.wicket.serialize.java.DeflatedJavaSerializer;
-import org.apache.wicket.settings.IRequestCycleSettings;
+import org.apache.wicket.settings.RequestCycleSettings.RenderStrategy;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.apache.wicket.util.file.Folder;
 import org.devgateway.toolkit.forms.service.SessionFinderService;
 import org.devgateway.toolkit.forms.wicket.converters.NonNumericFilteredBigDecimalConverter;
 import org.devgateway.toolkit.forms.wicket.page.BasePage;
@@ -41,7 +42,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.wicketstuff.annotation.mount.MountPath;
 import org.wicketstuff.annotation.scan.AnnotatedMountScanner;
 
 import com.google.javascript.jscomp.CompilationLevel;
@@ -53,6 +53,9 @@ import de.agilecoders.wicket.core.settings.BootstrapSettings;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.extensions.javascript.GoogleClosureJavaScriptCompressor;
 import de.agilecoders.wicket.extensions.javascript.YuiCssCompressor;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.editor.SummernoteConfig;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.editor.SummernoteFileStorage;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.editor.SummernoteStoredImageResourceReference;
 import de.agilecoders.wicket.less.BootstrapLess;
 import de.agilecoders.wicket.webjars.WicketWebjars;
 import nl.dries.wicket.hibernate.dozer.SessionFinderHolder;
@@ -71,6 +74,8 @@ import nl.dries.wicket.hibernate.dozer.SessionFinderHolder;
 @PropertySource("classpath:/org/devgateway/toolkit/forms/application.properties")
 public class FormsWebApplication extends AuthenticatedWebApplication {
 
+    public static final String STORAGE_ID = "fileStorage";
+	
 	private static final String BASE_PACKAGE_FOR_PAGES = BasePage.class.getPackage().getName();
 
 	@Autowired
@@ -94,6 +99,19 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
 		ConverterLocator locator = (ConverterLocator) super.newConverterLocator();
 		locator.set(BigDecimal.class, new NonNumericFilteredBigDecimalConverter());
 		return locator;
+	}
+
+	private void configureSummernote() {
+		// the folder where to store the images
+		Folder folder = new Folder(System.getProperty("java.io.tmpdir"), "bootstrap-summernote");
+		folder.mkdirs();
+		folder.deleteOnExit();
+
+		SummernoteConfig.addStorage(new SummernoteFileStorage(STORAGE_ID, folder));
+
+		// mount the resource reference responsible for image uploads
+		mountResource(SummernoteStoredImageResourceReference.SUMMERNOTE_MOUNT_PATH,
+				new SummernoteStoredImageResourceReference(STORAGE_ID));
 	}
 
 	/**
@@ -153,7 +171,7 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
 			getResourceSettings().setCachingStrategy(new NoOpResourceCachingStrategy());
 		}
 
-		getRequestCycleSettings().setRenderStrategy(IRequestCycleSettings.RenderStrategy.ONE_PASS_RENDER);
+		getRequestCycleSettings().setRenderStrategy(RenderStrategy.ONE_PASS_RENDER);
 	}
 
 	@Override
@@ -196,6 +214,7 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
 		// getDebugSettings().setAjaxDebugModeEnabled(false);
 
 		configureBootstrap();
+	    configureSummernote();
 		optimizeForWebPerformance();
 
 		// watch this using the URL

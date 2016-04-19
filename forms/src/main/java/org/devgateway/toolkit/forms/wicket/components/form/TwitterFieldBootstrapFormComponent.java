@@ -41,7 +41,7 @@ public class TwitterFieldBootstrapFormComponent extends TextFieldBootstrapFormCo
     protected TextField<String> inputField(String id, IModel<String> model) {
         return new TextField<String>(id, initFieldModel()) {
             @Override
-            protected void convertInput() {
+			public void convertInput() {
                 super.convertInput();
 
                 this.updateModel();

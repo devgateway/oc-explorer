@@ -18,6 +18,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -33,8 +34,10 @@ import org.devgateway.toolkit.persistence.dao.Person;
 import org.devgateway.toolkit.persistence.repository.PersonRepository;
 import org.wicketstuff.annotation.mount.MountPath;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapForm;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.ladda.LaddaAjaxButton;
 
 /**
  * @author mpostelnicu
@@ -67,7 +70,7 @@ public class LoginPage extends BasePage {
             add(notificationPanel);
 
             TextFieldBootstrapFormComponent<String> username = new TextFieldBootstrapFormComponent<>("username",
-                    new StringResourceModel("user", LoginPage.this, null), new PropertyModel<String>(this, "username"));
+                    new StringResourceModel("user", LoginPage.this), new PropertyModel<String>(this, "username"));
             username.required();
             add(username);
 
@@ -77,7 +80,7 @@ public class LoginPage extends BasePage {
             add(password);
             
 
-            IndicatingAjaxButton submit = new IndicatingAjaxButton("submit") {
+            LaddaAjaxButton submit = new LaddaAjaxButton("submit",Buttons.Type.Primary) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
@@ -99,6 +102,8 @@ public class LoginPage extends BasePage {
                     target.add(LoginForm.this);
                 }
             };
+            
+            submit.setLabel(Model.of("Submit"));
             add(submit);
 //            IndicatingAjaxButton forgotPassword = new IndicatingAjaxButton("forgotPassword",new StringResourceModel("forgotPassword", LoginPage.this, null)) {
 //                private static final long serialVersionUID = 1L;

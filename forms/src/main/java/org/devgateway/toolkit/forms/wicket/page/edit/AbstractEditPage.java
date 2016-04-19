@@ -13,8 +13,6 @@ package org.devgateway.toolkit.forms.wicket.page.edit;
 
 import javax.persistence.EntityManager;
 
-import nl.dries.wicket.hibernate.dozer.DozerModel;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.ComponentTag;
@@ -48,6 +46,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationMessage;
 import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapForm;
 import de.agilecoders.wicket.core.util.Attributes;
+import nl.dries.wicket.hibernate.dozer.DozerModel;
 
 /**
  * @author mpostelnicu
@@ -106,7 +105,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
      protected EntityManager entityManager;
 	
 		
-	@SpringBean
+	@SpringBean(required=false)
 	protected ReportsCacheService reportsCacheService;
 	 
 
@@ -139,7 +138,6 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
 
 			//remember last invalid visited object, we used this later to trigger the visibility of its parent container, if it is folded
 			lastInvalidVisitedObject=object;
-			
 			
 			//there's no point in visiting anything else, we already have a section with error. This hugely improves speed of large forms
 			//visit.stop();
@@ -225,7 +223,8 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
 			entityManager.clear();
 			
 			//we flush the mondrian cache to ensure it gets rebuilt
-			reportsCacheService.flushCache();
+			if(reportsCacheService!=null)
+				reportsCacheService.flushCache();
 			
 			// only redirect if redirect is true
 			if (redirectToSelf) {
@@ -363,7 +362,9 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
 		}
 
 		editForm = new EditForm("editForm") {
-            @Override
+			private static final long serialVersionUID = 1L;
+
+			@Override
             protected void onComponentTag(final ComponentTag tag){
                 super.onComponentTag(tag);
 
@@ -388,7 +389,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		
+
 		//we cant do anything if we dont have a jparepository here
 		if (jpaRepository == null) {
 			throw new NullJpaRepositoryException();

@@ -48,8 +48,15 @@ public class TestForm extends AbstractAuditableEntity implements Serializable {
 
 	@Column(length = DBConstants.MAX_DEFAULT_TEXT_LENGTH)
 	private String textArea;
+	
+	@Column(length = DBConstants.MAX_DEFAULT_TEXT_LENGTH)
+	private String summernote;
 
 	private Boolean checkbox;
+	
+	private Boolean checkboxPicker;
+	
+	private Boolean checkboxToggle;
 
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@ManyToOne
@@ -60,6 +67,8 @@ public class TestForm extends AbstractAuditableEntity implements Serializable {
 	private List<Role> entityMultiSelect;
 	
 	private Date date;
+	
+	private Date dateTime;
 	
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
@@ -129,6 +138,40 @@ public class TestForm extends AbstractAuditableEntity implements Serializable {
 
 	public void setFileInput(Set<FileMetadata> fileInput) {
 		this.fileInput = fileInput;
+	}
+
+
+
+	public Date getDateTime() {
+		return dateTime;
+	}
+
+	public void setDateTime(Date dateTime) {
+		this.dateTime = dateTime;
+	}
+
+	public String getSummernote() {
+		return summernote;
+	}
+
+	public void setSummernote(String summernote) {
+		this.summernote = summernote;
+	}
+
+	public Boolean getCheckboxPicker() {
+		return checkboxPicker;
+	}
+
+	public void setCheckboxPicker(Boolean checkboxPicker) {
+		this.checkboxPicker = checkboxPicker;
+	}
+
+	public Boolean getCheckboxToggle() {
+		return checkboxToggle;
+	}
+
+	public void setCheckboxToggle(Boolean checkboxToggle) {
+		this.checkboxToggle = checkboxToggle;
 	}
 
 
