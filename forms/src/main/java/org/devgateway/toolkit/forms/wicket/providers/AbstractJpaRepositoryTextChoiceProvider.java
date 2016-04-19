@@ -24,16 +24,15 @@ import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepo
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-
-import com.vaynberg.wicket.select2.Response;
-import com.vaynberg.wicket.select2.TextChoiceProvider;
+import org.wicketstuff.select2.ChoiceProvider;
+import org.wicketstuff.select2.Response;
 
 /**
  * @author mpostelnicu
  *
  */
 public abstract class AbstractJpaRepositoryTextChoiceProvider<T extends GenericPersistable & Labelable>
-		extends TextChoiceProvider<T> {
+		extends ChoiceProvider<T> {
 
 	private static final long serialVersionUID = 5709987900445896586L;
 
@@ -73,20 +72,21 @@ public abstract class AbstractJpaRepositoryTextChoiceProvider<T extends GenericP
 	}
 
 	@Override
-	public Object getId(T choice) {
+	public String getIdValue(T choice) {
 		// if the object is not null but it hasn't an ID return 0
 		if (choice != null && choice.getId() == null && addNewElements) {
-			return 0;
+			return "0";
 		}
 
-		return choice.getId();
+		return choice.getId().toString();
 	}
 
 	@Override
 	public void query(String term, int page, Response<T> response) {
 		Page<T> itemsByTerm;
-		if (term.isEmpty()) {
+		if (term==null || term.isEmpty()) {
             itemsByTerm = findAll(page);
+            response.setHasMore(itemsByTerm.hasNext());
         } else {
             itemsByTerm = getItemsByTerm(term.toLowerCase(), page);
         }

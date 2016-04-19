@@ -81,15 +81,15 @@ public class AjaxBootstrapNavigator extends AjaxPagingNavigator {
 
     @Override
     protected AbstractLink newPagingNavigationIncrementLink(String id, IPageable pageable, int increment) {
-        AbstractLink link = super.newPagingNavigationIncrementLink(id, pageable, increment);
-        link.setBeforeDisabledLink("").setAfterDisabledLink("");
+        AbstractLink link = super.newPagingNavigationIncrementLink(id, pageable, increment);   
+        //TODO:disable link
         return link;
     }
 
     @Override
     protected AbstractLink newPagingNavigationLink(String id, IPageable pageable, int pageNumber) {
         AbstractLink link = super.newPagingNavigationLink(id, pageable, pageNumber);
-        link.setBeforeDisabledLink("").setAfterDisabledLink("");
+        //TODO:disable link
         return link;
     }
 }

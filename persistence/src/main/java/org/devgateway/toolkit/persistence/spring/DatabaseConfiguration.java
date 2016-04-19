@@ -16,22 +16,22 @@ package org.devgateway.toolkit.persistence.spring;
 
 import java.io.PrintWriter;
 import java.net.InetAddress;
-import java.sql.Connection;
 import java.util.Properties;
 
 import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 import org.apache.derby.drda.NetworkServerControl;
-import org.apache.derby.jdbc.ClientDriver;
+import org.apache.derby.jdbc.ClientDriver40;
 import org.apache.log4j.Logger;
-import org.apache.tomcat.jdbc.pool.DataSource;
-import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.mock.jndi.SimpleNamingContextBuilder;
+
+import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * @author mpostelnicu
@@ -82,21 +82,17 @@ public class DatabaseConfiguration {
 	 * @return
 	 */
 	@Bean
-	@DependsOn(value = {"derbyServer","mbeanServer"})
+	@DependsOn(value = { "derbyServer", "mbeanServer" })
 	public DataSource dataSource() {
-		PoolProperties pp=new PoolProperties();		
-		pp.setJmxEnabled(false);
-		pp.setDefaultTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
-		pp.setInitialSize(100);
-		pp.setMaxWait(60000);
-		
-		DataSource dataSource = new DataSource(pp);
-		
-		dataSource.setDriverClassName(ClientDriver.class.getName());
-		dataSource.setUrl("jdbc:derby://localhost//derby/ocvn;create=true");
-		dataSource.setUsername("app");
-		dataSource.setPassword("app");
-		return dataSource;
+		HikariDataSource ds = new HikariDataSource();
+		ds.setTransactionIsolation("TRANSACTION_READ_COMMITTED");
+
+		ds.setJdbcUrl("jdbc:derby://localhost//derby/ocvn;create=true");		
+		ds.setUsername("app");
+		ds.setPassword("app");
+		ds.setDriverClassName(ClientDriver40.class.getName());
+
+		return ds;
 	}
 
 	

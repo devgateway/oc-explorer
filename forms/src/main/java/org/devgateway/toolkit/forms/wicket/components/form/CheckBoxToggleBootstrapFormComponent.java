@@ -11,28 +11,31 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.components.form;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapCheckbox;
 import de.agilecoders.wicket.core.util.Attributes;
-
-import de.agilecoders.wicket.core.util.Attributes;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkbox.bootstraptoggle.BootstrapToggle;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkbox.bootstraptoggle.BootstrapToggleConfig;
 
 /**
  * @author mpostelnicu
  * 
  */
-public class CheckBoxBootstrapFormComponent extends GenericEnablingBootstrapFormComponent<Boolean, BootstrapCheckbox> {
+public class CheckBoxToggleBootstrapFormComponent extends GenericEnablingBootstrapFormComponent<Boolean, BootstrapToggle> {
 	private static final long serialVersionUID = -4032850928243673675L;
 
 	private Boolean isFloatedInput = false;
 
-	protected CheckBox wrappedCheckbox;
+	private BootstrapToggleConfig config;
+	private CheckBox wrappedCheckbox;
 
-	public CheckBoxBootstrapFormComponent(String id, IModel<String> labelModel, IModel<Boolean> model) {
+
+	public CheckBoxToggleBootstrapFormComponent(String id, IModel<String> labelModel, IModel<Boolean> model) {
 		super(id, labelModel, model);
 	}
 
@@ -40,11 +43,11 @@ public class CheckBoxBootstrapFormComponent extends GenericEnablingBootstrapForm
 	 * @param id
 	 * @param model
 	 */
-	public CheckBoxBootstrapFormComponent(String id, IModel<Boolean> model) {
+	public CheckBoxToggleBootstrapFormComponent(String id, IModel<Boolean> model) {
 		super(id, model);
 	}
 
-	public CheckBoxBootstrapFormComponent(String id) {
+	public CheckBoxToggleBootstrapFormComponent(String id) {
 		super(id);
 	}
 
@@ -56,30 +59,46 @@ public class CheckBoxBootstrapFormComponent extends GenericEnablingBootstrapForm
 			Attributes.addClass(tag, "floated-input");
 		}
 	}
+
 	
 	@Override
 	protected FormComponent<Boolean> updatingBehaviorComponent() {
 		return wrappedCheckbox;
 	}
-
+	
 	@Override
-	protected BootstrapCheckbox inputField(String id, IModel<Boolean> model) {
-		return  new BootstrapCheckbox(id,initFieldModel()) {
+	protected BootstrapToggle inputField(String id, IModel<Boolean> model) {
+
+		config = new BootstrapToggleConfig();
+		config.withOnStyle(BootstrapToggleConfig.Style.info).withOffStyle(BootstrapToggleConfig.Style.warning)
+				.withStyle("customCssClass");
+
+		final BootstrapToggle checkBoxToggle = new BootstrapToggle("field", initFieldModel(), config) {
+
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected CheckBox newCheckBox(String id, IModel<Boolean> model) {
-				wrappedCheckbox=super.newCheckBox(id, model);
-				wrappedCheckbox.setOutputMarkupId(true);
+				wrappedCheckbox = super.newCheckBox(id, model);
+				wrappedCheckbox.add(new AjaxFormComponentUpdatingBehavior("change") {
+
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onUpdate(AjaxRequestTarget target) {
+						CheckBoxToggleBootstrapFormComponent.this.onUpdate(target);
+					}
+				});
 				return wrappedCheckbox;
 			}
 		};
+
+		return checkBoxToggle;
 	}
-	
 
 	@Override
 	public String getUpdateEvent() {
-		return "click";
+		return "change";
 	}
 
     public Boolean getIsFloatedInput() {
@@ -94,11 +113,8 @@ public class CheckBoxBootstrapFormComponent extends GenericEnablingBootstrapForm
 	protected boolean boundComponentsVisibilityAllowed(Boolean selectedValue) {
 		return selectedValue;
 	}
-	
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
-		if(field.isRequired()) 
-			wrappedCheckbox.setRequired(true);
+
+	public BootstrapToggleConfig getConfig() {
+		return config;
 	}
 }

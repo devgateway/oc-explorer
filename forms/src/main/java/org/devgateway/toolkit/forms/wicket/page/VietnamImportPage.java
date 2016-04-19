@@ -78,7 +78,7 @@ public class VietnamImportPage extends BasePage {
 	/**
 	 * @param parameters
 	 */
-	public VietnamImportPage(PageParameters parameters) {
+	public VietnamImportPage(final PageParameters parameters) {
 		super(parameters);
 	}
 
@@ -95,7 +95,7 @@ public class VietnamImportPage extends BasePage {
 			return fileTypes;
 		}
 
-		public void setFileTypes(List<String> fileTypes) {
+		public void setFileTypes(final List<String> fileTypes) {
 			this.fileTypes = fileTypes;
 		}
 
@@ -103,7 +103,7 @@ public class VietnamImportPage extends BasePage {
 			return sourceFiles;
 		}
 
-		public void setSourceFiles(VietnamImportSourceFiles sourceFiles) {
+		public void setSourceFiles(final VietnamImportSourceFiles sourceFiles) {
 			this.sourceFiles = sourceFiles;
 		}
 
@@ -111,7 +111,7 @@ public class VietnamImportPage extends BasePage {
 			return dropData;
 		}
 
-		public void setDropData(Boolean dropData) {
+		public void setDropData(final Boolean dropData) {
 			this.dropData = dropData;
 		}
 
@@ -120,7 +120,7 @@ public class VietnamImportPage extends BasePage {
 	
 
 	public class EditForm extends BootstrapForm<VietnamImportBean> {
-		public EditForm(String componentId) {
+		public EditForm(final String componentId) {
 			super(componentId);
 			// TODO Auto-generated constructor stub
 		}
@@ -163,7 +163,7 @@ public class VietnamImportPage extends BasePage {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onPostProcessTarget(AjaxRequestTarget target) {
+			protected void onPostProcessTarget(final AjaxRequestTarget target) {
 				if(threadPoolTaskExecutor.getActiveCount()==0) {
 					getSelfUpdatingBehavior().stop(target);
 					spinner.setVisibilityAllowed(false);
@@ -187,7 +187,19 @@ public class VietnamImportPage extends BasePage {
 	
 	protected void addFileTypesSelect() {
 		fileTypes = new Select2MultiChoiceBootstrapFormComponent<String>(
-				"fileTypes", new GenericChoiceProvider<String>(ImportFileTypes.allFileTypes));
+				"fileTypes", new GenericChoiceProvider<String>(ImportFileTypes.allFileTypes){
+
+					@Override
+					public String getDisplayValue(final String arg0) {
+						return arg0;
+					}
+
+					@Override
+					public String getIdValue(final String arg0) {
+						return arg0;
+					}
+					
+				});
 		fileTypes.required();
 		importForm.add(fileTypes);
 	}
@@ -197,7 +209,7 @@ public class VietnamImportPage extends BasePage {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
 				setResponsePage(Homepage.class);
 			}
 		};
@@ -213,7 +225,7 @@ public class VietnamImportPage extends BasePage {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
 				send(getPage(), Broadcast.BREADTH, new EditingDisabledEvent());	
 				logText.getSelfUpdatingBehavior().restart(target);
 				importContainer.setVisibilityAllowed(true);
@@ -241,7 +253,7 @@ public class VietnamImportPage extends BasePage {
 			}
 			
 			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form) {
+			protected void onError(final AjaxRequestTarget target, final Form<?> form) {
 				ValidationError error = new ValidationError();
 				error.addKey("formHasErrors");
 				error(error);
@@ -273,7 +285,7 @@ public class VietnamImportPage extends BasePage {
 
 	}
 	
-	private void switchFieldsBasedOnExecutorAvailability(AjaxRequestTarget target) {
+	private void switchFieldsBasedOnExecutorAvailability(final AjaxRequestTarget target) {
 		
 		boolean enabled=threadPoolTaskExecutor.getActiveCount()==0;
 		

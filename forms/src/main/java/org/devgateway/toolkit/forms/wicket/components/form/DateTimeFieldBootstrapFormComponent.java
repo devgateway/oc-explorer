@@ -16,26 +16,26 @@ package org.devgateway.toolkit.forms.wicket.components.form;
 
 import java.util.Date;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 
 import de.agilecoders.wicket.core.util.Attributes;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.DateTextField;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.DateTextFieldConfig;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.DateTextFieldConfig.TodayButton;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.DateTextFieldConfig.View;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePicker;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerConfig;
 
 /**
  * @author mpostelnicu
  * 
  */
-public class DateFieldBootstrapFormComponent extends GenericBootstrapFormComponent<Date, TextField<Date>> {
+public class DateTimeFieldBootstrapFormComponent extends GenericBootstrapFormComponent<Date, DatetimePicker> {
 	private static final long serialVersionUID = 6829640010904041758L;
 
-	public static final String DEFAULT_FORMAT = "dd/MM/yy";
+	public static final String DEFAULT_FORMAT = "dd/MM/yyyy HH:mm:ss";
+	
+	private DatetimePickerConfig config;
 
     private Boolean isFloatedInput = false;
 	
@@ -44,11 +44,11 @@ public class DateFieldBootstrapFormComponent extends GenericBootstrapFormCompone
 	 * @param labelModel
 	 * @param model
 	 */
-	public DateFieldBootstrapFormComponent(final String id, final IModel<String> labelModel, final IModel<Date> model) {
+	public DateTimeFieldBootstrapFormComponent(String id, IModel<String> labelModel, IModel<Date> model) {
 		super(id, labelModel, model);
 	}
 
-	public DateFieldBootstrapFormComponent(final String id) {
+	public DateTimeFieldBootstrapFormComponent(String id) {
 		super(id);
 	}
 	
@@ -56,23 +56,19 @@ public class DateFieldBootstrapFormComponent extends GenericBootstrapFormCompone
 	 * @param id
 	 * @param model
 	 */
-	public DateFieldBootstrapFormComponent(final String id, final IModel<Date> model) {
+	public DateTimeFieldBootstrapFormComponent(String id, IModel<Date> model) {
 		super(id, model);
 	}
 
-    @Override
-    protected TextField<Date> inputField(final String id, final IModel<Date> model) {
-        DateTextFieldConfig config = new DateTextFieldConfig().withView(View.Year).
-                withFormat(DEFAULT_FORMAT).autoClose(true).
-                calendarWeeks(true).forceParse(false).highlightToday(true).clearButton(true).
-                allowKeyboardNavigation(true).showTodayButton(TodayButton.LINKED).withView(View.Decade);
-
-        return new DateTextField(id, initFieldModel(), config);
-    }
+	@Override
+	protected DatetimePicker inputField(String id, IModel<Date> model) {
+		config = new DatetimePickerConfig().withFormat(DEFAULT_FORMAT);
+		return new DatetimePicker("field", initFieldModel(), config);
+	}
 
 	@Override
 	public String getUpdateEvent() {
-		return "change";
+		return "update";
 	}
 
 	/* (non-Javadoc)
@@ -81,22 +77,25 @@ public class DateFieldBootstrapFormComponent extends GenericBootstrapFormCompone
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
+		
+		border.add(new AttributeModifier("style", "position:relative;"));
 	
 		IndicatingAjaxLink<String> clearDateLink = new IndicatingAjaxLink<String>("clearDate") {
 			private static final long serialVersionUID = -1705495886974891511L;
 			@Override
-			public void onClick(final AjaxRequestTarget target) {
-				DateFieldBootstrapFormComponent.this.field.setModelObject(null);
-				target.add(DateFieldBootstrapFormComponent.this.field);
-			}
+			public void onClick(AjaxRequestTarget target) {
+				DateTimeFieldBootstrapFormComponent.this.field.setModelObject(null);
+				target.add(DateTimeFieldBootstrapFormComponent.this.field);
+			}	
 		};
 		border.add(clearDateLink);
 	}
 
     @Override
-    protected void onComponentTag(final ComponentTag tag) {
-        super.onComponentTag(tag);
+    protected void onComponentTag(ComponentTag tag) {    	
+    	super.onComponentTag(tag);
 
+        
         if(isFloatedInput) {
             Attributes.addClass(tag, "floated-input");
         }
@@ -106,7 +105,7 @@ public class DateFieldBootstrapFormComponent extends GenericBootstrapFormCompone
         return isFloatedInput;
     }
 
-    public void setIsFloatedInput(final Boolean isFloatedInput) {
+    public void setIsFloatedInput(Boolean isFloatedInput) {
         this.isFloatedInput = isFloatedInput;
     }
 }

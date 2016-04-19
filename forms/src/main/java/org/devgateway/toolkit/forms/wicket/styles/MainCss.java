@@ -40,15 +40,14 @@ public class MainCss extends CssResourceReference {
     }
 
     @Override
-    public Iterable<? extends HeaderItem> getDependencies() {
+    public List<HeaderItem> getDependencies() {
         final List<HeaderItem> dependencies = Lists.newArrayList(super.getDependencies());
 
         dependencies.add(CssHeaderItem.forReference(BootstrapCssReference.instance()));
         dependencies.add(CssHeaderItem.forReference(FontAwesomeCssReference.instance()));
 
         dependencies.add(CssHeaderItem.forReference(FixBootstrapStylesCssResourceReference.INSTANCE));
-        dependencies.add(CssHeaderItem.forReference(DatatableStyleResourceReference.INSTANCE));
-        dependencies.add(CssHeaderItem.forReference(Select2BootstrapCssResourceReference.INSTANCE));        
+        dependencies.add(CssHeaderItem.forReference(DatatableStyleResourceReference.INSTANCE));               
 
         return dependencies;
     }

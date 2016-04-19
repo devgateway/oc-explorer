@@ -67,7 +67,8 @@ public class TooltipLabel extends Label {
 	@Override
 	protected void onConfigure() {
 		super.onConfigure();
-		helpModelText = new StringResourceModel(fieldId + ".help", this, null, "");
+		helpModelText = new StringResourceModel(fieldId + ".help", this);
+		helpModelText.setDefaultValue("");
 
 		if (!helpModelText.getString().isEmpty()) {
 			tooltipConfig = new CustomTooltipConfig();

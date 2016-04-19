@@ -16,9 +16,8 @@ package org.devgateway.toolkit.forms.wicket.components.form;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.model.IModel;
-
-import com.vaynberg.wicket.select2.ChoiceProvider;
-import com.vaynberg.wicket.select2.Select2Choice;
+import org.wicketstuff.select2.ChoiceProvider;
+import org.wicketstuff.select2.Select2Choice;
 
 import de.agilecoders.wicket.core.util.Attributes;
 
@@ -28,15 +27,13 @@ import de.agilecoders.wicket.core.util.Attributes;
  */
 public class Select2ChoiceBootstrapFormComponent<TYPE> extends GenericEnablingBootstrapFormComponent<TYPE, Select2Choice<TYPE>> {
 	private static final long serialVersionUID = -3430670677135618576L;
-	private ChoiceProvider<TYPE> choiceProvider;
 
     private Boolean isFloatedInput = false;
 
 	public Select2ChoiceBootstrapFormComponent(String id, IModel<String> labelModel, IModel<TYPE> model,
 			ChoiceProvider<TYPE> choiceProvider) {
 		super(id, labelModel, model);
-		this.choiceProvider=choiceProvider;
-
+		provider(choiceProvider);
 	}
 	
 	public Select2ChoiceBootstrapFormComponent<TYPE> provider(ChoiceProvider<TYPE> choiceProvider) {
@@ -50,12 +47,12 @@ public class Select2ChoiceBootstrapFormComponent<TYPE> extends GenericEnablingBo
 	
 	public Select2ChoiceBootstrapFormComponent(String id, ChoiceProvider<TYPE> choiceProvider,IModel<TYPE> model) {
 		super(id,model);
-		this.choiceProvider=choiceProvider;
+		provider(choiceProvider);
 	}
 
 	public Select2ChoiceBootstrapFormComponent(String id, ChoiceProvider<TYPE> choiceProvider) {
 		super(id);
-		this.choiceProvider=choiceProvider;
+		provider(choiceProvider);
 	}
 
 	
@@ -67,7 +64,7 @@ public class Select2ChoiceBootstrapFormComponent<TYPE> extends GenericEnablingBo
 
 	@Override
 	public String getUpdateEvent() {
-		return "onchange";
+		return "change";
 	}
 	
 	/* (non-Javadoc)
@@ -75,12 +72,12 @@ public class Select2ChoiceBootstrapFormComponent<TYPE> extends GenericEnablingBo
 	 */
 	@Override
 	protected void onInitialize() {
+		field.getSettings().setPlaceholder("Click to select");
+		field.getSettings().setAllowClear(true);		
+		field.getSettings().setCloseOnSelect(true);
+		field.getSettings().setDropdownAutoWidth(true);		
 		super.onInitialize();
-	
-		field.setProvider(choiceProvider);
-		field.getSettings().setAllowClear(true);
-		field.getSettings().setPlaceholder("");
-		field.getSettings().setDropdownAutoWidth(true);
+
 	}
 
     @Override
