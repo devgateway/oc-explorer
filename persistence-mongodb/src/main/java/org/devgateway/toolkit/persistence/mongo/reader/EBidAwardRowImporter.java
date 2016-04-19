@@ -5,6 +5,7 @@ import java.text.ParseException;
 import org.devgateway.ocvn.persistence.mongo.ocds.Identifier;
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
 import org.devgateway.ocvn.persistence.mongo.ocds.Value;
+import org.devgateway.toolkit.persistence.mongo.dao.OCDSConst;
 import org.devgateway.toolkit.persistence.mongo.dao.VNAward;
 import org.devgateway.toolkit.persistence.mongo.dao.VNOrganization;
 import org.devgateway.toolkit.persistence.mongo.dao.VNPlanning;
@@ -19,7 +20,7 @@ import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
  *
  */
 public class EBidAwardRowImporter extends RowImporter<Release, ReleaseRepository> {
-
+	
 	protected VNOrganizationRepository organizationRepository;
 
 	public EBidAwardRowImporter(ReleaseRepository releaseRepository, VNImportService importService, VNOrganizationRepository organizationRepository,
@@ -69,7 +70,7 @@ public class EBidAwardRowImporter extends RowImporter<Release, ReleaseRepository
 		award.setBidOpenRank(row[4].isEmpty() ? null : getInteger(row[4]));
 
 		if (row.length > 5)
-			award.setStatus(row[5].equals("Y") ? "active" : "unsuccessful");
+			award.setStatus(row[5].equals("Y") ? OCDSConst.Awards.STATUS_ACTIVE : OCDSConst.Awards.STATUS_UNSUCCESSFUL);
 
 		if (row.length > 6)
 			award.setInelibigleYN(row[6]);
@@ -80,10 +81,23 @@ public class EBidAwardRowImporter extends RowImporter<Release, ReleaseRepository
 		if (row.length > 8)
 			award.setDate(row[8].isEmpty() ? null : getExcelDate(row[8]));
 
+		// For unsuccessful awards (in both eBid and Offline bid tabs), map the
+		// information on the bidder (supplier) to tender.tenderers for that
+		// BID_NO
+		// we ignore the fields if there are no tenders found
+		if (release.getTender() != null) {
+			if (award.getStatus().equals(OCDSConst.Awards.STATUS_UNSUCCESSFUL)) {
+				release.getTender().getTenderers().add(supplier);
+			}
+			release.getTender().setNumberOfTenders(release.getTender().getTenderers().size());
+		}
+		
 		if(release.getId()==null) 
 			release=repository.save(release);
 		else
 			documents.add(release);
+		
+		
 		
 		return true;
 	}
