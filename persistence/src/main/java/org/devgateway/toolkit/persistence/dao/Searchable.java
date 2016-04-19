@@ -15,10 +15,10 @@ package org.devgateway.toolkit.persistence.dao;
  * @author idobre
  * @since 3/10/15
  *
- * An entity that has a {@link String} designation property
+ *        An entity that has a {@link String} designation property
  */
 public interface Searchable {
-    public String getDesignation();
+	String getDesignation();
 
-    public void setDesignation(String designation);
+	void setDesignation(String designation);
 }

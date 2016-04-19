@@ -23,7 +23,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.envers.Audited;
 
-
 /**
  * 
  * @author mpostelnicu
@@ -32,46 +31,45 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Group extends Category{
+public class Group extends Category {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8451785172092014455L;
-	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE) @OneToMany  (mappedBy = "group",fetch = FetchType.LAZY)
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	@OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
 	private Set<Person> persons = new HashSet<>();
-	
-	
-	public Group(){
+
+	public Group() {
 		super();
 	}
 
-	
-	public Group(String label){
+	public Group(final String label) {
 		super();
 		this.label = label;
 	}
-	@Override
-    public String toString() {
-        return getLabel();
-    }
 
+	@Override
+	public String toString() {
+		return getLabel();
+	}
+
+	@Override
 	public String getLabel() {
 		return label;
 	}
 
-
-	public void setLabel(String label) {
+	@Override
+	public void setLabel(final String label) {
 		this.label = label;
 	}
-
 
 	public Set<Person> getPersons() {
 		return persons;
 	}
 
-
-	public void setPersons(Set<Person> persons) {
+	public void setPersons(final Set<Person> persons) {
 		this.persons = persons;
 	}
 

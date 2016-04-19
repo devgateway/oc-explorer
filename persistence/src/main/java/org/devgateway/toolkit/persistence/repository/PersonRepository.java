@@ -28,9 +28,9 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
 
 	@Query("select p from Person p where p.username = ?1")
 	List<Person> findByName(String username);
-	
+
 	Person findByUsername(String username);
-	
+
 	Person findByEmail(String email);
 
 }

@@ -32,48 +32,48 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@DiscriminatorColumn(length = 100)
-@Table(indexes= {@Index(columnList="label"),@Index(columnList="DTYPE")
-})
+@DiscriminatorColumn(length = Category.DTYPE_COLUMN_LENGTH)
+@Table(indexes = { @Index(columnList = "label"), @Index(columnList = "DTYPE") })
 public class Category extends AbstractAuditableEntity implements Serializable, Labelable {
+
+	static final int DTYPE_COLUMN_LENGTH = 100;
 
 	private static final long serialVersionUID = 1L;
 
 	protected String label;
 
-    protected String description;
+	protected String description;
 
-    public Category(String label) {
-        this.label = label;
-    }
+	public Category(final String label) {
+		this.label = label;
+	}
 
-    public Category() {
+	public Category() {
 
-    }
-    
-    @Override
-    public String getLabel() {
-        return label;
-    }
+	}
 
-    @Override
-    public void setLabel(String label) {
-        this.label = label;
-    }
+	@Override
+	public String getLabel() {
+		return label;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	@Override
+	public void setLabel(final String label) {
+		this.label = label;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    @Override
-    public String toString() {
-        return getLabel();
-    }
+	public void setDescription(final String description) {
+		this.description = description;
+	}
 
+	@Override
+	public String toString() {
+		return getLabel();
+	}
 
 	@Override
 	public AbstractAuditableEntity getParent() {
