@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.devgateway.toolkit.web.rest.entity;
 
-
 /**
  * 
  * @author mpostelnicu
@@ -22,7 +21,7 @@ public class Dummy {
 	private final long id;
 	private final String content;
 
-	public Dummy(long id, String content) {
+	public Dummy(final long id, final String content) {
 		this.id = id;
 		this.content = content;
 	}

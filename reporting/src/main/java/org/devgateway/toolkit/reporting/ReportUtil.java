@@ -27,19 +27,19 @@ import org.pentaho.reporting.libraries.base.config.Configuration;
  */
 public final class ReportUtil {
 	
+	private static final int TIMES_PRD_TRIES_AN_UNUSED_KEY = 200;
+
 	private ReportUtil() {
 
 	}
 
 	/**
-	 * https://github.com/pentaho/pentaho-reporting/blob/
-	 * 92933895b62c2020e9357209144fa9a7a15f9f4c/designer/report-designer/src/org
-	 * /pentaho/reporting/designer/core/actions/report/preview/PreviewHtmlAction
-	 * .java#L178
-	 * 
 	 * @param directoryName
 	 * @return
 	 * @throws IOException
+	 * @see https://github.com/pentaho/pentaho-reporting/blob/master/designer/
+	 *      report-designer/src/org/pentaho/reporting/designer/core/actions/
+	 *      report/preview/PreviewHtmlAction.java
 	 */
 	public static File createTemporaryDirectory(final String directoryName) throws IOException {
 		final Configuration configuration = ClassicEngineBoot.getInstance().getGlobalConfig();
@@ -56,7 +56,7 @@ public final class ReportUtil {
 		}
 
 		final Random randomGenerator = new Random(System.currentTimeMillis());
-		for (int i = 1; i < 200; i++) {
+		for (int i = 1; i < TIMES_PRD_TRIES_AN_UNUSED_KEY; i++) {
 			final int random = (randomGenerator.nextInt());
 			final File reportDirectory = new File(s, directoryName + random);
 
