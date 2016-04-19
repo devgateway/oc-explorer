@@ -28,12 +28,12 @@ public class EarlierThanDateValidator implements IValidator<Date> {
 
     private Date highDate;
 
-    public EarlierThanDateValidator(Date highDate) {
+    public EarlierThanDateValidator(final Date highDate) {
         this.highDate = highDate;
     }
 
     @Override
-    public void validate(IValidatable<Date> validatable) {
+    public void validate(final IValidatable<Date> validatable) {
         if (highDate == null) {
             return;
         }

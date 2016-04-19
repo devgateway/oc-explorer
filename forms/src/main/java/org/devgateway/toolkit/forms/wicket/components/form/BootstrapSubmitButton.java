@@ -35,14 +35,14 @@ public abstract class BootstrapSubmitButton extends LaddaAjaxButton {
 	 * @param id
 	 * @param model
 	 */
-	public BootstrapSubmitButton(String id, IModel<String> model) {
-		super(id, model,Buttons.Type.Primary);
-		setIconType(FontAwesomeIconType.save);	
+	public BootstrapSubmitButton(final String id, final IModel<String> model) {
+		super(id, model, Buttons.Type.Primary);
+		setIconType(FontAwesomeIconType.save);
 	}
 	
-	public BootstrapSubmitButton(String id, Form<?> form, IModel<String> model) {
-		super(id, model,form,Buttons.Type.Primary);
-		setIconType(FontAwesomeIconType.save);	
+	public BootstrapSubmitButton(final String id, final Form<?> form, final IModel<String> model) {
+		super(id, model, form, Buttons.Type.Primary);
+		setIconType(FontAwesomeIconType.save);
 	}
 	
 	@Override

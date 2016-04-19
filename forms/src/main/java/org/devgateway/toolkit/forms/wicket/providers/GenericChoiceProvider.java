@@ -30,13 +30,15 @@ import org.wicketstuff.select2.Response;
 public abstract class GenericChoiceProvider<T> extends ChoiceProvider<T> {
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger logger = Logger.getLogger(GenericChoiceProvider.class);
+	private static final Logger LOGGER = Logger.getLogger(GenericChoiceProvider.class);
 
     /**
-     * all elements are identified by and id which in this case is the String representation of the T object (see @toJson function)
-     * so we retain the elements as a tuple <id, T> so we can easily have access to the original T object in the @toChoices function
+	 * all elements are identified by and id which in this case is the String
+	 * representation of the T object (see @toJson function) so we retain the
+	 * elements as a tuple <id, T> so we can easily have access to the original
+	 * T object in the @toChoices function
      */
-    Map<String, T> bagOfElements;
+	private Map<String, T> bagOfElements;
 
     public GenericChoiceProvider (final List<T> listOfElements) {
         bagOfElements = new LinkedHashMap<>();
@@ -53,7 +55,8 @@ public abstract class GenericChoiceProvider<T> extends ChoiceProvider<T> {
 
         if (bagOfElements != null && bagOfElements.values() != null && bagOfElements.values().size() > 0) {
             for (final T el : bagOfElements.values()) {
-                // the elements should implement the method toString in order to filter them
+				// the elements should implement the method toString in order to
+				// filter them
                 if (term==null || el.toString().toLowerCase().contains(term.toLowerCase())) {
                     ret.add(el);
                 }
@@ -64,7 +67,8 @@ public abstract class GenericChoiceProvider<T> extends ChoiceProvider<T> {
     }
 
 //    @Override
-//    protected void toJson(T choice, org.apache.wicket.ajax.json.JSONWriter writer) {
+	// protected void toJson(T choice, org.apache.wicket.ajax.json.JSONWriter
+	// writer) {
 //    	 writer.key("id").value(choice.toString()).key("text").value(choice.toString());
 //    }
     
@@ -79,7 +83,7 @@ public abstract class GenericChoiceProvider<T> extends ChoiceProvider<T> {
                     // just get the element from the map
                     ret.add(bagOfElements.get(id));
                 } catch (final NumberFormatException e) {
-                    logger.error(e.getMessage());
+					LOGGER.error(e.getMessage());
                 }
             }
         }

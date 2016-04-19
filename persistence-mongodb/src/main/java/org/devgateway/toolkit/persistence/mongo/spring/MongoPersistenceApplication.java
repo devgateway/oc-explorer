@@ -41,7 +41,8 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoAuditing
 public class MongoPersistenceApplication {
 
-	public static void main(String[] args) {
+
+	public static void main(final String[] args) {
 		SpringApplication.run(MongoPersistenceApplication.class, args);
 	}
 

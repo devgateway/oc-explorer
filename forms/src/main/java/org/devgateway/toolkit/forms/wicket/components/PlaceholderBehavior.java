@@ -24,12 +24,12 @@ public class PlaceholderBehavior extends Behavior {
 	private static final long serialVersionUID = -5721230717164734414L;
 	private final String placeholder;
 
-    public PlaceholderBehavior(String placeholder) {
+    public PlaceholderBehavior(final String placeholder) {
         this.placeholder = placeholder;
     }
 
     @Override
-    public void onComponentTag(Component component, ComponentTag tag) {
+    public void onComponentTag(final Component component, final ComponentTag tag) {
         super.onComponentTag(component, tag);
         tag.put("placeholder", placeholder);
     }

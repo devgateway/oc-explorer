@@ -29,26 +29,16 @@ public class YearValidator implements IValidator<Integer> {
 	private static final long serialVersionUID = 1L;
 	private boolean maxCurrentYear = false;
 
+
 	public YearValidator maxCurrentYear() {
 		this.maxCurrentYear = true;
 		return this;
 	}
 
 	@Override
-	public void validate(IValidatable<Integer> validatable) {
-		if (validatable.getValue() == null)
+	public void validate(final IValidatable<Integer> validatable) {
+		if (validatable.getValue() == null) {
 			return;
-		// this is redundant to the >2000 check..
-		// if (validatable.getValue().toString().length() > 4) {
-		// ValidationError error = new ValidationError();
-		// error.addKey(this,"fourdigits");
-		// validatable.error(error);
-		// }
-
-		if (validatable.getValue() < 2000) {
-			ValidationError error = new ValidationError();
-			error.addKey(this, "after2000");
-			validatable.error(error);
 		}
 
 		if (maxCurrentYear && validatable.getValue() > Calendar.getInstance().get(Calendar.YEAR)) {

@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.styles;
 
-
 import org.apache.wicket.request.resource.CssResourceReference;
 
 /**
@@ -22,16 +21,16 @@ import org.apache.wicket.request.resource.CssResourceReference;
  */
 public class FixBootstrapStylesCssResourceReference extends CssResourceReference {
 
-    /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	public static final FixBootstrapStylesCssResourceReference INSTANCE = new FixBootstrapStylesCssResourceReference();
 
-    /**
-     * Construct.
-     */
-    public FixBootstrapStylesCssResourceReference() {
-        super(FixBootstrapStylesCssResourceReference.class, "fix.css");
-    }
+	/**
+	 * Construct.
+	 */
+	public FixBootstrapStylesCssResourceReference() {
+		super(FixBootstrapStylesCssResourceReference.class, "fix.css");
+	}
 }

@@ -27,17 +27,17 @@ import de.agilecoders.wicket.core.util.Attributes;
  * @author mpostelnicu
  * 
  */
-public class Select2MultiChoiceBootstrapFormComponent<TYPE> extends GenericBootstrapFormComponent<Collection<TYPE>, Select2MultiChoice<TYPE>> {
+public class Select2MultiChoiceBootstrapFormComponent<TYPE>
+		extends GenericBootstrapFormComponent<Collection<TYPE>, Select2MultiChoice<TYPE>> {
 	private static final long serialVersionUID = 7177558191815237814L;
 
-    private Boolean isFloatedInput = false;
+	private Boolean isFloatedInput = false;
 
 	public Select2MultiChoiceBootstrapFormComponent(final String id, final IModel<String> labelModel, final IModel<Collection<TYPE>> model,
 			final ChoiceProvider<TYPE> choiceProvider) {
 		super(id, labelModel, model);
 		provider(choiceProvider);
 	}
-	
 
 	
 	public Select2MultiChoiceBootstrapFormComponent<TYPE> provider(final ChoiceProvider<TYPE> choiceProvider) {
@@ -67,38 +67,34 @@ public class Select2MultiChoiceBootstrapFormComponent<TYPE> extends GenericBoots
 		return multiChoice;
 	}
 
-	
 	@Override
 	public String getUpdateEvent() {
 		return "change";
 	}
-	
-	
-	
+
 	@Override
 	protected void onInitialize() {
 		field.getSettings().setPlaceholder("Click to select");
-		field.getSettings().setAllowClear(true);		
+		field.getSettings().setAllowClear(true);
 		field.getSettings().setCloseOnSelect(true);
-		field.getSettings().setDropdownAutoWidth(true);		
+		field.getSettings().setDropdownAutoWidth(true);
 		field.getSettings().setEscapeMarkup("function (m) {return m;}");
 		super.onInitialize();
 
 	}
-	
 
     @Override
     protected void onComponentTag(final ComponentTag tag) {
         super.onComponentTag(tag);
 
-        if(isFloatedInput) {
-            Attributes.addClass(tag, "floated-input");
-        }
-    }
+		if (isFloatedInput) {
+			Attributes.addClass(tag, "floated-input");
+		}
+	}
 
-    public Boolean getIsFloatedInput() {
-        return isFloatedInput;
-    }
+	public Boolean getIsFloatedInput() {
+		return isFloatedInput;
+	}
 
     public void setIsFloatedInput(final Boolean isFloatedInput) {
         this.isFloatedInput = isFloatedInput;

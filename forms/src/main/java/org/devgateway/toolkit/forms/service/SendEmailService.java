@@ -35,7 +35,7 @@ public class SendEmailService {
 		return templateMessage;
 	}
 
-	public void setTemplateMessage(SimpleMailMessage templateMessage) {
+	public void setTemplateMessage(final SimpleMailMessage templateMessage) {
 		this.templateMessage = templateMessage;
 	}
 
@@ -44,7 +44,7 @@ public class SendEmailService {
 	 * @param person
 	 * @param urlEnable URL with a key, to validate the user email
 	 */
-	public void sendEmailToEnable(Person person, String urlEnable) {
+	public void sendEmailToEnable(final Person person, final String urlEnable) {
 
 		SimpleMailMessage msg = new SimpleMailMessage();
 		msg.setTo(person.getEmail());
@@ -72,7 +72,7 @@ public class SendEmailService {
 	 * @param person
 	 * @param newPassword
 	 */
-	public void sendEmailResetPassword(Person person, String newPassword) {
+	public void sendEmailResetPassword(final Person person, final String newPassword) {
 
 		SimpleMailMessage msg = new SimpleMailMessage();
 		msg.setTo(person.getEmail());
@@ -82,8 +82,7 @@ public class SendEmailService {
 				+ "These are your new login credentials for E-Procurement Toolkit.\n\n"
 				+ "Username: " + person.getUsername() + "\n" 
 				+ "Password: " + newPassword + "\n\n"
-				+ "At login, you will be prompted to change your password to one of your choice.\n\n"
-				+ "Thank you,\n"
+				+ "At login, you will be prompted to change your password to one of your choice.\n\n" + "Thank you,\n"
 				+ "DG Team");
 		try {
 			javaMailSenderImpl.send(msg);

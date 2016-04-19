@@ -44,25 +44,23 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons.Size;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeIconType;
 
 /**
- * @author mpostelnicu
- * This class can be use to display a list of Categories
+ * @author mpostelnicu This class can be use to display a list of Categories
  */
 
 public abstract class AbstractListPage<T extends GenericPersistable> extends BasePage {
 	private static final long serialVersionUID = 1958350868666244087L;
-	
+
 	protected BootstrapBookmarkablePageLink<T> editPageLink;
-	
-	
+
 	/**
 	 * Get a stub print button that does nothing
-	 * @param pageParameters 
+	 * 
+	 * @param pageParameters
 	 * @return
 	 */
-	protected Component getPrintButton(PageParameters pageParameters) {
+	protected Component getPrintButton(final PageParameters pageParameters) {
 		return new WebMarkupContainer("printButton").setVisibilityAllowed(false);
 	}
-	
 
 	public class ActionPanel extends Panel {
 		private static final long serialVersionUID = 5821419128121941939L;
@@ -71,7 +69,7 @@ public abstract class AbstractListPage<T extends GenericPersistable> extends Bas
 		 * @param id
 		 * @param model
 		 */
-		public ActionPanel(String id, IModel<T> model) {
+		public ActionPanel(final String id, final IModel<T> model) {
 			super(id, model);
 
 			final PageParameters pageParameters = new PageParameters();
@@ -82,22 +80,24 @@ public abstract class AbstractListPage<T extends GenericPersistable> extends Bas
 				pageParameters.set(WebConstants.PARAM_ID, entity.getId());
 			}
 
-			BootstrapBookmarkablePageLink<T> editPageLink = new BootstrapBookmarkablePageLink<>("edit", editPageClass, pageParameters, Buttons.Type.Info);
-			editPageLink.setIconType(FontAwesomeIconType.edit).setSize(Size.Small).setLabel(new StringResourceModel("edit", AbstractListPage.this, null));
+			BootstrapBookmarkablePageLink<T> editPageLink = new BootstrapBookmarkablePageLink<>("edit", editPageClass,
+					pageParameters, Buttons.Type.Info);
+			editPageLink.setIconType(FontAwesomeIconType.edit).setSize(Size.Small)
+					.setLabel(new StringResourceModel("edit", AbstractListPage.this, null));
 			add(editPageLink);
 
-        
-            add(getPrintButton(pageParameters));
-
+			add(getPrintButton(pageParameters));
 
 			PageParameters revisionsPageParameters = new PageParameters();
 			revisionsPageParameters.set(WebConstants.PARAM_ID, entity.getId());
 			revisionsPageParameters.set(WebConstants.PARAM_ENTITY_CLASS, entity.getClass().getName());
-			
-			BootstrapBookmarkablePageLink<Void> revisionsPageLink = new BootstrapBookmarkablePageLink<>("revisions", RevisionsPage.class, revisionsPageParameters, Buttons.Type.Info);
-			revisionsPageLink.setIconType(FontAwesomeIconType.clock_o).setSize(Size.Small).setLabel(new StringResourceModel("revisions", AbstractListPage.this, null));
+
+			BootstrapBookmarkablePageLink<Void> revisionsPageLink = new BootstrapBookmarkablePageLink<>("revisions",
+					RevisionsPage.class, revisionsPageParameters, Buttons.Type.Info);
+			revisionsPageLink.setIconType(FontAwesomeIconType.clock_o).setSize(Size.Small)
+					.setLabel(new StringResourceModel("revisions", AbstractListPage.this, null));
 			add(revisionsPageLink);
-			
+
 		}
 	}
 
@@ -107,18 +107,17 @@ public abstract class AbstractListPage<T extends GenericPersistable> extends Bas
 
 	protected JpaRepository<T, Long> jpaRepository;
 
-	public AbstractListPage(PageParameters parameters) {
+	public AbstractListPage(final PageParameters parameters) {
 		super(parameters);
 
 		columns = new ArrayList<>();
 		columns.add(new PropertyColumn<T, String>(new Model<>("ID"), "id"));
 	}
 
-	
-	public ActionPanel getActionPanel(String id, IModel<T> model) {
+	public ActionPanel getActionPanel(final String id, final IModel<T> model) {
 		return new ActionPanel(id, model);
 	}
-	
+
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
@@ -134,7 +133,9 @@ public abstract class AbstractListPage<T extends GenericPersistable> extends Bas
 		columns.add(new AbstractColumn<T, String>(new StringResourceModel("actionsColumn", this, null)) {
 			private static final long serialVersionUID = -7447601118569862123L;
 
-			public void populateItem(Item<ICellPopulator<T>> cellItem, String componentId, IModel<T> model) {
+			@Override
+			public void populateItem(final Item<ICellPopulator<T>> cellItem, final String componentId,
+					final IModel<T> model) {
 				cellItem.add(getActionPanel(componentId, model));
 			}
 		});
@@ -146,7 +147,8 @@ public abstract class AbstractListPage<T extends GenericPersistable> extends Bas
 		pageParameters.set(WebConstants.PARAM_ID, null);
 
 		editPageLink = new BootstrapBookmarkablePageLink<T>("new", editPageClass, pageParameters, Buttons.Type.Success);
-		editPageLink.setIconType(FontAwesomeIconType.plus_circle).setSize(Size.Large).setLabel(new StringResourceModel("new", AbstractListPage.this, null));
+		editPageLink.setIconType(FontAwesomeIconType.plus_circle).setSize(Size.Large)
+				.setLabel(new StringResourceModel("new", AbstractListPage.this, null));
 
 		add(editPageLink);
 	}

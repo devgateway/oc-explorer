@@ -26,8 +26,8 @@ import org.apache.wicket.model.IModel;
  * @author mpostelnicu {@link GenericBootstrapFormComponent} that can show and
  *         hide other components
  */
-public abstract class GenericEnablingBootstrapFormComponent<TYPE, FIELD extends FormComponent<TYPE>> extends
-		GenericBootstrapFormComponent<TYPE, FIELD> {
+public abstract class GenericEnablingBootstrapFormComponent<TYPE, FIELD extends FormComponent<TYPE>>
+		extends GenericBootstrapFormComponent<TYPE, FIELD> {
 
 	private static final long serialVersionUID = 1L;
 	private Set<Component> visibilityBoundComponents = new HashSet<Component>();
@@ -36,7 +36,7 @@ public abstract class GenericEnablingBootstrapFormComponent<TYPE, FIELD extends 
 	/**
 	 * @param id
 	 */
-	public GenericEnablingBootstrapFormComponent(String id) {
+	public GenericEnablingBootstrapFormComponent(final String id) {
 		super(id);
 	}
 
@@ -44,7 +44,7 @@ public abstract class GenericEnablingBootstrapFormComponent<TYPE, FIELD extends 
 	 * @param id
 	 * @param model
 	 */
-	public GenericEnablingBootstrapFormComponent(String id, IModel<TYPE> model) {
+	public GenericEnablingBootstrapFormComponent(final String id, final IModel<TYPE> model) {
 		super(id, model);
 	}
 
@@ -53,7 +53,8 @@ public abstract class GenericEnablingBootstrapFormComponent<TYPE, FIELD extends 
 	 * @param labelModel
 	 * @param model
 	 */
-	public GenericEnablingBootstrapFormComponent(String id, IModel<String> labelModel, IModel<TYPE> model) {
+	public GenericEnablingBootstrapFormComponent(final String id, final IModel<String> labelModel,
+			final IModel<TYPE> model) {
 		super(id, labelModel, model);
 	}
 
@@ -75,37 +76,41 @@ public abstract class GenericEnablingBootstrapFormComponent<TYPE, FIELD extends 
 	 * 
 	 * @param target
 	 */
-	protected void updateBoundComponents(AjaxRequestTarget target) {
+	protected void updateBoundComponents(final AjaxRequestTarget target) {
 		TYPE selectedValue = this.getModelObject();
-		if (selectedValue != null)
+		if (selectedValue != null) {
 			for (Component component : visibilityBoundComponents) {
 				component.setVisibilityAllowed(boundComponentsVisibilityAllowed(selectedValue));
-				if (target != null)
+				if (target != null) {
 					target.add(component);
+				}
 			}
+		}
 	}
 
-	
 	/**
 	 * Reversed of {@link #updateBoundComponents(AjaxRequestTarget)}
+	 * 
 	 * @param target
 	 */
-	protected void updateReverseBoundComponents(AjaxRequestTarget target) {
+	protected void updateReverseBoundComponents(final AjaxRequestTarget target) {
 		TYPE selectedValue = this.getModelObject();
-		if (selectedValue != null)
+		if (selectedValue != null) {
 			for (Component component : visibilityReverseBoundComponents) {
 				component.setVisibilityAllowed(!boundComponentsVisibilityAllowed(selectedValue));
-				if (target != null)
+				if (target != null) {
 					target.add(component);
+				}
 			}
+		}
 	}
-	
+
 	/**
 	 * Each time the component gets updated we also refresh the bound
 	 * components' visibility
 	 */
 	@Override
-	protected void onUpdate(AjaxRequestTarget target) {
+	protected void onUpdate(final AjaxRequestTarget target) {
 		super.onUpdate(target);
 		updateBoundComponents(target);
 		updateReverseBoundComponents(target);
@@ -132,19 +137,21 @@ public abstract class GenericEnablingBootstrapFormComponent<TYPE, FIELD extends 
 	 * @param c
 	 * @return
 	 */
-	public GenericEnablingBootstrapFormComponent<TYPE, FIELD> addBoundComponent(Component c) {
+	public GenericEnablingBootstrapFormComponent<TYPE, FIELD> addBoundComponent(final Component c) {
 		TYPE selectedValue = this.getModelObject();
 		c.setVisibilityAllowed(selectedValue == null ? false : boundComponentsVisibilityAllowed(selectedValue));
 		visibilityBoundComponents.add(c);
 		return this;
 	}
-	
+
 	/**
-	 * This is the negated version of {@link GenericEnablingBootstrapFormComponent#addBoundComponent(Component)}
+	 * This is the negated version of
+	 * {@link GenericEnablingBootstrapFormComponent#addBoundComponent(Component)}
+	 * 
 	 * @param c
 	 * @return
 	 */
-	public GenericEnablingBootstrapFormComponent<TYPE, FIELD> addReverseBoundComponent(Component c) {
+	public GenericEnablingBootstrapFormComponent<TYPE, FIELD> addReverseBoundComponent(final Component c) {
 		TYPE selectedValue = this.getModelObject();
 		c.setVisibilityAllowed(selectedValue == null ? false : !boundComponentsVisibilityAllowed(selectedValue));
 		visibilityReverseBoundComponents.add(c);

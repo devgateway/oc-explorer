@@ -43,10 +43,11 @@ public class WebInitializer implements ServletContextInitializer {
 	
 
 	@Override
-	public void onStartup(ServletContext sc) throws ServletException {
+	public void onStartup(final ServletContext sc) throws ServletException {
 
 // AUTO configured by spring boot 1.2.x and upper
-//		sc.addFilter(AbstractSecurityWebApplicationInitializer.DEFAULT_FILTER_NAME, new DelegatingFilterProxy("springSecurityFilterChain"))
+		// sc.addFilter(AbstractSecurityWebApplicationInitializer.DEFAULT_FILTER_NAME,
+		// new DelegatingFilterProxy("springSecurityFilterChain"))
 //				.addMappingForUrlPatterns(null, false, "/*");
 		
 		sc.addFilter("Spring OpenEntityManagerInViewFilter",

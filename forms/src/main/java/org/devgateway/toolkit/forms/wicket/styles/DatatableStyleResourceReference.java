@@ -11,21 +11,20 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.styles;
 
-
 import org.apache.wicket.request.resource.CssResourceReference;
 
 public class DatatableStyleResourceReference extends CssResourceReference {
 
-    /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	public static final DatatableStyleResourceReference INSTANCE = new DatatableStyleResourceReference();
 
-    /**
-     * Construct.
-     */
-    public DatatableStyleResourceReference() {
-        super(DatatableStyleResourceReference.class, "datatable.css");
-    }
+	/**
+	 * Construct.
+	 */
+	public DatatableStyleResourceReference() {
+		super(DatatableStyleResourceReference.class, "datatable.css");
+	}
 }

@@ -28,7 +28,7 @@ public class ListTestFormPage extends AbstractListPage<TestForm> {
 	@SpringBean
 	protected TestFormRepository testComponentsRepository;
 
-	public ListTestFormPage(PageParameters pageParameters) {
+	public ListTestFormPage(final PageParameters pageParameters) {
 		super(pageParameters);
 		this.jpaRepository = testComponentsRepository;
 		this.editPageClass = EditTestFormPage.class;

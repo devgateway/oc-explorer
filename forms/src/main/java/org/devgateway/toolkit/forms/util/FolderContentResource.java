@@ -42,11 +42,11 @@ public class FolderContentResource implements IResource {
 	private static final long serialVersionUID = 1L;
 	private final File rootFolder;
 
-	public FolderContentResource(File rootFolder) {
+	public FolderContentResource(final File rootFolder) {
 		this.rootFolder = rootFolder;
 	}
 
-	public void respond(Attributes attributes) {
+	public void respond(final Attributes attributes) {
 		PageParameters parameters = attributes.getParameters();
 		String fileName = parameters.get(PARAM_FILE_NAME).toString();
 

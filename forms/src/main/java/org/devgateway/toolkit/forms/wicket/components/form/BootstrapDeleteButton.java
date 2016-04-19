@@ -41,12 +41,12 @@ public abstract class BootstrapDeleteButton extends LaddaAjaxButton {
 	 * @param id
 	 * @param model
 	 */
-	public BootstrapDeleteButton(String id, IModel<String> model) {
-		super(id, model,Buttons.Type.Danger);
+	public BootstrapDeleteButton(final String id, final IModel<String> model) {
+		super(id, model, Buttons.Type.Danger);
 	}
 	
-	public BootstrapDeleteButton(String id) {
-		super(id,Buttons.Type.Danger);
+	public BootstrapDeleteButton(final String id) {
+		super(id, Buttons.Type.Danger);
 	}
 
 	@Override
@@ -65,14 +65,14 @@ public abstract class BootstrapDeleteButton extends LaddaAjaxButton {
 	}
 	
 	@Override
-	public void onEvent(IEvent<?> event) {
-        if(event.getPayload() instanceof EditingDisabledEvent) {
-        	this.setEnabled(false);
-        }
+	public void onEvent(final IEvent<?> event) {
+		if (event.getPayload() instanceof EditingDisabledEvent) {
+			this.setEnabled(false);
+		}
 	}
 	
 	@Override
-	protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+	protected void updateAjaxAttributes(final AjaxRequestAttributes attributes) {
 
 		super.updateAjaxAttributes(attributes);
 		AjaxCallListener ajaxCallListener = new AjaxCallListener();

@@ -53,9 +53,9 @@ public class TooltipLabel extends Label {
 	/**
 	 * @param id
 	 */
-	public TooltipLabel(String id,String fieldId) {
+	public TooltipLabel(final String id, final String fieldId) {
 		super(id, Model.of(""));
-		this.fieldId=fieldId;
+		this.fieldId = fieldId;
 		add(AttributeModifier.append("class", "fa fa-question-circle"));
 	}
 
@@ -83,7 +83,7 @@ public class TooltipLabel extends Label {
 		return configWithTrigger;
 	}
 
-	public void setConfigWithTrigger(TooltipConfig.OpenTrigger configWithTrigger) {
+	public void setConfigWithTrigger(final TooltipConfig.OpenTrigger configWithTrigger) {
 		this.configWithTrigger = configWithTrigger;
 	}
 
@@ -91,7 +91,7 @@ public class TooltipLabel extends Label {
 		return configWithHtml;
 	}
 
-	public void setConfigWithHtml(boolean configWithHtml) {
+	public void setConfigWithHtml(final boolean configWithHtml) {
 		this.configWithHtml = configWithHtml;
 	}
 }
