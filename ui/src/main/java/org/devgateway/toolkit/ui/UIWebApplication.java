@@ -10,12 +10,8 @@ import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
 @PropertySource("classpath:/org/devgateway/toolkit/ui/application.properties")
-public final class UIWebApplication {
+public class UIWebApplication {
 
-	private UIWebApplication() {
-		
-	}
-	
 	public static void main(final String[] args) {
 		SpringApplication.run(UIWebApplication.class, args);
 	}

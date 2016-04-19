@@ -27,11 +27,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @ComponentScan(basePackageClasses = ReportsCacheService.class)
 @Import({ DatabaseConfiguration.class })
-public final class ReportingApplication {
+public class ReportingApplication {
 
-	private ReportingApplication() {
-		
-	}
 	public static void main(final String[] args) {
 		SpringApplication.run(ReportingApplication.class, args);
 	}
