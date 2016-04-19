@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.events;
 
-
 /**
  * Event that triggers all editing fields/buttons to enabled=true
  * 

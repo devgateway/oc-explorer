@@ -22,7 +22,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.envers.Audited;
 
-
 /**
  * 
  * @author mpostelnicu
@@ -32,44 +31,47 @@ import org.hibernate.envers.Audited;
 @Audited
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Role extends GenericPersistable implements Serializable, Comparable<Role>, Labelable {
-	 
- 	/**
- 	 * 
- 	 */
- 	private static final long serialVersionUID = -6007958105920327142L;
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6007958105920327142L;
 	private String authority;
+
 	@Column(name = "authority")
 	public String getAuthority() {
 		return authority;
 	}
- 	public Role(){
- 	}
- 
-	public Role(String authority){
+
+	public Role() {
+	}
+
+	public Role(final String authority) {
 		this.authority = authority;
 	}
-	
+
 	/**
-	 * @param authority the authority to set
+	 * @param authority
+	 *            the authority to set
 	 */
-	public void setAuthority(String authority) {
+	public void setAuthority(final String authority) {
 		this.authority = authority;
- 	}
- 	
- 	@Override
-	public String toString() {
-		return authority;
- 	}
- 
-	@Override
-	public int compareTo(Role o) {
-		return this.authority.compareTo(o.getAuthority());
- 	}
+	}
 
 	@Override
-	public void setLabel(String label) {
+	public String toString() {
+		return authority;
+	}
+
+	@Override
+	public int compareTo(final Role o) {
+		return this.authority.compareTo(o.getAuthority());
+	}
+
+	@Override
+	public void setLabel(final String label) {
 		setAuthority(label);
-		
+
 	}
 
 	@Override

@@ -23,7 +23,7 @@ public class RequiredBehavior extends Behavior {
 	private static final long serialVersionUID = -2205308796433011875L;
 
 	@Override
-    public void onComponentTag(Component component, ComponentTag tag) {
+    public void onComponentTag(final Component component, final ComponentTag tag) {
         super.onComponentTag(component, tag);
         tag.put("required", "required");
     }

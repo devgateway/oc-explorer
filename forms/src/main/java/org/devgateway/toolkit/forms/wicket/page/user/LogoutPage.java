@@ -37,9 +37,10 @@ public class LogoutPage extends RedirectPage {
 	public LogoutPage() {
 		super("/logout");
 
-		if (rememberMeServices != null)
+		if (rememberMeServices != null) {
 			rememberMeServices.loginFail((HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest(),
 					(HttpServletResponse) RequestCycle.get().getResponse().getContainerResponse());
+		}
 
 	}
 }

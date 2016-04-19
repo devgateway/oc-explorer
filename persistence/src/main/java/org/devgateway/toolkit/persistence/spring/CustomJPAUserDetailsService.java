@@ -42,14 +42,14 @@ public class CustomJPAUserDetailsService implements UserDetailsService {
 	/**
 	 * Returns a populated {@link UserDetails} object. The username is first
 	 * retrieved from the database and then mapped to a {@link UserDetails}
-	 * object. We are currently using the {@link User} implementation from Spring
+	 * object. We are currently using the {@link User} implementation from
+	 * Spring
 	 */
 	@Override
-	public Person loadUserByUsername(String username)
-			throws UsernameNotFoundException {
+	public Person loadUserByUsername(final String username) throws UsernameNotFoundException {
 		try {
 			Person domainUser = personRepository.findByUsername(username);
-			
+
 			Set<GrantedAuthority> grantedAuthorities = getGrantedAuthorities(domainUser);
 			domainUser.setAuthorities(grantedAuthorities);
 			return domainUser;
@@ -61,23 +61,22 @@ public class CustomJPAUserDetailsService implements UserDetailsService {
 
 	/**
 	 * Reads {@link PersistedAuthority} objects from the
-	 * {@link org.devgateway.eudevfin.auth.common.domain.PersistedUser#getPersistedAuthorities()} and also from the
-	 * {@link PersistedUserGroup#getPersistedAuthorities()} (only if the {@link User} belongs to only one
-	 * {@link PersistedUserGroup}) and converts all {@link PersistedAuthority} objects to
-	 * {@link GrantedAuthority}. 
+	 * {@link org.devgateway.eudevfin.auth.common.domain.PersistedUser#getPersistedAuthorities()}
+	 * and also from the {@link PersistedUserGroup#getPersistedAuthorities()}
+	 * (only if the {@link User} belongs to only one {@link PersistedUserGroup})
+	 * and converts all {@link PersistedAuthority} objects to
+	 * {@link GrantedAuthority}.
 	 * 
 	 * @param domainUser
 	 * @return a {@link Set} containing the {@link GrantedAuthority}S
 	 */
-	public static Set<GrantedAuthority> getGrantedAuthorities(
-			Person domainUser) {
+	public static Set<GrantedAuthority> getGrantedAuthorities(final Person domainUser) {
 
 		Set<GrantedAuthority> grantedAuth = new HashSet<GrantedAuthority>();
 
 		// get user authorities
 		for (Role authority : domainUser.getRoles()) {
-			grantedAuth
-					.add(new SimpleGrantedAuthority(authority.getAuthority()));
+			grantedAuth.add(new SimpleGrantedAuthority(authority.getAuthority()));
 		}
 
 		return grantedAuth;

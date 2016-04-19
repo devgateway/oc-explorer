@@ -39,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	protected CustomJPAUserDetailsService customJPAUserDetailsService;
-	
+
 	@Bean
 	public HttpSessionSecurityContextRepository httpSessionSecurityContextRepository() {
 		return new HttpSessionSecurityContextRepository();
@@ -54,7 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Override
-	protected void configure(HttpSecurity http) throws Exception {
+	protected void configure(final HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/", "/home").permitAll().antMatchers("/dummy").authenticated()
 				.anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll().and().logout()
 				.permitAll().and().sessionManagement().and().csrf().disable();
@@ -62,7 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+	public void configureGlobal(final AuthenticationManagerBuilder auth) throws Exception {
 		// we use standard password encoder for all passwords
 		StandardPasswordEncoder spe = new StandardPasswordEncoder();
 		auth.userDetailsService(customJPAUserDetailsService).passwordEncoder(spe);

@@ -39,9 +39,12 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @PropertySource("classpath:/org/devgateway/toolkit/persistence/mongo/application.properties")
 @EnableMongoRepositories(basePackageClasses = ReleaseRepository.class)
 @EnableMongoAuditing
-public class MongoPersistenceApplication {
+public final class MongoPersistenceApplication {
 
-	public static void main(String[] args) {
+	private MongoPersistenceApplication() {		
+	}
+
+	public static void main(final String[] args) {
 		SpringApplication.run(MongoPersistenceApplication.class, args);
 	}
 

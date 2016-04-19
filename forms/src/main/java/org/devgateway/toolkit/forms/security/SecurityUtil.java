@@ -19,7 +19,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public final class SecurityUtil {
-
+	
+	private SecurityUtil() {
+		
+	}
+	
 	/**
 	 * returns the principal object. In our case the principal should be
 	 * {@link Person}
@@ -28,15 +32,18 @@ public final class SecurityUtil {
 	 * @see Principal
 	 */
 	public static Person getCurrentAuthenticatedPerson() {
-		if (SecurityContextHolder.getContext().getAuthentication() == null)
+		if (SecurityContextHolder.getContext().getAuthentication() == null) {
 			return null;
+		}
 		Authentication authentication = SecurityContextHolder.getContext()
 				.getAuthentication();
-		if (authentication == null)
+		if (authentication == null) {
 			return null;
+		}
 		final Object principal = authentication.getPrincipal();
-		if (principal instanceof Person)
+		if (principal instanceof Person) {
 			return (Person) principal;
+		}
 		return null;
 	}
 
@@ -45,9 +52,10 @@ public final class SecurityUtil {
 	 * @param p
 	 * @return
 	 */
-	public static boolean isUserAdmin(Person p) {
-		if (p == null || p.getRoles() == null)
+	public static boolean isUserAdmin(final Person p) {
+		if (p == null || p.getRoles() == null) {
 			return false;
+		}
 		for (Role r : p.getRoles()) {
 			if (r.getAuthority().equalsIgnoreCase(
 					SecurityConstants.Roles.ROLE_ADMIN)) {

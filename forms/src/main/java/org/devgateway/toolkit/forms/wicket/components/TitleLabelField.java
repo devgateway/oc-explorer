@@ -21,13 +21,15 @@ import org.apache.wicket.model.IModel;
  * FieldPanel that displays only a Label - is used to display a simple title in the Header of the ListSectionPanel
  */
 public class TitleLabelField<T> extends FieldPanel<T> {
-    private Label title;
 
-    public TitleLabelField(String id) {
+	private static final long serialVersionUID = 1L;
+	private Label title;
+
+    public TitleLabelField(final String id) {
         this(id, null);
     }
 
-    public TitleLabelField(String id, IModel<T> model) {
+    public TitleLabelField(final String id, final IModel<T> model) {
         super(id);
 
         title = new Label("title", model);
@@ -38,7 +40,7 @@ public class TitleLabelField<T> extends FieldPanel<T> {
         return title;
     }
 
-    public void setTitle(Label title) {
+    public void setTitle(final Label title) {
         this.title = title;
     }
 }

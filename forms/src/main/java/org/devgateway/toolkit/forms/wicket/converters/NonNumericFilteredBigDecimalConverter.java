@@ -30,17 +30,19 @@ import org.apache.wicket.util.convert.converter.BigDecimalConverter;
  *         the textfield loses focus it will refresh to show '123,456' (the
  *         comma is the decimal separator applied by
  *         {@link BigDecimalConverter#convertToString(BigDecimal, Locale)} but
- *         that is done only after the {@link BigDecimal} was read by convertInput()
+ *         that is done only after the {@link BigDecimal} was read by
+ *         convertInput()
  */
 public class NonNumericFilteredBigDecimalConverter extends BigDecimalConverter {
 
 	private static final long serialVersionUID = 1L;
 
-
 	@Override
-	public BigDecimal convertToObject(String value, Locale locale) {
-		if (value != null)
-			value = value.replaceAll("[^\\d\\.]", "");
-		return super.convertToObject(value, locale);
+	public BigDecimal convertToObject(final String value, final Locale locale) {
+		String newValue = value;
+		if (newValue != null) {
+			newValue = newValue.replaceAll("[^\\d\\.]", "");
+		}
+		return super.convertToObject(newValue, locale);
 	}
 }

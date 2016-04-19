@@ -75,8 +75,11 @@ public class DateFieldBootstrapFormComponent extends GenericBootstrapFormCompone
 		return "change";
 	}
 
-	/* (non-Javadoc)
-	 * @see org.devgateway.toolkit.forms.wicket.components.form.GenericBootstrapFormComponent#onConfigure()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.devgateway.toolkit.forms.wicket.components.form.
+	 * GenericBootstrapFormComponent#onConfigure()
 	 */
 	@Override
 	protected void onInitialize() {

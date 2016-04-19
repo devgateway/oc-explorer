@@ -98,7 +98,8 @@ public abstract class BasePage extends GenericWebPage<Void> {
     /**
      * Construct.
      *
-     * @param parameters current page parameters
+	 * @param parameters
+	 *            current page parameters
      */
     public BasePage(final PageParameters parameters) {
         super(parameters);
@@ -133,16 +134,18 @@ public abstract class BasePage extends GenericWebPage<Void> {
     /**
      * creates a new {@link Navbar} instance
      *
-     * @param markupId The components markup id.
+	 * @param markupId
+	 *            The components markup id.
      * @return a new {@link Navbar} instance
      */
-    protected Navbar newNavbar(String markupId) {
+	protected Navbar newNavbar(final String markupId) {
 
     	PageParameters pageParametersForAccountPage = new PageParameters();
         Navbar navbar = new Navbar(markupId);
 
         // logout menu
-        NavbarButton<LogoutPage> logoutMenu = new NavbarButton<LogoutPage>(LogoutPage.class,new StringResourceModel("navbar.logout", this, null));
+		NavbarButton<LogoutPage> logoutMenu = new NavbarButton<LogoutPage>(LogoutPage.class,
+				new StringResourceModel("navbar.logout", this, null));
         logoutMenu.setIconType(GlyphIconType.logout);
         MetaDataRoleAuthorizationStrategy.authorize(logoutMenu, Component.RENDER, SecurityConstants.Roles.ROLE_EDITOR);
 
@@ -157,12 +160,14 @@ public abstract class BasePage extends GenericWebPage<Void> {
             account = Model.of(person.getFirstName());
         }
 
-        NavbarButton<EditUserPage> accountMenu = new NavbarButton<>(EditUserPage.class, pageParametersForAccountPage, account);
+		NavbarButton<EditUserPage> accountMenu = new NavbarButton<>(EditUserPage.class, pageParametersForAccountPage,
+				account);
         accountMenu.setIconType(GlyphIconType.user);
         MetaDataRoleAuthorizationStrategy.authorize(accountMenu, Component.RENDER, SecurityConstants.Roles.ROLE_EDITOR);
 
         //home
-        NavbarButton<Homepage> homeMenu = new NavbarButton<>(Homepage.class, pageParametersForAccountPage, Model.of("Home"));
+		NavbarButton<Homepage> homeMenu = new NavbarButton<>(Homepage.class, pageParametersForAccountPage,
+				Model.of("Home"));
         homeMenu.setIconType(GlyphIconType.home);
         MetaDataRoleAuthorizationStrategy.authorize(homeMenu, Component.RENDER, SecurityConstants.Roles.ROLE_EDITOR);
 
@@ -172,11 +177,10 @@ public abstract class BasePage extends GenericWebPage<Void> {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected List<AbstractLink> newSubMenuButtons(String arg0) {
+			protected List<AbstractLink> newSubMenuButtons(final String arg0) {
 				List<AbstractLink> list = new ArrayList<>();
 				list.add(new MenuBookmarkablePageLink<ListGroupPage>(ListGroupPage.class, null,
-						new StringResourceModel("navbar.groups", this, null))
-								.setIconType(FontAwesomeIconType.tags));
+						new StringResourceModel("navbar.groups", this, null)).setIconType(FontAwesomeIconType.tags));
 				
 //				list.add(new MenuBookmarkablePageLink<ListTestFormPage>(ListTestFormPage.class, null,
 //						new StringResourceModel("navbar.testcomponents", this, null))
@@ -215,12 +219,11 @@ public abstract class BasePage extends GenericWebPage<Void> {
 //				list.add(halBrowserLink);
 				
 				MenuBookmarkablePageLink<UIRedirectPage> uiBrowserLink = new MenuBookmarkablePageLink<UIRedirectPage>(
-						UIRedirectPage.class, null, new StringResourceModel(
-								"navbar.ui", this, null)) {
+						UIRedirectPage.class, null, new StringResourceModel("navbar.ui", this, null)) {
 									private static final long serialVersionUID = 1L;
 
 									@Override 
-						            protected void onComponentTag(ComponentTag tag) { 
+					protected void onComponentTag(final ComponentTag tag) {
 						                super.onComponentTag(tag); 
 						                tag.put("target", "_blank"); 
 						            } 
@@ -237,7 +240,8 @@ public abstract class BasePage extends GenericWebPage<Void> {
         adminMenu.setIconType(GlyphIconType.cog);
         MetaDataRoleAuthorizationStrategy.authorize(adminMenu, Component.RENDER, SecurityConstants.Roles.ROLE_ADMIN);
         
-        navbar.addComponents(NavbarComponents.transform(Navbar.ComponentPosition.RIGHT,homeMenu,adminMenu,accountMenu,logoutMenu));
+		navbar.addComponents(NavbarComponents.transform(Navbar.ComponentPosition.RIGHT, homeMenu, adminMenu,
+				accountMenu, logoutMenu));
 
         
         return navbar;
@@ -247,7 +251,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
    
     @Override
-    public void renderHead(IHeaderResponse response) {
+	public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
 
         //response.render(CssHeaderItem.forReference(MainCss.INSTANCE));
@@ -258,7 +262,8 @@ public abstract class BasePage extends GenericWebPage<Void> {
         response.render(CssHeaderItem.forReference(FontAwesomeCssReference.instance()));
        
             response.render(JavaScriptHeaderItem.forReference(JQueryResourceReference.get()));
-//            response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(MainCss.class,
+		// response.render(JavaScriptHeaderItem.forReference(new
+		// JavaScriptResourceReference(MainCss.class,
 //                    "/assets/js/fileupload.js")));
        
     }

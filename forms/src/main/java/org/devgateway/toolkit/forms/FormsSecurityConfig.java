@@ -45,7 +45,7 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 	 * resources
 	 */
 	@Override
-	public void configure(WebSecurity web) throws Exception {
+	public void configure(final WebSecurity web) throws Exception {
 		super.configure(web);
 		web.ignoring().antMatchers("/ui/**","/api/tenderPriceByOcdsTypeYear/**", "/api/tenderPriceByVnTypeYear/**",
 				"/api/tenderBidPeriodPercentiles/**","/api/ocds/release/budgetProjectId/**",
@@ -97,12 +97,13 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 	}
 
 	@Override
-	protected void configure(HttpSecurity http) throws Exception {
+	protected void configure(final HttpSecurity http) throws Exception {
 		super.configure(http);
 
-		http.anonymous().disable(). // we do not allow anyonymous token. When
-									// enabled this basically means any guest
-									// user will have an annoymous default role
+		 // we do not allow anyonymous token. When
+		// enabled this basically means any guest
+		// user will have an annoymous default role
+		http.anonymous().disable().
 				sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER).
 				//we let Wicket create and manage sessions, so we disable
 				//session creation by spring
