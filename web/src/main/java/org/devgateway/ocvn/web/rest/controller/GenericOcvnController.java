@@ -39,20 +39,25 @@ import com.mongodb.DBObject;
  *
  */
 public class GenericOcvnController {
-	
-	protected Map<String,Object> filterProjectMap;
+
+	private static final int LAST_DAY = 31;
+
+	private static final int LAST_MONTH_ZERO = 11;
+
+	protected Map<String, Object> filterProjectMap;
 
 	protected final Logger logger = LoggerFactory.getLogger(GenericOcvnController.class);
-	
+
 	@Autowired
 	protected MongoTemplate mongoTemplate;
-	
+
 	/**
 	 * Gets the date of the first day of the year (01.01.year)
+	 * 
 	 * @param year
 	 * @return
 	 */
-	protected Date getStartDate(int year) {
+	protected Date getStartDate(final int year) {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, year);
 		cal.set(Calendar.DAY_OF_YEAR, 1);
@@ -62,44 +67,50 @@ public class GenericOcvnController {
 
 	/**
 	 * Gets the date of the last date of the year (31.12.year)
+	 * 
 	 * @param year
 	 * @return
 	 */
-	protected Date getEndDate(int year) {
+	protected Date getEndDate(final int year) {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, year);
-		cal.set(Calendar.MONTH, 11);
-		cal.set(Calendar.DAY_OF_MONTH, 31);
+		cal.set(Calendar.MONTH, LAST_MONTH_ZERO);
+		cal.set(Calendar.DAY_OF_MONTH, LAST_DAY);
 		Date end = cal.getTime();
 		return end;
 	}
 
 	/**
-	 * Appends the procuring bid type id for this filter, this will fitler based on tender.items.classification._id
+	 * Appends the procuring bid type id for this filter, this will fitler based
+	 * on tender.items.classification._id
+	 * 
 	 * @param filter
 	 * @return the {@link Criteria} for this filter
 	 */
-	protected Criteria getBidTypeIdFilterCriteria(DefaultFilterPagingRequest filter) {
+	protected Criteria getBidTypeIdFilterCriteria(final DefaultFilterPagingRequest filter) {
 		return createFilterCriteria("tender.items.classification._id", filter.getBidTypeId(), filter);
 	}
-	
-	private Criteria createFilterCriteria(String filterName, List<String> filterValues,
-			DefaultFilterPagingRequest filter) {
-		if (filterValues == null)
+
+	private Criteria createFilterCriteria(final String filterName, final List<String> filterValues,
+			final DefaultFilterPagingRequest filter) {
+		if (filterValues == null) {
 			return new Criteria();
+		}
 		return filter.getInvert() ? where(filterName).not().in(filterValues.toArray())
 				: where(filterName).in(filterValues.toArray());
 	}
 
 	/**
-	 * Appends the procuring entity id for this filter, this will fitler based on tender.procuringEntity._id
+	 * Appends the procuring entity id for this filter, this will fitler based
+	 * on tender.procuringEntity._id
+	 * 
 	 * @param filter
 	 * @return the {@link Criteria} for this filter
 	 */
-	protected Criteria getProcuringEntityIdCriteria(DefaultFilterPagingRequest filter) {
-	 		return createFilterCriteria("tender.procuringEntity._id", filter.getProcuringEntityId(), filter);
+	protected Criteria getProcuringEntityIdCriteria(final DefaultFilterPagingRequest filter) {
+		return createFilterCriteria("tender.procuringEntity._id", filter.getProcuringEntityId(), filter);
 	}
-	
+
 	@PostConstruct
 	protected void init() {
 		filterProjectMap = new ConcurrentHashMap<>();
@@ -107,9 +118,8 @@ public class GenericOcvnController {
 		filterProjectMap.put("tender.items.classification", 1);
 		filterProjectMap.put("tender.procurementMethodDetails", 1);
 	}
-	
-	
-	protected Criteria getYearFilterCriteria(String dateProperty,YearFilterPagingRequest filter) {
+
+	protected Criteria getYearFilterCriteria(final String dateProperty, final YearFilterPagingRequest filter) {
 		Criteria[] yearCriteria = null;
 		Criteria criteria = new Criteria();
 
@@ -118,69 +128,76 @@ public class GenericOcvnController {
 			yearCriteria[0] = new Criteria();
 		} else {
 			yearCriteria = new Criteria[filter.getYear().size()];
-			for (int i = 0; i < filter.getYear().size(); i++)
+			for (int i = 0; i < filter.getYear().size(); i++) {
 				yearCriteria[i] = where(dateProperty).gte(getStartDate(filter.getYear().get(i)))
 						.lte(getEndDate(filter.getYear().get(i)));
+			}
 		}
-		
+
 		return filter.getInvert() ? criteria.norOperator(yearCriteria) : criteria.orOperator(yearCriteria);
 	}
-	
+
 	/**
-	 * Appends the bid selection method to the filter, this will filter based on tender.procurementMethodDetails.
-	 * It accepts multiple elements
+	 * Appends the bid selection method to the filter, this will filter based on
+	 * tender.procurementMethodDetails. It accepts multiple elements
+	 * 
 	 * @param filter
 	 * @return the {@link Criteria} for this filter
 	 */
-	protected Criteria getBidSelectionMethod(DefaultFilterPagingRequest filter) {
+	protected Criteria getBidSelectionMethod(final DefaultFilterPagingRequest filter) {
 		return createFilterCriteria("tender.procurementMethodDetails", filter.getBidSelectionMethod(), filter);
 	}
-	
-	protected Criteria getDefaultFilterCriteria(DefaultFilterPagingRequest filter) {
-		return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter),
-				getProcuringEntityIdCriteria(filter), getBidSelectionMethod(filter));
+
+	protected Criteria getDefaultFilterCriteria(final DefaultFilterPagingRequest filter) {
+		return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
+				getBidSelectionMethod(filter));
 	}
-	
-	protected MatchOperation getMatchDefaultFilterOperation(DefaultFilterPagingRequest filter) {
+
+	protected MatchOperation getMatchDefaultFilterOperation(final DefaultFilterPagingRequest filter) {
 		return match(getDefaultFilterCriteria(filter));
 	}
 
 	/**
-	 * Creates a groupby expression that takes into account the filter. It will only use one of the filter options as groupby and ignores the rest.
+	 * Creates a groupby expression that takes into account the filter. It will
+	 * only use one of the filter options as groupby and ignores the rest.
+	 * 
 	 * @param filter
 	 * @param existingGroupBy
 	 * @return
 	 */
-	protected GroupOperation getTopXFilterOperation(GroupingFilterPagingRequest filter, String... existingGroupBy) {
+	protected GroupOperation getTopXFilterOperation(final GroupingFilterPagingRequest filter,
+			final String... existingGroupBy) {
 		List<String> groupBy = new ArrayList<>();
-		if (filter.getGroupByCategory() == null)
+		if (filter.getGroupByCategory() == null) {
 			groupBy.addAll(Arrays.asList(existingGroupBy));
+		}
 
-		if(filter.getGroupByCategory()!=null) 
+		if (filter.getGroupByCategory() != null) {
 			groupBy.add(getGroupByCategory(filter));
-		
+		}
+
 		return group(groupBy.toArray(new String[0]));
 	}
-	
+
 	@Deprecated
-	protected AggregationOperation getTopXFilterOperation(GroupingFilterPagingRequest filter, DBObject group) {
+	protected AggregationOperation getTopXFilterOperation(final GroupingFilterPagingRequest filter,
+			final DBObject group) {
 		if (filter.getGroupByCategory() != null) {
 			group.removeField(Fields.UNDERSCORE_ID);
-			group.put(Fields.UNDERSCORE_ID, "$"+getGroupByCategory(filter));
+			group.put(Fields.UNDERSCORE_ID, "$" + getGroupByCategory(filter));
 		}
 		return new CustomOperation(new BasicDBObject("$group", group));
 	}
-	
-	private String getGroupByCategory(GroupingFilterPagingRequest filter) {
-		if ("bidSelectionMethod".equals(filter.getGroupByCategory()))
+
+	private String getGroupByCategory(final GroupingFilterPagingRequest filter) {
+		if ("bidSelectionMethod".equals(filter.getGroupByCategory())) {
 			return "tender.procurementMethodDetails";
-		else if ("bidTypeId".equals(filter.getGroupByCategory()))
+		} else if ("bidTypeId".equals(filter.getGroupByCategory())) {
 			return "tender.items.classification._id";
-		else if ("procuringEntityId".equals(filter.getGroupByCategory()))
+		} else if ("procuringEntityId".equals(filter.getGroupByCategory())) {
 			return "tender.procuringEntity._id";
+		}
 		return null;
 	}
-	
 
-		
 }

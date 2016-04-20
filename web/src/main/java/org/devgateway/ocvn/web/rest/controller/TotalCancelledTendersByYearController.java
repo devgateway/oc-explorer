@@ -41,9 +41,8 @@ import com.mongodb.DBObject;
 @RestController
 public class TotalCancelledTendersByYearController extends GenericOcvnController {
 
-
 	@RequestMapping("/api/totalCancelledTendersByYear")
-	public List<DBObject> totalCancelledTendersByYear(@Valid DefaultFilterPagingRequest filter) {
+	public List<DBObject> totalCancelledTendersByYear(@Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject year = new BasicDBObject("$year", "$tender.tenderPeriod.startDate");
 
@@ -52,10 +51,8 @@ public class TotalCancelledTendersByYearController extends GenericOcvnController
 		project.put("year", year);
 		project.put("tender.value.amount", 1);
 
-		Aggregation agg = newAggregation(
-				match(where("tender.status").is("cancelled")),
-				getMatchDefaultFilterOperation(filter),		
-				new CustomOperation(new BasicDBObject("$project", project)),
+		Aggregation agg = newAggregation(match(where("tender.status").is("cancelled")),
+				getMatchDefaultFilterOperation(filter), new CustomOperation(new BasicDBObject("$project", project)),
 				group("$year").sum("$tender.value.amount").as("totalCancelledTendersAmount"),
 				sort(Direction.ASC, Fields.UNDERSCORE_ID));
 
@@ -63,7 +60,5 @@ public class TotalCancelledTendersByYearController extends GenericOcvnController
 		List<DBObject> list = results.getMappedResults();
 		return list;
 	}
-
-
 
 }

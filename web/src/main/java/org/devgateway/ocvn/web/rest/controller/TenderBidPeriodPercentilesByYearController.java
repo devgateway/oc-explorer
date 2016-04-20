@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TenderBidPeriodPercentilesByYearController extends GenericOcvnController {
 
 	@RequestMapping("/api/tenderBidPeriodPercentiles")
-	public Object tenderBidPeriodPercentiles(@Valid YearFilterPagingRequest filter) {
+	public Object tenderBidPeriodPercentiles(@Valid final YearFilterPagingRequest filter) {
 
 		ScriptOperations scriptOps = mongoTemplate.scriptOps();
 

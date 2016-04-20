@@ -13,8 +13,8 @@ import cz.jirutka.validator.collection.constraints.EachRange;
  */
 public class YearFilterPagingRequest extends DefaultFilterPagingRequest {
 
-	@EachRange(min = 1900, max = 2200)
-	List<Integer> year;
+	@EachRange(min = MIN_REQ_YEAR, max = MAX_REQ_YEAR)
+	protected List<Integer> year;
 
 	/**
 	 * 
@@ -27,7 +27,7 @@ public class YearFilterPagingRequest extends DefaultFilterPagingRequest {
 		return year;
 	}
 
-	public void setYear(List<Integer> year) {
+	public void setYear(final List<Integer> year) {
 		this.year = year;
 	}
 

@@ -8,21 +8,18 @@ import java.util.List;
 import cz.jirutka.validator.collection.constraints.EachPattern;
 
 /**
- * @author mihai
- * Filtering bean applied to all endpoints
+ * @author mihai Filtering bean applied to all endpoints
  */
 public class DefaultFilterPagingRequest extends GenericPagingRequest {
-
-
 
 	@EachPattern(regexp = "^[a-zA-Z0-9]*$")
 	List<String> bidTypeId;
 
 	@EachPattern(regexp = "^[a-zA-Z0-9]*$")
 	List<String> procuringEntityId;
-	
+
 	List<String> bidSelectionMethod;
-	
+
 	/**
 	 * This parameter will invert (negate) all existing filtering parameters. So
 	 * A IN B turns into A NOT IN B. A IN B AND AN IN C turns into A NOT IN B
@@ -31,19 +28,17 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 	 * actually dont use multiple parameters anywhere, so it should not matter
 	 * now
 	 */
-	Boolean invert=false;
-	
+	Boolean invert = false;
 
 	public DefaultFilterPagingRequest() {
 		super();
 	}
 
-
 	public List<String> getBidTypeId() {
 		return bidTypeId;
 	}
 
-	public void setBidTypeId(List<String> bidTypeId) {
+	public void setBidTypeId(final List<String> bidTypeId) {
 		this.bidTypeId = bidTypeId;
 	}
 
@@ -51,7 +46,7 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 		return procuringEntityId;
 	}
 
-	public void setProcuringEntityId(List<String> procuringEntityId) {
+	public void setProcuringEntityId(final List<String> procuringEntityId) {
 		this.procuringEntityId = procuringEntityId;
 	}
 
@@ -59,17 +54,15 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 		return bidSelectionMethod;
 	}
 
-	public void setBidSelectionMethod(List<String> bidSelectionMethod) {
+	public void setBidSelectionMethod(final List<String> bidSelectionMethod) {
 		this.bidSelectionMethod = bidSelectionMethod;
 	}
-
 
 	public Boolean getInvert() {
 		return invert;
 	}
 
-
-	public void setInvert(Boolean invert) {
+	public void setInvert(final Boolean invert) {
 		this.invert = invert;
 	}
 

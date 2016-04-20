@@ -29,14 +29,14 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class BidTypesSearchController extends GenericOcvnController {
-	
+
 	@Autowired
 	ClassificationRepository classificationRepository;
-	
+
 	@RequestMapping("/api/ocds/bidType/all")
 	public List<Classification> bidTypes() {
 
-		return classificationRepository.findAll(new Sort(Direction.ASC,"description"));
+		return classificationRepository.findAll(new Sort(Direction.ASC, "description"));
 
 	}
 

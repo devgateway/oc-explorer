@@ -49,6 +49,10 @@ import com.google.common.io.Files;
 @Transactional
 public class VNImportService {
 
+	private static final int MS_IN_SECOND = 1000;
+
+	private static final int LOG_IMPORT_EVERY = 10000;
+
 	@Autowired
 	private ReleaseRepository releaseRepository;
 
@@ -79,7 +83,8 @@ public class VNImportService {
 	// getClass().getResource("/UM_PUBINSTITU_SUPPLIERS_DQA.xlsx");
 	// URL locationFile = getClass().getResource("/Location_Table_SO.xlsx");
 
-	private void importSheet(final URL fileUrl, final String sheetName, final RowImporter<?, ?> importer) throws Exception {
+	private void importSheet(final URL fileUrl, final String sheetName, final RowImporter<?, ?> importer)
+			throws Exception {
 		importSheet(fileUrl, sheetName, importer, DBConstants.IMPORT_ROW_BATCH);
 	}
 
@@ -106,7 +111,8 @@ public class VNImportService {
 		msgBuffer.append(message).append("\r\n");
 	}
 
-	private void importSheet(final URL fileUrl, final String sheetName, final RowImporter<?, ?> importer, final int importRowBatch) {
+	private void importSheet(final URL fileUrl, final String sheetName, final RowImporter<?, ?> importer,
+			final int importRowBatch) {
 		logMessage("<b>Importing " + sheetName + " using " + importer.getClass().getSimpleName() + "</b>");
 
 		XExcelFileReader reader = null;
@@ -119,8 +125,8 @@ public class VNImportService {
 			while (!(rows = reader.readRows(importRowBatch)).isEmpty()) {
 				importer.importRows(rows);
 				rowNo += importRowBatch;
-				if (rowNo % 10000 == 0) {
-					logMessage("Import Speed " + rowNo * 1000 / (System.currentTimeMillis() - startTime)
+				if (rowNo % LOG_IMPORT_EVERY == 0) {
+					logMessage("Import Speed " + rowNo * MS_IN_SECOND / (System.currentTimeMillis() - startTime)
 							+ " rows per second.");
 				}
 			}

@@ -15,8 +15,8 @@ public class GroupingFilterPagingRequest extends DefaultFilterPagingRequest {
 		return groupByCategory;
 	}
 
-	public void setGroupByCategory(String groupByCategory) {
+	public void setGroupByCategory(final String groupByCategory) {
 		this.groupByCategory = groupByCategory;
 	}
-	
+
 }

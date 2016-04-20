@@ -44,25 +44,21 @@ import com.mongodb.DBObject;
 @RestController
 public class CostEffectivenessVisualsController extends GenericOcvnController {
 
-
 	@RequestMapping("/api/costEffectivenessAwardAmount")
-	public List<DBObject> costEffectivenessAwardAmount(@Valid DefaultFilterPagingRequest filter) {
+	public List<DBObject> costEffectivenessAwardAmount(@Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
 		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.endDate"));
 		project.put("awards.value.amount", 1);
-		
+
 		Aggregation agg = newAggregation(
 				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),
-						getMatchDefaultFilterOperation(filter)
-						,unwind("$awards"), match(where("awards.status").is("active").and("awards.value").exists(true)),
-						new CustomProjectionOperation(project),
-						group("$year").sum("$awards.value.amount").as("totalAwardAmount"),
-				sort(Direction.DESC,"totalAwardAmount"),
-				skip(filter.getSkip()),
-				limit(filter.getPageSize())
-				);
-		
+				getMatchDefaultFilterOperation(filter), unwind("$awards"),
+				match(where("awards.status").is("active").and("awards.value").exists(true)),
+				new CustomProjectionOperation(project),
+				group("$year").sum("$awards.value.amount").as("totalAwardAmount"),
+				sort(Direction.DESC, "totalAwardAmount"), skip(filter.getSkip()), limit(filter.getPageSize()));
+
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();
 		return tagCount;
@@ -70,22 +66,18 @@ public class CostEffectivenessVisualsController extends GenericOcvnController {
 	}
 
 	@RequestMapping("/api/costEffectivenessTenderAmount")
-	public List<DBObject> costEffectivenessTenderAmount(@Valid GroupingFilterPagingRequest filter) {
+	public List<DBObject> costEffectivenessTenderAmount(@Valid final GroupingFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
 		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.endDate"));
-		project.put("tender.value.amount", 1);		
-		project.putAll(filterProjectMap);		
-		
+		project.put("tender.value.amount", 1);
+		project.putAll(filterProjectMap);
+
 		Aggregation agg = newAggregation(
-				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),				
-				getMatchDefaultFilterOperation(filter),
-				new CustomProjectionOperation(project),
-				getTopXFilterOperation(filter,"$year").sum("$tender.value.amount").as("totalTenderAmount"),
-				sort(Direction.DESC,"totalTenderAmount"),
-				skip(filter.getSkip()),
-				limit(filter.getPageSize())
-				);
+				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),
+				getMatchDefaultFilterOperation(filter), new CustomProjectionOperation(project),
+				getTopXFilterOperation(filter, "$year").sum("$tender.value.amount").as("totalTenderAmount"),
+				sort(Direction.DESC, "totalTenderAmount"), skip(filter.getSkip()), limit(filter.getPageSize()));
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();

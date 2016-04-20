@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 public class GeoJsonPointSerializer extends JsonSerializer<GeoJsonPoint> {
 
 	@Override
-	public void serialize(GeoJsonPoint value, JsonGenerator gen, SerializerProvider serializers)
+	public void serialize(final GeoJsonPoint value, final JsonGenerator gen, final SerializerProvider serializers)
 			throws IOException, JsonProcessingException {
 		gen.writeStartObject();
 		gen.writeStringField("type", value.getType());

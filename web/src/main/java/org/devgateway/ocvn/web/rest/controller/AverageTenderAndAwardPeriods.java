@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.devgateway.ocvn.web.rest.controller;
 
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
@@ -45,9 +45,10 @@ import com.mongodb.DBObject;
 @RestController
 public class AverageTenderAndAwardPeriods extends GenericOcvnController {
 
+	private static final int DAY_MS = 86400000;
 
 	@RequestMapping("/api/averageTenderPeriod")
-	public List<DBObject> averageTenderPeriod(@Valid DefaultFilterPagingRequest filter) {
+	public List<DBObject> averageTenderPeriod(@Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject year = new BasicDBObject("$year", "$tender.tenderPeriod.startDate");
 
@@ -55,37 +56,31 @@ public class AverageTenderAndAwardPeriods extends GenericOcvnController {
 				Arrays.asList(
 						new BasicDBObject("$subtract",
 								Arrays.asList("$tender.tenderPeriod.endDate", "$tender.tenderPeriod.startDate")),
-						86400000));
+						DAY_MS));
 
 		DBObject project = new BasicDBObject();
 		project.put(Fields.UNDERSCORE_ID, 0);
 		project.put("year", year);
 		project.put("tenderLengthDays", tenderLengthDays);
-		
+
 		Aggregation agg = newAggregation(
 				match(where("tender.tenderPeriod.startDate").exists(true).and("tender.tenderPeriod.endDate")
 						.exists(true).andOperator(getDefaultFilterCriteria(filter))),
 				new CustomOperation(new BasicDBObject("$project", project)),
 				group("$year").avg("$tenderLengthDays").as("averageTenderDays"),
-				sort(Direction.DESC,"averageTenderDays"),
-				skip(filter.getSkip()),
-				limit(filter.getPageSize())
-				);
+				sort(Direction.DESC, "averageTenderDays"), skip(filter.getSkip()), limit(filter.getPageSize()));
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> list = results.getMappedResults();
 		return list;
 	}
 
-
 	@RequestMapping("/api/averageAwardPeriod")
-	public List<DBObject> averageAwardPeriod(@Valid DefaultFilterPagingRequest filter) {
+	public List<DBObject> averageAwardPeriod(@Valid final DefaultFilterPagingRequest filter) {
 		DBObject year = new BasicDBObject("$year", "$awards.date");
 
-		DBObject awardLengthDays = new BasicDBObject("$divide",
-				Arrays.asList(
-						new BasicDBObject("$subtract", Arrays.asList("$awards.date", "$tender.tenderPeriod.endDate")),
-						86400000));
+		DBObject awardLengthDays = new BasicDBObject("$divide", Arrays.asList(
+				new BasicDBObject("$subtract", Arrays.asList("$awards.date", "$tender.tenderPeriod.endDate")), DAY_MS));
 
 		DBObject project = new BasicDBObject();
 		project.put(Fields.UNDERSCORE_ID, 0);
@@ -94,32 +89,28 @@ public class AverageTenderAndAwardPeriods extends GenericOcvnController {
 		project.put("awards.date", 1);
 		project.put("awards.status", 1);
 		project.put("tender.tenderPeriod.endDate", 1);
-		
-		
-	
+
 		DBObject group = new BasicDBObject();
-		group.put(Fields.UNDERSCORE_ID,"$year");
-		group.put("averageAwardDays",new BasicDBObject("$avg", "$awardLengthDays" ));
-		
-		DBObject sort = new BasicDBObject();		
-		sort.put("averageAwardDays",-1);
-		
+		group.put(Fields.UNDERSCORE_ID, "$year");
+		group.put("averageAwardDays", new BasicDBObject("$avg", "$awardLengthDays"));
+
+		DBObject sort = new BasicDBObject();
+		sort.put("averageAwardDays", -1);
+
 		Aggregation agg = newAggregation(
-				//this is repeated so we gain speed by filtering items before unwind
+				// this is repeated so we gain speed by filtering items before
+				// unwind
 				match(where("tender.tenderPeriod.endDate").exists(true).and("awards.date").exists(true)
-						.and("awards.status").is("active")), 
+						.and("awards.status").is("active")),
 				unwind("$awards"),
-				//we need to filter the awards again after unwind
-				match(where("awards.date").exists(true)
-						.and("awards.status").is("active").andOperator(getDefaultFilterCriteria(filter))), 				
+				// we need to filter the awards again after unwind
+				match(where("awards.date").exists(true).and("awards.status").is("active")
+						.andOperator(getDefaultFilterCriteria(filter))),
 				new CustomOperation(new BasicDBObject("$project", project)),
 				new CustomOperation(new BasicDBObject("$group", group)),
-				new CustomOperation(new BasicDBObject("$sort", sort)),
-				skip(filter.getSkip()),
-				limit(filter.getPageSize())
-				);
-		
-		
+				new CustomOperation(new BasicDBObject("$sort", sort)), skip(filter.getSkip()),
+				limit(filter.getPageSize()));
+
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> list = results.getMappedResults();
 		return list;

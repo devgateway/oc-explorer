@@ -13,22 +13,29 @@ import org.hibernate.validator.constraints.Range;
  */
 public class GenericPagingRequest {
 
-	@Min(0)
-	Integer pageNumber;
+	public static final int DEFAULT_PAGE_SIZE = 100;
 
-	@Range(min = 1, max = 1000)
-	Integer pageSize;
+	public static final int MAX_PAGE_SIZE = 1000;
+	
+	public static final int MAX_REQ_YEAR = 2200;
+	public static final int MIN_REQ_YEAR = 1900;
+
+	@Min(0)
+	protected Integer pageNumber;
+
+	@Range(min = 1, max = MAX_PAGE_SIZE)
+	protected Integer pageSize;
 
 	public GenericPagingRequest() {
 		pageNumber = 0;
-		pageSize = 100;
+		pageSize = DEFAULT_PAGE_SIZE;
 	}
 
 	public Integer getPageNumber() {
 		return pageNumber;
 	}
 
-	public void setPageNumber(Integer page) {
+	public void setPageNumber(final Integer page) {
 		this.pageNumber = page;
 	}
 
@@ -36,11 +43,11 @@ public class GenericPagingRequest {
 		return pageSize;
 	}
 
-	public void setPageSize(Integer size) {
+	public void setPageSize(final Integer size) {
 		this.pageSize = size;
 	}
-	
+
 	public Integer getSkip() {
-		return pageNumber*pageSize;
+		return pageNumber * pageSize;
 	}
 }

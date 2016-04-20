@@ -39,56 +39,56 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class OcdsController extends GenericOcvnController {
 
-	private static final String SERVER_DOMAIN="http://ocvn.developmentgateway.org";
-	
+	private static final String SERVER_DOMAIN = "http://ocvn.developmentgateway.org";
+
 	@Autowired
 	private ReleaseRepository releaseRepository;
-	
-	
+
 	@RequestMapping("/api/ocds/release/budgetProjectId/{projectId:^[a-zA-Z0-9]*$}")
-	public Release ocdsByProjectId(@PathVariable String projectId) {
+	public Release ocdsByProjectId(@PathVariable final String projectId) {
 
 		Release release = releaseRepository.findByBudgetProjectId(projectId);
 		return release;
 	}
 
 	/**
-	 * Returns one {@link Release} entity found based on {@link VNPlanning#getBidNo()}
-	 * @param bidNo the bidNo
+	 * Returns one {@link Release} entity found based on
+	 * {@link VNPlanning#getBidNo()}
+	 * 
+	 * @param bidNo
+	 *            the bidNo
 	 * @return the release
 	 */
 	@RequestMapping("/api/ocds/release/planningBidNo/{bidNo:^[a-zA-Z0-9]*$}")
-	public Release ocdsByPlanningBidNo(@PathVariable String bidNo) {
+	public Release ocdsByPlanningBidNo(@PathVariable final String bidNo) {
 
 		Release release = releaseRepository.findByPlanningBidNo(bidNo);
 		return release;
 	}
-	
+
 	@RequestMapping("/api/ocds/release/ocid/{ocid}")
-	public Release ocdsByOcid(@PathVariable String ocid) {
+	public Release ocdsByOcid(@PathVariable final String ocid) {
 
 		Release release = releaseRepository.findByOcid(ocid);
 		return release;
 	}
-	
+
 	@RequestMapping("/api/ocds/package/ocid/{ocid}")
-	public ReleasePackage ocdsPackageByOcid(@PathVariable String ocid) {
+	public ReleasePackage ocdsPackageByOcid(@PathVariable final String ocid) {
 
 		Release release = releaseRepository.findByOcid(ocid);
 		return createReleasePackage(release);
 	}
 
-	
-	
-	public ReleasePackage createReleasePackage(Release release) {
-		ReleasePackage releasePackage=new ReleasePackage();
+	public ReleasePackage createReleasePackage(final Release release) {
+		ReleasePackage releasePackage = new ReleasePackage();
 		releasePackage.setLicense("https://creativecommons.org/licenses/by/2.0/");
 		releasePackage.setPublicationPolicy("https://github.com/open-contracting/sample-data/");
 		releasePackage.setPublishedDate(release.getDate());
-		releasePackage.getReleases().add(release);		
-		releasePackage.setUri(SERVER_DOMAIN+"/api/ocds/package/ocid/"+release.getOcid());
-		Publisher publisher=new Publisher();
-		
+		releasePackage.getReleases().add(release);
+		releasePackage.setUri(SERVER_DOMAIN + "/api/ocds/package/ocid/" + release.getOcid());
+		Publisher publisher = new Publisher();
+
 		publisher.setName("Government of Vietnam: Public Procurement Agency");
 		publisher.setScheme("VN-PPA");
 		publisher.setUid(release.getOcid());
@@ -96,31 +96,31 @@ public class OcdsController extends GenericOcvnController {
 		releasePackage.setPublisher(publisher);
 		return releasePackage;
 	}
-	
 
 	@RequestMapping("/api/ocds/package/planningBidNo/{bidNo:^[a-zA-Z0-9]*$}")
-	public ReleasePackage packagedReleaseByPlanningBidNo(@PathVariable String bidNo) {
-		Release release=ocdsByPlanningBidNo(bidNo);
-		
+	public ReleasePackage packagedReleaseByPlanningBidNo(@PathVariable final String bidNo) {
+		Release release = ocdsByPlanningBidNo(bidNo);
+
 		return createReleasePackage(release);
 	}
-	
-	
+
 	@RequestMapping("/api/ocds/package/budgetProjectId/{projectId:^[a-zA-Z0-9]*$}")
-	public ReleasePackage packagedReleaseByProjectId(@PathVariable String projectId) {
-		Release release=ocdsByProjectId(projectId);
-		
+	public ReleasePackage packagedReleaseByProjectId(@PathVariable final String projectId) {
+		Release release = ocdsByProjectId(projectId);
+
 		return createReleasePackage(release);
 	}
-	
+
 	/**
 	 * Returns a list of OCDS Releases, order by Id, using pagination
+	 * 
 	 * @return the release data
 	 */
 	@RequestMapping("/api/ocds/release/all")
-	public List<Release> ocdsReleases(@Valid YearFilterPagingRequest releaseRequest) {
+	public List<Release> ocdsReleases(@Valid final YearFilterPagingRequest releaseRequest) {
 
-		PageRequest pageRequest = new PageRequest(releaseRequest.getPageNumber(), releaseRequest.getPageSize(), Direction.ASC, "id");
+		PageRequest pageRequest = new PageRequest(releaseRequest.getPageNumber(), releaseRequest.getPageSize(),
+				Direction.ASC, "id");
 
 		List<Release> find = mongoTemplate
 				.find(query(getYearFilterCriteria("planning.bidPlanProjectDateApprove", releaseRequest)
@@ -129,17 +129,16 @@ public class OcdsController extends GenericOcvnController {
 		return find;
 
 	}
-	
-	
 
 	@RequestMapping("/api/ocds/package/all")
-	public List<ReleasePackage> ocdsPackages(@Valid YearFilterPagingRequest releaseRequest) {
+	public List<ReleasePackage> ocdsPackages(@Valid final YearFilterPagingRequest releaseRequest) {
 		List<Release> ocdsReleases = ocdsReleases(releaseRequest);
-		List<ReleasePackage> releasePackages=new ArrayList<>(ocdsReleases.size());
-		for(Release release: ocdsReleases) 
+		List<ReleasePackage> releasePackages = new ArrayList<>(ocdsReleases.size());
+		for (Release release : ocdsReleases) {
 			releasePackages.add(createReleasePackage(release));
-			
-		return releasePackages;		
+		}
+
+		return releasePackages;
 	}
 
 }

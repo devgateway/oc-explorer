@@ -35,8 +35,8 @@ import com.mongodb.DBObject;
 public class BidSelectionMethodSearchController extends GenericOcvnController {
 
 	/**
-	 * db.release.aggregate([ {$project : {"tender.procurementMethodDetails":1} },
-	 * {$group: {_id: "$tender.procurementMethodDetails" }} ])
+	 * db.release.aggregate([ {$project : {"tender.procurementMethodDetails":1}
+	 * }, {$group: {_id: "$tender.procurementMethodDetails" }} ])
 	 * 
 	 * @return
 	 */
