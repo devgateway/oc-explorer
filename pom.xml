@@ -13,7 +13,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.devgateway.toolkit</groupId>
 	<artifactId>toolkit</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>DGToolkit</name>
 	<description>DG Toolkit archetype - quick and easy way to start new projects through a working template</description>
