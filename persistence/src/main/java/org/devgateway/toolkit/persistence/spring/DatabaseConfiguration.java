@@ -41,21 +41,21 @@ import com.zaxxer.hikari.HikariDataSource;
 @EnableJpaAuditing
 @PropertySource("classpath:/org/devgateway/toolkit/persistence/application.properties")
 public class DatabaseConfiguration {
-	
+
+	private static final int DERBY_PORT = 1527;
 	protected static Logger logger = Logger.getLogger(DatabaseConfiguration.class);
-	
+
 	/**
 	 * This bean creates the JNDI tree and registers the
 	 * {@link javax.sql.DataSource} to this tree. This allows Pentaho Classic
 	 * Engine to use a {@link javax.sql.DataSource} ,in our case backed by a
 	 * connection pool instead of always opening up JDBC connections. Should
 	 * significantly improve performance of all classic reports. In PRD use
-	 * connection type=JNDI and name toolkitDS. To use it in PRD you need to add the
-	 * configuration to the local PRD. Edit ~/.pentaho/simple-jndi/default.properties
-	 * and add the following:
+	 * connection type=JNDI and name toolkitDS. To use it in PRD you need to add
+	 * the configuration to the local PRD. Edit
+	 * ~/.pentaho/simple-jndi/default.properties and add the following:
 	 * toolkitDS/type=javax.sql.DataSource
-	 * toolkitDS/driver=org.apache.derby.jdbc.ClientDriver
-	 * toolkitDS/user=app
+	 * toolkitDS/driver=org.apache.derby.jdbc.ClientDriver toolkitDS/user=app
 	 * toolkitDS/password=app
 	 * toolkitDS/url=jdbc:derby://localhost//derby/toolkit
 	 * 
@@ -76,9 +76,10 @@ public class DatabaseConfiguration {
 		}
 		return builder;
 	}
-	
+
 	/**
 	 * Creates a {@link javax.sql.DataSource} based on Tomcat {@link DataSource}
+	 * 
 	 * @return
 	 */
 	@Bean
@@ -96,9 +97,9 @@ public class DatabaseConfiguration {
 		return ds;
 	}
 
-	
 	/**
 	 * Graciously starts a Derby Database Server when the application starts up
+	 * 
 	 * @return
 	 * @throws Exception
 	 */
@@ -106,10 +107,9 @@ public class DatabaseConfiguration {
 	public NetworkServerControl derbyServer() throws Exception {
 		Properties p = System.getProperties();
 		p.put("derby.storage.pageCacheSize", "10000");
-		NetworkServerControl nsc = new NetworkServerControl(InetAddress.getByName("localhost"), 1527);
+		NetworkServerControl nsc = new NetworkServerControl(InetAddress.getByName("localhost"), DERBY_PORT);
 		nsc.start(new PrintWriter(java.lang.System.out, true));
 		return nsc;
 	}
-	
 
 }

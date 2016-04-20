@@ -3,7 +3,11 @@ var webpack = require('webpack');
 config.entry = "./index.jsx";
 config.output.filename = "index.min.js";
 delete config.devtool;
-config.plugins.push(new webpack.optimize.UglifyJsPlugin());
-config.plugins.push(new webpack.optimize.DedupePlugin());
+config.plugins = config.plugins.filter(function(plugin){
+  return !(plugin instanceof webpack.HotModuleReplacementPlugin);
+}).concat([
+  new webpack.optimize.UglifyJsPlugin(),
+  new webpack.optimize.DedupePlugin()
+]);
 
 module.exports = config;

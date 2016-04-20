@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.page;
 
-
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -25,11 +24,9 @@ import org.wicketstuff.annotation.mount.MountPath;
 
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_ADMIN)
 @MountPath("/editgroup")
-public class EditGroupPage extends AbstractEditPage<Group>{
+public class EditGroupPage extends AbstractEditPage<Group> {
 
 	private static final long serialVersionUID = -6069250112046118104L;
-	
-
 
 	@Override
 	protected Group newInstance() {
@@ -39,8 +36,7 @@ public class EditGroupPage extends AbstractEditPage<Group>{
 	@SpringBean
 	private GroupRepository groupRepository;
 
-
-	public EditGroupPage(PageParameters parameters) {
+	public EditGroupPage(final PageParameters parameters) {
 		super(parameters);
 		this.jpaRepository = groupRepository;
 		this.listPageClass = ListGroupPage.class;
@@ -54,6 +50,6 @@ public class EditGroupPage extends AbstractEditPage<Group>{
 		TextFieldBootstrapFormComponent<String> gname = new TextFieldBootstrapFormComponent<>("label");
 		gname.required();
 		editForm.add(gname);
-		
+
 	}
 }

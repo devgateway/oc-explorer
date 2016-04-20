@@ -22,7 +22,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * Run this application only when you need access to Spring Data JPA but without Wicket frontend
+ * Run this application only when you need access to Spring Data JPA but without
+ * Wicket frontend
+ * 
  * @author mpostelnicu
  *
  */
@@ -34,8 +36,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan("org.devgateway.toolkit")
 public class PersistenceApplication {
 	
-
-    public static void main(String[] args) {
-        SpringApplication.run(PersistenceApplication.class, args);
-    }
+	public static void main(final String[] args) {
+		SpringApplication.run(PersistenceApplication.class, args);
+	}
 }

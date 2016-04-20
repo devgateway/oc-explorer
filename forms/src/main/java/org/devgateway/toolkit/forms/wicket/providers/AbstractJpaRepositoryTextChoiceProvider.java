@@ -50,19 +50,19 @@ public abstract class AbstractJpaRepositoryTextChoiceProvider<T extends GenericP
 
 	protected TextSearchableRepository<T, Long> textSearchableRepository;
 
-	public AbstractJpaRepositoryTextChoiceProvider(TextSearchableRepository<T, Long> textSearchableRepository) {
+	public AbstractJpaRepositoryTextChoiceProvider(final TextSearchableRepository<T, Long> textSearchableRepository) {
 		this.textSearchableRepository = textSearchableRepository;
 	}
 
-	public AbstractJpaRepositoryTextChoiceProvider(TextSearchableRepository<T, Long> textSearchableRepository,
-												   Class<T> clazz, Boolean addNewElements) {
+	public AbstractJpaRepositoryTextChoiceProvider(final TextSearchableRepository<T, Long> textSearchableRepository,
+			final Class<T> clazz, final Boolean addNewElements) {
 		this.textSearchableRepository = textSearchableRepository;
 		this.clazz = clazz;
 		this.addNewElements = addNewElements;
 	}
 
-	public AbstractJpaRepositoryTextChoiceProvider(TextSearchableRepository<T, Long> textSearchableRepository,
-												   IModel<Collection<T>> restrictedToItemsModel) {
+	public AbstractJpaRepositoryTextChoiceProvider(final TextSearchableRepository<T, Long> textSearchableRepository,
+			final IModel<Collection<T>> restrictedToItemsModel) {
 		this(textSearchableRepository);
 		this.restrictedToItemsModel = restrictedToItemsModel;
 	}
@@ -72,7 +72,7 @@ public abstract class AbstractJpaRepositoryTextChoiceProvider<T extends GenericP
 	}
 
 	@Override
-	public String getIdValue(T choice) {
+	public String getIdValue(final T choice) {
 		// if the object is not null but it hasn't an ID return 0
 		if (choice != null && choice.getId() == null && addNewElements) {
 			return "0";
@@ -82,20 +82,20 @@ public abstract class AbstractJpaRepositoryTextChoiceProvider<T extends GenericP
 	}
 
 	@Override
-	public void query(String term, int page, Response<T> response) {
+	public void query(final String term, final int page, final Response<T> response) {
 		Page<T> itemsByTerm;
-		if (term==null || term.isEmpty()) {
-            itemsByTerm = findAll(page);
-            response.setHasMore(itemsByTerm.hasNext());
-        } else {
-            itemsByTerm = getItemsByTerm(term.toLowerCase(), page);
-        }
-	
-	
+		if (term == null || term.isEmpty()) {
+			itemsByTerm = findAll(page);
+			response.setHasMore(itemsByTerm.hasNext());
+		} else {
+			itemsByTerm = getItemsByTerm(term.toLowerCase(), page);
+		}
+
 		if (itemsByTerm != null) {
 			if (itemsByTerm.getContent().size() == 0 && addNewElements) {
 				// add new element dynamically
-				// the new element should extend Category so that we can attache a 'label' to it
+				// the new element should extend Category so that we can attache
+				// a 'label' to it
 				try {
 					newObject = clazz.newInstance();
 					newObject.setLabel(term);
@@ -116,18 +116,18 @@ public abstract class AbstractJpaRepositoryTextChoiceProvider<T extends GenericP
 		}
 	}
 
-	protected Page<T> getItemsByTerm(String term, int page) {
+	protected Page<T> getItemsByTerm(final String term, final int page) {
 		PageRequest pageRequest = new PageRequest(page, WebConstants.SELECT_PAGE_SIZE, sort);
-            return getTextSearchableRepository().searchText(term, pageRequest);
+		return getTextSearchableRepository().searchText(term, pageRequest);
 	}
 
-	public Page<T> findAll(int page) {
+	public Page<T> findAll(final int page) {
 		PageRequest pageRequest = new PageRequest(page, WebConstants.SELECT_PAGE_SIZE, sort);
-            return getTextSearchableRepository().findAll(pageRequest);
+		return getTextSearchableRepository().findAll(pageRequest);
 	}
 
 	@Override
-	public Collection<T> toChoices(Collection<String> ids) {
+	public Collection<T> toChoices(final Collection<String> ids) {
 		ArrayList<String> idsList = new ArrayList<>();
 
 		for (String id : ids) {
@@ -148,8 +148,8 @@ public abstract class AbstractJpaRepositoryTextChoiceProvider<T extends GenericP
 			Long id = Long.parseLong(s);
 			T findOne = getTextSearchableRepository().findOne(id);
 			if (findOne == null) {
-				logger.error("Cannot find entity with id=" + id
-						+ " in repository " + getTextSearchableRepository().getClass());
+				logger.error("Cannot find entity with id=" + id + " in repository "
+						+ getTextSearchableRepository().getClass());
 			} else {
 				response.add(findOne);
 			}

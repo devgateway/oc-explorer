@@ -46,110 +46,115 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.ladda.LaddaAjaxBut
 @MountPath("/login")
 public class LoginPage extends BasePage {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @SpringBean
-    private PersonRepository personRepository;
+	@SpringBean
+	private PersonRepository personRepository;
 
-    
-    private IndicatingAjaxButton enableAccount;
+	private IndicatingAjaxButton enableAccount;
+	
+	private static final int HIDE_NOTIFICATION_SECONDS = 15;
 
-    class LoginForm extends BootstrapForm<Void> {
+	public class LoginForm extends BootstrapForm<Void> {
 
-        private static final long serialVersionUID = 2066636625524650473L;
-        private String username;
-        private String password;
+		private static final long serialVersionUID = 2066636625524650473L;
+		private String username;
+		private String password;
 
-        public LoginForm(String id) {
-            super(id);
+		public LoginForm(final String id) {
+			super(id);
 
-            pageTitle.setVisible(false);
-            final NotificationPanel notificationPanel = new NotificationPanel("loginFeedback");
-            notificationPanel.hideAfter(Duration.seconds(15));
-            notificationPanel.setOutputMarkupId(true);
-            add(notificationPanel);
+			pageTitle.setVisible(false);
+			final NotificationPanel notificationPanel = new NotificationPanel("loginFeedback");
+			notificationPanel.hideAfter(Duration.seconds(HIDE_NOTIFICATION_SECONDS));
+			notificationPanel.setOutputMarkupId(true);
+			add(notificationPanel);
 
-            TextFieldBootstrapFormComponent<String> username = new TextFieldBootstrapFormComponent<>("username",
-                    new StringResourceModel("user", LoginPage.this), new PropertyModel<String>(this, "username"));
-            username.required();
-            add(username);
+			TextFieldBootstrapFormComponent<String> username = new TextFieldBootstrapFormComponent<>("username",
+					new StringResourceModel("user", LoginPage.this), new PropertyModel<String>(this, "username"));
+			username.required();
+			add(username);
 
-            PasswordFieldBootstrapFormComponent password = new PasswordFieldBootstrapFormComponent("password",
-                    new PropertyModel<String>(this, "password"));
-            password.getField().setResetPassword(false);
-            add(password);
-            
+			PasswordFieldBootstrapFormComponent password = new PasswordFieldBootstrapFormComponent("password",
+					new PropertyModel<String>(this, "password"));
+			password.getField().setResetPassword(false);
+			add(password);
 
-            LaddaAjaxButton submit = new LaddaAjaxButton("submit",Buttons.Type.Primary) {
-                private static final long serialVersionUID = 1L;
+			LaddaAjaxButton submit = new LaddaAjaxButton("submit", Buttons.Type.Primary) {
+				private static final long serialVersionUID = 1L;
 
-                @Override
-                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    SSAuthenticatedWebSession session = SSAuthenticatedWebSession.getSSAuthenticatedWebSession();
-                    if (session.signIn(LoginForm.this.username, LoginForm.this.password)) {
-                        Person user = SecurityUtil.getCurrentAuthenticatedPerson();
-                            setResponsePage(getApplication().getHomePage());                    
-                    } else {
-                    	notificationPanel.error(getString("bad_credentials"));
-                        target.add(notificationPanel);
-                        target.add(LoginForm.this);
-                    }
-                }
+				@Override
+				protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+					SSAuthenticatedWebSession session = SSAuthenticatedWebSession.getSSAuthenticatedWebSession();
+					if (session.signIn(LoginForm.this.username, LoginForm.this.password)) {
+						Person user = SecurityUtil.getCurrentAuthenticatedPerson();
+						setResponsePage(getApplication().getHomePage());
+					} else {
+						notificationPanel.error(getString("bad_credentials"));
+						target.add(notificationPanel);
+						target.add(LoginForm.this);
+					}
+				}
 
-                @Override
-                protected void onError(AjaxRequestTarget target, Form<?> form) {
-                    target.add(notificationPanel);
-                    target.add(LoginForm.this);
-                }
-            };
-            
-            submit.setLabel(Model.of("Submit"));
-            add(submit);
-//            IndicatingAjaxButton forgotPassword = new IndicatingAjaxButton("forgotPassword",new StringResourceModel("forgotPassword", LoginPage.this, null)) {
-//                private static final long serialVersionUID = 1L;
-//
-//                @Override
-//                protected void onConfigure() {
-//                    super.onConfigure();
-//                    setDefaultFormProcessing(false);
-//                }
-//
-//                @Override
-//                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-//                    setResponsePage(ForgotYourPasswordPage.class);
-//                }
-//
-//                @Override
-//                protected void onError(AjaxRequestTarget target, Form<?> form) {
-//                    target.add(notificationPanel);
-//                    target.add(LoginForm.this);
-//                }
-//
-//            };
-//            add(forgotPassword);
+				@Override
+				protected void onError(final AjaxRequestTarget target, final Form<?> form) {
+					target.add(notificationPanel);
+					target.add(LoginForm.this);
+				}
+			};
 
-        }
-    }
+			submit.setLabel(Model.of("Submit"));
+			add(submit);
+			// IndicatingAjaxButton forgotPassword = new
+			// IndicatingAjaxButton("forgotPassword",new
+			// StringResourceModel("forgotPassword", LoginPage.this, null)) {
+			// private static final long serialVersionUID = 1L;
+			//
+			// @Override
+			// protected void onConfigure() {
+			// super.onConfigure();
+			// setDefaultFormProcessing(false);
+			// }
+			//
+			// @Override
+			// protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			// setResponsePage(ForgotYourPasswordPage.class);
+			// }
+			//
+			// @Override
+			// protected void onError(AjaxRequestTarget target, Form<?> form) {
+			// target.add(notificationPanel);
+			// target.add(LoginForm.this);
+			// }
+			//
+			// };
+			// add(forgotPassword);
 
-    /**
-     * @param parameters
-     */
-    public LoginPage(PageParameters parameters) {
-        super(parameters);
+		}
+	}
 
-        //redirect to homepage if user reaches the /login page while authenticated
-        if(AbstractAuthenticatedWebSession.get().isSignedIn()) setResponsePage(Homepage.class);
-        
-        LoginForm loginForm = new LoginForm("loginform");
-        add(loginForm);
+	/**
+	 * @param parameters
+	 */
+	public LoginPage(final PageParameters parameters) {
+		super(parameters);
 
-    }
+		// redirect to homepage if user reaches the /login page while
+		// authenticated
+		if (AbstractAuthenticatedWebSession.get().isSignedIn()) {
+			setResponsePage(Homepage.class);
+		}
 
-    @Override
-    protected void onInitialize() {
-        super.onInitialize();
+		LoginForm loginForm = new LoginForm("loginform");
+		add(loginForm);
 
-        // hide footer since it's not stick to the bottom of the page
-        footer.setVisibilityAllowed(false);
-    }
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+
+		// hide footer since it's not stick to the bottom of the page
+		footer.setVisibilityAllowed(false);
+	}
 }

@@ -18,17 +18,15 @@ import org.wicketstuff.annotation.mount.MountPath;
 
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_ADMIN)
 @MountPath(value = "/user")
-public class EditUserPageElevated extends EditUserPage{
-	
+public class EditUserPageElevated extends EditUserPage {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5372177614898411737L;
 
-
-	public EditUserPageElevated(PageParameters parameters) {
+	public EditUserPageElevated(final PageParameters parameters) {
 		super(parameters);
 	}
-
 
 }

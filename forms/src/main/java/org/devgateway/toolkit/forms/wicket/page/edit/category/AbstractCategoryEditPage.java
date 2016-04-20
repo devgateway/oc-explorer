@@ -24,7 +24,7 @@ public abstract class AbstractCategoryEditPage<T extends Category> extends Abstr
 	private static final long serialVersionUID = 6571076983713857766L;
 	protected TextFieldBootstrapFormComponent<String> label;
 
-	public AbstractCategoryEditPage(PageParameters parameters) {
+	public AbstractCategoryEditPage(final PageParameters parameters) {
 		super(parameters);
 	}
 

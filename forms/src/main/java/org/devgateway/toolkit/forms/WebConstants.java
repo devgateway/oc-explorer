@@ -15,6 +15,10 @@ import org.apache.wicket.validation.validator.StringValidator;
 import org.devgateway.toolkit.persistence.dao.DBConstants;
 
 public final class WebConstants {
+	
+	private WebConstants() {
+		
+	}
 	public static final int PAGE_SIZE = 10;
 	public static final int SELECT_PAGE_SIZE = 25;
 
@@ -25,9 +29,9 @@ public final class WebConstants {
 	public static final String PARAM_ENTITY_CLASS = "class";
 
 	public static final class StringValidators {
-		public static final StringValidator maximumLengthValidatorOneLineText = StringValidator
+		public static final StringValidator MAXIMUM_LENGTH_VALIDATOR_ONE_LINE_TEXT = StringValidator
 				.maximumLength(DBConstants.MAX_DEFAULT_TEXT_LENGTH_ONE_LINE);
-		public static final StringValidator maximumLengthValidatorTextArea = StringValidator
+		public static final StringValidator MAXIMUM_LENGTH_VALIDATOR_ONE_LINE_TEXTAREA = StringValidator
 				.maximumLength(DBConstants.MAX_DEFAULT_TEXT_AREA);
 	}
 }

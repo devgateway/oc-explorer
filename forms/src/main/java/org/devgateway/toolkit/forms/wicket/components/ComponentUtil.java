@@ -29,7 +29,11 @@ import org.devgateway.toolkit.forms.wicket.events.EditingEnabledEvent;
  * @author mpostelnicu
  *
  */
-public class ComponentUtil {
+public final class ComponentUtil {
+	
+	private ComponentUtil() {
+		
+	}
 
 	/**
 	 * Trivial method to set the child {@link GenericBootstrapFormComponent}
@@ -42,8 +46,8 @@ public class ComponentUtil {
 	 * 
 	 * @return the parent
 	 */
-	public static MarkupContainer addRequiredFlagBootstrapFormComponent(boolean requiredFlag,
-			WebMarkupContainer parent, GenericBootstrapFormComponent<?, ?> child) {
+	public static MarkupContainer addRequiredFlagBootstrapFormComponent(final boolean requiredFlag,
+			final WebMarkupContainer parent, final GenericBootstrapFormComponent<?, ?> child) {
 		return parent.add(requiredFlag ? child.required() : child);
 	}
 	
@@ -58,7 +62,7 @@ public class ComponentUtil {
 	}
 	
 
-	public static void enableDisableEvent(Component c, IEvent<?> event) {
+	public static void enableDisableEvent(final Component c, final IEvent<?> event) {
 		if (event.getPayload() instanceof EditingDisabledEvent) {
 			c.setEnabled(false);
 		}

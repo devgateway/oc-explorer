@@ -24,7 +24,7 @@ import org.springframework.boot.context.web.SpringBootServletInitializer;
 public class WarInitializer extends SpringBootServletInitializer {
 
     @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+    protected SpringApplicationBuilder configure(final SpringApplicationBuilder application) {
         return application.sources(FormsWebApplication.class);
     }
 

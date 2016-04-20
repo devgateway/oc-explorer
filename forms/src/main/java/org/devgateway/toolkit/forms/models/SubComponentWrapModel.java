@@ -27,7 +27,7 @@ public class SubComponentWrapModel<T> implements IWrapModel<T> {
 	private static final long serialVersionUID = 4054354057335519754L;
 	private Component parent;
 
-	public SubComponentWrapModel(Component parent) {
+	public SubComponentWrapModel(final Component parent) {
 		this.parent = parent;
 	}
 
@@ -48,15 +48,16 @@ public class SubComponentWrapModel<T> implements IWrapModel<T> {
 	}
 
 	@Override
-	public void setObject(T object) {
+	public void setObject(final T object) {
 		parent.setDefaultModelObject(object);
 	}
 
 	@Override
 	public void detach() {
 		IModel<?> wrappedModel = getWrappedModel();
-		if (wrappedModel != null)
+		if (wrappedModel != null) {
 			wrappedModel.detach();
+		}
 	}
 
 }

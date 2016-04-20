@@ -25,28 +25,36 @@ import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepo
  * @author mpostelnicu
  *
  */
-public class GenericPersistableJpaRepositoryTextChoiceProvider<T extends GenericPersistable & Labelable> extends
-		AbstractJpaRepositoryTextChoiceProvider<T> {
+public class GenericPersistableJpaRepositoryTextChoiceProvider<T extends GenericPersistable & Labelable>
+		extends AbstractJpaRepositoryTextChoiceProvider<T> {
 	private static final long serialVersionUID = -643286578944834690L;
-	
-	public GenericPersistableJpaRepositoryTextChoiceProvider(TextSearchableRepository<T, Long> textSearchableRepository) {
+
+	public GenericPersistableJpaRepositoryTextChoiceProvider(
+			final TextSearchableRepository<T, Long> textSearchableRepository) {
 		super(textSearchableRepository);
 	}
 
-	public GenericPersistableJpaRepositoryTextChoiceProvider(TextSearchableRepository<T, Long> textSearchableRepository,IModel<Collection<T>> restrictedToItemsModel) {
+	public GenericPersistableJpaRepositoryTextChoiceProvider(
+			final TextSearchableRepository<T, Long> textSearchableRepository,
+			final IModel<Collection<T>> restrictedToItemsModel) {
 		super(textSearchableRepository, restrictedToItemsModel);
 	}
 
-	public GenericPersistableJpaRepositoryTextChoiceProvider(TextSearchableRepository<T, Long> textSearchableRepository,
-										 Class<T> clazz, Boolean addNewElements) {
+	public GenericPersistableJpaRepositoryTextChoiceProvider(
+			final TextSearchableRepository<T, Long> textSearchableRepository, final Class<T> clazz,
+			final Boolean addNewElements) {
 		super(textSearchableRepository, clazz, addNewElements);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.vaynberg.wicket.select2.TextChoiceProvider#getDisplayText(java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.vaynberg.wicket.select2.TextChoiceProvider#getDisplayText(java.lang.
+	 * Object)
 	 */
 	@Override
-	public String getDisplayValue(T choice) {
+	public String getDisplayValue(final T choice) {
 		if (addNewElements && choice.getId() == null) {
 			return choice.toString() + " ---> (press enter to create new element)";
 		}

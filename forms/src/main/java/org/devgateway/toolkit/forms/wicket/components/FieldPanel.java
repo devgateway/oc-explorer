@@ -28,14 +28,14 @@ public class FieldPanel<T> extends GenericPanel<T> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public FieldPanel(String id) {
+	public FieldPanel(final String id) {
 		super(id);
 	}
 	/**
 	 * @param id
 	 * @param model
 	 */
-	public FieldPanel(String id, IModel<T> model) {
+	public FieldPanel(final String id, final IModel<T> model) {
 		super(id,  model);
 	}
 

@@ -23,8 +23,8 @@ import org.pentaho.reporting.engine.classic.core.modules.output.table.html.URLRe
 import org.pentaho.reporting.libraries.repository.ContentEntity;
 
 /**
- * @author mpostelnicu This {@link URLRewriter} will translate local folder resources
- *         into wicket encoded resources using the
+ * @author mpostelnicu This {@link URLRewriter} will translate local folder
+ *         resources into wicket encoded resources using the
  *         {@link SharedResourceReference} to {@link FolderContentResource}
  */
 public class WicketResourceURLRewriter implements URLRewriter {
@@ -39,13 +39,14 @@ public class WicketResourceURLRewriter implements URLRewriter {
 	 * #rewrite(org.pentaho.reporting.libraries.repository.ContentEntity,
 	 * org.pentaho.reporting.libraries.repository.ContentEntity)
 	 */
-	public WicketResourceURLRewriter(SharedResourceReference folderResourceReference) {
+	public WicketResourceURLRewriter(final SharedResourceReference folderResourceReference) {
 
 		this.folderResourceReference = folderResourceReference;
 	}
 
 	@Override
-	public String rewrite(ContentEntity sourceDocument, ContentEntity dataEntity) throws URLRewriteException {
+	public String rewrite(final ContentEntity sourceDocument, final ContentEntity dataEntity)
+			throws URLRewriteException {
 		PageParameters parameters = new PageParameters();
 		parameters.add(FolderContentResource.PARAM_FILE_NAME, dataEntity.getName());
 		return RequestCycle.get().urlFor(folderResourceReference, parameters).toString();

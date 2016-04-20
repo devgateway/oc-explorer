@@ -20,17 +20,16 @@ import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * @author mpostelnicu
- * Simple configuration for mondrian backend module
+ * @author mpostelnicu Simple configuration for mondrian backend module
  *
  */
 @EnableAutoConfiguration
 @EnableTransactionManagement
-@ComponentScan(basePackageClasses=ReportsCacheService.class)
+@ComponentScan(basePackageClasses = ReportsCacheService.class)
 @Import({ DatabaseConfiguration.class })
 public class ReportingApplication {
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		SpringApplication.run(ReportingApplication.class, args);
 	}
 }
