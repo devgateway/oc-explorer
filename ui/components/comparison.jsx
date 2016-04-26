@@ -5,18 +5,20 @@ export default class Comparison extends Component{
     var {state, Component, title, width} = this.props;
     var {data, yAxisRange, xAxisRange, criteriaNames} = state;
     return (
-        <div>
+        <div className="row">
           <h3 className="page-header">{title}</h3>
           {data.map((datum, index) => (
-             <Component
-                 key={index}
-                 yAxisRange={yAxisRange}
-                 xAxisRange={xAxisRange}
-                 data={datum}
-                 pageHeaderTitle={false}
-                 title={criteriaNames[index] || "Other"}
-                 width={width}
-             />
+              <div className="col-md-6">
+                <Component
+                    key={index}
+                    yAxisRange={yAxisRange}
+                    xAxisRange={xAxisRange}
+                    data={datum}
+                    pageHeaderTitle={false}
+                    title={criteriaNames[index] || "Other"}
+                    width={width}
+                />
+              </div>
           ))}
         </div>
     )
