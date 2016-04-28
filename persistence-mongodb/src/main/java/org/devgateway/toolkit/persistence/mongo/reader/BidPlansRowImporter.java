@@ -19,7 +19,8 @@ import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
  */
 public class BidPlansRowImporter extends RowImporter<Release, ReleaseRepository> {
 
-	public BidPlansRowImporter(final ReleaseRepository releaseRepository, final VNImportService importService, final int skipRows) {
+	public BidPlansRowImporter(final ReleaseRepository releaseRepository, final VNImportService importService,
+			final int skipRows) {
 		super(releaseRepository, importService, skipRows);
 	}
 
