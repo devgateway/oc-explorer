@@ -2,28 +2,23 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <body>
 <wicket:extend>
-	<div class="row">
-		<div>
 			<form wicket:id="editForm" role="form">
 				<div class="form-group">
 					<wicket:child/>
 				</div>
 
-				<div class="col-md-6 col-md-offset-2">
-					<div class="action-btns-wrapper">
+				<div class="row-fluid">
 						<button wicket:id="save" type="button" class="btn btn-green btn-form-action">Save</button>
 						<button wicket:id="delete" type="button" class="btn btn-form-action">Delete</button>
 						<span wicket:id="extraButtons"></span>
-						<button wicket:id="cancel" type="button" class="btn btn-grey btn-form-action">Cancel</button>						
-					</div>
+						<button wicket:id="cancel" type="button" class="btn btn-grey btn-form-action">Cancel</button>											
 				</div>
+				
+			
+				<hr/>
 			</form>
-		</div>
-	</div>
 	
-	<wicket:fragment wicket:id="noButtons">
-
-	</wicket:fragment>
+	<wicket:fragment wicket:id="noButtons"/>	
 </wicket:extend>
 
 </body>

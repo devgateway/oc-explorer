@@ -39,6 +39,7 @@ import org.devgateway.toolkit.forms.wicket.page.lists.ListUserPage;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListVietnamImportSourceFiles;
 import org.devgateway.toolkit.forms.wicket.page.user.EditUserPage;
 import org.devgateway.toolkit.forms.wicket.page.user.LogoutPage;
+import org.devgateway.toolkit.forms.wicket.styles.MainCss;
 import org.devgateway.toolkit.persistence.dao.Person;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.dropdown.MenuBookmarkablePageLink;
@@ -243,7 +244,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 	public void renderHead(final IHeaderResponse response) {
 		super.renderHead(response);
 
-		// response.render(CssHeaderItem.forReference(MainCss.INSTANCE));
+		response.render(CssHeaderItem.forReference(MainCss.INSTANCE));
 
 		response.render(RespondJavaScriptReference.headerItem());
 
@@ -251,6 +252,8 @@ public abstract class BasePage extends GenericWebPage<Void> {
 		response.render(CssHeaderItem.forReference(FontAwesomeCssReference.instance()));
 
 		response.render(JavaScriptHeaderItem.forReference(JQueryResourceReference.get()));
+		
+		//response.render(CssHeaderItem.forReference(Select2BoostrapCssResourceReference.INSTANCE));
 		// response.render(JavaScriptHeaderItem.forReference(new
 		// JavaScriptResourceReference(MainCss.class,
 		// "/assets/js/fileupload.js")));
