@@ -123,7 +123,7 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 		List<T> saved = repository.save(documents);
 
 		// if this is a release repository, we perform validation of the saved
-		// object
+		// object. We do not throw an exception nor stop the import process.
 		if (repository instanceof ReleaseRepository) {
 			importService.getValidationService().validateAll(saved).stream().filter(r -> !r.isSuccess())
 					.forEach(r -> importService
