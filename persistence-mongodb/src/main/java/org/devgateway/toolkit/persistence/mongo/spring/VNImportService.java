@@ -67,6 +67,9 @@ public class VNImportService {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
+	
+	@Autowired
+	private JsonSchemaValidationService validationService;
 
 	private StringBuffer msgBuffer = new StringBuffer();
 
@@ -247,6 +250,10 @@ public class VNImportService {
 
 	public void newMsgBuffer() {
 		msgBuffer = new StringBuffer();
+	}
+
+	public JsonSchemaValidationService getValidationService() {
+		return validationService;
 	}
 
 }
