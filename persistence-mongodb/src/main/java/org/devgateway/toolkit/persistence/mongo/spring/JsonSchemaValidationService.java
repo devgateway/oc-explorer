@@ -3,7 +3,6 @@
  */
 package org.devgateway.toolkit.persistence.mongo.spring;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
@@ -15,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,7 +34,7 @@ public class JsonSchemaValidationService {
 	private final Logger logger = LoggerFactory.getLogger(JsonSchemaValidationService.class);
 	private JsonSchema schema;
 
-	public static final String OCDS_1_0_SCHEMA_LOCATION = "classpath:release-schema.json";
+	public static final String OCDS_1_0_SCHEMA_LOCATION = "/release-schema.json";
 
 	@Autowired
 	private ObjectMapper jacksonObjectMapper;
@@ -45,9 +43,8 @@ public class JsonSchemaValidationService {
 	private void init() {
 
 		try {
-			
-			File file = ResourceUtils.getFile(OCDS_1_0_SCHEMA_LOCATION);
-			final JsonNode jsonNode = JsonLoader.fromFile(file);
+	
+			final JsonNode jsonNode = JsonLoader.fromResource(OCDS_1_0_SCHEMA_LOCATION);
 			
 			schema = JsonSchemaFactory.newBuilder()
 					.setReportProvider(new ListReportProvider(LogLevel.ERROR, LogLevel.FATAL)).freeze()
