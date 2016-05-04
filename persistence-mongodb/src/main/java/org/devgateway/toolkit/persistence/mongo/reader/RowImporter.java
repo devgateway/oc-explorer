@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.DateUtil;
+import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,7 +120,16 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 			}
 		}
 
-		repository.save(documents);
+		List<T> saved = repository.save(documents);
+
+		// if this is a release repository, we perform validation of the saved
+		// object. We do not throw an exception nor stop the import process.
+		if (repository instanceof ReleaseRepository) {
+			importService.getValidationService().validateAll(saved).stream().filter(r -> !r.isSuccess())
+					.forEach(r -> importService
+							.logMessage("<font style='color:red'>OCDS Validation Failed: " + r.toString() + "</font>"));
+		}
+
 		logger.debug("Finished importing " + importedRows + " rows.");
 		return true;
 	}

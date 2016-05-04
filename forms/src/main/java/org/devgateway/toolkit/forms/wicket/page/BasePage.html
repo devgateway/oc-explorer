@@ -7,26 +7,27 @@
 
     </head>
 
+    
     <body>
       	<wicket:container wicket:id="scripts-container"/>
-        <div class="container">
-            <header wicket:id="header"></header>
+		<header wicket:id="header"></header>        
+        <div class="container-fluid">	
             <div class="page-header">
                 <div class="text-center">
                     <h3 wicket:id="pageTitle"></h3>
                 </div>
-            </div>
-
-            <div class="main-container">
+            </div>       
+   
+            <div class="container-fluid">
                 <wicket:child />
-                <div class="row">
+                <div class="row-fluid">
                         <span wicket:id="feedback" class="feedbackPanel"></span>
                 </div>
             </div>
 
         
         </div>
-        
+         
             <footer class="footer" wicket:id="footer"></footer>
      
     </body>

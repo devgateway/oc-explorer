@@ -26,7 +26,8 @@
 		<java.version>1.8</java.version>
 		<joda.time.version>2.7</joda.time.version>
 		<jadira.usertype.version>3.2.0.GA</jadira.usertype.version>
-		<ehcache.version>2.6.11</ehcache.version>		
+		<ehcache.version>2.6.11</ehcache.version>	
+		<json.schema.validator.version>2.2.6</json.schema.validator.version>
 	</properties>
 
 <parent>
@@ -93,6 +94,11 @@
 			<version>3.13</version>
 		</dependency>
 
+		<dependency>
+		    <groupId>com.github.fge</groupId>
+		    <artifactId>json-schema-validator</artifactId>
+		    <version>${json.schema.validator.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -123,6 +129,7 @@
 				<include>**/*.xml</include>
 				<include>**/*.xlsx</include>
 				<include>**/*.js</include>
+				<include>**/*.json</include>
 			</includes>
 
 		</resource>

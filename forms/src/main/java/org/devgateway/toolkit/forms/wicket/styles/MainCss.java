@@ -28,28 +28,26 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeCs
  */
 
 public class MainCss extends CssResourceReference {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public static final MainCss INSTANCE = new MainCss();
+	public static final MainCss INSTANCE = new MainCss();
 
-    /**
-     * Construct.
-     */
-    public MainCss() {
-        super(MainCss.class, "main.css");
-    }
+	/**
+	 * Construct.
+	 */
+	public MainCss() {
+		super(MainCss.class, "main-new.css");
+	}
 
-    @Override
-    public List<HeaderItem> getDependencies() {
-        final List<HeaderItem> dependencies = Lists.newArrayList(super.getDependencies());
+	@Override
+	public List<HeaderItem> getDependencies() {
+		final List<HeaderItem> dependencies = Lists.newArrayList(super.getDependencies());
 
-        dependencies.add(CssHeaderItem.forReference(BootstrapCssReference.instance()));
-        dependencies.add(CssHeaderItem.forReference(FontAwesomeCssReference.instance()));
+		dependencies.add(CssHeaderItem.forReference(BootstrapCssReference.instance()));
+		dependencies.add(CssHeaderItem.forReference(FontAwesomeCssReference.instance()));
 
-        dependencies.add(CssHeaderItem.forReference(FixBootstrapStylesCssResourceReference.INSTANCE));
-        dependencies.add(CssHeaderItem.forReference(DatatableStyleResourceReference.INSTANCE));               
+	//	dependencies.add(CssHeaderItem.forReference(DatatableStyleResourceReference.INSTANCE));
 
-        return dependencies;
-    }
+		return dependencies;
+	}
 }
-

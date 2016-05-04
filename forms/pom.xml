@@ -33,7 +33,7 @@
         <wicket.bootstrap.version>0.10.6</wicket.bootstrap.version>
         <zt.zip.version>1.9</zt.zip.version>
         <poi.version>3.13</poi.version>
-        <wicket.webjars.version>0.5.3</wicket.webjars.version>
+        <wicket.webjars.version>0.5.4</wicket.webjars.version>
     </properties>
 
     <dependencies>
