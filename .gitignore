@@ -8,3 +8,6 @@ npm-debug.log
 /webpack-test/bundle.js
 /.checkstyle
 /target
+*.iml
+.idea
+rebel.xml
