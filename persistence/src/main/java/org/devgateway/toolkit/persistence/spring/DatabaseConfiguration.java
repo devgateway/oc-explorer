@@ -27,6 +27,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.mock.jndi.SimpleNamingContextBuilder;
@@ -40,6 +41,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 @EnableJpaAuditing
 @PropertySource("classpath:/org/devgateway/toolkit/persistence/application.properties")
+@Profile("!integration")
 public class DatabaseConfiguration {
 
 	private static final int DERBY_PORT = 1527;
@@ -89,7 +91,6 @@ public class DatabaseConfiguration {
 		ds.setTransactionIsolation("TRANSACTION_READ_COMMITTED");
 
 		ds.setJdbcUrl("jdbc:derby://localhost//derby/toolkit;create=true");
-		// ds.setJdbcUrl("jdbc:postgresql://localhost/egarten");
 		ds.setUsername("app");
 		ds.setPassword("app");
 		ds.setDriverClassName(ClientDriver40.class.getName());
@@ -106,7 +107,8 @@ public class DatabaseConfiguration {
 	@Bean(destroyMethod = "shutdown")
 	public NetworkServerControl derbyServer() throws Exception {
 		Properties p = System.getProperties();
-		p.put("derby.storage.pageCacheSize", "10000");
+		p.put("derby.storage.pageCacheSize", "30000");
+		p.put("derby.language.maxMemoryPerTable", "20000");
 		NetworkServerControl nsc = new NetworkServerControl(InetAddress.getByName("localhost"), DERBY_PORT);
 		nsc.start(new PrintWriter(java.lang.System.out, true));
 		return nsc;
