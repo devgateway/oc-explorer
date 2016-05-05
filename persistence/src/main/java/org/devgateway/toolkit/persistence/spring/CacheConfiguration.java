@@ -17,10 +17,11 @@ package org.devgateway.toolkit.persistence.spring;
 import javax.management.MBeanServer;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 
 import net.sf.ehcache.CacheManager;
@@ -31,6 +32,7 @@ import net.sf.ehcache.management.ManagementService;
  *
  */
 @Configuration
+@EnableCaching
 public class CacheConfiguration {
 
 	@Autowired
@@ -40,15 +42,25 @@ public class CacheConfiguration {
 	private CacheManager cacheManager;
 
 	@Bean
-	public EhCacheManagerFactoryBean ehCacheManagerFactoryBean() {
+	@Profile("prod")
+	public EhCacheManagerFactoryBean ehCacheManagerFactoryBeanProd() {
 		EhCacheManagerFactoryBean ehCacheManagerFactoryBean = new EhCacheManagerFactoryBean();
-		ehCacheManagerFactoryBean.setConfigLocation(new ClassPathResource("ehcache.xml"));
+		ehCacheManagerFactoryBean.setConfigLocation(new ClassPathResource("ehcache-prod.xml"));
+		ehCacheManagerFactoryBean.setShared(true);
+		return ehCacheManagerFactoryBean;
+	}
+
+	@Bean
+	@Profile({ "integration", "dev" })
+	public EhCacheManagerFactoryBean ehCacheManagerFactoryBeanDev() {
+		EhCacheManagerFactoryBean ehCacheManagerFactoryBean = new EhCacheManagerFactoryBean();
+		ehCacheManagerFactoryBean.setConfigLocation(new ClassPathResource("ehcache-dev.xml"));
 		ehCacheManagerFactoryBean.setShared(true);
 		return ehCacheManagerFactoryBean;
 	}
 
 	@Bean(destroyMethod = "dispose", initMethod = "init")
-	@DependsOn(value = { "ehCacheManagerFactoryBean", "mbeanServer" })
+	@Profile("!integration")
 	public ManagementService ehCacheManagementService() {
 		ManagementService managementService = new ManagementService(cacheManager, mbeanServer, true, true, true, true);
 		return managementService;
