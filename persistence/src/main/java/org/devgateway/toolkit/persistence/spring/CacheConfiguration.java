@@ -17,6 +17,7 @@ package org.devgateway.toolkit.persistence.spring;
 import javax.management.MBeanServer;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
@@ -35,7 +36,7 @@ import net.sf.ehcache.management.ManagementService;
 @EnableCaching
 public class CacheConfiguration {
 
-	@Autowired
+	@Autowired(required = false)
 	private MBeanServer mbeanServer;
 
 	@Autowired
@@ -59,6 +60,7 @@ public class CacheConfiguration {
 		return ehCacheManagerFactoryBean;
 	}
 
+	@ConditionalOnBean(name = "mbeanServer")
 	@Bean(destroyMethod = "dispose", initMethod = "init")
 	@Profile("!integration")
 	public ManagementService ehCacheManagementService() {
