@@ -85,7 +85,7 @@ public class DatabaseConfiguration {
 	 * @return
 	 */
 	@Bean
-	@DependsOn(value = { "derbyServer", "mbeanServer" })
+	@DependsOn(value = { "derbyServer"})
 	public DataSource dataSource() {
 		HikariDataSource ds = new HikariDataSource();
 		ds.setTransactionIsolation("TRANSACTION_READ_COMMITTED");
