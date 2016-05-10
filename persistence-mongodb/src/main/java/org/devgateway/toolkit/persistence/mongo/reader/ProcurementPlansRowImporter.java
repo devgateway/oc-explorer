@@ -5,10 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Locale;
 
-import org.devgateway.ocvn.persistence.mongo.ocds.Budget;
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
 import org.devgateway.ocvn.persistence.mongo.ocds.Value;
 import org.devgateway.toolkit.persistence.mongo.dao.Location;
+import org.devgateway.toolkit.persistence.mongo.dao.VNBudget;
 import org.devgateway.toolkit.persistence.mongo.dao.VNPlanning;
 import org.devgateway.toolkit.persistence.mongo.repository.LocationRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
@@ -23,7 +23,7 @@ import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 public class ProcurementPlansRowImporter extends RowImporter<Release, ReleaseRepository> {
 	private LocationRepository locationRepository;
 
-	SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yy", new Locale("en"));
+	private SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yy", new Locale("en"));
 
 	public ProcurementPlansRowImporter(final ReleaseRepository releaseRepository, final VNImportService importService,
 			final LocationRepository locationRepository, final int skipRows) {
@@ -45,7 +45,7 @@ public class ProcurementPlansRowImporter extends RowImporter<Release, ReleaseRep
 		release.getTag().add("planning");
 		documents.add(release);
 		VNPlanning planning = new VNPlanning();
-		Budget budget = new Budget();
+		VNBudget budget = new VNBudget();
 		release.setPlanning(planning);
 		planning.setBudget(budget);
 
@@ -63,9 +63,9 @@ public class ProcurementPlansRowImporter extends RowImporter<Release, ReleaseRep
 		}
 
 		planning.setBidPlanProjectDateIssue(row[4].isEmpty() ? null : getDateFromString(sdf, row[4]));
-		planning.setBidPlanProjectStyle(row[5]);
+		
 		planning.setBidPlanProjectCompanyIssue(row[6]);
-		planning.setBidPlanProjectType(row[7]);
+		
 		planning.setBidPlanProjectFund(getInteger(row[8]));
 		if (!row[9].trim().isEmpty()) {
 			planning.setBidPlanProjectClassify(Arrays.asList(row[9].trim().split(", ")));
@@ -77,6 +77,8 @@ public class ProcurementPlansRowImporter extends RowImporter<Release, ReleaseRep
 		}
 
 		budget.setProjectID(row[0]);
+		budget.setBidPlanProjectStyle(row[5]);
+		budget.setBidPlanProjectType(row[7]);
 		budget.setProject(row[1]);
 		budget.setDescription(row[11]);
 

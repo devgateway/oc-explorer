@@ -19,9 +19,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class VNPlanning extends Planning {
 
 	Date bidPlanProjectDateIssue;
-	String bidPlanProjectStyle;
+	
 	String bidPlanProjectCompanyIssue;
-	String bidPlanProjectType;
+	
 	Integer bidPlanProjectFund;
 	List<String> bidPlanProjectClassify;
 
@@ -42,13 +42,7 @@ public class VNPlanning extends Planning {
 		this.bidPlanProjectDateIssue = bidPlanProjectDateIssue;
 	}
 
-	public String getBidPlanProjectStyle() {
-		return bidPlanProjectStyle;
-	}
-
-	public void setBidPlanProjectStyle(final String bidPlanProjectStyle) {
-		this.bidPlanProjectStyle = bidPlanProjectStyle;
-	}
+	
 
 	public String getBidPlanProjectCompanyIssue() {
 		return bidPlanProjectCompanyIssue;
@@ -58,13 +52,7 @@ public class VNPlanning extends Planning {
 		this.bidPlanProjectCompanyIssue = bidPlanProjectCompanyIssue;
 	}
 
-	public String getBidPlanProjectType() {
-		return bidPlanProjectType;
-	}
-
-	public void setBidPlanProjectType(final String bidPlanProjectType) {
-		this.bidPlanProjectType = bidPlanProjectType;
-	}
+	
 
 	public Integer getBidPlanProjectFund() {
 		return bidPlanProjectFund;
