@@ -70,8 +70,7 @@ public class ProcurementPlansRowImporter extends RowImporter<Release, ReleaseRep
 		if (!row[9].trim().isEmpty()) {
 			planning.setBidPlanProjectClassify(Arrays.asList(row[9].trim().split(", ")));
 		}
-		planning.setBidPlanProjectDateApprove(row[10].isEmpty() ? null : getDateFromString(sdf, row[10]));
-		planning.setBidPlanNm(row[11]);
+		planning.setBidPlanProjectDateApprove(row[10].isEmpty() ? null : getDateFromString(sdf, row[10]));		
 		planning.setBidPlanProjectStdClsCd(row[12]);
 		if (row.length > 13) {
 			planning.setBidNo(row[13]);
@@ -79,6 +78,7 @@ public class ProcurementPlansRowImporter extends RowImporter<Release, ReleaseRep
 
 		budget.setProjectID(row[0]);
 		budget.setProject(row[1]);
+		budget.setDescription(row[11]);
 
 		Value value = new Value();
 		budget.setAmount(value);

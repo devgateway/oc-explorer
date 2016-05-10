@@ -27,7 +27,6 @@ public class VNPlanning extends Planning {
 
 	@Indexed
 	Date bidPlanProjectDateApprove;
-	String bidPlanNm;
 	String bidPlanProjectStdClsCd;
 
 	List<Location> locations = new ArrayList<>();
@@ -83,13 +82,6 @@ public class VNPlanning extends Planning {
 		this.bidPlanProjectDateApprove = bidPlanProjectDateApprove;
 	}
 
-	public String getBidPlanNm() {
-		return bidPlanNm;
-	}
-
-	public void setBidPlanNm(final String bidPlanNm) {
-		this.bidPlanNm = bidPlanNm;
-	}
 
 	public String getBidPlanProjectStdClsCd() {
 		return bidPlanProjectStdClsCd;
