@@ -2,7 +2,6 @@ package org.devgateway.toolkit.persistence.mongo.reader;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Locale;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
@@ -68,10 +67,10 @@ public class ProcurementPlansRowImporter extends RowImporter<Release, ReleaseRep
 		
 		planning.setBidPlanProjectFund(getInteger(row[8]));
 		if (!row[9].trim().isEmpty()) {
-			planning.setBidPlanProjectClassify(Arrays.asList(row[9].trim().split(", ")));
+			budget.getProjectClassification().setDescription(row[9].trim());
 		}
 		planning.setBidPlanProjectDateApprove(row[10].isEmpty() ? null : getDateFromString(sdf, row[10]));		
-		planning.setBidPlanProjectStdClsCd(row[12]);
+		budget.getProjectClassification().setId(row[12]);
 		if (row.length > 13) {
 			planning.setBidNo(row[13]);
 		}

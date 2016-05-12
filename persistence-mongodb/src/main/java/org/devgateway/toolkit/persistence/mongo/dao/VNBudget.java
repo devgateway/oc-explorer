@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Budget;
+import org.devgateway.ocvn.persistence.mongo.ocds.Classification;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -20,7 +21,17 @@ public class VNBudget extends Budget {
 
 	private String bidPlanProjectType;
 
+	private Classification projectClassification = new Classification();
+
 	private List<VNLocation> projectLocation = new ArrayList<>();
+
+	public Classification getProjectClassification() {
+		return projectClassification;
+	}
+
+	public void setProjectClassification(Classification projectClassification) {
+		this.projectClassification = projectClassification;
+	}
 
 	public List<VNLocation> getProjectLocation() {
 		return projectLocation;

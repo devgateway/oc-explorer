@@ -22,11 +22,10 @@ public class VNPlanning extends Planning {
 	String bidPlanProjectCompanyIssue;
 	
 	Integer bidPlanProjectFund;
-	List<String> bidPlanProjectClassify;
 
 	@Indexed
 	Date bidPlanProjectDateApprove;
-	String bidPlanProjectStdClsCd;
+
 
 
 	@Indexed()
@@ -69,13 +68,6 @@ public class VNPlanning extends Planning {
 	}
 
 
-	public String getBidPlanProjectStdClsCd() {
-		return bidPlanProjectStdClsCd;
-	}
-
-	public void setBidPlanProjectStdClsCd(final String bidPlanProjectStdClsCd) {
-		this.bidPlanProjectStdClsCd = bidPlanProjectStdClsCd;
-	}
 
 	public String getBidNo() {
 		return bidNo;
@@ -85,12 +77,5 @@ public class VNPlanning extends Planning {
 		this.bidNo = bidNo;
 	}
 
-	public List<String> getBidPlanProjectClassify() {
-		return bidPlanProjectClassify;
-	}
-
-	public void setBidPlanProjectClassify(final List<String> bidPlanProjectClassify) {
-		this.bidPlanProjectClassify = bidPlanProjectClassify;
-	}
-
+	
 }
