@@ -3,7 +3,6 @@
  */
 package org.devgateway.toolkit.persistence.mongo.dao;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,7 +28,6 @@ public class VNPlanning extends Planning {
 	Date bidPlanProjectDateApprove;
 	String bidPlanProjectStdClsCd;
 
-	List<Location> locations = new ArrayList<>();
 
 	@Indexed()
 	String bidNo;
@@ -93,14 +91,6 @@ public class VNPlanning extends Planning {
 
 	public void setBidPlanProjectClassify(final List<String> bidPlanProjectClassify) {
 		this.bidPlanProjectClassify = bidPlanProjectClassify;
-	}
-
-	public List<Location> getLocations() {
-		return locations;
-	}
-
-	public void setLocations(final List<Location> locations) {
-		this.locations = locations;
 	}
 
 }

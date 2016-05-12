@@ -7,11 +7,11 @@ import java.util.Locale;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
 import org.devgateway.ocvn.persistence.mongo.ocds.Value;
-import org.devgateway.toolkit.persistence.mongo.dao.Location;
 import org.devgateway.toolkit.persistence.mongo.dao.VNBudget;
+import org.devgateway.toolkit.persistence.mongo.dao.VNLocation;
 import org.devgateway.toolkit.persistence.mongo.dao.VNPlanning;
-import org.devgateway.toolkit.persistence.mongo.repository.LocationRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.toolkit.persistence.mongo.repository.VNLocationRepository;
 import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
 
 /**
@@ -21,12 +21,12 @@ import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
  * @see VNPlanning
  */
 public class ProcurementPlansRowImporter extends RowImporter<Release, ReleaseRepository> {
-	private LocationRepository locationRepository;
+	private VNLocationRepository locationRepository;
 
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yy", new Locale("en"));
 
 	public ProcurementPlansRowImporter(final ReleaseRepository releaseRepository, final VNImportService importService,
-			final LocationRepository locationRepository, final int skipRows) {
+			final VNLocationRepository locationRepository, final int skipRows) {
 		super(releaseRepository, importService, skipRows);
 		this.locationRepository = locationRepository;
 	}
@@ -49,17 +49,17 @@ public class ProcurementPlansRowImporter extends RowImporter<Release, ReleaseRep
 		release.setPlanning(planning);
 		planning.setBudget(budget);
 
-		// search for loations
+		// search for locations
 
 		String[] locations = row[3].split(",");
 		for (int i = 0; i < locations.length; i++) {
-			Location location = locationRepository.findByName(locations[i].trim());
+			VNLocation location = locationRepository.findByDescription(locations[i].trim());
 			if (location == null) {
-				location = new Location();
-				location.setName(locations[i]);
+				location = new VNLocation();
+				location.setDescription(locations[i]);
 			}
 
-			planning.getLocations().add(location);
+			budget.getProjectLocation().add(location);
 		}
 
 		planning.setBidPlanProjectDateIssue(row[4].isEmpty() ? null : getDateFromString(sdf, row[4]));
