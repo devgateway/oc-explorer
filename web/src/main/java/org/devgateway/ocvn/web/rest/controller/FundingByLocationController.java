@@ -48,7 +48,7 @@ public class FundingByLocationController extends GenericOcvnController {
 	public List<DBObject> plannedFundingByLocation(@Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject vars = new BasicDBObject();
-		vars.put("numberOfLocations", new BasicDBObject("$size", "$planning.locations"));
+		vars.put("numberOfLocations", new BasicDBObject("$size", "$planning.budget.projectLocation"));
 		vars.put("planningBudget", "$planning.budget.amount.amount");
 		DBObject in = new BasicDBObject("$divide", Arrays.asList("$$planningBudget", "$$numberOfLocations"));
 
@@ -59,18 +59,18 @@ public class FundingByLocationController extends GenericOcvnController {
 		DBObject dividedTotal = new BasicDBObject("$let", let);
 
 		DBObject project = new BasicDBObject();
-		project.put("planning.locations", 1);
+		project.put("planning.budget.projectLocation", 1);
 		project.put("cntprj", new BasicDBObject("$literal", 1));
 		project.put("planning.budget.amount.amount", 1);
 		project.put("dividedTotal", dividedTotal);
 		project.put("year", new BasicDBObject("$year", "$planning.bidPlanProjectDateApprove"));
 
 		Aggregation agg = newAggregation(
-				match(where("planning").exists(true).and("planning.locations.0").exists(true)
+				match(where("planning").exists(true).and("planning.budget.projectLocation.0").exists(true)
 						.andOperator(getProcuringEntityIdCriteria(filter))),
-				new CustomOperation(new BasicDBObject("$project", project)), unwind("$planning.locations"),
-				group("year", "planning.locations").sum("$dividedTotal").as("totalPlannedAmount").sum("$cntprj")
-						.as("recordsCount"),
+				new CustomOperation(new BasicDBObject("$project", project)), unwind("$planning.budget.projectLocation"),
+				group("year", "planning.budget.projectLocation").sum("$dividedTotal").as("totalPlannedAmount")
+						.sum("$cntprj").as("recordsCount"),
 				sort(Direction.DESC, "totalPlannedAmount"), skip(filter.getSkip()), limit(filter.getPageSize()));
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
