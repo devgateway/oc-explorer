@@ -3,13 +3,10 @@
  */
 package org.devgateway.ocvn.persistence.mongo.ocds;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
 /**
  * @author mihai
  * Address OCDS entity http://standard.open-contracting.org/latest/en/schema/reference/#address
  */
-@Document
 public class Address {
 	String streetAddress;
 	String locality;

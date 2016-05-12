@@ -6,13 +6,11 @@ package org.devgateway.toolkit.persistence.mongo.dao;
 import java.util.Date;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Tender;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- * @author mihai Extension of {@link Tender} to allow extra Vietnam-specific
+ * @author mihai Eerxtension of {@link Tender} to allow extra Vietnam-specific
  *         fields
  */
-@Document(collection = "tender")
 public class VNTender extends Tender {
 	Integer bidMethod;
 	Integer contrMethod;

@@ -5,13 +5,11 @@ package org.devgateway.toolkit.persistence.mongo.dao;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Award;
 import org.devgateway.ocvn.persistence.mongo.ocds.Value;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
  * Extension of {@link Award} to allow extra Vietnam-specific fields
  */
-@Document(collection = "award")
 public class VNAward extends Award {
 
 	String inelibigleYN;

@@ -7,14 +7,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
 /**
  * @author mihai Amendment OCDS entity
  *         http://standard.open-contracting.org/latest/en/schema/reference/#
  *         amendment
  */
-@Document
 public class Amendment {
 
 	Date date;

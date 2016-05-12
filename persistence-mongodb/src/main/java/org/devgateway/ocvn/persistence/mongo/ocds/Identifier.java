@@ -1,21 +1,19 @@
 package org.devgateway.ocvn.persistence.mongo.ocds;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 /**
- * @author mihai
- * Identifier OCDS entity http://standard.open-contracting.org/latest/en/schema/reference/#identifier
+ * @author mihai Identifier OCDS entity
+ *         http://standard.open-contracting.org/latest/en/schema/reference/#
+ *         identifier
  */
-@Document
 public class Identifier {
 
 	String scheme;
-	@Id
+
 	String id;
 	String legalName;
 	String uri;
 
+	@Override
 	public String toString() {
 		return id;
 	}

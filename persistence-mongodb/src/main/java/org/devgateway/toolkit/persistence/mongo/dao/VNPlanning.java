@@ -4,17 +4,14 @@
 package org.devgateway.toolkit.persistence.mongo.dao;
 
 import java.util.Date;
-import java.util.List;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Planning;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai Extension of {@link Planning} to allow extra Vietnam-specific
  *         fields
  */
-@Document(collection = "planning")
 public class VNPlanning extends Planning {
 
 	Date bidPlanProjectDateIssue;

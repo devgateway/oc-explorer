@@ -6,16 +6,12 @@ package org.devgateway.ocvn.persistence.mongo.ocds;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 /**
- * @author mihai
- * Item OCDS Entity http://standard.open-contracting.org/latest/en/schema/reference/#item
+ * @author mihai Item OCDS Entity
+ *         http://standard.open-contracting.org/latest/en/schema/reference/#item
  */
-@Document
 public class Item {
-	@Id
+
 	String id;
 	String description;
 	Classification classification;

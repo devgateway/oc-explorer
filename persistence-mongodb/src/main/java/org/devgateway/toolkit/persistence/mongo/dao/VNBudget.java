@@ -8,13 +8,11 @@ import java.util.List;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Budget;
 import org.devgateway.ocvn.persistence.mongo.ocds.Classification;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mpostelnicu
  *
  */
-@Document(collection = "budget")
 public class VNBudget extends Budget {
 
 	private String bidPlanProjectStyle;

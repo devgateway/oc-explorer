@@ -3,19 +3,14 @@
  */
 package org.devgateway.ocvn.persistence.mongo.ocds;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 /**
  * @author mihai
  * Classification OCDS Entity http://standard.open-contracting.org/latest/en/schema/reference/#classification
  */
-@Document
 public class Classification {
 
 	String scheme;
 
-	@Id
 	String id;
 
 	String description;
