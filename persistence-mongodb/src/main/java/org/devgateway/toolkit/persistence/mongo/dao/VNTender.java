@@ -5,7 +5,6 @@ package org.devgateway.toolkit.persistence.mongo.dao;
 
 import java.util.Date;
 
-import org.devgateway.ocvn.persistence.mongo.ocds.Organization;
 import org.devgateway.ocvn.persistence.mongo.ocds.Tender;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -17,7 +16,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class VNTender extends Tender {
 	Integer bidMethod;
 	Integer contrMethod;
-	Organization orderIntituCd;
 	String approveState;
 	String cancelYN;
 	String modYn;
@@ -38,14 +36,6 @@ public class VNTender extends Tender {
 
 	public void setContrMethod(final Integer contrMethod) {
 		this.contrMethod = contrMethod;
-	}
-
-	public Organization getOrderIntituCd() {
-		return orderIntituCd;
-	}
-
-	public void setOrderIntituCd(final Organization orderIntituCd) {
-		this.orderIntituCd = orderIntituCd;
 	}
 
 	public String getApproveState() {

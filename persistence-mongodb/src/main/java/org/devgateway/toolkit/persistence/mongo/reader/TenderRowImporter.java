@@ -27,7 +27,7 @@ import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
  */
 public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 
-	SimpleDateFormat sdf = new SimpleDateFormat("dd.MMM.yy", new Locale("en"));
+	private SimpleDateFormat sdf = new SimpleDateFormat("dd.MMM.yy", new Locale("en"));
 	private VNOrganizationRepository organizationRepository;
 	private ClassificationRepository classificationRepository;
 
@@ -159,7 +159,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 			orderInstituCd.setIdentifier(orderInstituCdIdentifier);
 			orderInstituCd = organizationRepository.save(orderInstituCd);
 		}
-		tender.setOrderIntituCd(orderInstituCd);
+		release.setBuyer(orderInstituCd);
 
 		if (row.length > 12 && !row[12].isEmpty()) {
 			Value value = new Value();
