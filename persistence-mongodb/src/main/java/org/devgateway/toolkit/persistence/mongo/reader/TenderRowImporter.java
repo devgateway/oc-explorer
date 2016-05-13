@@ -1,8 +1,6 @@
 package org.devgateway.toolkit.persistence.mongo.reader;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Classification;
 import org.devgateway.ocvn.persistence.mongo.ocds.Identifier;
@@ -27,7 +25,6 @@ import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
  */
 public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 
-	SimpleDateFormat sdf = new SimpleDateFormat("dd.MMM.yy", new Locale("en"));
 	private VNOrganizationRepository organizationRepository;
 	private ClassificationRepository classificationRepository;
 
@@ -119,12 +116,36 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 			procurementMethod = "selective";
 			procurementMethodDetails = "Trong trường hợp đặc biệt";
 			break;
-
+		default:
+			procurementMethod = "undefined";
+			procurementMethodDetails = "Undefined";
+			break;
 		}
 		tender.setProcurementMethodDetails(procurementMethodDetails);
 		tender.setProcurementMethod(procurementMethod);
 		tender.setContrMethod(getInteger(row[6]));
-
+		
+		switch (tender.getContrMethod()) {
+		case 1:
+			tender.setContrMethodDetails("Trọn gói");
+			break;
+		case 2:
+			tender.setContrMethodDetails("Theo đơn giá");
+			break;
+		case 3:
+			tender.setContrMethodDetails("Theo thời gian");
+			break;
+		case 4:
+			tender.setContrMethodDetails("Theo tỷ lệ phần trăm");
+			break;
+		case 5:
+			tender.setContrMethodDetails("Hỗn hợp");
+			break;
+		default:
+			tender.setContrMethodDetails("Undefined");
+			break;
+		}
+		
 		Period period = new Period();
 
 		period.setStartDate(row[7].isEmpty() ? null : getExcelDate(row[7]));
@@ -142,7 +163,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 			procuringEntity.setIdentifier(procuringEntityIdentifier);
 			procuringEntity = organizationRepository.save(procuringEntity);
 		} else {
-			if (procuringEntity.getProcuringEntity() == null || procuringEntity.getProcuringEntity() == false) {
+			if (procuringEntity.getProcuringEntity() == null || !procuringEntity.getProcuringEntity()) {
 				procuringEntity.setProcuringEntity(true);
 				procuringEntity = organizationRepository.save(procuringEntity);
 			}
