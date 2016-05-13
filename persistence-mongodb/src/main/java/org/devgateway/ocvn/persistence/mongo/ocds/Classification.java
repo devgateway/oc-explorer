@@ -3,7 +3,6 @@
  */
 package org.devgateway.ocvn.persistence.mongo.ocds;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -15,7 +14,6 @@ public class Classification {
 
 	String scheme;
 
-	@Id
 	String id;
 
 	String description;

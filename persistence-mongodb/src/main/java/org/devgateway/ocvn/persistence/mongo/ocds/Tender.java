@@ -6,7 +6,6 @@ package org.devgateway.ocvn.persistence.mongo.ocds;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -15,10 +14,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
  *         http://standard.open-contracting.org/latest/en/schema/reference/#
  *         tender
  */
-@Document
 public class Tender {
 
-	@Id
 	String id;
 	String title;
 	String description;

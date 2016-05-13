@@ -12,7 +12,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * @author mihai
  * Implementation OCDS Entity http://standard.open-contracting.org/latest/en/schema/reference/#implementation
  */
-@Document
 public class Implementation {
 
 	List<Transaction> transactions = new ArrayList<>();

@@ -4,13 +4,11 @@
 package org.devgateway.toolkit.persistence.mongo.dao;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Item;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai Extension of {@link Item} to allow extra Vietnam-specific
  *         fields
  */
-@Document(collection = "item")
 public class VNItem extends Item {
 	String bidPlanItemRefNum;
 	String bidPlanItemStyle;

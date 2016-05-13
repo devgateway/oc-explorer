@@ -117,8 +117,8 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 			procurementMethodDetails = "Trong trường hợp đặc biệt";
 			break;
 		default:
-			procurementMethod = "undefined";
-			procurementMethodDetails = "Undefined";
+			procurementMethod = null;
+			procurementMethodDetails = null;
 			break;
 		}
 		tender.setProcurementMethodDetails(procurementMethodDetails);
@@ -180,7 +180,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 			orderInstituCd.setIdentifier(orderInstituCdIdentifier);
 			orderInstituCd = organizationRepository.save(orderInstituCd);
 		}
-		tender.setOrderIntituCd(orderInstituCd);
+		release.setBuyer(orderInstituCd);
 
 		if (row.length > 12 && !row[12].isEmpty()) {
 			Value value = new Value();

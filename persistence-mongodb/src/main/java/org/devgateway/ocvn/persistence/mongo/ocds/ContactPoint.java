@@ -3,13 +3,10 @@
  */
 package org.devgateway.ocvn.persistence.mongo.ocds;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
 /**
  * @author mihai
  * ContactPoint OCDS Entity http://standard.open-contracting.org/latest/en/schema/reference/#contactpoint
  */
-@Document
 public class ContactPoint {
 	String name;
 	String email;

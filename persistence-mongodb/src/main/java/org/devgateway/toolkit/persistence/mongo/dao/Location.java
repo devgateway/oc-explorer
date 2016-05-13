@@ -4,51 +4,51 @@
 package org.devgateway.toolkit.persistence.mongo.dao;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
-import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
-import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
+import org.springframework.data.mongodb.core.geo.GeoJson;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-/**
- * @author mihai
- * Custom location object used for displaying {@link VNPlanning} entities on the map.
- * This deviates away from OCDS standard, so we have added it to the subentity
- */
-@Document
-public class Location {
+public abstract class Location<T extends GeoJson<?>> {
 
 	@Id
-	String id;
+	private Gazetteer gazetteer = new Gazetteer();
 
 	@Indexed
-	String name;
+	private String description;
 
-	@GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
-	GeoJsonPoint coordinates;
+	private String uri;
 
-	public String getName() {
-		return name;
+	public void setupGazetteer(String id) {
+		getGazetteer().getIdentifiers().add(id);
+		uri = getGazetteerPrefix() + id;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public String getDescription() {
+		return description;
 	}
 
-	public GeoJsonPoint getCoordinates() {
-		return coordinates;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	public void setCoordinates(GeoJsonPoint coordinates) {
-		this.coordinates = coordinates;
+	public String getUri() {
+		return uri;
 	}
 
-	public String getId() {
-		return id;
+	public void setUri(String uri) {
+		this.uri = uri;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public Gazetteer getGazetteer() {
+		return gazetteer;
 	}
 
+	public void setGazetteer(Gazetteer gazetteer) {
+		this.gazetteer = gazetteer;
+	}
+
+	public abstract T getGeometry();
+
+	public abstract void setGeometry(T geometry);
+
+	public abstract String getGazetteerPrefix();
 }

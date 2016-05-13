@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -16,9 +15,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
  *         http://standard.open-contracting.org/latest/en/schema/reference/#
  *         award
  */
-@Document
 public class Award {
-	@Id
+
 	String id;
 	String title;
 	String desription;
