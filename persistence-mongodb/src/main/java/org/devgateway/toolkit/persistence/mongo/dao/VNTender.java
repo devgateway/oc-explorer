@@ -7,6 +7,7 @@ import java.util.Date;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Organization;
 import org.devgateway.ocvn.persistence.mongo.ocds.Tender;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -15,14 +16,35 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document(collection = "tender")
 public class VNTender extends Tender {
-	Integer bidMethod;
-	Integer contrMethod;
-	Organization orderIntituCd;
-	String approveState;
-	String cancelYN;
-	String modYn;
+	private Integer bidMethod;
 
-	Date bidOpenDt;
+	@Indexed
+	private Integer contrMethod;
+	private String contrMethodDetails;
+	private Organization orderIntituCd;
+	private String approveState;
+	private String cancelYN;
+	private String modYn;
+	private String procurementMethodDetails;
+
+	
+	public String getProcurementMethodDetails() {
+		return procurementMethodDetails;
+	}
+
+	public void setProcurementMethodDetails(String procurementMethodDetails) {
+		this.procurementMethodDetails = procurementMethodDetails;
+	}
+
+	public String getContrMethodDetails() {
+		return contrMethodDetails;
+	}
+
+	public void setContrMethodDetails(String contrMethodDetails) {
+		this.contrMethodDetails = contrMethodDetails;
+	}
+
+	private Date bidOpenDt;
 
 	public Integer getBidMethod() {
 		return bidMethod;

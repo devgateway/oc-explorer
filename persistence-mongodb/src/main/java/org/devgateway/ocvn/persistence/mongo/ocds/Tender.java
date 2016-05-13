@@ -30,7 +30,6 @@ public class Tender {
 	@Indexed
 	String procurementMethod;
 	@Indexed
-	String procurementMethodDetails;
 	String procurementMethodRationale;
 	String awardCriteria;
 	String awardCriteriaDetails;
@@ -42,7 +41,7 @@ public class Tender {
 	Boolean hasEnquiries;
 	String eligibilityCriteria;
 	Period awardPeriod;
-	Integer numberOfTenders;
+	Integer numberOfTenderers;
 	List<Organization> tenderers = new ArrayList<>();
 
 	Organization procuringEntity;
@@ -194,12 +193,12 @@ public class Tender {
 		this.awardPeriod = awardPeriod;
 	}
 
-	public Integer getNumberOfTenders() {
-		return numberOfTenders;
+	public Integer getNumberOfTenderers() {
+		return numberOfTenderers;
 	}
 
-	public void setNumberOfTenders(final Integer numberOfTenders) {
-		this.numberOfTenders = numberOfTenders;
+	public void setNumberOfTenderers(final Integer numberOfTenderers) {
+		this.numberOfTenderers = numberOfTenderers;
 	}
 
 	public List<Organization> getTenderers() {
@@ -240,14 +239,6 @@ public class Tender {
 
 	public void setAmendment(final Amendment amendment) {
 		this.amendment = amendment;
-	}
-
-	public String getProcurementMethodDetails() {
-		return procurementMethodDetails;
-	}
-
-	public void setProcurementMethodDetails(final String procurementMethodDetails) {
-		this.procurementMethodDetails = procurementMethodDetails;
 	}
 
 }

@@ -114,7 +114,7 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 			if (award.getStatus().equals(OCDSConst.Awards.STATUS_UNSUCCESSFUL)) {
 				release.getTender().getTenderers().add(supplier);
 			}
-			release.getTender().setNumberOfTenders(release.getTender().getTenderers().size());
+			release.getTender().setNumberOfTenderers(release.getTender().getTenderers().size());
 		}
 
 		if (release.getId() == null) {
