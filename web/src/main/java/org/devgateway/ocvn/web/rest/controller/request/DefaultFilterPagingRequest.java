@@ -6,6 +6,7 @@ package org.devgateway.ocvn.web.rest.controller.request;
 import java.util.List;
 
 import cz.jirutka.validator.collection.constraints.EachPattern;
+import cz.jirutka.validator.collection.constraints.EachRange;
 
 /**
  * @author mihai Filtering bean applied to all endpoints
@@ -13,12 +14,16 @@ import cz.jirutka.validator.collection.constraints.EachPattern;
 public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
 	@EachPattern(regexp = "^[a-zA-Z0-9]*$")
-	List<String> bidTypeId;
+	private List<String> bidTypeId;
 
 	@EachPattern(regexp = "^[a-zA-Z0-9]*$")
-	List<String> procuringEntityId;
+	private List<String> procuringEntityId;
 
-	List<String> bidSelectionMethod;
+	private List<String> bidSelectionMethod;
+
+	@EachRange(min = 1, max = 5)
+	private List<Integer> contrMethod;
+
 
 	/**
 	 * This parameter will invert (negate) all existing filtering parameters. So
@@ -28,7 +33,7 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 	 * actually dont use multiple parameters anywhere, so it should not matter
 	 * now
 	 */
-	Boolean invert = false;
+	private Boolean invert = false;
 
 	public DefaultFilterPagingRequest() {
 		super();
@@ -64,6 +69,14 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
 	public void setInvert(final Boolean invert) {
 		this.invert = invert;
+	}
+
+	public List<Integer> getContrMethod() {
+		return contrMethod;
+	}
+
+	public void setContrMethod(List<Integer> contrMethod) {
+		this.contrMethod = contrMethod;
 	}
 
 }

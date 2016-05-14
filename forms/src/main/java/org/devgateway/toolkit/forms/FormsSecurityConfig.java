@@ -56,11 +56,11 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 				"/api/totalCancelledTendersByYear**", "/api/averageTenderPeriod**",
 				"/api/ocds/bidSelectionMethod/all**", "/api/topTenLargestAwards**", "/api/topTenLargestTenders**",
 				"/api/averageAwardPeriod**", "/api/ocds/release/ocid/**", "/api/ocds/bidType/all**",
-				"/api/ocds/package/budgetProjectId/**", "/api/ocds/package/planningBidNo/**",
-				"/api/ocds/package/all/**", "/api/ocds/package/ocid/**", "/img/**", "/css*/**", "/js*/**",
-				"/assets*/**", "/wicket/resource/**/*.js", "/wicket/resource/**/*.css", "/wicket/resource/**/*.png",
-				"/wicket/resource/**/*.jpg", "/wicket/resource/**/*.gif", "/login/**", "/resources/**",
-				"/resources/public/**");
+				"/api/ocds/contrMethod/all/**", "/api/ocds/package/budgetProjectId/**",
+				"/api/ocds/package/planningBidNo/**", "/api/ocds/package/all/**", "/api/ocds/package/ocid/**",
+				"/img/**", "/css*/**", "/js*/**", "/assets*/**", "/wicket/resource/**/*.js",
+				"/wicket/resource/**/*.css", "/wicket/resource/**/*.png", "/wicket/resource/**/*.jpg",
+				"/wicket/resource/**/*.gif", "/login/**", "/resources/**", "/resources/public/**");
 	}
 
 	/**

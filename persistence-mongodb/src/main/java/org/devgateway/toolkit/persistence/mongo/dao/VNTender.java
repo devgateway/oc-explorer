@@ -6,7 +6,6 @@ package org.devgateway.toolkit.persistence.mongo.dao;
 import java.util.Date;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Tender;
-import org.springframework.data.mongodb.core.index.Indexed;
 
 /**
  * @author mihai Eerxtension of {@link Tender} to allow extra Vietnam-specific
@@ -15,9 +14,17 @@ import org.springframework.data.mongodb.core.index.Indexed;
 public class VNTender extends Tender {
 	private Integer bidMethod;
 
-	@Indexed
-	private Integer contrMethod;
-	private String contrMethodDetails;
+	
+	public ContrMethod getContrMethod() {
+		return contrMethod;
+	}
+
+	public void setContrMethod(ContrMethod contrMethod) {
+		this.contrMethod = contrMethod;
+	}
+
+	private ContrMethod contrMethod;
+	
 	private String approveState;
 	private String cancelYN;
 	private String modYn;
@@ -32,14 +39,6 @@ public class VNTender extends Tender {
 		this.procurementMethodDetails = procurementMethodDetails;
 	}
 
-	public String getContrMethodDetails() {
-		return contrMethodDetails;
-	}
-
-	public void setContrMethodDetails(String contrMethodDetails) {
-		this.contrMethodDetails = contrMethodDetails;
-	}
-
 	private Date bidOpenDt;
 
 	public Integer getBidMethod() {
@@ -50,13 +49,6 @@ public class VNTender extends Tender {
 		this.bidMethod = bidMethod;
 	}
 
-	public Integer getContrMethod() {
-		return contrMethod;
-	}
-
-	public void setContrMethod(final Integer contrMethod) {
-		this.contrMethod = contrMethod;
-	}
 
 	public String getApproveState() {
 		return approveState;

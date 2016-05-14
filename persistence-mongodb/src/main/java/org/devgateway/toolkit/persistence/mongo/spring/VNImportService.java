@@ -26,6 +26,7 @@ import org.devgateway.toolkit.persistence.mongo.reader.SupplierRowImporter;
 import org.devgateway.toolkit.persistence.mongo.reader.TenderRowImporter;
 import org.devgateway.toolkit.persistence.mongo.reader.XExcelFileReader;
 import org.devgateway.toolkit.persistence.mongo.repository.ClassificationRepository;
+import org.devgateway.toolkit.persistence.mongo.repository.ContrMethodRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.VNLocationRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationRepository;
@@ -61,6 +62,9 @@ public class VNImportService {
 
 	@Autowired
 	private ClassificationRepository classificationRepository;
+	
+	@Autowired
+	private ContrMethodRepository contrMethodRepository;
 
 	@Autowired
 	private VNLocationRepository locationRepository;
@@ -210,8 +214,9 @@ public class VNImportService {
 			}
 
 			if (fileTypes.contains(ImportFileTypes.TENDERS)) {
-				importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "Tender", new TenderRowImporter(
-						releaseRepository, this, organizationRepository, classificationRepository, 2));
+				importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "Tender",
+						new TenderRowImporter(releaseRepository, this, organizationRepository, classificationRepository,
+								contrMethodRepository, 2));
 			}
 
 			if (fileTypes.contains(ImportFileTypes.EBID_AWARDS)) {
