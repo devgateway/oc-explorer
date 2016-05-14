@@ -6,7 +6,6 @@ package org.devgateway.ocvn.persistence.mongo.ocds;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -15,10 +14,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
  *         http://standard.open-contracting.org/latest/en/schema/reference/#
  *         tender
  */
-@Document
 public class Tender {
 
-	@Id
 	String id;
 	String title;
 	String description;
@@ -30,7 +27,6 @@ public class Tender {
 	@Indexed
 	String procurementMethod;
 	@Indexed
-	String procurementMethodDetails;
 	String procurementMethodRationale;
 	String awardCriteria;
 	String awardCriteriaDetails;
@@ -42,7 +38,7 @@ public class Tender {
 	Boolean hasEnquiries;
 	String eligibilityCriteria;
 	Period awardPeriod;
-	Integer numberOfTenders;
+	Integer numberOfTenderers;
 	List<Organization> tenderers = new ArrayList<>();
 
 	Organization procuringEntity;
@@ -194,12 +190,12 @@ public class Tender {
 		this.awardPeriod = awardPeriod;
 	}
 
-	public Integer getNumberOfTenders() {
-		return numberOfTenders;
+	public Integer getNumberOfTenderers() {
+		return numberOfTenderers;
 	}
 
-	public void setNumberOfTenders(final Integer numberOfTenders) {
-		this.numberOfTenders = numberOfTenders;
+	public void setNumberOfTenderers(final Integer numberOfTenderers) {
+		this.numberOfTenderers = numberOfTenderers;
 	}
 
 	public List<Organization> getTenderers() {
@@ -240,14 +236,6 @@ public class Tender {
 
 	public void setAmendment(final Amendment amendment) {
 		this.amendment = amendment;
-	}
-
-	public String getProcurementMethodDetails() {
-		return procurementMethodDetails;
-	}
-
-	public void setProcurementMethodDetails(final String procurementMethodDetails) {
-		this.procurementMethodDetails = procurementMethodDetails;
 	}
 
 }

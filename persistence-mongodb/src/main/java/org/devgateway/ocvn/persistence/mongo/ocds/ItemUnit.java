@@ -1,13 +1,10 @@
 package org.devgateway.ocvn.persistence.mongo.ocds;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
 /**
  * 
  * @author mihai
  * Unit OCDS Entity http://standard.open-contracting.org/latest/en/schema/reference/#unit
  */
-@Document
 public class ItemUnit {
 	String name;
 	Value2 value;

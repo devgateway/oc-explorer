@@ -1,8 +1,6 @@
 package org.devgateway.toolkit.persistence.mongo.reader;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Classification;
 import org.devgateway.ocvn.persistence.mongo.ocds.Identifier;
@@ -10,10 +8,12 @@ import org.devgateway.ocvn.persistence.mongo.ocds.Item;
 import org.devgateway.ocvn.persistence.mongo.ocds.Period;
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
 import org.devgateway.ocvn.persistence.mongo.ocds.Value;
+import org.devgateway.toolkit.persistence.mongo.dao.ContrMethod;
 import org.devgateway.toolkit.persistence.mongo.dao.VNOrganization;
 import org.devgateway.toolkit.persistence.mongo.dao.VNPlanning;
 import org.devgateway.toolkit.persistence.mongo.dao.VNTender;
 import org.devgateway.toolkit.persistence.mongo.repository.ClassificationRepository;
+import org.devgateway.toolkit.persistence.mongo.repository.ContrMethodRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationRepository;
 import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
@@ -27,17 +27,18 @@ import org.devgateway.toolkit.persistence.mongo.spring.VNImportService;
  */
 public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 
-	SimpleDateFormat sdf = new SimpleDateFormat("dd.MMM.yy", new Locale("en"));
 	private VNOrganizationRepository organizationRepository;
 	private ClassificationRepository classificationRepository;
+	private ContrMethodRepository contrMethodRepository;
 
 	public TenderRowImporter(final ReleaseRepository releaseRepository, final VNImportService importService,
 			final VNOrganizationRepository organizationRepository,
-			final ClassificationRepository classificationRepository, final int skipRows) {
+			final ClassificationRepository classificationRepository, ContrMethodRepository contrMethodRepository,
+			final int skipRows) {
 		super(releaseRepository, importService, skipRows);
 		this.organizationRepository = organizationRepository;
 		this.classificationRepository = classificationRepository;
-
+		this.contrMethodRepository = contrMethodRepository;
 	}
 
 	@Override
@@ -119,12 +120,46 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 			procurementMethod = "selective";
 			procurementMethodDetails = "Trong trường hợp đặc biệt";
 			break;
-
+		default:
+			procurementMethod = null;
+			procurementMethodDetails = null;
+			break;
 		}
 		tender.setProcurementMethodDetails(procurementMethodDetails);
 		tender.setProcurementMethod(procurementMethod);
-		tender.setContrMethod(getInteger(row[6]));
-
+		
+		
+		Integer contrMethodId = getInteger(row[6]);
+		if (contrMethodId != null) {
+			ContrMethod contrMethod = contrMethodRepository.findOne(contrMethodId);
+			if (contrMethod == null) {
+				contrMethod = new ContrMethod();
+				contrMethod.setId(contrMethodId);
+				switch (contrMethodId) {
+				case 1:
+					contrMethod.setDetails("Trọn gói");
+					break;
+				case 2:
+					contrMethod.setDetails("Theo đơn giá");
+					break;
+				case 3:
+					contrMethod.setDetails("Theo thời gian");
+					break;
+				case 4:
+					contrMethod.setDetails("Theo tỷ lệ phần trăm");
+					break;
+				case 5:
+					contrMethod.setDetails("Hỗn hợp");
+					break;
+				default:
+					contrMethod.setDetails("Undefined");
+					break;
+				}
+				contrMethod = contrMethodRepository.save(contrMethod);
+			}
+			tender.setContrMethod(contrMethod);
+		}
+		
 		Period period = new Period();
 
 		period.setStartDate(row[7].isEmpty() ? null : getExcelDate(row[7]));
@@ -142,7 +177,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 			procuringEntity.setIdentifier(procuringEntityIdentifier);
 			procuringEntity = organizationRepository.save(procuringEntity);
 		} else {
-			if (procuringEntity.getProcuringEntity() == null || procuringEntity.getProcuringEntity() == false) {
+			if (procuringEntity.getProcuringEntity() == null || !procuringEntity.getProcuringEntity()) {
 				procuringEntity.setProcuringEntity(true);
 				procuringEntity = organizationRepository.save(procuringEntity);
 			}
@@ -159,7 +194,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 			orderInstituCd.setIdentifier(orderInstituCdIdentifier);
 			orderInstituCd = organizationRepository.save(orderInstituCd);
 		}
-		tender.setOrderIntituCd(orderInstituCd);
+		release.setBuyer(orderInstituCd);
 
 		if (row.length > 12 && !row[12].isEmpty()) {
 			Value value = new Value();

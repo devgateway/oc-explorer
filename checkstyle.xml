@@ -79,8 +79,7 @@
       <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
     <module name="IllegalInstantiation"/>
-    <module name="InnerAssignment"/>
-    <module name="MagicNumber"/>
+    <module name="InnerAssignment"/>    
     <module name="MissingSwitchDefault"/>
     <module name="SimplifyBooleanExpression"/>
     <module name="SimplifyBooleanReturn"/>
@@ -95,7 +94,6 @@
       <property name="protectedAllowed" value="true"/>
     </module>
     <module name="ArrayTypeStyle"/>
-    <module name="FinalParameters"/>
     <module name="TodoComment">
       <property name="severity" value="ignore"/>
       <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>

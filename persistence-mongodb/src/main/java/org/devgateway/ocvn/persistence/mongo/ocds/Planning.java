@@ -13,7 +13,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
  *         http://standard.open-contracting.org/latest/en/schema/reference/#
  *         planning
  */
-@Document
 public class Planning {
 	Budget budget;
 	String rationale;

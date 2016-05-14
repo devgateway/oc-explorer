@@ -2,23 +2,21 @@ package org.devgateway.toolkit.persistence.mongo.repository;
 
 import java.util.List;
 
-import org.devgateway.toolkit.persistence.mongo.dao.Location;
+import org.devgateway.toolkit.persistence.mongo.dao.ContrMethod;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-@CacheConfig(cacheNames = "locations")
-public interface LocationRepository extends MongoRepository<Location, String> {
+@CacheConfig(cacheNames = "contrMethods")
+public interface ContrMethodRepository extends MongoRepository<ContrMethod, Integer> {
 
 	@Cacheable
-	Location findByName(String name);
+	@Override
+	ContrMethod findOne(Integer id);
 
 	@Override
 	@CacheEvict(allEntries = true)
-	<S extends Location> List<S> save(Iterable<S> entites);
+	<S extends ContrMethod> List<S> save(Iterable<S> entites);
 
-	@Override
-	@CacheEvict(allEntries = true)
-	<S extends Location> S save(S entity);
 }

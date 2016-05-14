@@ -5,16 +5,14 @@ package org.devgateway.ocvn.persistence.mongo.ocds;
 
 import java.util.Date;
 
-import org.springframework.data.annotation.Id;
-
 /**
  * @author mihai
  * Document OCDS Entity http://standard.open-contracting.org/latest/en/schema/reference/#document
  */
-@org.springframework.data.mongodb.core.mapping.Document
+
 public class Document {
 
-	@Id
+
 	String id;
 	String documentType;
 	String title;

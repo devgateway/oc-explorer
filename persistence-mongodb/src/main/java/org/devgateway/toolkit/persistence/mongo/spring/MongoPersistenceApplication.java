@@ -46,33 +46,37 @@ public class MongoPersistenceApplication {
 		SpringApplication.run(MongoPersistenceApplication.class, args);
 	}
 
-	public static enum BigDecimal2ToDoubleConverter implements Converter<BigDecimal2, Double> {
+	public enum BigDecimal2ToDoubleConverter implements Converter<BigDecimal2, Double> {
 		INSTANCE;
 
+		@Override
 		public Double convert(BigDecimal2 source) {
 			return source == null ? null : source.doubleValue();
 		}
 	}
 
-	public static enum DoubleToBigDecimal2Converter implements Converter<Double, BigDecimal2> {
+	public enum DoubleToBigDecimal2Converter implements Converter<Double, BigDecimal2> {
 		INSTANCE;
 
+		@Override
 		public BigDecimal2 convert(Double source) {
 			return source != null ? new BigDecimal2(source) : null;
 		}
 	}
 
-	public static enum BigDecimalToDoubleConverter implements Converter<BigDecimal, Double> {
+	public enum BigDecimalToDoubleConverter implements Converter<BigDecimal, Double> {
 		INSTANCE;
 
+		@Override
 		public Double convert(BigDecimal source) {
 			return source == null ? null : source.doubleValue();
 		}
 	}
 
-	public static enum DoubleToBigDecimalConverter implements Converter<Double, BigDecimal> {
+	public enum DoubleToBigDecimalConverter implements Converter<Double, BigDecimal> {
 		INSTANCE;
 
+		@Override
 		public BigDecimal convert(Double source) {
 			return source != null ? new BigDecimal(source) : null;
 		}
@@ -85,5 +89,7 @@ public class MongoPersistenceApplication {
 						BigDecimalToDoubleConverter.INSTANCE, DoubleToBigDecimalConverter.INSTANCE }));
 	}
 
+	
+	
 
 }

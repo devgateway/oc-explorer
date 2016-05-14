@@ -3,20 +3,17 @@
  */
 package org.devgateway.ocvn.persistence.mongo.ocds;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
  * Budget OCDS Entity http://standard.open-contracting.org/latest/en/schema/reference/#budget
  */
-@Document
+
 public class Budget {
 
 	String source;
 	
-	@Id
 	String id;
 	
 	String description;

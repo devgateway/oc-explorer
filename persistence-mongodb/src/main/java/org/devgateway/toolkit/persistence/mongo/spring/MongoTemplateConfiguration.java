@@ -31,16 +31,21 @@ public class MongoTemplateConfiguration {
 	@PostConstruct
 	public void mongoPostInit() {
 		
-		//initialize some extra indexes
+		// initialize some extra indexes
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.bidNo", Direction.ASC));
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("awards.status", Direction.ASC));
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("awards.value.amount", Direction.ASC));
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.value.amount", Direction.ASC));
-		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.tenderPeriod.startDate", Direction.ASC));
+		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.contrMethod._id", Direction.ASC));
+		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.contrMethod.details", Direction.ASC));
+		mongoTemplate.indexOps(Release.class)
+				.ensureIndex(new Index().on("tender.tenderPeriod.startDate", Direction.ASC));
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.tenderPeriod.endDate", Direction.ASC));
-		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.items.classification._id", Direction.ASC));
+		mongoTemplate.indexOps(Release.class)
+				.ensureIndex(new Index().on("tender.items.classification._id", Direction.ASC));
 		mongoTemplate.indexOps(VNOrganization.class).ensureIndex(new Index().on("identifier._id", Direction.ASC));
-		mongoTemplate.indexOps(VNOrganization.class).ensureIndex(new Index().on("additionalIdentifiers._id", Direction.ASC));
+		mongoTemplate.indexOps(VNOrganization.class)
+				.ensureIndex(new Index().on("additionalIdentifiers._id", Direction.ASC));
 		mongoTemplate.indexOps(VNOrganization.class)
 				.ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());
 		logger.info("Added extra Mongo indexes");

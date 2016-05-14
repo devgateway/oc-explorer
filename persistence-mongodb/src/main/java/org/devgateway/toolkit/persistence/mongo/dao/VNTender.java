@@ -5,24 +5,41 @@ package org.devgateway.toolkit.persistence.mongo.dao;
 
 import java.util.Date;
 
-import org.devgateway.ocvn.persistence.mongo.ocds.Organization;
 import org.devgateway.ocvn.persistence.mongo.ocds.Tender;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- * @author mihai Extension of {@link Tender} to allow extra Vietnam-specific
+ * @author mihai Eerxtension of {@link Tender} to allow extra Vietnam-specific
  *         fields
  */
-@Document(collection = "tender")
 public class VNTender extends Tender {
-	Integer bidMethod;
-	Integer contrMethod;
-	Organization orderIntituCd;
-	String approveState;
-	String cancelYN;
-	String modYn;
+	private Integer bidMethod;
 
-	Date bidOpenDt;
+	
+	public ContrMethod getContrMethod() {
+		return contrMethod;
+	}
+
+	public void setContrMethod(ContrMethod contrMethod) {
+		this.contrMethod = contrMethod;
+	}
+
+	private ContrMethod contrMethod;
+	
+	private String approveState;
+	private String cancelYN;
+	private String modYn;
+	private String procurementMethodDetails;
+
+	
+	public String getProcurementMethodDetails() {
+		return procurementMethodDetails;
+	}
+
+	public void setProcurementMethodDetails(String procurementMethodDetails) {
+		this.procurementMethodDetails = procurementMethodDetails;
+	}
+
+	private Date bidOpenDt;
 
 	public Integer getBidMethod() {
 		return bidMethod;
@@ -32,21 +49,6 @@ public class VNTender extends Tender {
 		this.bidMethod = bidMethod;
 	}
 
-	public Integer getContrMethod() {
-		return contrMethod;
-	}
-
-	public void setContrMethod(final Integer contrMethod) {
-		this.contrMethod = contrMethod;
-	}
-
-	public Organization getOrderIntituCd() {
-		return orderIntituCd;
-	}
-
-	public void setOrderIntituCd(final Organization orderIntituCd) {
-		this.orderIntituCd = orderIntituCd;
-	}
 
 	public String getApproveState() {
 		return approveState;
