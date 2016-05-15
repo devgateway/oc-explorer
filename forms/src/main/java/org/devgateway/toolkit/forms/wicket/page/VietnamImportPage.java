@@ -76,6 +76,8 @@ public class VietnamImportPage extends BasePage {
 
 	private CheckBoxBootstrapFormComponent dropData;
 
+	private CheckBoxBootstrapFormComponent validateData;
+
 	/**
 	 * @param parameters
 	 */
@@ -91,6 +93,16 @@ public class VietnamImportPage extends BasePage {
 		private List<String> fileTypes = new ArrayList<>(ImportFileTypes.ALL_FILE_TYPES);
 
 		private Boolean dropData = true;
+
+		private Boolean validateData = true;
+
+		public Boolean getValidateData() {
+			return validateData;
+		}
+
+		public void setValidateData(Boolean validateData) {
+			this.validateData = validateData;
+		}
 
 		public List<String> getFileTypes() {
 			return fileTypes;
@@ -182,6 +194,12 @@ public class VietnamImportPage extends BasePage {
 		importForm.add(dropData);
 	}
 
+	protected void addValidateData() {
+		validateData = new CheckBoxBootstrapFormComponent("validateData");
+		importForm.add(validateData);
+	}
+
+	
 	protected void addFileTypesSelect() {
 		fileTypes = new Select2MultiChoiceBootstrapFormComponent<String>("fileTypes",
 				new GenericChoiceProvider<String>(ImportFileTypes.ALL_FILE_TYPES) {
@@ -238,7 +256,7 @@ public class VietnamImportPage extends BasePage {
 									.getContent().getBytes(),
 							importForm.getModelObject().getSourceFiles().getPublicInstitutionsSuppliersFile().iterator()
 									.next().getContent().getBytes(),
-							importForm.getModelObject().getDropData());
+							importForm.getModelObject().getDropData(), importForm.getModelObject().getValidateData());
 				} catch (Exception e) {
 					logger.error(e);
 					e.printStackTrace();
@@ -279,6 +297,7 @@ public class VietnamImportPage extends BasePage {
 		addLogText();
 		addDoneButton();
 		addDropData();
+		addValidateData();
 
 		switchFieldsBasedOnExecutorAvailability(null);
 

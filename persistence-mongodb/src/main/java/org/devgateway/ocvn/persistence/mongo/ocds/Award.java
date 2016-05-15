@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -21,13 +20,10 @@ public class Award {
 	String title;
 	String desription;
 
-	@Indexed
 	String status;
 
-	@Indexed
 
 	Date date;
-	@Indexed
 	Value value;
 
 	List<Organization> suppliers = new ArrayList<>();

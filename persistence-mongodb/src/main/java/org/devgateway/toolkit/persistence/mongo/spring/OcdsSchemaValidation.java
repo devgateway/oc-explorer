@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jackson.JsonLoader;
@@ -36,6 +37,29 @@ public class OcdsSchemaValidation {
 
 	private ObjectMapper jacksonObjectMapper;
 	private String[] patchResourceNames;
+
+	public class ProcessingReportWithNode {
+		private ProcessingReport report;
+		private String failedValidationObjString;
+
+		public ProcessingReportWithNode(ProcessingReport report, String failedValidationObjString) {
+			this.report = report;
+			this.failedValidationObjString = failedValidationObjString;
+		}
+
+		public ProcessingReport getReport() {
+			return report;
+		}
+
+		public String getFailedValidationObjString() {
+			return failedValidationObjString;
+		}
+
+		@Override
+		public String toString() {
+			return report.toString() + " FAILED OBJECT JSON: " + failedValidationObjString;
+		}
+	}
 
 	public OcdsSchemaValidation(ObjectMapper jacksonObjectMapper) {
 
@@ -77,9 +101,18 @@ public class OcdsSchemaValidation {
 		}
 	}
 
-	public ProcessingReport validate(final JsonNode jsonNode) {
+	public ProcessingReportWithNode validate(final JsonNode jsonNode) {
 		try {
-			return schema.validate(jsonNode);
+			ProcessingReport processingReport = schema.validate(jsonNode);
+			ProcessingReportWithNode processingReportWithNode = null;
+			try {
+				processingReportWithNode = new ProcessingReportWithNode(processingReport, processingReport.isSuccess()
+						? null : jacksonObjectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode));
+			} catch (JsonProcessingException e) {
+				logger.error(e.getMessage());
+				e.printStackTrace();
+			}
+			return processingReportWithNode;
 		} catch (ProcessingException e) {
 			logger.error(e.getMessage());
 			e.printStackTrace();
@@ -87,12 +120,12 @@ public class OcdsSchemaValidation {
 		return null;
 	}
 
-	public ProcessingReport validate(final Object object) {
+	public ProcessingReportWithNode validate(final Object object) {
 		JsonNode value = jacksonObjectMapper.convertValue(object, JsonNode.class);
 		return validate(value);
 	}
 
-	public <S> List<ProcessingReport> validateAll(final Collection<S> values) {
+	public <S> List<ProcessingReportWithNode> validateAll(final Collection<S> values) {
 		return values.stream().map(this::validate).collect(Collectors.toList());
 	}
 

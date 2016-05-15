@@ -167,7 +167,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 		tender.setTenderPeriod(period);
 		tender.setBidOpenDt(row[9].isEmpty() ? null : getExcelDate(row[9]));
 
-		VNOrganization procuringEntity = organizationRepository.findById(row[10]);
+		VNOrganization procuringEntity = organizationRepository.findOne(row[10]);
 
 		if (procuringEntity == null) {
 			procuringEntity = new VNOrganization();
@@ -185,7 +185,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 
 		tender.setProcuringEntity(procuringEntity);
 
-		VNOrganization orderInstituCd = organizationRepository.findById(row[11]);
+		VNOrganization orderInstituCd = organizationRepository.findOne(row[11]);
 
 		if (orderInstituCd == null) {
 			orderInstituCd = new VNOrganization();
@@ -214,7 +214,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 			// are found, we create a fake item and add only this classification
 			for (Item item : tender.getItems()) {
 				String classificationId = row[21].trim();
-				Classification classification = classificationRepository.findById(classificationId);
+				Classification classification = classificationRepository.findOne(classificationId);
 				if (classification == null) {
 					classification = new Classification();
 					classification.setId(classificationId);

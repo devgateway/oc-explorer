@@ -58,7 +58,7 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 			award.setValue(value);
 		}
 
-		VNOrganization supplier = organizationRepository.findById(row[3]);
+		VNOrganization supplier = organizationRepository.findOne(row[3]);
 
 		if (supplier == null) {
 			supplier = new VNOrganization();

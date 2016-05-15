@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.devgateway.ocvn.persistence.mongo.ocds.Release;
 import org.devgateway.toolkit.persistence.mongo.dao.DBConstants;
 import org.devgateway.toolkit.persistence.mongo.dao.ImportFileTypes;
 import org.devgateway.toolkit.persistence.mongo.reader.BidPlansRowImporter;
@@ -33,6 +34,8 @@ import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationReposit
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.ScriptOperations;
 import org.springframework.data.mongodb.core.script.ExecutableMongoScript;
@@ -54,6 +57,8 @@ public class VNImportService {
 
 	private static final int LOG_IMPORT_EVERY = 10000;
 
+	private static final int VALIDATION_BATCH = 5000;
+
 	@Autowired
 	private ReleaseRepository releaseRepository;
 
@@ -62,7 +67,7 @@ public class VNImportService {
 
 	@Autowired
 	private ClassificationRepository classificationRepository;
-	
+
 	@Autowired
 	private ContrMethodRepository contrMethodRepository;
 
@@ -71,7 +76,10 @@ public class VNImportService {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
-	
+
+	@Autowired
+	private MongoTemplateConfiguration mongoTemplateConfiguration;
+
 	@Autowired
 	private OcdsSchemaValidation validationService;
 
@@ -100,11 +108,28 @@ public class VNImportService {
 	 */
 	private void purgeDatabase() {
 		logMessage("Purging database...");
+
 		ScriptOperations scriptOps = mongoTemplate.scriptOps();
-		ExecutableMongoScript echoScript = new ExecutableMongoScript(
-				"db.release.remove({});db.location.remove({});db.organization.remove({});");
+		ExecutableMongoScript echoScript = new ExecutableMongoScript("db.dropDatabase()");
 		scriptOps.execute(echoScript);
+
 		logMessage("Database purged.");
+
+		// //recreate inline indexes
+		// mongoTemplate.setApplicationContext(applicationContext);
+		//
+
+		// create indexes that affect import performance
+		mongoTemplateConfiguration.createMandatoryImportIndexes();
+
+	}
+
+	/**
+	 * This is invoked if the database has been purged
+	 */
+	private void postImportStage() {
+		// post-init indexes
+		mongoTemplateConfiguration.createPostImportStructures();
 	}
 
 	/**
@@ -177,7 +202,8 @@ public class VNImportService {
 
 	@Async
 	public void importAllSheets(final List<String> fileTypes, final byte[] prototypeDatabase, final byte[] locations,
-			final byte[] publicInstitutionsSuppliers, final Boolean purgeDatabase) throws InterruptedException {
+			final byte[] publicInstitutionsSuppliers, final Boolean purgeDatabase, final Boolean validateData)
+			throws InterruptedException {
 
 		String tempDirPath = null;
 		try {
@@ -229,6 +255,14 @@ public class VNImportService {
 						new OfflineAwardRowImporter(releaseRepository, this, organizationRepository, 2));
 			}
 
+			if (purgeDatabase) {
+				postImportStage();
+			}
+
+			if (validateData) {
+				validateData();
+			}
+
 			logMessage("<b>IMPORT PROCESS COMPLETED.</b>");
 
 		} catch (Exception e) {
@@ -247,6 +281,26 @@ public class VNImportService {
 				}
 			}
 		}
+	}
+
+	public void validateData() {
+
+		logMessage("<b>RUNNING SCHEMA VALIDATION.</b>");
+
+		int pageNumber = 0;
+		int processedCount = 0;
+
+		Page<Release> page;
+		do {
+			page = releaseRepository.findAll(new PageRequest(pageNumber++, VALIDATION_BATCH));
+			page.getContent().parallelStream().map(rel -> validationService.validate(rel))
+					.filter(r -> !r.getReport().isSuccess()).forEach(r -> logMessage(
+							"<font style='color:red'>OCDS Validation Failed: " + r.toString() + "</font>"));
+			processedCount += page.getNumberOfElements();
+			logMessage("Validating " + processedCount + " releases");
+		} while (!page.isLast());
+
+		logMessage("<b>SCHEMA VALIDATION COMPLETE.</b>");
 	}
 
 	public StringBuffer getMsgBuffer() {

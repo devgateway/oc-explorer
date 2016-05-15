@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.IOUtils;
 import org.devgateway.ocvn.persistence.mongo.ocds.Release;
+import org.devgateway.toolkit.persistence.mongo.dao.Location;
 import org.devgateway.toolkit.persistence.mongo.dao.VNOrganization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,12 +29,32 @@ public class MongoTemplateConfiguration {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
+	public void createMandatoryImportIndexes() {
+		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.budget.projectID", Direction.ASC));
+		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.bidNo", Direction.ASC));
+		mongoTemplate.indexOps(Location.class).ensureIndex(new Index().on("description", Direction.ASC));
+
+	}
+
 	@PostConstruct
 	public void mongoPostInit() {
-		
+		createMandatoryImportIndexes();
+		createPostImportStructures();
+	}
+
+	public void createPostImportStructures() {
+
 		// initialize some extra indexes
-		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.bidNo", Direction.ASC));
+		mongoTemplate.indexOps(Release.class)
+				.ensureIndex(new Index().on("planning.bidPlanProjectDateApprove", Direction.ASC));
+		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("ocid", Direction.ASC));
+
+		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.procurementMethod", Direction.ASC));
+		mongoTemplate.indexOps(Release.class)
+				.ensureIndex(new Index().on("tender.procurementMethodRationale", Direction.ASC));
+		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.status", Direction.ASC));
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("awards.status", Direction.ASC));
+		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("awards.date", Direction.ASC));
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("awards.value.amount", Direction.ASC));
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.value.amount", Direction.ASC));
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.contrMethod._id", Direction.ASC));
@@ -44,16 +65,16 @@ public class MongoTemplateConfiguration {
 		mongoTemplate.indexOps(Release.class)
 				.ensureIndex(new Index().on("tender.items.classification._id", Direction.ASC));
 		mongoTemplate.indexOps(VNOrganization.class).ensureIndex(new Index().on("identifier._id", Direction.ASC));
+		mongoTemplate.indexOps(VNOrganization.class).ensureIndex(new Index().on("procuringEntity", Direction.ASC));
 		mongoTemplate.indexOps(VNOrganization.class)
 				.ensureIndex(new Index().on("additionalIdentifiers._id", Direction.ASC));
 		mongoTemplate.indexOps(VNOrganization.class)
 				.ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());
 		logger.info("Added extra Mongo indexes");
-		
-		
-		ScriptOperations scriptOps = mongoTemplate.scriptOps();				
 
-		//add script to calculate the percentiles endpoint
+		ScriptOperations scriptOps = mongoTemplate.scriptOps();
+
+		// add script to calculate the percentiles endpoint
 		URL scriptFile = getClass().getResource("/tenderBidPeriodPercentilesMongo.js");
 		try {
 			String scriptText = IOUtils.toString(scriptFile);
@@ -63,8 +84,7 @@ public class MongoTemplateConfiguration {
 			e.printStackTrace();
 		}
 
-		
-		//add general mongo system helper methods
+		// add general mongo system helper methods
 		URL systemScriptFile = getClass().getResource("/mongoSystemScripts.js");
 		try {
 			String systemScriptFileText = IOUtils.toString(systemScriptFile);
@@ -73,10 +93,7 @@ public class MongoTemplateConfiguration {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		 
+
 	}
-	
-	
 
 }

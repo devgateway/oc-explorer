@@ -50,7 +50,7 @@ public class ProcuringEntitySearchController extends GenericOcvnController {
 	@RequestMapping("/api/ocds/organization/id/{id:^[a-zA-Z0-9]*$}")
 	public VNOrganization organizationId(@PathVariable final String id) {
 
-		VNOrganization org = organizationRepository.findById(id);
+		VNOrganization org = organizationRepository.findOne(id);
 		return org;
 	}
 
