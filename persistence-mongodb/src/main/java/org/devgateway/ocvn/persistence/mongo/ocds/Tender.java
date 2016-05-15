@@ -6,7 +6,6 @@ package org.devgateway.ocvn.persistence.mongo.ocds;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -19,20 +18,17 @@ public class Tender {
 	String id;
 	String title;
 	String description;
-	@Indexed
 	String status;
 	List<Item> items = new ArrayList<>();
 	Value minValue;
 	Value value;
-	@Indexed
-	String procurementMethod;
-	@Indexed
+	
+	String procurementMethod;	
 	String procurementMethodRationale;
 	String awardCriteria;
 	String awardCriteriaDetails;
 	List<String> submissionMethod = new ArrayList<>();
 	String submissionMethodDetails;
-	@Indexed
 	Period tenderPeriod;
 	Period enquiryPeriod;
 	Boolean hasEnquiries;

@@ -3,8 +3,6 @@
  */
 package org.devgateway.ocvn.persistence.mongo.ocds;
 
-import org.springframework.data.mongodb.core.index.Indexed;
-
 /**
  * @author mihai
  * Budget OCDS Entity http://standard.open-contracting.org/latest/en/schema/reference/#budget
@@ -22,7 +20,6 @@ public class Budget {
 	
 	String project;
 	
-	@Indexed
 	String projectID;
 	
 	String uri;

@@ -54,7 +54,7 @@ public class EBidAwardRowImporter extends RowImporter<Release, ReleaseRepository
 		value.setAmount(getDecimal(row[1]));
 		award.setValue(value);
 
-		VNOrganization supplier = organizationRepository.findById(row[2]);
+		VNOrganization supplier = organizationRepository.findOne(row[2]);
 
 		if (supplier == null) {
 			supplier = new VNOrganization();

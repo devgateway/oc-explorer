@@ -12,7 +12,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface ClassificationRepository extends MongoRepository<Classification, String> {
 
 	@Cacheable
-	Classification findById(String id);
+	@Override
+	Classification findOne(String id);
 
 	@Override
 	@CacheEvict(allEntries = true)

@@ -29,7 +29,7 @@ public class PublicInstitutionRowImporter extends RowImporter<VNOrganization, VN
 		if (row[0] == null || row[0].isEmpty()) {
 			throw new RuntimeException("Main identifier empty!");
 		}
-		VNOrganization organization = repository.findById(row[0]);
+		VNOrganization organization = repository.findOne(row[0]);
 		if (organization != null) {
 			throw new RuntimeException("Duplicate identifer for organization " + organization);
 		}
@@ -37,6 +37,7 @@ public class PublicInstitutionRowImporter extends RowImporter<VNOrganization, VN
 		Identifier identifier = new Identifier();
 
 		identifier.setId(row[0]);
+		organization.setId(row[0]);
 		organization.setIdentifier(identifier);
 		organization.setName(row[1]);
 

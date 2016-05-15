@@ -5,19 +5,14 @@ package org.devgateway.ocvn.persistence.mongo.ocds;
 
 import java.util.Date;
 
-import org.springframework.data.mongodb.core.index.Indexed;
-
 /**
  * @author mihai
  *
  */
 public class Period {
-
-	@Indexed
-	
 	Date startDate;
 	
-	@Indexed
+
 	Date endDate;
 
 	public Date getStartDate() {

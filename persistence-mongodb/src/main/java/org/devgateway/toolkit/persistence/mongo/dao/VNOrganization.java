@@ -1,7 +1,6 @@
 package org.devgateway.toolkit.persistence.mongo.dao;
 
 import org.devgateway.ocvn.persistence.mongo.ocds.Organization;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @Document(collection = "organization")
 public class VNOrganization extends Organization {
-	@Indexed
 	@JsonIgnore
 	private Boolean procuringEntity;
 

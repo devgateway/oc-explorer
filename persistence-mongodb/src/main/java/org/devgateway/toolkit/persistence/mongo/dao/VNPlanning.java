@@ -20,12 +20,8 @@ public class VNPlanning extends Planning {
 	
 	Integer bidPlanProjectFund;
 
-	@Indexed
 	Date bidPlanProjectDateApprove;
 
-
-
-	@Indexed()
 	String bidNo;
 
 	public Date getBidPlanProjectDateIssue() {
