@@ -14,8 +14,7 @@ package org.devgateway.toolkit.persistence.mongo.spring;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
-import org.devgateway.ocvn.persistence.mongo.ocds.BigDecimal2;
-import org.devgateway.toolkit.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.BigDecimal2;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -35,9 +34,9 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
  *
  */
 @SpringBootApplication
-@ComponentScan("org.devgateway.toolkit")
+@ComponentScan("org.devgateway")
 @PropertySource("classpath:/org/devgateway/toolkit/persistence/mongo/application.properties")
-@EnableMongoRepositories(basePackageClasses = ReleaseRepository.class)
+@EnableMongoRepositories(basePackages = "org.devgateway")
 @EnableMongoAuditing
 public class MongoPersistenceApplication {
 

@@ -15,10 +15,10 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
+import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository;
 import org.devgateway.ocvn.web.rest.controller.GenericOcvnController;
 import org.devgateway.ocvn.web.rest.controller.request.ProcuringEntitySearchRequest;
-import org.devgateway.toolkit.persistence.mongo.dao.VNOrganization;
-import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.query.Criteria;

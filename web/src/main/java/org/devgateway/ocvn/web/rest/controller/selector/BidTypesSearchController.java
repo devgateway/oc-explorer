@@ -13,9 +13,9 @@ package org.devgateway.ocvn.web.rest.controller.selector;
 
 import java.util.List;
 
-import org.devgateway.ocvn.persistence.mongo.ocds.Classification;
+import org.devgateway.ocds.persistence.mongo.Classification;
+import org.devgateway.ocds.persistence.mongo.repository.ClassificationRepository;
 import org.devgateway.ocvn.web.rest.controller.GenericOcvnController;
-import org.devgateway.toolkit.persistence.mongo.repository.ClassificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;

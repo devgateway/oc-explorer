@@ -13,9 +13,9 @@ package org.devgateway.ocvn.web.rest.controller.selector;
 
 import java.util.List;
 
+import org.devgateway.ocvn.persistence.mongo.dao.ContrMethod;
+import org.devgateway.ocvn.persistence.mongo.repository.ContrMethodRepository;
 import org.devgateway.ocvn.web.rest.controller.GenericOcvnController;
-import org.devgateway.toolkit.persistence.mongo.dao.ContrMethod;
-import org.devgateway.toolkit.persistence.mongo.repository.ContrMethodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;

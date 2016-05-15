@@ -2,7 +2,7 @@ package org.devgateway.ocvn.web.rest.controller.request;
 
 import java.util.List;
 
-import org.devgateway.toolkit.persistence.mongo.dao.VNPlanning;
+import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
 
 import cz.jirutka.validator.collection.constraints.EachRange;
 

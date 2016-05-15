@@ -32,7 +32,6 @@ import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.file.Folder;
 import org.devgateway.toolkit.forms.service.SessionFinderService;
 import org.devgateway.toolkit.forms.wicket.converters.NonNumericFilteredBigDecimalConverter;
-import org.devgateway.toolkit.forms.wicket.page.BasePage;
 import org.devgateway.toolkit.forms.wicket.page.Homepage;
 import org.devgateway.toolkit.forms.wicket.page.user.LoginPage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,13 +69,13 @@ import nl.dries.wicket.hibernate.dozer.SessionFinderHolder;
  */
 @EnableScheduling
 @SpringBootApplication
-@ComponentScan("org.devgateway.toolkit")
+@ComponentScan("org.devgateway")
 @PropertySource("classpath:/org/devgateway/toolkit/forms/application.properties")
 public class FormsWebApplication extends AuthenticatedWebApplication {
 
     public static final String STORAGE_ID = "fileStorage";
 	
-	private static final String BASE_PACKAGE_FOR_PAGES = BasePage.class.getPackage().getName();
+	private static final String BASE_PACKAGE_FOR_PAGES = "org.devgateway";
 
 	@Autowired
 	private ApplicationContext applicationContext;

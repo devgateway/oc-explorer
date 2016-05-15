@@ -8,11 +8,11 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import org.devgateway.ocvn.persistence.mongo.ocds.Address;
-import org.devgateway.ocvn.persistence.mongo.ocds.ContactPoint;
-import org.devgateway.ocvn.persistence.mongo.ocds.Identifier;
-import org.devgateway.toolkit.persistence.mongo.dao.VNOrganization;
-import org.devgateway.toolkit.persistence.mongo.repository.VNOrganizationRepository;
+import org.devgateway.ocds.persistence.mongo.Address;
+import org.devgateway.ocds.persistence.mongo.ContactPoint;
+import org.devgateway.ocds.persistence.mongo.Identifier;
+import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
+import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository;
 import org.devgateway.toolkit.persistence.mongo.spring.MongoPersistenceApplication;
 import org.junit.Before;
 import org.junit.Test;

@@ -6,9 +6,9 @@ import java.net.URL;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.IOUtils;
-import org.devgateway.ocvn.persistence.mongo.ocds.Release;
-import org.devgateway.toolkit.persistence.mongo.dao.Location;
-import org.devgateway.toolkit.persistence.mongo.dao.VNOrganization;
+import org.devgateway.ocds.persistence.mongo.Location;
+import org.devgateway.ocds.persistence.mongo.Release;
+import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
