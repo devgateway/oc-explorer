@@ -16,7 +16,7 @@ import org.apache.commons.io.FileUtils;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.repository.ClassificationRepository;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
-import org.devgateway.ocvn.persistence.mongo.dao.DBConstants;
+import org.devgateway.ocvn.persistence.mongo.dao.MongoConstants;
 import org.devgateway.ocvn.persistence.mongo.dao.ImportFileTypes;
 import org.devgateway.ocvn.persistence.mongo.reader.BidPlansRowImporter;
 import org.devgateway.ocvn.persistence.mongo.reader.EBidAwardRowImporter;
@@ -101,7 +101,7 @@ public class VNImportService {
 
 	private void importSheet(final URL fileUrl, final String sheetName, final RowImporter<?, ?> importer)
 			throws Exception {
-		importSheet(fileUrl, sheetName, importer, DBConstants.IMPORT_ROW_BATCH);
+		importSheet(fileUrl, sheetName, importer, MongoConstants.IMPORT_ROW_BATCH);
 	}
 
 	/**

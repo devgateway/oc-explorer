@@ -8,6 +8,7 @@ import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.Value;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.VNImportService;
+import org.devgateway.ocvn.persistence.mongo.dao.MongoConstants;
 import org.devgateway.ocvn.persistence.mongo.dao.VNBudget;
 import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
 import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
@@ -40,7 +41,7 @@ public class ProcurementPlansRowImporter extends RowImporter<Release, ReleaseRep
 		}
 
 		Release release = new Release();
-		release.setOcid("ocvn-prjid-" + projectID);
+		release.setOcid(MongoConstants.OCDS_PREFIX + "prjid-" + projectID);
 		release.getTag().add("planning");
 		documents.add(release);
 		VNPlanning planning = new VNPlanning();
