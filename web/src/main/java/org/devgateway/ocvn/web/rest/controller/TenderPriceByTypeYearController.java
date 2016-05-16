@@ -18,6 +18,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mongodb.BasicDBObject;
@@ -31,7 +32,7 @@ import com.mongodb.DBObject;
 @RestController
 public class TenderPriceByTypeYearController extends GenericOcvnController {
 
-	@RequestMapping("/api/tenderPriceByOcdsTypeYear")
+	@RequestMapping(value = "/api/tenderPriceByOcdsTypeYear", method = RequestMethod.GET)
 	public List<DBObject> tenderPriceByOcdsTypeYear(@Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
@@ -51,7 +52,7 @@ public class TenderPriceByTypeYearController extends GenericOcvnController {
 
 	}
 
-	@RequestMapping("/api/tenderPriceByVnTypeYear")
+	@RequestMapping(value = "/api/tenderPriceByVnTypeYear", method = RequestMethod.GET)
 	public List<DBObject> tenderPriceByVnTypeYear(@Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();

@@ -31,6 +31,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mongodb.BasicDBObject;
@@ -44,7 +45,7 @@ import com.mongodb.DBObject;
 @RestController
 public class FundingByLocationController extends GenericOcvnController {
 
-	@RequestMapping("/api/plannedFundingByLocation")
+	@RequestMapping(value = "/api/plannedFundingByLocation", method = RequestMethod.GET)
 	public List<DBObject> plannedFundingByLocation(@Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject vars = new BasicDBObject();

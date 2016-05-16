@@ -31,6 +31,7 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mongodb.BasicDBObject;
@@ -52,7 +53,7 @@ public class CountPlansTendersAwardsController extends GenericOcvnController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping("/api/countBidPlansByYear")
+	@RequestMapping(value = "/api/countBidPlansByYear", method = RequestMethod.GET)
 	public List<DBObject> countBidPlansByYear(@Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
@@ -77,7 +78,7 @@ public class CountPlansTendersAwardsController extends GenericOcvnController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping("/api/countTendersByYear")
+	@RequestMapping(value="/api/countTendersByYear", method = RequestMethod.GET)
 	public List<DBObject> countTendersByYear(@Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
@@ -101,7 +102,7 @@ public class CountPlansTendersAwardsController extends GenericOcvnController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping("/api/countAwardsByYear")
+	@RequestMapping(value="/api/countAwardsByYear", method = RequestMethod.GET)
 	public List<DBObject> countAwardsByYear(@Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project0 = new BasicDBObject();

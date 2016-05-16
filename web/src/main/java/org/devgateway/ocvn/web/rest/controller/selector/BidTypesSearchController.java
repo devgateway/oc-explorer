@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -31,9 +32,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class BidTypesSearchController extends GenericOcvnController {
 
 	@Autowired
-	ClassificationRepository classificationRepository;
+	private ClassificationRepository classificationRepository;
 
-	@RequestMapping("/api/ocds/bidType/all")
+	@RequestMapping(value = "/api/ocds/bidType/all", method = RequestMethod.GET)
 	public List<Classification> bidTypes() {
 
 		return classificationRepository.findAll(new Sort(Direction.ASC, "description"));

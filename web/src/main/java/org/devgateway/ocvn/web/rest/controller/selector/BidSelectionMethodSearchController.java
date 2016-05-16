@@ -21,6 +21,7 @@ import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mongodb.BasicDBObject;
@@ -40,7 +41,7 @@ public class BidSelectionMethodSearchController extends GenericOcvnController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping("/api/ocds/bidSelectionMethod/all")
+	@RequestMapping(value = "/api/ocds/bidSelectionMethod/all", method = RequestMethod.GET)
 	public List<DBObject> bidSelectionMethods() {
 
 		DBObject project = new BasicDBObject("tender.procurementMethodDetails", 1);

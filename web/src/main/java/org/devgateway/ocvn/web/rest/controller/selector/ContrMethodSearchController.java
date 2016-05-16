@@ -21,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -34,7 +35,7 @@ public class ContrMethodSearchController extends GenericOcvnController {
 	@Autowired
 	private ContrMethodRepository contrMethodRepository;
 
-	@RequestMapping("/api/ocds/contrMethod/all")
+	@RequestMapping(value = "/api/ocds/contrMethod/all", method = RequestMethod.GET)
 	public List<ContrMethod> contrMethods() {
 
 		return contrMethodRepository.findAll(new Sort(Direction.ASC, Fields.UNDERSCORE_ID));

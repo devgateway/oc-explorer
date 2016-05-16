@@ -29,6 +29,7 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mongodb.BasicDBObject;
@@ -52,7 +53,7 @@ public class TopTenController extends GenericOcvnController {
 	 * @return
 	 */
 
-	@RequestMapping("/api/topTenLargestAwards")
+	@RequestMapping(value = "/api/topTenLargestAwards", method = RequestMethod.GET)
 	public List<DBObject> topTenLargestAwards(@Valid final YearFilterPagingRequest filter) {
 
 		BasicDBObject project = new BasicDBObject();
@@ -84,7 +85,7 @@ public class TopTenController extends GenericOcvnController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping("/api/topTenLargestTenders")
+	@RequestMapping(value = "/api/topTenLargestTenders", method = RequestMethod.GET)
 	public List<DBObject> topTenLargestTenders(@Valid final YearFilterPagingRequest filter) {
 
 		BasicDBObject project = new BasicDBObject();
