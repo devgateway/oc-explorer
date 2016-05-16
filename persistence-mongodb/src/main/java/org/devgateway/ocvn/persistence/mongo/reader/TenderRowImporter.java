@@ -12,6 +12,7 @@ import org.devgateway.ocds.persistence.mongo.repository.ClassificationRepository
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.VNImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.ContrMethod;
+import org.devgateway.ocvn.persistence.mongo.dao.MongoConstants;
 import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
 import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
@@ -48,7 +49,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 
 		if (release == null) {
 			release = new Release();
-			release.setOcid("ocvn-bidno-" + row[0]);
+			release.setOcid(MongoConstants.OCDS_PREFIX + "bidno-" + row[0]);
 			release.getTag().add("tender");
 			VNPlanning planning = new VNPlanning();
 			release.setPlanning(planning);

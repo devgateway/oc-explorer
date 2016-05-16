@@ -8,6 +8,7 @@ import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.persistence.mongo.Value;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.VNImportService;
+import org.devgateway.ocvn.persistence.mongo.dao.MongoConstants;
 import org.devgateway.ocvn.persistence.mongo.dao.VNItem;
 import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
@@ -33,7 +34,7 @@ public class BidPlansRowImporter extends RowImporter<Release, ReleaseRepository>
 		if (release == null) {
 			release = new Release();
 			release.getTag().add("planning");
-			release.setOcid("ocvn-prjid-" + projectID);
+			release.setOcid(MongoConstants.OCDS_PREFIX + "prjid-" + projectID);
 			VNPlanning planning = new VNPlanning();
 			release.setPlanning(planning);
 		}

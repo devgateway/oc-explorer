@@ -7,6 +7,7 @@ import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.Value;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.VNImportService;
+import org.devgateway.ocvn.persistence.mongo.dao.MongoConstants;
 import org.devgateway.ocvn.persistence.mongo.dao.OCDSConst;
 import org.devgateway.ocvn.persistence.mongo.dao.VNAward;
 import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
@@ -38,7 +39,7 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 		if (release == null) {
 			release = new Release();
 			release.getTag().add("award");
-			release.setOcid("ocvn-bidno-" + row[0]);
+			release.setOcid(MongoConstants.OCDS_PREFIX+"bidno-" + row[0]);
 			VNPlanning planning = new VNPlanning();
 			release.setPlanning(planning);
 			planning.setBidNo(row[0]);
