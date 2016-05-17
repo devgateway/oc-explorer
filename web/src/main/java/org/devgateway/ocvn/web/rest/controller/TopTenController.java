@@ -28,6 +28,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,8 +54,9 @@ public class TopTenController extends GenericOcvnController {
 	 * @return
 	 */
 
-	@RequestMapping(value = "/api/topTenLargestAwards", method = RequestMethod.GET)
-	public List<DBObject> topTenLargestAwards(@Valid final YearFilterPagingRequest filter) {
+	@RequestMapping(value = "/api/topTenLargestAwards", method = RequestMethod.GET,
+			 produces = "application/json")
+	public List<DBObject> topTenLargestAwards(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
 		BasicDBObject project = new BasicDBObject();
 		project.put(Fields.UNDERSCORE_ID, 0);
@@ -85,8 +87,9 @@ public class TopTenController extends GenericOcvnController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/api/topTenLargestTenders", method = RequestMethod.GET)
-	public List<DBObject> topTenLargestTenders(@Valid final YearFilterPagingRequest filter) {
+	@RequestMapping(value = "/api/topTenLargestTenders", method = RequestMethod.GET,
+			 produces = "application/json")
+	public List<DBObject> topTenLargestTenders(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
 		BasicDBObject project = new BasicDBObject();
 		project.put(Fields.UNDERSCORE_ID, 0);

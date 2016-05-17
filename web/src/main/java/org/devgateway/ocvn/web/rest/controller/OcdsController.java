@@ -27,6 +27,7 @@ import org.devgateway.ocvn.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,7 +46,8 @@ public class OcdsController extends GenericOcvnController {
 	@Autowired
 	private ReleaseRepository releaseRepository;
 
-	@RequestMapping(value = "/api/ocds/release/budgetProjectId/{projectId:^[a-zA-Z0-9]*$}", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/ocds/release/budgetProjectId/{projectId:^[a-zA-Z0-9]*$}", method = RequestMethod.GET,
+			 produces = "application/json")
 	public Release ocdsByProjectId(@PathVariable final String projectId) {
 
 		Release release = releaseRepository.findByBudgetProjectId(projectId);
@@ -60,21 +62,24 @@ public class OcdsController extends GenericOcvnController {
 	 *            the bidNo
 	 * @return the release
 	 */
-	@RequestMapping(value = "/api/ocds/release/planningBidNo/{bidNo:^[a-zA-Z0-9]*$}", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/ocds/release/planningBidNo/{bidNo:^[a-zA-Z0-9]*$}", method = RequestMethod.GET,
+			 produces = "application/json")
 	public Release ocdsByPlanningBidNo(@PathVariable final String bidNo) {
 
 		Release release = releaseRepository.findByPlanningBidNo(bidNo);
 		return release;
 	}
 
-	@RequestMapping(value = "/api/ocds/release/ocid/{ocid}", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/ocds/release/ocid/{ocid}", method = RequestMethod.GET,
+			 produces = "application/json")
 	public Release ocdsByOcid(@PathVariable final String ocid) {
 
 		Release release = releaseRepository.findByOcid(ocid);
 		return release;
 	}
 
-	@RequestMapping(value = "/api/ocds/package/ocid/{ocid}", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/ocds/package/ocid/{ocid}", method = RequestMethod.GET,
+			 produces = "application/json")
 	public ReleasePackage ocdsPackageByOcid(@PathVariable final String ocid) {
 
 		Release release = releaseRepository.findByOcid(ocid);
@@ -98,14 +103,16 @@ public class OcdsController extends GenericOcvnController {
 		return releasePackage;
 	}
 
-	@RequestMapping(value = "/api/ocds/package/planningBidNo/{bidNo:^[a-zA-Z0-9]*$}", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/ocds/package/planningBidNo/{bidNo:^[a-zA-Z0-9]*$}", method = RequestMethod.GET,
+			 produces = "application/json")
 	public ReleasePackage packagedReleaseByPlanningBidNo(@PathVariable final String bidNo) {
 		Release release = ocdsByPlanningBidNo(bidNo);
 
 		return createReleasePackage(release);
 	}
 
-	@RequestMapping(value = "/api/ocds/package/budgetProjectId/{projectId:^[a-zA-Z0-9]*$}", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/ocds/package/budgetProjectId/{projectId:^[a-zA-Z0-9]*$}", method = RequestMethod.GET,
+			 produces = "application/json")
 	public ReleasePackage packagedReleaseByProjectId(@PathVariable final String projectId) {
 		Release release = ocdsByProjectId(projectId);
 
@@ -117,8 +124,9 @@ public class OcdsController extends GenericOcvnController {
 	 * 
 	 * @return the release data
 	 */
-	@RequestMapping(value = "/api/ocds/release/all", method = RequestMethod.GET)
-	public List<Release> ocdsReleases(@Valid final YearFilterPagingRequest releaseRequest) {
+	@RequestMapping(value = "/api/ocds/release/all", method = RequestMethod.GET,
+			 produces = "application/json")
+	public List<Release> ocdsReleases(@ModelAttribute @Valid final YearFilterPagingRequest releaseRequest) {
 
 		PageRequest pageRequest = new PageRequest(releaseRequest.getPageNumber(), releaseRequest.getPageSize(),
 				Direction.ASC, "id");
@@ -131,8 +139,9 @@ public class OcdsController extends GenericOcvnController {
 
 	}
 
-	@RequestMapping(value = "/api/ocds/package/all", method = RequestMethod.GET)
-	public List<ReleasePackage> ocdsPackages(@Valid final YearFilterPagingRequest releaseRequest) {
+	@RequestMapping(value = "/api/ocds/package/all", method = RequestMethod.GET,
+			 produces = "application/json")
+	public List<ReleasePackage> ocdsPackages(@ModelAttribute @Valid final YearFilterPagingRequest releaseRequest) {
 		List<Release> ocdsReleases = ocdsReleases(releaseRequest);
 		List<ReleasePackage> releasePackages = new ArrayList<>(ocdsReleases.size());
 		for (Release release : ocdsReleases) {

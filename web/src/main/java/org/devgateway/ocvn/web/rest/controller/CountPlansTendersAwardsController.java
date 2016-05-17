@@ -30,6 +30,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,8 +54,8 @@ public class CountPlansTendersAwardsController extends GenericOcvnController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/api/countBidPlansByYear", method = RequestMethod.GET)
-	public List<DBObject> countBidPlansByYear(@Valid final DefaultFilterPagingRequest filter) {
+	@RequestMapping(value = "/api/countBidPlansByYear", method = RequestMethod.GET, produces = "application/json")
+	public List<DBObject> countBidPlansByYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
 		project.put("year", new BasicDBObject("$year", "$planning.bidPlanProjectDateApprove"));
@@ -78,8 +79,8 @@ public class CountPlansTendersAwardsController extends GenericOcvnController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value="/api/countTendersByYear", method = RequestMethod.GET)
-	public List<DBObject> countTendersByYear(@Valid final DefaultFilterPagingRequest filter) {
+	@RequestMapping(value = "/api/countTendersByYear", method = RequestMethod.GET, produces = "application/json")
+	public List<DBObject> countTendersByYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
 		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
@@ -102,8 +103,8 @@ public class CountPlansTendersAwardsController extends GenericOcvnController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value="/api/countAwardsByYear", method = RequestMethod.GET)
-	public List<DBObject> countAwardsByYear(@Valid final DefaultFilterPagingRequest filter) {
+	@RequestMapping(value = "/api/countAwardsByYear", method = RequestMethod.GET, produces = "application/json")
+	public List<DBObject> countAwardsByYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project0 = new BasicDBObject();
 		project0.put("awards", 1);

@@ -31,6 +31,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,8 +49,8 @@ public class AverageTenderAndAwardPeriods extends GenericOcvnController {
 
 	private static final int DAY_MS = 86400000;
 
-	@RequestMapping(value = "/api/averageTenderPeriod", method = RequestMethod.GET)
-	public List<DBObject> averageTenderPeriod(@Valid final DefaultFilterPagingRequest filter) {
+	@RequestMapping(value = "/api/averageTenderPeriod", method = RequestMethod.GET, produces = "application/json")
+	public List<DBObject> averageTenderPeriod(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject year = new BasicDBObject("$year", "$tender.tenderPeriod.startDate");
 
@@ -76,8 +77,8 @@ public class AverageTenderAndAwardPeriods extends GenericOcvnController {
 		return list;
 	}
 
-	@RequestMapping(value="/api/averageAwardPeriod", method = RequestMethod.GET)
-	public List<DBObject> averageAwardPeriod(@Valid final DefaultFilterPagingRequest filter) {
+	@RequestMapping(value = "/api/averageAwardPeriod", method = RequestMethod.GET, produces = "application/json")
+	public List<DBObject> averageAwardPeriod(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 		DBObject year = new BasicDBObject("$year", "$awards.date");
 
 		DBObject awardLengthDays = new BasicDBObject("$divide", Arrays.asList(

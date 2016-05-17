@@ -25,6 +25,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.core.query.TextQuery;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -63,7 +64,8 @@ public class ProcuringEntitySearchController extends GenericOcvnController {
 	 * @return
 	 */
 	@RequestMapping(value = "/api/ocds/organization/procuringEntity/all", method = RequestMethod.GET)
-	public List<VNOrganization> procuringEntitySearchText(@Valid final ProcuringEntitySearchRequest request) {
+	public List<VNOrganization> procuringEntitySearchText(
+			@ModelAttribute @Valid final ProcuringEntitySearchRequest request) {
 
 		PageRequest pageRequest = new PageRequest(request.getPageNumber(), request.getPageSize());
 
