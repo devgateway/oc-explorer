@@ -35,238 +35,239 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Audited
 public class Person extends AbstractAuditableEntity implements Serializable, UserDetails {
+    private static final long serialVersionUID = 109780377848343674L;
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 109780377848343674L;
+    private String username;
 
-	private String username;
-	private String firstName;
-	private String lastName;
-	private String email;
+    private String firstName;
 
-	@JsonIgnore
-	private String password;
+    private String lastName;
 
-	private String country;
-	private String title;
-	// flag if user is first time logged
-	private Boolean changePassword = true;
-	private Boolean enabled = true;
+    private String email;
 
-	@JsonIgnore
-	private String secret;
+    @JsonIgnore
+    private String password;
 
-	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-	@ManyToOne(fetch = FetchType.EAGER)
-	private Group group;
+    private String country;
 
-	@Transient
-	private Collection<? extends GrantedAuthority> authorities;
+    private String title;
 
-	@Transient
-	@JsonIgnore
-	private String plainPassword;
+    private Boolean changePassword;
 
-	@Transient
-	@JsonIgnore
-	private String plainPasswordCheck;
+    private Boolean enabled = true;
 
-	// flag if user want to change password
-	@Transient
-	@JsonIgnore
-	private boolean changePass;
+    @JsonIgnore
+    private String secret;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-	private List<Role> roles;
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Group group;
 
-	@Override
-	public String getUsername() {
-		return username;
-	}
+    @Transient
+    private Collection<? extends GrantedAuthority> authorities;
 
-	public void setUsername(final String username) {
-		this.username = username;
-	}
+    @Transient
+    @JsonIgnore
+    private String plainPassword;
 
-	public String getEmail() {
-		return email;
-	}
+    @Transient
+    @JsonIgnore
+    private String plainPasswordCheck;
 
-	public void setEmail(final String email) {
-		this.email = email;
-	}
+    // flag if user want to change password
+    @Transient
+    @JsonIgnore
+    private boolean changePass;
 
-	@Override
-	public String getPassword() {
-		return password;
-	}
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private List<Role> roles;
 
-	public void setPassword(final String password) {
-		this.password = password;
-	}
+    @Override
+    public String getUsername() {
+        return username;
+    }
 
-	public Group getGroup() {
-		return group;
-	}
+    public void setUsername(final String username) {
+        this.username = username;
+    }
 
-	public void setGroup(final Group group) {
-		this.group = group;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public String getFirstName() {
-		return firstName;
-	}
+    public void setEmail(final String email) {
+        this.email = email;
+    }
 
-	public void setFirstName(final String firstName) {
-		this.firstName = firstName;
-	}
+    @Override
+    public String getPassword() {
+        return password;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    public void setPassword(final String password) {
+        this.password = password;
+    }
 
-	public void setLastName(final String lastName) {
-		this.lastName = lastName;
-	}
+    public Group getGroup() {
+        return group;
+    }
 
-	/**
-	 * @return the authorities
-	 */
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return authorities;
-	}
+    public void setGroup(final Group group) {
+        this.group = group;
+    }
 
-	/**
-	 * @param authorities
-	 *            the authorities to set
-	 */
-	public void setAuthorities(final Collection<? extends GrantedAuthority> authorities) {
-		this.authorities = authorities;
-	}
+    public String getFirstName() {
+        return firstName;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.springframework.security.core.userdetails.UserDetails#
-	 * isAccountNonExpired()
-	 */
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
+    public void setFirstName(final String firstName) {
+        this.firstName = firstName;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.springframework.security.core.userdetails.UserDetails#
-	 * isAccountNonLocked()
-	 */
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
+    public String getLastName() {
+        return lastName;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.springframework.security.core.userdetails.UserDetails#
-	 * isCredentialsNonExpired()
-	 */
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
+    public void setLastName(final String lastName) {
+        this.lastName = lastName;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.springframework.security.core.userdetails.UserDetails#isEnabled()
-	 */
-	@Override
-	public boolean isEnabled() {
-		return this.enabled;
-	}
+    /**
+     * @return the authorities
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
 
-	public String getCountry() {
-		return country;
-	}
+    /**
+     * @param authorities
+     *            the authorities to set
+     */
+    public void setAuthorities(final Collection<? extends GrantedAuthority> authorities) {
+        this.authorities = authorities;
+    }
 
-	public void setCountry(final String country) {
-		this.country = country;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.springframework.security.core.userdetails.UserDetails#
+     * isAccountNonExpired()
+     */
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
-	public String getPlainPassword() {
-		return plainPassword;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.springframework.security.core.userdetails.UserDetails#
+     * isAccountNonLocked()
+     */
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
 
-	public void setPlainPassword(final String plainPassword) {
-		this.plainPassword = plainPassword;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.springframework.security.core.userdetails.UserDetails#
+     * isCredentialsNonExpired()
+     */
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 
-	public String getPlainPasswordCheck() {
-		return plainPasswordCheck;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * org.springframework.security.core.userdetails.UserDetails#isEnabled()
+     */
+    @Override
+    public boolean isEnabled() {
+        return this.enabled;
+    }
 
-	public void setPlainPasswordCheck(final String plainPasswordCheck) {
-		this.plainPasswordCheck = plainPasswordCheck;
-	}
+    public String getCountry() {
+        return country;
+    }
 
-	public boolean isChangePass() {
-		return changePass;
-	}
+    public void setCountry(final String country) {
+        this.country = country;
+    }
 
-	public void setChangePass(final boolean changePass) {
-		this.changePass = changePass;
-	}
+    public String getPlainPassword() {
+        return plainPassword;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public void setPlainPassword(final String plainPassword) {
+        this.plainPassword = plainPassword;
+    }
 
-	public void setTitle(final String title) {
-		this.title = title;
-	}
+    public String getPlainPasswordCheck() {
+        return plainPasswordCheck;
+    }
 
-	public void setEnabled(final boolean enabled) {
-		this.enabled = enabled;
-	}
+    public void setPlainPasswordCheck(final String plainPasswordCheck) {
+        this.plainPasswordCheck = plainPasswordCheck;
+    }
 
-	public Boolean getChangePassword() {
-		return changePassword;
-	}
+    public boolean getChangePass() {
+        return changePass;
+    }
 
-	public void setChangePassword(final Boolean changePassword) {
-		this.changePassword = changePassword;
-	}
+    public void setChangePass(final boolean changePass) {
+        this.changePass = changePass;
+    }
 
-	public String getSecret() {
-		return secret;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setSecret(final String secret) {
-		this.secret = secret;
-	}
+    public void setTitle(final String title) {
+        this.title = title;
+    }
 
-	public List<Role> getRoles() {
-		return roles;
-	}
+    public void setEnabled(final boolean enabled) {
+        this.enabled = enabled;
+    }
 
-	public void setRoles(final List<Role> roles) {
-		this.roles = roles;
-	}
+    public Boolean getChangePassword() {
+        return changePassword;
+    }
 
-	@Override
-	public String toString() {
-		return "[" + username + "," + firstName + "," + lastName + "," + email + "]";
-	}
+    public void setChangePassword(final Boolean changePassword) {
+        this.changePassword = changePassword;
+    }
 
-	@Override
-	public AbstractAuditableEntity getParent() {
-		return null;
-	}
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(final String secret) {
+        this.secret = secret;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(final List<Role> roles) {
+        this.roles = roles;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + username + "," + firstName + "," + lastName + "," + email + "]";
+    }
+
+    @Override
+    public AbstractAuditableEntity getParent() {
+        return null;
+    }
 }
