@@ -20,11 +20,11 @@
     <name>Wicket Forms</name>
     <description>DGToolkit Forms</description>
 
-	<parent>
-	    <groupId>org.devgateway.toolkit</groupId>
-	    <artifactId>toolkit</artifactId>
-	    <version>0.0.1-SNAPSHOT</version>
-	 </parent>
+    <parent>
+        <groupId>org.devgateway.toolkit</groupId>
+        <artifactId>toolkit</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -49,46 +49,44 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
-
-
         <dependency>
             <groupId>org.devgateway.toolkit</groupId>
             <artifactId>ui</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
-		<dependency>
-			<groupId>org.devgateway.toolkit</groupId>
-			<artifactId>reporting</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>bcprov-jdk14</artifactId>
-					<groupId>bouncycastle</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>bcprov-jdk14</artifactId>
-					<groupId>org.bouncycastle</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+        <dependency>
+            <groupId>org.devgateway.toolkit</groupId>
+            <artifactId>reporting</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>bcprov-jdk14</artifactId>
+                    <groupId>bouncycastle</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>bcprov-jdk14</artifactId>
+                    <groupId>org.bouncycastle</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
 
-		<dependency>
-			<groupId>org.devgateway.toolkit</groupId>
-			<artifactId>web</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		
-		<!--
-		Uncomment this if you are planning to use Spring Boot DevTools (if you don't use JRebel)
-		 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>	
-		</dependency>
-		 -->
-	
+        <dependency>
+            <groupId>org.devgateway.toolkit</groupId>
+            <artifactId>web</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <!--
+        Uncomment this if you are planning to use Spring Boot DevTools (if you don't use JRebel)
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
+         -->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-integration</artifactId>
@@ -100,67 +98,60 @@
             </exclusions>
         </dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-tomcat</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jetty</artifactId>
-		</dependency>
-        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jetty</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
-        
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-rest-hal-browser</artifactId>
-		</dependency>
 
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-rest-hal-browser</artifactId>
+        </dependency>
 
-
-        
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-remoting</artifactId>
         </dependency>
-        
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jetty</artifactId>
-            <scope>provided</scope>
-        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-spring</artifactId>
             <version>${wicket.version}</version>
         </dependency>
 
-		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib</artifactId>
-			<version>3.1</version>
-		</dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>3.1</version>
+        </dependency>
 
-		<dependency>
-			<groupId>de.agilecoders.wicket.webjars</groupId>
-			<artifactId>wicket-webjars</artifactId>
-			<version>${wicket.webjars.version}</version>
-		</dependency>
-
+        <dependency>
+            <groupId>de.agilecoders.wicket.webjars</groupId>
+            <artifactId>wicket-webjars</artifactId>
+            <version>${wicket.webjars.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.wicket</groupId>
@@ -168,13 +159,11 @@
             <version>${wicket.version}</version>
         </dependency>
 
-
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-datetime</artifactId>
             <version>${wicket.version}</version>
         </dependency>
-
 
         <dependency>
             <groupId>org.apache.wicket</groupId>
@@ -188,14 +177,12 @@
             <version>${wicket.version}</version>
         </dependency>
 
-
         <dependency>
             <groupId>org.zeroturnaround</groupId>
             <artifactId>zt-zip</artifactId>
             <version>${zt.zip.version}</version>
             <type>jar</type>
         </dependency>
-
 
         <dependency>
             <groupId>de.agilecoders.wicket</groupId>
@@ -215,11 +202,11 @@
             <version>${wicket.bootstrap.version}</version>
         </dependency>
 
-		<dependency>
-			<groupId>org.wicketstuff</groupId>
-			<artifactId>wicketstuff-select2</artifactId>
-			<version>${wicket.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.wicketstuff</groupId>
+            <artifactId>wicketstuff-select2</artifactId>
+            <version>${wicket.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.wicketstuff</groupId>
@@ -233,13 +220,11 @@
             </exclusions>
         </dependency>
 
-      
         <dependency>
             <groupId>com.yahoo.platform.yui</groupId>
             <artifactId>yuicompressor</artifactId>
             <version>2.4.8</version>
         </dependency>
-
 
         <dependency>
             <groupId>de.agilecoders.wicket</groupId>
@@ -252,7 +237,7 @@
             <artifactId>wicket-bootstrap-less</artifactId>
             <version>${wicket.bootstrap.version}</version>
         </dependency>
-         
+
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
@@ -266,8 +251,6 @@
     </dependencies>
 
     <build>
-
-
         <resources>
             <resource>
                 <filtering>true</filtering>
@@ -289,22 +272,22 @@
 
         <plugins>
 
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-        			<executable>true</executable>
-    			</configuration>
-				<version>${spring.boot.version}</version>
-				<executions>
-					<execution>
-						<goals>
-							<!-- This will ensure a fat jar is created, will include all jar dependencies inside a /lib folder within this jar -->
-							<goal>repackage</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <executable>true</executable>
+                </configuration>
+                <version>${spring.boot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <!-- This will ensure a fat jar is created, will include all jar dependencies inside a /lib folder within this jar -->
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -345,24 +328,24 @@
                 <version>${wicket.version}</version>
             </dependency>
             <dependency>
-            	<groupId>org.apache.derby</groupId>
-            	<artifactId>derby</artifactId>
-            	<version>${derby.version}</version>
+                <groupId>org.apache.derby</groupId>
+                <artifactId>derby</artifactId>
+                <version>${derby.version}</version>
             </dependency>
             <dependency>
-            	<groupId>org.hibernate</groupId>
-            	<artifactId>hibernate-ehcache</artifactId>
-            	<version>${hibernate.core.version}</version>            	
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-ehcache</artifactId>
+                <version>${hibernate.core.version}</version>
             </dependency>
             <dependency>
-            	<groupId>org.hibernate</groupId>
-            	<artifactId>hibernate-entitymanager</artifactId>
-            	<version>${hibernate.core.version}</version>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-entitymanager</artifactId>
+                <version>${hibernate.core.version}</version>
             </dependency>
             <dependency>
-            	<groupId>org.hibernate</groupId>
-            	<artifactId>hibernate-envers</artifactId>
-            	<version>${hibernate.core.version}</version>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-envers</artifactId>
+                <version>${hibernate.core.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
