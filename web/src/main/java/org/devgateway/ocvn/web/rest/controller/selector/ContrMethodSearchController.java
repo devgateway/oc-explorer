@@ -35,7 +35,7 @@ public class ContrMethodSearchController extends GenericOcvnController {
 	@Autowired
 	private ContrMethodRepository contrMethodRepository;
 
-	@RequestMapping(value = "/api/ocds/contrMethod/all", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/ocds/contrMethod/all", method = RequestMethod.GET, produces = "application/json")
 	public List<ContrMethod> contrMethods() {
 
 		return contrMethodRepository.findAll(new Sort(Direction.ASC, Fields.UNDERSCORE_ID));

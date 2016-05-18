@@ -49,7 +49,7 @@ public class ProcuringEntitySearchController extends GenericOcvnController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value = "/api/ocds/organization/id/{id:^[a-zA-Z0-9]*$}", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/ocds/organization/id/{id:^[a-zA-Z0-9]*$}", method = RequestMethod.GET, produces = "application/json")
 	public VNOrganization organizationId(@PathVariable final String id) {
 
 		VNOrganization org = organizationRepository.findOne(id);
@@ -63,7 +63,7 @@ public class ProcuringEntitySearchController extends GenericOcvnController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "/api/ocds/organization/procuringEntity/all", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/ocds/organization/procuringEntity/all", method = RequestMethod.GET, produces = "application/json")
 	public List<VNOrganization> procuringEntitySearchText(
 			@ModelAttribute @Valid final ProcuringEntitySearchRequest request) {
 

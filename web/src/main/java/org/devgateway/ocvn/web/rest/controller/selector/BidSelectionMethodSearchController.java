@@ -41,7 +41,8 @@ public class BidSelectionMethodSearchController extends GenericOcvnController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/api/ocds/bidSelectionMethod/all", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/ocds/bidSelectionMethod/all", method = RequestMethod.GET,
+			produces = "application/json")
 	public List<DBObject> bidSelectionMethods() {
 
 		DBObject project = new BasicDBObject("tender.procurementMethodDetails", 1);
