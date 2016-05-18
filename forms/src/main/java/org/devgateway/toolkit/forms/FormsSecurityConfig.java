@@ -60,7 +60,8 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 				"/api/ocds/package/planningBidNo/**", "/api/ocds/package/all/**", "/api/ocds/package/ocid/**",
 				"/img/**", "/css*/**", "/js*/**", "/assets*/**", "/wicket/resource/**/*.js",
 				"/wicket/resource/**/*.css", "/wicket/resource/**/*.png", "/wicket/resource/**/*.jpg",
-				"/wicket/resource/**/*.gif", "/login/**", "/resources/**", "/resources/public/**");
+				"/wicket/resource/**/*.gif", "/login/**", "/forgotPassword/**",
+                "/resources/**", "/resources/public/**");
 	}
 
 	/**
