@@ -47,17 +47,7 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 	@Override
 	public void configure(final WebSecurity web) throws Exception {
 		super.configure(web);
-		web.ignoring().antMatchers("/ui/**", "/api/tenderPriceByOcdsTypeYear/**", "/api/tenderPriceByVnTypeYear/**",
-				"/api/tenderBidPeriodPercentiles/**", "/api/ocds/release/budgetProjectId/**",
-				"/api/ocds/release/planningBidNo/**", "/api/plannedFundingByLocation/**",
-				"/api/costEffectivenessAwardAmount/**", "/api/costEffectivenessTenderAmount/**",
-				"/api/ocds/organization/procuringEntity/**", "/api/ocds/organization/id/**", "/api/ocds/release/all/**",
-				"/api/countBidPlansByYear/**", "/api/countTendersByYear/**", "/api/countAwardsByYear/**",
-				"/api/totalCancelledTendersByYear**", "/api/averageTenderPeriod**",
-				"/api/ocds/bidSelectionMethod/all**", "/api/topTenLargestAwards**", "/api/topTenLargestTenders**",
-				"/api/averageAwardPeriod**", "/api/ocds/release/ocid/**", "/api/ocds/bidType/all**",
-				"/api/ocds/contrMethod/all/**", "/api/ocds/package/budgetProjectId/**",
-				"/api/ocds/package/planningBidNo/**", "/api/ocds/package/all/**", "/api/ocds/package/ocid/**",
+		web.ignoring().antMatchers("/ui/**", 
 				"/img/**", "/css*/**", "/js*/**", "/assets*/**", "/wicket/resource/**/*.js",
 				"/wicket/resource/**/*.css", "/wicket/resource/**/*.png", "/wicket/resource/**/*.jpg",
 				"/wicket/resource/**/*.gif", "/login/**", "/forgotPassword/**",

@@ -30,7 +30,9 @@ import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mongodb.BasicDBObject;
@@ -44,8 +46,8 @@ import com.mongodb.DBObject;
 @RestController
 public class FundingByLocationController extends GenericOcvnController {
 
-	@RequestMapping("/api/plannedFundingByLocation")
-	public List<DBObject> plannedFundingByLocation(@Valid final DefaultFilterPagingRequest filter) {
+	@RequestMapping(value = "/api/plannedFundingByLocation", method = RequestMethod.GET, produces = "application/json")
+	public List<DBObject> plannedFundingByLocation(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject vars = new BasicDBObject();
 		vars.put("numberOfLocations", new BasicDBObject("$size", "$planning.budget.projectLocation"));

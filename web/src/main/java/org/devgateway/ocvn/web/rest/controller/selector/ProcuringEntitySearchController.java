@@ -25,8 +25,10 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.core.query.TextQuery;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -38,7 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProcuringEntitySearchController extends GenericOcvnController {
 
 	@Autowired
-	VNOrganizationRepository organizationRepository;
+	private VNOrganizationRepository organizationRepository;
 
 	/**
 	 * Searches organizations based on ID. Returns only one result, if the id
@@ -47,7 +49,7 @@ public class ProcuringEntitySearchController extends GenericOcvnController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping("/api/ocds/organization/id/{id:^[a-zA-Z0-9]*$}")
+	@RequestMapping(value = "/api/ocds/organization/id/{id:^[a-zA-Z0-9]*$}", method = RequestMethod.GET, produces = "application/json")
 	public VNOrganization organizationId(@PathVariable final String id) {
 
 		VNOrganization org = organizationRepository.findOne(id);
@@ -61,8 +63,9 @@ public class ProcuringEntitySearchController extends GenericOcvnController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("/api/ocds/organization/procuringEntity/all")
-	public List<VNOrganization> procuringEntitySearchText(@Valid final ProcuringEntitySearchRequest request) {
+	@RequestMapping(value = "/api/ocds/organization/procuringEntity/all", method = RequestMethod.GET, produces = "application/json")
+	public List<VNOrganization> procuringEntitySearchText(
+			@ModelAttribute @Valid final ProcuringEntitySearchRequest request) {
 
 		PageRequest pageRequest = new PageRequest(request.getPageNumber(), request.getPageSize());
 

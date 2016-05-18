@@ -6,7 +6,9 @@ import javax.validation.Valid;
 
 import org.devgateway.ocvn.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.data.mongodb.core.ScriptOperations;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -17,8 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TenderBidPeriodPercentilesByYearController extends GenericOcvnController {
 
-	@RequestMapping("/api/tenderBidPeriodPercentiles")
-	public Object tenderBidPeriodPercentiles(@Valid final YearFilterPagingRequest filter) {
+	@RequestMapping(value = "/api/tenderBidPeriodPercentiles", method = RequestMethod.GET,
+			 produces = "application/json")
+	public Object tenderBidPeriodPercentiles(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
 		ScriptOperations scriptOps = mongoTemplate.scriptOps();
 

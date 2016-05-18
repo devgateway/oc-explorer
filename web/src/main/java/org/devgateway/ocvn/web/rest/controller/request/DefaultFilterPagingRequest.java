@@ -14,6 +14,7 @@ import cz.jirutka.validator.collection.constraints.EachRange;
 public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
 	@EachPattern(regexp = "^[a-zA-Z0-9]*$")
+	//@ApiModelProperty(value="something")
 	private List<String> bidTypeId;
 
 	@EachPattern(regexp = "^[a-zA-Z0-9]*$")
@@ -23,7 +24,6 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
 	@EachRange(min = 1, max = 5)
 	private List<Integer> contrMethod;
-
 
 	/**
 	 * This parameter will invert (negate) all existing filtering parameters. So

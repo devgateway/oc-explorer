@@ -36,7 +36,7 @@ public class MainCss extends CssResourceReference {
 	 * Construct.
 	 */
 	public MainCss() {
-		super(MainCss.class, "main-new.css");
+		super(MainCss.class, "main.css");
 	}
 
 	@Override

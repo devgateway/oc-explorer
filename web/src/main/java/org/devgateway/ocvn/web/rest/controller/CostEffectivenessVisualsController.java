@@ -30,7 +30,9 @@ import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperat
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mongodb.BasicDBObject;
@@ -44,8 +46,9 @@ import com.mongodb.DBObject;
 @RestController
 public class CostEffectivenessVisualsController extends GenericOcvnController {
 
-	@RequestMapping("/api/costEffectivenessAwardAmount")
-	public List<DBObject> costEffectivenessAwardAmount(@Valid final DefaultFilterPagingRequest filter) {
+	@RequestMapping(value = "/api/costEffectivenessAwardAmount", method = RequestMethod.GET,
+			produces = "application/json")
+	public List<DBObject> costEffectivenessAwardAmount(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
 		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.endDate"));
@@ -65,8 +68,10 @@ public class CostEffectivenessVisualsController extends GenericOcvnController {
 
 	}
 
-	@RequestMapping("/api/costEffectivenessTenderAmount")
-	public List<DBObject> costEffectivenessTenderAmount(@Valid final GroupingFilterPagingRequest filter) {
+	@RequestMapping(value = "/api/costEffectivenessTenderAmount", method = RequestMethod.GET,
+			 produces = "application/json")
+	public List<DBObject> costEffectivenessTenderAmount(
+			@ModelAttribute @Valid final GroupingFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
 		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.endDate"));
