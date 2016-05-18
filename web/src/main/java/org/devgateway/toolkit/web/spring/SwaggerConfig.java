@@ -15,12 +15,15 @@ import static springfox.documentation.builders.PathSelectors.regex;
 @EnableSwagger2
 public class SwaggerConfig {
 	@Bean
-	public Docket api() {
+	public Docket ocDashboardsApi() {
 		return new Docket(DocumentationType.SWAGGER_2).groupName("ocDashboardsApi").apiInfo(ocDashboardsApiInfo())
-				.select().apis(RequestHandlerSelectors.any()).paths(regex("/api/.*"))
-				// .apis(RequestHandlerSelectors.any())
-				// .paths(PathSelectors.any())
-				.build();
+				.select().apis(RequestHandlerSelectors.any()).paths(regex("/api/.*")).build();
+	}
+
+	@Bean
+	public Docket manageApi() {
+		return new Docket(DocumentationType.SWAGGER_2).groupName("manageApi")
+				.select().apis(RequestHandlerSelectors.any()).paths(regex("/manage/.*")).build();
 	}
 
 	private ApiInfo ocDashboardsApiInfo() {
