@@ -54,7 +54,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return securityContextPersistenceFilter;
 	}
 
-	
 	protected String[] allowedApiEndpoints() {
 		return new String[] { "/api/tenderPriceByOcdsTypeYear/**", "/api/tenderPriceByVnTypeYear/**",
 				"/api/tenderBidPeriodPercentiles/**", "/api/ocds/release/budgetProjectId/**",
@@ -67,19 +66,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				"/api/averageAwardPeriod**", "/api/ocds/release/ocid/**", "/api/ocds/bidType/all**",
 				"/api/ocds/contrMethod/all/**", "/api/ocds/package/budgetProjectId/**",
 				"/api/ocds/package/planningBidNo/**", "/api/ocds/package/all/**", "/api/ocds/package/ocid/**",
-				"/api/ocds/location/all/**", "/api/ocds/location/search/**"		
-		};
+				"/api/ocds/location/all/**", "/api/ocds/location/search/**", "/api/averageNumberOfTenderers/**" };
 	}
-	
-	
+
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers("/", "/home", "/v2/api-docs/**", "/swagger-ui.html**", "/webjars/**", "/images/**",
 				"/configuration/**", "/swagger-resources/**").antMatchers(allowedApiEndpoints());
 
 	}
-	
- 	
+
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
 		http.authorizeRequests().anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll().and()
