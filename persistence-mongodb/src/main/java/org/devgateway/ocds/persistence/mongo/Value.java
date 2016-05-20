@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocds.persistence.mongo;
 
@@ -10,23 +10,24 @@ import java.math.BigDecimal;
  * Value OCDS Entity http://standard.open-contracting.org/latest/en/schema/reference/#value
  */
 public class Value {
-	BigDecimal amount;
-	String currency;
+    private BigDecimal amount;
 
-	public BigDecimal getAmount() {
-		return amount;
-	}
+    private String currency;
 
-	public void setAmount(BigDecimal amount) {
-		this.amount = amount;
-	}
+    public BigDecimal getAmount() {
+        return amount;
+    }
 
-	public String getCurrency() {
-		return currency;
-	}
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
 
-	public void setCurrency(String currency) {
-		this.currency = currency;
-	}
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
 
 }

@@ -10,10 +10,9 @@ import java.util.Date;
  *
  */
 public class Period {
-	Date startDate;
-	
+	private Date startDate;
 
-	Date endDate;
+    private Date endDate;
 
 	public Date getStartDate() {
 		return startDate;

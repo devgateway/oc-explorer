@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocds.persistence.mongo;
 
@@ -11,60 +11,64 @@ import java.util.List;
  *         http://standard.open-contracting.org/latest/en/schema/reference/#item
  */
 public class Item {
+    private String id;
 
-	String id;
-	String description;
-	Classification classification;
-	List<Classification> additionalClassifications = new ArrayList<>();
-	Integer quantity;
-	ItemUnit unit;
+    private String description;
 
-	public String getId() {
-		return id;
-	}
+    private Classification classification;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    private List<Classification> additionalClassifications = new ArrayList<>();
 
-	public String getDescription() {
-		return description;
-	}
+    private Integer quantity;
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    private ItemUnit unit;
 
-	public Classification getClassification() {
-		return classification;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setClassification(Classification classification) {
-		this.classification = classification;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public List<Classification> getAdditionalClassifications() {
-		return additionalClassifications;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setAdditionalClassifications(List<Classification> additionalClassifications) {
-		this.additionalClassifications = additionalClassifications;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public Integer getQuantity() {
-		return quantity;
-	}
+    public Classification getClassification() {
+        return classification;
+    }
 
-	public void setQuantity(Integer quantity) {
-		this.quantity = quantity;
-	}
+    public void setClassification(Classification classification) {
+        this.classification = classification;
+    }
 
-	public ItemUnit getUnit() {
-		return unit;
-	}
+    public List<Classification> getAdditionalClassifications() {
+        return additionalClassifications;
+    }
 
-	public void setUnit(ItemUnit unit) {
-		this.unit = unit;
-	}
+    public void setAdditionalClassifications(List<Classification> additionalClassifications) {
+        this.additionalClassifications = additionalClassifications;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public ItemUnit getUnit() {
+        return unit;
+    }
+
+    public void setUnit(ItemUnit unit) {
+        this.unit = unit;
+    }
 
 }

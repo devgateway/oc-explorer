@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocds.persistence.mongo;
 
@@ -13,54 +13,55 @@ import java.util.List;
  *         amendment
  */
 public class Amendment {
+    private Date date;
 
-	Date date;
-	List<Change> changes = new ArrayList<>();
-	String rationale;
+    private List<Change> changes = new ArrayList<>();
 
-	public class Change {
-		String property;
-		String former_value;
+    private String rationale;
 
-		public String getProperty() {
-			return property;
-		}
+    public class Change {
+        private String property;
+        private String former_value;
 
-		public void setProperty(final String property) {
-			this.property = property;
-		}
+        public String getProperty() {
+            return property;
+        }
 
-		public String getFormer_value() {
-			return former_value;
-		}
+        public void setProperty(final String property) {
+            this.property = property;
+        }
 
-		public void setFormer_value(final String former_value) {
-			this.former_value = former_value;
-		}
+        public String getFormer_value() {
+            return former_value;
+        }
 
-	}
+        public void setFormer_value(final String former_value) {
+            this.former_value = former_value;
+        }
 
-	public Date getDate() {
-		return date;
-	}
+    }
 
-	public void setDate(final Date date) {
-		this.date = date;
-	}
+    public Date getDate() {
+        return date;
+    }
 
-	public List<Change> getChanges() {
-		return changes;
-	}
+    public void setDate(final Date date) {
+        this.date = date;
+    }
 
-	public void setChanges(final List<Change> changes) {
-		this.changes = changes;
-	}
+    public List<Change> getChanges() {
+        return changes;
+    }
 
-	public String getRationale() {
-		return rationale;
-	}
+    public void setChanges(final List<Change> changes) {
+        this.changes = changes;
+    }
 
-	public void setRationale(final String rationale) {
-		this.rationale = rationale;
-	}
+    public String getRationale() {
+        return rationale;
+    }
+
+    public void setRationale(final String rationale) {
+        this.rationale = rationale;
+    }
 }

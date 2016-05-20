@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocds.persistence.mongo;
 
@@ -15,68 +15,71 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document
 public class Organization {
+    @Id
+    private String id;
 
-	@Id
-	String id;
+    private Identifier identifier;
 
-	Identifier identifier;
-	List<Identifier> additionalIdentifiers = new ArrayList<>();
-	String name;
-	Address address;
-	ContactPoint contactPoint;
+    private List<Identifier> additionalIdentifiers = new ArrayList<>();
 
-	@Override
-	public String toString() {
-		return name + " with id=" + identifier.getId();
-	}
+    private String name;
 
-	public Identifier getIdentifier() {
-		return identifier;
-	}
+    private Address address;
 
-	public void setIdentifier(Identifier identifier) {
-		this.identifier = identifier;
-		this.id = identifier.getId();
-	}
+    private ContactPoint contactPoint;
 
-	public List<Identifier> getAdditionalIdentifiers() {
-		return additionalIdentifiers;
-	}
+    @Override
+    public String toString() {
+        return name + " with id=" + identifier.getId();
+    }
 
-	public void setAdditionalIdentifiers(List<Identifier> additionalIdentifiers) {
-		this.additionalIdentifiers = additionalIdentifiers;
-	}
+    public Identifier getIdentifier() {
+        return identifier;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setIdentifier(Identifier identifier) {
+        this.identifier = identifier;
+        this.id = identifier.getId();
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public List<Identifier> getAdditionalIdentifiers() {
+        return additionalIdentifiers;
+    }
 
-	public Address getAddress() {
-		return address;
-	}
+    public void setAdditionalIdentifiers(List<Identifier> additionalIdentifiers) {
+        this.additionalIdentifiers = additionalIdentifiers;
+    }
 
-	public void setAddress(Address address) {
-		this.address = address;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public ContactPoint getContactPoint() {
-		return contactPoint;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setContactPoint(ContactPoint contactPoint) {
-		this.contactPoint = contactPoint;
-	}
+    public Address getAddress() {
+        return address;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public ContactPoint getContactPoint() {
+        return contactPoint;
+    }
+
+    public void setContactPoint(ContactPoint contactPoint) {
+        this.contactPoint = contactPoint;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
 }
