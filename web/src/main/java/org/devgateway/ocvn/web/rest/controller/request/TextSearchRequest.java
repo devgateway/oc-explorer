@@ -9,12 +9,12 @@ import javax.validation.constraints.Size;
  * @author mihai
  *
  */
-public class ProcuringEntitySearchRequest extends GenericPagingRequest {
+public class TextSearchRequest extends GenericPagingRequest {
 
 	@Size(min = 3, max = 30)
-	String text;
+	private String text;
 
-	public ProcuringEntitySearchRequest() {
+	public TextSearchRequest() {
 		super();
 	}
 

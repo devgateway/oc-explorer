@@ -18,7 +18,7 @@ import javax.validation.Valid;
 import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
 import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository;
 import org.devgateway.ocvn.web.rest.controller.GenericOcvnController;
-import org.devgateway.ocvn.web.rest.controller.request.ProcuringEntitySearchRequest;
+import org.devgateway.ocvn.web.rest.controller.request.TextSearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -49,7 +49,8 @@ public class ProcuringEntitySearchController extends GenericOcvnController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value = "/api/ocds/organization/id/{id:^[a-zA-Z0-9]*$}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/api/ocds/organization/id/{id:^[a-zA-Z0-9]*$}", method = RequestMethod.GET,
+			produces = "application/json")
 	public VNOrganization organizationId(@PathVariable final String id) {
 
 		VNOrganization org = organizationRepository.findOne(id);
@@ -63,25 +64,10 @@ public class ProcuringEntitySearchController extends GenericOcvnController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "/api/ocds/organization/procuringEntity/all", method = RequestMethod.GET, produces = "application/json")
-	public List<VNOrganization> procuringEntitySearchText(
-			@ModelAttribute @Valid final ProcuringEntitySearchRequest request) {
-
-		PageRequest pageRequest = new PageRequest(request.getPageNumber(), request.getPageSize());
-
-		Query query = null;
-
-		if (request.getText() == null) {
-			query = new Query();
-		} else {
-			query = TextQuery.queryText(new TextCriteria().matching(request.getText())).sortByScore();
-		}
-		query.addCriteria(Criteria.where("procuringEntity").is(true)).with(pageRequest);
-
-		List<VNOrganization> orgs = mongoTemplate.find(query, VNOrganization.class);
-
-		return orgs;
-
+	@RequestMapping(value = "/api/ocds/organization/procuringEntity/all", method = RequestMethod.GET, 
+			produces = "application/json")
+	public List<VNOrganization> procuringEntitySearchText(@ModelAttribute @Valid final TextSearchRequest request) {
+		return genericSearchRequest(request, Criteria.where("procuringEntity").is(true), VNOrganization.class);
 	}
 
 }
