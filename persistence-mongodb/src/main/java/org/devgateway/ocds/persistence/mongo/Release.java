@@ -3,15 +3,11 @@
  */
 package org.devgateway.ocds.persistence.mongo;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.*;
 
 /**
  * @author mihai Release OCDS Entity
