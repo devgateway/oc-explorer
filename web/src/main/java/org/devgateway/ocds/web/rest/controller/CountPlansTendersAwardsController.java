@@ -112,7 +112,8 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
 		DBObject sort = new BasicDBObject();
 		sort.put("count", -1);
 
-		Aggregation agg = Aggregation.newAggregation(match(where("awards.0").exists(true)), getMatchDefaultFilterOperation(filter),
+		Aggregation agg = Aggregation.newAggregation(match(where("awards.0").exists(true)),
+                getMatchDefaultFilterOperation(filter),
 				new CustomOperation(new BasicDBObject("$project", project0)), unwind("$awards"),
 				match(where("awards.date").exists(true)), new CustomOperation(new BasicDBObject("$project", project)),
 				new CustomOperation(new BasicDBObject("$group", group)),

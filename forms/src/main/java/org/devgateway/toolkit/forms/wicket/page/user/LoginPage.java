@@ -42,12 +42,12 @@ import org.wicketstuff.annotation.mount.MountPath;
  */
 @MountPath("/login")
 public class LoginPage extends BasePage {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@SpringBean
-	private PersonRepository personRepository;
+    @SpringBean
+    private PersonRepository personRepository;
 
-	private static final int HIDE_NOTIFICATION_SECONDS = 15;
+    private static final int HIDE_NOTIFICATION_SECONDS = 15;
 
     class LoginForm extends BootstrapForm<Void> {
         private static final long serialVersionUID = 2066636625524650473L;
@@ -56,7 +56,7 @@ public class LoginPage extends BasePage {
 
         private String password;
 
-        public LoginForm(final String id) {
+        LoginForm(final String id) {
             super(id);
 
             pageTitle.setVisible(false);

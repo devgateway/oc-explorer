@@ -177,7 +177,8 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
                 list.add(new
                         MenuBookmarkablePageLink<ListTestFormPage>(ListTestFormPage.class, null,
-                        new StringResourceModel("navbar.testcomponents", this, null)).setIconType(FontAwesomeIconType.android));
+                        new StringResourceModel("navbar.testcomponents", this, null)).
+                        setIconType(FontAwesomeIconType.android));
 
                 list.add(new MenuBookmarkablePageLink<ListUserPage>(ListUserPage.class, null,
                         new StringResourceModel("navbar.users", this, null)).setIconType(FontAwesomeIconType.users));

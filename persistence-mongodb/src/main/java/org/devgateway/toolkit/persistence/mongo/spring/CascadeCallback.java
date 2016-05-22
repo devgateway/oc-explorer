@@ -33,10 +33,12 @@ public class CascadeCallback implements ReflectionUtils.FieldCallback {
             if (fieldValue != null) {
                 if (Collection.class.isAssignableFrom(field.getType())) {
                     Collection<?> c = (Collection<?>) fieldValue;
-                    for (Object o : c)
+                    for (Object o : c) {
                         saveValue(o);
-                } else
+                    }
+                } else {
                     saveValue(fieldValue);
+                }
             }
         }
 
