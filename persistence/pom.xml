@@ -12,8 +12,8 @@
     <artifactId>persistence</artifactId>
     <packaging>jar</packaging>
 
-    <name>OCExplorer Persistence</name>
-    <description>OCExplorer Persistence</description>
+    <name>OCVN Persistence</name>
+    <description>OCVN Persistence</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,9 +26,9 @@
     </properties>
 
     <parent>
-        <groupId>org.devgateway.ocds</groupId>
-        <artifactId>oce</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <groupId>org.devgateway.ocvn</groupId>
+        <artifactId>ocvn</artifactId>
+        <version>0.3.1-SNAPSHOT</version>
     </parent>
 
     <repositories>
@@ -40,6 +40,7 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+
     </repositories>
 
     <dependencies>
@@ -223,7 +224,6 @@
                     <include>**/*.sql</include>
                     <include>**/*.xml</include>
                 </includes>
-
             </resource>
 
             <resource>
@@ -237,7 +237,6 @@
 
             </resource>
         </resources>
-
 
         <plugins>
             <plugin>

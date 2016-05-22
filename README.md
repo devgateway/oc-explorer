@@ -1,4 +1,4 @@
-# Open Contracting Explorer (OCE)
+# Open Contracting Vietnam (OCVN)
 
 [![Build Status](https://travis-ci.org/devgateway/ocvn.svg?branch=develop)](https://travis-ci.org/devgateway/ocvn)
 

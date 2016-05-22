@@ -84,7 +84,7 @@ public class DatabaseConfiguration {
         HikariDataSource ds = new HikariDataSource();
         ds.setTransactionIsolation("TRANSACTION_READ_COMMITTED");
 
-        ds.setJdbcUrl("jdbc:derby://localhost//derby/ocexplorer;create=true");
+        ds.setJdbcUrl("jdbc:derby://localhost//derby/ocvn;create=true");
         ds.setUsername("app");
         ds.setPassword("app");
         ds.setDriverClassName(ClientDriver40.class.getName());
@@ -107,5 +107,4 @@ public class DatabaseConfiguration {
         nsc.start(new PrintWriter(java.lang.System.out, true));
         return nsc;
     }
-
 }

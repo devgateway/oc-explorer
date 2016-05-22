@@ -1,6 +1,7 @@
 package org.devgateway.ocvn.persistence.mongo.reader;
 
 import org.devgateway.ocds.persistence.mongo.Location;
+import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
 import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
 import org.devgateway.ocvn.persistence.mongo.spring.VNImportService;

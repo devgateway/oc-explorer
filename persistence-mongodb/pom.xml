@@ -17,8 +17,8 @@
     <artifactId>persistence-mongodb</artifactId>
     <packaging>jar</packaging>
 
-    <name>OCExplorer MongoDB Persistence</name>
-    <description>OCExplorer MongoDB Persistence</description>
+    <name>OCVN MongoDB Persistence</name>
+    <description>OCVN MongoDB Persistence</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -32,9 +32,9 @@
     </properties>
 
     <parent>
-        <groupId>org.devgateway.ocds</groupId>
-        <artifactId>oce</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <groupId>org.devgateway.ocvn</groupId>
+        <artifactId>ocvn</artifactId>
+        <version>0.3.1-SNAPSHOT</version>
     </parent>
 
     <repositories>
@@ -46,6 +46,7 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+
     </repositories>
 
     <dependencies>
@@ -135,6 +136,7 @@
                     <include>**/*.js</include>
                     <include>**/*.json</include>
                 </includes>
+
             </resource>
         </resources>
 

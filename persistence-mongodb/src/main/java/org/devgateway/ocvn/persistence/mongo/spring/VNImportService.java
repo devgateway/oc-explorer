@@ -6,11 +6,13 @@ package org.devgateway.ocvn.persistence.mongo.spring;
 import com.google.common.io.Files;
 import org.apache.commons.io.FileUtils;
 import org.devgateway.ocds.persistence.mongo.Release;
+import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
+import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.repository.ClassificationRepository;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.spring.ExcelImportService;
 import org.devgateway.ocds.persistence.mongo.spring.OcdsSchemaValidation;
 import org.devgateway.ocvn.persistence.mongo.dao.ImportFileTypes;
-import org.devgateway.ocvn.persistence.mongo.dao.MongoConstants;
 import org.devgateway.ocvn.persistence.mongo.reader.*;
 import org.devgateway.ocvn.persistence.mongo.repository.ContrMethodRepository;
 import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
@@ -44,7 +46,7 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class VNImportService {
+public class VNImportService implements ExcelImportService {
 
     private static final int MS_IN_SECOND = 1000;
 
@@ -175,7 +177,8 @@ public class VNImportService {
      * @throws IOException
      */
     private String saveSourceFilesToTempDir(final byte[] prototypeDatabase, final byte[] locations,
-                                            final byte[] publicInstitutionsSuppliers) throws FileNotFoundException, IOException {
+                                            final byte[] publicInstitutionsSuppliers)
+            throws FileNotFoundException, IOException {
         File tempDir = Files.createTempDir();
         FileOutputStream prototypeDatabaseOutputStream = new FileOutputStream(new File(tempDir, DATABASE_FILE_NAME));
         prototypeDatabaseOutputStream.write(prototypeDatabase);
@@ -195,7 +198,8 @@ public class VNImportService {
 
     @Async
     public void importAllSheets(final List<String> fileTypes, final byte[] prototypeDatabase, final byte[] locations,
-                                final byte[] publicInstitutionsSuppliers, final Boolean purgeDatabase, final Boolean validateData)
+                                final byte[] publicInstitutionsSuppliers,
+                                final Boolean purgeDatabase, final Boolean validateData)
             throws InterruptedException {
 
         String tempDirPath = null;

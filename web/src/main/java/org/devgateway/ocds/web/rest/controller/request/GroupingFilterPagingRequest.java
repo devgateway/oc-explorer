@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocds.web.rest.controller.request;
 
@@ -9,14 +9,14 @@ package org.devgateway.ocds.web.rest.controller.request;
  */
 public class GroupingFilterPagingRequest extends DefaultFilterPagingRequest {
 
-	private String groupByCategory;
+    private String groupByCategory;
 
-	public String getGroupByCategory() {
-		return groupByCategory;
-	}
+    public String getGroupByCategory() {
+        return groupByCategory;
+    }
 
-	public void setGroupByCategory(final String groupByCategory) {
-		this.groupByCategory = groupByCategory;
-	}
+    public void setGroupByCategory(final String groupByCategory) {
+        this.groupByCategory = groupByCategory;
+    }
 
 }

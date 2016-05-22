@@ -1,9 +1,14 @@
 package org.devgateway.ocvn.persistence.mongo.reader;
 
 import org.devgateway.ocds.persistence.mongo.*;
+import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
+import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.repository.ClassificationRepository;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
-import org.devgateway.ocvn.persistence.mongo.dao.*;
+import org.devgateway.ocvn.persistence.mongo.dao.ContrMethod;
+import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
+import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
+import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
 import org.devgateway.ocvn.persistence.mongo.repository.ContrMethodRepository;
 import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository;
 import org.devgateway.ocvn.persistence.mongo.spring.VNImportService;
@@ -26,7 +31,8 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 
     public TenderRowImporter(final ReleaseRepository releaseRepository, final VNImportService importService,
                              final VNOrganizationRepository organizationRepository,
-                             final ClassificationRepository classificationRepository, ContrMethodRepository contrMethodRepository,
+                             final ClassificationRepository classificationRepository,
+                             final ContrMethodRepository contrMethodRepository,
                              final int skipRows) {
         super(releaseRepository, importService, skipRows);
         this.organizationRepository = organizationRepository;

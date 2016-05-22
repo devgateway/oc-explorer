@@ -9,8 +9,8 @@
     <artifactId>web</artifactId>
     <packaging>jar</packaging>
 
-    <name>OCExplorer Web</name>
-    <description>OCExplorer Web Module</description>
+    <name>OCVN Web</name>
+    <description>OCVN Web Module</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,9 +19,9 @@
     </properties>
 
     <parent>
-        <groupId>org.devgateway.ocds</groupId>
-        <artifactId>oce</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <groupId>org.devgateway.ocvn</groupId>
+        <artifactId>ocvn</artifactId>
+        <version>0.3.1-SNAPSHOT</version>
     </parent>
 
     <repositories>
@@ -33,12 +33,9 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-
     </repositories>
 
-
     <dependencies>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -103,17 +100,16 @@
         </dependency>
 
         <dependency>
-            <groupId>org.devgateway.ocds</groupId>
+            <groupId>org.devgateway.ocvn</groupId>
             <artifactId>persistence</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>org.devgateway.ocds</groupId>
+            <groupId>org.devgateway.ocvn</groupId>
             <artifactId>persistence-mongodb</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.3.1-SNAPSHOT</version>
         </dependency>
-
 
         <dependency>
             <groupId>javax.mail</groupId>
@@ -121,6 +117,7 @@
             <version>1.4</version>
         </dependency>
     </dependencies>
+
     <build>
         <resources>
             <resource>

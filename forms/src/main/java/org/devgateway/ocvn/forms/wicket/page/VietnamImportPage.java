@@ -20,7 +20,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.ValidationError;
-import org.devgateway.ocvn.persistence.mongo.spring.VNImportService;
+import org.devgateway.ocds.persistence.mongo.spring.ExcelImportService;
 import org.devgateway.ocvn.forms.wicket.components.LogLabel;
 import org.devgateway.ocvn.persistence.dao.VietnamImportSourceFiles;
 import org.devgateway.ocvn.persistence.mongo.dao.ImportFileTypes;
@@ -53,7 +53,7 @@ public class VietnamImportPage extends BasePage {
     private VietnamImportSourceFilesRepository sourceFilesRepository;
 
     @SpringBean
-    private VNImportService vnImportService;
+    private ExcelImportService vnExcelImportService;
 
     @SpringBean
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
@@ -167,7 +167,7 @@ public class VietnamImportPage extends BasePage {
 
             @Override
             public String getObject() {
-                return vnImportService.getMsgBuffer().toString();
+                return vnExcelImportService.getMsgBuffer().toString();
             }
         };
 
@@ -250,7 +250,7 @@ public class VietnamImportPage extends BasePage {
 
                 try {
 
-                    vnImportService.importAllSheets(importForm.getModelObject().getFileTypes(),
+                    vnExcelImportService.importAllSheets(importForm.getModelObject().getFileTypes(),
                             importForm.getModelObject().getSourceFiles().getPrototypeDatabaseFile().iterator().next()
                                     .getContent().getBytes(),
                             importForm.getModelObject().getSourceFiles().getLocationsFile().iterator().next()
@@ -289,7 +289,7 @@ public class VietnamImportPage extends BasePage {
     protected void onInitialize() {
         super.onInitialize();
 
-        vnImportService.newMsgBuffer();
+        vnExcelImportService.newMsgBuffer();
 
         addForm();
         addSourceFilesSelect();
@@ -305,7 +305,6 @@ public class VietnamImportPage extends BasePage {
     }
 
     private void switchFieldsBasedOnExecutorAvailability(final AjaxRequestTarget target) {
-
         boolean enabled = threadPoolTaskExecutor.getActiveCount() == 0;
 
         importContainer.setVisibilityAllowed(!enabled);
