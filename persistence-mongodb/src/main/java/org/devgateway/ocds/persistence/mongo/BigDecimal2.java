@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocds.persistence.mongo;
 
@@ -16,17 +16,17 @@ import java.math.BigDecimal;
  */
 public class BigDecimal2 extends BigDecimal {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	public BigDecimal2(String val) {
-		super(val);
-	}
+    public BigDecimal2(String val) {
+        super(val);
+    }
 
-	public BigDecimal2(Double val) {
-		super(val);
-	}
+    public BigDecimal2(Double val) {
+        super(val);
+    }
 
 }

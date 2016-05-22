@@ -14,7 +14,7 @@ package org.devgateway.toolkit.web.spring;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
-import org.devgateway.ocvn.web.rest.serializers.GeoJsonPointSerializer;
+import org.devgateway.ocds.web.rest.serializers.GeoJsonPointSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;

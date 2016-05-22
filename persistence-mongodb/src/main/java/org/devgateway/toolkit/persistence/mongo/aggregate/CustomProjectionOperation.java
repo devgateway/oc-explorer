@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.devgateway.toolkit.persistence.mongo.aggregate;
 
@@ -12,11 +12,11 @@ import com.mongodb.DBObject;
  */
 public class CustomProjectionOperation extends CustomOperation {
 
-	/**
-	 * @param operation
-	 */
-	public CustomProjectionOperation(DBObject operation) {
-		super(new BasicDBObject("$project", operation));
-	}
+    /**
+     * @param operation
+     */
+    public CustomProjectionOperation(DBObject operation) {
+        super(new BasicDBObject("$project", operation));
+    }
 
 }

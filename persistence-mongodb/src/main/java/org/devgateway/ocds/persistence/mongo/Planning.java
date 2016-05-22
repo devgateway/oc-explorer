@@ -1,12 +1,10 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocds.persistence.mongo;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai Planning OCDS ENtity
@@ -14,31 +12,33 @@ import org.springframework.data.mongodb.core.mapping.Document;
  *         planning
  */
 public class Planning {
-	Budget budget;
-	String rationale;
-	List<Document> documents = new ArrayList<>();
+    private Budget budget;
 
-	public Budget getBudget() {
-		return budget;
-	}
+    private String rationale;
 
-	public void setBudget(final Budget budget) {
-		this.budget = budget;
-	}
+    private List<Document> documents = new ArrayList<>();
 
-	public String getRationale() {
-		return rationale;
-	}
+    public Budget getBudget() {
+        return budget;
+    }
 
-	public void setRationale(final String rationale) {
-		this.rationale = rationale;
-	}
+    public void setBudget(final Budget budget) {
+        this.budget = budget;
+    }
 
-	public List<Document> getDocuments() {
-		return documents;
-	}
+    public String getRationale() {
+        return rationale;
+    }
 
-	public void setDocuments(final List<Document> documents) {
-		this.documents = documents;
-	}
+    public void setRationale(final String rationale) {
+        this.rationale = rationale;
+    }
+
+    public List<Document> getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(final List<Document> documents) {
+        this.documents = documents;
+    }
 }
