@@ -25,7 +25,7 @@ public class SupplierRowImporter extends RowImporter<VNOrganization, VNOrganizat
 	}
 
 	@Override
-	public void importRow(final String[] row) throws ParseException {
+	public boolean importRow(final String[] row) throws ParseException {
 		if (row[0] == null || row[0].isEmpty()) {
 			throw new RuntimeException("Main identifier empty!");
 		}
@@ -54,8 +54,9 @@ public class SupplierRowImporter extends RowImporter<VNOrganization, VNOrganizat
 
 		organization.setContactPoint(cp);
 
-		repository.insert(organization);
+		documents.add(organization);
 
+		return true;
 	}
 
 }

@@ -18,17 +18,5 @@ public interface ClassificationRepository extends MongoRepository<Classification
 	@Override
 	@CacheEvict(allEntries = true)
 	<S extends Classification> List<S> save(Iterable<S> entites);
-	
-	@Override
-	@CacheEvict(allEntries = true)
-	<S extends Classification> S save(S entity);
 
-	@Override
-	@CacheEvict(allEntries = true)
-	<S extends Classification> List<S> insert(Iterable<S> entities);
-	
-	@Override
-	@CacheEvict(allEntries = true)
-	<S extends Classification> S insert(S entity);
-	
 }

@@ -35,10 +35,12 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 	protected int skipRows;
 	protected int cursorRowNo = 0;
 	protected int importedRows = 0;
+	protected List<T> documents;
 
 	public RowImporter(final R repository, final VNImportService importService, final int skipRows) {
 		this.repository = repository;
 		this.importService = importService;
+		documents = new ArrayList<>();
 		this.skipRows = skipRows;
 	}
 
@@ -101,6 +103,7 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 	}
 
 	public boolean importRows(final List<String[]> rows) throws ParseException {
+		documents.clear();
 
 		for (String[] row : rows) {
 			if (cursorRowNo++ < skipRows || isRowEmpty(row)) {
@@ -108,7 +111,7 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 			}
 
 			try {
-				importRow(row);				
+				importRow(row);
 				importedRows++;
 			} catch (Exception e) {
 				importService.logMessage(
@@ -116,11 +119,13 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 				// throw e; we do not stop
 			}
 		}
-	
+
+		repository.save(documents);
+
 		logger.debug("Finished importing " + importedRows + " rows.");
 		return true;
 	}
 
-	public abstract void importRow(String[] row) throws ParseException;
+	public abstract boolean importRow(String[] row) throws ParseException;
 
 }

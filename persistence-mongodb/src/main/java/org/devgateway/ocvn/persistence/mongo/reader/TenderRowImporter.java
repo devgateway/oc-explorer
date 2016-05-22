@@ -26,7 +26,7 @@ import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository
  * @author mihai
  * @see VNTender
  */
-public class TenderRowImporter extends ReleaseRowImporter {
+public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 
 	private VNOrganizationRepository organizationRepository;
 	private ClassificationRepository classificationRepository;
@@ -43,7 +43,7 @@ public class TenderRowImporter extends ReleaseRowImporter {
 	}
 
 	@Override
-	public Release createReleaseFromReleaseRow(final String[] row) throws ParseException {
+	public boolean importRow(final String[] row) throws ParseException {
 
 		Release release = repository.findByPlanningBidNo(row[0]);
 
@@ -156,7 +156,7 @@ public class TenderRowImporter extends ReleaseRowImporter {
 					contrMethod.setDetails("Undefined");
 					break;
 				}
-				contrMethod = contrMethodRepository.insert(contrMethod);
+				contrMethod = contrMethodRepository.save(contrMethod);
 			}
 			tender.setContrMethod(contrMethod);
 		}
@@ -176,7 +176,7 @@ public class TenderRowImporter extends ReleaseRowImporter {
 			Identifier procuringEntityIdentifier = new Identifier();
 			procuringEntityIdentifier.setId(row[10]);
 			procuringEntity.setIdentifier(procuringEntityIdentifier);
-			procuringEntity = organizationRepository.insert(procuringEntity);
+			procuringEntity = organizationRepository.save(procuringEntity);
 		} else {
 			if (procuringEntity.getProcuringEntity() == null || !procuringEntity.getProcuringEntity()) {
 				procuringEntity.setProcuringEntity(true);
@@ -193,7 +193,7 @@ public class TenderRowImporter extends ReleaseRowImporter {
 			Identifier orderInstituCdIdentifier = new Identifier();
 			orderInstituCdIdentifier.setId(row[11]);
 			orderInstituCd.setIdentifier(orderInstituCdIdentifier);
-			orderInstituCd = organizationRepository.insert(orderInstituCd);
+			orderInstituCd = organizationRepository.save(orderInstituCd);
 		}
 		release.setBuyer(orderInstituCd);
 
@@ -237,7 +237,7 @@ public class TenderRowImporter extends ReleaseRowImporter {
 						classification.setDescription("Undefined");
 						break;
 					}
-					classification = classificationRepository.insert(classification);
+					classification = classificationRepository.save(classification);
 
 				}
 				item.setClassification(classification);
@@ -245,6 +245,12 @@ public class TenderRowImporter extends ReleaseRowImporter {
 
 		}
 
-		return release;
+		if (release.getId() == null) {
+			release = repository.save(release);
+		} else {
+			documents.add(release);
+		}
+
+		return true;
 	}
 }

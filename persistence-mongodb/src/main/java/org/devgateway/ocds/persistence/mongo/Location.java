@@ -3,33 +3,17 @@
  */
 package org.devgateway.ocds.persistence.mongo;
 
-import java.io.Serializable;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.geo.GeoJson;
 
-public abstract class Location<T extends GeoJson<?>> implements Identifiable {
+public abstract class Location<T extends GeoJson<?>> {
 
 	@Id
-	private String id;
-	
 	private Gazetteer gazetteer = new Gazetteer();
 
 	private String description;
 
 	private String uri;
-
-	
-	@Override
-	public Serializable getId() {
-		return id;
-	}
-	
-	
-	public void setId(String id) {
-		this.id = id;
-	}
-
 
 	public void setupGazetteer(String id) {
 		getGazetteer().getIdentifiers().add(id);
@@ -65,7 +49,4 @@ public abstract class Location<T extends GeoJson<?>> implements Identifiable {
 	public abstract void setGeometry(T geometry);
 
 	public abstract String getGazetteerPrefix();
-	
-	
-	
 }

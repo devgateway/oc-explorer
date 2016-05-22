@@ -20,7 +20,7 @@ import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
  *         custom Excel format provided by Vietnam
  * @see VNPlanning
  */
-public class ProcurementPlansRowImporter extends ReleaseRowImporter {
+public class ProcurementPlansRowImporter extends RowImporter<Release, ReleaseRepository> {
 	private VNLocationRepository locationRepository;
 
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yy", new Locale("en"));
@@ -32,7 +32,7 @@ public class ProcurementPlansRowImporter extends ReleaseRowImporter {
 	}
 
 	@Override
-	public Release createReleaseFromReleaseRow(final String[] row) throws ParseException {
+	public boolean importRow(final String[] row) throws ParseException {
 
 		String projectID = row[0];
 		Release oldRelease = repository.findByBudgetProjectId(projectID);
@@ -43,6 +43,7 @@ public class ProcurementPlansRowImporter extends ReleaseRowImporter {
 		Release release = new Release();
 		release.setOcid(MongoConstants.OCDS_PREFIX + "prjid-" + projectID);
 		release.getTag().add("planning");
+		documents.add(release);
 		VNPlanning planning = new VNPlanning();
 		VNBudget budget = new VNBudget();
 		release.setPlanning(planning);
@@ -85,6 +86,6 @@ public class ProcurementPlansRowImporter extends ReleaseRowImporter {
 		budget.setAmount(value);
 		value.setCurrency("VND");
 		value.setAmount(getDecimal(row[2]));
-		return release;
+		return true;
 	}
 }

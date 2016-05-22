@@ -18,7 +18,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  *         http://standard.open-contracting.org/latest/en/schema/release/
  */
 @Document
-public class Release implements Identifiable {
+public class Release {
 
 	@Id
 	String id;
@@ -44,7 +44,6 @@ public class Release implements Identifiable {
 
 	String language = "en";
 
-	@Override
 	public String getId() {
 		return id;
 	}

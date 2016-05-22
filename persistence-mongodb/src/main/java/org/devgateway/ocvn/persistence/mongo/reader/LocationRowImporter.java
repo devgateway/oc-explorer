@@ -23,7 +23,7 @@ public class LocationRowImporter extends RowImporter<VNLocation, VNLocationRepos
 	}
 
 	@Override
-	public void importRow(final String[] row) throws ParseException {
+	public boolean importRow(final String[] row) throws ParseException {
 
 		VNLocation location = repository.findByDescription(row[0]);
 		if (location != null) {
@@ -31,13 +31,15 @@ public class LocationRowImporter extends RowImporter<VNLocation, VNLocationRepos
 		}
 
 		location = new VNLocation();
-		
+		documents.add(location);
+
 		location.setDescription(row[0]);
 
 		GeoJsonPoint coordinates = new GeoJsonPoint(getDouble(row[2]), getDouble(row[1]));
 		location.setGeometry(coordinates);
 		location.setupGazetteer(row[3]);
 		
-		repository.insert(location);
+
+		return true;
 	}
 }

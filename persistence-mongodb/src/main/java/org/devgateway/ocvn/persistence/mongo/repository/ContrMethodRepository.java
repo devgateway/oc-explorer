@@ -19,15 +19,4 @@ public interface ContrMethodRepository extends MongoRepository<ContrMethod, Inte
 	@CacheEvict(allEntries = true)
 	<S extends ContrMethod> List<S> save(Iterable<S> entites);
 
-	@Override
-	@CacheEvict(allEntries = true)
-	<S extends ContrMethod> S save(S entity);
-	
-	@Override
-	@CacheEvict(allEntries = true)
-	<S extends ContrMethod> List<S> insert(Iterable<S> entites);
-	
-	@CacheEvict(allEntries = true)
-	@Override
-	<S extends ContrMethod> S insert(S entity);
 }

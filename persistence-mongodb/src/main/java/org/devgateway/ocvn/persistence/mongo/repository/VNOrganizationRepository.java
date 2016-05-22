@@ -22,13 +22,5 @@ public interface VNOrganizationRepository extends MongoRepository<VNOrganization
 	@Override
 	@CacheEvict(allEntries = true)
 	<S extends VNOrganization> List<S> save(Iterable<S> entites);
-	
-	@Override
-	@CacheEvict(allEntries = true)
-	<S extends VNOrganization> List<S> insert(Iterable<S> entities);
-	
-	@Override
-	@CacheEvict(allEntries = true)
-	<S extends VNOrganization> S insert(S entity);
 
 }
