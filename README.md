@@ -1,6 +1,6 @@
 # Open Contracting Explorer (OCE)
 
-[![Build Status](https://travis-ci.org/devgateway/ocvn.svg?branch=develop)](https://travis-ci.org/devgateway/ocvn)
+[![Build Status](https://travis-ci.org/devgateway/oc-explorer.svg?branch=develop)](https://travis-ci.org/devgateway/oc-explorer)
 
 ## Presentation
 
