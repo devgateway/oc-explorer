@@ -1,9 +1,9 @@
 package org.devgateway.toolkit.persistence.mongo.spring;
 
-import java.lang.reflect.Field;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.util.ReflectionUtils;
+
+import java.lang.reflect.Field;
 
 public class FieldCallback implements ReflectionUtils.FieldCallback {
     private boolean idFound;

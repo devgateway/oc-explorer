@@ -1,17 +1,13 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocds.persistence.mongo;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.*;
 
 /**
  * @author mihai Release OCDS Entity
@@ -19,117 +15,116 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document
 public class Release {
+    @Id
+    private String id;
 
-	@Id
-	String id;
+    private String ocid;
 
-	String ocid;
+    @CreatedDate
+    private Date date;
 
-	@CreatedDate
-	Date date;
+    private Set<String> tag = new HashSet<>();
 
-	Set<String> tag = new HashSet<>();
+    private String initiationType = "tender";
 
-	String initiationType = "tender";
+    private Planning planning;
 
-	Planning planning;
+    private Tender tender;
 
-	Tender tender;
+    private Organization buyer;
 
-	Organization buyer;
+    private List<Award> awards = new ArrayList<>();
 
-	List<Award> awards = new ArrayList<>();
+    private List<Contract> contracts = new ArrayList<>();
 
-	List<Contract> contracts = new ArrayList<>();
+    private String language = "en";
 
-	String language = "en";
+    public String getId() {
+        return id;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public void setId(final String id) {
+        this.id = id;
+    }
 
-	public void setId(final String id) {
-		this.id = id;
-	}
+    public String getOcid() {
+        return ocid;
+    }
 
-	public String getOcid() {
-		return ocid;
-	}
+    public void setOcid(final String ocid) {
+        this.ocid = ocid;
+    }
 
-	public void setOcid(final String ocid) {
-		this.ocid = ocid;
-	}
+    public Date getDate() {
+        return date;
+    }
 
-	public Date getDate() {
-		return date;
-	}
+    public void setDate(final Date date) {
+        this.date = date;
+    }
 
-	public void setDate(final Date date) {
-		this.date = date;
-	}
+    public String getInitiationType() {
+        return initiationType;
+    }
 
-	public String getInitiationType() {
-		return initiationType;
-	}
+    public void setInitiationType(final String initiationType) {
+        this.initiationType = initiationType;
+    }
 
-	public void setInitiationType(final String initiationType) {
-		this.initiationType = initiationType;
-	}
+    public Planning getPlanning() {
+        return planning;
+    }
 
-	public Planning getPlanning() {
-		return planning;
-	}
+    public void setPlanning(final Planning planning) {
+        this.planning = planning;
+    }
 
-	public void setPlanning(final Planning planning) {
-		this.planning = planning;
-	}
+    public Tender getTender() {
+        return tender;
+    }
 
-	public Tender getTender() {
-		return tender;
-	}
+    public void setTender(final Tender tender) {
+        this.tender = tender;
+    }
 
-	public void setTender(final Tender tender) {
-		this.tender = tender;
-	}
+    public Organization getBuyer() {
+        return buyer;
+    }
 
-	public Organization getBuyer() {
-		return buyer;
-	}
+    public void setBuyer(final Organization buyer) {
+        this.buyer = buyer;
+    }
 
-	public void setBuyer(final Organization buyer) {
-		this.buyer = buyer;
-	}
+    public List<Award> getAwards() {
+        return awards;
+    }
 
-	public List<Award> getAwards() {
-		return awards;
-	}
+    public void setAwards(final List<Award> awards) {
+        this.awards = awards;
+    }
 
-	public void setAwards(final List<Award> awards) {
-		this.awards = awards;
-	}
+    public List<Contract> getContracts() {
+        return contracts;
+    }
 
-	public List<Contract> getContracts() {
-		return contracts;
-	}
+    public void setContracts(final List<Contract> contracts) {
+        this.contracts = contracts;
+    }
 
-	public void setContracts(final List<Contract> contracts) {
-		this.contracts = contracts;
-	}
+    public String getLanguage() {
+        return language;
+    }
 
-	public String getLanguage() {
-		return language;
-	}
+    public void setLanguage(final String language) {
+        this.language = language;
+    }
 
-	public void setLanguage(final String language) {
-		this.language = language;
-	}
+    public Set<String> getTag() {
+        return tag;
+    }
 
-	public Set<String> getTag() {
-		return tag;
-	}
-
-	public void setTag(final Set<String> tag) {
-		this.tag = tag;
-	}
+    public void setTag(final Set<String> tag) {
+        this.tag = tag;
+    }
 
 }

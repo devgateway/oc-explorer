@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocds.persistence.mongo;
 
@@ -12,44 +12,44 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Classification {
 
-	String scheme;
+    private String scheme;
 
-	String id;
+    private String id;
 
-	String description;
+    private String description;
 
-	String uri;
+    private String uri;
 
-	public String getScheme() {
-		return scheme;
-	}
+    public String getScheme() {
+        return scheme;
+    }
 
-	public void setScheme(String scheme) {
-		this.scheme = scheme;
-	}
+    public void setScheme(String scheme) {
+        this.scheme = scheme;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public String getUri() {
-		return uri;
-	}
+    public String getUri() {
+        return uri;
+    }
 
-	public void setUri(String uri) {
-		this.uri = uri;
-	}
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
 
 }

@@ -204,7 +204,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
 	public class SaveEditPageButton extends BootstrapSubmitButton {
 		private static final long serialVersionUID = 9075809391795974349L;
 
-		public boolean redirect = true;
+		private boolean redirect = true;
 
 		protected boolean redirectToSelf = false;
 
