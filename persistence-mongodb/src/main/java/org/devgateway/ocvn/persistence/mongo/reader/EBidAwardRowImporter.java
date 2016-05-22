@@ -22,7 +22,7 @@ import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository
  * @see VNAward
  *
  */
-public class EBidAwardRowImporter extends RowImporter<Release, ReleaseRepository> {
+public class EBidAwardRowImporter extends ReleaseRowImporter {
 
 	protected VNOrganizationRepository organizationRepository;
 
@@ -33,9 +33,9 @@ public class EBidAwardRowImporter extends RowImporter<Release, ReleaseRepository
 	}
 
 	@Override
-	public boolean importRow(final String[] row) throws ParseException {
+	public Release createReleaseFromReleaseRow(final String[] row) throws ParseException {
 
-		Release release = repository.findByPlanningBidNo(row[0]);
+		Release release = repository.findByPlanningBidNo(row[0]);		
 
 		if (release == null) {
 			release = new Release();
@@ -62,7 +62,7 @@ public class EBidAwardRowImporter extends RowImporter<Release, ReleaseRepository
 			Identifier supplierId = new Identifier();
 			supplierId.setId(row[2]);
 			supplier.setIdentifier(supplierId);
-			supplier = organizationRepository.save(supplier);
+			supplier = organizationRepository.insert(supplier);
 		}
 
 		award.getSuppliers().add(supplier);
@@ -98,12 +98,6 @@ public class EBidAwardRowImporter extends RowImporter<Release, ReleaseRepository
 			release.getTender().setNumberOfTenderers(release.getTender().getTenderers().size());
 		}
 
-		if (release.getId() == null) {
-			release = repository.save(release);
-		} else {
-			documents.add(release);
-		}
-
-		return true;
+		return release;
 	}
 }

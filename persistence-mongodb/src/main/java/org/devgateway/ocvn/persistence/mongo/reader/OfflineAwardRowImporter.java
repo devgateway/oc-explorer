@@ -21,7 +21,7 @@ import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository
  * @author mihai
  * @see VNAward
  */
-public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseRepository> {
+public class OfflineAwardRowImporter extends ReleaseRowImporter {
 
 	private VNOrganizationRepository organizationRepository;
 
@@ -32,14 +32,14 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 	}
 
 	@Override
-	public boolean importRow(final String[] row) throws ParseException {
+	public Release createReleaseFromReleaseRow(final String[] row) throws ParseException {
 
 		Release release = repository.findByPlanningBidNo(row[0]);
 
 		if (release == null) {
 			release = new Release();
 			release.getTag().add("award");
-			release.setOcid(MongoConstants.OCDS_PREFIX+"bidno-" + row[0]);
+			release.setOcid(MongoConstants.OCDS_PREFIX + "bidno-" + row[0]);
 			VNPlanning planning = new VNPlanning();
 			release.setPlanning(planning);
 			planning.setBidNo(row[0]);
@@ -66,7 +66,7 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 			Identifier supplierId = new Identifier();
 			supplierId.setId(row[3]);
 			supplier.setIdentifier(supplierId);
-			supplier = organizationRepository.save(supplier);
+			supplier = organizationRepository.insert(supplier);
 		}
 
 		award.getSuppliers().add(supplier);
@@ -118,12 +118,7 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
 			release.getTender().setNumberOfTenderers(release.getTender().getTenderers().size());
 		}
 
-		if (release.getId() == null) {
-			release = repository.save(release);
-		} else {
-			documents.add(release);
-		}
-
-		return true;
+		
+		return release;
 	}
 }

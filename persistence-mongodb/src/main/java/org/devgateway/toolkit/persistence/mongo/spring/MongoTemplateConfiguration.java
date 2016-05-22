@@ -66,6 +66,10 @@ public class MongoTemplateConfiguration {
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.tenderPeriod.endDate", Direction.ASC));
 		mongoTemplate.indexOps(Release.class)
 				.ensureIndex(new Index().on("tender.items.classification._id", Direction.ASC));
+		mongoTemplate.indexOps(Release.class)
+		.ensureIndex(new Index().on("planning.budget.projectLocation", Direction.ASC));
+
+		
 		mongoTemplate.indexOps(VNOrganization.class).ensureIndex(new Index().on("identifier._id", Direction.ASC));
 		mongoTemplate.indexOps(VNOrganization.class).ensureIndex(new Index().on("procuringEntity", Direction.ASC));
 		mongoTemplate.indexOps(VNOrganization.class)
@@ -76,7 +80,8 @@ public class MongoTemplateConfiguration {
 		mongoTemplate.indexOps(VNLocation.class)
 		.ensureIndex(new TextIndexDefinitionBuilder().onField("description").onField("uri").build());
 
-		logger.info("Added extra Mongo indexes");
+		
+				logger.info("Added extra Mongo indexes");
 
 		ScriptOperations scriptOps = mongoTemplate.scriptOps();
 
