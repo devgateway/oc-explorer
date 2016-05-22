@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * Organization OCDS entity http://standard.open-contracting.org/latest/en/schema/reference/#organization
  */
 @Document
-public class Organization {
+public class Organization implements Identifiable {
 
 	@Id
 	String id;
@@ -71,6 +71,7 @@ public class Organization {
 		this.contactPoint = contactPoint;
 	}
 
+	@Override
 	public String getId() {
 		return id;
 	}
