@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.devgateway.toolkit.persistence.mongo.aggregate;
 
@@ -12,11 +12,11 @@ import com.mongodb.DBObject;
  */
 public class CustomSortingOperation extends CustomOperation {
 
-	/**
-	 * @param operation
-	 */
-	public CustomSortingOperation(DBObject operation) {
-		super(new BasicDBObject("$sort", operation));
-	}
+    /**
+     * @param operation
+     */
+    public CustomSortingOperation(DBObject operation) {
+        super(new BasicDBObject("$sort", operation));
+    }
 
 }
