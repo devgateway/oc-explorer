@@ -26,21 +26,21 @@ import org.wicketstuff.annotation.mount.MountPath;
 @MountPath(value = "/listImportSourceFiles")
 public class ListVietnamImportSourceFiles extends AbstractListPage<VietnamImportSourceFiles> {
 
-	private static final long serialVersionUID = -324298525712620234L;
-	@SpringBean
-	protected VietnamImportSourceFilesRepository vietnamImportSourceFilesRepository;
+    private static final long serialVersionUID = -324298525712620234L;
+    @SpringBean
+    protected VietnamImportSourceFilesRepository vietnamImportSourceFilesRepository;
 
-	public ListVietnamImportSourceFiles(final PageParameters pageParameters) {
-		super(pageParameters);
-		this.jpaRepository = vietnamImportSourceFilesRepository;
-		this.editPageClass = EditVietnamImportSourceFiles.class;
+    public ListVietnamImportSourceFiles(final PageParameters pageParameters) {
+        super(pageParameters);
+        this.jpaRepository = vietnamImportSourceFilesRepository;
+        this.editPageClass = EditVietnamImportSourceFiles.class;
 
-		columns.add(
-				new PropertyColumn<VietnamImportSourceFiles, String>(new Model<String>("Batch Name"), "name", "name"));
-		columns.add(new PropertyColumn<VietnamImportSourceFiles, String>(new Model<String>("Created"), "created",
-				"created"));
-		columns.add(new PropertyColumn<VietnamImportSourceFiles, String>(new Model<String>("Updated"), "lastUpdated",
-				"lastUpdated"));
-	}
+        columns.add(
+                new PropertyColumn<>(new Model<>("Batch Name"), "name", "name"));
+        columns.add(new PropertyColumn<>(new Model<>("Created"), "created",
+                "created"));
+        columns.add(new PropertyColumn<>(new Model<>("Updated"), "lastUpdated",
+                "lastUpdated"));
+    }
 
 }

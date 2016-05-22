@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocvn.persistence.mongo.dao;
 
@@ -9,13 +9,13 @@ package org.devgateway.ocvn.persistence.mongo.dao;
  */
 public final class OCDSConst {
 
-	public final class Awards {
-		private Awards() {
-			
-		}
-		public static final String STATUS_UNSUCCESSFUL = "unsuccessful";
-		public static final String STATUS_ACTIVE = "active";
+    public final class Awards {
+        private Awards() {
 
-	}
+        }
+        public static final String STATUS_UNSUCCESSFUL = "unsuccessful";
+        public static final String STATUS_ACTIVE = "active";
+
+    }
 
 }

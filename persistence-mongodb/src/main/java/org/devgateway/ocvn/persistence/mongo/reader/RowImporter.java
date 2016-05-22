@@ -8,8 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.DateUtil;
-import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
-import org.devgateway.ocds.persistence.mongo.spring.VNImportService;
+import org.devgateway.ocvn.persistence.mongo.spring.VNImportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.repository.MongoRepository;

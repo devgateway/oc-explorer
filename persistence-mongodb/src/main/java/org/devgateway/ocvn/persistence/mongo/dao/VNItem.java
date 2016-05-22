@@ -10,11 +10,15 @@ import org.devgateway.ocds.persistence.mongo.Item;
  *         fields
  */
 public class VNItem extends Item {
-	String bidPlanItemRefNum;
-	String bidPlanItemStyle;
-	String bidPlanItemFund;
-	String bidPlanItemMethodSelect;
-	String bidPlanItemMethod;
+    private String bidPlanItemRefNum;
+
+    private String bidPlanItemStyle;
+
+    private String bidPlanItemFund;
+
+    private String bidPlanItemMethodSelect;
+
+    private String bidPlanItemMethod;
 
 	public String getBidPlanItemRefNum() {
 		return bidPlanItemRefNum;

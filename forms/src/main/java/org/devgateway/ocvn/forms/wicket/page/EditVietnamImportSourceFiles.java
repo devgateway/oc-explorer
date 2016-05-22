@@ -10,12 +10,9 @@
  * Development Gateway - initial API and implementation
  *******************************************************************************/
 /**
- * 
+ *
  */
 package org.devgateway.ocvn.forms.wicket.page;
-
-import java.io.File;
-import java.net.URISyntaxException;
 
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.link.DownloadLink;
@@ -32,6 +29,9 @@ import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListVietnamImportSourceFiles;
 import org.wicketstuff.annotation.mount.MountPath;
 
+import java.io.File;
+import java.net.URISyntaxException;
+
 /**
  * @author mpostelnicu
  *
@@ -41,79 +41,79 @@ import org.wicketstuff.annotation.mount.MountPath;
 @MountPath("/editImportSourceFiles")
 public class EditVietnamImportSourceFiles extends AbstractEditPage<VietnamImportSourceFiles> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@SpringBean
-	private VietnamImportSourceFilesRepository vietnamImportSourceFilesRepository;
+    @SpringBean
+    private VietnamImportSourceFilesRepository vietnamImportSourceFilesRepository;
 
-	/**
-	 * @param parameters
-	 */
-	public EditVietnamImportSourceFiles(final PageParameters parameters) {
-		super(parameters);
+    /**
+     * @param parameters
+     */
+    public EditVietnamImportSourceFiles(final PageParameters parameters) {
+        super(parameters);
 
-		this.jpaRepository = vietnamImportSourceFilesRepository;
-		this.listPageClass = ListVietnamImportSourceFiles.class;
+        this.jpaRepository = vietnamImportSourceFilesRepository;
+        this.listPageClass = ListVietnamImportSourceFiles.class;
 
-	}
+    }
 
-	@Override
-	protected VietnamImportSourceFiles newInstance() {
-		return new VietnamImportSourceFiles();
-	}
+    @Override
+    protected VietnamImportSourceFiles newInstance() {
+        return new VietnamImportSourceFiles();
+    }
 
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
-		
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
 
-		TextFieldBootstrapFormComponent<String> name = new TextFieldBootstrapFormComponent<>("name");
-		name.required();
-		editForm.add(name);
 
-		TextAreaFieldBootstrapFormComponent<String> description = new TextAreaFieldBootstrapFormComponent<>(
-				"description");
-		editForm.add(description);
-		
-		
-		FileInputBootstrapFormComponent prototypeDatabaseFile = new FileInputBootstrapFormComponent(
-				"prototypeDatabaseFile");
-		prototypeDatabaseFile.maxFiles(1);
-		prototypeDatabaseFile.required();
-		editForm.add(prototypeDatabaseFile);
+        TextFieldBootstrapFormComponent<String> name = new TextFieldBootstrapFormComponent<>("name");
+        name.required();
+        editForm.add(name);
 
-		FileInputBootstrapFormComponent publicInstitutionsSuppliersFile = new FileInputBootstrapFormComponent(
-				"publicInstitutionsSuppliersFile");
-		publicInstitutionsSuppliersFile.maxFiles(1);
-		publicInstitutionsSuppliersFile.required();
-		editForm.add(publicInstitutionsSuppliersFile);
-		
-		try {
-			DownloadLink locationsTemplate = new DownloadLink("locationsTemplate",
-					new File(RootXlsx.class.getResource("Location_Table_SO.xlsx").toURI()));
+        TextAreaFieldBootstrapFormComponent<String> description = new TextAreaFieldBootstrapFormComponent<>(
+                "description");
+        editForm.add(description);
 
-			editForm.add(locationsTemplate);
 
-			DownloadLink suppliersTemplate = new DownloadLink("suppliersTemplate",
-					new File(RootXlsx.class.getResource("UM_PUBINSTITU_SUPPLIERS_DQA.xlsx").toURI()));
-			editForm.add(suppliersTemplate);
+        FileInputBootstrapFormComponent prototypeDatabaseFile = new FileInputBootstrapFormComponent(
+                "prototypeDatabaseFile");
+        prototypeDatabaseFile.maxFiles(1);
+        prototypeDatabaseFile.required();
+        editForm.add(prototypeDatabaseFile);
 
-			DownloadLink prototypeDatabase = new DownloadLink("prototypeDatabase",
-					new File(RootXlsx.class.getResource("Prototype_Database_OCDSCore.xlsx").toURI()));
+        FileInputBootstrapFormComponent publicInstitutionsSuppliersFile = new FileInputBootstrapFormComponent(
+                "publicInstitutionsSuppliersFile");
+        publicInstitutionsSuppliersFile.maxFiles(1);
+        publicInstitutionsSuppliersFile.required();
+        editForm.add(publicInstitutionsSuppliersFile);
 
-			editForm.add(prototypeDatabase);
+        try {
+            DownloadLink locationsTemplate = new DownloadLink("locationsTemplate",
+                    new File(RootXlsx.class.getResource("Location_Table_SO.xlsx").toURI()));
 
-		} catch (URISyntaxException e) {
-			logger.error(e);
-			e.printStackTrace();
-		}
-		
-		FileInputBootstrapFormComponent locationsFile = new FileInputBootstrapFormComponent("locationsFile");
-		locationsFile.maxFiles(1);
-		locationsFile.required();
-		editForm.add(locationsFile);
-		
+            editForm.add(locationsTemplate);
 
-	}
+            DownloadLink suppliersTemplate = new DownloadLink("suppliersTemplate",
+                    new File(RootXlsx.class.getResource("UM_PUBINSTITU_SUPPLIERS_DQA.xlsx").toURI()));
+            editForm.add(suppliersTemplate);
+
+            DownloadLink prototypeDatabase = new DownloadLink("prototypeDatabase",
+                    new File(RootXlsx.class.getResource("Prototype_Database_OCDSCore.xlsx").toURI()));
+
+            editForm.add(prototypeDatabase);
+
+        } catch (URISyntaxException e) {
+            logger.error(e);
+            e.printStackTrace();
+        }
+
+        FileInputBootstrapFormComponent locationsFile = new FileInputBootstrapFormComponent("locationsFile");
+        locationsFile.maxFiles(1);
+        locationsFile.required();
+        editForm.add(locationsFile);
+
+
+    }
 
 }

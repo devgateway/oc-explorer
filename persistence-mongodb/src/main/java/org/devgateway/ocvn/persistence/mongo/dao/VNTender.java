@@ -1,85 +1,86 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocvn.persistence.mongo.dao;
 
-import java.util.Date;
-
 import org.devgateway.ocds.persistence.mongo.Tender;
+
+import java.util.Date;
 
 /**
  * @author mihai Eerxtension of {@link Tender} to allow extra Vietnam-specific
  *         fields
  */
 public class VNTender extends Tender {
-	private Integer bidMethod;
+    private Integer bidMethod;
 
-	
-	public ContrMethod getContrMethod() {
-		return contrMethod;
-	}
+    private ContrMethod contrMethod;
 
-	public void setContrMethod(ContrMethod contrMethod) {
-		this.contrMethod = contrMethod;
-	}
+    private String approveState;
 
-	private ContrMethod contrMethod;
-	
-	private String approveState;
-	private String cancelYN;
-	private String modYn;
-	private String procurementMethodDetails;
+    private String cancelYN;
 
-	
-	public String getProcurementMethodDetails() {
-		return procurementMethodDetails;
-	}
+    private String modYn;
 
-	public void setProcurementMethodDetails(String procurementMethodDetails) {
-		this.procurementMethodDetails = procurementMethodDetails;
-	}
+    private String procurementMethodDetails;
 
-	private Date bidOpenDt;
+    public ContrMethod getContrMethod() {
+        return contrMethod;
+    }
 
-	public Integer getBidMethod() {
-		return bidMethod;
-	}
+    public void setContrMethod(ContrMethod contrMethod) {
+        this.contrMethod = contrMethod;
+    }
 
-	public void setBidMethod(final Integer bidMethod) {
-		this.bidMethod = bidMethod;
-	}
+    public String getProcurementMethodDetails() {
+        return procurementMethodDetails;
+    }
+
+    public void setProcurementMethodDetails(String procurementMethodDetails) {
+        this.procurementMethodDetails = procurementMethodDetails;
+    }
+
+    private Date bidOpenDt;
+
+    public Integer getBidMethod() {
+        return bidMethod;
+    }
+
+    public void setBidMethod(final Integer bidMethod) {
+        this.bidMethod = bidMethod;
+    }
 
 
-	public String getApproveState() {
-		return approveState;
-	}
+    public String getApproveState() {
+        return approveState;
+    }
 
-	public void setApproveState(final String approveState) {
-		this.approveState = approveState;
-	}
+    public void setApproveState(final String approveState) {
+        this.approveState = approveState;
+    }
 
-	public String getCancelYN() {
-		return cancelYN;
-	}
+    public String getCancelYN() {
+        return cancelYN;
+    }
 
-	public void setCancelYN(final String cancelYN) {
-		this.cancelYN = cancelYN;
-	}
+    public void setCancelYN(final String cancelYN) {
+        this.cancelYN = cancelYN;
+    }
 
-	public String getModYn() {
-		return modYn;
-	}
+    public String getModYn() {
+        return modYn;
+    }
 
-	public void setModYn(final String modYn) {
-		this.modYn = modYn;
-	}
+    public void setModYn(final String modYn) {
+        this.modYn = modYn;
+    }
 
-	public Date getBidOpenDt() {
-		return bidOpenDt;
-	}
+    public Date getBidOpenDt() {
+        return bidOpenDt;
+    }
 
-	public void setBidOpenDt(final Date bidOpenDt) {
-		this.bidOpenDt = bidOpenDt;
-	}
+    public void setBidOpenDt(final Date bidOpenDt) {
+        this.bidOpenDt = bidOpenDt;
+    }
 
 }
