@@ -9,7 +9,7 @@ package org.devgateway.ocds.web.rest.controller.request;
  */
 public class GroupingFilterPagingRequest extends DefaultFilterPagingRequest {
 
-	String groupByCategory;
+	private String groupByCategory;
 
 	public String getGroupByCategory() {
 		return groupByCategory;
