@@ -5,12 +5,11 @@ import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.persistence.mongo.Value;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
-import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.VNItem;
 import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
-import org.devgateway.ocvn.persistence.mongo.spring.VNImportService;
 
 import java.text.ParseException;
 
@@ -19,15 +18,15 @@ import java.text.ParseException;
  *         format provided by Vietnam
  * @see VNPlanning
  */
-public class BidPlansRowImporter extends RowImporter<Release, ReleaseRepository> {
+public class BidPlansRowImporter extends ReleaseRowImporter {
 
-    public BidPlansRowImporter(final ReleaseRepository releaseRepository, final VNImportService importService,
+    public BidPlansRowImporter(final ReleaseRepository releaseRepository, final ImportService importService,
                                final int skipRows) {
         super(releaseRepository, importService, skipRows);
     }
 
     @Override
-    public boolean importRow(final String[] row) throws ParseException {
+    public Release createReleaseFromReleaseRow(final String[] row) throws ParseException {
 
         String projectID = row[0];
         Release release = repository.findByBudgetProjectId(projectID);
@@ -39,11 +38,14 @@ public class BidPlansRowImporter extends RowImporter<Release, ReleaseRepository>
             VNPlanning planning = new VNPlanning();
             release.setPlanning(planning);
         }
-        documents.add(release);
 
-        Budget budget = new Budget();
+        Budget budget = release.getPlanning().getBudget();
+        if (budget == null) {
+            budget = new Budget();
+            release.getPlanning().setBudget(budget);
+        }
         budget.setProjectID(row[0]);
-        release.getPlanning().setBudget(budget);
+
         Value value = new Value();
         value.setCurrency("VND");
         budget.setAmount(value);
@@ -73,6 +75,6 @@ public class BidPlansRowImporter extends RowImporter<Release, ReleaseRepository>
         item.setBidPlanItemMethod(row[7]);
         item.setId(row[8]);
 
-        return true;
+        return release;
     }
 }

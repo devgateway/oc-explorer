@@ -10,7 +10,6 @@ import java.util.List;
 
 @CacheConfig(cacheNames = "organizations")
 public interface VNOrganizationRepository extends MongoRepository<VNOrganization, String> {
-
     @Cacheable
     @Override
     VNOrganization findOne(String id);
@@ -23,4 +22,11 @@ public interface VNOrganizationRepository extends MongoRepository<VNOrganization
     @CacheEvict(allEntries = true)
     <S extends VNOrganization> List<S> save(Iterable<S> entites);
 
+    @Override
+    @CacheEvict(allEntries = true)
+    <S extends VNOrganization> List<S> insert(Iterable<S> entities);
+
+    @Override
+    @CacheEvict(allEntries = true)
+    <S extends VNOrganization> S insert(S entity);
 }

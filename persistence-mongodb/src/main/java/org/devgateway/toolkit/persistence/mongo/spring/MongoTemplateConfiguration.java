@@ -20,7 +20,6 @@ import java.net.URL;
 
 @Configuration
 public class MongoTemplateConfiguration {
-
     private final Logger logger = LoggerFactory.getLogger(MongoTemplateConfiguration.class);
 
     @Autowired
@@ -88,5 +87,4 @@ public class MongoTemplateConfiguration {
         }
 
     }
-
 }

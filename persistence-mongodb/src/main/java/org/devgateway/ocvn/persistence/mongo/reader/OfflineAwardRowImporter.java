@@ -7,11 +7,11 @@ import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.persistence.mongo.constants.OCDSConst;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.VNAward;
 import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
 import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
 import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository;
-import org.devgateway.ocvn.persistence.mongo.spring.VNImportService;
 
 import java.text.ParseException;
 
@@ -22,18 +22,18 @@ import java.text.ParseException;
  * @author mihai
  * @see VNAward
  */
-public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseRepository> {
+public class OfflineAwardRowImporter extends ReleaseRowImporter {
 
     private VNOrganizationRepository organizationRepository;
 
-    public OfflineAwardRowImporter(final ReleaseRepository releaseRepository, final VNImportService importService,
+    public OfflineAwardRowImporter(final ReleaseRepository releaseRepository, final ImportService importService,
                                    final VNOrganizationRepository organizationRepository, final int skipRows) {
         super(releaseRepository, importService, skipRows);
         this.organizationRepository = organizationRepository;
     }
 
     @Override
-    public boolean importRow(final String[] row) throws ParseException {
+    public Release createReleaseFromReleaseRow(final String[] row) throws ParseException {
 
         Release release = repository.findByPlanningBidNo(row[0]);
 
@@ -67,7 +67,7 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
             Identifier supplierId = new Identifier();
             supplierId.setId(row[3]);
             supplier.setIdentifier(supplierId);
-            supplier = organizationRepository.save(supplier);
+            supplier = organizationRepository.insert(supplier);
         }
 
         award.getSuppliers().add(supplier);
@@ -119,12 +119,7 @@ public class OfflineAwardRowImporter extends RowImporter<Release, ReleaseReposit
             release.getTender().setNumberOfTenderers(release.getTender().getTenderers().size());
         }
 
-        if (release.getId() == null) {
-            release = repository.save(release);
-        } else {
-            documents.add(release);
-        }
 
-        return true;
+        return release;
     }
 }

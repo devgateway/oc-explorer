@@ -2,9 +2,9 @@ package org.devgateway.ocvn.persistence.mongo.reader;
 
 import org.devgateway.ocds.persistence.mongo.Location;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
+import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
 import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
-import org.devgateway.ocvn.persistence.mongo.spring.VNImportService;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 
 import java.text.ParseException;
@@ -18,13 +18,13 @@ import java.text.ParseException;
  */
 public class LocationRowImporter extends RowImporter<VNLocation, VNLocationRepository> {
 
-    public LocationRowImporter(final VNLocationRepository locationRepository, final VNImportService importService,
+    public LocationRowImporter(final VNLocationRepository locationRepository, final ImportService importService,
                                final int skipRows) {
         super(locationRepository, importService, skipRows);
     }
 
     @Override
-    public boolean importRow(final String[] row) throws ParseException {
+    public void importRow(final String[] row) throws ParseException {
 
         VNLocation location = repository.findByDescription(row[0]);
         if (location != null) {
@@ -32,7 +32,6 @@ public class LocationRowImporter extends RowImporter<VNLocation, VNLocationRepos
         }
 
         location = new VNLocation();
-        documents.add(location);
 
         location.setDescription(row[0]);
 
@@ -40,7 +39,6 @@ public class LocationRowImporter extends RowImporter<VNLocation, VNLocationRepos
         location.setGeometry(coordinates);
         location.setupGazetteer(row[3]);
 
-
-        return true;
+        repository.insert(location);
     }
 }

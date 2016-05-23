@@ -1,15 +1,12 @@
-/**
- *
- */
 package org.devgateway.ocvn.persistence.mongo.reader;
 
 import org.devgateway.ocds.persistence.mongo.Address;
 import org.devgateway.ocds.persistence.mongo.ContactPoint;
 import org.devgateway.ocds.persistence.mongo.Identifier;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
+import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
 import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository;
-import org.devgateway.ocvn.persistence.mongo.spring.VNImportService;
 
 import java.text.ParseException;
 
@@ -20,13 +17,13 @@ import java.text.ParseException;
  */
 public class SupplierRowImporter extends RowImporter<VNOrganization, VNOrganizationRepository> {
 
-    public SupplierRowImporter(final VNOrganizationRepository repository, final VNImportService importService,
+    public SupplierRowImporter(final VNOrganizationRepository repository, final ImportService importService,
                                final int skipRows) {
         super(repository, importService, skipRows);
     }
 
     @Override
-    public boolean importRow(final String[] row) throws ParseException {
+    public void importRow(final String[] row) throws ParseException {
         if (row[0] == null || row[0].isEmpty()) {
             throw new RuntimeException("Main identifier empty!");
         }
@@ -55,9 +52,8 @@ public class SupplierRowImporter extends RowImporter<VNOrganization, VNOrganizat
 
         organization.setContactPoint(cp);
 
-        documents.add(organization);
+        repository.insert(organization);
 
-        return true;
     }
 
 }
