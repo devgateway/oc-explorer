@@ -1,7 +1,7 @@
 import React from "react";
 import Component from "../pure-render-component";
 import CostEffectiveness from "./cost-effectiveness";
-import FundingByBidType from "./funding-by-bid-type";
+import BidSelection from "./bid-selection";
 import BiddingPeriod from "./bidding-period";
 import Cancelled from "./cancelled";
 import {toImmutable} from "nuclear-js";
@@ -67,7 +67,7 @@ export default class Tender extends Component{
             years={selectedYears}
             width={width}
             data={filteredBidTypeData}
-            Component={FundingByBidType}
+            Component={BidSelection}
             yAxisRange={[minValue, maxValue]}
           />
       )
@@ -75,7 +75,7 @@ export default class Tender extends Component{
       var bidTypeData = data.get('bidType');
       if(!bidTypeData) return null;
       return (
-          <FundingByBidType
+          <BidSelection
               width={width}
               data={filterBidTypeData(selectedYears)(bidTypeData)}
           />
@@ -156,12 +156,12 @@ export default class Tender extends Component{
               <Comparison
                   width={width}
                   state={bidType}
-                  Component={FundingByBidType}
-                  title="Funding by bid type"
+                  Component={BidSelection}
+                  title="Bid Selection Method"
               />
               :
-              <FundingByBidType
-                  title="Funding by bid type"
+              <BidSelection
+                  title="Bid Selection Method"
                   data={bidType}
                   width={width}
               />
