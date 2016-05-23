@@ -21,4 +21,13 @@ public interface VNLocationRepository extends MongoRepository<VNLocation, String
 	@Override
 	@CacheEvict(allEntries = true)
 	<S extends VNLocation> S save(S entity);
+	
+	@Override
+	@CacheEvict(allEntries = true)
+	<S extends VNLocation> List<S> insert(Iterable<S> entities);
+	
+	@Override
+	@CacheEvict(allEntries = true)
+	<S extends VNLocation> S insert(S entity);
+		
 }

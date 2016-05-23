@@ -26,7 +26,7 @@ import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository
  * @author mihai
  * @see VNTender
  */
-public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
+public class TenderRowImporter extends ReleaseRowImporter {
 
 	private VNOrganizationRepository organizationRepository;
 	private ClassificationRepository classificationRepository;
@@ -43,7 +43,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 	}
 
 	@Override
-	public boolean importRow(final String[] row) throws ParseException {
+	public Release createReleaseFromReleaseRow(final String[] row) throws ParseException {
 
 		Release release = repository.findByPlanningBidNo(row[0]);
 
@@ -156,7 +156,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 					contrMethod.setDetails("Undefined");
 					break;
 				}
-				contrMethod = contrMethodRepository.save(contrMethod);
+				contrMethod = contrMethodRepository.insert(contrMethod);
 			}
 			tender.setContrMethod(contrMethod);
 		}
@@ -176,7 +176,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 			Identifier procuringEntityIdentifier = new Identifier();
 			procuringEntityIdentifier.setId(row[10]);
 			procuringEntity.setIdentifier(procuringEntityIdentifier);
-			procuringEntity = organizationRepository.save(procuringEntity);
+			procuringEntity = organizationRepository.insert(procuringEntity);
 		} else {
 			if (procuringEntity.getProcuringEntity() == null || !procuringEntity.getProcuringEntity()) {
 				procuringEntity.setProcuringEntity(true);
@@ -193,7 +193,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 			Identifier orderInstituCdIdentifier = new Identifier();
 			orderInstituCdIdentifier.setId(row[11]);
 			orderInstituCd.setIdentifier(orderInstituCdIdentifier);
-			orderInstituCd = organizationRepository.save(orderInstituCd);
+			orderInstituCd = organizationRepository.insert(orderInstituCd);
 		}
 		release.setBuyer(orderInstituCd);
 
@@ -237,7 +237,7 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 						classification.setDescription("Undefined");
 						break;
 					}
-					classification = classificationRepository.save(classification);
+					classification = classificationRepository.insert(classification);
 
 				}
 				item.setClassification(classification);
@@ -245,12 +245,6 @@ public class TenderRowImporter extends RowImporter<Release, ReleaseRepository> {
 
 		}
 
-		if (release.getId() == null) {
-			release = repository.save(release);
-		} else {
-			documents.add(release);
-		}
-
-		return true;
+		return release;
 	}
 }
