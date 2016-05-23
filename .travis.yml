@@ -9,5 +9,3 @@ env:
         - JAVA_OPTS="-XX:MaxPermSize=2g -Xmx4g"
 jdk:
     - oraclejdk8
-services:
-    - mongodb
