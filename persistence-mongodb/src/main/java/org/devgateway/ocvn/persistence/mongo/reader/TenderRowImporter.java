@@ -30,7 +30,8 @@ public class TenderRowImporter extends ReleaseRowImporter {
 
     public TenderRowImporter(final ReleaseRepository releaseRepository, final ImportService importService,
                              final VNOrganizationRepository organizationRepository,
-                             final ClassificationRepository classificationRepository, ContrMethodRepository contrMethodRepository,
+                             final ClassificationRepository classificationRepository,
+                             final ContrMethodRepository contrMethodRepository,
                              final int skipRows) {
         super(releaseRepository, importService, skipRows);
         this.organizationRepository = organizationRepository;
