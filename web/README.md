@@ -1,4 +1,4 @@
-# OCVN web module
+# OC Explorer web module
 
 This module provides REST endpoints for the services needed, as well as basic security. It depends on the **persistence** module and on the **persitence-mongodb**.
 
