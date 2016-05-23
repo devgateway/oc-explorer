@@ -6,48 +6,49 @@ package org.devgateway.ocds.persistence.mongo;
  *         identifier
  */
 public class Identifier {
+    private String scheme;
 
-	String scheme;
+    private String id;
 
-	String id;
-	String legalName;
-	String uri;
+    private String legalName;
 
-	@Override
-	public String toString() {
-		return id;
-	}
+    private String uri;
 
-	public String getScheme() {
-		return scheme;
-	}
+    @Override
+    public String toString() {
+        return id;
+    }
 
-	public void setScheme(String scheme) {
-		this.scheme = scheme;
-	}
+    public String getScheme() {
+        return scheme;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public void setScheme(String scheme) {
+        this.scheme = scheme;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public String getLegalName() {
-		return legalName;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setLegalName(String legalName) {
-		this.legalName = legalName;
-	}
+    public String getLegalName() {
+        return legalName;
+    }
 
-	public String getUri() {
-		return uri;
-	}
+    public void setLegalName(String legalName) {
+        this.legalName = legalName;
+    }
 
-	public void setUri(String uri) {
-		this.uri = uri;
-	}
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
 
 }

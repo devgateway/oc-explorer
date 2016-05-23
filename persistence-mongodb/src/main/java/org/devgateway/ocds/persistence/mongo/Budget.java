@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocds.persistence.mongo;
 
@@ -9,76 +9,75 @@ package org.devgateway.ocds.persistence.mongo;
  */
 
 public class Budget {
+    private String source;
 
-	String source;
-	
-	String id;
-	
-	String description;
-	
-	Value amount;
-	
-	String project;
-	
-	String projectID;
-	
-	String uri;
+    private String id;
 
-	public String getSource() {
-		return source;
-	}
+    private String description;
 
-	public void setSource(String source) {
-		this.source = source;
-	}
+    private Value amount;
 
-	public String getId() {
-		return id;
-	}
+    private String project;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    private String projectID;
 
-	public String getDescription() {
-		return description;
-	}
+    private String uri;
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public String getSource() {
+        return source;
+    }
 
-	public Value getAmount() {
-		return amount;
-	}
+    public void setSource(String source) {
+        this.source = source;
+    }
 
-	public void setAmount(Value amount) {
-		this.amount = amount;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public String getProject() {
-		return project;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setProject(String project) {
-		this.project = project;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public String getProjectID() {
-		return projectID;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public void setProjectID(String projectID) {
-		this.projectID = projectID;
-	}
+    public Value getAmount() {
+        return amount;
+    }
 
-	public String getUri() {
-		return uri;
-	}
+    public void setAmount(Value amount) {
+        this.amount = amount;
+    }
 
-	public void setUri(String uri) {
-		this.uri = uri;
-	}
-	
-	
+    public String getProject() {
+        return project;
+    }
+
+    public void setProject(String project) {
+        this.project = project;
+    }
+
+    public String getProjectID() {
+        return projectID;
+    }
+
+    public void setProjectID(String projectID) {
+        this.projectID = projectID;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
+
+
 }

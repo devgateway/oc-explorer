@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocds.persistence.mongo;
 
@@ -7,116 +7,119 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
 /**
  * @author mihai Award OCDS entity
  *         http://standard.open-contracting.org/latest/en/schema/reference/#
  *         award
  */
 public class Award {
+    private String id;
 
-	String id;
-	String title;
-	String desription;
+    private String title;
 
-	String status;
+    private String desription;
 
+    private String status;
 
-	Date date;
-	Value value;
+    private Date date;
 
-	List<Organization> suppliers = new ArrayList<>();
-	List<Item> items = new ArrayList<>();
-	Period contractPeriod;
-	List<Document> documents = new ArrayList<>();
-	Amendment amendment;
+    private Value value;
 
-	public String getId() {
-		return id;
-	}
+    private List<Organization> suppliers = new ArrayList<>();
 
-	public void setId(final String id) {
-		this.id = id;
-	}
+    private List<Item> items = new ArrayList<>();
 
-	public String getTitle() {
-		return title;
-	}
+    private Period contractPeriod;
 
-	public void setTitle(final String title) {
-		this.title = title;
-	}
+    private List<Document> documents = new ArrayList<>();
 
-	public String getDesription() {
-		return desription;
-	}
+    private Amendment amendment;
 
-	public void setDesription(final String desription) {
-		this.desription = desription;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public String getStatus() {
-		return status;
-	}
+    public void setId(final String id) {
+        this.id = id;
+    }
 
-	public void setStatus(final String status) {
-		this.status = status;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public Date getDate() {
-		return date;
-	}
+    public void setTitle(final String title) {
+        this.title = title;
+    }
 
-	public void setDate(final Date date) {
-		this.date = date;
-	}
+    public String getDesription() {
+        return desription;
+    }
 
-	public Value getValue() {
-		return value;
-	}
+    public void setDesription(final String desription) {
+        this.desription = desription;
+    }
 
-	public void setValue(final Value value) {
-		this.value = value;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public List<Organization> getSuppliers() {
-		return suppliers;
-	}
+    public void setStatus(final String status) {
+        this.status = status;
+    }
 
-	public void setSuppliers(final List<Organization> suppliers) {
-		this.suppliers = suppliers;
-	}
+    public Date getDate() {
+        return date;
+    }
 
-	public List<Item> getItems() {
-		return items;
-	}
+    public void setDate(final Date date) {
+        this.date = date;
+    }
 
-	public void setItems(final List<Item> items) {
-		this.items = items;
-	}
+    public Value getValue() {
+        return value;
+    }
 
-	public Period getContractPeriod() {
-		return contractPeriod;
-	}
+    public void setValue(final Value value) {
+        this.value = value;
+    }
 
-	public void setContractPeriod(final Period contractPeriod) {
-		this.contractPeriod = contractPeriod;
-	}
+    public List<Organization> getSuppliers() {
+        return suppliers;
+    }
 
-	public List<Document> getDocuments() {
-		return documents;
-	}
+    public void setSuppliers(final List<Organization> suppliers) {
+        this.suppliers = suppliers;
+    }
 
-	public void setDocuments(final List<Document> documents) {
-		this.documents = documents;
-	}
+    public List<Item> getItems() {
+        return items;
+    }
 
-	public Amendment getAmendment() {
-		return amendment;
-	}
+    public void setItems(final List<Item> items) {
+        this.items = items;
+    }
 
-	public void setAmendment(final Amendment amendment) {
-		this.amendment = amendment;
-	}
+    public Period getContractPeriod() {
+        return contractPeriod;
+    }
+
+    public void setContractPeriod(final Period contractPeriod) {
+        this.contractPeriod = contractPeriod;
+    }
+
+    public List<Document> getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(final List<Document> documents) {
+        this.documents = documents;
+    }
+
+    public Amendment getAmendment() {
+        return amendment;
+    }
+
+    public void setAmendment(final Amendment amendment) {
+        this.amendment = amendment;
+    }
 }

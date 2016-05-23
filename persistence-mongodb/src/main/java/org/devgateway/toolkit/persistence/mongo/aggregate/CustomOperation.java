@@ -1,19 +1,18 @@
 package org.devgateway.toolkit.persistence.mongo.aggregate;
 
+import com.mongodb.DBObject;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperationContext;
 
-import com.mongodb.DBObject;
-
 public class CustomOperation implements AggregationOperation {
-	private DBObject operation;
+    private DBObject operation;
 
-	public CustomOperation(final DBObject operation) {
-		this.operation = operation;
-	}
+    public CustomOperation(final DBObject operation) {
+        this.operation = operation;
+    }
 
-	@Override
-	public DBObject toDBObject(final AggregationOperationContext context) {
-		return context.getMappedObject(operation);
-	}
+    @Override
+    public DBObject toDBObject(final AggregationOperationContext context) {
+        return context.getMappedObject(operation);
+    }
 }

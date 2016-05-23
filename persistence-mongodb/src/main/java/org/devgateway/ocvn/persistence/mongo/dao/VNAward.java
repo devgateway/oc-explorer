@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocvn.persistence.mongo.dao;
 
@@ -11,70 +11,74 @@ import org.devgateway.ocds.persistence.mongo.Value;
  * Extension of {@link Award} to allow extra Vietnam-specific fields
  */
 public class VNAward extends Award {
+    private String inelibigleYN;
 
-	String inelibigleYN;
-	String ineligibleRson;
-	Integer bidOpenRank;
+    private String ineligibleRson;
 
-	Integer bidType;
-	Integer bidSuccMethod;
-	Value bidPrice;
-	String contractTime;
+    private Integer bidOpenRank;
 
-	public String getInelibigleYN() {
-		return inelibigleYN;
-	}
+    private Integer bidType;
 
-	public void setInelibigleYN(String inelibigleYN) {
-		this.inelibigleYN = inelibigleYN;
-	}
+    private Integer bidSuccMethod;
 
-	public Integer getBidOpenRank() {
-		return bidOpenRank;
-	}
+    private Value bidPrice;
 
-	public void setBidOpenRank(Integer bidOpenRank) {
-		this.bidOpenRank = bidOpenRank;
-	}
+    private String contractTime;
 
-	public Integer getBidType() {
-		return bidType;
-	}
+    public String getInelibigleYN() {
+        return inelibigleYN;
+    }
 
-	public void setBidType(Integer bidType) {
-		this.bidType = bidType;
-	}
+    public void setInelibigleYN(String inelibigleYN) {
+        this.inelibigleYN = inelibigleYN;
+    }
 
-	public Integer getBidSuccMethod() {
-		return bidSuccMethod;
-	}
+    public Integer getBidOpenRank() {
+        return bidOpenRank;
+    }
 
-	public void setBidSuccMethod(Integer bidSuccMethod) {
-		this.bidSuccMethod = bidSuccMethod;
-	}
+    public void setBidOpenRank(Integer bidOpenRank) {
+        this.bidOpenRank = bidOpenRank;
+    }
 
-	public Value getBidPrice() {
-		return bidPrice;
-	}
+    public Integer getBidType() {
+        return bidType;
+    }
 
-	public void setBidPrice(Value bidPrice) {
-		this.bidPrice = bidPrice;
-	}
+    public void setBidType(Integer bidType) {
+        this.bidType = bidType;
+    }
 
-	public String getContractTime() {
-		return contractTime;
-	}
+    public Integer getBidSuccMethod() {
+        return bidSuccMethod;
+    }
 
-	public void setContractTime(String contractTime) {
-		this.contractTime = contractTime;
-	}
+    public void setBidSuccMethod(Integer bidSuccMethod) {
+        this.bidSuccMethod = bidSuccMethod;
+    }
 
-	public String getIneligibleRson() {
-		return ineligibleRson;
-	}
+    public Value getBidPrice() {
+        return bidPrice;
+    }
 
-	public void setIneligibleRson(String ineligibleRson) {
-		this.ineligibleRson = ineligibleRson;
-	}
+    public void setBidPrice(Value bidPrice) {
+        this.bidPrice = bidPrice;
+    }
+
+    public String getContractTime() {
+        return contractTime;
+    }
+
+    public void setContractTime(String contractTime) {
+        this.contractTime = contractTime;
+    }
+
+    public String getIneligibleRson() {
+        return ineligibleRson;
+    }
+
+    public void setIneligibleRson(String ineligibleRson) {
+        this.ineligibleRson = ineligibleRson;
+    }
 
 }

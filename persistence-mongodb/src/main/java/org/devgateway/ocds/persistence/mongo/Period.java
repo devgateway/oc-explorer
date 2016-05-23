@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocds.persistence.mongo;
 
@@ -10,25 +10,24 @@ import java.util.Date;
  *
  */
 public class Period {
-	Date startDate;
-	
+    private Date startDate;
 
-	Date endDate;
+    private Date endDate;
 
-	public Date getStartDate() {
-		return startDate;
-	}
+    public Date getStartDate() {
+        return startDate;
+    }
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
 
-	public Date getEndDate() {
-		return endDate;
-	}
+    public Date getEndDate() {
+        return endDate;
+    }
 
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
 
 }

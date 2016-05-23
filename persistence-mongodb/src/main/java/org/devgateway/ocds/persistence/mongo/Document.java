@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocds.persistence.mongo;
 
@@ -11,90 +11,94 @@ import java.util.Date;
  */
 
 public class Document {
+    private String id;
 
+    private String documentType;
 
-	String id;
-	String documentType;
-	String title;
-	String description;
-	String url;
-	
-	Date datePublished;
-	
-	Date dateModified;
-	String format;
-	String language;
+    private String title;
 
-	public String getId() {
-		return id;
-	}
+    private String description;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    private String language;
 
-	public String getDocumentType() {
-		return documentType;
-	}
+    private String url;
 
-	public void setDocumentType(String documentType) {
-		this.documentType = documentType;
-	}
+    private Date datePublished;
 
-	public String getTitle() {
-		return title;
-	}
+    private Date dateModified;
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    private String format;
 
-	public String getDescription() {
-		return description;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public String getUrl() {
-		return url;
-	}
+    public String getDocumentType() {
+        return documentType;
+    }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    public void setDocumentType(String documentType) {
+        this.documentType = documentType;
+    }
 
-	public Date getDatePublished() {
-		return datePublished;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setDatePublished(Date datePublished) {
-		this.datePublished = datePublished;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public Date getDateModified() {
-		return dateModified;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDateModified(Date dateModified) {
-		this.dateModified = dateModified;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public String getFormat() {
-		return format;
-	}
+    public String getUrl() {
+        return url;
+    }
 
-	public void setFormat(String format) {
-		this.format = format;
-	}
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-	public String getLanguage() {
-		return language;
-	}
+    public Date getDatePublished() {
+        return datePublished;
+    }
 
-	public void setLanguage(String language) {
-		this.language = language;
-	}
+    public void setDatePublished(Date datePublished) {
+        this.datePublished = datePublished;
+    }
+
+    public Date getDateModified() {
+        return dateModified;
+    }
+
+    public void setDateModified(Date dateModified) {
+        this.dateModified = dateModified;
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
 
 }

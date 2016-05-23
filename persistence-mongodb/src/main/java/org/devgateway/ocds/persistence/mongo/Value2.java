@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocds.persistence.mongo;
 
@@ -11,24 +11,24 @@ package org.devgateway.ocds.persistence.mongo;
  * @see {@link Value}
  */
 public class Value2 {
-	
-	BigDecimal2 amount;
-	String currency;
+    private BigDecimal2 amount;
 
-	public BigDecimal2 getAmount() {
-		return amount;
-	}
+    private String currency;
 
-	public void setAmount(BigDecimal2 amount) {
-		this.amount = amount;
-	}
+    public BigDecimal2 getAmount() {
+        return amount;
+    }
 
-	public String getCurrency() {
-		return currency;
-	}
+    public void setAmount(BigDecimal2 amount) {
+        this.amount = amount;
+    }
 
-	public void setCurrency(String currency) {
-		this.currency = currency;
-	}
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
 
 }

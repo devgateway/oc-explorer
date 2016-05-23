@@ -19,14 +19,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 
+ *
  * @author mpostelnicu
  *
  */
 @Transactional
 public interface VietnamImportSourceFilesRepository extends TextSearchableRepository<VietnamImportSourceFiles, Long> {
 
-	@Override
-	@Query("select a from  #{#entityName} a where lower(a.name) like %?1%")
-	Page<VietnamImportSourceFiles> searchText(String code, Pageable page);
+    @Override
+    @Query("select a from  #{#entityName} a where lower(a.name) like %?1%")
+    Page<VietnamImportSourceFiles> searchText(String code, Pageable page);
 }

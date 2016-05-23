@@ -1,13 +1,11 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocds.persistence.mongo;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai Contract OCDS entity
@@ -16,114 +14,124 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 
 public class Contract {
-	String id;
-	String awardID;
-	String title;
-	String description;
-	String status;
-	Period period;
-	Value value;
-	List<Item> items = new ArrayList<>();
+    private String id;
 
-	Date dateSigned;
-	List<Document> documents = new ArrayList<>();
-	Amendment amendment;
-	Implementation implementation;
+    private String awardID;
 
-	public String getId() {
-		return id;
-	}
+    private String title;
 
-	public void setId(final String id) {
-		this.id = id;
-	}
+    private String description;
 
-	public String getAwardID() {
-		return awardID;
-	}
+    private String status;
 
-	public void setAwardID(final String awardID) {
-		this.awardID = awardID;
-	}
+    private Period period;
 
-	public String getTitle() {
-		return title;
-	}
+    private Value value;
 
-	public void setTitle(final String title) {
-		this.title = title;
-	}
+    private List<Item> items = new ArrayList<>();
 
-	public String getDescription() {
-		return description;
-	}
+    private Date dateSigned;
 
-	public void setDescription(final String description) {
-		this.description = description;
-	}
+    private List<Document> documents = new ArrayList<>();
 
-	public String getStatus() {
-		return status;
-	}
+    private Amendment amendment;
 
-	public void setStatus(final String status) {
-		this.status = status;
-	}
+    private Implementation implementation;
 
-	public Period getPeriod() {
-		return period;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setPeriod(final Period period) {
-		this.period = period;
-	}
+    public void setId(final String id) {
+        this.id = id;
+    }
 
-	public Value getValue() {
-		return value;
-	}
+    public String getAwardID() {
+        return awardID;
+    }
 
-	public void setValue(final Value value) {
-		this.value = value;
-	}
+    public void setAwardID(final String awardID) {
+        this.awardID = awardID;
+    }
 
-	public List<Item> getItems() {
-		return items;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setItems(final List<Item> items) {
-		this.items = items;
-	}
+    public void setTitle(final String title) {
+        this.title = title;
+    }
 
-	public Date getDateSigned() {
-		return dateSigned;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDateSigned(final Date dateSigned) {
-		this.dateSigned = dateSigned;
-	}
+    public void setDescription(final String description) {
+        this.description = description;
+    }
 
-	public List<Document> getDocuments() {
-		return documents;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public void setDocuments(final List<Document> documents) {
-		this.documents = documents;
-	}
+    public void setStatus(final String status) {
+        this.status = status;
+    }
 
-	public Amendment getAmendment() {
-		return amendment;
-	}
+    public Period getPeriod() {
+        return period;
+    }
 
-	public void setAmendment(final Amendment amendment) {
-		this.amendment = amendment;
-	}
+    public void setPeriod(final Period period) {
+        this.period = period;
+    }
 
-	public Implementation getImplementation() {
-		return implementation;
-	}
+    public Value getValue() {
+        return value;
+    }
 
-	public void setImplementation(final Implementation implementation) {
-		this.implementation = implementation;
-	}
+    public void setValue(final Value value) {
+        this.value = value;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(final List<Item> items) {
+        this.items = items;
+    }
+
+    public Date getDateSigned() {
+        return dateSigned;
+    }
+
+    public void setDateSigned(final Date dateSigned) {
+        this.dateSigned = dateSigned;
+    }
+
+    public List<Document> getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(final List<Document> documents) {
+        this.documents = documents;
+    }
+
+    public Amendment getAmendment() {
+        return amendment;
+    }
+
+    public void setAmendment(final Amendment amendment) {
+        this.amendment = amendment;
+    }
+
+    public Implementation getImplementation() {
+        return implementation;
+    }
+
+    public void setImplementation(final Implementation implementation) {
+        this.implementation = implementation;
+    }
 
 }

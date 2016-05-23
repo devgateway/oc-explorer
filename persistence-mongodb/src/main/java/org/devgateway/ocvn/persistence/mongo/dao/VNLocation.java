@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocvn.persistence.mongo.dao;
 
@@ -13,30 +13,29 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document(collection = "location")
 public class VNLocation extends Location<GeoJsonPoint> {
+    public static final String GEONAMES_URI_PREFIX = "http://www.geonames.org/";
 
-	public static final String GEONAMES_URI_PREFIX = "http://www.geonames.org/";
-	public static final String GEONAMES_SCHEME = "GEONAMES";
+    public static final String GEONAMES_SCHEME = "GEONAMES";
 
+    private GeoJsonPoint geometry;
 
-	private GeoJsonPoint geometry;
+    public VNLocation() {
+        super();
+        this.getGazetteer().setScheme(GEONAMES_SCHEME);
+    }
 
-	public VNLocation() {
-		super();
-		this.getGazetteer().setScheme(GEONAMES_SCHEME);
-	}
+    @Override
+    public GeoJsonPoint getGeometry() {
+        return geometry;
+    }
 
-	@Override
-	public GeoJsonPoint getGeometry() {
-		return geometry;
-	}
+    @Override
+    public void setGeometry(GeoJsonPoint geometry) {
+        this.geometry = geometry;
+    }
 
-	@Override
-	public void setGeometry(GeoJsonPoint geometry) {
-		this.geometry = geometry;
-	}
-
-	@Override
-	public String getGazetteerPrefix() {
-		return GEONAMES_URI_PREFIX;
-	}
+    @Override
+    public String getGazetteerPrefix() {
+        return GEONAMES_URI_PREFIX;
+    }
 }
