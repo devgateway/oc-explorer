@@ -2,6 +2,7 @@ package org.devgateway.ocvn.persistence.mongo.reader;
 
 import org.devgateway.ocds.persistence.mongo.*;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
+import org.devgateway.ocds.persistence.mongo.reader.ReleaseRowImporter;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.repository.ClassificationRepository;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;

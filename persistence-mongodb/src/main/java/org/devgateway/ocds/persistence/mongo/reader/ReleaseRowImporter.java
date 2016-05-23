@@ -1,4 +1,4 @@
-package org.devgateway.ocvn.persistence.mongo.reader;
+package org.devgateway.ocds.persistence.mongo.reader;
 
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
