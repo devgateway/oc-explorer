@@ -5,14 +5,14 @@ import Location from "./location";
 require("./style.less");
 
 var aggregateLocations = locations => locations
-    .groupBy(location => location.getIn(['locations', '_id']))
+    .groupBy(location => location.getIn(['budget.projectLocation', '_id']))
     .map(locations => locations.reduce((reducedLocation, location) => {
         return {
-          "_id": location.getIn(['locations', '_id']),
-          "name": location.getIn(['locations', 'name']),
+          "_id": location.getIn(['budget.projectLocation', '_id']),
+          "name": location.getIn(['budget.projectLocation', 'description']),
           "amount": reducedLocation.amount + location.get('totalPlannedAmount'),
           "count": reducedLocation.count + location.get('recordsCount'),
-          "coords": location.getIn(['locations', 'coordinates', 'coordinates']).toJS()
+          "coords": location.getIn(['budget.projectLocation', 'geometry', 'coordinates']).toJS()
         }
       }, {
         "amount": 0,
