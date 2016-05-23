@@ -1,6 +1,3 @@
-/**
- *
- */
 package org.devgateway.ocds.persistence.mongo;
 
 import org.springframework.data.annotation.CreatedDate;
@@ -14,7 +11,7 @@ import java.util.*;
  *         http://standard.open-contracting.org/latest/en/schema/release/
  */
 @Document
-public class Release {
+public class Release implements Identifiable {
     @Id
     private String id;
 
@@ -39,6 +36,7 @@ public class Release {
 
     private String language = "en";
 
+    @Override
     public String getId() {
         return id;
     }

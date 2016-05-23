@@ -1,6 +1,3 @@
-/**
- *
- */
 package org.devgateway.ocds.persistence.mongo;
 
 import org.springframework.data.annotation.Id;
@@ -14,7 +11,7 @@ import java.util.List;
  * Organization OCDS entity http://standard.open-contracting.org/latest/en/schema/reference/#organization
  */
 @Document
-public class Organization {
+public class Organization implements Identifiable {
     @Id
     private String id;
 
@@ -74,6 +71,7 @@ public class Organization {
         this.contactPoint = contactPoint;
     }
 
+    @Override
     public String getId() {
         return id;
     }
