@@ -32,6 +32,7 @@ import org.apache.wicket.validation.ValidationError;
 import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.forms.exceptions.NullJpaRepositoryException;
 import org.devgateway.toolkit.forms.exceptions.NullListPageClassException;
+import org.devgateway.toolkit.forms.util.MarkupCacheService;
 import org.devgateway.toolkit.forms.wicket.components.ComponentUtil;
 import org.devgateway.toolkit.forms.wicket.components.form.BootstrapCancelButton;
 import org.devgateway.toolkit.forms.wicket.components.form.BootstrapDeleteButton;
@@ -104,6 +105,16 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
 
 	@SpringBean
 	protected EntityManager entityManager;
+	
+    @SpringBean(required = false)
+    protected MarkupCacheService markupCacheService;
+
+    public void flushReportingCaches() {
+        if (markupCacheService != null) {
+            markupCacheService.flushMarkupCache();
+            markupCacheService.clearReportsCache();
+        }
+    }
 
 	public GenericBootstrapValidationVisitor getBootstrapValidationVisitor(final AjaxRequestTarget target) {
 		return new GenericBootstrapValidationVisitor(target);
