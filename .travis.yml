@@ -3,6 +3,7 @@ sudo: false
 cache:
     directories:
         - $HOME/.m2
+        - $HOME/.embedmongo
         - ui/node_modules
         - ui/node
 env:
