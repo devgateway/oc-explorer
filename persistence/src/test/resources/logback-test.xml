@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- keep console log colors configured in spring boot -->
+    <include resource="org/springframework/boot/logging/logback/base.xml" />
+
+    <logger name="at.compax.bbsng.app" level="error" />
+    <logger name="org.springframework.core " level="error" />
+    <logger name="org.springframework.beans" level="error" />
+    <logger name="org.springframework.context" level="error" />
+    <logger name="org.springframework.transaction" level="error" />
+    <logger name="org.springframework.web" level="error" />
+    <logger name="org.springframework.test" level="error" />
+    <logger name="org.hibernate" level="error" />
+
+    <!-- Setting the root level of logging to INFO -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+</configuration>
