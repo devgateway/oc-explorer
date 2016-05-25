@@ -1,29 +1,15 @@
 
 package org.devgateway.ocds.generated.persistence.mongo;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Generated;
-
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.*;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import javax.annotation.Generated;
+import java.util.*;
 
 
 /**
@@ -117,7 +103,7 @@ public class ReleaseSchema {
      * 
      */
     @JsonProperty("buyer")
-    private Tenderer buyer;
+    private Organization buyer;
     /**
      * Awards
      * <p>
@@ -348,7 +334,7 @@ public class ReleaseSchema {
      *     The buyer
      */
     @JsonProperty("buyer")
-    public Tenderer getBuyer() {
+    public Organization getBuyer() {
         return buyer;
     }
 
@@ -361,7 +347,7 @@ public class ReleaseSchema {
      *     The buyer
      */
     @JsonProperty("buyer")
-    public void setBuyer(Tenderer buyer) {
+    public void setBuyer(Organization buyer) {
         this.buyer = buyer;
     }
 

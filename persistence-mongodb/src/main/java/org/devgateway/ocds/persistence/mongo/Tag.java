@@ -1,5 +1,4 @@
-
-package org.devgateway.ocds.generated.persistence.mongo;
+package org.devgateway.ocds.persistence.mongo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +26,9 @@ public enum Tag {
     IMPLEMENTATION_UPDATE("implementationUpdate"),
     CONTRACT_TERMINATION("contractTermination"),
     COMPILED("compiled");
+
     private final String value;
+
     private final static Map<String, Tag> CONSTANTS = new HashMap<String, Tag>();
 
     static {

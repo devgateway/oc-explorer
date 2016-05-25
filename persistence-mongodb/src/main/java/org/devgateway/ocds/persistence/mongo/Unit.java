@@ -1,49 +1,43 @@
 
-package org.devgateway.ocds.generated.persistence.mongo;
+package org.devgateway.ocds.persistence.mongo;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.Generated;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import javax.annotation.Generated;
 
 
 /**
- * Description of the unit which the good comes in e.g. hours, kilograms. Made up of a unit name, and the value of a single unit.
- * 
+ * Description of the unit which the good comes in e.g. hours, kilograms.
+ * Made up of a unit name, and the value of a single unit.
+ *
+ * http://standard.open-contracting.org/latest/en/schema/reference/#unit
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
-    "name",
-    "value"
+        "name",
+        "value"
 })
 public class Unit {
 
     /**
      * Name of the unit
-     * 
+     *
      */
     @JsonProperty("name")
     private String name;
+
     @JsonProperty("value")
     private Amount value;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * Name of the unit
-     * 
+     *
      * @return
      *     The name
      */
@@ -54,7 +48,7 @@ public class Unit {
 
     /**
      * Name of the unit
-     * 
+     *
      * @param name
      *     The name
      */
@@ -64,7 +58,7 @@ public class Unit {
     }
 
     /**
-     * 
+     *
      * @return
      *     The value
      */
@@ -74,7 +68,7 @@ public class Unit {
     }
 
     /**
-     * 
+     *
      * @param value
      *     The value
      */
@@ -88,19 +82,12 @@ public class Unit {
         return ToStringBuilder.reflectionToString(this);
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(name).append(value).append(additionalProperties).toHashCode();
+        return new HashCodeBuilder().
+                append(name).
+                append(value).
+                toHashCode();
     }
 
     @Override
@@ -112,7 +99,10 @@ public class Unit {
             return false;
         }
         Unit rhs = ((Unit) other);
-        return new EqualsBuilder().append(name, rhs.name).append(value, rhs.value).append(additionalProperties, rhs.additionalProperties).isEquals();
+        return new EqualsBuilder().
+                append(name, rhs.name).
+                append(value, rhs.value).
+                isEquals();
     }
 
 }

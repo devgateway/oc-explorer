@@ -1,44 +1,153 @@
-/**
- *
- */
 package org.devgateway.ocds.persistence.mongo;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import javax.annotation.Generated;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+
 
 /**
- * @author mihai
- * Implementation OCDS Entity http://standard.open-contracting.org/latest/en/schema/reference/#implementation
+ * Implementation
+ * <p>
+ * Information during the performance / implementation stage of the contract.
+ *
+ * http://standard.open-contracting.org/latest/en/schema/reference/#implementation
+ *
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Generated("org.jsonschema2pojo")
+@JsonPropertyOrder({
+        "transactions",
+        "milestones",
+        "documents"
+})
 public class Implementation {
-    private List<Transaction> transactions = new ArrayList<>();
 
-    private List<Milestone> milestones = new ArrayList<>();
+    /**
+     * A list of the spending transactions made against this contract
+     *
+     */
+    @JsonProperty("transactions")
+    @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    private Set<Transaction> transactions = new LinkedHashSet<Transaction>();
 
-    private List<Document> documents = new ArrayList<>();
+    /**
+     * As milestones are completed, milestone completions should be documented.
+     *
+     */
+    @JsonProperty("milestones")
+    @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    private Set<Milestone> milestones = new LinkedHashSet<Milestone>();
 
-    public List<Transaction> getTransactions() {
+    /**
+     * Documents and reports that are part of the implementation phase e.g. audit and evaluation reports.
+     *
+     */
+    @JsonProperty("documents")
+    @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    private Set<Document> documents = new LinkedHashSet<Document>();
+
+    /**
+     * A list of the spending transactions made against this contract
+     *
+     * @return
+     *     The transactions
+     */
+    @JsonProperty("transactions")
+    public Set<Transaction> getTransactions() {
         return transactions;
     }
 
-    public void setTransactions(List<Transaction> transactions) {
+    /**
+     * A list of the spending transactions made against this contract
+     *
+     * @param transactions
+     *     The transactions
+     */
+    @JsonProperty("transactions")
+    public void setTransactions(Set<Transaction> transactions) {
         this.transactions = transactions;
     }
 
-    public List<Milestone> getMilestones() {
+    /**
+     * As milestones are completed, milestone completions should be documented.
+     *
+     * @return
+     *     The milestones
+     */
+    @JsonProperty("milestones")
+    public Set<Milestone> getMilestones() {
         return milestones;
     }
 
-    public void setMilestones(List<Milestone> milestones) {
+    /**
+     * As milestones are completed, milestone completions should be documented.
+     *
+     * @param milestones
+     *     The milestones
+     */
+    @JsonProperty("milestones")
+    public void setMilestones(Set<Milestone> milestones) {
         this.milestones = milestones;
     }
 
-    public List<Document> getDocuments() {
+    /**
+     * Documents and reports that are part of the implementation phase e.g. audit and evaluation reports.
+     *
+     * @return
+     *     The documents
+     */
+    @JsonProperty("documents")
+    public Set<Document> getDocuments() {
         return documents;
     }
 
-    public void setDocuments(List<Document> documents) {
+    /**
+     * Documents and reports that are part of the implementation phase e.g. audit and evaluation reports.
+     *
+     * @param documents
+     *     The documents
+     */
+    @JsonProperty("documents")
+    public void setDocuments(Set<Document> documents) {
         this.documents = documents;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().
+                append(transactions).
+                append(milestones).
+                append(documents).
+                toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if ((other instanceof Implementation) == false) {
+            return false;
+        }
+        Implementation rhs = ((Implementation) other);
+        return new EqualsBuilder().
+                append(transactions, rhs.transactions).
+                append(milestones, rhs.milestones).
+                append(documents, rhs.documents).
+                isEquals();
     }
 
 }
