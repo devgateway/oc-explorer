@@ -101,7 +101,7 @@ public class Amount {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Amount) == false) {
+        if (!(other instanceof Amount)) {
             return false;
         }
         Amount rhs = ((Amount) other);

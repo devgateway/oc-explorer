@@ -314,7 +314,7 @@ public class Budget {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Budget) == false) {
+        if (!(other instanceof Budget)) {
             return false;
         }
         Budget rhs = ((Budget) other);

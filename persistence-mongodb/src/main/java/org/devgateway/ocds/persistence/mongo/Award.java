@@ -130,8 +130,6 @@ public class Award {
      */
     @JsonProperty("amendment")
     private Amendment amendment;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * Award ID
@@ -418,16 +416,6 @@ public class Award {
         return ToStringBuilder.reflectionToString(this);
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
     @Override
     public int hashCode() {
         return new HashCodeBuilder().
@@ -442,7 +430,6 @@ public class Award {
                 append(contractPeriod).
                 append(documents).
                 append(amendment).
-                append(additionalProperties).
                 toHashCode();
     }
 
@@ -451,7 +438,7 @@ public class Award {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Award) == false) {
+        if (!(other instanceof Award)) {
             return false;
         }
         Award rhs = ((Award) other);
@@ -467,7 +454,6 @@ public class Award {
                 append(contractPeriod, rhs.contractPeriod).
                 append(documents, rhs.documents).
                 append(amendment, rhs.amendment).
-                append(additionalProperties, rhs.additionalProperties).
                 isEquals();
     }
 
@@ -487,7 +473,7 @@ public class Award {
             }
         }
 
-        private Status(String value) {
+        Status(String value) {
             this.value = value;
         }
 

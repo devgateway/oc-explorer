@@ -195,7 +195,7 @@ public class ContactPoint {
         if (other == this) {
             return true;
         }
-        if ((other instanceof ContactPoint) == false) {
+        if (!(other instanceof ContactPoint)) {
             return false;
         }
         ContactPoint rhs = ((ContactPoint) other);

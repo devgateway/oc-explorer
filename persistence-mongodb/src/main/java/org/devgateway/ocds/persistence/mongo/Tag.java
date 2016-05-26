@@ -37,7 +37,7 @@ public enum Tag {
         }
     }
 
-    private Tag(String value) {
+    Tag(String value) {
         this.value = value;
     }
 

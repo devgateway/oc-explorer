@@ -374,7 +374,7 @@ public class Document {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Document) == false) {
+        if (!(other instanceof Document)) {
             return false;
         }
         Document rhs = ((Document) other);

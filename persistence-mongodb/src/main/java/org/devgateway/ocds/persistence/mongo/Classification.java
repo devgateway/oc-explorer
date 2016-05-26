@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.annotation.Generated;
@@ -23,7 +24,7 @@ import java.net.URI;
         "uri"
 })
 @Document
-public class Classification {
+public class Classification implements Identifiable {
     /**
      * An classification should be drawn from an existing scheme or list of codes.
      * This field is used to indicate the scheme/codelist from which the classification is drawn.
@@ -41,6 +42,7 @@ public class Classification {
      *
      */
     @JsonProperty("id")
+    @Id
     private String id;
 
     /**
@@ -97,6 +99,7 @@ public class Classification {
      *     The id
      */
     @JsonProperty("id")
+    @Override
     public String getId() {
         return id;
     }
@@ -178,7 +181,7 @@ public class Classification {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Classification) == false) {
+        if (!(other instanceof Classification)) {
             return false;
         }
         Classification rhs = ((Classification) other);

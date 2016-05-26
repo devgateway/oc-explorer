@@ -474,7 +474,7 @@ public class Contract {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Contract) == false) {
+        if (!(other instanceof Contract)) {
             return false;
         }
         Contract rhs = ((Contract) other);
@@ -512,7 +512,7 @@ public class Contract {
             }
         }
 
-        private Status(String value) {
+        Status(String value) {
             this.value = value;
         }
 

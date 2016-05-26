@@ -95,7 +95,7 @@ public class Unit {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Unit) == false) {
+        if (!(other instanceof Unit)) {
             return false;
         }
         Unit rhs = ((Unit) other);

@@ -158,7 +158,7 @@ public class Planning {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Planning) == false) {
+        if (!(other instanceof Planning)) {
             return false;
         }
         Planning rhs = ((Planning) other);

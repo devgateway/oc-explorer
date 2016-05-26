@@ -236,7 +236,7 @@ public class Item {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Item) == false) {
+        if (!(other instanceof Item)) {
             return false;
         }
         Item rhs = ((Item) other);

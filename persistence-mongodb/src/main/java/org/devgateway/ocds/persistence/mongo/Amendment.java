@@ -1,13 +1,16 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.devgateway.ocds.generated.persistence.mongo.Change;
 
 import javax.annotation.Generated;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -49,8 +52,6 @@ public class Amendment {
      */
     @JsonProperty("rationale")
     private String rationale;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * Amendment Date
@@ -131,23 +132,12 @@ public class Amendment {
         return ToStringBuilder.reflectionToString(this);
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
     @Override
     public int hashCode() {
         return new HashCodeBuilder().
                 append(date).
                 append(changes).
                 append(rationale).
-                append(additionalProperties).
                 toHashCode();
     }
 
@@ -156,7 +146,7 @@ public class Amendment {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Amendment) == false) {
+        if (!(other instanceof Amendment)) {
             return false;
         }
         Amendment rhs = ((Amendment) other);
@@ -164,7 +154,6 @@ public class Amendment {
                 append(date, rhs.date).
                 append(changes, rhs.changes).
                 append(rationale, rhs.rationale).
-                append(additionalProperties, rhs.additionalProperties).
                 isEquals();
     }
 

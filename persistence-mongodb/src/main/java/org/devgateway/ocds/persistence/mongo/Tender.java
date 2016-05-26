@@ -859,7 +859,7 @@ public class Tender {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Tender) == false) {
+        if (!(other instanceof Tender)) {
             return false;
         }
         Tender rhs = ((Tender) other);
@@ -908,7 +908,7 @@ public class Tender {
             }
         }
 
-        private ProcurementMethod(String value) {
+        ProcurementMethod(String value) {
             this.value = value;
         }
 
@@ -949,7 +949,7 @@ public class Tender {
             }
         }
 
-        private Status(String value) {
+        Status(String value) {
             this.value = value;
         }
 

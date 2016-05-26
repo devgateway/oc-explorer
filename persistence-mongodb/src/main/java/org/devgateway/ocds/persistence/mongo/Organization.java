@@ -33,7 +33,7 @@ import java.util.Set;
         "contactPoint"
 })
 @Document
-public class Organization {
+public class Organization implements Identifiable {
     @Id
     private String id;
 
@@ -75,6 +75,7 @@ public class Organization {
     @JsonProperty("contactPoint")
     private ContactPoint contactPoint;
 
+    @Override
     public String getId() {
         return id;
     }
@@ -226,7 +227,7 @@ public class Organization {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Organization) == false) {
+        if (!(other instanceof Organization)) {
             return false;
         }
         Organization rhs = ((Organization) other);

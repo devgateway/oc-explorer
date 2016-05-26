@@ -271,7 +271,7 @@ public class Transaction {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Transaction) == false) {
+        if (!(other instanceof Transaction)) {
             return false;
         }
         Transaction rhs = ((Transaction) other);

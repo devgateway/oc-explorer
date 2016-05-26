@@ -265,7 +265,7 @@ public class Milestone {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Milestone) == false) {
+        if (!(other instanceof Milestone)) {
             return false;
         }
         Milestone rhs = ((Milestone) other);
@@ -295,7 +295,7 @@ public class Milestone {
             }
         }
 
-        private Status(String value) {
+        Status(String value) {
             this.value = value;
         }
 

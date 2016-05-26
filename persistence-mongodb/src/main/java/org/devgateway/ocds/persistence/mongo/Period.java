@@ -101,7 +101,7 @@ public class Period {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Period) == false) {
+        if (!(other instanceof Period)) {
             return false;
         }
         Period rhs = ((Period) other);

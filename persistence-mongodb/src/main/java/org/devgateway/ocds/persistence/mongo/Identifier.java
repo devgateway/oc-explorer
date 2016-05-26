@@ -179,7 +179,7 @@ public class Identifier {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Identifier) == false) {
+        if (!(other instanceof Identifier)) {
             return false;
         }
         Identifier rhs = ((Identifier) other);
