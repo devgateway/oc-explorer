@@ -7,9 +7,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import javax.annotation.Generated;
-import java.net.URI;
-
 /**
  * Budget Information
  * <p>
@@ -44,7 +41,7 @@ public class Budget {
      *
      */
     @JsonProperty("source")
-    private URI source;
+    private String source;
 
     /**
      * An identifier for the budget line item which provides funds for this contracting process.
@@ -98,7 +95,7 @@ public class Budget {
      *
      */
     @JsonProperty("uri")
-    private URI uri;
+    private String uri;
 
     /**
      * Data Source
@@ -110,7 +107,7 @@ public class Budget {
      *     The source
      */
     @JsonProperty("source")
-    public URI getSource() {
+    public String getSource() {
         return source;
     }
 
@@ -124,7 +121,7 @@ public class Budget {
      *     The source
      */
     @JsonProperty("source")
-    public void setSource(URI source) {
+    public void setSource(String source) {
         this.source = source;
     }
 
@@ -272,7 +269,7 @@ public class Budget {
      *     The uri
      */
     @JsonProperty("uri")
-    public URI getUri() {
+    public String getUri() {
         return uri;
     }
 
@@ -286,7 +283,7 @@ public class Budget {
      *     The uri
      */
     @JsonProperty("uri")
-    public void setUri(URI uri) {
+    public void setUri(String uri) {
         this.uri = uri;
     }
 

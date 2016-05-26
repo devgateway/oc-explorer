@@ -9,9 +9,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.annotation.Generated;
-import java.net.URI;
-
 /**
  * Classification OCDS Entity http://standard.open-contracting.org/latest/en/schema/reference/#classification
  */
@@ -57,7 +54,7 @@ public class Classification implements Identifiable {
      *
      */
     @JsonProperty("uri")
-    private URI uri;
+    private String uri;
 
     /**
      * An classification should be drawn from an existing scheme or list of codes.
@@ -144,7 +141,7 @@ public class Classification implements Identifiable {
      *     The uri
      */
     @JsonProperty("uri")
-    public URI getUri() {
+    public String getUri() {
         return uri;
     }
 
@@ -156,7 +153,7 @@ public class Classification implements Identifiable {
      *     The uri
      */
     @JsonProperty("uri")
-    public void setUri(URI uri) {
+    public void setUri(String uri) {
         this.uri = uri;
     }
 

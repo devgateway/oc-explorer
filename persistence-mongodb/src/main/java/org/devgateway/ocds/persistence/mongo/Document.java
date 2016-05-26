@@ -7,8 +7,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import javax.annotation.Generated;
-import java.net.URI;
 import java.util.Date;
 
 
@@ -77,7 +75,7 @@ public class Document {
      *
      */
     @JsonProperty("url")
-    private URI url;
+    private String url;
 
     /**
      * The date on which the document was first published. This is particularly important for legally
@@ -226,7 +224,7 @@ public class Document {
      *     The url
      */
     @JsonProperty("url")
-    public URI getUrl() {
+    public String getUrl() {
         return url;
     }
 
@@ -238,7 +236,7 @@ public class Document {
      *     The url
      */
     @JsonProperty("url")
-    public void setUrl(URI url) {
+    public void setUrl(String url) {
         this.url = url;
     }
 

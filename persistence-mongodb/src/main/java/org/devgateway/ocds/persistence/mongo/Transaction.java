@@ -7,7 +7,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.net.URI;
 import java.util.Date;
 
 
@@ -55,7 +54,7 @@ public class Transaction {
      *
      */
     @JsonProperty("source")
-    private URI source;
+    private String source;
 
     /**
      * The date of the transaction
@@ -119,7 +118,7 @@ public class Transaction {
      *     The source
      */
     @JsonProperty("source")
-    public URI getSource() {
+    public String getSource() {
         return source;
     }
 
@@ -134,7 +133,7 @@ public class Transaction {
      *     The source
      */
     @JsonProperty("source")
-    public void setSource(URI source) {
+    public void setSource(String source) {
         this.source = source;
     }
 
