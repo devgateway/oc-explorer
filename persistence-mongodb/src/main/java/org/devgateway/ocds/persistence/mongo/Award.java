@@ -20,7 +20,6 @@ import java.util.*;
  *
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
         "id",
         "title",
@@ -459,8 +458,11 @@ public class Award {
 
     public enum Status {
         PENDING("pending"),
+
         ACTIVE("active"),
+
         CANCELLED("cancelled"),
+
         UNSUCCESSFUL("unsuccessful");
 
         private final String value;

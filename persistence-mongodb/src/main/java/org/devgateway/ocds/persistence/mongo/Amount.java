@@ -19,7 +19,6 @@ import java.math.BigDecimal;
  *      (hope this will be fixed in future versions of spring data mongodb)
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
         "amount",
         "currency"

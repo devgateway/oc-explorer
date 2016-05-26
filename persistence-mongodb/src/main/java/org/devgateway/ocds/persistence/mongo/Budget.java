@@ -25,7 +25,6 @@ import java.net.URI;
  *
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
         "source",
         "id",

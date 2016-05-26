@@ -20,7 +20,6 @@ import java.util.*;
  *
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
         "id",
         "title",
@@ -891,11 +890,11 @@ public class Tender {
                 isEquals();
     }
 
-    @Generated("org.jsonschema2pojo")
     public enum ProcurementMethod {
-
         OPEN("open"),
+
         SELECTIVE("selective"),
+
         LIMITED("limited");
 
         private final String value;
@@ -930,13 +929,15 @@ public class Tender {
 
     }
 
-    @Generated("org.jsonschema2pojo")
     public enum Status {
-
         PLANNED("planned"),
+
         ACTIVE("active"),
+
         CANCELLED("cancelled"),
+
         UNSUCCESSFUL("unsuccessful"),
+
         COMPLETE("complete");
 
         private final String value;

@@ -19,7 +19,6 @@ import java.util.*;
  *
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
         "id",
         "awardID",
@@ -494,12 +493,13 @@ public class Contract {
                 isEquals();
     }
 
-    @Generated("org.jsonschema2pojo")
     public enum Status {
-
         PENDING("pending"),
+
         ACTIVE("active"),
+
         CANCELLED("cancelled"),
+
         TERMINATED("terminated");
 
         private final String value;

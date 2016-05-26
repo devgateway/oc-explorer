@@ -20,7 +20,6 @@ import java.util.*;
  *
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
         "id",
         "ocid",
@@ -533,9 +532,7 @@ public class Release implements Identifiable {
                 isEquals();
     }
 
-    @Generated("org.jsonschema2pojo")
     public enum InitiationType {
-
         TENDER("tender");
 
         private final String value;

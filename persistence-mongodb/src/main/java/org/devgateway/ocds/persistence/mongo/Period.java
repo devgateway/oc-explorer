@@ -18,7 +18,6 @@ import java.util.Date;
  *
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
         "startDate",
         "endDate"

@@ -13,7 +13,6 @@ import javax.annotation.Generated;
  *  Identifier OCDS entity http://standard.open-contracting.org/latest/en/schema/reference/#identifier
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
         "scheme",
         "id",

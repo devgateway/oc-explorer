@@ -14,7 +14,6 @@ import java.util.*;
  * Milestone OCDS entity http://standard.open-contracting.org/latest/en/schema/reference/#milestone
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
         "id",
         "title",
@@ -280,13 +279,15 @@ public class Milestone {
                 isEquals();
     }
 
-    @Generated("org.jsonschema2pojo")
     public enum Status {
-
         MET("met"),
+
         NOT_MET("notMet"),
+
         PARTIALLY_MET("partiallyMet");
+
         private final String value;
+
         private final static Map<String, Milestone.Status> CONSTANTS = new HashMap<String, Milestone.Status>();
 
         static {

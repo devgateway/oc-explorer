@@ -24,7 +24,6 @@ import java.util.Set;
  *
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
         "identifier",
         "additionalIdentifiers",

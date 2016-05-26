@@ -19,7 +19,6 @@ import javax.annotation.Generated;
  *
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
         "streetAddress",
         "locality",

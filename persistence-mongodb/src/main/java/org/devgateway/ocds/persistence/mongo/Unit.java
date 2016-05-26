@@ -18,7 +18,6 @@ import javax.annotation.Generated;
  * http://standard.open-contracting.org/latest/en/schema/reference/#unit
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
         "name",
         "value"

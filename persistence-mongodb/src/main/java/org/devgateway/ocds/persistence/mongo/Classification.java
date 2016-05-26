@@ -16,7 +16,6 @@ import java.net.URI;
  * Classification OCDS Entity http://standard.open-contracting.org/latest/en/schema/reference/#classification
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
         "scheme",
         "id",

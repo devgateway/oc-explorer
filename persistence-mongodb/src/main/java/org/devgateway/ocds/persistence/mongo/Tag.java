@@ -1,30 +1,40 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.Generated;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-@Generated("org.jsonschema2pojo")
-public enum Tag {
+import java.util.HashMap;
+import java.util.Map;
 
+public enum Tag {
     PLANNING("planning"),
+
     TENDER("tender"),
+
     TENDER_AMENDMENT("tenderAmendment"),
+
     TENDER_UPDATE("tenderUpdate"),
+
     TENDER_CANCELLATION("tenderCancellation"),
+
     AWARD("award"),
+
     AWARD_UPDATE("awardUpdate"),
+
     AWARD_CANCELLATION("awardCancellation"),
+
     CONTRACT("contract"),
+
     CONTRACT_UPDATE("contractUpdate"),
+
     CONTRACT_AMENDMENT("contractAmendment"),
+
     IMPLEMENTATION("implementation"),
+
     IMPLEMENTATION_UPDATE("implementationUpdate"),
+
     CONTRACT_TERMINATION("contractTermination"),
+
     COMPILED("compiled");
 
     private final String value;
