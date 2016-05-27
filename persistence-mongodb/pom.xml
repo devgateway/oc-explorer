@@ -166,15 +166,15 @@
         <plugins>
 
 
-<!-- 
 
+<!-- 
 	<plugin>
 		<groupId>org.jsonschema2pojo</groupId>
 		<artifactId>jsonschema2pojo-maven-plugin</artifactId>
 		<version>0.4.23</version>
 		<configuration>
-			<sourceDirectory>${basedir}/src/main/resources/release-schema.json</sourceDirectory>
-			<targetPackage>org.devgateway.ocds.generated.persistence.mongo</targetPackage>
+			<sourceDirectory>${basedir}/src/main/resources/record-package-schema.json</sourceDirectory>
+			<targetPackage>org.devgateway.ocds.generated.record</targetPackage>
 		</configuration>
 		<executions>
 			<execution>
@@ -185,7 +185,9 @@
 		</executions>
 	</plugin>
      
- -->   
+
+ -->
+    
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
