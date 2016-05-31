@@ -572,7 +572,7 @@ public class Tender {
      *     The tenderPeriod
      */
     @JsonProperty("tenderPeriod")
-    public Period getPeriod() {
+    public Period getTenderPeriod() {
         return tenderPeriod;
     }
 
@@ -585,7 +585,7 @@ public class Tender {
      *     The tenderPeriod
      */
     @JsonProperty("tenderPeriod")
-    public void setPeriod(Period tenderPeriod) {
+    public void setTenderPeriod(Period tenderPeriod) {
         this.tenderPeriod = tenderPeriod;
     }
 
