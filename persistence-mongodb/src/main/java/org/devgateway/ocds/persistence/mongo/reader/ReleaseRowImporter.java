@@ -1,7 +1,6 @@
 package org.devgateway.ocds.persistence.mongo.reader;
 
 import org.devgateway.ocds.persistence.mongo.Release;
-import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 

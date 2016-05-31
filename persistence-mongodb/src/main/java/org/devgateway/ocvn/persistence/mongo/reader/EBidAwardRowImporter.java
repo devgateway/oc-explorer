@@ -1,10 +1,11 @@
 package org.devgateway.ocvn.persistence.mongo.reader;
 
+import org.devgateway.ocds.persistence.mongo.Amount;
+import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.Identifier;
 import org.devgateway.ocds.persistence.mongo.Release;
-import org.devgateway.ocds.persistence.mongo.Value;
+import org.devgateway.ocds.persistence.mongo.Tag;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
-import org.devgateway.ocds.persistence.mongo.constants.OCDSConst;
 import org.devgateway.ocds.persistence.mongo.reader.ReleaseRowImporter;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
@@ -42,7 +43,7 @@ public class EBidAwardRowImporter extends ReleaseRowImporter {
         if (release == null) {
             release = new Release();
             release.setOcid(MongoConstants.OCDS_PREFIX + "bidno-" + row[0]);
-            release.getTag().add("award");
+            release.getTag().add(Tag.AWARD);
             VNPlanning planning = new VNPlanning();
             release.setPlanning(planning);
             planning.setBidNo(row[0]);
@@ -52,7 +53,7 @@ public class EBidAwardRowImporter extends ReleaseRowImporter {
         award.setId(release.getOcid() + "-award-" + release.getAwards().size());
         release.getAwards().add(award);
 
-        Value value = new Value();
+        Amount value = new Amount();
         value.setCurrency("VND");
         value.setAmount(getDecimal(row[1]));
         award.setValue(value);
@@ -74,7 +75,7 @@ public class EBidAwardRowImporter extends ReleaseRowImporter {
         award.setBidOpenRank(row[4].isEmpty() ? null : getInteger(row[4]));
 
         if (row.length > 5) {
-            award.setStatus(row[5].equals("Y") ? OCDSConst.Awards.STATUS_ACTIVE : OCDSConst.Awards.STATUS_UNSUCCESSFUL);
+            award.setStatus(row[5].equals("Y") ? Award.Status.ACTIVE : Award.Status.UNSUCCESSFUL);
         }
 
         if (row.length > 6) {
@@ -94,7 +95,7 @@ public class EBidAwardRowImporter extends ReleaseRowImporter {
         // BID_NO
         // we ignore the fields if there are no tenders found
         if (release.getTender() != null) {
-            if (award.getStatus().equals(OCDSConst.Awards.STATUS_UNSUCCESSFUL)) {
+            if (award.getStatus().equals(Award.Status.UNSUCCESSFUL)) {
                 release.getTender().getTenderers().add(supplier);
             }
             release.getTender().setNumberOfTenderers(release.getTender().getTenderers().size());

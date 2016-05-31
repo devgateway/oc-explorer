@@ -1,7 +1,8 @@
 package org.devgateway.ocvn.persistence.mongo.reader;
 
+import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Release;
-import org.devgateway.ocds.persistence.mongo.Value;
+import org.devgateway.ocds.persistence.mongo.Tag;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.persistence.mongo.reader.ReleaseRowImporter;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
@@ -44,7 +45,7 @@ public class ProcurementPlansRowImporter extends ReleaseRowImporter {
 
         Release release = new Release();
         release.setOcid(MongoConstants.OCDS_PREFIX + "prjid-" + projectID);
-        release.getTag().add("planning");
+        release.getTag().add(Tag.PLANNING);
         VNPlanning planning = new VNPlanning();
         VNBudget budget = new VNBudget();
         release.setPlanning(planning);
@@ -83,7 +84,7 @@ public class ProcurementPlansRowImporter extends ReleaseRowImporter {
         budget.setProject(row[1]);
         budget.setDescription(row[11]);
 
-        Value value = new Value();
+        Amount value = new Amount();
         budget.setAmount(value);
         value.setCurrency("VND");
         value.setAmount(getDecimal(row[2]));

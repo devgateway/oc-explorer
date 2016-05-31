@@ -1,5 +1,6 @@
 package org.devgateway.ocvn.persistence.mongo.reader;
 
+import org.devgateway.ocds.persistence.mongo.Gazetteer;
 import org.devgateway.ocds.persistence.mongo.Location;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
@@ -37,7 +38,11 @@ public class LocationRowImporter extends RowImporter<VNLocation, VNLocationRepos
 
         GeoJsonPoint coordinates = new GeoJsonPoint(getDouble(row[2]), getDouble(row[1]));
         location.setGeometry(coordinates);
-        location.setupGazetteer(row[3]);
+
+        Gazetteer gazetteer = new Gazetteer();
+        gazetteer.getIdentifiers().add(row[3]);
+        location.setGazetteer(gazetteer);
+        location.setUri(location.getGazetteerPrefix() + row[3]);
 
         repository.insert(location);
     }

@@ -1,10 +1,11 @@
 package org.devgateway.ocvn.persistence.mongo.reader;
 
+import org.devgateway.ocds.persistence.mongo.Amount;
+import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.Identifier;
 import org.devgateway.ocds.persistence.mongo.Release;
-import org.devgateway.ocds.persistence.mongo.Value;
+import org.devgateway.ocds.persistence.mongo.Tag;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
-import org.devgateway.ocds.persistence.mongo.constants.OCDSConst;
 import org.devgateway.ocds.persistence.mongo.reader.ReleaseRowImporter;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
@@ -40,7 +41,7 @@ public class OfflineAwardRowImporter extends ReleaseRowImporter {
 
         if (release == null) {
             release = new Release();
-            release.getTag().add("award");
+            release.getTag().add(Tag.AWARD);
             release.setOcid(MongoConstants.OCDS_PREFIX + "bidno-" + row[0]);
             VNPlanning planning = new VNPlanning();
             release.setPlanning(planning);
@@ -55,7 +56,7 @@ public class OfflineAwardRowImporter extends ReleaseRowImporter {
         award.setTitle(row[1]);
 
         if (!row[2].isEmpty()) {
-            Value value = new Value();
+            Amount value = new Amount();
             value.setCurrency("VND");
             value.setAmount(getDecimal(row[2]));
             award.setValue(value);
@@ -79,7 +80,7 @@ public class OfflineAwardRowImporter extends ReleaseRowImporter {
         // Integer.parseInt(row[4]));
 
         if (row.length > 5) {
-            award.setStatus(row[5].equals("Y") ? OCDSConst.Awards.STATUS_ACTIVE : OCDSConst.Awards.STATUS_UNSUCCESSFUL);
+            award.setStatus(row[5].equals("Y") ? Award.Status.ACTIVE : Award.Status.UNSUCCESSFUL);
         }
 
         if (row.length > 6) {
@@ -99,7 +100,7 @@ public class OfflineAwardRowImporter extends ReleaseRowImporter {
         }
 
         if (row.length > 10 && row[10] != null && !row[10].isEmpty()) {
-            Value value2 = new Value();
+            Amount value2 = new Amount();
             value2.setCurrency("VND");
             value2.setAmount(getDecimal(row[10]));
             award.setValue(value2);
@@ -114,7 +115,7 @@ public class OfflineAwardRowImporter extends ReleaseRowImporter {
         // BID_NO
         // we ignore the fields if there are no tenders found
         if (release.getTender() != null) {
-            if (award.getStatus().equals(OCDSConst.Awards.STATUS_UNSUCCESSFUL)) {
+            if (award.getStatus().equals(Award.Status.UNSUCCESSFUL)) {
                 release.getTender().getTenderers().add(supplier);
             }
             release.getTender().setNumberOfTenderers(release.getTender().getTenderers().size());
