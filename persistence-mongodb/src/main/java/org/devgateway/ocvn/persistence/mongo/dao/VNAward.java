@@ -3,8 +3,8 @@
  */
 package org.devgateway.ocvn.persistence.mongo.dao;
 
+import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Award;
-import org.devgateway.ocds.persistence.mongo.Value;
 
 /**
  * @author mihai
@@ -21,7 +21,7 @@ public class VNAward extends Award {
 
     private Integer bidSuccMethod;
 
-    private Value bidPrice;
+    private Amount bidPrice;
 
     private String contractTime;
 
@@ -57,11 +57,11 @@ public class VNAward extends Award {
         this.bidSuccMethod = bidSuccMethod;
     }
 
-    public Value getBidPrice() {
+    public Amount getBidPrice() {
         return bidPrice;
     }
 
-    public void setBidPrice(Value bidPrice) {
+    public void setBidPrice(Amount bidPrice) {
         this.bidPrice = bidPrice;
     }
 

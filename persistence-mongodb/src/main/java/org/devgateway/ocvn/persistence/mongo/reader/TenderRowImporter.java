@@ -1,6 +1,13 @@
 package org.devgateway.ocvn.persistence.mongo.reader;
 
-import org.devgateway.ocds.persistence.mongo.*;
+import org.devgateway.ocds.persistence.mongo.Amount;
+import org.devgateway.ocds.persistence.mongo.Classification;
+import org.devgateway.ocds.persistence.mongo.Identifier;
+import org.devgateway.ocds.persistence.mongo.Item;
+import org.devgateway.ocds.persistence.mongo.Period;
+import org.devgateway.ocds.persistence.mongo.Release;
+import org.devgateway.ocds.persistence.mongo.Tag;
+import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.persistence.mongo.reader.ReleaseRowImporter;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
@@ -48,7 +55,7 @@ public class TenderRowImporter extends ReleaseRowImporter {
         if (release == null) {
             release = new Release();
             release.setOcid(MongoConstants.OCDS_PREFIX + "bidno-" + row[0]);
-            release.getTag().add("tender");
+            release.getTag().add(Tag.TENDER);
             VNPlanning planning = new VNPlanning();
             release.setPlanning(planning);
             planning.setBidNo(row[0]);
@@ -61,26 +68,26 @@ public class TenderRowImporter extends ReleaseRowImporter {
             release.setTender(tender);
         }
 
-        String status = null;
+        Tender.Status status = null;
         if (row[1].equals("Y") && (row[2].equals("N") || row[2].isEmpty())
                 && (row[3].equals("N") || row[3].isEmpty())) {
-            status = "active";
+            status = Tender.Status.ACTIVE;
         }
 
         if (row[1].isEmpty() && (row[2].isEmpty()) && (row[3].isEmpty())) {
-            status = "planned";
+            status = Tender.Status.PLANNED;
         }
 
         if (row[1].isEmpty() && (row[2].equals("N")) && (row[3].equals("N") || row[3].isEmpty())) {
-            status = "planned";
+            status = Tender.Status.PLANNED;
         }
 
         if (row[1].equals("Y") && (row[2].equals("Y")) && (row[3].equals("N") || row[3].isEmpty())) {
-            status = "cancelled";
+            status = Tender.Status.CANCELLED;
         }
 
         if (row[1].isEmpty() && (row[2].equals("Y")) && (row[3].equals("N") || row[3].isEmpty())) {
-            status = "cancelled";
+            status = Tender.Status.CANCELLED;
         }
         tender.setStatus(status);
         tender.setApproveState(row[1]);
@@ -88,35 +95,35 @@ public class TenderRowImporter extends ReleaseRowImporter {
         tender.setModYn(row[3]);
         tender.setBidMethod(getInteger(row[4]));
 
-        String procurementMethod = null;
+        Tender.ProcurementMethod procurementMethod = null;
         String procurementMethodDetails = null;
         switch (getInteger(row[5])) {
             case 1:
-                procurementMethod = "open";
+                procurementMethod = Tender.ProcurementMethod.OPEN;
                 procurementMethodDetails = "Đấu thầu rộng rãi";
                 break;
             case 2:
-                procurementMethod = "selective";
+                procurementMethod = Tender.ProcurementMethod.SELECTIVE;
                 procurementMethodDetails = "Đấu thầu hạn chế";
                 break;
             case 3:
-                procurementMethod = "limited";
+                procurementMethod = Tender.ProcurementMethod.LIMITED;
                 procurementMethodDetails = "Chỉ định thầu";
                 break;
             case 4:
-                procurementMethod = "limited";
+                procurementMethod = Tender.ProcurementMethod.LIMITED;
                 procurementMethodDetails = "Mua sắm trực tiếp";
                 break;
             case 5:
-                procurementMethod = "open";
+                procurementMethod = Tender.ProcurementMethod.OPEN;
                 procurementMethodDetails = "Chào hàng cạnh tranh";
                 break;
             case 6:
-                procurementMethod = "limited";
+                procurementMethod = Tender.ProcurementMethod.LIMITED;
                 procurementMethodDetails = "Tự thực hiện";
                 break;
             case 7:
-                procurementMethod = "selective";
+                procurementMethod = Tender.ProcurementMethod.SELECTIVE;
                 procurementMethodDetails = "Trong trường hợp đặc biệt";
                 break;
             default:
@@ -196,7 +203,7 @@ public class TenderRowImporter extends ReleaseRowImporter {
         release.setBuyer(orderInstituCd);
 
         if (row.length > 12 && !row[12].isEmpty()) {
-            Value value = new Value();
+            Amount value = new Amount();
             value.setCurrency("VND");
             value.setAmount(getDecimal(row[12]));
             tender.setValue(value);
