@@ -39,7 +39,7 @@ public enum Tag {
 
     private final String value;
 
-    private final static Map<String, Tag> CONSTANTS = new HashMap<String, Tag>();
+    private static final Map<String, Tag> CONSTANTS = new HashMap<String, Tag>();
 
     static {
         for (Tag c: values()) {

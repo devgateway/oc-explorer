@@ -13,28 +13,28 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "name",
-    "scheme",
-    "uid",
-    "uri"
+        "name",
+        "scheme",
+        "uid",
+        "uri"
 })
 public class Publisher {
-	   /**
-     * 
+    /**
+     *
      * (Required)
-     * 
+     *
      */
     @JsonProperty("name")
     private String name;
     /**
      * The scheme that holds the unique identifiers used to identify the item being identified.
-     * 
+     *
      */
     @JsonProperty("scheme")
     private String scheme;
     /**
      * The unique ID for this entity under the given ID scheme.
-     * 
+     *
      */
     @JsonProperty("uid")
     private String uid;
@@ -42,9 +42,9 @@ public class Publisher {
     private String uri;
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @return
      *     The name
      */
@@ -54,9 +54,9 @@ public class Publisher {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param name
      *     The name
      */
@@ -67,7 +67,7 @@ public class Publisher {
 
     /**
      * The scheme that holds the unique identifiers used to identify the item being identified.
-     * 
+     *
      * @return
      *     The scheme
      */
@@ -78,7 +78,7 @@ public class Publisher {
 
     /**
      * The scheme that holds the unique identifiers used to identify the item being identified.
-     * 
+     *
      * @param scheme
      *     The scheme
      */
@@ -89,7 +89,7 @@ public class Publisher {
 
     /**
      * The unique ID for this entity under the given ID scheme.
-     * 
+     *
      * @return
      *     The uid
      */
@@ -100,7 +100,7 @@ public class Publisher {
 
     /**
      * The unique ID for this entity under the given ID scheme.
-     * 
+     *
      * @param uid
      *     The uid
      */
@@ -110,7 +110,7 @@ public class Publisher {
     }
 
     /**
-     * 
+     *
      * @return
      *     The uri
      */
@@ -120,7 +120,7 @@ public class Publisher {
     }
 
     /**
-     * 
+     *
      * @param uri
      *     The uri
      */
@@ -137,7 +137,11 @@ public class Publisher {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(name).append(scheme).append(uid).append(uri).toHashCode();
+        return new HashCodeBuilder().
+                append(name).
+                append(scheme).
+                append(uid).
+                append(uri).toHashCode();
     }
 
     @Override
@@ -145,11 +149,15 @@ public class Publisher {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Publisher) == false) {
+        if (!(other instanceof Publisher)) {
             return false;
         }
         Publisher rhs = ((Publisher) other);
-        return new EqualsBuilder().append(name, rhs.name).append(scheme, rhs.scheme).append(uid, rhs.uid).append(uri, rhs.uri).isEquals();
+        return new EqualsBuilder().
+                append(name, rhs.name).
+                append(scheme, rhs.scheme).
+                append(uid, rhs.uid).
+                append(uri, rhs.uri).isEquals();
     }
 
 }
