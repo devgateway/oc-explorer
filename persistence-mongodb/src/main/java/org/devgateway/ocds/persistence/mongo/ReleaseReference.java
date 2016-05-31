@@ -1,60 +1,65 @@
 
 package org.devgateway.ocds.persistence.mongo;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 /**
  * Information to uniquely identify the release.
- * 
+ *
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "url",
-    "date",
-    "tag"
+        "url",
+        "date",
+        "tag"
 })
 public class ReleaseReference {
 
     /**
-     * The url of the release which contains the url of the package with the releaseID appended using a fragment identifier e.g. http://ocds.open-contracting.org/demos/releases/12345.json#ocds-a2ef3d01-1594121/1
+     * The url of the release which contains the url of the package with the releaseID appended using a fragment
+     * identifier e.g. http://ocds.open-contracting.org/demos/releases/12345.json#ocds-a2ef3d01-1594121/1
      * (Required)
-     * 
+     *
      */
     @JsonProperty("url")
     private String url;
+
     /**
      * Release Date
      * <p>
-     * The date of the release, should match `date` at the root level of the release. This is used to sort the releases in the list into date order.
+     * The date of the release, should match `date` at the root level of the release.
+     * This is used to sort the releases in the list into date order.
      * (Required)
-     * 
+     *
      */
     @JsonProperty("date")
     private Date date;
+
     /**
      * Release Tag
      * <p>
-     * The tag should match the tag in the release. This provides additional context when reviewing a record to see what types of releases are included for this ocid.
-     * 
+     * The tag should match the tag in the release. This provides additional context when reviewing a record
+     * to see what types of releases are included for this ocid.
+     *
      */
     @JsonProperty("tag")
     private List<Tag> tag = new ArrayList<Tag>();
 
     /**
-     * The url of the release which contains the url of the package with the releaseID appended using a fragment identifier e.g. http://ocds.open-contracting.org/demos/releases/12345.json#ocds-a2ef3d01-1594121/1
+     * The url of the release which contains the url of the package with the releaseID appended using a fragment
+     * identifier e.g. http://ocds.open-contracting.org/demos/releases/12345.json#ocds-a2ef3d01-1594121/1
      * (Required)
-     * 
+     *
      * @return
      *     The url
      */
@@ -64,9 +69,10 @@ public class ReleaseReference {
     }
 
     /**
-     * The url of the release which contains the url of the package with the releaseID appended using a fragment identifier e.g. http://ocds.open-contracting.org/demos/releases/12345.json#ocds-a2ef3d01-1594121/1
+     * The url of the release which contains the url of the package with the releaseID appended using a fragment
+     * identifier e.g. http://ocds.open-contracting.org/demos/releases/12345.json#ocds-a2ef3d01-1594121/1
      * (Required)
-     * 
+     *
      * @param url
      *     The url
      */
@@ -78,9 +84,10 @@ public class ReleaseReference {
     /**
      * Release Date
      * <p>
-     * The date of the release, should match `date` at the root level of the release. This is used to sort the releases in the list into date order.
+     * The date of the release, should match `date` at the root level of the release.
+     * This is used to sort the releases in the list into date order.
      * (Required)
-     * 
+     *
      * @return
      *     The date
      */
@@ -92,9 +99,10 @@ public class ReleaseReference {
     /**
      * Release Date
      * <p>
-     * The date of the release, should match `date` at the root level of the release. This is used to sort the releases in the list into date order.
+     * The date of the release, should match `date` at the root level of the release.
+     * This is used to sort the releases in the list into date order.
      * (Required)
-     * 
+     *
      * @param date
      *     The date
      */
@@ -106,8 +114,9 @@ public class ReleaseReference {
     /**
      * Release Tag
      * <p>
-     * The tag should match the tag in the release. This provides additional context when reviewing a record to see what types of releases are included for this ocid.
-     * 
+     * The tag should match the tag in the release. This provides additional context when reviewing a record
+     * to see what types of releases are included for this ocid.
+     *
      * @return
      *     The tag
      */
@@ -119,8 +128,9 @@ public class ReleaseReference {
     /**
      * Release Tag
      * <p>
-     * The tag should match the tag in the release. This provides additional context when reviewing a record to see what types of releases are included for this ocid.
-     * 
+     * The tag should match the tag in the release. This provides additional context when reviewing a record
+     * to see what types of releases are included for this ocid.
+     *
      * @param tag
      *     The tag
      */
@@ -136,7 +146,10 @@ public class ReleaseReference {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(url).append(date).append(tag).toHashCode();
+        return new HashCodeBuilder().
+                append(url).
+                append(date).
+                append(tag).toHashCode();
     }
 
     @Override
@@ -144,11 +157,14 @@ public class ReleaseReference {
         if (other == this) {
             return true;
         }
-        if ((other instanceof ReleaseReference) == false) {
+        if (!(other instanceof ReleaseReference)) {
             return false;
         }
         ReleaseReference rhs = ((ReleaseReference) other);
-        return new EqualsBuilder().append(url, rhs.url).append(date, rhs.date).append(tag, rhs.tag).isEquals();
+        return new EqualsBuilder().
+                append(url, rhs.url).
+                append(date, rhs.date).
+                append(tag, rhs.tag).isEquals();
     }
 
 }
