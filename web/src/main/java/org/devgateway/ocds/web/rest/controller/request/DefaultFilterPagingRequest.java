@@ -7,6 +7,7 @@ import java.util.List;
 
 import cz.jirutka.validator.collection.constraints.EachPattern;
 import cz.jirutka.validator.collection.constraints.EachRange;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author mihai Filtering bean applied to all endpoints
@@ -14,7 +15,7 @@ import cz.jirutka.validator.collection.constraints.EachRange;
 public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
 	@EachPattern(regexp = "^[a-zA-Z0-9]*$")
-	//@ApiModelProperty(value="something")
+	@ApiModelProperty(value = "This corresponds to the tender.items.classification._id")
 	private List<String> bidTypeId;
 
 	@EachPattern(regexp = "^[a-zA-Z0-9]*$")
