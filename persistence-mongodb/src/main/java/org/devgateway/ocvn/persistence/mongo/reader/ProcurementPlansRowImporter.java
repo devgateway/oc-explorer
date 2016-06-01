@@ -45,7 +45,7 @@ public class ProcurementPlansRowImporter extends ReleaseRowImporter {
 
         Release release = new Release();
         release.setOcid(MongoConstants.OCDS_PREFIX + "prjid-" + projectID);
-        release.getTag().add(Tag.PLANNING);
+        release.getTag().add(Tag.planning);
         VNPlanning planning = new VNPlanning();
         VNBudget budget = new VNBudget();
         release.setPlanning(planning);

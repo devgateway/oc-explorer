@@ -41,7 +41,7 @@ public class OfflineAwardRowImporter extends ReleaseRowImporter {
 
         if (release == null) {
             release = new Release();
-            release.getTag().add(Tag.AWARD);
+            release.getTag().add(Tag.award);
             release.setOcid(MongoConstants.OCDS_PREFIX + "bidno-" + row[0]);
             VNPlanning planning = new VNPlanning();
             release.setPlanning(planning);
@@ -80,7 +80,7 @@ public class OfflineAwardRowImporter extends ReleaseRowImporter {
         // Integer.parseInt(row[4]));
 
         if (row.length > 5) {
-            award.setStatus(row[5].equals("Y") ? Award.Status.ACTIVE : Award.Status.UNSUCCESSFUL);
+            award.setStatus(row[5].equals("Y") ? Award.Status.active : Award.Status.unsuccesful);
         }
 
         if (row.length > 6) {
@@ -115,7 +115,7 @@ public class OfflineAwardRowImporter extends ReleaseRowImporter {
         // BID_NO
         // we ignore the fields if there are no tenders found
         if (release.getTender() != null) {
-            if (award.getStatus().equals(Award.Status.UNSUCCESSFUL)) {
+            if (award.getStatus().equals(Award.Status.unsuccesful)) {
                 release.getTender().getTenderers().add(supplier);
             }
             release.getTender().setNumberOfTenderers(release.getTender().getTenderers().size());

@@ -36,7 +36,7 @@ public class BidPlansRowImporter extends ReleaseRowImporter {
 
         if (release == null) {
             release = new Release();
-            release.getTag().add(Tag.PLANNING);
+            release.getTag().add(Tag.planning);
             release.setOcid(MongoConstants.OCDS_PREFIX + "prjid-" + projectID);
             VNPlanning planning = new VNPlanning();
             release.setPlanning(planning);

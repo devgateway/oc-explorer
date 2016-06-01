@@ -55,7 +55,7 @@ public class TenderRowImporter extends ReleaseRowImporter {
         if (release == null) {
             release = new Release();
             release.setOcid(MongoConstants.OCDS_PREFIX + "bidno-" + row[0]);
-            release.getTag().add(Tag.TENDER);
+            release.getTag().add(Tag.tender);
             VNPlanning planning = new VNPlanning();
             release.setPlanning(planning);
             planning.setBidNo(row[0]);
@@ -71,23 +71,23 @@ public class TenderRowImporter extends ReleaseRowImporter {
         Tender.Status status = null;
         if (row[1].equals("Y") && (row[2].equals("N") || row[2].isEmpty())
                 && (row[3].equals("N") || row[3].isEmpty())) {
-            status = Tender.Status.ACTIVE;
+            status = Tender.Status.active;
         }
 
         if (row[1].isEmpty() && (row[2].isEmpty()) && (row[3].isEmpty())) {
-            status = Tender.Status.PLANNED;
+            status = Tender.Status.planned;
         }
 
         if (row[1].isEmpty() && (row[2].equals("N")) && (row[3].equals("N") || row[3].isEmpty())) {
-            status = Tender.Status.PLANNED;
+            status = Tender.Status.planned;
         }
 
         if (row[1].equals("Y") && (row[2].equals("Y")) && (row[3].equals("N") || row[3].isEmpty())) {
-            status = Tender.Status.CANCELLED;
+            status = Tender.Status.cancelled;
         }
 
         if (row[1].isEmpty() && (row[2].equals("Y")) && (row[3].equals("N") || row[3].isEmpty())) {
-            status = Tender.Status.CANCELLED;
+            status = Tender.Status.cancelled;
         }
         tender.setStatus(status);
         tender.setApproveState(row[1]);
@@ -99,31 +99,31 @@ public class TenderRowImporter extends ReleaseRowImporter {
         String procurementMethodDetails = null;
         switch (getInteger(row[5])) {
             case 1:
-                procurementMethod = Tender.ProcurementMethod.OPEN;
+                procurementMethod = Tender.ProcurementMethod.open;
                 procurementMethodDetails = "Đấu thầu rộng rãi";
                 break;
             case 2:
-                procurementMethod = Tender.ProcurementMethod.SELECTIVE;
+                procurementMethod = Tender.ProcurementMethod.selective;
                 procurementMethodDetails = "Đấu thầu hạn chế";
                 break;
             case 3:
-                procurementMethod = Tender.ProcurementMethod.LIMITED;
+                procurementMethod = Tender.ProcurementMethod.limited;
                 procurementMethodDetails = "Chỉ định thầu";
                 break;
             case 4:
-                procurementMethod = Tender.ProcurementMethod.LIMITED;
+                procurementMethod = Tender.ProcurementMethod.limited;
                 procurementMethodDetails = "Mua sắm trực tiếp";
                 break;
             case 5:
-                procurementMethod = Tender.ProcurementMethod.OPEN;
+                procurementMethod = Tender.ProcurementMethod.open;
                 procurementMethodDetails = "Chào hàng cạnh tranh";
                 break;
             case 6:
-                procurementMethod = Tender.ProcurementMethod.LIMITED;
+                procurementMethod = Tender.ProcurementMethod.limited;
                 procurementMethodDetails = "Tự thực hiện";
                 break;
             case 7:
-                procurementMethod = Tender.ProcurementMethod.SELECTIVE;
+                procurementMethod = Tender.ProcurementMethod.selective;
                 procurementMethodDetails = "Trong trường hợp đặc biệt";
                 break;
             default:
