@@ -501,13 +501,13 @@ public class Contract {
     }
 
     public enum Status {
-        PENDING("pending"),
+    	pending("pending"),
 
-        ACTIVE("active"),
+    	active("active"),
 
-        CANCELLED("cancelled"),
+    	cancelled("cancelled"),
 
-        TERMINATED("terminated");
+    	terminated("terminated");
 
         private final String value;
 

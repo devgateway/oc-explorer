@@ -104,7 +104,7 @@ public class Release implements Identifiable {
      *
      */
     @JsonProperty("initiationType")
-    private InitiationType initiationType = InitiationType.TENDER;
+    private InitiationType initiationType = InitiationType.tender;
 
     /**
      * Planning
@@ -542,7 +542,7 @@ public class Release implements Identifiable {
     }
 
     public enum InitiationType {
-        TENDER("tender");
+        tender("tender");
 
         private final String value;
 

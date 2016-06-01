@@ -464,13 +464,13 @@ public class Award {
     }
 
     public enum Status {
-        PENDING("pending"),
+        pending("pending"),
 
-        ACTIVE("active"),
+        active("active"),
 
-        CANCELLED("cancelled"),
+        cancelled("cancelled"),
 
-        UNSUCCESSFUL("unsuccessful");
+        unsuccesful("unsuccessful");
 
         private final String value;
 
