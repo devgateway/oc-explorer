@@ -1,7 +1,9 @@
-package org.devgateway.ocds.persistence.mongo.spring;
+package org.devgateway.ocds.persistence.mongo.spring.json;
 
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.spring.json.JsonImport;
+import org.devgateway.ocds.persistence.mongo.spring.json.ReleaseJsonImport;
 import org.devgateway.ocds.persistence.mongo.test.AbstractMongoTest;
 import org.junit.Assert;
 import org.junit.Test;

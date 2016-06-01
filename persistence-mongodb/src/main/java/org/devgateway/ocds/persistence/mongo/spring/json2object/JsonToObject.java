@@ -1,4 +1,4 @@
-package org.devgateway.ocds.persistence.mongo.spring;
+package org.devgateway.ocds.persistence.mongo.spring.json2object;
 
 import java.io.IOException;
 
@@ -9,9 +9,9 @@ import java.io.IOException;
 public interface JsonToObject<T> {
 
     /**
-     * Just transform a JSON String to a T object
+     * Transform a JSON String to a T object
      *
-     * @return a T object
+     * @return T object
      */
     T toObject() throws IOException;
 }

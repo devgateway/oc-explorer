@@ -1,14 +1,18 @@
-package org.devgateway.ocds.persistence.mongo.spring;
+package org.devgateway.ocds.persistence.mongo.spring.json;
 
 import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.spring.json2object.JsonToObject;
+import org.devgateway.ocds.persistence.mongo.spring.json2object.ReleaseJsonToObject;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;
 
 /**
+ * Class that imports a JSON object (from a string/file) into the database
+ *
  * @author idobre
  * @since 5/31/16
  */
@@ -20,9 +24,9 @@ public class ReleaseJsonImport implements JsonImport<Release> {
 
     private final JsonToObject releaseJsonToObject;
 
-    public ReleaseJsonImport(final ReleaseRepository releaseRepository, final String jsonRelease) {
+    public ReleaseJsonImport(final ReleaseRepository releaseRepository, final String releaseJsonToObject) {
         this.releaseRepository = releaseRepository;
-        this.releaseJsonToObject = new ReleaseJsonToObject(jsonRelease);
+        this.releaseJsonToObject = new ReleaseJsonToObject(releaseJsonToObject);
     }
 
     public ReleaseJsonImport(final ReleaseRepository releaseRepository, final File file) throws IOException {
@@ -33,12 +37,7 @@ public class ReleaseJsonImport implements JsonImport<Release> {
     @Override
     public Release importObject() throws IOException {
         Release release = (Release) releaseJsonToObject.toObject();
-
-        if (release.getId() == null) {
-            release = releaseRepository.insert(release);
-        } else {
-            release = releaseRepository.save(release);
-        }
+        release = releaseRepository.save(release);
 
         return release;
     }

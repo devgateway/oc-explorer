@@ -1,6 +1,8 @@
-package org.devgateway.ocds.persistence.mongo.spring;
+package org.devgateway.ocds.persistence.mongo.spring.json2object;
 
 import org.devgateway.ocds.persistence.mongo.Release;
+import org.devgateway.ocds.persistence.mongo.spring.json2object.JsonToObject;
+import org.devgateway.ocds.persistence.mongo.spring.json2object.ReleaseJsonToObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,7 +66,7 @@ public class ReleaseJsonToObjectTest {
     @Test
     public void toObjectFromFile() throws Exception {
         ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("release-json-to-object-test.json").getFile());
+        File file = new File(classLoader.getResource("json/release-json-to-object-test.json").getFile());
 
         JsonToObject releaseJsonToObject = new ReleaseJsonToObject(file);
 
