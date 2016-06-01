@@ -49,7 +49,7 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
 
         Assert.assertEquals(releases.size(), 1);
         Assert.assertNotNull(importedRelease);
-        Assert.assertEquals(importedRelease.getTender().getProcurementMethod(), Tender.ProcurementMethod.OPEN);
+        Assert.assertEquals(importedRelease.getTender().getProcurementMethod(), Tender.ProcurementMethod.open);
     }
 
     @Test
@@ -78,7 +78,7 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
         Assert.assertEquals(releases.size(), 1);
         Assert.assertNotNull(importedRelease);
         Set<Award> awards = importedRelease.getAwards();
-        Assert.assertEquals(awards.iterator().next().getStatus(), Award.Status.PENDING);
+        Assert.assertEquals(awards.iterator().next().getStatus(), Award.Status.pending);
     }
 
     @Test
@@ -93,7 +93,7 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
         Assert.assertEquals(releases.size(), 1);
         Assert.assertNotNull(importedRelease);
         Set<Contract> contracts = importedRelease.getContracts();
-        Assert.assertEquals(contracts.iterator().next().getStatus(), Contract.Status.ACTIVE);
+        Assert.assertEquals(contracts.iterator().next().getStatus(), Contract.Status.active);
     }
 
     @Test
@@ -107,7 +107,7 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
 
         Assert.assertEquals(releases.size(), 1);
         Assert.assertNotNull(importedRelease);
-        Assert.assertArrayEquals(importedRelease.getTag().toArray(), new Tag[] {Tag.IMPLEMENTATION});
+        Assert.assertArrayEquals(importedRelease.getTag().toArray(), new Tag[] {Tag.implementation});
         Set<Contract> contracts = importedRelease.getContracts();
         Set<Transaction> transactions = contracts.iterator().next().getImplementation().getTransactions();
         Assert.assertEquals(transactions.iterator().next().getSource(), "https://openspending.org/uk-barnet-spending/");
