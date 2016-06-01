@@ -37,7 +37,7 @@ public abstract class Location<T extends GeoJson<?>> implements Identifiable {
     private String description;
 
     @JsonProperty("gazetteer")
-    private Gazetteer gazetteer;
+	private Gazetteer gazetteer = new Gazetteer();
 
     /**
      * A URI to a further description of the activity location. This may be a human readable document with information
