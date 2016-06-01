@@ -899,11 +899,11 @@ public class Tender {
     }
 
     public enum ProcurementMethod {
-        OPEN("open"),
+        open("open"),
 
-        SELECTIVE("selective"),
+        selective("selective"),
 
-        LIMITED("limited");
+        limited("limited");
 
         private final String value;
 
@@ -938,15 +938,15 @@ public class Tender {
     }
 
     public enum Status {
-        PLANNED("planned"),
+        planned("planned"),
 
-        ACTIVE("active"),
+        active("active"),
 
-        CANCELLED("cancelled"),
+        cancelled("cancelled"),
 
-        UNSUCCESSFUL("unsuccessful"),
+        unsuccesful("unsuccessful"),
 
-        COMPLETE("complete");
+        complete("complete");
 
         private final String value;
 

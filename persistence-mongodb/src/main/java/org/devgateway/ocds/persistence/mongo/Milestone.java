@@ -287,11 +287,11 @@ public class Milestone {
     }
 
     public enum Status {
-        MET("met"),
+    	met("met"),
 
-        NOT_MET("notMet"),
+    	notMet("notMet"),
 
-        PARTIALLY_MET("partiallyMet");
+    	partiallyMet("partiallyMet");
 
         private final String value;
 

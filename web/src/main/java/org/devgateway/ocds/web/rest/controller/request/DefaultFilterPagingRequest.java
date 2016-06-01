@@ -5,6 +5,7 @@ package org.devgateway.ocds.web.rest.controller.request;
 
 import cz.jirutka.validator.collection.constraints.EachPattern;
 import cz.jirutka.validator.collection.constraints.EachRange;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
     @EachPattern(regexp = "^[a-zA-Z0-9]*$")
-    //@ApiModelProperty(value="something")
+   	@ApiModelProperty(value = "This corresponds to the tender.items.classification._id")
     private List<String> bidTypeId;
 
     @EachPattern(regexp = "^[a-zA-Z0-9]*$")
