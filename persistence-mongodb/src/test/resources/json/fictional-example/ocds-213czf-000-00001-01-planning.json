@@ -1,15 +1,15 @@
 {
-"uri":"http://standard.open-contracting.org/examples/releases/ocds-213czf-000-00001-01-planning.json",
-"publishedDate":"2009-03-15T14:45:00Z",
-"publisher": {
+    "uri":"http://standard.open-contracting.org/examples/releases/ocds-213czf-000-00001-01-planning.json",
+    "publishedDate":"2009-03-15T14:45:00Z",
+    "publisher": {
         "scheme": "GB-COH",
         "uid": "09506232",
         "name": "Open Data Services Co-operative Limited",
         "uri": "http://standard.open-contracting.org/examples/"
     },
-"license":"http://opendatacommons.org/licenses/pddl/1.0/",
-"publicationPolicy":"https://github.com/open-contracting/sample-data/",
-"releases":[{
+    "license":"http://opendatacommons.org/licenses/pddl/1.0/",
+    "publicationPolicy":"https://github.com/open-contracting/sample-data/",
+    "releases":[{
         "language": "en",
         "ocid": "ocds-213czf-000-00001",
         "id": "ocds-213czf-000-00001-01-planning",
@@ -182,6 +182,6 @@
                 }
             ]
         }
-        
+
     }]
 }
