@@ -1,15 +1,15 @@
 {
-"uri":"http://standard.open-contracting.org/examples/releases/ocds-213czf-000-00001-02-tender.json",
-"publishedDate":"2010-03-01T09:30:00Z",
-"publisher": {
+    "uri":"http://standard.open-contracting.org/examples/releases/ocds-213czf-000-00001-02-tender.json",
+    "publishedDate":"2010-03-01T09:30:00Z",
+    "publisher": {
         "scheme": "GB-COH",
         "uid": "09506232",
         "name": "Open Data Services Co-operative Limited",
         "uri": "http://standard.open-contracting.org/examples/"
     },
-"license":"http://opendatacommons.org/licenses/pddl/1.0/",
-"publicationPolicy":"https://github.com/open-contracting/sample-data/",
-"releases":[{
+    "license":"http://opendatacommons.org/licenses/pddl/1.0/",
+    "publicationPolicy":"https://github.com/open-contracting/sample-data/",
+    "releases":[{
         "language": "en",
         "ocid": "ocds-213czf-000-00001",
         "id": "ocds-213czf-000-00001-02-tender",
@@ -87,14 +87,14 @@
             "submissionMethod": [ "electronicSubmission" ],
             "submissionMethodDetails": "Submit through the online portal at http://example.com/submissions/ocds-213czf-000-00001-01/",
             "enquiryPeriod": {
-                    "startDate": "2010-03-01T09:00:00Z",
-                    "endDate": "2010-03-14T17:30:00Z"
+                "startDate": "2010-03-01T09:00:00Z",
+                "endDate": "2010-03-14T17:30:00Z"
             },
             "hasEnquiries": false,
             "tenderPeriod": {
                 "startDate": "2010-03-01T09:00:00Z",
                 "endDate": "2011-04-01T18:00:00Z"
-                
+
             },
             "awardPeriod": {
                 "startDate": "2010-06-01T00:00:00Z",
@@ -135,6 +135,6 @@
                     "language": "en"
                 }
             ]
-        }        
+        }
     }]
 }
