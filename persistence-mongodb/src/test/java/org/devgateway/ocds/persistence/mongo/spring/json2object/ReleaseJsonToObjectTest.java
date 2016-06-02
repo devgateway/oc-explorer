@@ -45,9 +45,9 @@ public class ReleaseJsonToObjectTest {
 
         Release release = (Release) releaseJsonToObject.toObject();
 
-        Assert.assertEquals("IDs are the same", release.getId(), "123");
-        Assert.assertEquals("Check budget amount", release.getPlanning().getBudget().getAmount().getAmount(), new BigDecimal(10000));
-        Assert.assertEquals("Check budget currency", release.getPlanning().getBudget().getAmount().getCurrency(), "USD");
+        Assert.assertEquals("IDs are the same", "123", release.getId());
+        Assert.assertEquals("Check budget amount", new BigDecimal(10000), release.getPlanning().getBudget().getAmount().getAmount());
+        Assert.assertEquals("Check budget currency", "USD", release.getPlanning().getBudget().getAmount().getCurrency());
     }
 
     @Test(expected = IOException.class)
@@ -74,8 +74,8 @@ public class ReleaseJsonToObjectTest {
 
         Release release = (Release) releaseJsonToObject.toObject();
 
-        Assert.assertEquals("IDs are the same", release.getId(), "12345");
-        Assert.assertEquals("Check budget amount", release.getPlanning().getBudget().getAmount().getAmount(), new BigDecimal(10000));
-        Assert.assertEquals("Check budget currency", release.getPlanning().getBudget().getAmount().getCurrency(), "RON");
+        Assert.assertEquals("IDs are the same", "12345", release.getId());
+        Assert.assertEquals("Check budget amount", new BigDecimal(10000), release.getPlanning().getBudget().getAmount().getAmount());
+        Assert.assertEquals("Check budget currency", "RON", release.getPlanning().getBudget().getAmount().getCurrency());
     }
 }

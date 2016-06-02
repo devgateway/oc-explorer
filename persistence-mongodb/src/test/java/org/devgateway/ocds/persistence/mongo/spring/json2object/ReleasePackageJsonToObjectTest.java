@@ -50,15 +50,16 @@ public class ReleasePackageJsonToObjectTest {
 
         ReleasePackage releasePackage = (ReleasePackage) releasePackageJsonToObject.toObject();
 
-        Assert.assertEquals("Publisher uid are the same", releasePackage.getPublisher().getUid(), "09506232");
-        Assert.assertEquals("Check published date", releasePackage.getPublishedDate(),
-                new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:sszzzz").parse("2009-03-15T14:45:00-0000"));
+        Assert.assertEquals("Publisher uid are the same", "09506232", releasePackage.getPublisher().getUid());
+        Assert.assertEquals("Check published date",
+                new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:sszzzz").parse("2009-03-15T14:45:00-0000"),
+                releasePackage.getPublishedDate());
 
         Assert.assertFalse("Release array is not empty", releasePackage.getReleases().isEmpty());
         Release release = releasePackage.getReleases().iterator().next();
 
-        Assert.assertEquals("Check budget amount", release.getPlanning().getBudget().getAmount().getAmount(), new BigDecimal(10000));
-        Assert.assertEquals("Check budget currency", release.getPlanning().getBudget().getAmount().getCurrency(), "USD");
+        Assert.assertEquals("Check budget amount", new BigDecimal(10000), release.getPlanning().getBudget().getAmount().getAmount());
+        Assert.assertEquals("Check budget currency", "USD", release.getPlanning().getBudget().getAmount().getCurrency());
     }
 
 }

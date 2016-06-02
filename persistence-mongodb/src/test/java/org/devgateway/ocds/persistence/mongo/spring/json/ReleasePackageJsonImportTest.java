@@ -33,9 +33,9 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
         Collection<Release> releases = releasePackageJsonImport.importObjects();
         Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-01-planning");
 
-        Assert.assertEquals(releases.size(), 1);
+        Assert.assertEquals(1, releases.size());
         Assert.assertNotNull(importedRelease);
-        Assert.assertEquals(importedRelease.getPlanning().getBudget().getAmount().getCurrency(), "GBP");
+        Assert.assertEquals("GBP", importedRelease.getPlanning().getBudget().getAmount().getCurrency());
     }
 
     @Test
@@ -47,9 +47,9 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
         Collection<Release> releases = releasePackageJsonImport.importObjects();
         Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-02-tender");
 
-        Assert.assertEquals(releases.size(), 1);
+        Assert.assertEquals(1, releases.size());
         Assert.assertNotNull(importedRelease);
-        Assert.assertEquals(importedRelease.getTender().getProcurementMethod(), Tender.ProcurementMethod.open);
+        Assert.assertEquals(Tender.ProcurementMethod.open, importedRelease.getTender().getProcurementMethod());
     }
 
     @Test
@@ -61,9 +61,9 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
         Collection<Release> releases = releasePackageJsonImport.importObjects();
         Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-03-tenderAmendment");
 
-        Assert.assertEquals(releases.size(), 1);
+        Assert.assertEquals(1, releases.size());
         Assert.assertNotNull(importedRelease);
-        Assert.assertArrayEquals(importedRelease.getTender().getSubmissionMethod().toArray(), new String[] {"electronicSubmission"});
+        Assert.assertArrayEquals(new String[] {"electronicSubmission"}, importedRelease.getTender().getSubmissionMethod().toArray());
     }
 
     @Test
@@ -75,10 +75,10 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
         Collection<Release> releases = releasePackageJsonImport.importObjects();
         Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-04-award");
 
-        Assert.assertEquals(releases.size(), 1);
+        Assert.assertEquals(1, releases.size());
         Assert.assertNotNull(importedRelease);
         Set<Award> awards = importedRelease.getAwards();
-        Assert.assertEquals(awards.iterator().next().getStatus(), Award.Status.pending);
+        Assert.assertEquals(Award.Status.pending, awards.iterator().next().getStatus());
     }
 
     @Test
@@ -90,10 +90,10 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
         Collection<Release> releases = releasePackageJsonImport.importObjects();
         Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-05-contract");
 
-        Assert.assertEquals(releases.size(), 1);
+        Assert.assertEquals(1, releases.size());
         Assert.assertNotNull(importedRelease);
         Set<Contract> contracts = importedRelease.getContracts();
-        Assert.assertEquals(contracts.iterator().next().getStatus(), Contract.Status.active);
+        Assert.assertEquals(Contract.Status.active, contracts.iterator().next().getStatus());
     }
 
     @Test
@@ -105,11 +105,11 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
         Collection<Release> releases = releasePackageJsonImport.importObjects();
         Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-06-implementation");
 
-        Assert.assertEquals(releases.size(), 1);
+        Assert.assertEquals(1, releases.size());
         Assert.assertNotNull(importedRelease);
-        Assert.assertArrayEquals(importedRelease.getTag().toArray(), new Tag[] {Tag.implementation});
+        Assert.assertArrayEquals(new Tag[] {Tag.implementation}, importedRelease.getTag().toArray());
         Set<Contract> contracts = importedRelease.getContracts();
         Set<Transaction> transactions = contracts.iterator().next().getImplementation().getTransactions();
-        Assert.assertEquals(transactions.iterator().next().getSource(), "https://openspending.org/uk-barnet-spending/");
+        Assert.assertEquals("https://openspending.org/uk-barnet-spending/", transactions.iterator().next().getSource());
     }
 }
