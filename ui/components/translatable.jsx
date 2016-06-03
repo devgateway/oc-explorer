@@ -1,6 +1,6 @@
 var translatable = Class => class Translatable extends Class{
   __(text){
-    var {translations} = this.props;
+    var translations = this.props.translations || {};
     return translations[text] || text;
   }
 
