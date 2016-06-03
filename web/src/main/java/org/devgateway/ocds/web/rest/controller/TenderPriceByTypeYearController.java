@@ -2,6 +2,9 @@ package org.devgateway.ocds.web.rest.controller;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+
+import io.swagger.annotations.ApiOperation;
+
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.data.domain.Sort.Direction;
@@ -31,6 +34,9 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @RestController
 public class TenderPriceByTypeYearController extends GenericOCDSController {
 
+	@ApiOperation(value = "Returns the tender price by OCDS type (procurementMethod), by year. "
+			+ "The OCDS type is read from tender.procurementMethod. The tender price is read from "
+			+ "tender.value.amount")
     @RequestMapping(value = "/api/tenderPriceByOcdsTypeYear", method = RequestMethod.GET,
             produces = "application/json")
     public List<DBObject> tenderPriceByOcdsTypeYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
@@ -52,6 +58,9 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
 
     }
 
+	@ApiOperation(value = "Returns the tender price by Vietnam type (procurementMethodDetails), by year. "
+			+ "The OCDS type is read from tender.procurementMethodDetails. The tender price is read from "
+			+ "tender.value.amount")
     @RequestMapping(value = "/api/tenderPriceByVnTypeYear", method = RequestMethod.GET,
             produces = "application/json")
     public List<DBObject> tenderPriceByVnTypeYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
