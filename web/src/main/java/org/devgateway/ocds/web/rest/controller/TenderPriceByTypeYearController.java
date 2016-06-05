@@ -42,7 +42,7 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
     public List<DBObject> tenderPriceByOcdsTypeYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
-        project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.endDate"));
+        project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
         project.put("tender.procurementMethod", 1);
         project.put("tender.value", 1);
 
@@ -66,7 +66,7 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
     public List<DBObject> tenderPriceByVnTypeYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
-        project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.endDate"));
+        project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
         project.put("tender.procurementMethodDetails", 1);
         project.put("tender.value", 1);
 
