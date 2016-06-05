@@ -48,13 +48,13 @@ import io.swagger.annotations.ApiOperation;
 public class CostEffectivenessVisualsController extends GenericOCDSController {
 
 	@ApiOperation(value = "Cost effectiveness of Awards: Displays the total amount of active awards grouped by year."
-			+ "The tender entity has to have adicamount values. The year is calculated from tenderPeriod.endDate")
+			+ "The tender entity has to have adicamount values. The year is calculated from tenderPeriod.startDate")
 	@RequestMapping(value = "/api/costEffectivenessAwardAmount", 
 	method = RequestMethod.GET, produces = "application/json")
 	public List<DBObject> costEffectivenessAwardAmount(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
-		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.endDate"));
+		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
 		project.put("awards.value.amount", 1);
 
 		Aggregation agg = Aggregation.newAggregation(
@@ -74,14 +74,14 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 	@ApiOperation(value = "Cost effectiveness of Tenders:"
 			+ " Displays the total amount the tenders of the active awards grouped by year."
 			+ "The tender and awards entities have to have amount values. "
-			+ "The year is calculated from tenderPeriod.endDate")
+			+ "The year is calculated from tenderPeriod.startDate")
 	@RequestMapping(value = "/api/costEffectivenessTenderAmount", 
 	method = RequestMethod.GET, produces = "application/json")
 	public List<DBObject> costEffectivenessTenderAmount(
 			@ModelAttribute @Valid final GroupingFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
-		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.endDate"));
+		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
 		project.put("tender.value.amount", 1);
 		project.putAll(filterProjectMap);
 
