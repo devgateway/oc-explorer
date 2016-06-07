@@ -10,9 +10,10 @@ import cn from "classnames";
 import {toImmutable} from "nuclear-js";
 import Filters from "./filters";
 import ComparisonCriteria from "./filters/compare";
+import translatable from "../translatable";
 require('./style.less');
 
-export default class App extends React.Component{
+export default class App extends translatable(Component){
   componentDidMount(){
     this.props.actions.changeContentWidth(document.querySelector('.years-bar').offsetWidth);
   }
