@@ -4,7 +4,7 @@ import flux from "./flux";
 import {debounce} from "./tools";
 var TRANSLATIONS = {
   en: require('./languages/en_US.json'),
-  ro: require('./languages/ro_RO.json')
+  vn: require('./languages/vn_VN.json')
 };
 
 flux.onUpdate(state =>
