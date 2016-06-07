@@ -16,6 +16,8 @@ import com.mongodb.DBObject;
 
 import io.swagger.annotations.ApiOperation;
 
+import org.devgateway.ocds.persistence.mongo.Award;
+import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomGroupingOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
@@ -45,7 +47,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
  *
  */
 @RestController
-public class PercentOfTendersCancelled extends GenericOCDSController {
+public class TenderPercentages extends GenericOCDSController {
 
 	@ApiOperation("Returns the percent of tenders that were cancelled, grouped by year."
 			+ " The year is taken from tender.tenderPeriod.startDate. The response also contains the"
@@ -83,5 +85,58 @@ public class PercentOfTendersCancelled extends GenericOCDSController {
         List<DBObject> list = results.getMappedResults();
         return list;
     }
+	
+	
+	@ApiOperation("Returns the percent of tenders that were cancelled, grouped by year."
+			+ " The year is taken from tender.tenderPeriod.startDate. The response also contains the"
+			+ " total number of tenders and total number of cancelled tenders for each year.")
+    @RequestMapping(value = "/api/percentTendersUsingEBid", method = RequestMethod.GET, produces = "application/json")
+    public List<DBObject> percentTendersUsingEBid(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+
+        DBObject project1 = new BasicDBObject();
+        project1.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+        project1.put("tender.submissionMethod", 1);
+		project1.put("awards.status", 1);
+
+        DBObject group = new BasicDBObject();
+        group.put(Fields.UNDERSCORE_ID, "$year");
+        group.put("totalTenders", new BasicDBObject("$sum", 1));
+		group.put("totalUsingEBid",
+				new BasicDBObject("$sum",
+						new BasicDBObject("$cond",
+								Arrays.asList(
+										new BasicDBObject("$and", Arrays.asList(
+												new BasicDBObject("$eq",
+														Arrays.asList("$tender.submissionMethod",
+																Tender.SubmissionMethod.electronicSubmission
+																		.toString())),
+												new BasicDBObject("$eq", Arrays.asList("$awards.status",
+														Award.Status.active.toString())))),
+										1, 0))));
+
+        DBObject project2 = new BasicDBObject();
+        project2.put(Fields.UNDERSCORE_ID, 0);
+        project2.put("year", Fields.UNDERSCORE_ID_REF);
+        project2.put("totalTenders", 1);
+        project2.put("totalUsingEBid", 1);
+        project2.put("percentUsingEBid", new BasicDBObject("$multiply",
+                Arrays.asList(new BasicDBObject("$divide", Arrays.asList("$totalUsingEBid", "$totalTenders")), 100)));
+
+        Aggregation agg = newAggregation(
+                match(where("tender.tenderPeriod.startDate").exists(true).and("tender.submissionMethod").exists(true)
+                        .andOperator(getDefaultFilterCriteria(filter))),
+                new CustomProjectionOperation(project1), new CustomGroupingOperation(group),
+                new CustomProjectionOperation(project2),
+                sort(Direction.ASC, "year"), skip(filter.getSkip()), limit(filter.getPageSize())
+        );
+        
+        System.out.println(agg.toString());
+
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+        List<DBObject> list = results.getMappedResults();
+        return list;
+    }
+	
+	
 
 }
