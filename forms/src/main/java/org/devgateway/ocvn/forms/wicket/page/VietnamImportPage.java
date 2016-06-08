@@ -3,11 +3,10 @@
  */
 package org.devgateway.ocvn.forms.wicket.page;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons.Type;
-import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapForm;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeIconType;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.ladda.LaddaAjaxButton;
-import nl.dries.wicket.hibernate.dozer.DozerModel;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.event.Broadcast;
@@ -16,7 +15,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.ValidationError;
@@ -37,9 +36,11 @@ import org.devgateway.toolkit.forms.wicket.providers.GenericPersistableJpaReposi
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.wicketstuff.annotation.mount.MountPath;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons.Type;
+import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapForm;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeIconType;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.ladda.LaddaAjaxButton;
+import nl.dries.wicket.hibernate.dozer.DozerModel;
 
 /**
  * @author mpostelnicu
@@ -230,7 +231,7 @@ public class VietnamImportPage extends BasePage {
             }
         };
         doneButton.setDefaultFormProcessing(false);
-        doneButton.setLabel(Model.of("Done"));
+        doneButton.setLabel(new ResourceModel("done"));
         doneButton.setDefaultFormProcessing(false);
         doneButton.setIconType(FontAwesomeIconType.thumbs_up);
         importForm.add(doneButton);
@@ -280,7 +281,7 @@ public class VietnamImportPage extends BasePage {
                 target.add(feedbackPanel);
             }
         };
-        importButton.setLabel(Model.of("Start import process"));
+        importButton.setLabel(new ResourceModel("startImportProcess"));
         importButton.setIconType(FontAwesomeIconType.hourglass_start);
         importForm.add(importButton);
     }
