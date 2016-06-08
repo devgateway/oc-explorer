@@ -36,5 +36,6 @@
   "Years": "năm",
   "result": "kết quả",
   "results": "các kết quả",
-  "type search query": "loại truy vấn tìm kiếm"
+  "type search query": "loại truy vấn tìm kiếm",
+  "The Procurement M&E Prototype is an interactive platform for analyzing, monitoring, and evaluating information on procurement in Vietnam. All data in the dashboard are collected from the Vietnam Government eProcurement system (eGP)": "Đấu thầu M & E Prototype là một nền tảng tương tác cho việc phân tích, giám sát và đánh giá thông tin về đấu thầu ở Việt Nam. Tất cả các dữ liệu trong các bảng điều khiển được thu thập từ hệ thống eProcurement Chính phủ Việt Nam (EGP)"
 }

@@ -42,11 +42,7 @@ export default class App extends translatable(Component){
               <p><strong>{this.__("Toolkit description")}</strong></p>
               <p>
                 <small>
-                  {this.__(`
-                  The Procurement M&E Prototype is an interactive platform for analyzing, monitoring, and evaluating
-                  information on procurement in Vietnam. All data in the dashboard are collected from the Vietnam
-                  Government eProcurement system (eGP).
-                  `)}
+                  {this.__("The Procurement M&E Prototype is an interactive platform for analyzing, monitoring, and evaluating information on procurement in Vietnam. All data in the dashboard are collected from the Vietnam Government eProcurement system (eGP).")}
                 </small>
               </p>
             </section>
