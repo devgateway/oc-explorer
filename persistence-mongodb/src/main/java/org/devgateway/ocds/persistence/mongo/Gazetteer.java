@@ -1,15 +1,17 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -30,7 +32,7 @@ public class Gazetteer implements Serializable {
      *
      */
     @JsonProperty("identifiers")
-    private List<String> identifiers = new ArrayList<String>();
+    private Set<String> identifiers = new TreeSet<String>();
 
     /**
      * The entry of the selected gazetteer in the gazetteers codelist. The codelist provides details of services,
@@ -63,7 +65,7 @@ public class Gazetteer implements Serializable {
      *     The identifiers
      */
     @JsonProperty("identifiers")
-    public List<String> getIdentifiers() {
+    public Set<String> getIdentifiers() {
         return identifiers;
     }
 
@@ -74,7 +76,7 @@ public class Gazetteer implements Serializable {
      *     The identifiers
      */
     @JsonProperty("identifiers")
-    public void setIdentifiers(List<String> identifiers) {
+    public void setIdentifiers(Set<String> identifiers) {
         this.identifiers = identifiers;
     }
 

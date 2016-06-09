@@ -67,8 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				"/api/ocds/contrMethod/all/**", "/api/ocds/package/budgetProjectId/**",
 				"/api/ocds/package/planningBidNo/**", "/api/ocds/package/all/**", "/api/ocds/package/ocid/**",
 				"/api/ocds/location/all/**", "/api/ocds/location/search/**", "/api/averageNumberOfTenderers/**",
-				"/api/percentTendersCancelled/**"
-		};
+				"/api/percentTendersCancelled/**", "/api/percentTendersUsingEBid/**" };
 	}
 
 	@Override
