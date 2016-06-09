@@ -1,21 +1,23 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 
 /**
@@ -148,7 +150,7 @@ public class Tender {
      *
      */
     @JsonProperty("submissionMethod")
-    private List<String> submissionMethod = new ArrayList<String>();
+    private Set<String> submissionMethod = new TreeSet<String>();
 
     /**
      * Any detailed or further information on the submission method. This may include the address,
@@ -519,7 +521,7 @@ public class Tender {
      *     The submissionMethod
      */
     @JsonProperty("submissionMethod")
-    public List<String> getSubmissionMethod() {
+    public Set<String> getSubmissionMethod() {
         return submissionMethod;
     }
 
@@ -533,7 +535,7 @@ public class Tender {
      *     The submissionMethod
      */
     @JsonProperty("submissionMethod")
-    public void setSubmissionMethod(List<String> submissionMethod) {
+    public void setSubmissionMethod(Set<String> submissionMethod) {
         this.submissionMethod = submissionMethod;
     }
 
