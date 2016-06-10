@@ -3,11 +3,12 @@
  */
 package org.devgateway.ocvn.persistence.mongo.dao;
 
-import org.devgateway.ocds.persistence.mongo.Budget;
-import org.devgateway.ocds.persistence.mongo.Classification;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.devgateway.ocds.persistence.mongo.Amount;
+import org.devgateway.ocds.persistence.mongo.Budget;
+import org.devgateway.ocds.persistence.mongo.Classification;
 
 /**
  * @author mpostelnicu
@@ -19,6 +20,8 @@ public class VNBudget extends Budget {
     private String bidPlanProjectType;
 
     private Classification projectClassification = new Classification();
+        
+    private Amount projectAmount;
 
     private List<VNLocation> projectLocation = new ArrayList<>();
 
@@ -53,5 +56,13 @@ public class VNBudget extends Budget {
     public void setBidPlanProjectType(String bidPlanProjectType) {
         this.bidPlanProjectType = bidPlanProjectType;
     }
+
+	public Amount getProjectAmount() {
+		return projectAmount;
+	}
+
+	public void setProjectAmount(Amount projectAmount) {
+		this.projectAmount = projectAmount;
+	}
 
 }
