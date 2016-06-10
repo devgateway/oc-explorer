@@ -92,7 +92,7 @@ public class TenderRowImporter extends ReleaseRowImporter {
         tender.setStatus(status);
         tender.setApproveState(row[1]);
         tender.setCancelYN(row[2]);
-        tender.setModYn(row[3]);
+        tender.setModYn(row[3]);   
         tender.setBidMethod(getInteger(row[4]));
 
         Tender.ProcurementMethod procurementMethod = null;
@@ -208,6 +208,15 @@ public class TenderRowImporter extends ReleaseRowImporter {
             value.setAmount(getDecimal(row[12]));
             tender.setValue(value);
         }
+
+        
+		if (row.length > 14 && !row[14].isEmpty()) {
+			tender.setPublicationMethod(row[14]);
+		}
+		
+		if (row.length > 15 && !row[15].isEmpty()) {
+			tender.setCancellationRationale(row[15]);
+		}
 
         if (row.length > 21 && !row[21].isEmpty()) {
             if (tender.getItems().isEmpty()) {
