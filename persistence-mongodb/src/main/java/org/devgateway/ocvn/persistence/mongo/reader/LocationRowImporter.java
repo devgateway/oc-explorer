@@ -34,6 +34,7 @@ public class LocationRowImporter extends RowImporter<VNLocation, VNLocationRepos
 
         location = new VNLocation();
 
+        location.setId(row[3]);
         location.setDescription(row[0]);
 
         GeoJsonPoint coordinates = new GeoJsonPoint(getDouble(row[2]), getDouble(row[1]));

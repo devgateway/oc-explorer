@@ -85,7 +85,7 @@ public class ProcurementPlansRowImporter extends ReleaseRowImporter {
         budget.setDescription(row[11]);
 
         Amount value = new Amount();
-        budget.setAmount(value);
+        budget.setProjectAmount(value);
         value.setCurrency("VND");
         value.setAmount(getDecimal(row[2]));
         return release;
