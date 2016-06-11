@@ -24,101 +24,124 @@ import java.util.List;
  */
 public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 
-    private final Logger logger = LoggerFactory.getLogger(RowImporter.class);
+	private final Logger logger = LoggerFactory.getLogger(RowImporter.class);
 
-    protected R repository;
+	protected R repository;
 
-    protected ImportService importService;
+	protected ImportService importService;
 
-    protected int skipRows;
-    protected int cursorRowNo = 0;
-    protected int importedRows = 0;
+	protected int skipRows;
+	protected int cursorRowNo = 0;
+	protected int importedRows = 0;
 
-    public RowImporter(final R repository, final ImportService importService, final int skipRows) {
-        this.repository = repository;
-        this.importService = importService;
-        this.skipRows = skipRows;
-    }
+	public RowImporter(final R repository, final ImportService importService, final int skipRows) {
+		this.repository = repository;
+		this.importService = importService;
+		this.skipRows = skipRows;
+	}
 
-    /**
-     * Returns a double number, checking the {@link NumberFormatException} and
-     * wrapping the error into a {@link RuntimeException} that can be thrown
-     * later
-     *
-     * @param string
-     * @return
-     */
-    public Double getDouble(final String string) {
-        try {
-            return Double.parseDouble(string);
-        } catch (NumberFormatException e) {
-            throw new RuntimeException("Cell value " + string + " is not a valid number.");
-        }
-    }
+	public String getRowCell(String[] row, int index) {
+		if (row.length > index && !row[index].isEmpty()) {
+			return row[index].trim();
+		}
+		return null;
+	}
 
-    public BigDecimal getDecimal(final String string) {
-        try {
-            return new BigDecimal(string);
-        } catch (NumberFormatException e) {
-            throw new RuntimeException("Cell value " + string + " is not a valid decimal.");
-        }
-    }
+	/**
+	 * Returns a double number, checking the {@link NumberFormatException} and
+	 * wrapping the error into a {@link RuntimeException} that can be thrown
+	 * later
+	 *
+	 * @param string
+	 * @return
+	 */
+	public Double getDouble(final String string) {
+		if (string == null) {
+			return null;
+		}
+		try {
+			return Double.parseDouble(string);
+		} catch (NumberFormatException e) {
+			throw new RuntimeException("Cell value " + string + " is not a valid number.");
+		}
+	}
 
-    public Integer getInteger(final String string) {
-        try {
-            return Integer.parseInt(string);
-        } catch (NumberFormatException e) {
-            throw new RuntimeException("Cell value " + string + " is not a valid integer.");
-        }
-    }
+	public BigDecimal getDecimal(final String string) {
+		if (string == null) {
+			return null;
+		}
+		try {
+			return new BigDecimal(string);
+		} catch (NumberFormatException e) {
+			throw new RuntimeException("Cell value " + string + " is not a valid decimal.");
+		}
+	}
 
-    public Date getDateFromString(final SimpleDateFormat sdf, final String string) {
-        try {
-            return sdf.parse(string);
-        } catch (ParseException e) {
-            throw new RuntimeException(
-                    "Cell value " + string + " is not a valid date. Use format " + sdf.getNumberFormat().toString());
-        }
-    }
+	public Integer getInteger(final String string) {
+		if (string == null) {
+			return null;
+		}
+		try {
+			return Integer.parseInt(string);
+		} catch (NumberFormatException e) {
+			throw new RuntimeException("Cell value " + string + " is not a valid integer.");
+		}
+	}
 
-    public Date getExcelDate(final String string) {
-        try {
-            return DateUtil.getJavaCalendar(Double.parseDouble(string)).getTime();
-        } catch (NumberFormatException e) {
-            throw new RuntimeException("Cell value " + string + " is not a valid Excel date.");
-        }
-    }
+	@Deprecated
+	public Date getDateFromString(final SimpleDateFormat sdf, final String string) {
+		if (string == null) {
+			return null;
+		}
+		try {
+			return sdf.parse(string);
+		} catch (ParseException e) {
+			throw new RuntimeException(
+					"Cell value " + string + " is not a valid date. Use format " + sdf.getNumberFormat().toString());
+		}
+	}
 
-    private boolean isRowEmpty(final String[] row) {
-        for (int i = 0; i < row.length; i++) {
-            if (!row[i].trim().isEmpty()) {
-                return false;
-            }
-        }
-        return true;
-    }
+	public Date getExcelDate(final String string) {
+		if (string == null) {
+			return null;
+		}
+		try {
+			return DateUtil.getJavaCalendar(Double.parseDouble(string)).getTime();
+		} catch (NumberFormatException e) {
+			throw new RuntimeException("Cell value " + string + " is not a valid Excel date.");
+		}
+	}
 
-    public boolean importRows(final List<String[]> rows) throws ParseException {
+	private boolean isRowEmpty(final String[] row) {
+		for (int i = 0; i < row.length; i++) {
+			if (!row[i].trim().isEmpty()) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-        for (String[] row : rows) {
-            if (cursorRowNo++ < skipRows || isRowEmpty(row)) {
-                continue;
-            }
+	public boolean importRows(final List<String[]> rows) throws ParseException {
 
-            try {
-                importRow(row);
-                importedRows++;
-            } catch (Exception e) {
-                importService.logMessage(
-                        "	<font style='color:red'>Error importing row " + cursorRowNo + ". " + e + "</font>");
-                // throw e; we do not stop
-            }
-        }
+		for (String[] row : rows) {
+			if (cursorRowNo++ < skipRows || isRowEmpty(row)) {
+				continue;
+			}
 
-        logger.debug("Finished importing " + importedRows + " rows.");
-        return true;
-    }
+			try {
+				importRow(row);
+				importedRows++;
+			} catch (Exception e) {
+				importService.logMessage(
+						"	<font style='color:red'>Error importing row " + cursorRowNo + ". " + e + "</font>");
+				// throw e; we do not stop
+			}
+		}
 
-    public abstract void importRow(String[] row) throws ParseException;
+		logger.debug("Finished importing " + importedRows + " rows.");
+		return true;
+	}
+
+	public abstract void importRow(String[] row) throws ParseException;
 
 }

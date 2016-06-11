@@ -17,43 +17,43 @@ import java.text.ParseException;
  */
 public class SupplierRowImporter extends RowImporter<VNOrganization, VNOrganizationRepository> {
 
-    public SupplierRowImporter(final VNOrganizationRepository repository, final ImportService importService,
-                               final int skipRows) {
-        super(repository, importService, skipRows);
-    }
+	public SupplierRowImporter(final VNOrganizationRepository repository, final ImportService importService,
+			final int skipRows) {
+		super(repository, importService, skipRows);
+	}
 
-    @Override
-    public void importRow(final String[] row) throws ParseException {
-        if (row[0] == null || row[0].isEmpty()) {
-            throw new RuntimeException("Main identifier empty!");
-        }
-        VNOrganization organization = repository.findOne(row[0]);
-        if (organization != null) {
-            throw new RuntimeException("Duplicate identifer for organization " + organization);
-        }
-        organization = new VNOrganization();
-        Identifier identifier = new Identifier();
+	@Override
+	public void importRow(final String[] row) throws ParseException {
+		if (getRowCell(row, 0) == null) {
+			throw new RuntimeException("Main identifier empty!");
+		}
+		VNOrganization organization = repository.findOne(getRowCell(row, 0));
+		if (organization != null) {
+			throw new RuntimeException("Duplicate identifer for organization " + organization);
+		}
+		organization = new VNOrganization();
+		Identifier identifier = new Identifier();
 
-        identifier.setId(row[0]);
-        organization.setId(row[0]);
-        organization.setIdentifier(identifier);
-        organization.setName(row[2]);
+		identifier.setId(getRowCell(row, 0));
+		organization.setId(getRowCell(row, 0));
+		organization.setIdentifier(identifier);
+		organization.setName(getRowCell(row, 2));
 
-        Address address = new Address();
-        address.setStreetAddress(row[18]);
-        address.setPostalCode(row[17]);
+		Address address = new Address();
+		address.setStreetAddress(getRowCell(row, 18));
+		address.setPostalCode(getRowCell(row, 17));
 
-        organization.setAddress(address);
+		organization.setAddress(address);
 
-        ContactPoint cp = new ContactPoint();
-        cp.setTelephone(row[20]);
-        cp.setFaxNumber(row[21]);
-        cp.setUrl(row[22]);
+		ContactPoint cp = new ContactPoint();
+		cp.setTelephone(getRowCell(row, 20));
+		cp.setFaxNumber(getRowCell(row, 21));
+		cp.setUrl(getRowCell(row, 22));
 
-        organization.setContactPoint(cp);
+		organization.setContactPoint(cp);
 
-        repository.insert(organization);
+		repository.insert(organization);
 
-    }
+	}
 
 }

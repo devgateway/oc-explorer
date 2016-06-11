@@ -31,7 +31,7 @@ public class BidPlansRowImporter extends ReleaseRowImporter {
     @Override
     public Release createReleaseFromReleaseRow(final String[] row) throws ParseException {
 
-        String projectID = row[0];
+		String projectID = getRowCell(row, 0);
         Release release = repository.findByBudgetProjectId(projectID);
 
         if (release == null) {
@@ -47,14 +47,14 @@ public class BidPlansRowImporter extends ReleaseRowImporter {
             budget = new Budget();
             release.getPlanning().setBudget(budget);
         }
-        budget.setProjectID(row[0]);
+		budget.setProjectID(getRowCell(row, 0));
 
         Amount value = new Amount();
         value.setCurrency("VND");
         budget.setAmount(value);
 
         // decimal2
-        value.setAmount(getDecimal(row[5]));
+		value.setAmount(getDecimal(getRowCell(row, 5)));
 
         Tender tender = release.getTender();
         if (tender == null) {
@@ -69,14 +69,14 @@ public class BidPlansRowImporter extends ReleaseRowImporter {
         tender.getItems().add(item);
 
         // decimal2
-        value.setAmount(getDecimal(row[5]));
-        item.setDescription(row[1]);
-        item.setBidPlanItemRefNum(row[2]);
-        item.setBidPlanItemStyle(row[3]);
-        item.setBidPlanItemFund(row[4]);
-        item.setBidPlanItemMethodSelect(row[6]);
-        item.setBidPlanItemMethod(row[7]);
-        item.setId(row[8]);
+		value.setAmount(getDecimal(getRowCell(row, 5)));
+		item.setDescription(getRowCell(row, 1));
+		item.setBidPlanItemRefNum(getRowCell(row, 2));
+		item.setBidPlanItemStyle(getRowCell(row, 3));
+		item.setBidPlanItemFund(getRowCell(row, 4));
+		item.setBidPlanItemMethodSelect(getRowCell(row, 6));
+		item.setBidPlanItemMethod(getRowCell(row, 7));
+		item.setId(getRowCell(row, 8));
 
         return release;
     }
