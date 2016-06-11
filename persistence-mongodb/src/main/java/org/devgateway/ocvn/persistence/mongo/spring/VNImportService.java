@@ -243,12 +243,12 @@ public class VNImportService implements ExcelImportService {
             }
 
             if (fileTypes.contains(ImportFileTypes.EBID_AWARDS)) {
-                importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "eBid_Award",
+                importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "eBid_Awards",
                         new EBidAwardRowImporter(releaseRepository, this, organizationRepository, 2));
             }
 
             if (fileTypes.contains(ImportFileTypes.OFFLINE_AWARDS)) {
-                importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "Offline_Award",
+                importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "Offline_Awards",
                         new OfflineAwardRowImporter(releaseRepository, this, organizationRepository, 2));
             }
 
