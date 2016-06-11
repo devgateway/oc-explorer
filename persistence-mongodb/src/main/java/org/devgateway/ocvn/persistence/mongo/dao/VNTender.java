@@ -23,8 +23,28 @@ public class VNTender extends Tender {
     private String modYn;
 
     private String procurementMethodDetails;
+    
+    private String publicationMethod; 
+    
+    private String cancellationRationale;       
 
-    public ContrMethod getContrMethod() {
+    public String getCancellationRationale() {
+		return cancellationRationale;
+	}
+
+	public void setCancellationRationale(String cancellationRationale) {
+		this.cancellationRationale = cancellationRationale;
+	}
+
+	public String getPublicationMethod() {
+		return publicationMethod;
+	}
+
+	public void setPublicationMethod(String publicationMethod) {
+		this.publicationMethod = publicationMethod;
+	}
+
+	public ContrMethod getContrMethod() {
         return contrMethod;
     }
 

@@ -1,5 +1,7 @@
 package org.devgateway.ocvn.persistence.mongo.reader;
 
+import java.text.ParseException;
+
 import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.Tag;
@@ -13,10 +15,6 @@ import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
 import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
 import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-
 /**
  *
  * @author mihai Specific {@link RowImporter} for Procurement Plans, in the
@@ -24,70 +22,66 @@ import java.util.Locale;
  * @see VNPlanning
  */
 public class ProcurementPlansRowImporter extends ReleaseRowImporter {
-    private VNLocationRepository locationRepository;
+	private VNLocationRepository locationRepository;
 
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yy", new Locale("en"));
+	public ProcurementPlansRowImporter(final ReleaseRepository releaseRepository, final ImportService importService,
+			final VNLocationRepository locationRepository, final int skipRows) {
+		super(releaseRepository, importService, skipRows);
+		this.locationRepository = locationRepository;
+	}
 
-    public ProcurementPlansRowImporter(final ReleaseRepository releaseRepository, final ImportService importService,
-                                       final VNLocationRepository locationRepository, final int skipRows) {
-        super(releaseRepository, importService, skipRows);
-        this.locationRepository = locationRepository;
-    }
+	@Override
+	public Release createReleaseFromReleaseRow(final String[] row) throws ParseException {
 
-    @Override
-    public Release createReleaseFromReleaseRow(final String[] row) throws ParseException {
+		String projectID = getRowCell(row, 0);
+		Release oldRelease = repository.findByBudgetProjectId(projectID);
+		if (oldRelease != null) {
+			throw new RuntimeException("Duplicate planning.budget.projectID");
+		}
 
-        String projectID = row[0];
-        Release oldRelease = repository.findByBudgetProjectId(projectID);
-        if (oldRelease != null) {
-            throw new RuntimeException("Duplicate planning.budget.projectID");
-        }
+		Release release = new Release();
+		release.setOcid(MongoConstants.OCDS_PREFIX + "prjid-" + projectID);
+		release.getTag().add(Tag.planning);
+		VNPlanning planning = new VNPlanning();
+		VNBudget budget = new VNBudget();
+		release.setPlanning(planning);
+		planning.setBudget(budget);
 
-        Release release = new Release();
-        release.setOcid(MongoConstants.OCDS_PREFIX + "prjid-" + projectID);
-        release.getTag().add(Tag.planning);
-        VNPlanning planning = new VNPlanning();
-        VNBudget budget = new VNBudget();
-        release.setPlanning(planning);
-        planning.setBudget(budget);
+		// search for locations
+		if (getRowCell(row, 3) != null) {
+			String[] locations = getRowCell(row, 3).split(",");
+			for (int i = 0; i < locations.length; i++) {
+				VNLocation location = locationRepository.findByDescription(locations[i].trim());
+				if (location == null) {
+					location = new VNLocation();
+					location.setDescription(locations[i]);
+				}
 
-        // search for locations
+				budget.getProjectLocation().add(location);
+			}
+		}
 
-        String[] locations = row[3].split(",");
-        for (int i = 0; i < locations.length; i++) {
-            VNLocation location = locationRepository.findByDescription(locations[i].trim());
-            if (location == null) {
-                location = new VNLocation();
-                location.setDescription(locations[i]);
-            }
+		planning.setBidPlanProjectDateIssue(getExcelDate(getRowCell(row, 4)));
 
-            budget.getProjectLocation().add(location);
-        }
+		planning.setBidPlanProjectCompanyIssue(getRowCell(row, 6));
 
-        planning.setBidPlanProjectDateIssue(row[4].isEmpty() ? null : getDateFromString(sdf, row[4]));
+		planning.setBidPlanProjectFund(getInteger(getRowCell(row, 8)));
+		budget.getProjectClassification().setDescription(getRowCell(row, 9));
 
-        planning.setBidPlanProjectCompanyIssue(row[6]);
+		planning.setBidPlanProjectDateApprove(getExcelDate(getRowCell(row, 10)));
+		budget.getProjectClassification().setId(getRowCell(row, 12));
+		planning.setBidNo(getRowCell(row, 13));
 
-        planning.setBidPlanProjectFund(getInteger(row[8]));
-        if (!row[9].trim().isEmpty()) {
-            budget.getProjectClassification().setDescription(row[9].trim());
-        }
-        planning.setBidPlanProjectDateApprove(row[10].isEmpty() ? null : getDateFromString(sdf, row[10]));
-        budget.getProjectClassification().setId(row[12]);
-        if (row.length > 13) {
-            planning.setBidNo(row[13]);
-        }
+		budget.setProjectID(getRowCell(row, 0));
+		budget.setBidPlanProjectStyle(getRowCell(row, 5));
+		budget.setBidPlanProjectType(getRowCell(row, 7));
+		budget.setProject(getRowCell(row, 1));
+		budget.setDescription(getRowCell(row, 11));
 
-        budget.setProjectID(row[0]);
-        budget.setBidPlanProjectStyle(row[5]);
-        budget.setBidPlanProjectType(row[7]);
-        budget.setProject(row[1]);
-        budget.setDescription(row[11]);
-
-        Amount value = new Amount();
-        budget.setProjectAmount(value);
-        value.setCurrency("VND");
-        value.setAmount(getDecimal(row[2]));
-        return release;
-    }
+		Amount value = new Amount();
+		budget.setProjectAmount(value);
+		value.setCurrency("VND");
+		value.setAmount(getDecimal(getRowCell(row, 2)));
+		return release;
+	}
 }
