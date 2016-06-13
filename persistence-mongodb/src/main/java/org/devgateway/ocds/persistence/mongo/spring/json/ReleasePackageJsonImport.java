@@ -37,8 +37,8 @@ public class ReleasePackageJsonImport implements JsonImportPackage<ReleasePackag
 
     @Override
     public Collection<Release> importObjects() throws IOException {
-        ReleasePackage releasePackage = (ReleasePackage) releasePackageJsonToObject.toObject();
-        Collection<Release> savedReleases = new LinkedHashSet<>();
+        final ReleasePackage releasePackage = (ReleasePackage) releasePackageJsonToObject.toObject();
+        final Collection<Release> savedReleases = new LinkedHashSet<>();
 
         if (!releasePackage.getReleases().isEmpty()) {
             Set<Release> releases = releasePackage.getReleases();

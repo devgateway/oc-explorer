@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -32,9 +33,11 @@ import java.util.Set;
 })
 @Document
 public class Organization implements Identifiable {
+    @ExcelExport
     @Id
     private String id;
 
+    @ExcelExport
     @JsonProperty("identifier")
     private Identifier identifier;
     /**
@@ -55,6 +58,7 @@ public class Organization implements Identifiable {
      * This field could also include details of the department or sub-unit involved in this contracting process.
      *
      */
+    @ExcelExport
     @JsonProperty("name")
     private String name;
 
@@ -63,6 +67,7 @@ public class Organization implements Identifiable {
      * for this particular contracting process.
      *
      */
+    @ExcelExport
     @JsonProperty("address")
     private Address address;
 
@@ -70,6 +75,7 @@ public class Organization implements Identifiable {
      * An person, contact point or department to contact in relation to this contracting process.
      *
      */
+    @ExcelExport
     @JsonProperty("contactPoint")
     private ContactPoint contactPoint;
 

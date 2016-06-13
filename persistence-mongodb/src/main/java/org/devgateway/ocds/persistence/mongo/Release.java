@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -52,6 +54,7 @@ public class Release implements Identifiable {
      * (Required)
      *
      */
+    @ExcelExport
     @JsonProperty("id")
     @Id
     private String id;
@@ -66,6 +69,7 @@ public class Release implements Identifiable {
      * (Required)
      *
      */
+    @ExcelExport
     @JsonProperty("ocid")
     private String ocid;
 
@@ -77,6 +81,7 @@ public class Release implements Identifiable {
      * (Required)
      *
      */
+    @ExcelExport
     @JsonProperty("date")
     @CreatedDate
     private Date date;
@@ -91,6 +96,7 @@ public class Release implements Identifiable {
      * (Required)
      *
      */
+    @ExcelExport
     @JsonProperty("tag")
     private List<Tag> tag = new ArrayList<Tag>();
 
@@ -103,6 +109,7 @@ public class Release implements Identifiable {
      * (Required)
      *
      */
+    @ExcelExport
     @JsonProperty("initiationType")
     private InitiationType initiationType = InitiationType.tender;
 
@@ -114,6 +121,7 @@ public class Release implements Identifiable {
      * at this stage e.g. totalValue in tender
      *
      */
+    @ExcelExport
     @JsonProperty("planning")
     private Planning planning;
 
@@ -124,6 +132,7 @@ public class Release implements Identifiable {
      * and selecting a winner or winners.
      *
      */
+    @ExcelExport
     @JsonProperty("tender")
     private Tender tender;
 
@@ -133,6 +142,7 @@ public class Release implements Identifiable {
      * An organization.
      *
      */
+    @ExcelExport
     @JsonProperty("buyer")
     private Organization buyer;
 
@@ -143,6 +153,8 @@ public class Release implements Identifiable {
      * process e.g. because the contract is split amongst different providers, or because it is a standing offer.
      *
      */
+    @ExcelExport
+    @ExcelExportSepareteSheet
     @JsonProperty("awards")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
     private Set<Award> awards = new LinkedHashSet<Award>();

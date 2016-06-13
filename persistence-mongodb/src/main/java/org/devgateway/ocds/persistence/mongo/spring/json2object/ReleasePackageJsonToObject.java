@@ -19,11 +19,11 @@ public class ReleasePackageJsonToObject extends AbstractJsonToObject<ReleasePack
         super(jsonObject);
     }
 
-    public ReleasePackageJsonToObject(InputStream inputStream) throws IOException {
+    public ReleasePackageJsonToObject(final InputStream inputStream) throws IOException {
         super(inputStream);
     }
 
-    public ReleasePackageJsonToObject(File file) throws IOException {
+    public ReleasePackageJsonToObject(final File file) throws IOException {
         super(file);
     }
 

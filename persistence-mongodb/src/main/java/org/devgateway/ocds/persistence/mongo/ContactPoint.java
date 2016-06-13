@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 
 /**
@@ -28,6 +29,7 @@ public class ContactPoint {
      * for correspondence relating to this contracting process.
      *
      */
+    @ExcelExport
     @JsonProperty("name")
     private String name;
 
@@ -35,6 +37,7 @@ public class ContactPoint {
      * The e-mail address of the contact point/person.
      *
      */
+    @ExcelExport
     @JsonProperty("email")
     private String email;
 
@@ -42,6 +45,7 @@ public class ContactPoint {
      * The telephone number of the contact point/person. This should include the international dialling code.
      *
      */
+    @ExcelExport
     @JsonProperty("telephone")
     private String telephone;
 
@@ -49,6 +53,7 @@ public class ContactPoint {
      * The fax number of the contact point/person. This should include the international dialling code.
      *
      */
+    @ExcelExport
     @JsonProperty("faxNumber")
     private String faxNumber;
 
@@ -56,6 +61,7 @@ public class ContactPoint {
      * A web address for the contact point/person.
      *
      */
+    @ExcelExport
     @JsonProperty("url")
     private String url;
 
