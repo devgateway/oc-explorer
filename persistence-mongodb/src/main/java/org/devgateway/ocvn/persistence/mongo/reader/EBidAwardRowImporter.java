@@ -78,13 +78,17 @@ public class EBidAwardRowImporter extends ReleaseRowImporter {
 			supplier = organizationRepository.insert(supplier);
 		}
 
-		award.getSuppliers().add(supplier);
+		award.setStatus("Y".equals(getRowCell(row, 5)) ? Award.Status.active : Award.Status.unsuccesful);
+		
+		// active=successful awards have suppliers
+		if (Award.Status.active.equals(award.getStatus())) {
+			award.getSuppliers().add(supplier);
+		}
 
 		award.setContractTime(getRowCell(row, 3));
 
 		award.setBidOpenRank(getInteger(getRowCell(row, 4)));
 
-		award.setStatus("Y".equals(getRowCell(row, 5)) ? Award.Status.active : Award.Status.unsuccesful);
 
 		award.setInelibigleYN(getRowCell(row, 6));
 
@@ -92,13 +96,9 @@ public class EBidAwardRowImporter extends ReleaseRowImporter {
 
 		award.setDate(getExcelDate(getRowCell(row, 8)));
 
-		// For unsuccessful awards (in both eBid and Offline bid tabs), map the
-		// information on the bidder (supplier) to tender.tenderers for that
-		// BID_NO
-		// we ignore the fields if there are no tenders found
-		if (award.getStatus().equals(Award.Status.unsuccesful)) {
-			release.getTender().getTenderers().add(supplier);
-		}
+		//regardless if the award is active or not, we add the supplier to tenderers
+		release.getTender().getTenderers().add(supplier);
+
 		release.getTender().setNumberOfTenderers(release.getTender().getTenderers().size());
 
 		return release;
