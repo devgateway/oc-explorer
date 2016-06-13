@@ -57,7 +57,6 @@ public class Classification implements Identifiable {
      * this value should be left blank.
      *
      */
-    @ExcelExport
     @JsonProperty("uri")
     private String uri;
 

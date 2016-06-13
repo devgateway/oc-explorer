@@ -27,11 +27,9 @@ public class Unit {
      * Name of the unit
      *
      */
-    @ExcelExport
     @JsonProperty("name")
     private String name;
 
-    @ExcelExport
     @JsonProperty("value")
     private Amount value;
 

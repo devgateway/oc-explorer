@@ -34,7 +34,6 @@ public class Item {
      * (Required)
      *
      */
-    @ExcelExport
     @JsonProperty("id")
     private String id;
 
@@ -75,7 +74,6 @@ public class Item {
      * Made up of a unit name, and the value of a single unit.
      *
      */
-    @ExcelExport
     @JsonProperty("unit")
     private Unit unit;
 
