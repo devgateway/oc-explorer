@@ -1,8 +1,9 @@
 package org.devgateway.ocvn.persistence.mongo.reader;
 
+import java.text.ParseException;
+
 import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Award;
-import org.devgateway.ocds.persistence.mongo.Identifier;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.Tag;
 import org.devgateway.ocds.persistence.mongo.Tender;
@@ -16,8 +17,6 @@ import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
 import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
 import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository;
-
-import java.text.ParseException;
 
 /**
  * Specific {@link RowImporter} for eBid Awards {@link VNAward} in the custom
@@ -69,14 +68,12 @@ public class EBidAwardRowImporter extends ReleaseRowImporter {
 		award.setValue(value);
 
 		VNOrganization supplier = organizationRepository.findOne(getRowCell(row, 2));
-
+		
 		if (supplier == null) {
 			supplier = new VNOrganization();
-			Identifier supplierId = new Identifier();
-			supplierId.setId(getRowCell(row, 2));
-			supplier.setIdentifier(supplierId);
+			supplier.setName(getRowCell(row, 2));
 			supplier = organizationRepository.insert(supplier);
-		}
+		}		
 
 		award.setStatus("Y".equals(getRowCell(row, 5)) ? Award.Status.active : Award.Status.unsuccesful);
 		
