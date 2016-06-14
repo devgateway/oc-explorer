@@ -117,7 +117,9 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
                     case FieldType.OCDS_OBJECT_FIELD:
                         if (field.getType().equals(java.util.Set.class) || field.getType().equals(java.util.List.class)) {
                             final List<Object> ocdsFlattenObjects = new ArrayList();
-                            ocdsFlattenObjects.addAll((Collection) PropertyUtils.getProperty(object, field.getName()));
+                            if (object != null) {
+                                ocdsFlattenObjects.addAll((Collection) PropertyUtils.getProperty(object, field.getName()));
+                            }
 
                             writeFlattenObject(ocdsFlattenObjects, field, row, field.getName());
                         } else {
@@ -137,19 +139,23 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
                                 this.workbook, getFieldClass(field));
                         final List<Object> ocdsObjectsSeparateSheet = new ArrayList();
 
-                        if (field.getType().equals(java.util.Set.class) || field.getType().equals(java.util.List.class)) {
-                            ocdsObjectsSeparateSheet.addAll((Collection) PropertyUtils.getProperty(object, field.getName()));
-                        } else {
-                            ocdsObjectsSeparateSheet.add(PropertyUtils.getProperty(object, field.getName()));
+                        if (object != null) {
+                            if (field.getType().equals(java.util.Set.class) || field.getType().equals(java.util.List.class)) {
+                                ocdsObjectsSeparateSheet.addAll((Collection) PropertyUtils.getProperty(object, field.getName()));
+                            } else {
+                                ocdsObjectsSeparateSheet.add(PropertyUtils.getProperty(object, field.getName()));
+                            }
                         }
                         int rowNumber = objectSheetSepareteSheet.writeSheetGetLink(ocdsObjectsSeparateSheet);
 
-                        if (rowNumber != -1) {
-                            // get the last 'free' cell
-                            coll = row.getLastCellNum() == -1 ? 0 : row.getLastCellNum();
+                        // get the last 'free' cell
+                        coll = row.getLastCellNum() == -1 ? 0 : row.getLastCellNum();
+                        writeHeaderLabel(field, coll);
 
-                            writeHeaderLabel(field, coll);
+                        if (rowNumber != -1) {
                             writeCellLink(field.getName(), row, coll, objectSheetSepareteSheet.getExcelSheetName(), rowNumber);
+                        } else {
+                            writeCell(null, row, coll);
                         }
 
                         break;
@@ -187,10 +193,13 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
     @Override
     public void writeSheet(final List<Object> objects) {
         for (Object obj : objects) {
-            int lastRow = excelSheet.getLastRowNum();
-            Row row = createRow(excelSheet, ++lastRow);
 
-            writeRow(obj, row);
+            if (obj != null) {
+                int lastRow = excelSheet.getLastRowNum();
+                Row row = createRow(excelSheet, ++lastRow);
+
+                writeRow(obj, row);
+            }
         }
     }
 
@@ -250,7 +259,9 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
                         } else {
                             final List<Object> newObjects = new ArrayList();
                             for (Object obj : objects) {
-                                newObjects.add(PropertyUtils.getProperty(obj, innerField.getName()));
+                                if (obj != null && PropertyUtils.getProperty(obj, innerField.getName()) != null) {
+                                    newObjects.add(PropertyUtils.getProperty(obj, innerField.getName()));
+                                }
                             }
 
                             writeFlattenObject(newObjects, innerField, row, labelPrefix + "/" + innerField.getName());
