@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -30,6 +31,7 @@ public class Classification implements Identifiable {
      *  wherever possible.
      *
      */
+    @ExcelExport
     @JsonProperty("scheme")
     private String scheme;
 
@@ -37,6 +39,7 @@ public class Classification implements Identifiable {
      * The classification code drawn from the selected scheme.
      *
      */
+    @ExcelExport
     @JsonProperty("id")
     @Id
     private String id;
@@ -45,6 +48,7 @@ public class Classification implements Identifiable {
      * A textual description or title for the code.
      *
      */
+    @ExcelExport
     @JsonProperty("description")
     private String description;
 

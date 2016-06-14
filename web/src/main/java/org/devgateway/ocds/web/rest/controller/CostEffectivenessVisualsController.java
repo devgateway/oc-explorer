@@ -58,7 +58,9 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
         project.put("awards.value.amount", 1);
 
         Aggregation agg = Aggregation.newAggregation(
-                match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),
+				match(where("awards").elemMatch(where("status").
+						and("tender.tenderPeriod.startDate").exists(true).
+						is("active")).and("tender.value").exists(true)),
                 getMatchDefaultFilterOperation(filter), unwind("$awards"),
                 match(where("awards.status").is("active").and("awards.value").exists(true)),
                 new CustomProjectionOperation(project),
@@ -86,7 +88,9 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
         project.putAll(filterProjectMap);
 
         Aggregation agg = Aggregation.newAggregation(
-                match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),
+				match(where("awards").elemMatch(where("status").is("active")).
+						and("tender.tenderPeriod.startDate").exists(true).
+						and("tender.value").exists(true)),
                 getMatchDefaultFilterOperation(filter), new CustomProjectionOperation(project),
                 getTopXFilterOperation(filter, "$year").sum("$tender.value.amount").as("totalTenderAmount"),
                 sort(Direction.DESC, "totalTenderAmount"), skip(filter.getSkip()), limit(filter.getPageSize()));

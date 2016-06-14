@@ -2,6 +2,7 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "title": "Schema for an Open Contracting Release",
     "type": "object",
+    "additionalProperties": false,
     "properties": {
         "ocid": {
             "title": "Open Contracting ID",
@@ -81,12 +82,14 @@
         }
     },
     "required": ["id", "ocid", "date", "tag", "initiationType", "planning", "tender", "buyer", "awards", "contracts", "language"],
+    "additionalProperties": false,
     "definitions": {
         "Planning": {
             "title": "Planning",
             "description": "Information from the planning phase of the contracting process. Note that many other fields may be filled in a planning release, in the appropriate fields in other schema sections, these would likely be estimates at this stage e.g. totalValue in tender",
             "type": "object",
             "required": ["budget", "rationale", "documents"],
+            "additionalProperties": false,
             "properties": {
                 "budget": { "$ref": "#/definitions/Budget" },
                 "rationale": {
@@ -113,6 +116,7 @@
             "description": "Data regarding tender process - publicly inviting prospective contractors to submit bids for evaluation and selecting a winner or winners.",
             "type": "object",
             "required": ["id", "title", "description", "status", "items", "minValue", "value", "procurementMethod", "procurementMethodRationale", "awardCriteria", "awardCriteriaDetails", "submissionMethod", "submissionMethodDetails", "tenderPeriod", "enquiryPeriod", "hasEnquiries", "eligibilityCriteria", "awardPeriod", "numberOfTenderers", "tenderers", "procuringEntity", "documents", "milestones", "amendment"],
+            "additionalProperties": false,
             "properties": {
                 "id": {
                     "title": "Tender ID",
@@ -268,6 +272,7 @@
             "description": "An award for the given procurement. There may be more than one award per contracting process e.g. because the contract is split amongst different providers, or because it is a standing offer.",
             "type": "object",
             "required": ["id", "title", "description", "status", "date", "value", "suppliers", "items", "contractPeriod", "documents", "amendment"],
+            "additionalProperties": false,
             "properties": {
                 "id": {
                     "title": "Award ID",
@@ -350,6 +355,7 @@
             "title": "Contract",
             "description": "Information regarding the signed contract between the buyer and supplier(s).",
             "required": ["id", "awardID", "title", "description", "status", "period", "value", "items", "dateSigned", "documents", "amendment", "implementation"],
+            "additionalProperties": false,
             "properties": {
                 "id": {
                     "title": "Contract ID",
@@ -435,6 +441,7 @@
             "title": "Implementation",
             "description": "Information during the performance / implementation stage of the contract.",
             "required": ["transactions", "milestones", "documents"],
+            "additionalProperties": false,
             "properties": {
                 "transactions": {
                     "description": "A list of the spending transactions made against this contract",
@@ -465,6 +472,7 @@
         "Milestone": {
             "type": "object",
             "required": ["id", "title", "description", "dueDate", "dateModified", "status", "documents"],
+            "additionalProperties": false,
             "properties": {
                 "id": {
                     "description": "A local identifier for this milestone, unique within this block. This field is used to keep track of multiple revisions of a milestone through the compilation from release to record mechanism.",
@@ -522,6 +530,7 @@
             "title": "Document",
             "description": "Links to, or descriptions of, external documents can be attached at various locations within the standard. Documents may be supporting information, formal notices, downloadable forms, or any other kind of resource that should be made public as part of full open contracting.",
             "required": ["id", "documentType", "title", "description", "url", "datePublished", "dateModified", "format", "language"],
+            "additionalProperties": false,
             "properties": {
                 "id": {
                     "description": "A local, unique identifier for this document. This field is used to keep track of multiple revisions of a document through the compilation from release to record mechanism.",
@@ -587,6 +596,7 @@
             "description": "This section contain information about the budget line, and associated projects, through which this contracting process is funded. It draws upon data model of the [Budget Data Package](https://github.com/openspending/budget-data-package/blob/master/specification.md), and should be used to cross-reference to more detailed information held using a Budget Data Package, or, where no linked Budget Data Package is available, to provide enough information to allow a user to manually or automatically cross-reference with another published source of budget and project information.",
             "mergeStrategy": "ocdsVersion",
             "required": ["source", "id", "description", "amount", "project", "projectID", "uri"],
+            "additionalProperties": false,
             "properties": {
                 "source": {
                     "title": "Data Source",
@@ -647,6 +657,7 @@
             "title": "Transaction Information",
             "description": "A spending transaction related to the contracting process. Draws upon the data models of the [Budget Data Package](https://github.com/openspending/budget-data-package/blob/master/specification.md) and the [International Aid Transpareny Initiative](http://iatistandard.org/activity-standard/iati-activities/iati-activity/transaction/) and should be used to cross-reference to more detailed information held using a Budget Data Package, IATI file, or to provide enough information to allow a user to manually or automatically cross-reference with some other published source of transactional spending data.",
             "required": ["id", "source", "date", "amount", "providerOrganization", "receiverOrganization", "uri"],
+            "additionalProperties": false,
             "properties": {
                 "id":{ 
                     "description": "A unique identifier for this transaction. This identifier should be possible to cross-reference against the provided data source. For the budget data package this is the id, for IATI, the transaction reference.",
@@ -692,6 +703,7 @@
             "description": "An organization.",
             "type": "object",
             "required": ["identifier", "additionalIdentifiers", "name", "address", "contactPoint"],
+            "additionalProperties": false,
             "properties": {
                 "identifier": { 
                     "description": "The primary identifier for this organization. Identifiers that uniquely pick out a legal entity should be preferred. Consult the [organization identifier guidance](http://ocds.open-contracting.org/standard/r/1__0__0/en/key_concepts/identifiers/#organization-identifiers) for the preferred scheme and identifier to use.",
@@ -722,6 +734,7 @@
             "type": "object",
             "description": "A good, service, or work to be contracted.",
             "required": ["id", "description", "classification", "additionalClassifications", "quantity", "unit"],
+            "additionalProperties": false,
             "properties": {
                 "id": {
                     "description": "A local identifier to reference and merge the items by. Must be unique within a given array of items.",
@@ -754,6 +767,7 @@
                     "description": "Description of the unit which the good comes in e.g. hours, kilograms. Made up of a unit name, and the value of a single unit.",
                     "type": "object",
                     "required": ["name", "value"],
+                    "additionalProperties": false,
                     "properties": {
                         "name": {
                             "description": "Name of the unit",
@@ -782,6 +796,7 @@
             "type": "object",
             "title": "Amendment information",
             "required": ["date", "changes", "rationale"],
+            "additionalProperties": false,
             "properties": {
                 "date": {
                     "title": "Amendment Date",
@@ -796,6 +811,7 @@
                     "mergeStrategy": "ocdsVersion",
                     "type": "array",
                     "required": ["property", "former_value"],
+                    "additionalProperties": false,
                     "items": {
                         "type": "object",
                         "properties": {
@@ -825,6 +841,7 @@
         "Classification": {
             "type": "object",
             "required": ["scheme", "id", "description", "uri"],
+            "additionalProperties": false,
             "properties": {
                 "scheme": {
                     "description": "An classification should be drawn from an existing scheme or list of codes. This field is used to indicate the scheme/codelist from which the classification is drawn. For line item classifications, this value should represent an known [Item Classification Scheme](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists/#item-classification-scheme) wherever possible.",
@@ -857,6 +874,7 @@
         "Identifier": {
             "type": "object",
             "required": ["scheme", "id", "legalName", "uri"],
+            "additionalProperties": false,
             "properties": {
                 "scheme": {
                     "description": "Organization identifiers be drawn from an existing identification scheme. This field is used to indicate the scheme or codelist in which the identifier will be found. This value should be drawn from the [Organization Identifier Scheme](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists/#organization-identifier-scheme).",
@@ -890,6 +908,7 @@
             "description": "An address. This may be the legally registered address of the organization, or may be a correspondence address for this particular contracting process.",
             "type": "object",
             "required": ["streetAddress", "locality", "region", "postalCode", "countryName"],
+            "additionalProperties": false,
             "properties": {
                 "streetAddress": {
                     "type": ["string", "null"],
@@ -927,6 +946,7 @@
             "type": "object",
             "description": "An person, contact point or department to contact in relation to this contracting process.",
             "required": ["name", "email", "telephone", "faxNumber", "url"],
+            "additionalProperties": false,
             "properties": {
                 "name": {
                     "type": ["string", "null"],
@@ -964,6 +984,7 @@
         "Value": {
             "type": "object",
             "required": ["amount", "currency"],
+            "additionalProperties": false,
             "properties": {
                 "amount": {
                     "description": "Amount as a number.",
@@ -982,6 +1003,7 @@
             "type": "object",
             "title": "Period",
             "required": ["startDate", "endDate"],
+            "additionalProperties": false,
             "properties": {
                 "startDate": { 
                     "description": "The start date for the period.",

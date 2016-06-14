@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,7 @@ public class Planning {
      * automatically cross-reference with another published source of budget and project information.
      *
      */
+    @ExcelExport
     @JsonProperty("budget")
     private Budget budget;
 
@@ -47,6 +49,7 @@ public class Planning {
      * The rationale for the procurement provided in free text. More detail can be provided in an attached document.
      *
      */
+    @ExcelExport
     @JsonProperty("rationale")
     private String rationale;
 
@@ -55,7 +58,7 @@ public class Planning {
      *
      */
     @JsonProperty("documents")
-    private List<Document> documents = new ArrayList<Document>();
+    private List<Document> documents = new ArrayList<>();
 
     /**
      * Budget Information
