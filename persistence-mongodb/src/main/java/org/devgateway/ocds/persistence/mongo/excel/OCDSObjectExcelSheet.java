@@ -40,6 +40,10 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
 
     private final Class clazz;
 
+    private String parent;
+
+    private int parentRowNumber;
+
     private final String headerPrefix;
 
     /**
@@ -77,6 +81,13 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
         }
     }
 
+    OCDSObjectExcelSheet(final Workbook workbook, final Class clazz, final String parent, final int parentRowNumber) {
+        this(workbook, clazz);
+
+        this.parent = parent;
+        this.parentRowNumber = parentRowNumber;
+    }
+
     /**
      * Constructor used to print an OCDS Object in an existing excel sheet.
      * Normally this Object should be a child of one of the main notice phases.
@@ -104,6 +115,12 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
                 new ClassFieldsDefault(clazz)
         );
         final Iterator<Field> fields = classFields.getFields();
+
+        // first row should be the parent name with a link
+        if (parent != null) {
+            writeHeaderLabel("Parent", 0);
+            writeCellLink(parent, row, 0, parent, parentRowNumber);
+        }
 
         while (fields.hasNext()) {
             final Field field = fields.next();
@@ -144,14 +161,15 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
                         break;
                     case FieldType.OCDS_OBJECT_SEPARETE_SHEET_FIELD:
                         final OCDSObjectExcelSheet objectSheetSepareteSheet = new OCDSObjectExcelSheet(
-                                this.workbook, getFieldClass(field));
+                                this.workbook, getFieldClass(field), excelSheetName, row.getRowNum() + 1);
                         final List<Object> ocdsObjectsSeparateSheet = new ArrayList();
 
-                        if (object != null) {
+                        if (object != null && PropertyUtils.getProperty(object, field.getName()) != null) {
                             if (field.getType().equals(java.util.Set.class)
                                     || field.getType().equals(java.util.List.class)) {
                                 ocdsObjectsSeparateSheet.addAll(
                                         (Collection) PropertyUtils.getProperty(object, field.getName()));
+
                             } else {
                                 ocdsObjectsSeparateSheet.add(PropertyUtils.getProperty(object, field.getName()));
                             }
@@ -370,6 +388,18 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
 
         if (headerCell == null) {
             writeCell(getHeaderPrefix() + field.getName(), headerRow, coll);
+        }
+    }
+
+    /**
+     * Functions that check if the header cell is empty, if yes then add the label
+     */
+    private void writeHeaderLabel(String label, int coll) {
+        final Row headerRow = excelSheet.getRow(0);
+        final Cell headerCell = headerRow.getCell(coll);
+
+        if (headerCell == null) {
+            writeCell(label, headerRow, coll);
         }
     }
 
