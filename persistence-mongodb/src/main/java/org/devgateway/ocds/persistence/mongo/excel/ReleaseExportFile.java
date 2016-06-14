@@ -12,9 +12,9 @@ import java.util.List;
  * @since 6/7/16
  */
 public final class ReleaseExportFile implements ExcelFile {
-    final private List<Release> releases;
+    private final List<Release> releases;
 
-    final private Workbook workbook;
+    private final Workbook workbook;
 
     ReleaseExportFile(final List<Release> releases) {
         this.releases = releases;

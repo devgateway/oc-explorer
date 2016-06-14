@@ -18,25 +18,27 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * Class that prepares the default Styles and Fonts for Excel cells.
+ *
  * @author idobre
  * @since 6/7/16
  */
 public abstract class AbstractExcelSheet implements ExcelSheet {
     protected final Workbook workbook;
 
-    final private Font dataFont;
+    private final Font dataFont;
 
-    final private Font headerFont;
+    private final Font headerFont;
 
-    final private Font linkFont;
+    private final Font linkFont;
 
-    final private CellStyle dataStyleCell;
+    private final CellStyle dataStyleCell;
 
-    final private CellStyle headerStyleCell;
+    private final CellStyle headerStyleCell;
 
-    final private CellStyle linkStyleCell;
+    private final CellStyle linkStyleCell;
 
-    final CreationHelper createHelper;
+    private final CreationHelper createHelper;
 
     // declare only one cell object reference
     private Cell cell = null;
@@ -114,7 +116,7 @@ public abstract class AbstractExcelSheet implements ExcelSheet {
                     } else {
                         if (value instanceof Boolean) {
                             cell = row.createCell(column, Cell.CELL_TYPE_BOOLEAN);
-                            cell.setCellValue(((Boolean) value) == true ? "Yes" : "No");
+                            cell.setCellValue(((Boolean) value) ? "Yes" : "No");
                         } else {
                             if (value instanceof Date) {
                                 SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -142,7 +144,7 @@ public abstract class AbstractExcelSheet implements ExcelSheet {
     }
 
     /**
-     * Creates a cell that is a link to another sheet in the document.
+     * Creates a cell that is a link to another sheet in the document {@link Hyperlink.LINK_DOCUMENT}.
      *
      * @param value
      * @param row

@@ -22,7 +22,11 @@ import java.util.List;
 import java.util.StringJoiner;
 
 /**
- * Implementation of a {@link ExcelSheet} interface for an OCDS Object
+ * Implementation of a {@link ExcelSheet} interface for an OCDS Object.
+ * An OCDS Object can pe exported in several ways:
+ *      * in a separate sheet {@link ExcelExportSepareteSheet}
+ *      * in an existing sheet on a particular row (the object it's part of a main release phases)
+ *      * in an existing row, but exported as a flatten object {@link #writeRowFlattenObject}
  *
  * @author idobre
  * @since 6/7/16
@@ -74,7 +78,8 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
     }
 
     /**
-     * Constructor used to print an OCDS Object in an existing excel sheet
+     * Constructor used to print an OCDS Object in an existing excel sheet.
+     * Normally this Object should be a child of one of the main notice phases.
      *
      * @param workbook
      * @param clazz
@@ -111,26 +116,29 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
                         int coll = row.getLastCellNum() == -1 ? 0 : row.getLastCellNum();
 
                         writeHeaderLabel(field, coll);
-                        writeCell(object == null ? null : PropertyUtils.getProperty(object, field.getName()), row, coll);
+                        writeCell(object == null ? null
+                                : PropertyUtils.getProperty(object, field.getName()), row, coll);
 
                         break;
                     case FieldType.OCDS_OBJECT_FIELD:
-                        if (field.getType().equals(java.util.Set.class) || field.getType().equals(java.util.List.class)) {
+                        final OCDSObjectExcelSheet objectSheet = new OCDSObjectExcelSheet(
+                                this.workbook,
+                                getFieldClass(field),
+                                excelSheetName,
+                                getHeaderPrefix() + field.getName());
+
+                        if (field.getType().equals(java.util.Set.class)
+                                || field.getType().equals(java.util.List.class)) {
                             final List<Object> ocdsFlattenObjects = new ArrayList();
                             if (object != null) {
-                                ocdsFlattenObjects.addAll((Collection) PropertyUtils.getProperty(object, field.getName()));
+                                ocdsFlattenObjects.addAll(
+                                        (Collection) PropertyUtils.getProperty(object, field.getName()));
                             }
 
-                            writeFlattenObject(ocdsFlattenObjects, field, row, field.getName());
+                            objectSheet.writeRowFlattenObject(ocdsFlattenObjects, row);
                         } else {
-                            final OCDSObjectExcelSheet objectSheet = new OCDSObjectExcelSheet(
-                                    this.workbook,
-                                    getFieldClass(field),
-                                    excelSheetName,
-                                    getHeaderPrefix() + field.getName());
-
-                            // print the Object on the same row
-                            objectSheet.writeRow(object == null ? null : PropertyUtils.getProperty(object, field.getName()), row);
+                            objectSheet.writeRow(object == null ? null
+                                    : PropertyUtils.getProperty(object, field.getName()), row);
                         }
 
                         break;
@@ -140,8 +148,10 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
                         final List<Object> ocdsObjectsSeparateSheet = new ArrayList();
 
                         if (object != null) {
-                            if (field.getType().equals(java.util.Set.class) || field.getType().equals(java.util.List.class)) {
-                                ocdsObjectsSeparateSheet.addAll((Collection) PropertyUtils.getProperty(object, field.getName()));
+                            if (field.getType().equals(java.util.Set.class)
+                                    || field.getType().equals(java.util.List.class)) {
+                                ocdsObjectsSeparateSheet.addAll(
+                                        (Collection) PropertyUtils.getProperty(object, field.getName()));
                             } else {
                                 ocdsObjectsSeparateSheet.add(PropertyUtils.getProperty(object, field.getName()));
                             }
@@ -153,13 +163,13 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
                         writeHeaderLabel(field, coll);
 
                         if (rowNumber != -1) {
-                            writeCellLink(field.getName(), row, coll, objectSheetSepareteSheet.getExcelSheetName(), rowNumber);
+                            writeCellLink(field.getName(), row, coll,
+                                    objectSheetSepareteSheet.getExcelSheetName(), rowNumber);
                         } else {
                             writeCell(null, row, coll);
                         }
 
                         break;
-
                     default:
                         LOGGER.error("Undefined field type");
                         break;
@@ -171,7 +181,91 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
     }
 
     /**
-     * Write the objects and return the first number.
+     * Function to flat export an array of objects. Example:
+     * [
+     *      {
+     *          x: aaa,
+     *          y: bbb,
+     *      },
+     *      {
+     *          x: ccc,
+     *          y: ddd,
+     *      }
+     * ]
+     *
+     * Will be printed as:
+     *      |     x     |     y     |
+     *      | aaa ; bbb | ccc ; ddd |
+     *
+     * @param objects
+     * @param row
+     */
+    public void writeRowFlattenObject(final List<Object> objects, final Row row) {
+        final ClassFields classFields = new ClassFieldsExcelExport(
+                new ClassFieldsDefault(clazz)
+        );
+        final Iterator<Field> fields = classFields.getFields();
+
+        while (fields.hasNext()) {
+            final Field field = fields.next();
+
+            final int fieldType = getFieldType(field);
+            try {
+                switch (fieldType) {
+                    case FieldType.BASIC_FIELD:
+                        // get the last 'free' cell
+                        int coll = row.getLastCellNum() == -1 ? 0 : row.getLastCellNum();
+                        StringJoiner flattenValue = new StringJoiner(" | ");
+                        for (Object obj : objects) {
+                            if (obj != null && PropertyUtils.getProperty(obj, field.getName()) != null) {
+                                flattenValue.add(PropertyUtils.getProperty(obj, field.getName()).toString());
+                            }
+                        }
+
+                        writeHeaderLabel(field, coll);
+                        writeCell(flattenValue.toString(), row, coll);
+
+                        break;
+                    case FieldType.OCDS_OBJECT_FIELD:
+                        if (field.getType().equals(java.util.Set.class)
+                                || field.getType().equals(java.util.List.class)) {
+                            LOGGER.error("Unsupported operation for field: '" + field.getName()
+                                    + "'! You can not flatten an array of objects that contains other array of objects "
+                                    + "that need to be printed in other sheet.");
+                        } else {
+                            final List<Object> newObjects = new ArrayList();
+                            for (Object obj : objects) {
+                                if (obj != null && PropertyUtils.getProperty(obj, field.getName()) != null) {
+                                    newObjects.add(PropertyUtils.getProperty(obj, field.getName()));
+                                }
+                            }
+
+                            final OCDSObjectExcelSheet objectSheet = new OCDSObjectExcelSheet(
+                                    this.workbook,
+                                    getFieldClass(field),
+                                    excelSheetName,
+                                    getHeaderPrefix() + field.getName());
+                            objectSheet.writeRowFlattenObject(newObjects, row);
+                        }
+
+                        break;
+                    case FieldType.OCDS_OBJECT_SEPARETE_SHEET_FIELD:
+                        LOGGER.error("Unsupported operation for field: '" + field.getName()
+                                + "'! You can not flatten an array of objects that contains objects "
+                                + "that need to be printed in other sheet.");
+                        break;
+                    default:
+                        LOGGER.error("Undefined field type");
+                        break;
+                }
+            }  catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                LOGGER.error(e);
+            }
+        }
+    }
+
+    /**
+     * Write the objects and return the first row index.
      * Used to create a document link between sheets.
      *
      * @param objects
@@ -204,87 +298,6 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
     }
 
     /**
-     * Helper function to flat print an array of objects. Example:
-     * [
-     *      {
-     *          x: aaa,
-     *          y: bbb,
-     *      },
-     *      {
-     *          x: ccc,
-     *          y: ddd,
-     *      }
-     * ]
-     *
-     * Will be printed as:
-     *      |     x     |     y     |
-     *      | aaa ; bbb | ccc ; ddd |
-     *
-     * @param objects
-     * @param field
-     * @param row
-     * @param labelPrefix
-     */
-    private void writeFlattenObject(final List<Object> objects, Field field, Row row, String labelPrefix) {
-        final ClassFields classFields = new ClassFieldsExcelExport(
-                new ClassFieldsDefault(getFieldClass(field))
-        );
-        final Iterator<Field> fields = classFields.getFields();
-
-        while (fields.hasNext()) {
-            final Field innerField = fields.next();
-
-            final int innerFieldType = getFieldType(innerField);
-            try {
-                switch (innerFieldType) {
-                    case FieldType.BASIC_FIELD:
-                        // get the last 'free' cell
-                        int coll = row.getLastCellNum() == -1 ? 0 : row.getLastCellNum();
-                        StringJoiner flattenValue = new StringJoiner(" | ");
-                        for (Object obj : objects) {
-                            if (obj != null && PropertyUtils.getProperty(obj, innerField.getName()) != null) {
-                                flattenValue.add(PropertyUtils.getProperty(obj, innerField.getName()).toString());
-                            }
-                        }
-
-                        writeHeaderLabel(labelPrefix + "/" + innerField.getName(), coll);
-                        writeCell(flattenValue.toString(), row, coll);
-
-                        break;
-                    case FieldType.OCDS_OBJECT_FIELD:
-                        if (innerField.getType().equals(java.util.Set.class) || innerField.getType().equals(java.util.List.class)) {
-                            LOGGER.error("Unsupported operation for field: '" + innerField.getName() +
-                                    "'! You can not flatten an array of objects that contains other array of objects " +
-                                    "that need to be printed in other sheet.");
-                        } else {
-                            final List<Object> newObjects = new ArrayList();
-                            for (Object obj : objects) {
-                                if (obj != null && PropertyUtils.getProperty(obj, innerField.getName()) != null) {
-                                    newObjects.add(PropertyUtils.getProperty(obj, innerField.getName()));
-                                }
-                            }
-
-                            writeFlattenObject(newObjects, innerField, row, labelPrefix + "/" + innerField.getName());
-                        }
-
-                        break;
-                    case FieldType.OCDS_OBJECT_SEPARETE_SHEET_FIELD:
-                        LOGGER.error("Unsupported operation for field: '" + innerField.getName() +
-                                "'! You can not flatten an array of objects that contains objects " +
-                                "that need to be printed in other sheet.");
-
-                        break;
-                    default:
-                        LOGGER.error("Undefined field type");
-                        break;
-                }
-            }  catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                LOGGER.error(e);
-            }
-        }
-    }
-
-    /**
      * Return the {@link FieldType} of a Field
      * This is used to determine the writing strategy for this particular field
      *
@@ -294,7 +307,7 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
     private int getFieldType(Field field) {
         final Class fieldClass = getFieldClass(field);
 
-        if (FieldType.basicTypes.contains(fieldClass)) {
+        if (FieldType.BASICTYPES.contains(fieldClass)) {
             return FieldType.BASIC_FIELD;
         }
 
@@ -357,18 +370,6 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
 
         if (headerCell == null) {
             writeCell(getHeaderPrefix() + field.getName(), headerRow, coll);
-        }
-    }
-
-    /**
-     * Functions that check if the header cell is empty, if yes then add the label
-     */
-    private void writeHeaderLabel(String label, int coll) {
-        final Row headerRow = excelSheet.getRow(0);
-        final Cell headerCell = headerRow.getCell(coll);
-
-        if (headerCell == null) {
-            writeCell(getHeaderPrefix() + label, headerRow, coll);
         }
     }
 
