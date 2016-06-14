@@ -94,11 +94,6 @@
         </dependency>
 
         <dependency>
-            <groupId>de.flapdoodle.embed</groupId>
-            <artifactId>de.flapdoodle.embed.mongo</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>com.github.fge</groupId>
             <artifactId>json-schema-validator</artifactId>
             <version>${json.schema.validator.version}</version>
@@ -108,12 +103,6 @@
             <groupId>com.github.fge</groupId>
             <artifactId>json-patch</artifactId>
             <version>${json.patch.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>3.13</version>
         </dependency>
 
         <dependency>
@@ -127,13 +116,17 @@
             <artifactId>commons-io</artifactId>
             <version>2.3</version>
         </dependency>
-        
- 		<dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons.lang3.version}</version>
-		</dependency>
-        
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons.lang3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -167,27 +160,27 @@
 
 
 
-<!-- 
-	<plugin>
-		<groupId>org.jsonschema2pojo</groupId>
-		<artifactId>jsonschema2pojo-maven-plugin</artifactId>
-		<version>0.4.23</version>
-		<configuration>
-			<sourceDirectory>${basedir}/src/main/resources/record-package-schema.json</sourceDirectory>
-			<targetPackage>org.devgateway.ocds.generated.record</targetPackage>
-		</configuration>
-		<executions>
-			<execution>
-				<goals>
-					<goal>generate</goal>
-				</goals>
-			</execution>
-		</executions>
-	</plugin>
-     
+            <!--
+                <plugin>
+                    <groupId>org.jsonschema2pojo</groupId>
+                    <artifactId>jsonschema2pojo-maven-plugin</artifactId>
+                    <version>0.4.23</version>
+                    <configuration>
+                        <sourceDirectory>${basedir}/src/main/resources/record-package-schema.json</sourceDirectory>
+                        <targetPackage>org.devgateway.ocds.generated.record</targetPackage>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>generate</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
 
- -->
-    
+
+             -->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>

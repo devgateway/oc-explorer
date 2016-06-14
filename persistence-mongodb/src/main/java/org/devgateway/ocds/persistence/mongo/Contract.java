@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -52,6 +54,7 @@ public class Contract {
      * (Required)
      *
      */
+    @ExcelExport
     @JsonProperty("id")
     private String id;
 
@@ -62,6 +65,7 @@ public class Contract {
      * (Required)
      *
      */
+    @ExcelExport
     @JsonProperty("awardID")
     private String awardID;
 
@@ -69,6 +73,7 @@ public class Contract {
      * Contract title
      *
      */
+    @ExcelExport
     @JsonProperty("title")
     private String title;
 
@@ -76,6 +81,7 @@ public class Contract {
      * Contract description
      *
      */
+    @ExcelExport
     @JsonProperty("description")
     private String description;
 
@@ -87,6 +93,7 @@ public class Contract {
      *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists/#contract-status)
      *
      */
+    @ExcelExport
     @JsonProperty("status")
     private Status status;
 
@@ -96,9 +103,11 @@ public class Contract {
      *
      *
      */
+    @ExcelExport
     @JsonProperty("period")
     private Period period;
 
+    @ExcelExport
     @JsonProperty("value")
     private Amount value;
 
@@ -109,6 +118,8 @@ public class Contract {
      * Note: If the items are the same as the award do not repeat.
      *
      */
+    @ExcelExport
+    @ExcelExportSepareteSheet
     @JsonProperty("items")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
     private Set<Item> items = new LinkedHashSet<Item>();
@@ -117,6 +128,7 @@ public class Contract {
      * The date the contract was signed. In the case of multiple signatures, the date of the last signature.
      *
      */
+    @ExcelExport
     @JsonProperty("dateSigned")
     private Date dateSigned;
 
@@ -143,6 +155,7 @@ public class Contract {
      * Information during the performance / implementation stage of the contract.
      *
      */
+    @ExcelExport
     @JsonProperty("implementation")
     private Implementation implementation;
 

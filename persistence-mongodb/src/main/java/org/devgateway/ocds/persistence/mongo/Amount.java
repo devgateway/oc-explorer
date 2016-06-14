@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 import java.math.BigDecimal;
 
@@ -27,6 +28,7 @@ public class Amount {
      * Amount as a number.
      *
      */
+    @ExcelExport
     @JsonProperty("amount")
     private BigDecimal amount;
 
@@ -34,6 +36,7 @@ public class Amount {
      * The currency in 3-letter ISO 4217 format.
      *
      */
+    @ExcelExport
     @JsonProperty("currency")
     private String currency;
 
