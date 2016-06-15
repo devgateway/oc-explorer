@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 /**
  * Budget Information
@@ -58,9 +59,11 @@ public class Budget {
      * or the programme used to fund this project.
      *
      */
+    @ExcelExport
     @JsonProperty("description")
     private String description;
 
+    @ExcelExport
     @JsonProperty("amount")
     private Amount amount;
 
@@ -73,6 +76,7 @@ public class Budget {
      * can be provided in third-party data, linked from the data source above.
      *
      */
+    @ExcelExport
     @JsonProperty("project")
     private String project;
 

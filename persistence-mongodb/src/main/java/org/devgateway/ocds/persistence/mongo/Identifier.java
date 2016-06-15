@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 /**
  *  Identifier OCDS entity http://standard.open-contracting.org/latest/en/schema/reference/#identifier
@@ -27,6 +28,7 @@ public class Identifier {
      *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists/#organization-identifier-scheme).
      *
      */
+    @ExcelExport
     @JsonProperty("scheme")
     private String scheme;
 
@@ -34,6 +36,7 @@ public class Identifier {
      * The identifier of the organization in the selected scheme.
      *
      */
+    @ExcelExport
     @JsonProperty("id")
     private String id;
 
@@ -41,6 +44,7 @@ public class Identifier {
      * The legally registered name of the organization.
      *
      */
+    @ExcelExport
     @JsonProperty("legalName")
     private String legalName;
 
@@ -51,6 +55,7 @@ public class Identifier {
      * hat can be done through the url field of the Organization contact point.
      *
      */
+    @ExcelExport
     @JsonProperty("uri")
     private String uri;
 

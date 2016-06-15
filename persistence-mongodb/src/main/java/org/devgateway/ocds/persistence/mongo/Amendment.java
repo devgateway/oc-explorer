@@ -32,6 +32,7 @@ public class Amendment {
      * The data of this amendment.
      *
      */
+
     @JsonProperty("date")
     private Date date;
 

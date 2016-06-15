@@ -1,5 +1,17 @@
 package org.devgateway.ocds.persistence.mongo;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -7,17 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 
 /**
@@ -66,6 +67,7 @@ public class Tender {
      * (Required)
      *
      */
+    @ExcelExport
     @JsonProperty("id")
     private String id;
 
@@ -73,6 +75,7 @@ public class Tender {
      * Tender title
      *
      */
+    @ExcelExport
     @JsonProperty("title")
     private String title;
 
@@ -80,6 +83,7 @@ public class Tender {
      * Tender description
      *
      */
+    @ExcelExport
     @JsonProperty("description")
     private String description;
 
@@ -90,6 +94,7 @@ public class Tender {
      * [tenderStatus codelist](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#tender-status)
      *
      */
+    @ExcelExport
     @JsonProperty("status")
     private Status status;
 
@@ -100,13 +105,17 @@ public class Tender {
      * Items should not be duplicated, but a quantity of 2 specified instead.
      *
      */
+    @ExcelExport
+    @ExcelExportSepareteSheet
     @JsonProperty("items")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
     private Set<Item> items = new LinkedHashSet<Item>();
 
+    @ExcelExport
     @JsonProperty("minValue")
     private Amount minValue;
 
+    @ExcelExport
     @JsonProperty("value")
     private Amount value;
 
@@ -117,6 +126,7 @@ public class Tender {
      * Open, Selective, Limited
      *
      */
+    @ExcelExport
     @JsonProperty("procurementMethod")
     private ProcurementMethod procurementMethod;
 
@@ -124,6 +134,7 @@ public class Tender {
      * Rationale of procurement method, especially in the case of Limited tendering.
      *
      */
+    @ExcelExport
     @JsonProperty("procurementMethodRationale")
     private String procurementMethodRationale;
 
@@ -132,6 +143,7 @@ public class Tender {
      * [award criteria codelist](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#award-criteria)
      *
      */
+    @ExcelExport
     @JsonProperty("awardCriteria")
     private String awardCriteria;
 
@@ -139,6 +151,7 @@ public class Tender {
      * Any detailed or further information on the award or selection criteria.
      *
      */
+    @ExcelExport
     @JsonProperty("awardCriteriaDetails")
     private String awardCriteriaDetails;
 
@@ -149,6 +162,7 @@ public class Tender {
      *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#submission-method)
      *
      */
+    @ExcelExport
     @JsonProperty("submissionMethod")
     private Set<String> submissionMethod = new TreeSet<String>();
 
@@ -158,6 +172,7 @@ public class Tender {
      * and any special requirements to be followed for submissions.
      *
      */
+    @ExcelExport
     @JsonProperty("submissionMethodDetails")
     private String submissionMethodDetails;
 
@@ -167,6 +182,7 @@ public class Tender {
      *
      *
      */
+    @ExcelExport
     @JsonProperty("tenderPeriod")
     private Period tenderPeriod;
 
@@ -202,6 +218,7 @@ public class Tender {
     @JsonProperty("awardPeriod")
     private Period awardPeriod;
 
+    @ExcelExport
     @JsonProperty("numberOfTenderers")
     private Integer numberOfTenderers;
 
@@ -209,6 +226,7 @@ public class Tender {
      * All entities who submit a tender.
      *
      */
+    @ExcelExport
     @JsonProperty("tenderers")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
     private Set<Organization> tenderers = new LinkedHashSet<Organization>();
@@ -219,6 +237,7 @@ public class Tender {
      * An organization.
      *
      */
+    @ExcelExport
     @JsonProperty("procuringEntity")
     private Organization procuringEntity;
 
@@ -228,6 +247,7 @@ public class Tender {
      * for details of potential documents to include.
      *
      */
+    @ExcelExport
     @JsonProperty("documents")
     private List<Document> documents = new ArrayList<Document>();
 
@@ -938,17 +958,17 @@ public class Tender {
         }
 
     }
-    
-    
-    
+
+
+
     public enum SubmissionMethod {
-    	electronicAuction("electronicAuction"),
+        electronicAuction("electronicAuction"),
 
-    	electronicSubmission("electronicSubmission"),
+        electronicSubmission("electronicSubmission"),
 
-    	written("written"),
-    	
-    	inPerson("inPerson");
+        written("written"),
+
+        inPerson("inPerson");
 
         private final String value;
 
@@ -972,7 +992,7 @@ public class Tender {
 
         @JsonCreator
         public static SubmissionMethod fromValue(String value) {
-        	SubmissionMethod constant = CONSTANTS.get(value);
+            SubmissionMethod constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
             } else {

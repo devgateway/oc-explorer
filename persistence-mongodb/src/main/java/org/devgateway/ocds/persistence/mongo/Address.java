@@ -1,12 +1,12 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 
 /**
@@ -30,6 +30,7 @@ public class Address {
      * The street address. For example, 1600 Amphitheatre Pkwy.
      *
      */
+    @ExcelExport
     @JsonProperty("streetAddress")
     private String streetAddress;
 
@@ -37,6 +38,7 @@ public class Address {
      * The locality. For example, Mountain View.
      *
      */
+    @ExcelExport
     @JsonProperty("locality")
     private String locality;
 
@@ -44,6 +46,7 @@ public class Address {
      * The region. For example, CA.
      *
      */
+    @ExcelExport
     @JsonProperty("region")
     private String region;
 
@@ -51,6 +54,7 @@ public class Address {
      * The postal code. For example, 94043.
      *
      */
+    @ExcelExport
     @JsonProperty("postalCode")
     private String postalCode;
 
@@ -58,9 +62,9 @@ public class Address {
      * The country name. For example, United States.
      *
      */
+    @ExcelExport
     @JsonProperty("countryName")
     private String countryName;
-    @JsonIgnore
 
     /**
      * The street address. For example, 1600 Amphitheatre Pkwy.

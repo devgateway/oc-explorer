@@ -57,10 +57,11 @@ public class TotalCancelledTendersByYearController extends GenericOCDSController
         project.put("year", year);
         project.put("tender.value.amount", 1);
 
-        Aggregation agg = newAggregation(match(where("tender.status").is("cancelled")),
-                getMatchDefaultFilterOperation(filter), new CustomOperation(new BasicDBObject("$project", project)),
-                group("$year").sum("$tender.value.amount").as("totalCancelledTendersAmount"),
-                sort(Direction.ASC, Fields.UNDERSCORE_ID));
+		Aggregation agg = newAggregation(
+				match(where("tender.status").is("cancelled").and("tender.tenderPeriod.startDate").exists(true)),
+				getMatchDefaultFilterOperation(filter), new CustomOperation(new BasicDBObject("$project", project)),
+				group("$year").sum("$tender.value.amount").as("totalCancelledTendersAmount"),
+				sort(Direction.ASC, Fields.UNDERSCORE_ID));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> list = results.getMappedResults();

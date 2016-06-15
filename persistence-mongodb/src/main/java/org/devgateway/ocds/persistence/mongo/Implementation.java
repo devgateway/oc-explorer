@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -32,9 +33,10 @@ public class Implementation {
      * A list of the spending transactions made against this contract
      *
      */
+    @ExcelExport
     @JsonProperty("transactions")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
-    private Set<Transaction> transactions = new LinkedHashSet<Transaction>();
+    private Set<Transaction> transactions = new LinkedHashSet<>();
 
     /**
      * As milestones are completed, milestone completions should be documented.

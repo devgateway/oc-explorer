@@ -1,8 +1,9 @@
 package org.devgateway.ocvn.persistence.mongo.reader;
 
+import java.text.ParseException;
+
 import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Award;
-import org.devgateway.ocds.persistence.mongo.Identifier;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.Tag;
 import org.devgateway.ocds.persistence.mongo.Tender;
@@ -16,8 +17,6 @@ import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
 import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
 import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository;
-
-import java.text.ParseException;
 
 /**
  * Specific {@link RowImporter} for eBid Awards {@link VNAward} in the custom
@@ -69,22 +68,24 @@ public class EBidAwardRowImporter extends ReleaseRowImporter {
 		award.setValue(value);
 
 		VNOrganization supplier = organizationRepository.findOne(getRowCell(row, 2));
-
+		
 		if (supplier == null) {
 			supplier = new VNOrganization();
-			Identifier supplierId = new Identifier();
-			supplierId.setId(getRowCell(row, 2));
-			supplier.setIdentifier(supplierId);
+			supplier.setName(getRowCell(row, 2));
 			supplier = organizationRepository.insert(supplier);
-		}
+		}		
 
-		award.getSuppliers().add(supplier);
+		award.setStatus("Y".equals(getRowCell(row, 5)) ? Award.Status.active : Award.Status.unsuccesful);
+		
+		// active=successful awards have suppliers
+		if (Award.Status.active.equals(award.getStatus())) {
+			award.getSuppliers().add(supplier);
+		}
 
 		award.setContractTime(getRowCell(row, 3));
 
 		award.setBidOpenRank(getInteger(getRowCell(row, 4)));
 
-		award.setStatus("Y".equals(getRowCell(row, 5)) ? Award.Status.active : Award.Status.unsuccesful);
 
 		award.setInelibigleYN(getRowCell(row, 6));
 
@@ -92,13 +93,9 @@ public class EBidAwardRowImporter extends ReleaseRowImporter {
 
 		award.setDate(getExcelDate(getRowCell(row, 8)));
 
-		// For unsuccessful awards (in both eBid and Offline bid tabs), map the
-		// information on the bidder (supplier) to tender.tenderers for that
-		// BID_NO
-		// we ignore the fields if there are no tenders found
-		if (award.getStatus().equals(Award.Status.unsuccesful)) {
-			release.getTender().getTenderers().add(supplier);
-		}
+		//regardless if the award is active or not, we add the supplier to tenderers
+		release.getTender().getTenderers().add(supplier);
+
 		release.getTender().setNumberOfTenderers(release.getTender().getTenderers().size());
 
 		return release;
