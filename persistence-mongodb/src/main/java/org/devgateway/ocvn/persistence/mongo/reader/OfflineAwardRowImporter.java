@@ -81,7 +81,7 @@ public class OfflineAwardRowImporter extends ReleaseRowImporter {
 			supplier = organizationRepository.insert(supplier);
 		}
 
-		award.setStatus("Y".equals(getRowCell(row, 5)) ? Award.Status.active : Award.Status.unsuccesful);
+		award.setStatus("Y".equals(getRowCell(row, 5)) ? Award.Status.active : Award.Status.unsuccessful);
 
 		// active=successful awards have suppliers
 		if (Award.Status.active.equals(award.getStatus())) {
