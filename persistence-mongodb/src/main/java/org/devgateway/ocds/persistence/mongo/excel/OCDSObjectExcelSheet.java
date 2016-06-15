@@ -17,8 +17,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 
 /**
@@ -45,6 +47,12 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
     private int parentRowNumber;
 
     private final String headerPrefix;
+
+    private static Map<Class, ClassFields> classFieldsCache;
+
+    static {
+        classFieldsCache = new HashMap<>();
+    }
 
     /**
      * Constructor used to print an OCDS Object in a separate excel sheet.
@@ -111,9 +119,14 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
 
     @Override
     public void writeRow(final Object object, final Row row) {
-        final ClassFields classFields = new ClassFieldsExcelExport(
-                new ClassFieldsDefault(clazz)
-        );
+        final ClassFields classFields;
+        if (classFieldsCache.get(clazz) != null) {
+            classFields = classFieldsCache.get(clazz);
+        } else {
+            classFields = new ClassFieldsExcelExport(
+                    new ClassFieldsDefault(clazz)
+            );
+        }
         final Iterator<Field> fields = classFields.getFields();
 
         // first row should be the parent name with a link
@@ -219,9 +232,14 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
      * @param row
      */
     public void writeRowFlattenObject(final List<Object> objects, final Row row) {
-        final ClassFields classFields = new ClassFieldsExcelExport(
-                new ClassFieldsDefault(clazz)
-        );
+        final ClassFields classFields;
+        if (classFieldsCache.get(clazz) != null) {
+            classFields = classFieldsCache.get(clazz);
+        } else {
+            classFields = new ClassFieldsExcelExport(
+                    new ClassFieldsDefault(clazz)
+            );
+        }
         final Iterator<Field> fields = classFields.getFields();
 
         while (fields.hasNext()) {

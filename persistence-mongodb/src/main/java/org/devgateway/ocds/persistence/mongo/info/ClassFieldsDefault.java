@@ -11,13 +11,18 @@ import java.util.Iterator;
 public final class ClassFieldsDefault implements ClassFields {
     private final Class clazz;
 
+    private Field[] declaredFields;
+
     public ClassFieldsDefault(Class clazz) {
         this.clazz = clazz;
     }
 
     @Override
     public Iterator<Field> getFields() {
-        final Field[] declaredFields = clazz.getDeclaredFields();
+        // cache declared fields of a class
+        if (declaredFields == null) {
+            declaredFields = clazz.getDeclaredFields();
+        }
 
         // filter some of the fields including this$0 used in inner classes
         Iterator<Field> fields = Arrays.stream(declaredFields)

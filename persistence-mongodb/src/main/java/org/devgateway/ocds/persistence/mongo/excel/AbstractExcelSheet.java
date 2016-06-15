@@ -26,11 +26,11 @@ import java.util.Set;
 public abstract class AbstractExcelSheet implements ExcelSheet {
     protected final Workbook workbook;
 
-    private final Font dataFont;
+    private Font dataFont;
 
-    private final Font headerFont;
+    private Font headerFont;
 
-    private final Font linkFont;
+    private Font linkFont;
 
     private final CellStyle dataStyleCell;
 
@@ -43,45 +43,54 @@ public abstract class AbstractExcelSheet implements ExcelSheet {
     // declare only one cell object reference
     private Cell cell = null;
 
-    AbstractExcelSheet(final Workbook workbook) {
+    public AbstractExcelSheet(final Workbook workbook) {
         this.workbook = workbook;
 
-        // init the fonts and styles
-        this.dataFont = this.workbook.createFont();
-        this.dataFont.setFontHeightInPoints((short) 12);
-        this.dataFont.setFontName("Times New Roman");
-        this.dataFont.setColor(HSSFColor.BLACK.index);
+        // get the styles from workbook without creating them again (by default the workbook has already 1 style)
+        if (workbook.getNumCellStyles() > 1) {
+            this.dataStyleCell = workbook.getCellStyleAt((short) 1);
 
-        this.headerFont = this.workbook.createFont();
-        this.headerFont.setFontHeightInPoints((short) 14);
-        this.headerFont.setFontName("Times New Roman");
-        this.headerFont.setColor(HSSFColor.BLACK.index);
-        this.headerFont.setBold(true);
+            this.headerStyleCell = workbook.getCellStyleAt((short) 2);
 
-        this.linkFont = this.workbook.createFont();
-        this.linkFont.setFontHeightInPoints((short) 12);
-        this.linkFont.setFontName("Times New Roman");
-        // by default hyperlinks are blue and underlined
-        this.linkFont.setColor(HSSFColor.BLUE.index);
-        this.linkFont.setUnderline(Font.U_SINGLE);
+            this.linkStyleCell = workbook.getCellStyleAt((short) 3);
+        } else {
+            // init the fonts and styles
+            this.dataFont = this.workbook.createFont();
+            this.dataFont.setFontHeightInPoints((short) 12);
+            this.dataFont.setFontName("Times New Roman");
+            this.dataFont.setColor(HSSFColor.BLACK.index);
 
-        this.dataStyleCell = this.workbook.createCellStyle();
-        this.dataStyleCell.setAlignment(CellStyle.ALIGN_LEFT);
-        this.dataStyleCell.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
-        this.dataStyleCell.setWrapText(true);
-        this.dataStyleCell.setFont(this.dataFont);
+            this.headerFont = this.workbook.createFont();
+            this.headerFont.setFontHeightInPoints((short) 14);
+            this.headerFont.setFontName("Times New Roman");
+            this.headerFont.setColor(HSSFColor.BLACK.index);
+            this.headerFont.setBold(true);
 
-        this.headerStyleCell = this.workbook.createCellStyle();
-        this.headerStyleCell.setAlignment(CellStyle.ALIGN_CENTER);
-        this.headerStyleCell.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
-        this.headerStyleCell.setWrapText(true);
-        this.headerStyleCell.setFont(this.headerFont);
+            this.linkFont = this.workbook.createFont();
+            this.linkFont.setFontHeightInPoints((short) 12);
+            this.linkFont.setFontName("Times New Roman");
+            // by default hyperlinks are blue and underlined
+            this.linkFont.setColor(HSSFColor.BLUE.index);
+            this.linkFont.setUnderline(Font.U_SINGLE);
 
-        this.linkStyleCell = this.workbook.createCellStyle();
-        this.linkStyleCell.setAlignment(CellStyle.ALIGN_LEFT);
-        this.linkStyleCell.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
-        this.linkStyleCell.setWrapText(true);
-        this.linkStyleCell.setFont(this.linkFont);
+            this.dataStyleCell = this.workbook.createCellStyle();
+            this.dataStyleCell.setAlignment(CellStyle.ALIGN_LEFT);
+            this.dataStyleCell.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+            this.dataStyleCell.setWrapText(true);
+            this.dataStyleCell.setFont(this.dataFont);
+
+            this.headerStyleCell = this.workbook.createCellStyle();
+            this.headerStyleCell.setAlignment(CellStyle.ALIGN_CENTER);
+            this.headerStyleCell.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+            this.headerStyleCell.setWrapText(true);
+            this.headerStyleCell.setFont(this.headerFont);
+
+            this.linkStyleCell = this.workbook.createCellStyle();
+            this.linkStyleCell.setAlignment(CellStyle.ALIGN_LEFT);
+            this.linkStyleCell.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+            this.linkStyleCell.setWrapText(true);
+            this.linkStyleCell.setFont(this.linkFont);
+        }
 
         this.createHelper = workbook.getCreationHelper();
     }
@@ -139,12 +148,13 @@ public abstract class AbstractExcelSheet implements ExcelSheet {
                 cell.setCellStyle(dataStyleCell);
             }
         } else {
-            cell = row.createCell(column, Cell.CELL_TYPE_BLANK);
+            // create a Cell.CELL_TYPE_BLANK
+            row.createCell(column);
         }
     }
 
     /**
-     * Creates a cell that is a link to another sheet in the document {@link Hyperlink.LINK_DOCUMENT}.
+     * Creates a cell that is a link to another sheet in the document {@link Hyperlink#LINK_DOCUMENT}.
      *
      * @param value
      * @param row

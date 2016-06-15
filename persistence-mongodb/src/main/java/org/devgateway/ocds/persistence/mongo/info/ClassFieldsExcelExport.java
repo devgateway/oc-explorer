@@ -4,6 +4,7 @@ import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
@@ -15,17 +16,23 @@ import java.util.stream.StreamSupport;
 public final class ClassFieldsExcelExport implements ClassFields {
     private final ClassFields original;
 
+    private Stream<Field> stream;
+
     public ClassFieldsExcelExport(final ClassFields classFields) {
         this.original = classFields;
     }
 
     @Override
     public Iterator<Field> getFields() {
-        final Iterable<Field> originalFields = () -> this.original.getFields();
+        // cache the stream
+        if (stream == null) {
+            final Iterable<Field> originalFields = () -> this.original.getFields();
 
-        // return only classes that are annotated with @ExcelExport
-        return StreamSupport.stream(originalFields.spliterator(), false)
-                .filter(field -> field.getAnnotation(ExcelExport.class) != null)
-                .iterator();
+            // return only classes that are annotated with @ExcelExport
+            stream = StreamSupport.stream(originalFields.spliterator(), false)
+                    .filter(field -> field.getAnnotation(ExcelExport.class) != null);
+        }
+
+        return stream.iterator();
     }
 }
