@@ -122,7 +122,6 @@ public class Release implements Identifiable {
      *
      */
     @ExcelExport
-    @ExcelExportSepareteSheet
     @JsonProperty("planning")
     private Planning planning;
 

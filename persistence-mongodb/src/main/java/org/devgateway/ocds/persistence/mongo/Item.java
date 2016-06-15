@@ -34,6 +34,7 @@ public class Item {
      * (Required)
      *
      */
+    @ExcelExport
     @JsonProperty("id")
     private String id;
 

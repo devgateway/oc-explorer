@@ -19,4 +19,6 @@ public interface ExcelSheet {
     void writeRow(final Object object, final Row row);
 
     void writeSheet(final List<Object> objects);
+
+    void emptySheet();
 }
