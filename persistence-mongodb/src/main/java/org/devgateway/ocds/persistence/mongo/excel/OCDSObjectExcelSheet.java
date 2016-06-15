@@ -124,7 +124,7 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
             classFields = classFieldsCache.get(clazz);
         } else {
             classFields = new ClassFieldsExcelExport(
-                    new ClassFieldsDefault(clazz)
+                    new ClassFieldsDefault(clazz, true)
             );
         }
         final Iterator<Field> fields = classFields.getFields();
@@ -237,7 +237,7 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
             classFields = classFieldsCache.get(clazz);
         } else {
             classFields = new ClassFieldsExcelExport(
-                    new ClassFieldsDefault(clazz)
+                    new ClassFieldsDefault(clazz, true)
             );
         }
         final Iterator<Field> fields = classFields.getFields();
