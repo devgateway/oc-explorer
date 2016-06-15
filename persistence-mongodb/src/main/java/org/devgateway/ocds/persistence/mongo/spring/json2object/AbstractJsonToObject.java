@@ -1,6 +1,7 @@
 package org.devgateway.ocds.persistence.mongo.spring.json2object;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 
@@ -27,6 +28,9 @@ public abstract class AbstractJsonToObject<T> implements JsonToObject<T> {
         // this are non-standard features that are disabled by default.
         mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
         mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.configure(JsonParser.Feature.IGNORE_UNDEFINED, true);
 
         // Note that enabling this feature will incur performance overhead
         // due to having to store and check additional information: this typically
