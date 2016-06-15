@@ -7,5 +7,9 @@ export default {
   },
   decCounter(){
     dispatcher.dispatch(constants.DEC_COUNTER);
+  },
+  setLocale(loc){
+    localStorage.lang = loc;
+    dispatcher.dispatch(constants.LOCALE_CHANGED, loc);
   }
 }

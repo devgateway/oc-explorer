@@ -1,3 +1,15 @@
 language: java
+sudo: false
+cache:
+    directories:
+        - $HOME/.m2
+        - $HOME/.embedmongo
+        - ui/node_modules
+        - ui/node
+env:
+    global:
+        - MAVEN_OPTS="-XX:MaxPermSize=2g -Xmx4g"
+        - JAVA_OPTS="-XX:MaxPermSize=2g -Xmx4g"
+script: mvn test -B --quiet
 jdk:
-  - oraclejdk8
+    - oraclejdk8
