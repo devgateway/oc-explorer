@@ -91,7 +91,7 @@ public class EBidAwardRowImporter extends ReleaseRowImporter {
 
 		award.setIneligibleRson(getRowCell(row, 7));
 
-		award.setDate(getExcelDate(getRowCell(row, 8)));
+		award.setDate(getExcelDate(getRowCell(row, 9)));
 
 		//regardless if the award is active or not, we add the supplier to tenderers
 		release.getTender().getTenderers().add(supplier);
