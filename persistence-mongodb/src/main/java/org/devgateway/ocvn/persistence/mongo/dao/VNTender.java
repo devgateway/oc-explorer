@@ -4,6 +4,7 @@
 package org.devgateway.ocvn.persistence.mongo.dao;
 
 import org.devgateway.ocds.persistence.mongo.Tender;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 import java.util.Date;
 
@@ -12,8 +13,10 @@ import java.util.Date;
  *         fields
  */
 public class VNTender extends Tender {
+    @ExcelExport
     private Integer bidMethod;
 
+    @ExcelExport
     private ContrMethod contrMethod;
 
     private String approveState;
@@ -22,11 +25,16 @@ public class VNTender extends Tender {
 
     private String modYn;
 
+    @ExcelExport
     private String procurementMethodDetails;
-    
+
+    @ExcelExport
     private String publicationMethod; 
     
-    private String cancellationRationale;       
+    private String cancellationRationale;
+
+    @ExcelExport
+    private Date bidOpenDt;
 
     public String getCancellationRationale() {
 		return cancellationRationale;
@@ -60,8 +68,6 @@ public class VNTender extends Tender {
         this.procurementMethodDetails = procurementMethodDetails;
     }
 
-    private Date bidOpenDt;
-
     public Integer getBidMethod() {
         return bidMethod;
     }
@@ -69,7 +75,6 @@ public class VNTender extends Tender {
     public void setBidMethod(final Integer bidMethod) {
         this.bidMethod = bidMethod;
     }
-
 
     public String getApproveState() {
         return approveState;

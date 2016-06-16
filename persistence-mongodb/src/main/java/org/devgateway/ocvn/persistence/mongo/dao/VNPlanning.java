@@ -4,6 +4,7 @@
 package org.devgateway.ocvn.persistence.mongo.dao;
 
 import org.devgateway.ocds.persistence.mongo.Planning;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 import java.util.Date;
 
@@ -18,8 +19,10 @@ public class VNPlanning extends Planning {
 
     private Integer bidPlanProjectFund;
 
+    @ExcelExport
     private Date bidPlanProjectDateApprove;
 
+    @ExcelExport
     private String bidNo;
 
     public Date getBidPlanProjectDateIssue() {

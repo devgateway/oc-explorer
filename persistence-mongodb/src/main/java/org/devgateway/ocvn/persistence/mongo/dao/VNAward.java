@@ -5,6 +5,7 @@ package org.devgateway.ocvn.persistence.mongo.dao;
 
 import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Award;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 /**
  * @author mihai
@@ -17,8 +18,10 @@ public class VNAward extends Award {
 
     private Integer bidOpenRank;
 
+    @ExcelExport
     private Integer bidType;
 
+    @ExcelExport
     private Integer bidSuccMethod;
 
     private Amount bidPrice;
