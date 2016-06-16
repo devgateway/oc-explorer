@@ -31,7 +31,6 @@ public class Classification implements Identifiable {
      *  wherever possible.
      *
      */
-    @ExcelExport
     @JsonProperty("scheme")
     private String scheme;
 

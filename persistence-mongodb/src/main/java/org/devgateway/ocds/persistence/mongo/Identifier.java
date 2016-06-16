@@ -28,7 +28,6 @@ public class Identifier {
      *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists/#organization-identifier-scheme).
      *
      */
-    @ExcelExport
     @JsonProperty("scheme")
     private String scheme;
 
@@ -55,7 +54,6 @@ public class Identifier {
      * hat can be done through the url field of the Organization contact point.
      *
      */
-    @ExcelExport
     @JsonProperty("uri")
     private String uri;
 

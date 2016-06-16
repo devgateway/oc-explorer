@@ -3,6 +3,7 @@
  */
 package org.devgateway.ocvn.persistence.mongo.dao;
 
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 import org.springframework.data.annotation.Id;
 
 /**
@@ -10,10 +11,10 @@ import org.springframework.data.annotation.Id;
  *
  */
 public class ContrMethod {
-
     @Id
     private Integer id;
 
+    @ExcelExport
     private String details;
 
     public Integer getId() {

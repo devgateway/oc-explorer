@@ -9,6 +9,7 @@ import java.util.List;
 import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Budget;
 import org.devgateway.ocds.persistence.mongo.Classification;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 /**
  * @author mpostelnicu
@@ -23,6 +24,7 @@ public class VNBudget extends Budget {
         
     private Amount projectAmount;
 
+    @ExcelExport
     private List<VNLocation> projectLocation = new ArrayList<>();
 
     public Classification getProjectClassification() {
