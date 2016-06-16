@@ -1,5 +1,6 @@
 package org.devgateway.ocds.persistence.mongo.excel;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -14,7 +15,6 @@ import org.devgateway.ocds.persistence.mongo.info.ClassFieldsExcelExport;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -48,7 +48,7 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
 
     private final String headerPrefix;
 
-    private static Map<Class, ClassFields> classFieldsCache;
+    private static Map<Class, List<Field>> classFieldsCache;
 
     static {
         classFieldsCache = new HashMap<>();
@@ -119,15 +119,19 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
 
     @Override
     public void writeRow(final Object object, final Row row) {
-        final ClassFields classFields;
+        final Iterator<Field> fields;
+
         if (classFieldsCache.get(clazz) != null) {
-            classFields = classFieldsCache.get(clazz);
+            List<Field> fieldsList = classFieldsCache.get(clazz);
+            fields = fieldsList.iterator();
         } else {
-            classFields = new ClassFieldsExcelExport(
+            final ClassFields classFields = new ClassFieldsExcelExport(
                     new ClassFieldsDefault(clazz, true)
             );
+
+            fields = classFields.getFields();
+            classFieldsCache.put(clazz, Lists.newArrayList(classFields.getFields()));
         }
-        final Iterator<Field> fields = classFields.getFields();
 
         // first row should be the parent name with a link
         if (parent != null) {
@@ -138,7 +142,7 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
         while (fields.hasNext()) {
             final Field field = fields.next();
 
-            final int fieldType = getFieldType(field);
+            final int fieldType = OCDSObjectUtil.getFieldType(field);
             try {
                 switch (fieldType) {
                     case FieldType.BASIC_FIELD:
@@ -153,7 +157,7 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
                     case FieldType.OCDS_OBJECT_FIELD:
                         final OCDSObjectExcelSheet objectSheet = new OCDSObjectExcelSheet(
                                 this.workbook,
-                                getFieldClass(field),
+                                OCDSObjectUtil.getFieldClass(field),
                                 excelSheetName,
                                 getHeaderPrefix() + field.getName());
 
@@ -174,7 +178,7 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
                         break;
                     case FieldType.OCDS_OBJECT_SEPARETE_SHEET_FIELD:
                         final OCDSObjectExcelSheet objectSheetSepareteSheet = new OCDSObjectExcelSheet(
-                                this.workbook, getFieldClass(field), excelSheetName, row.getRowNum() + 1);
+                                this.workbook, OCDSObjectUtil.getFieldClass(field), excelSheetName, row.getRowNum() + 1);
                         final List<Object> ocdsObjectsSeparateSheet = new ArrayList();
 
                         if (object != null && PropertyUtils.getProperty(object, field.getName()) != null) {
@@ -232,20 +236,25 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
      * @param row
      */
     public void writeRowFlattenObject(final List<Object> objects, final Row row) {
-        final ClassFields classFields;
+        final Iterator<Field> fields;
+
         if (classFieldsCache.get(clazz) != null) {
-            classFields = classFieldsCache.get(clazz);
+            List<Field> fieldsList = classFieldsCache.get(clazz);
+            fields = fieldsList.iterator();
         } else {
-            classFields = new ClassFieldsExcelExport(
+            final ClassFields classFields = new ClassFieldsExcelExport(
                     new ClassFieldsDefault(clazz, true)
             );
+
+            fields = classFields.getFields();
+
+            classFieldsCache.put(clazz, Lists.newArrayList(classFields.getFields()));
         }
-        final Iterator<Field> fields = classFields.getFields();
 
         while (fields.hasNext()) {
             final Field field = fields.next();
 
-            final int fieldType = getFieldType(field);
+            final int fieldType = OCDSObjectUtil.getFieldType(field);
             try {
                 switch (fieldType) {
                     case FieldType.BASIC_FIELD:
@@ -278,7 +287,7 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
 
                             final OCDSObjectExcelSheet objectSheet = new OCDSObjectExcelSheet(
                                     this.workbook,
-                                    getFieldClass(field),
+                                    OCDSObjectUtil.getFieldClass(field),
                                     excelSheetName,
                                     getHeaderPrefix() + field.getName());
                             objectSheet.writeRowFlattenObject(newObjects, row);
@@ -331,62 +340,6 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
                 writeRow(obj, row);
             }
         }
-    }
-
-    /**
-     * Return the {@link FieldType} of a Field
-     * This is used to determine the writing strategy for this particular field
-     *
-     * @param field
-     * @return
-     */
-    private int getFieldType(Field field) {
-        final Class fieldClass = getFieldClass(field);
-
-        if (FieldType.BASICTYPES.contains(fieldClass)) {
-            return FieldType.BASIC_FIELD;
-        }
-
-        // check if this is an OCDS Object (an Object defined in our application)
-        final String classPackage = fieldClass.getName().substring(0, fieldClass.getName().lastIndexOf('.'));
-        if (classPackage.contains("org.devgateway")) {
-            if (fieldClass.isEnum()) {
-                return FieldType.BASIC_FIELD;
-            }
-
-            if (field.getAnnotation(ExcelExportSepareteSheet.class) != null) {
-                return FieldType.OCDS_OBJECT_SEPARETE_SHEET_FIELD;
-            }
-
-            return FieldType.OCDS_OBJECT_FIELD;
-        }
-
-        LOGGER.error("We didn't get the field type for: '" + field.getName()
-                + "', returning: " + FieldType.BASIC_FIELD);
-        return FieldType.BASIC_FIELD;
-    }
-
-    /**
-     * Return the Class of a field
-     *
-     * @param field
-     * @return
-     */
-    private Class getFieldClass(Field field) {
-        Class fieldClass = null;
-
-        if (field.getType().equals(java.util.Set.class) || field.getType().equals(java.util.List.class)) {
-            final ParameterizedType genericListType = (ParameterizedType) field.getGenericType();
-            try {
-                fieldClass = Class.forName(genericListType.getActualTypeArguments()[0].getTypeName());
-            } catch (ClassNotFoundException e) {
-                LOGGER.error(e);
-            }
-        } else {
-            fieldClass = field.getType();
-        }
-
-        return fieldClass;
     }
 
     private String getHeaderPrefix() {
