@@ -48,23 +48,23 @@ import io.swagger.annotations.ApiOperation;
 public class CostEffectivenessVisualsController extends GenericOCDSController {
 
 	@ApiOperation(value = "Cost effectiveness of Awards: Displays the total amount of active awards grouped by year."
-			+ "The tender entity has to have adicamount values. The year is calculated from tenderPeriod.startDate")
+			+ "The tender entity has to have adicamount values. The year is calculated from awards.date")
 	@RequestMapping(value = "/api/costEffectivenessAwardAmount", 
 	method = RequestMethod.GET, produces = "application/json")
     public List<DBObject> costEffectivenessAwardAmount(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
-		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+		project.put("year", new BasicDBObject("$year", "$awards.date"));
         project.put("awards.value.amount", 1);
 
         Aggregation agg = Aggregation.newAggregation(
-				match(where("awards").elemMatch(where("status").is("active")).and("tender.tenderPeriod.startDate")
+				match(where("awards").elemMatch(where("status").is("active")).and("awards.date")
 						.exists(true).and("tender.value").exists(true)),
                 getMatchDefaultFilterOperation(filter), unwind("$awards"),
                 match(where("awards.status").is("active").and("awards.value").exists(true)),
                 new CustomProjectionOperation(project),
                 group("$year").sum("$awards.value.amount").as("totalAwardAmount"),
-                sort(Direction.DESC, "totalAwardAmount"), skip(filter.getSkip()), limit(filter.getPageSize()));
+                sort(Direction.DESC, "totalAwardAmount"), skip(filter.getSkip()), limit(filter.getPageSize()));     
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
