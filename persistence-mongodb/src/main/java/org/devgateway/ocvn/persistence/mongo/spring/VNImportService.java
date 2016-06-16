@@ -3,7 +3,16 @@
  */
 package org.devgateway.ocvn.persistence.mongo.spring;
 
-import com.google.common.io.Files;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.List;
+
 import org.apache.commons.io.FileUtils;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
@@ -13,7 +22,14 @@ import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ExcelImportService;
 import org.devgateway.ocds.persistence.mongo.spring.OcdsSchemaValidation;
 import org.devgateway.ocvn.persistence.mongo.dao.ImportFileTypes;
-import org.devgateway.ocvn.persistence.mongo.reader.*;
+import org.devgateway.ocvn.persistence.mongo.reader.BidPlansRowImporter;
+import org.devgateway.ocvn.persistence.mongo.reader.EBidAwardRowImporter;
+import org.devgateway.ocvn.persistence.mongo.reader.LocationRowImporter;
+import org.devgateway.ocvn.persistence.mongo.reader.OfflineAwardRowImporter;
+import org.devgateway.ocvn.persistence.mongo.reader.ProcurementPlansRowImporter;
+import org.devgateway.ocvn.persistence.mongo.reader.PublicInstitutionRowImporter;
+import org.devgateway.ocvn.persistence.mongo.reader.SupplierRowImporter;
+import org.devgateway.ocvn.persistence.mongo.reader.TenderRowImporter;
 import org.devgateway.ocvn.persistence.mongo.repository.ContrMethodRepository;
 import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
 import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository;
@@ -22,6 +38,8 @@ import org.devgateway.toolkit.persistence.mongo.spring.MongoTemplateConfiguratio
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -31,14 +49,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
-import java.util.List;
+import com.google.common.io.Files;
 
 /**
  * @author mihai Service that imports Excel sheets from given import file in
@@ -77,6 +88,9 @@ public class VNImportService implements ExcelImportService {
 
     @Autowired
     private OcdsSchemaValidation validationService;
+    
+	@Autowired(required=false)
+	private CacheManager cacheManager;
 
     private StringBuffer msgBuffer = new StringBuffer();
 
@@ -166,6 +180,17 @@ public class VNImportService implements ExcelImportService {
         }
     }
 
+    
+	/**
+	 * Simple method that gets all cache names and invokes {@link Cache#clear()}
+	 * on all
+	 */
+	public void clearAllCaches() {
+		if (cacheManager != null) {
+			cacheManager.getCacheNames().forEach(c -> cacheManager.getCache(c).clear());
+		}
+	}
+    
     /**
      * Extracts the files from the given {@link VietnamImportSourceFiles}
      * object, creates a temp dir and drops them there.
@@ -203,6 +228,9 @@ public class VNImportService implements ExcelImportService {
             throws InterruptedException {
 
         String tempDirPath = null;
+        
+        clearAllCaches();
+        
         try {
             newMsgBuffer();
             if (purgeDatabase) {
