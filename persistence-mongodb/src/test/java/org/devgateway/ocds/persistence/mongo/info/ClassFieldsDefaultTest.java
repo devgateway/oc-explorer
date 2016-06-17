@@ -21,11 +21,33 @@ public class ClassFieldsDefaultTest {
         private String label;
     }
 
+    private class TestClassImproved extends TestClass {
+        private static final long serialVersionUID = 1L;
+
+        private Boolean valid;
+    }
+
     @Test
     public void getFields() throws Exception {
         final String[] expectedFields = {"id", "label"};
 
         ClassFields classFields = new ClassFieldsDefault(TestClass.class);
+        Iterator<Field> fields = classFields.getFields();
+
+        List<String> actualFields = new ArrayList<>();
+        while(fields.hasNext()) {
+            Field f = fields.next();
+            actualFields.add(f.getName());
+        }
+
+        Assert.assertArrayEquals(expectedFields, actualFields.toArray());
+    }
+
+    @Test
+    public void getInheritedFields() throws Exception {
+        final String[] expectedFields = {"id", "label", "valid"};
+
+        ClassFields classFields = new ClassFieldsDefault(TestClassImproved.class, true);
         Iterator<Field> fields = classFields.getFields();
 
         List<String> actualFields = new ArrayList<>();

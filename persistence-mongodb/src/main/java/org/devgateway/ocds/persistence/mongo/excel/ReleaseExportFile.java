@@ -12,11 +12,11 @@ import java.util.List;
  * @since 6/7/16
  */
 public final class ReleaseExportFile implements ExcelFile {
-    final private List<Release> releases;
+    private final List<Release> releases;
 
-    final private Workbook workbook;
+    private final Workbook workbook;
 
-    ReleaseExportFile(final List<Release> releases) {
+    public ReleaseExportFile(final List<Release> releases) {
         this.releases = releases;
 
         // create the excel file
@@ -25,7 +25,7 @@ public final class ReleaseExportFile implements ExcelFile {
 
     @Override
     public Workbook createWorkbook() {
-        OCDSObjectExcelSheet releaseSheet = new OCDSObjectExcelSheet(this.workbook, Release.class);
+        ExcelSheet releaseSheet = new OCDSObjectExcelSheet(this.workbook, Release.class);
 
         // don't do anything if the list of releases is empty, just display the error message
         if (releases == null || releases.isEmpty()) {

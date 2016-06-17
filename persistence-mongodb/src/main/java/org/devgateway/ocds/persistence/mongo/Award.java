@@ -481,7 +481,7 @@ public class Award {
 
         cancelled("cancelled"),
 
-        unsuccesful("unsuccessful");
+        unsuccessful("unsuccessful");
 
         private final String value;
 
