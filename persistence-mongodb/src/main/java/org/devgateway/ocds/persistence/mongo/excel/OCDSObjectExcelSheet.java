@@ -149,9 +149,13 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
                         // get the last 'free' cell
                         int coll = row.getLastCellNum() == -1 ? 0 : row.getLastCellNum();
 
-                        writeHeaderLabel(field, coll);
-                        writeCell(object == null ? null
-                                : PropertyUtils.getProperty(object, field.getName()), row, coll);
+                        try {
+                            writeCell(object == null ? null
+                                    : PropertyUtils.getProperty(object, field.getName()), row, coll);
+                            writeHeaderLabel(field, coll);
+                        } catch (NoSuchMethodException e) {
+                            // do nothing
+                        }
 
                         break;
                     case FieldType.OCDS_OBJECT_FIELD:
@@ -165,11 +169,14 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
                                 || field.getType().equals(java.util.List.class)) {
                             final List<Object> ocdsFlattenObjects = new ArrayList();
                             if (object != null) {
-                                ocdsFlattenObjects.addAll(
-                                        (Collection) PropertyUtils.getProperty(object, field.getName()));
+                                try {
+                                    ocdsFlattenObjects.addAll(
+                                            (Collection) PropertyUtils.getProperty(object, field.getName()));
+                                    objectSheet.writeRowFlattenObject(ocdsFlattenObjects, row);
+                                } catch (NoSuchMethodException e) {
+                                    // do nothing
+                                }
                             }
-
-                            objectSheet.writeRowFlattenObject(ocdsFlattenObjects, row);
                         } else {
                             objectSheet.writeRow(object == null ? null
                                     : PropertyUtils.getProperty(object, field.getName()), row);
@@ -186,7 +193,6 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
                                     || field.getType().equals(java.util.List.class)) {
                                 ocdsObjectsSeparateSheet.addAll(
                                         (Collection) PropertyUtils.getProperty(object, field.getName()));
-
                             } else {
                                 ocdsObjectsSeparateSheet.add(PropertyUtils.getProperty(object, field.getName()));
                             }
@@ -258,17 +264,22 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
             try {
                 switch (fieldType) {
                     case FieldType.BASIC_FIELD:
-                        // get the last 'free' cell
-                        int coll = row.getLastCellNum() == -1 ? 0 : row.getLastCellNum();
-                        StringJoiner flattenValue = new StringJoiner(" | ");
-                        for (Object obj : objects) {
-                            if (obj != null && PropertyUtils.getProperty(obj, field.getName()) != null) {
-                                flattenValue.add(PropertyUtils.getProperty(obj, field.getName()).toString());
+                        try {
+                            // get the last 'free' cell
+                            int coll = row.getLastCellNum() == -1 ? 0 : row.getLastCellNum();
+                            StringJoiner flattenValue = new StringJoiner(" | ");
+                            for (Object obj : objects) {
+                                if (obj != null && PropertyUtils.getProperty(obj, field.getName()) != null) {
+                                    flattenValue.add(PropertyUtils.getProperty(obj, field.getName()).toString());
+                                }
                             }
-                        }
 
-                        writeHeaderLabel(field, coll);
-                        writeCell(flattenValue.toString(), row, coll);
+                            writeHeaderLabel(field, coll);
+                            writeCell(flattenValue.toString(), row, coll);
+
+                        } catch (NoSuchMethodException e) {
+                            // do nothing
+                        }
 
                         break;
                     case FieldType.OCDS_OBJECT_FIELD:
@@ -280,8 +291,12 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
                         } else {
                             final List<Object> newObjects = new ArrayList();
                             for (Object obj : objects) {
-                                if (obj != null && PropertyUtils.getProperty(obj, field.getName()) != null) {
-                                    newObjects.add(PropertyUtils.getProperty(obj, field.getName()));
+                                try {
+                                    if (obj != null && PropertyUtils.getProperty(obj, field.getName()) != null) {
+                                        newObjects.add(PropertyUtils.getProperty(obj, field.getName()));
+                                    }
+                                } catch (NoSuchMethodException e) {
+                                    // do nothing
                                 }
                             }
 
@@ -303,7 +318,7 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
                         LOGGER.error("Undefined field type");
                         break;
                 }
-            }  catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            }  catch (IllegalAccessException | InvocationTargetException e) {
                 LOGGER.error(e);
             }
         }
