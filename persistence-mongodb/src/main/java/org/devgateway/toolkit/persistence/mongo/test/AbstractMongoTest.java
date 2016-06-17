@@ -1,4 +1,4 @@
-package org.devgateway.ocds.persistence.mongo.test;
+package org.devgateway.toolkit.persistence.mongo.test;
 
 import org.devgateway.toolkit.persistence.mongo.spring.MongoPersistenceApplication;
 import org.junit.runner.RunWith;
