@@ -89,7 +89,7 @@ public class VNImportService implements ExcelImportService {
     @Autowired
     private OcdsSchemaValidation validationService;
     
-	@Autowired(required=false)
+	@Autowired(required = false)
 	private CacheManager cacheManager;
 
     private StringBuffer msgBuffer = new StringBuffer();
