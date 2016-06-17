@@ -221,11 +221,7 @@ export default {
   },
 
   toggleFilterOption(slug, option, selected){
-    dispatcher.dispatch(constants.FILTER_OPTIONS_TOGGLED, {
-      slug: slug,
-      option: option,
-      selected: selected
-    })
+    dispatcher.dispatch(constants.FILTER_OPTIONS_TOGGLED, {slug, option, selected});
   },
 
   updateProcuringEntityQuery(newQuery){

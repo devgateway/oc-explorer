@@ -40,11 +40,13 @@ var store = Store({
     this.on(constants.FILTER_BOX_CHANGED, (state, slug) => state.set('filtersBox', slug));
     this.on(constants.FILTERS_DATA_UPDATED, (state, data) => state.set('filters', toImmutable(data)));
     this.on(constants.FILTER_TOGGLED, (state, {slug, open}) => state.setIn(['filters', slug, 'open'], open));
-    this.on(constants.FILTER_OPTIONS_TOGGLED, (state, {slug, option, selected}) => {
-      var newState = state.setIn(['filters', slug, 'options', option, 'selected'], selected);
-      actions.loadData(newState.get('filters').toJS());
-      return newState;
-    });
+    this.on(constants.FILTER_OPTIONS_TOGGLED, (state, {slug, option, selected}) =>
+      state.setIn(['filters', slug, 'options', option, 'selected'], selected)
+    );
+
+    //TODO: on filters applied
+    //actions.loadData(newState.get('filters').toJS());
+
     this.on(constants.PROCURING_ENTITY_QUERY_UPDATED, (state, newQuery) => state.set('procuringEntityQuery', newQuery));
     this.on(constants.PROCURING_ENTITIES_UPDATED, (state, procuringEntities) =>
         state.setIn(['filters', 'procuringEntities', 'options'], toImmutable(procuringEntities)));
