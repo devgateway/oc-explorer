@@ -109,7 +109,7 @@ public class OfflineAwardRowImporter extends ReleaseRowImporter {
 			supplierOrganization = tendererOrganization;
 		}
 
-		award.setDate(getExcelDate(getRowCell(row, 11)));
+		award.setDate(getExcelDate(getRowCell(row, 12)));
 		
 		//regardless if the award is active or not, we add the supplier to tenderers
 		release.getTender().getTenderers().add(supplierOrganization);

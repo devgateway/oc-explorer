@@ -76,6 +76,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        
+		<dependency>
+		    <groupId>junit</groupId>
+		    <artifactId>junit</artifactId>		    
+		</dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -158,9 +163,19 @@
             </resource>
         </resources>
 
+		<testResources>		
+			<testResource>
+				<filtering>true</filtering>
+				<directory>src/test/resources</directory>
+				<includes>
+					<include>**/*.properties</include>
+					<include>**/*.xlsx</include>
+					<include>**/*.json</include>
+				</includes>		
+			</testResource>
+		</testResources>
+		
         <plugins>
-
-
 
             <!--
                 <plugin>

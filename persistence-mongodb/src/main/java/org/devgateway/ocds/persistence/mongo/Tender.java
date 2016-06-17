@@ -999,7 +999,7 @@ public class Tender {
 
         cancelled("cancelled"),
 
-        unsuccesful("unsuccessful"),
+        unsuccessful("unsuccessful"),
 
         complete("complete");
 
