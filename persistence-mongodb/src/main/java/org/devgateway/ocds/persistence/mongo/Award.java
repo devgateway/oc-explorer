@@ -62,7 +62,6 @@ public class Award {
      * Award title
      *
      */
-    @ExcelExport
     @JsonProperty("title")
     private String title;
 
