@@ -35,7 +35,6 @@ public class Identifier {
      * The identifier of the organization in the selected scheme.
      *
      */
-    @ExcelExport
     @JsonProperty("id")
     private String id;
 
@@ -43,7 +42,6 @@ public class Identifier {
      * The legally registered name of the organization.
      *
      */
-    @ExcelExport
     @JsonProperty("legalName")
     private String legalName;
 

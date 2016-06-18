@@ -4,6 +4,7 @@
 package org.devgateway.ocvn.persistence.mongo.dao;
 
 import org.devgateway.ocds.persistence.mongo.Location;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -17,6 +18,7 @@ public class VNLocation extends Location<GeoJsonPoint> {
 
     public static final String GEONAMES_SCHEME = "GEONAMES";
 
+    @ExcelExport
     private GeoJsonPoint geometry;
 
     public VNLocation() {

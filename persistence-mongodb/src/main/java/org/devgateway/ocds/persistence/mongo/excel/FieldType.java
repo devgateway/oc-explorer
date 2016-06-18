@@ -6,6 +6,7 @@ package org.devgateway.ocds.persistence.mongo.excel;
  */
 
 import com.google.common.collect.ImmutableSet;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -38,6 +39,7 @@ public final class FieldType {
             .add(Boolean.class)
             .add(Integer.class)
             .add(Long.class)
+            .add(GeoJsonPoint.class)
             .add(boolean.class)
             .add(int.class)
             .add(long.class)
