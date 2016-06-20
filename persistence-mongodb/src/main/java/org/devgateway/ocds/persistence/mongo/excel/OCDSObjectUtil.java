@@ -2,13 +2,19 @@ package org.devgateway.ocds.persistence.mongo.excel;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
+import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
 import org.devgateway.ocds.persistence.mongo.info.ClassFields;
 import org.devgateway.ocds.persistence.mongo.info.ClassFieldsDefault;
 import org.devgateway.ocds.persistence.mongo.info.ClassFieldsExcelExport;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -46,7 +52,7 @@ public final class OCDSObjectUtil {
      * @param field
      * @return
      */
-    public static int getFieldType(Field field) {
+    public static int getFieldType(final Field field) {
         final Class fieldClass = getFieldClass(field);
 
         if (FieldType.BASICTYPES.contains(fieldClass)) {
@@ -78,7 +84,7 @@ public final class OCDSObjectUtil {
      * @param field
      * @return
      */
-    public static Class getFieldClass(Field field) {
+    public static Class getFieldClass(final Field field) {
         Class fieldClass = null;
 
         if (fieldsClassCache.get(field) != null) {
@@ -113,7 +119,7 @@ public final class OCDSObjectUtil {
      * @param clazz
      * @return
      */
-    public static Iterator<Field> getFields(Class clazz) {
+    public static Iterator<Field> getFields(final Class clazz) {
         final Iterator<Field> fields;
 
         if (classFieldsCache.get(clazz) != null) {
@@ -129,6 +135,30 @@ public final class OCDSObjectUtil {
         }
 
         return fields;
+    }
+
+    /**
+     * Try to get the ocid for a {@link Release}.
+     *
+     * @param object
+     * @return ocid
+     */
+    public static String getOCDSObjectID(final Object object) {
+        if (object == null || !(object instanceof Release)) {
+            return null;
+        }
+
+        String objectId = null;
+        try {
+            Method ocidMethod = PropertyUtils.getReadMethod(new PropertyDescriptor("ocid", object.getClass()));
+            if (ocidMethod != null) {
+                objectId = (String) ocidMethod.invoke(object);
+            }
+        } catch (IllegalAccessException | InvocationTargetException | IntrospectionException e) {
+
+        }
+
+        return objectId;
     }
 
     /**
