@@ -1,6 +1,5 @@
 package org.devgateway.ocds.persistence.mongo.excel;
 
-import com.google.common.collect.Lists;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -9,9 +8,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
-import org.devgateway.ocds.persistence.mongo.info.ClassFields;
-import org.devgateway.ocds.persistence.mongo.info.ClassFieldsDefault;
-import org.devgateway.ocds.persistence.mongo.info.ClassFieldsExcelExport;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -42,17 +38,15 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
 
     private final Class clazz;
 
-    private String parent;
-
-    private int parentRowNumber;
+    private Map<String, Object> parentInfo;
 
     private final String headerPrefix;
 
-    private static Map<Class, List<Field>> classFieldsCache;
+    private static final String PARENTSHEET = "parentSheet";
 
-    static {
-        classFieldsCache = new HashMap<>();
-    }
+    private static final String PARENTID = "parentID";
+
+    private static final String PARENTROWNUMBER = "parentRowNumber";
 
     /**
      * Constructor used to print an OCDS Object in a separate excel sheet.
@@ -89,11 +83,10 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
         }
     }
 
-    OCDSObjectExcelSheet(final Workbook workbook, final Class clazz, final String parent, final int parentRowNumber) {
+    OCDSObjectExcelSheet(final Workbook workbook, final Class clazz, final Map<String, Object> parentInfo) {
         this(workbook, clazz);
 
-        this.parent = parent;
-        this.parentRowNumber = parentRowNumber;
+        this.parentInfo = parentInfo;
     }
 
     /**
@@ -119,24 +112,17 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
 
     @Override
     public void writeRow(final Object object, final Row row) {
-        final Iterator<Field> fields;
-
-        if (classFieldsCache.get(clazz) != null) {
-            List<Field> fieldsList = classFieldsCache.get(clazz);
-            fields = fieldsList.iterator();
-        } else {
-            final ClassFields classFields = new ClassFieldsExcelExport(
-                    new ClassFieldsDefault(clazz, true)
-            );
-
-            fields = classFields.getFields();
-            classFieldsCache.put(clazz, Lists.newArrayList(classFields.getFields()));
-        }
+        final Iterator<Field> fields = OCDSObjectUtil.getFields(clazz);
 
         // first row should be the parent name with a link
-        if (parent != null) {
+        if (parentInfo != null) {
+            String parentCell = (String) parentInfo.get(PARENTSHEET);
+            if (parentInfo.get(PARENTID) != null) {
+                parentCell += " - " + parentInfo.get(PARENTID);
+            }
             writeHeaderLabel("Parent", 0);
-            writeCellLink(parent, row, 0, parent, parentRowNumber);
+            writeCellLink(parentCell, row, 0,
+                    (String) parentInfo.get(PARENTSHEET), (int) parentInfo.get(PARENTROWNUMBER));
         }
 
         while (fields.hasNext()) {
@@ -168,14 +154,10 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
                         if (field.getType().equals(java.util.Set.class)
                                 || field.getType().equals(java.util.List.class)) {
                             final List<Object> ocdsFlattenObjects = new ArrayList();
-                            if (object != null) {
-                                try {
-                                    ocdsFlattenObjects.addAll(
-                                            (Collection) PropertyUtils.getProperty(object, field.getName()));
-                                    objectSheet.writeRowFlattenObject(ocdsFlattenObjects, row);
-                                } catch (NoSuchMethodException e) {
-                                    // do nothing
-                                }
+                            if (object != null && PropertyUtils.isReadable(object, field.getName())) {
+                                ocdsFlattenObjects.addAll(
+                                        (Collection) PropertyUtils.getProperty(object, field.getName()));
+                                objectSheet.writeRowFlattenObject(ocdsFlattenObjects, row);
                             }
                         } else {
                             objectSheet.writeRow(object == null ? null
@@ -184,8 +166,13 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
 
                         break;
                     case FieldType.OCDS_OBJECT_SEPARETE_SHEET_FIELD:
+                        final Map<String, Object> info = new HashMap();
+                        info.put(PARENTSHEET, excelSheetName);
+                        info.put(PARENTID, OCDSObjectUtil.getOCDSObjectID(object));
+                        info.put(PARENTROWNUMBER, row.getRowNum() + 1);
+
                         final OCDSObjectExcelSheet objectSheetSepareteSheet = new OCDSObjectExcelSheet(
-                                this.workbook, OCDSObjectUtil.getFieldClass(field), excelSheetName, row.getRowNum() + 1);
+                                this.workbook, OCDSObjectUtil.getFieldClass(field), info);
                         final List<Object> ocdsObjectsSeparateSheet = new ArrayList();
 
                         if (object != null && PropertyUtils.getProperty(object, field.getName()) != null) {
@@ -242,20 +229,7 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
      * @param row
      */
     public void writeRowFlattenObject(final List<Object> objects, final Row row) {
-        final Iterator<Field> fields;
-
-        if (classFieldsCache.get(clazz) != null) {
-            List<Field> fieldsList = classFieldsCache.get(clazz);
-            fields = fieldsList.iterator();
-        } else {
-            final ClassFields classFields = new ClassFieldsExcelExport(
-                    new ClassFieldsDefault(clazz, true)
-            );
-
-            fields = classFields.getFields();
-
-            classFieldsCache.put(clazz, Lists.newArrayList(classFields.getFields()));
-        }
+        final Iterator<Field> fields = OCDSObjectUtil.getFields(clazz);
 
         while (fields.hasNext()) {
             final Field field = fields.next();
@@ -291,13 +265,11 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
                         } else {
                             final List<Object> newObjects = new ArrayList();
                             for (Object obj : objects) {
-                                try {
-                                    if (obj != null && PropertyUtils.getProperty(obj, field.getName()) != null) {
-                                        newObjects.add(PropertyUtils.getProperty(obj, field.getName()));
-                                    }
-                                } catch (NoSuchMethodException e) {
-                                    // do nothing
+                                if (obj != null && PropertyUtils.getProperty(obj, field.getName()) != null
+                                        && PropertyUtils.isReadable(obj, field.getName())) {
+                                    newObjects.add(PropertyUtils.getProperty(obj, field.getName()));
                                 }
+
                             }
 
                             final OCDSObjectExcelSheet objectSheet = new OCDSObjectExcelSheet(
@@ -318,7 +290,7 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
                         LOGGER.error("Undefined field type");
                         break;
                 }
-            }  catch (IllegalAccessException | InvocationTargetException e) {
+            }  catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                 LOGGER.error(e);
             }
         }
