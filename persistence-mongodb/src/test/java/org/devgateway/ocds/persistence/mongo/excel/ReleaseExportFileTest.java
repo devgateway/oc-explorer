@@ -41,9 +41,8 @@ public class ReleaseExportFileTest {
         Assert.assertEquals("release id", "ocds-213czf-000-00001-01-planning", workbook.getSheet("release").getRow(3).getCell(0).toString());
         Assert.assertEquals("release id", "ocds-213czf-000-00001-06-implementation", workbook.getSheet("release").getRow(5).getCell(0).toString());
 
-        Assert.assertEquals("tender parent", "release", workbook.getSheet("vntender").getRow(1).getCell(0).toString());
+        Assert.assertEquals("tender parent", "release - ocds-213czf-000-00001", workbook.getSheet("vntender").getRow(1).getCell(0).toString());
         Assert.assertEquals("tender id", "ocds-213czf-000-00001-01-planning", workbook.getSheet("vntender").getRow(1).getCell(1).toString());
-
 
         Assert.assertEquals("award number of rows", 4, workbook.getSheet("vnaward").getLastRowNum());
 
