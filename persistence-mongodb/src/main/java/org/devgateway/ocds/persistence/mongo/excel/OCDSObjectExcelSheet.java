@@ -1,6 +1,5 @@
 package org.devgateway.ocds.persistence.mongo.excel;
 
-import com.google.common.collect.Lists;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -9,18 +8,13 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
-import org.devgateway.ocds.persistence.mongo.info.ClassFields;
-import org.devgateway.ocds.persistence.mongo.info.ClassFieldsDefault;
-import org.devgateway.ocds.persistence.mongo.info.ClassFieldsExcelExport;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.StringJoiner;
 
 /**
@@ -47,12 +41,6 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
     private int parentRowNumber;
 
     private final String headerPrefix;
-
-    private static Map<Class, List<Field>> classFieldsCache;
-
-    static {
-        classFieldsCache = new HashMap<>();
-    }
 
     /**
      * Constructor used to print an OCDS Object in a separate excel sheet.
@@ -119,19 +107,7 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
 
     @Override
     public void writeRow(final Object object, final Row row) {
-        final Iterator<Field> fields;
-
-        if (classFieldsCache.get(clazz) != null) {
-            List<Field> fieldsList = classFieldsCache.get(clazz);
-            fields = fieldsList.iterator();
-        } else {
-            final ClassFields classFields = new ClassFieldsExcelExport(
-                    new ClassFieldsDefault(clazz, true)
-            );
-
-            fields = classFields.getFields();
-            classFieldsCache.put(clazz, Lists.newArrayList(classFields.getFields()));
-        }
+        final Iterator<Field> fields = OCDSObjectUtil.getFields(clazz);
 
         // first row should be the parent name with a link
         if (parent != null) {
@@ -242,20 +218,7 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
      * @param row
      */
     public void writeRowFlattenObject(final List<Object> objects, final Row row) {
-        final Iterator<Field> fields;
-
-        if (classFieldsCache.get(clazz) != null) {
-            List<Field> fieldsList = classFieldsCache.get(clazz);
-            fields = fieldsList.iterator();
-        } else {
-            final ClassFields classFields = new ClassFieldsExcelExport(
-                    new ClassFieldsDefault(clazz, true)
-            );
-
-            fields = classFields.getFields();
-
-            classFieldsCache.put(clazz, Lists.newArrayList(classFields.getFields()));
-        }
+        final Iterator<Field> fields = OCDSObjectUtil.getFields(clazz);
 
         while (fields.hasNext()) {
             final Field field = fields.next();

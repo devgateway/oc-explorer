@@ -1,12 +1,18 @@
 package org.devgateway.ocds.persistence.mongo.excel;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
+import org.devgateway.ocds.persistence.mongo.info.ClassFields;
+import org.devgateway.ocds.persistence.mongo.info.ClassFieldsDefault;
+import org.devgateway.ocds.persistence.mongo.info.ClassFieldsExcelExport;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,8 +24,12 @@ public final class OCDSObjectUtil {
 
     private static Map<Field, Class> fieldsClassCache;
 
+    private static Map<Class, List<Field>> classFieldsCache;
+
     static {
         fieldsClassCache = new HashMap<>();
+
+        classFieldsCache = new HashMap<>();
     }
 
     /**
@@ -94,6 +104,31 @@ public final class OCDSObjectUtil {
         }
 
         return fieldClass;
+    }
+
+    /**
+     * Returns an Iterator with the Fields of a Class.
+     * The fields are filtered with the {@link ClassFieldsExcelExport} class.
+     *
+     * @param clazz
+     * @return
+     */
+    public static Iterator<Field> getFields(Class clazz) {
+        final Iterator<Field> fields;
+
+        if (classFieldsCache.get(clazz) != null) {
+            List<Field> fieldsList = classFieldsCache.get(clazz);
+            fields = fieldsList.iterator();
+        } else {
+            final ClassFields classFields = new ClassFieldsExcelExport(
+                    new ClassFieldsDefault(clazz, true)
+            );
+
+            fields = classFields.getFields();
+            classFieldsCache.put(clazz, Lists.newArrayList(classFields.getFields()));
+        }
+
+        return fields;
     }
 
     /**
