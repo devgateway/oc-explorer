@@ -55,6 +55,7 @@ public class ProcurementPlansRowImporter extends ReleaseRowImporter {
 				if (location == null) {
 					location = new VNLocation();
 					location.setDescription(locations[i]);
+					location = locationRepository.insert(location);
 				}
 
 				budget.getProjectLocation().add(location);
