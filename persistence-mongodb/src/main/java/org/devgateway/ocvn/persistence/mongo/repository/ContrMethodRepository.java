@@ -14,6 +14,9 @@ public interface ContrMethodRepository extends MongoRepository<ContrMethod, Inte
     @Cacheable
     @Override
     ContrMethod findOne(Integer id);
+    
+    @Cacheable
+    ContrMethod findByDetails(String details);
 
     @Override
     @CacheEvict(allEntries = true)
