@@ -86,12 +86,21 @@ public class EBidAwardRowImporter extends ReleaseRowImporter {
 
 		award.setBidOpenRank(getInteger(getRowCell(row, 4)));
 
-
 		award.setInelibigleYN(getRowCell(row, 6));
 
 		award.setIneligibleRson(getRowCell(row, 7));
 
-		award.setDate(getExcelDate(getRowCell(row, 9)));
+		if (getRowCell(row, 8) != null) {
+			award.setAlternateDate(getExcelDate(getRowCell(row, 8)));
+		}
+
+		if (getRowCell(row, 10) != null) {
+			award.setDate(getExcelDate(getRowCell(row, 10)));
+		}
+		
+		if (getRowCell(row, 9) != null) {
+			award.setPublishedDate(getExcelDate(getRowCell(row, 9)));
+		}
 
 		//regardless if the award is active or not, we add the supplier to tenderers
 		release.getTender().getTenderers().add(supplier);

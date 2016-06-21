@@ -3,6 +3,8 @@
  */
 package org.devgateway.ocvn.persistence.mongo.dao;
 
+import java.util.Date;
+
 import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
@@ -17,6 +19,10 @@ public class VNAward extends Award {
     private String ineligibleRson;
 
     private Integer bidOpenRank;
+    
+    private Date alternateDate;
+    
+    private Date publishedDate;
 
     @ExcelExport
     private Integer bidType;
@@ -83,5 +89,22 @@ public class VNAward extends Award {
     public void setIneligibleRson(String ineligibleRson) {
         this.ineligibleRson = ineligibleRson;
     }
+
+	public Date getAlternateDate() {
+		return alternateDate;
+	}
+
+	public void setAlternateDate(Date alternateDate) {
+		this.alternateDate = alternateDate;
+	}
+
+	public Date getPublishedDate() {
+		return publishedDate;
+	}
+
+	public void setPublishedDate(Date publishedDate) {
+		this.publishedDate = publishedDate;
+	}
+    
 
 }

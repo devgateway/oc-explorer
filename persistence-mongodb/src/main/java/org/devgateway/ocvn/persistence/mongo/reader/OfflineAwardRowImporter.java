@@ -1,8 +1,9 @@
 package org.devgateway.ocvn.persistence.mongo.reader;
 
+import java.text.ParseException;
+
 import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Award;
-import org.devgateway.ocds.persistence.mongo.Identifier;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.Tag;
 import org.devgateway.ocds.persistence.mongo.Tender;
@@ -17,8 +18,6 @@ import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTendererOrganization;
 import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository;
-
-import java.text.ParseException;
 
 /**
  * Specific {@link RowImporter} for Offline Awards, in the custom Excel format
@@ -72,19 +71,23 @@ public class OfflineAwardRowImporter extends ReleaseRowImporter {
 			value.setAmount(getDecimal(getRowCell(row, 2)));
 			award.setValue(value);
 		}
+		
+		VNOrganization supplier = null;
+		if (getRowCell(row, 3) != null) {
+			supplier = organizationRepository.findOne(getRowCell(row, 3));
 
-		VNOrganization supplier = organizationRepository.findOne(getRowCell(row, 3));
-
-		if (supplier == null) {
-			supplier = new VNOrganization();
-			supplier.setName(getRowCell(row, 3));
-			supplier = organizationRepository.insert(supplier);
+			if (supplier == null) {
+				supplier = new VNOrganization();
+				supplier.setName(getRowCell(row, 3));
+				supplier.setId(getRowCell(row, 3));
+				supplier = organizationRepository.insert(supplier);
+			}
 		}
 
 		award.setStatus("Y".equals(getRowCell(row, 5)) ? Award.Status.active : Award.Status.unsuccessful);
 
 		// active=successful awards have suppliers
-		if (Award.Status.active.equals(award.getStatus())) {
+		if (supplier != null && Award.Status.active.equals(award.getStatus())) {
 			award.getSuppliers().add(supplier);
 		}
 
@@ -100,7 +103,7 @@ public class OfflineAwardRowImporter extends ReleaseRowImporter {
 		award.setBidSuccMethod(getInteger(getRowCell(row, 9)));
 		
 		VNOrganization supplierOrganization = supplier;
-		if (getRowCell(row, 10) != null) {
+		if (supplierOrganization != null && getRowCell(row, 10) != null) {
 			Amount value2 = new Amount();
 			value2.setCurrency("VND");
 			value2.setAmount(getDecimal(getRowCell(row, 10)));
@@ -109,10 +112,18 @@ public class OfflineAwardRowImporter extends ReleaseRowImporter {
 			supplierOrganization = tendererOrganization;
 		}
 
-		award.setDate(getExcelDate(getRowCell(row, 12)));
+		if (getRowCell(row, 12) != null) {
+			award.setDate(getExcelDate(getRowCell(row, 12)));
+		}
+
+		if (getRowCell(row, 11) != null) {
+			award.setAlternateDate(getExcelDate(getRowCell(row, 11)));
+		}
 		
 		//regardless if the award is active or not, we add the supplier to tenderers
-		release.getTender().getTenderers().add(supplierOrganization);
+		if (supplierOrganization != null) {
+			release.getTender().getTenderers().add(supplierOrganization);
+		}
 
 		release.getTender().setNumberOfTenderers(release.getTender().getTenderers().size());
 
