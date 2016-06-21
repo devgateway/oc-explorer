@@ -267,7 +267,7 @@ public class VNImportService implements ExcelImportService {
             if (fileTypes.contains(ImportFileTypes.TENDERS)) {
                 importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "Tender",
                         new TenderRowImporter(releaseRepository, this, organizationRepository, classificationRepository,
-                                contrMethodRepository, 2));
+                                contrMethodRepository, locationRepository, 2));
             }
 
             if (fileTypes.contains(ImportFileTypes.EBID_AWARDS)) {

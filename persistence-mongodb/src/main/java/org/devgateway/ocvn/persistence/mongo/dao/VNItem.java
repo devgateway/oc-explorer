@@ -22,6 +22,8 @@ public class VNItem extends Item {
     private String bidPlanItemMethodSelect;
 
     private String bidPlanItemMethod;
+    
+    private VNLocation deliveryLocation;
 
 	public String getBidPlanItemRefNum() {
 		return bidPlanItemRefNum;
@@ -61,6 +63,14 @@ public class VNItem extends Item {
 
 	public void setBidPlanItemMethod(final String bidPlanItemMethod) {
 		this.bidPlanItemMethod = bidPlanItemMethod;
+	}
+
+	public VNLocation getDeliveryLocation() {
+		return deliveryLocation;
+	}
+
+	public void setDeliveryLocation(VNLocation deliveryLocation) {
+		this.deliveryLocation = deliveryLocation;
 	}
 
 }

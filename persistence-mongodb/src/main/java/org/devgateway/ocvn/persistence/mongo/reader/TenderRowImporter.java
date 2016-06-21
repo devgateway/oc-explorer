@@ -17,10 +17,13 @@ import org.devgateway.ocds.persistence.mongo.repository.ClassificationRepository
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.ContrMethod;
+import org.devgateway.ocvn.persistence.mongo.dao.VNItem;
+import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
 import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
 import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
 import org.devgateway.ocvn.persistence.mongo.repository.ContrMethodRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
 import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository;
 
 /**
@@ -35,15 +38,18 @@ public class TenderRowImporter extends ReleaseRowImporter {
 	private VNOrganizationRepository organizationRepository;
 	private ClassificationRepository classificationRepository;
 	private ContrMethodRepository contrMethodRepository;
+	private VNLocationRepository locationRepository;
 
 	public TenderRowImporter(final ReleaseRepository releaseRepository, final ImportService importService,
 			final VNOrganizationRepository organizationRepository,
 			final ClassificationRepository classificationRepository, final ContrMethodRepository contrMethodRepository,
+			final VNLocationRepository locationRepository,
 			final int skipRows) {
 		super(releaseRepository, importService, skipRows);
 		this.organizationRepository = organizationRepository;
 		this.classificationRepository = classificationRepository;
 		this.contrMethodRepository = contrMethodRepository;
+		this.locationRepository = locationRepository;
 	}
 
 	@Override
@@ -136,32 +142,32 @@ public class TenderRowImporter extends ReleaseRowImporter {
 		tender.setProcurementMethodDetails(procurementMethodDetails);
 		tender.setProcurementMethod(procurementMethod);
 
-		Integer contrMethodId = getInteger(getRowCell(row, 6));
-		if (contrMethodId != null) {
-			ContrMethod contrMethod = contrMethodRepository.findOne(contrMethodId);
+		String contrMethodDetail = getRowCell(row, 6);
+		if (contrMethodDetail != null) {
+			ContrMethod contrMethod = contrMethodRepository.findByDetails(contrMethodDetail);
 			if (contrMethod == null) {
 				contrMethod = new ContrMethod();
-				contrMethod.setId(contrMethodId);
-				switch (contrMethodId) {
-				case 1:
-					contrMethod.setDetails("Trọn gói");
-					break;
-				case 2:
-					contrMethod.setDetails("Theo đơn giá");
-					break;
-				case 3:
-					contrMethod.setDetails("Theo thời gian");
-					break;
-				case 4:
-					contrMethod.setDetails("Theo tỷ lệ phần trăm");
-					break;
-				case 5:
-					contrMethod.setDetails("Hỗn hợp");
-					break;
-				default:
-					contrMethod.setDetails("Undefined");
-					break;
-				}
+				contrMethod.setDetails(contrMethodDetail);
+//				switch (contrMethodId) {
+//				case 1:
+//					contrMethod.setDetails("Trọn gói");
+//					break;
+//				case 2:
+//					contrMethod.setDetails("Theo đơn giá");
+//					break;
+//				case 3:
+//					contrMethod.setDetails("Theo thời gian");
+//					break;
+//				case 4:
+//					contrMethod.setDetails("Theo tỷ lệ phần trăm");
+//					break;
+//				case 5:
+//					contrMethod.setDetails("Hỗn hợp");
+//					break;
+//				default:
+//					contrMethod.setDetails("Undefined");
+//					break;
+//				}
 				contrMethod = contrMethodRepository.insert(contrMethod);
 			}
 			tender.setContrMethod(contrMethod);
@@ -213,18 +219,34 @@ public class TenderRowImporter extends ReleaseRowImporter {
 		tender.setPublicationMethod(getRowCell(row, 14));
 
 		tender.setCancellationRationale(getRowCell(row, 15));
+		
+		//location attached to tender/items
+		
+		String locationName = getRowCell(row, 16);
+		VNLocation location = null;
+		if (locationName != null) {
+			location = locationRepository.findByDescription(locationName);
+			if (location == null) {
+				location = new VNLocation();
+				location.setDescription(locationName);
+				location = locationRepository.insert(location);
+			}
+		}		
 
 		if (getRowCell(row, 21) != null) {
 			if (tender.getItems().isEmpty()) {
-				Item item = new Item();
+				VNItem item = new VNItem();
 				item.setId(Integer.toString(tender.getItems().size()));
+				if (location != null) {
+					item.setDeliveryLocation(location);
+				}
 				tender.getItems().add(item);
 			}
 
 			// we set classification for all items within this tender. If none
 			// are found, we create a fake item and add only this classification
 			for (Item item : tender.getItems()) {
-				String classificationId = getRowCell(row, 21);
+				String classificationId = getRowCell(row, 13);
 				Classification classification = classificationRepository.findOne(classificationId);
 				if (classification == null) {
 					classification = new Classification();
@@ -251,6 +273,10 @@ public class TenderRowImporter extends ReleaseRowImporter {
 
 				}
 				item.setClassification(classification);
+				if (location != null) {
+					((VNItem) item).setDeliveryLocation(location);
+				}
+				
 			}
 
 		}
