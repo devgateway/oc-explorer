@@ -6,7 +6,6 @@ package org.devgateway.ocds.web.rest.controller.request;
 import java.util.List;
 
 import cz.jirutka.validator.collection.constraints.EachPattern;
-import cz.jirutka.validator.collection.constraints.EachRange;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -28,8 +27,8 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 	private List<String> bidSelectionMethod;
 
 	@ApiModelProperty(value = "This will filter after tender.contrMethod.id, Values range from 1 to 5.")
-	@EachRange(min = 1, max = 5)
-	private List<Integer> contrMethod;
+	@EachPattern(regexp = "^[a-zA-Z0-9]*$")
+	private List<String> contrMethod;
 
 	/**
 	 * This parameter will invert (negate) all existing filtering parameters. So
@@ -81,12 +80,14 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 		this.invert = invert;
 	}
 
-	public List<Integer> getContrMethod() {
+	public List<String> getContrMethod() {
 		return contrMethod;
 	}
 
-	public void setContrMethod(List<Integer> contrMethod) {
+	public void setContrMethod(List<String> contrMethod) {
 		this.contrMethod = contrMethod;
 	}
+
+
 
 }

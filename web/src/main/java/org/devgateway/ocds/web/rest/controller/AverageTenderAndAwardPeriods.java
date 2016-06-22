@@ -162,5 +162,41 @@ public class AverageTenderAndAwardPeriods extends GenericOCDSController {
 		List<DBObject> list = results.getMappedResults();
 		return list;
 	}
+	
+	
+	@ApiOperation(value = "Quality indicator for averageAwardPeriod endpoint, "
+			+ "showing the percentage of awards that have start and end dates vs the total tenders in the system")
+	@RequestMapping(value = "/api/qualityAverageAwardPeriod", method = RequestMethod.GET, produces = "application/json")
+	public List<DBObject> qualityAverageAwardPeriod(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+
+		DBObject project = new BasicDBObject();
+		project.put(Fields.UNDERSCORE_ID, 0);
+		project.put("awardWithStartEndDates",
+				new BasicDBObject("$cond",
+						Arrays.asList(
+								new BasicDBObject("$and", Arrays.asList(
+										new BasicDBObject("$gt", Arrays.asList("$awards.date", null)),
+										new BasicDBObject("$gt", Arrays.asList("$tender.tenderPeriod.endDate", null)))),
+								1, 0)));
+
+		DBObject project1 = new BasicDBObject();
+		project1.put("totalAwardWithStartEndDates", 1);
+		project1.put("totalAwards", 1);
+		project1.put("percentageAwardWithStartEndDates",
+				new BasicDBObject("$multiply", Arrays.asList(
+						new BasicDBObject("$divide", Arrays.asList("$totalAwardWithStartEndDates", "$totalAwards")),
+						100)));
+
+		Aggregation agg = newAggregation(
+				match(where("awards.0").exists(true).andOperator(getDefaultFilterCriteria(filter))), unwind("$awards"),
+				new CustomProjectionOperation(project),
+				group().sum("awardWithStartEndDates").as("totalAwardWithStartEndDates").count().as("totalAwards"),
+				new CustomProjectionOperation(project1));
+		
+		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+		List<DBObject> list = results.getMappedResults();
+		return list;
+	}
+
 
 }

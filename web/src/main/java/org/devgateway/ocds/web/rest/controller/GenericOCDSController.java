@@ -15,9 +15,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import org.bson.types.ObjectId;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.TextSearchRequest;
@@ -103,10 +105,12 @@ public class GenericOCDSController {
      * @param filter
      * @return the {@link Criteria} for this filter
      */
-    protected Criteria getContrMethodFilterCriteria(final DefaultFilterPagingRequest filter) {
-        return createFilterCriteria("tender.contrMethod._id", filter.getContrMethod(), filter);
-    }
-
+	protected Criteria getContrMethodFilterCriteria(final DefaultFilterPagingRequest filter) {
+		return filter.getContrMethod() == null ? new Criteria()
+				: createFilterCriteria("tender.contrMethod._id",
+						filter.getContrMethod().stream().map(s -> new ObjectId(s)).collect(Collectors.toList()),
+						filter);
+	}
 
     protected <S> List<S> genericSearchRequest(TextSearchRequest request, Criteria criteria, Class<S> clazz) {
 
