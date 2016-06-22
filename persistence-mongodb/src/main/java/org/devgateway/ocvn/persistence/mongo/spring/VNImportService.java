@@ -256,28 +256,28 @@ public class VNImportService implements ExcelImportService {
 
             if (fileTypes.contains(ImportFileTypes.PROCUREMENT_PLANS)) {
                 importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "ProcurementPlans",
-                        new ProcurementPlansRowImporter(releaseRepository, this, locationRepository, 2));
+                        new ProcurementPlansRowImporter(releaseRepository, this, locationRepository, 1));
             }
 
             if (fileTypes.contains(ImportFileTypes.BID_PLANS)) {
                 importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "BidPlans",
-                        new BidPlansRowImporter(releaseRepository, this, 2));
+                        new BidPlansRowImporter(releaseRepository, this, 1));
             }
 
             if (fileTypes.contains(ImportFileTypes.TENDERS)) {
                 importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "Tender",
                         new TenderRowImporter(releaseRepository, this, organizationRepository, classificationRepository,
-                                contrMethodRepository, locationRepository, 2));
+                                contrMethodRepository, locationRepository, 1));
             }
 
             if (fileTypes.contains(ImportFileTypes.EBID_AWARDS)) {
                 importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "eBid_Awards",
-                        new EBidAwardRowImporter(releaseRepository, this, organizationRepository, 2));
+                        new EBidAwardRowImporter(releaseRepository, this, organizationRepository, 1));
             }
 
             if (fileTypes.contains(ImportFileTypes.OFFLINE_AWARDS)) {
                 importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "Offline_Awards",
-                        new OfflineAwardRowImporter(releaseRepository, this, organizationRepository, 2));
+                        new OfflineAwardRowImporter(releaseRepository, this, organizationRepository, 1));
             }
 
             if (purgeDatabase) {

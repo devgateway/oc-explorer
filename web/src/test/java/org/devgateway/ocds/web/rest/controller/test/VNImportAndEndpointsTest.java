@@ -44,7 +44,7 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
 			return;
 		}
 		vnExcelImportService.importAllSheets(ImportFileTypes.ALL_FILE_TYPES,
-				loadResourceStreamAsByteArray("/testImport/test_OCVN_June12016_Update_Template.xlsx"),
+				loadResourceStreamAsByteArray("/testImport/test_egp_Jun21_Import.xlsx"),
 				loadResourceStreamAsByteArray("/testImport/test_Location_Table_Geocoded.xlsx"),
 				loadResourceStreamAsByteArray("/testImport/test_UM_PUBINSTITU_SUPPLIERS_DQA.xlsx"), true, false);
 	}
