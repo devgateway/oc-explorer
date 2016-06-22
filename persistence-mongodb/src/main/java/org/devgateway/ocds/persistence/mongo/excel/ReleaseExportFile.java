@@ -1,6 +1,7 @@
 package org.devgateway.ocds.persistence.mongo.excel;
 
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.devgateway.ocds.persistence.mongo.Release;
 
@@ -20,7 +21,7 @@ public final class ReleaseExportFile implements ExcelFile {
         this.releases = releases;
 
         // create the excel file
-        this.workbook = new XSSFWorkbook();
+        this.workbook = new SXSSFWorkbook(100);
     }
 
     @Override
@@ -29,7 +30,7 @@ public final class ReleaseExportFile implements ExcelFile {
 
         // don't do anything if the list of releases is empty, just display the error message
         if (releases == null || releases.isEmpty()) {
-            releaseSheet.emptySheet();
+            // releaseSheet.emptySheet();
         } else {
             releaseSheet.writeSheet(new ArrayList<>(releases));
         }
