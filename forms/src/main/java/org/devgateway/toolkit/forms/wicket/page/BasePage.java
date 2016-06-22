@@ -208,8 +208,12 @@ public abstract class BasePage extends GenericWebPage<Void> {
 					}
 				};
 				uiBrowserLink.setIconType(FontAwesomeIconType.rocket).setEnabled(true);
-
 				list.add(uiBrowserLink);
+
+
+                list.add(new MenuBookmarkablePageLink<Void>(EditAdminSettingsPage.class,
+                        new StringResourceModel("navbar.adminSettings", BasePage.this, null)).
+                        setIconType(FontAwesomeIconType.briefcase));
 
 				return list;
 			}
