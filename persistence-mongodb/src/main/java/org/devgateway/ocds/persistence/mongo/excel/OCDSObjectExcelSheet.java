@@ -77,7 +77,7 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
             createRow(excelSheet, 0);
 
             // set a default width - this will increase the performance
-            excelSheet.setDefaultColumnWidth(30);
+            excelSheet.setDefaultColumnWidth(35);
         } else {
             excelSheet = workbook.getSheet(excelSheetName);
         }
@@ -120,7 +120,9 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
             if (parentInfo.get(PARENTID) != null) {
                 parentCell += " - " + parentInfo.get(PARENTID);
             }
-            writeHeaderLabel("Parent", 0);
+            if (row.getRowNum() < 2) {
+                writeHeaderLabel("Parent", 0);
+            }
             writeCellLink(parentCell, row, 0,
                     (String) parentInfo.get(PARENTSHEET), (int) parentInfo.get(PARENTROWNUMBER));
         }
@@ -138,7 +140,9 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
                         try {
                             writeCell(object == null ? null
                                     : PropertyUtils.getProperty(object, field.getName()), row, coll);
-                            writeHeaderLabel(field, coll);
+                            if (row.getRowNum() < 2) {
+                                writeHeaderLabel(field, coll);
+                            }
                         } catch (NoSuchMethodException e) {
                             // do nothing
                         }
@@ -188,7 +192,9 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
 
                         // get the last 'free' cell
                         coll = row.getLastCellNum() == -1 ? 0 : row.getLastCellNum();
-                        writeHeaderLabel(field, coll);
+                        if (row.getRowNum() < 2) {
+                            writeHeaderLabel(field, coll);
+                        }
 
                         if (rowNumber != -1) {
                             writeCellLink(field.getName(), row, coll,
@@ -248,7 +254,9 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
                                 }
                             }
 
-                            writeHeaderLabel(field, coll);
+                            if (row.getRowNum() < 2) {
+                                writeHeaderLabel(field, coll);
+                            }
                             writeCell(flattenValue.toString(), row, coll);
 
                         } catch (NoSuchMethodException e) {
