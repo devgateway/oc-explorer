@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -33,6 +34,7 @@ public class Item {
      * (Required)
      *
      */
+    @ExcelExport
     @JsonProperty("id")
     private String id;
 
@@ -40,9 +42,11 @@ public class Item {
      * A description of the goods, services to be provided.
      *
      */
+    @ExcelExport
     @JsonProperty("description")
     private String description;
 
+    @ExcelExport
     @JsonProperty("classification")
     private Classification classification;
 
@@ -62,6 +66,7 @@ public class Item {
      * The number of units required
      *
      */
+    @ExcelExport
     @JsonProperty("quantity")
     private Integer quantity;
 

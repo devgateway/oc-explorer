@@ -60,7 +60,8 @@ public class AverageNumberOfTenderers extends GenericOCDSController {
 		project.put("tender.numberOfTenderers", 1);
 
 		Aggregation agg = newAggregation(
-				match(where("tender.numberOfTenderers").gt(0).andOperator(getDefaultFilterCriteria(filter))),
+				match(where("tender.numberOfTenderers").gt(0).and("tender.tenderPeriod.startDate").exists(true)
+						.andOperator(getDefaultFilterCriteria(filter))),
 				new CustomProjectionOperation(project),
 				group("$year").avg("tender.numberOfTenderers").as("averageNoTenderers"),
 				project(Fields.from(Fields.field("year", Fields.UNDERSCORE_ID_REF))).andInclude("averageNoTenderers")

@@ -1,8 +1,6 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jackson.JsonLoader;
 import com.github.fge.jsonschema.core.report.ListReportProvider;
 import com.github.fge.jsonschema.core.report.LogLevel;
@@ -45,8 +43,6 @@ public class ReleaseExportTest extends AbstractWebTest {
     @Autowired
     private WebApplicationContext wac;
 
-    private ObjectMapper mapper;
-
     private JsonNode ocdsSchemaNode;
 
     private JsonSchema schema;
@@ -64,16 +60,6 @@ public class ReleaseExportTest extends AbstractWebTest {
         // for a more focused unit tests we can use:
         // this.mockMvc = MockMvcBuilders.standaloneSetup(new OcdsController()).build();
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
-
-        this.mapper = new ObjectMapper();
-        // this are non-standard features that are disabled by default.
-        this.mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
-        this.mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-
-        // Note that enabling this feature will incur performance overhead
-        // due to having to store and check additional information: this typically
-        // adds 20-30% to execution time for basic parsing.
-        this.mapper.configure(JsonParser.Feature.STRICT_DUPLICATE_DETECTION, true);
 
         this.ocdsSchemaNode = JsonLoader.fromResource("/schema/release-schema.json");
         this.schema = JsonSchemaFactory.newBuilder()

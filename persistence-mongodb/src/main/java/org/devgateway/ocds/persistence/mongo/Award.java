@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -52,6 +54,7 @@ public class Award {
      * (Required)
      *
      */
+    @ExcelExport
     @JsonProperty("id")
     private String id;
 
@@ -59,6 +62,7 @@ public class Award {
      * Award title
      *
      */
+    @ExcelExport
     @JsonProperty("title")
     private String title;
 
@@ -66,6 +70,7 @@ public class Award {
      * Award description
      *
      */
+    @ExcelExport
     @JsonProperty("description")
     private String description;
 
@@ -76,6 +81,7 @@ public class Award {
      *  [awardStatus codelist](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists/#award-status)
      *
      */
+    @ExcelExport
     @JsonProperty("status")
     private Status status;
 
@@ -85,9 +91,11 @@ public class Award {
      * The date of the contract award. This is usually the date on which a decision to award was made.
      *
      */
+    @ExcelExport
     @JsonProperty("date")
     private Date date;
 
+    @ExcelExport
     @JsonProperty("value")
     private Amount value;
 
@@ -96,6 +104,7 @@ public class Award {
      * these should be split into separate award blocks.
      *
      */
+    @ExcelExport
     @JsonProperty("suppliers")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
     private Set<Organization> suppliers = new LinkedHashSet<Organization>();
@@ -107,6 +116,8 @@ public class Award {
      * Items should not be duplicated, but the quantity specified instead.
      *
      */
+    @ExcelExport
+    @ExcelExportSepareteSheet
     @JsonProperty("items")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
     private Set<Item> items = new LinkedHashSet<Item>();
@@ -115,8 +126,8 @@ public class Award {
      * Period
      * <p>
      *
-     *
      */
+    @ExcelExport
     @JsonProperty("contractPeriod")
     private Period contractPeriod;
 
@@ -470,7 +481,7 @@ public class Award {
 
         cancelled("cancelled"),
 
-        unsuccesful("unsuccessful");
+        unsuccessful("unsuccessful");
 
         private final String value;
 

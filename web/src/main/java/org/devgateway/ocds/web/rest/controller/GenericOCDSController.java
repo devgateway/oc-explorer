@@ -3,8 +3,23 @@
  */
 package org.devgateway.ocds.web.rest.controller;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
+
+import org.bson.types.ObjectId;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.TextSearchRequest;
@@ -24,18 +39,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.core.query.TextQuery;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
-import static org.springframework.data.mongodb.core.query.Criteria.where;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
 /**
  * @author mpostelnicu
@@ -100,10 +105,12 @@ public class GenericOCDSController {
      * @param filter
      * @return the {@link Criteria} for this filter
      */
-    protected Criteria getContrMethodFilterCriteria(final DefaultFilterPagingRequest filter) {
-        return createFilterCriteria("tender.contrMethod._id", filter.getContrMethod(), filter);
-    }
-
+	protected Criteria getContrMethodFilterCriteria(final DefaultFilterPagingRequest filter) {
+		return filter.getContrMethod() == null ? new Criteria()
+				: createFilterCriteria("tender.contrMethod._id",
+						filter.getContrMethod().stream().map(s -> new ObjectId(s)).collect(Collectors.toList()),
+						filter);
+	}
 
     protected <S> List<S> genericSearchRequest(TextSearchRequest request, Criteria criteria, Class<S> clazz) {
 
@@ -145,14 +152,15 @@ public class GenericOCDSController {
         return createFilterCriteria("tender.procuringEntity._id", filter.getProcuringEntityId(), filter);
     }
 
-    @PostConstruct
-    protected void init() {
-        filterProjectMap = new ConcurrentHashMap<>();
-        filterProjectMap.put("tender.procuringEntity", 1);
-        filterProjectMap.put("tender.items.classification", 1);
-        filterProjectMap.put("tender.procurementMethodDetails", 1);
-        filterProjectMap.put("tender.contrMethod", 1);
-    }
+	@PostConstruct
+	protected void init() {
+		Map<String, Object> tmpMap = new HashMap<>();
+		tmpMap.put("tender.procuringEntity._id", 1);
+		tmpMap.put("tender.items.classification", 1);
+		tmpMap.put("tender.procurementMethodDetails", 1);
+		tmpMap.put("tender.contrMethod", 1);
+		filterProjectMap = Collections.unmodifiableMap(tmpMap);
+	}
 
     protected Criteria getYearFilterCriteria(final String dateProperty, final YearFilterPagingRequest filter) {
         Criteria[] yearCriteria = null;
@@ -226,11 +234,11 @@ public class GenericOCDSController {
 
     private String getGroupByCategory(final GroupingFilterPagingRequest filter) {
         if ("bidSelectionMethod".equals(filter.getGroupByCategory())) {
-            return "tender.procurementMethodDetails";
+            return "tender.procurementMethodDetails".replace(".", "");
         } else if ("bidTypeId".equals(filter.getGroupByCategory())) {
-            return "tender.items.classification._id";
+            return "tender.items.classification._id".replace(".", "");
         } else if ("procuringEntityId".equals(filter.getGroupByCategory())) {
-            return "tender.procuringEntity._id";
+            return "tender.procuringEntity._id".replace(".", "");
         }
         return null;
     }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 import java.util.Date;
 
@@ -53,6 +54,7 @@ public class Transaction {
      * or project identifiers, provided here.
      *
      */
+    @ExcelExport
     @JsonProperty("source")
     private String source;
 
@@ -60,15 +62,19 @@ public class Transaction {
      * The date of the transaction
      *
      */
+    @ExcelExport
     @JsonProperty("date")
     private Date date;
 
+    @ExcelExport
     @JsonProperty("amount")
     private Amount amount;
 
+    @ExcelExport
     @JsonProperty("providerOrganization")
     private Identifier providerOrganization;
 
+    @ExcelExport
     @JsonProperty("receiverOrganization")
     private Identifier receiverOrganization;
 
