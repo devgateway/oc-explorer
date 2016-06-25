@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.spring.ExcelImportService;
+import org.devgateway.ocds.web.rest.controller.AverageNumberOfTenderersController;
 import org.devgateway.ocds.web.rest.controller.CostEffectivenessVisualsController;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
@@ -30,6 +31,9 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
 
 	@Autowired
 	private CostEffectivenessVisualsController costEffectivenessVisualsController;
+	
+	@Autowired	
+	private AverageNumberOfTenderersController averageNumberOfTenderersController;
 
 	private static boolean initialized = false;
 
@@ -73,8 +77,21 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
 		double totalAwardAmount = (double) root.get("totalTenderAmount");
 		Assert.assertEquals(1500, totalAwardAmount, 0);
 
-		System.out.println(costEffectivenessTenderAmount);
-
 	}
+	
+	@Test
+	public void testAverageNumberOfTenderersController() {
+		List<DBObject> averageNumberOfTenderers = averageNumberOfTenderersController.
+				averageNumberOfTenderers(new DefaultFilterPagingRequest());
+				
+		DBObject root = averageNumberOfTenderers.get(0);
+		int year = (int) root.get("year");
+		Assert.assertEquals(2012, year);
+
+		double averageNoTenderers = (double) root.get("averageNoTenderers");
+		Assert.assertEquals(2, averageNoTenderers, 0);
+	}
+	
+	
 
 }
