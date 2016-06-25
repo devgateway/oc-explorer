@@ -48,7 +48,7 @@ import io.swagger.annotations.ApiOperation;
  *
  */
 @RestController
-public class AverageTenderAndAwardPeriods extends GenericOCDSController {
+public class AverageTenderAndAwardPeriodsController extends GenericOCDSController {
 
 	private static final int DAY_MS = 86400000;
 
