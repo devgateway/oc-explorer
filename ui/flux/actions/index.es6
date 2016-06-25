@@ -245,5 +245,9 @@ export default {
   setLocale(loc){
     localStorage.lang = loc;
     dispatcher.dispatch(constants.LOCALE_CHANGED, loc);
+  },
+
+  applyFilters(){
+    dispatcher.dispatch(constants.FILTERS_APPLIED);
   }
 }

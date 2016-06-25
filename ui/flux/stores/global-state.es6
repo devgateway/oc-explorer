@@ -44,8 +44,7 @@ var store = Store({
       state.setIn(['filters', slug, 'options', option, 'selected'], selected)
     );
 
-    //TODO: on filters applied
-    //actions.loadData(newState.get('filters').toJS());
+    this.on(constants.FILTERS_APPLIED, state => (actions.loadData(state.get('filters').toJS()), state));
 
     this.on(constants.PROCURING_ENTITY_QUERY_UPDATED, (state, newQuery) => state.set('procuringEntityQuery', newQuery));
     this.on(constants.PROCURING_ENTITIES_UPDATED, (state, procuringEntities) =>
