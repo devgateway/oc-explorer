@@ -48,7 +48,7 @@ import io.swagger.annotations.ApiOperation;
  *
  */
 @RestController
-public class TenderPercentages extends GenericOCDSController {
+public class TenderPercentagesController extends GenericOCDSController {
 
 	@ApiOperation("Returns the percent of tenders that were cancelled, grouped by year."
 			+ " The year is taken from tender.tenderPeriod.startDate. The response also contains the"
