@@ -62,8 +62,8 @@ public class DatabaseConfiguration {
 	@Value("${dg-toolkit.derby.port}")
 	private int DERBY_PORT;
 	
-	@Value("${spring.datasource.jndi-name}")
-	private String springDatasourceJndiName;
+	@Value("${dg-toolkit.datasource.jndi-name}")
+	private String datasourceJndiName;
 	
 	protected static Logger logger = Logger.getLogger(DatabaseConfiguration.class);
 
@@ -86,7 +86,7 @@ public class DatabaseConfiguration {
 	@Bean
 	public SimpleNamingContextBuilder jndiBuilder() {
 		SimpleNamingContextBuilder builder = new SimpleNamingContextBuilder();
-		builder.bind(springDatasourceJndiName, dataSource());
+		builder.bind(datasourceJndiName, dataSource());
 		try {
 			builder.activate();
 		} catch (IllegalStateException e) {
