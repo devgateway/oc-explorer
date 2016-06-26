@@ -1,32 +1,33 @@
 jest.setMock('../style.less', "");
 jest.dontMock('../index.jsx');
-var Counter = require('../index.jsx');
-var React = require('react/addons');
-var {TestUtils} = React.addons;
+let Counter = require('../index.jsx').default;
+let React = require('react');
+let ReactDOM = require('react-dom');
+let TestUtils = require('react-addons-test-utils');
 
 describe("counter", () => {
-  it("should display the year correctly", () => {
-    var mockValue = 5;
-    var counter = TestUtils.renderIntoDocument(<Counter value={mockValue}/>);
-    expect(React.findDOMNode(counter).textContent.trim()).toEqual('5');
+  it("should display the value correctly", () => {
+    let mockValue = 5;
+    let counter = TestUtils.renderIntoDocument(<Counter value={mockValue}/>);
+    expect(ReactDOM.findDOMNode(counter).textContent.trim()).toEqual('5');
   });
 
   it("should increment the counter", () => {
-    var mockActions = {
+    let mockActions = {
       incCounter: jest.genMockFn()
     };
-    var counter = TestUtils.renderIntoDocument(<Counter actions={mockActions}/>);
-    var plus = TestUtils.findRenderedDOMComponentWithClass(counter, 'glyphicon-plus');
+    let counter = TestUtils.renderIntoDocument(<Counter actions={mockActions}/>);
+    let plus = TestUtils.findRenderedDOMComponentWithClass(counter, 'glyphicon-plus');
     TestUtils.Simulate.click(plus);
     expect(mockActions.incCounter).toBeCalled();
   });
 
   it("should decrement the counter", () => {
-    var mockActions = {
+    let mockActions = {
       decCounter: jest.genMockFn()
     };
-    var counter = TestUtils.renderIntoDocument(<Counter actions={mockActions}/>);
-    var minus = TestUtils.findRenderedDOMComponentWithClass(counter, 'glyphicon-minus');
+    let counter = TestUtils.renderIntoDocument(<Counter actions={mockActions}/>);
+    let minus = TestUtils.findRenderedDOMComponentWithClass(counter, 'glyphicon-minus');
     TestUtils.Simulate.click(minus);
     expect(mockActions.decCounter).toBeCalled();
   });
