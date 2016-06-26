@@ -36,7 +36,6 @@
     "bootstrap": "^3.3.5"
   },
   "devDependencies": {
-    "@alexeisavca/ftools": "0.0.1",
     "babel-core": "^6.10.4",
     "babel-jest": "^13.0.0",
     "babel-loader": "^6.2.4",
