@@ -59,6 +59,6 @@ This module is packaged as a fat jar. For testing purposes, the default configur
  You can run the forms module just as any module of dg-toolkit:
 
 
- `java -jar target/forms-0.0.1-SNAPSHOT.jar`
+ `java -Dspring.profiles.active=dev -jar target/forms-0.0.1-SNAPSHOT.jar`
 
  This will start everything, including an embedded Tomcat Web server and all the services attached it.
