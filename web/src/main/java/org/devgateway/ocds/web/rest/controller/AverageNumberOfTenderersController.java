@@ -47,7 +47,7 @@ import io.swagger.annotations.ApiOperation;
  *
  */
 @RestController
-public class AverageNumberOfTenderers extends GenericOCDSController {
+public class AverageNumberOfTenderersController extends GenericOCDSController {
 
 	@ApiOperation(value = "Calculate average number of tenderers, by year. The endpoint can be filtered"
 			+ "by year read from tender.tenderPeriod.startDate. "

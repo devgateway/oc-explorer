@@ -14,10 +14,16 @@
  */
 package org.devgateway.toolkit.persistence.spring;
 
-import com.zaxxer.hikari.HikariDataSource;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.util.Properties;
+
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import org.apache.derby.drda.NetworkServerControl;
-import org.apache.derby.jdbc.ClientDriver40;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -26,11 +32,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.mock.jndi.SimpleNamingContextBuilder;
 
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.util.Properties;
+import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * @author mpostelnicu
@@ -42,7 +44,27 @@ import java.util.Properties;
 @Profile("!integration")
 public class DatabaseConfiguration {
 
-    private static final int DERBY_PORT = 1527;
+	@Value("${spring.datasource.username}")
+	private String springDatasourceUsername;
+	
+	@Value("${spring.datasource.password}")
+	private String springDatasourcePassword;	
+	
+	@Value("${spring.datasource.url}")
+	private String springDatasourceUrl;
+	
+	@Value("${spring.datasource.driver-class-name}")
+	private String springDatasourceDriverClassName;
+	
+	@Value("${spring.datasource.transaction-isolation}")
+	private String springDatasourceTransactionIsolation;
+	
+	@Value("${dg-toolkit.derby.port}")
+	private int DERBY_PORT;
+	
+	@Value("${dg-toolkit.datasource.jndi-name}")
+	private String datasourceJndiName;
+	
     protected static Logger logger = Logger.getLogger(DatabaseConfiguration.class);
 
     /**
@@ -64,7 +86,7 @@ public class DatabaseConfiguration {
     @Bean
     public SimpleNamingContextBuilder jndiBuilder() {
         SimpleNamingContextBuilder builder = new SimpleNamingContextBuilder();
-        builder.bind("toolkitDS", dataSource());
+		builder.bind(datasourceJndiName, dataSource());
         try {
             builder.activate();
         } catch (IllegalStateException e) {
@@ -86,13 +108,11 @@ public class DatabaseConfiguration {
     @DependsOn(value = { "derbyServer"})
     public DataSource dataSource() {
         HikariDataSource ds = new HikariDataSource();
-        ds.setTransactionIsolation("TRANSACTION_READ_COMMITTED");
-
-        ds.setJdbcUrl("jdbc:derby://localhost//derby/ocexplorer;create=true");
-        ds.setUsername("app");
-        ds.setPassword("app");
-        ds.setDriverClassName(ClientDriver40.class.getName());
-
+		ds.setTransactionIsolation(springDatasourceTransactionIsolation);
+		ds.setJdbcUrl(springDatasourceUrl);
+		ds.setUsername(springDatasourceUsername);
+		ds.setPassword(springDatasourcePassword);
+		ds.setDriverClassName(springDatasourceDriverClassName);
         return ds;
     }
 
