@@ -32,11 +32,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.mock.jndi.SimpleNamingContextBuilder;
 
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.util.Properties;
+import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * @author mpostelnicu
