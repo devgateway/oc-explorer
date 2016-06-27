@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.spring.ExcelImportService;
 import org.devgateway.ocds.web.rest.controller.AverageNumberOfTenderersController;
+import org.devgateway.ocds.web.rest.controller.AverageTenderAndAwardPeriodsController;
 import org.devgateway.ocds.web.rest.controller.CostEffectivenessVisualsController;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
@@ -15,7 +16,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.data.mongodb.core.aggregation.Fields;
 
 import com.mongodb.DBObject;
 
@@ -23,7 +25,7 @@ import com.mongodb.DBObject;
  * @author mihai
  *
  */
-@WebAppConfiguration
+@WebIntegrationTest
 public class VNImportAndEndpointsTest extends AbstractMongoTest {
 
 	@Autowired
@@ -34,6 +36,9 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
 	
 	@Autowired	
 	private AverageNumberOfTenderersController averageNumberOfTenderersController;
+	
+	@Autowired
+	private AverageTenderAndAwardPeriodsController averageTenderAndAwardPeriodsController;
 
 	private static boolean initialized = false;
 
@@ -58,8 +63,8 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
 		List<DBObject> costEffectivenessAwardAmount = costEffectivenessVisualsController
 				.costEffectivenessAwardAmount(new DefaultFilterPagingRequest());
 		DBObject root = costEffectivenessAwardAmount.get(0);
-		int year = (int) root.get("_id");
-		Assert.assertEquals(2012, year);
+		int year = (int) root.get(Fields.UNDERSCORE_ID);
+		Assert.assertEquals(2014, year);
 
 		double totalAwardAmount = (double) root.get("totalAwardAmount");
 		Assert.assertEquals(2000, totalAwardAmount, 0);
@@ -71,7 +76,7 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
 		List<DBObject> costEffectivenessTenderAmount = costEffectivenessVisualsController
 				.costEffectivenessTenderAmount(new GroupingFilterPagingRequest());
 		DBObject root = costEffectivenessTenderAmount.get(0);
-		int year = (int) root.get("_id");
+		int year = (int) root.get(Fields.UNDERSCORE_ID);
 		Assert.assertEquals(2013, year);
 
 		double totalAwardAmount = (double) root.get("totalTenderAmount");
@@ -92,6 +97,37 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
 		Assert.assertEquals(2, averageNoTenderers, 0);
 	}
 	
+	@Test
+	public void testAverageAwardPeriod() {
+		List<DBObject> averageAwardPeriod = averageTenderAndAwardPeriodsController
+				.averageAwardPeriod(new DefaultFilterPagingRequest());
+
+		DBObject root = averageAwardPeriod.get(0);
+		int year = (int) root.get(Fields.UNDERSCORE_ID);
+		Assert.assertEquals(2014, year);
+
+		double n = (double) root.get("averageAwardDays");
+		Assert.assertEquals(536, n, 0);
+	}
 	
+	@Test
+	public void testAverageTenderPeriod() {
+		List<DBObject> averageTenderPeriod = averageTenderAndAwardPeriodsController
+				.averageTenderPeriod(new DefaultFilterPagingRequest());
+
+		DBObject root = averageTenderPeriod.get(0);
+		int year = (int) root.get(Fields.UNDERSCORE_ID);
+		Assert.assertEquals(2013, year);
+
+		double n = (double) root.get("averageTenderDays");
+		Assert.assertEquals(15, n, 0);
+		
+		root = averageTenderPeriod.get(1);
+		year = (int) root.get(Fields.UNDERSCORE_ID);
+		Assert.assertEquals(2012, year);
+
+		n = (double) root.get("averageTenderDays");
+		Assert.assertEquals(15, n, 0);
+	}
 
 }
