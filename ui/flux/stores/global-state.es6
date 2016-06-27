@@ -4,6 +4,8 @@ import keyMirror from "keymirror";
 import {identity} from "../../tools";
 import actions from "../actions";
 
+let mapIn = (obj, path, cb) => obj.updateIn(path, items => items.map(cb));
+
 export let tabs = keyMirror({
   OVERVIEW: null,
   PLANNING: null,
@@ -26,11 +28,11 @@ let store = Store({
   },
 
   initialize(){
-    var updateData = (path, pipe = identity) => (state, data) => state.setIn(['data', path], pipe(data));
+    let updateData = (path, pipe = identity) => (state, data) => state.setIn(['data', path], pipe(data));
 
     this.on(constants.TAB_CHANGED, (state, tab) => state.set('tab', tab));
     this.on(constants.YEAR_TOGGLED, (state, {year, selected}) => {
-      var newState = state.setIn(['filters', 'years', year], selected);
+      let newState = state.setIn(['filters', 'years', year], selected);
       actions.loadServerSideYearFilteredData(newState.get('filters').toJS());
       return newState;
     });
@@ -52,11 +54,19 @@ let store = Store({
 
     this.on(constants.FILTERS_APPLIED, state => (actions.loadData(state.get('filters').toJS()), state));
 
+    this.on(constants.FILTERS_RESET, state =>
+        mapIn(state, ['filters'], filter =>
+          filter.has('options') ?
+              mapIn(filter, ['options'], option => option.set('selected', false)) :
+              filter
+        )
+    );
+
     this.on(constants.PROCURING_ENTITY_QUERY_UPDATED, (state, newQuery) => state.set('procuringEntityQuery', newQuery));
     this.on(constants.PROCURING_ENTITIES_UPDATED, (state, procuringEntities) =>
         state.setIn(['filters', 'procuringEntities', 'options'], toImmutable(procuringEntities)));
     this.on(constants.COMPARISON_CRITERIA_UPDATED, (state, criteria) => {
-      var newState = state.set('compareBy', criteria);
+      let newState = state.set('compareBy', criteria);
       actions.loadComparisonData(newState.get('compareBy'), newState.get('filters').toJS());
       return newState;
     });
