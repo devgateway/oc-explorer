@@ -16,8 +16,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.data.mongodb.core.aggregation.Fields;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.mongodb.DBObject;
 
@@ -25,7 +25,7 @@ import com.mongodb.DBObject;
  * @author mihai
  *
  */
-@WebIntegrationTest
+@WebAppConfiguration
 public class VNImportAndEndpointsTest extends AbstractMongoTest {
 
 	@Autowired
