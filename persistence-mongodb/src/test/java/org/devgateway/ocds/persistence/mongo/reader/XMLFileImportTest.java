@@ -34,6 +34,16 @@ public class XMLFileImportTest extends AbstractMongoTest {
         protected AbstractRulesModule getAbstractRulesModule() {
             return new TestRules();
         }
+
+        @Override
+        public StringBuffer getMsgBuffer() {
+            return null;
+        }
+
+        @Override
+        public void logMessage(String message) {
+
+        }
     }
 
     public class TestRules extends AbstractRulesModule {

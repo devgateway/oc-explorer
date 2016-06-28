@@ -1,5 +1,6 @@
 package org.devgateway.ocds.persistence.mongo.reader;
 
+import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
@@ -8,7 +9,7 @@ import java.io.IOException;
  * @author idobre
  * @since 6/27/16
  */
-public interface XMLFile {
+public interface XMLFile extends ImportService {
     /**
      * Process an XML stream and map it to Release objects.
      *
@@ -23,4 +24,11 @@ public interface XMLFile {
      * @param obj
      */
     public void saveRelease(Object obj);
+
+    /**
+     * Returns a StringBuffer with import statistics
+     *
+     * @return StringBuffer
+     */
+    StringBuffer getMsgBuffer();
 }
