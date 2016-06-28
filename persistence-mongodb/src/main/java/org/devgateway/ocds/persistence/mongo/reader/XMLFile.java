@@ -3,7 +3,9 @@ package org.devgateway.ocds.persistence.mongo.reader;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.xml.sax.SAXException;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author idobre
@@ -16,7 +18,9 @@ public interface XMLFile extends ImportService {
      * @throws IOException
      * @throws SAXException
      */
-    public void process() throws IOException, SAXException;
+    public void process(final InputStream inputStream) throws IOException, SAXException;
+
+    public void process(final File file) throws IOException, SAXException;
 
     /**
      * Save a particular release into database.
