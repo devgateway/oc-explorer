@@ -128,6 +128,18 @@
             <artifactId>mail</artifactId>
             <version>1.4</version>
         </dependency>
+        
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-rest</artifactId>
+			<exclusions>
+				<exclusion>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+					<groupId>org.springframework.boot</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+        
 
         <dependency>
             <groupId>junit</groupId>
