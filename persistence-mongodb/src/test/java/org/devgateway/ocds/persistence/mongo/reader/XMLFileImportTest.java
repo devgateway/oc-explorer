@@ -7,11 +7,7 @@ import org.devgateway.toolkit.persistence.mongo.test.AbstractMongoTest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.RememberMeAuthenticationProvider;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +23,7 @@ public class XMLFileImportTest extends AbstractMongoTest {
     private ReleaseRepository releaseRepository;
 
     @Autowired
+    @Qualifier("XMLFileImportDefault")
     private XMLFile xmlFile;
 
     @Test
