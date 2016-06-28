@@ -132,16 +132,6 @@ public class VietnamImportPage extends BasePage {
 
     }
 
-    public class EditForm extends BootstrapForm<VietnamImportBean> {
-        public EditForm(final String componentId) {
-            super(componentId);
-            // TODO Auto-generated constructor stub
-        }
-
-        private static final long serialVersionUID = -9127043819229346784L;
-
-    }
-
     protected void addForm() {
         importForm = new BootstrapForm<VietnamImportBean>("form",
                 new CompoundPropertyModel<>(new DozerModel<>(new VietnamImportBean())));
