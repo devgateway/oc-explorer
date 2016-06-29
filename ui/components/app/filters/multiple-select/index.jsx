@@ -22,7 +22,7 @@ export default class MultipleSelect extends Component{
                   <label>
                     <input
                         type="checkbox"
-                        value={option.get('selected')}
+                        checked={option.get('selected')}
                         onChange={e => actions.toggleFilterOption(slug, option.get('id'), !option.get('selected'))}
                     /> {option.get('description')}
                   </label>

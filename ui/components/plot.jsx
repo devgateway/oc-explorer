@@ -1,10 +1,12 @@
 import Component from "./pure-render-component";
 import Plotly from "plotly.js/lib/core";
+import translatable from "./translatable";
+
 Plotly.register([
     require('plotly.js/lib/bar')
 ]);
 
-class Plot extends Component{
+class Plot extends translatable(Component){
   getDecoratedLayout(){
     var {pageHeaderTitle, title, xAxisRange, yAxisRange} = this.props;
     var layout = this.getLayout();
