@@ -9,9 +9,8 @@ export default class Comparison extends Component{
           <h3 className="page-header">{title}</h3>
           <div className="row">
             {data.map((datum, index) => (
-                <div className="col-md-6">
+                <div className="col-md-6" key={index}>
                   <Component
-                      key={index}
                       yAxisRange={yAxisRange}
                       xAxisRange={xAxisRange}
                       data={datum}

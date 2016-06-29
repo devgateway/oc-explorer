@@ -42,11 +42,14 @@ let yearOnly = year => ({
 let maxFieldExceptYear = datum =>
     Math.max.apply(Math, Object.keys(datum).filter(key => "year" != key).map(key => datum[key] || 0));
 
+const FALLBACK_BIDTYPE = Map({description: "Other"});
+
 let getCriteriaNames = (compare, comparisonCriteriaNames, filters) => {
   switch(compare){
     case "bidTypeId":
       return ensureArray(comparisonCriteriaNames).map(name =>
-          filters.getIn(['bidTypes', 'options']).find(bidType => bidType.get('id') == name[0]).get('description')
+          filters.getIn(['bidTypes', 'options'])
+              .find(bidType => bidType.get('id') == name[0], undefined, FALLBACK_BIDTYPE).get('description')
       );
     default:
       return ensureArray(comparisonCriteriaNames).map(pluck('_id'));
