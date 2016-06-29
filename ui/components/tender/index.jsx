@@ -4,14 +4,17 @@ import CostEffectiveness from "./cost-effectiveness";
 import BidSelection from "./bid-selection";
 import BiddingPeriod from "./bidding-period";
 import Cancelled from "./cancelled";
+import CancelledPercents from "./cancelled-percents";
+import AvgNrBids from "./avg-nr-bids";
 import {toImmutable} from "nuclear-js";
 import Comparison from "../comparison";
 import translatable from "../translatable";
 
 export default class Tender extends translatable(Component){
   render(){
-    var {state, width, translations} = this.props;
-    var {compare, costEffectiveness, bidPeriod, bidType, cancelled} = state;
+    let {state, width, actions, translations} = this.props;
+    let {compare, costEffectiveness, bidPeriod, bidType, cancelled, avgNrBids,
+        showPercentsCancelled} = state;
     return (
         <div className="col-sm-12 content">
           {compare ?
@@ -65,7 +68,25 @@ export default class Tender extends translatable(Component){
               />
           }
 
-          {compare ?
+          {showPercentsCancelled ?
+            (compare ?
+              <Comparison
+                  translations={translations}
+                  width={width}
+                  state={cancelled}
+                  Component={CancelledPercents}
+                  title={this.__("Cancelled funding percentage")}
+                  actions={actions}
+              />
+              :
+              <CancelledPercents
+                  translations={translations}
+                  title={this.__("Cancelled funding percentage")}
+                  actions={actions}
+                  data={cancelled}
+                  width={width}
+              />
+            ) : (compare ?
               <Comparison
                   translations={translations}
                   width={width}
@@ -78,6 +99,23 @@ export default class Tender extends translatable(Component){
                   translations={translations}
                   title={this.__("Cancelled funding")}
                   data={cancelled}
+                  width={width}
+                  actions={actions}
+              />
+            )
+          }
+
+          {compare ?
+              <Comparison
+                  width={width}
+                  state={avgNrBids}
+                  Component={AvgNrBids}
+                  title={this.__("Average number of bids")}
+              />
+              :
+              <AvgNrBids
+                  title={this.__("Average number of bids")}
+                  data={avgNrBids}
                   width={width}
               />
           }
