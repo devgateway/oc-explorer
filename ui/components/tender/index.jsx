@@ -4,6 +4,7 @@ import CostEffectiveness from "./cost-effectiveness";
 import FundingByBidType from "./funding-by-bid-type";
 import BiddingPeriod from "./bidding-period";
 import Cancelled from "./cancelled";
+import CancelledPercents from "./cancelled-percents";
 import AvgNrBids from "./avg-nr-bids";
 import {toImmutable} from "nuclear-js";
 import Comparison from "../comparison";
@@ -11,8 +12,9 @@ import translatable from "../translatable";
 
 export default class Tender extends translatable(Component){
   render(){
-    let {state, width} = this.props;
-    let {compare, costEffectiveness, bidPeriod, bidType, cancelled, avgNrBids} = state;
+    let {state, width, actions} = this.props;
+    let {compare, costEffectiveness, bidPeriod, bidType, cancelled, avgNrBids,
+        showPercentsCancelled} = state;
     return (
         <div className="col-sm-12 content">
           {compare ?
@@ -60,19 +62,38 @@ export default class Tender extends translatable(Component){
               />
           }
 
-          {compare ?
+          {showPercentsCancelled ?
+            (compare ?
+              <Comparison
+                  width={width}
+                  state={cancelled}
+                  Component={CancelledPercents}
+                  title={this.__("Cancelled funding percentage")}
+                  actions={actions}
+              />
+              :
+              <CancelledPercents
+                  title={this.__("Cancelled funding percentage")}
+                  actions={actions}
+                  data={cancelled}
+                  width={width}
+              />
+            ) : (compare ?
               <Comparison
                   width={width}
                   state={cancelled}
                   Component={Cancelled}
-                  title="Cancelled funding"
+                  title={this.__("Cancelled funding")}
+                  actions={actions}
               />
               :
               <Cancelled
-                  title="Cancelled funding"
+                  title={this.__("Cancelled funding")}
+                  actions={actions}
                   data={cancelled}
                   width={width}
               />
+            )
           }
 
           {compare ?

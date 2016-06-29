@@ -23,7 +23,8 @@ let store = Store({
       comparisonData: {},
       procuringEntityQuery: "",
       filters: {},
-      locale: localStorage.lang || 'en'
+      locale: localStorage.lang || 'en',
+      showPercentsCancelled: false
     })
   },
 
@@ -43,6 +44,7 @@ let store = Store({
     this.on(constants.BID_PERIOD_DATA_UPDATED, updateData('bidPeriod'));
     this.on(constants.OVERVIEW_DATA_UPDATED, updateData('overview'));
     this.on(constants.CANCELLED_DATA_UPDATED, updateData('cancelled'));
+    this.on(constants.CANCELLED_PERCENTS_DATA_UPDATED, updateData('cancelledPercents'));
     this.on(constants.TOP_TENDERS_DATA_UPDATED, updateData('topTenders'));
     this.on(constants.TOP_AWARDS_DATA_UPDATED, updateData('topAwards'));
     this.on(constants.AVERAGED_TENDERS_DATA_UPDATED, updateData('avgTenders'));
@@ -83,6 +85,8 @@ let store = Store({
     this.on(constants.COMPARISON_CRITERIA_NAMES_UPDATED, (state, names) => state.set('comparisonCriteriaNames', names))
     
     this.on(constants.LOCALE_CHANGED, (state, loc) => state.set('locale', loc));
+
+    this.on(constants.CANCELLED_TYPE_TOGGLED, (state, percents) => state.set('showPercentsCancelled', percents));
   }
 });
 
