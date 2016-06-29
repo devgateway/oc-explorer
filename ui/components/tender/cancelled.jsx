@@ -38,7 +38,6 @@ export default class BiddingPeriod extends Plot{
 
   render(){
     let {pageHeaderTitle, title, actions} = this.props;
-    console.log(actions);
     return (
         <section>
           {pageHeaderTitle &&

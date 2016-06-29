@@ -13,7 +13,8 @@ import translatable from "../translatable";
 export default class Tender extends translatable(Component){
   render(){
     let {state, width, actions} = this.props;
-    let {compare, costEffectiveness, bidPeriod, bidType, cancelled, avgNrBids, showPercentsCancelled} = state;
+    let {compare, costEffectiveness, bidPeriod, bidType, cancelled, avgNrBids,
+        showPercentsCancelled} = state;
     return (
         <div className="col-sm-12 content">
           {compare ?

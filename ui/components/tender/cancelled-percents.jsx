@@ -8,10 +8,10 @@ export default class BiddingPeriod extends Plot{
   }
 
   getData(){
-    var {data} = this.props;
+    let {data} = this.props;
     return [{
       x: data.map(pluck('year')),
-      y: data.map(pluck('count')),
+      y: data.map(pluck('percentCancelled')),
       type: 'scatter',
       fill: 'tonexty'
     }];
@@ -20,14 +20,14 @@ export default class BiddingPeriod extends Plot{
   getLayout(){
     return {
       xaxis: {
-        title: "Years",
+        title: this.__("Years"),
         type: 'category',
         titlefont: {
           color: "#cc3c3b"
         }
       },
       yaxis: {
-        title: "Percent",
+        title: this.__("Percent"),
         titlefont: {
           color: "#cc3c3b"
         },
