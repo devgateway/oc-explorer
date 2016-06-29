@@ -27,5 +27,6 @@ export default keyMirror({
   COMPARISON_CRITERIA_NAMES_UPDATED: null,
   LOCALE_CHANGED: null,
   FILTERS_APPLIED: null,
-  FILTERS_RESET: null
+  FILTERS_RESET: null,
+  AVERAGED_TENDERS_DATA_UPDATED: null
 })

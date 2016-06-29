@@ -45,6 +45,7 @@ let store = Store({
     this.on(constants.CANCELLED_DATA_UPDATED, updateData('cancelled'));
     this.on(constants.TOP_TENDERS_DATA_UPDATED, updateData('topTenders'));
     this.on(constants.TOP_AWARDS_DATA_UPDATED, updateData('topAwards'));
+    this.on(constants.AVERAGED_TENDERS_DATA_UPDATED, updateData('avgTenders'));
     this.on(constants.FILTER_BOX_CHANGED, (state, slug) => state.set('filtersBox', slug));
     this.on(constants.FILTERS_DATA_UPDATED, (state, data) => state.set('filters', toImmutable(data)));
     this.on(constants.FILTER_TOGGLED, (state, {slug, open}) => state.setIn(['filters', slug, 'open'], open));
