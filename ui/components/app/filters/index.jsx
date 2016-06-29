@@ -3,8 +3,9 @@ import style from "./style.less";
 import cn from "classnames";
 import MultipleSelect from "./multiple-select";
 import TypeAhead from "./type-ahead";
+import translatable from "../../translatable";
 
-export default class Filters extends Component{
+class Filters extends translatable(Component){
   render(){
     var {actions, state} = this.props;
     var globalState = state.get('globalState');
@@ -36,9 +37,24 @@ export default class Filters extends Component{
                   state={filters.get('procuringEntities')}
                   actions={actions}
               />
+              <section className="buttons">
+                <button className="btn btn-primary" onClick={e => actions.applyFilters()}>
+                  {this.__('Apply')}
+                </button>
+                &nbsp;
+                <button className="btn btn-default" onClick={e => actions.resetFilters()}>
+                  {this.__('Reset')}
+                  </button>
+              </section>
             </div>
           </div>
         </section>
     )
   }
 }
+
+Filters.propTypes = {
+  translations: React.PropTypes.object.isRequired
+};
+
+export default Filters;
