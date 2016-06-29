@@ -115,6 +115,10 @@ let getCancelled = mkDataGetter({
   path: "cancelled"
 });
 
+let getCancelledPercents = mkDataGetter({
+  path: "cancelledPercents"
+});
+
 let getBidType = [
   ['globalState', 'compareBy'],
   ['globalState', 'data', 'bidType'],
@@ -173,15 +177,16 @@ let getTender = [
     getBidPeriod,
     getBidType,
     getCancelled,
+    getCancelledPercents,
     getAvgTenders,
     ['globalState', 'showPercentsCancelled'],
-    (compare, costEffectiveness, bidPeriod, bidType, cancelled, avgNrBids, showPercentsCancelled) => {
+    (compare, costEffectiveness, bidPeriod, bidType, cancelled, cancelledPercents, avgNrBids, showPercentsCancelled) => {
       return {
         compare,
         costEffectiveness,
         bidPeriod,
         bidType,
-        cancelled,
+        cancelled: showPercentsCancelled ? cancelledPercents : cancelled,
         avgNrBids,
         showPercentsCancelled
       }

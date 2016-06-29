@@ -83,7 +83,6 @@ export default {
     let load = url => fetchJson(addFilters(filters, url));
     load('/api/topTenLargestTenders').then(data => dispatcher.dispatch(constants.TOP_TENDERS_DATA_UPDATED, data));
     load('/api/topTenLargestAwards').then(data => dispatcher.dispatch(constants.TOP_AWARDS_DATA_UPDATED, data));
-    load('/api/averageNumberOfTenderers').then(data => dispatcher.dispatch(constants.AVERAGED_TENDERS_DATA_UPDATED, data));
   },
 
   loadData(filters = null){
@@ -116,6 +115,10 @@ export default {
     load(endpoints.TOTAL_CANCELLED_TENDERS_BY_YEAR)
         .then(transformCancelledData)
         .then(data => dispatcher.dispatch(constants.CANCELLED_DATA_UPDATED, data));
+
+    load('/api/averageNumberOfTenderers').then(data => dispatcher.dispatch(constants.AVERAGED_TENDERS_DATA_UPDATED, data));
+
+    load('/api/percentTendersCancelled').then(data => dispatcher.dispatch(constants.CANCELLED_PERCENTS_DATA_UPDATED, data));
   },
 
   bootstrap(){
