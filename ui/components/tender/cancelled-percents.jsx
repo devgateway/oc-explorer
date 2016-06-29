@@ -27,7 +27,7 @@ export default class BiddingPeriod extends Plot{
         }
       },
       yaxis: {
-        title: "Amount",
+        title: "Percent",
         titlefont: {
           color: "#cc3c3b"
         },
@@ -38,15 +38,14 @@ export default class BiddingPeriod extends Plot{
 
   render(){
     let {pageHeaderTitle, title, actions} = this.props;
-    console.log(actions);
     return (
         <section>
           {pageHeaderTitle &&
-            <h4 className="page-header">
-                {title}
-                  &nbsp;
-                  <button className="btn btn-default btn-sm" onClick={e => actions.toggleCancelledPercents(true)}>%</button>
-            </h4>
+          <h4 className="page-header">
+            {title}
+            &nbsp;
+            <button className="btn btn-default btn-sm" onClick={e => actions.toggleCancelledPercents(false)}>&#8363;</button>
+          </h4>
           }
           <div ref="chartContainer"></div>
         </section>
