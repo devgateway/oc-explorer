@@ -161,7 +161,7 @@ export default {
   },
 
   loadComparisonData(criteria, filters){
-    if("none" == criteria) return;
+    if(!criteria) return;
     let comparisonUrl = new URI(endpoints.COST_EFFECTIVENESS_TENDER_AMOUNT).addSearch({
       groupByCategory: criteria,
       pageSize: 3
