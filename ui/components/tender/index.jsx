@@ -93,7 +93,6 @@ export default class Tender extends translatable(Component){
                   state={cancelled}
                   Component={Cancelled}
                   title={this.__("Cancelled funding")}
-                  actions={actions}
               />
               :
               <Cancelled
@@ -101,17 +100,26 @@ export default class Tender extends translatable(Component){
                   title={this.__("Cancelled funding")}
                   data={cancelled}
                   width={width}
+                  actions={actions}
               />
             )
           }
+
+          {compare ?
+              <Comparison
+                  width={width}
+                  state={avgNrBids}
+                  Component={AvgNrBids}
+                  title={this.__("Average number of bids")}
+              />
+              :
+              <AvgNrBids
+                  title={this.__("Average number of bids")}
+                  data={avgNrBids}
+                  width={width}
+              />
+          }
         </div>
     );
-
-    return (
-        <div className="col-sm-12 content">
-          {this.getBidType()}
-          {this.getCancelled()}
-        </div>
-    )
   }
 }
