@@ -4,14 +4,15 @@ import CostEffectiveness from "./cost-effectiveness";
 import FundingByBidType from "./funding-by-bid-type";
 import BiddingPeriod from "./bidding-period";
 import Cancelled from "./cancelled";
+import AvgNrBids from "./avg-nr-bids";
 import {toImmutable} from "nuclear-js";
 import Comparison from "../comparison";
-import {pluck} from "../../tools";
+import translatable from "../translatable";
 
-export default class Tender extends Component{
+export default class Tender extends translatable(Component){
   render(){
     let {state, width} = this.props;
-    let {compare, costEffectiveness, bidPeriod, bidType, cancelled} = state;
+    let {compare, costEffectiveness, bidPeriod, bidType, cancelled, avgNrBids} = state;
     return (
         <div className="col-sm-12 content">
           {compare ?
@@ -70,6 +71,21 @@ export default class Tender extends Component{
               <Cancelled
                   title="Cancelled funding"
                   data={cancelled}
+                  width={width}
+              />
+          }
+
+          {compare ?
+              <Comparison
+                  width={width}
+                  state={avgNrBids}
+                  Component={AvgNrBids}
+                  title={this.__("Average number of bids")}
+              />
+              :
+              <AvgNrBids
+                  title={this.__("Average number of bids")}
+                  data={avgNrBids}
                   width={width}
               />
           }

@@ -174,14 +174,14 @@ let getTender = [
     getBidType,
     getCancelled,
     getAvgTenders,
-    (compare, costEffectiveness, bidPeriod, bidType, cancelled, avgTenders) => {
+    (compare, costEffectiveness, bidPeriod, bidType, cancelled, avgNrBids) => {
       return {
         compare,
         costEffectiveness,
         bidPeriod,
         bidType,
         cancelled,
-        avgTenders
+        avgNrBids
       }
     }
 ];
