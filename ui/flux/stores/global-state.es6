@@ -23,7 +23,8 @@ let store = Store({
       comparisonData: {},
       procuringEntityQuery: "",
       filters: {},
-      locale: localStorage.lang || 'en'
+      locale: localStorage.lang || 'en',
+      showPercentsCancelled: false
     })
   },
 
@@ -83,6 +84,8 @@ let store = Store({
     this.on(constants.COMPARISON_CRITERIA_NAMES_UPDATED, (state, names) => state.set('comparisonCriteriaNames', names))
     
     this.on(constants.LOCALE_CHANGED, (state, loc) => state.set('locale', loc));
+
+    this.on(constants.CANCELLED_TYPE_TOGGLED, (state, percents) => state.set('showPercentsCancelled', percents));
   }
 });
 

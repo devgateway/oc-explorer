@@ -252,5 +252,9 @@ export default {
 
   resetFilters(){
     dispatcher.dispatch(constants.FILTERS_RESET);
+  },
+
+  toggleCancelledPercents(bool){
+    dispatcher.dispatch(constants.CANCELLED_TYPE_TOGGLED, bool);
   }
 }

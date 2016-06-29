@@ -174,14 +174,16 @@ let getTender = [
     getBidType,
     getCancelled,
     getAvgTenders,
-    (compare, costEffectiveness, bidPeriod, bidType, cancelled, avgNrBids) => {
+    ['globalState', 'showPercentsCancelled'],
+    (compare, costEffectiveness, bidPeriod, bidType, cancelled, avgNrBids, showPercentsCancelled) => {
       return {
         compare,
         costEffectiveness,
         bidPeriod,
         bidType,
         cancelled,
-        avgNrBids
+        avgNrBids,
+        showPercentsCancelled
       }
     }
 ];
