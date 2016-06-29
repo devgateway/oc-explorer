@@ -24,7 +24,6 @@ class Filters extends translatable(Component){
               <i className="glyphicon glyphicon-menu-right"></i>
             </div>
             <div className="box" onClick={e => e.stopPropagation()}>
-              <MultipleSelect title="Bid type" slug="bidTypes" state={filters.get('bidTypes')} actions={actions}/>
               <MultipleSelect
                   title={this.__("Bid type")}
                   slug="bidTypes"
