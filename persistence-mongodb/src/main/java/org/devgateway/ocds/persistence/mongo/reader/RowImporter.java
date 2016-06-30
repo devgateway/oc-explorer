@@ -1,16 +1,18 @@
 package org.devgateway.ocds.persistence.mongo.reader;
 
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.poi.ss.usermodel.DateUtil;
+import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.repository.MongoRepository;
-
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Generic superclass for importing rows from excel data sources
@@ -105,11 +107,17 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 		if (string == null) {
 			return null;
 		}
+		Calendar calendar;
 		try {
-			return DateUtil.getJavaCalendar(Double.parseDouble(string)).getTime();
+			calendar = DateUtil.getJavaCalendar(Double.parseDouble(string));
+			if (calendar.get(Calendar.YEAR) < MongoConstants.MINIMUM_MONGO_YEAR) {
+				throw new RuntimeException("Years below " + MongoConstants.MINIMUM_MONGO_YEAR + " are not allowed"
+						+ " (" + calendar.get(Calendar.YEAR) + ").");
+			}
 		} catch (NumberFormatException e) {
 			throw new RuntimeException("Cell value " + string + " is not a valid Excel date.");
 		}
+		return calendar.getTime();
 	}
 
 	private boolean isRowEmpty(final String[] row) {

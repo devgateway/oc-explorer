@@ -20,4 +20,6 @@ public final class MongoConstants {
     public static final String OCDS_PREFIX = "ocds-ep75k8-";
 
     public static final int IMPORT_ROW_BATCH = 1000;
+    
+	public static final int MINIMUM_MONGO_YEAR = 2010;
 }
