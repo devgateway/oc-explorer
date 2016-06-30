@@ -177,6 +177,7 @@
 					<include>**/*.properties</include>
 					<include>**/*.xlsx</include>
 					<include>**/*.json</include>
+                    <include>**/*.xml</include>
 				</includes>		
 			</testResource>
 		</testResources>
