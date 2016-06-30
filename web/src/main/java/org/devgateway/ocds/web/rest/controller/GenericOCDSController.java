@@ -156,7 +156,7 @@ public class GenericOCDSController {
 	protected void init() {
 		Map<String, Object> tmpMap = new HashMap<>();
 		tmpMap.put("tender.procuringEntity._id", 1);
-		tmpMap.put("tender.items.classification", 1);
+		tmpMap.put("tender.items.classification._id", 1);
 		tmpMap.put("tender.procurementMethodDetails", 1);
 		tmpMap.put("tender.contrMethod", 1);
 		filterProjectMap = Collections.unmodifiableMap(tmpMap);
