@@ -9,11 +9,11 @@ class Filters extends translatable(Component){
   render(){
     var {actions, state, translations} = this.props;
     var globalState = state.get('globalState');
-    var open = 'filters' == globalState.get('filtersBox');
+    var open = 'filters' == globalState.get('menuBox');
     var filters = globalState.get('filters');
     return (
         <section
-            onClick={e => actions.setFiltersBox(open ? "" : "filters")}
+            onClick={e => actions.setMenuBox(open ? "" : "filters")}
             className={cn("col-sm-12 filters", {open: open})}
         >
           <div className="row">

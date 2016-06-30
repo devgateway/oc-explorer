@@ -211,8 +211,8 @@ export default {
     });
   },
 
-  setFiltersBox(slug){
-    dispatcher.dispatch(constants.FILTER_BOX_CHANGED, slug);
+  setMenuBox(slug){
+    dispatcher.dispatch(constants.MENU_BOX_CHANGED, slug);
   },
 
   toggleFilter(slug, open){

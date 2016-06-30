@@ -27,8 +27,10 @@ export default class App extends translatable(Component){
             <small>{this.__('Toolkit')}</small>
           </h1>
         </div>
-        <div className="col-sm-5">
-
+        <div className="col-sm-5 menu">
+          <div>Filter the data</div>
+          <div>Compare</div>
+          <div>Export</div>
         </div>
         <div className="col-sm-1 language-switcher">
           <img src="assets/flags/us.png" alt="" onClick={e => actions.setLocale("en")}/>

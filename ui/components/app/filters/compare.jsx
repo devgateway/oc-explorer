@@ -6,10 +6,10 @@ export default class ComparisionCriteria extends translatable(Component){
   render(){
     var {actions, state} = this.props;
     var globalState = state.get('globalState');
-    var open = 'compare' == globalState.get('filtersBox');
+    var open = 'compare' == globalState.get('menuBox');
     return (
         <section
-            onClick={e => actions.setFiltersBox(open ? "" : "compare")}
+            onClick={e => actions.setMenuBox(open ? "" : "compare")}
             className={cn("col-sm-12 filters", {open: open})}
         >
           <div className="row">
