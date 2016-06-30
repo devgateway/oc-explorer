@@ -50,7 +50,6 @@ let store = Store({
     this.on(constants.AVERAGED_TENDERS_DATA_UPDATED, updateData('avgTenders'));
     this.on(constants.MENU_BOX_CHANGED, (state, slug) => state.set('menuBox', slug));
     this.on(constants.FILTERS_DATA_UPDATED, (state, data) => state.set('filters', toImmutable(data)));
-    this.on(constants.FILTER_TOGGLED, (state, {slug, open}) => state.setIn(['filters', slug, 'open'], open));
     this.on(constants.FILTER_OPTIONS_TOGGLED, (state, {slug, option, selected}) =>
       state.setIn(['filters', slug, 'options', option, 'selected'], selected)
     );

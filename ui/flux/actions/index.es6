@@ -129,7 +129,6 @@ export default {
     ]).then(([bidTypes, bidSelectionMethods]) => dispatcher.dispatch(constants.FILTERS_DATA_UPDATED, {
       years: years().reduce((map, year) => map.set(year, true), toImmutable({})),
       bidTypes: {
-        open: true,
         options: bidTypes.reduce((accum, bidType) => {
           let {id} = bidType;
           accum[id] = {
@@ -141,7 +140,6 @@ export default {
         }, {})
       },
       bidSelectionMethods: {
-        open: true,
         options: bidSelectionMethods
             .filter(method => !!method._id)
             .reduce((accum, {_id}) => {
@@ -154,7 +152,6 @@ export default {
             }, {})
       },
       procuringEntities: {
-        open: true,
         options: []
       }
     }));
@@ -213,13 +210,6 @@ export default {
 
   setMenuBox(slug){
     dispatcher.dispatch(constants.MENU_BOX_CHANGED, slug);
-  },
-
-  toggleFilter(slug, open){
-    dispatcher.dispatch(constants.FILTER_TOGGLED, {
-      slug: slug,
-      open: open
-    })
   },
 
   toggleFilterOption(slug, option, selected){

@@ -12,7 +12,7 @@ export default class MultipleSelect extends Component{
     let open = state.get('open');
     return (
         <section className={cn('col-sm-4', 'field', {open: open})}>
-          <header onClick={e => actions.toggleFilter(slug, !open)}>
+          <header>
             {title} <span className="count">({selectedCount}/{totalOptions})</span>
           </header>
           <section className="options">
