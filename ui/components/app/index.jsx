@@ -18,7 +18,24 @@ export default class App extends translatable(Component){
   }
 
   render(){
-    var {state, actions, translations} = this.props;
+    let {state, actions, translations} = this.props;
+    return <div className="container-fluid">
+      <header className="branding row">
+        <div className="col-sm-offset-1 col-sm-5">
+          <h1>
+            {this.__('e-Procurement')}
+            <small>{this.__('Toolkit')}</small>
+          </h1>
+        </div>
+        <div className="col-sm-5">
+
+        </div>
+        <div className="col-sm-1 language-switcher">
+          <img src="assets/flags/us.png" alt="" onClick={e => actions.setLocale("en")}/>
+          <img src="assets/flags/vn.png" alt="" onClick={e => actions.setLocale("vn")}/>
+        </div>
+      </header>
+    </div>;
     var width = state.getIn(['globalState', 'contentWidth']);
     var navigationLink = (text, marker, tab) =>
         <NavigationLink text={text} actions={actions} tab={tab} marker={marker} active={state.getIn(['globalState', 'tab']) == tab}/>
@@ -28,10 +45,7 @@ export default class App extends translatable(Component){
         <aside className="col-xs-4 col-md-3 col-lg-2">
           <div className="row">
             <section className="col-sm-12 branding">
-              <h1>
-                {this.__('E-procurement')}
-                <small>{this.__('Toolkit')}</small>
-              </h1>
+
             </section>
             <div role="navigation">
               {navigationLink(this.__("Overview"), 'search', tabs.OVERVIEW)}
@@ -48,10 +62,7 @@ export default class App extends translatable(Component){
             </section>
             <Filters {...this.props}/>
             <ComparisonCriteria {...this.props}/>
-            <section className="col-sm-12 language-switcher">
-              <img src="assets/flags/us.png" alt="" onClick={e => actions.setLocale("en")}/>
-              <img src="assets/flags/vn.png" alt="" onClick={e => actions.setLocale("vn")}/>
-            </section>
+
           </div>
         </aside>
         <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 years-bar" role="navigation">
