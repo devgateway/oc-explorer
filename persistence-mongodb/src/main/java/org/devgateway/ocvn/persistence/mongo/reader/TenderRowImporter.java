@@ -233,7 +233,6 @@ public class TenderRowImporter extends ReleaseRowImporter {
 			}
 		}		
 
-		if (getRowCell(row, 21) != null) {
 			if (tender.getItems().isEmpty()) {
 				VNItem item = new VNItem();
 				item.setId(Integer.toString(tender.getItems().size()));
@@ -279,7 +278,7 @@ public class TenderRowImporter extends ReleaseRowImporter {
 				
 			}
 
-		}
+
 
 		return release;
 	}
