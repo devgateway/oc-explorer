@@ -30,7 +30,9 @@ export default class App extends translatable(Component){
         <div className="col-sm-6 menu">
           <Filters {...this.props}/>
           <ComparisonCriteria {...this.props}/>
-          <div>Export</div>
+          <div>
+            <i className="glyphicon glyphicon-download-alt"></i> Export <i className="glyphicon glyphicon-menu-down"></i>
+          </div>
         </div>
         <div className="col-sm-1 language-switcher">
           <img src="assets/flags/us.png" alt="" onClick={e => actions.setLocale("en")}/>
