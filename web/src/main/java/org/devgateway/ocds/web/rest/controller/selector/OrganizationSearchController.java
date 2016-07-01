@@ -56,7 +56,7 @@ public class OrganizationSearchController extends GenericOCDSController {
 	@RequestMapping("/api/ocds/organization/all")
 	@ApiOperation(value = "Lists all organizations in the database. "
 			+ "Allows full text search using the text parameter.")
-	public List<Organization> procuringEntitySearchText(@Valid final OrganizationSearchRequest request) {
+	public List<Organization> organizationSearchText(@Valid final OrganizationSearchRequest request) {
 
 		PageRequest pageRequest = new PageRequest(request.getPageNumber(), request.getPageSize());
 
