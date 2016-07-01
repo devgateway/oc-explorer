@@ -1,12 +1,8 @@
 import React from "react";
 import Component from "../pure-render-component";
-import CostEffectiveness from "./cost-effectiveness";
-import BidSelection from "./bid-selection";
 import BiddingPeriod from "./bidding-period";
 import Cancelled from "./cancelled";
 import CancelledPercents from "./cancelled-percents";
-import AvgNrBids from "./avg-nr-bids";
-import PercentEbid from "./percent-ebid";
 import {toImmutable} from "nuclear-js";
 import Comparison from "../comparison";
 import translatable from "../translatable";
@@ -14,27 +10,9 @@ import translatable from "../translatable";
 export default class Tender extends translatable(Component){
   render(){
     let {state, width, actions, translations} = this.props;
-    let {compare, costEffectiveness, bidPeriod, bidType, cancelled, avgNrBids, showPercentsCancelled,
-        percentEbid} = state;
+    let {compare, bidPeriod, cancelled, showPercentsCancelled} = state;
     return (
         <div className="col-sm-12 content">
-          {compare ?
-              <Comparison
-                  translations={translations}
-                  width={width}
-                  state={costEffectiveness}
-                  Component={CostEffectiveness}
-                  title={this.__("Cost effectiveness")}
-              />
-          :
-              <CostEffectiveness
-                  translations={translations}
-                title={this.__("Cost effectiveness")}
-                data={costEffectiveness}
-                width={width}
-              />
-          }
-
           {compare ?
               <Comparison
                   translations={translations}
@@ -48,23 +26,6 @@ export default class Tender extends translatable(Component){
                   translations={translations}
                   title={this.__("Bid period")}
                   data={bidPeriod}
-                  width={width}
-              />
-          }
-
-          {compare ?
-              <Comparison
-                  translations={translations}
-                  width={width}
-                  state={bidType}
-                  Component={BidSelection}
-                  title={this.__("Bid Selection Method")}
-              />
-              :
-              <BidSelection
-                  translations={translations}
-                  title={this.__("Bid Selection Method")}
-                  data={bidType}
                   width={width}
               />
           }
@@ -104,36 +65,6 @@ export default class Tender extends translatable(Component){
                   actions={actions}
               />
             )
-          }
-
-          {compare ?
-              <Comparison
-                  width={width}
-                  state={avgNrBids}
-                  Component={AvgNrBids}
-                  title={this.__("Average number of bids")}
-              />
-              :
-              <AvgNrBids
-                  title={this.__("Average number of bids")}
-                  data={avgNrBids}
-                  width={width}
-              />
-          }
-
-          {compare ?
-              <Comparison
-                  width={width}
-                  state={percentEbid}
-                  Component={PercentEbid}
-                  title={this.__("% of tenders using eBid")}
-              />
-              :
-              <PercentEbid
-                  title={this.__("% of tenders using eBid")}
-                  data={percentEbid}
-                  width={width}
-              />
           }
         </div>
     );

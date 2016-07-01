@@ -9,7 +9,9 @@ let mapIn = (obj, path, cb) => obj.updateIn(path, items => items.map(cb));
 export let tabs = keyMirror({
   OVERVIEW: null,
   PLANNING: null,
-  TENDER_AWARD: null
+  COMPETITIVENESS: null,
+  EFFICIENCY: null,
+  E_PROCUREMENT: null
 });
 
 let store = Store({
