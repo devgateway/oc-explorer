@@ -60,6 +60,39 @@ export default class App extends translatable(Component){
           </section>
         </div>
       </aside>
+      <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10">
+        <div className="row">
+             {function(tab, props){
+               let {state, actions} = props;
+               switch(tab){
+                 case tabs.OVERVIEW:
+                   return <Overview
+                       translations={translations}
+                       actions={actions}
+                       state={state.get('overview')}
+                       width={width}
+                   />;
+                 case tabs.PLANNING: return (
+                     <Planning
+                         translations={translations}
+                         width={globalState.get('contentWidth')}
+                         years={globalState.getIn(['filters', 'years'])}
+                         locations={globalState.getIn(['data', 'locations'])}
+                     />
+                 );
+                 default: return (
+                     <Tender
+                         translations={translations}
+                         actions={actions}
+                         state={state.get('tender')}
+                         width={width}
+                     />
+                 )
+               }
+             }(globalState.get('tab'), this.props)}
+               <div className="col-sm-12 thick-red-line"></div>
+        </div>
+      </div>
     </div>;
 
     return (
@@ -77,39 +110,7 @@ export default class App extends translatable(Component){
             </a>
           )).toArray()}
         </div>
-        <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10">
-          <div className="row">
-            {function(tab, props){
-              let {state, actions} = props;
-              switch(tab){
-                case tabs.OVERVIEW:
-                  return <Overview
-                      translations={translations}
-                      actions={actions}
-                      state={state.get('overview')}
-                      width={width}
-                  />;
-                case tabs.PLANNING: return (
-                    <Planning
-                        translations={translations}
-                        width={globalState.get('contentWidth')}
-                        years={globalState.getIn(['filters', 'years'])}
-                        locations={globalState.getIn(['data', 'locations'])}
-                    />
-                );
-                default: return (
-                    <Tender
-                        translations={translations}
-                        actions={actions}
-                        state={state.get('tender')}
-                        width={width}
-                    />
-                )
-              }
-            }(globalState.get('tab'), this.props)}
-            <div className="col-sm-12 thick-red-line"></div>
-          </div>
-        </div>
+
       </div>
     )
   }
