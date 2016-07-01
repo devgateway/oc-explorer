@@ -16,6 +16,7 @@ import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
@@ -38,7 +39,8 @@ public class OrganizationSearchController extends GenericOCDSController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping("/api/ocds/organization/id/{id:^[a-zA-Z0-9]*$}")
+	@RequestMapping(value ="/api/ocds/organization/id/{id:^[a-zA-Z0-9]*$}",
+			method = RequestMethod.GET, produces = "application/json")
 	@ApiOperation(value = "Finds organization entity by the given id")
 	public Organization organizationId(@PathVariable final String id) {
 
@@ -53,7 +55,8 @@ public class OrganizationSearchController extends GenericOCDSController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("/api/ocds/organization/all")
+	@RequestMapping(value="/api/ocds/organization/all",
+			method = RequestMethod.GET, produces = "application/json")
 	@ApiOperation(value = "Lists all organizations in the database. "
 			+ "Allows full text search using the text parameter.")
 	public List<Organization> organizationSearchText(@Valid final OrganizationSearchRequest request) {
