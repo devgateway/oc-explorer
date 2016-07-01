@@ -19,6 +19,10 @@ export default class App extends translatable(Component){
 
   render(){
     let {state, actions, translations} = this.props;
+    let width = state.getIn(['globalState', 'contentWidth']);
+    let navigationLink = (text, marker, tab) =>
+        <NavigationLink text={text} actions={actions} tab={tab} marker={marker} active={state.getIn(['globalState', 'tab']) == tab}/>
+    let globalState = state.get('globalState');
     return <div className="container-fluid">
       <header className="branding row">
         <div className="col-sm-offset-1 col-sm-4">
@@ -39,33 +43,28 @@ export default class App extends translatable(Component){
           <img src="assets/flags/vn.png" alt="" onClick={e => actions.setLocale("vn")}/>
         </div>
       </header>
+      <aside className="col-xs-4 col-md-3 col-lg-2">
+        <div className="row">
+          <div role="navigation">
+               {navigationLink(this.__("Overview"), 'search', tabs.OVERVIEW)}
+               {navigationLink(this.__("Planning"), 'map-marker', tabs.PLANNING)}
+               {navigationLink(this.__("Tender"), 'time', tabs.TENDER_AWARD)}
+          </div>
+          <section className="col-sm-12 description">
+            <p><strong>{this.__("Toolkit description")}</strong></p>
+            <p>
+              <small>
+                {this.__("The Procurement M&E Prototype is an interactive platform for analyzing, monitoring, and evaluating information on procurement in Vietnam. All data in the dashboard are collected from the Vietnam Government eProcurement system (eGP).")}
+              </small>
+            </p>
+          </section>
+        </div>
+      </aside>
     </div>;
-    var width = state.getIn(['globalState', 'contentWidth']);
-    var navigationLink = (text, marker, tab) =>
-        <NavigationLink text={text} actions={actions} tab={tab} marker={marker} active={state.getIn(['globalState', 'tab']) == tab}/>
-    var globalState = state.get('globalState');
+
     return (
       <div className="container-fluid">
-        <aside className="col-xs-4 col-md-3 col-lg-2">
-          <div className="row">
-            <section className="col-sm-12 branding">
 
-            </section>
-            <div role="navigation">
-              {navigationLink(this.__("Overview"), 'search', tabs.OVERVIEW)}
-              {navigationLink(this.__("Planning"), 'map-marker', tabs.PLANNING)}
-              {navigationLink(this.__("Tender"), 'time', tabs.TENDER_AWARD)}
-            </div>
-            <section className="col-sm-12 description">
-              <p><strong>{this.__("Toolkit description")}</strong></p>
-              <p>
-                <small>
-                  {this.__("The Procurement M&E Prototype is an interactive platform for analyzing, monitoring, and evaluating information on procurement in Vietnam. All data in the dashboard are collected from the Vietnam Government eProcurement system (eGP).")}
-                </small>
-              </p>
-            </section>
-          </div>
-        </aside>
         <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 years-bar" role="navigation">
           {globalState.hasIn(['filters', 'years']) && globalState.getIn(['filters', 'years']).map((selected, year) => (
             <a
@@ -81,7 +80,7 @@ export default class App extends translatable(Component){
         <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10">
           <div className="row">
             {function(tab, props){
-              var {state, actions} = props;
+              let {state, actions} = props;
               switch(tab){
                 case tabs.OVERVIEW:
                   return <Overview
