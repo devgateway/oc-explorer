@@ -3,7 +3,9 @@ import Component from "../pure-render-component";
 import {tabs} from "../../flux/stores/global-state";
 import Overview from "../overview";
 import Planning from "../planning";
-import Tender from "../tender";
+import Competitiveness from "../competitiveness";
+import Efficiency from "../efficiency";
+import EProcurement from "../e-procurement";
 import NavigationLink from "./navigation-link";
 import cn from "classnames";
 import {toImmutable} from "nuclear-js";
@@ -48,7 +50,9 @@ export default class App extends translatable(Component){
           <div role="navigation">
                {navigationLink(this.__("Overview"), 'search', tabs.OVERVIEW)}
                {navigationLink(this.__("Location"), 'map-marker', tabs.PLANNING)}
-               {navigationLink(this.__("Tender"), 'time', tabs.TENDER_AWARD)}
+               {navigationLink(this.__("Competitiveness"), '', tabs.COMPETITIVENESS)}
+               {navigationLink(this.__("Efficiency"), '', tabs.EFFICIENCY)}
+               {navigationLink(this.__("eProcurement"), '', tabs.E_PROCUREMENT)}
           </div>
           <section className="col-sm-12 description">
             <p><strong>{this.__("Toolkit description")}</strong></p>
@@ -80,14 +84,30 @@ export default class App extends translatable(Component){
                          locations={globalState.getIn(['data', 'locations'])}
                      />
                  );
-                 default: return (
-                     <Tender
+                 case tabs.COMPETITIVENESS: return (
+                     <Competitiveness
                          translations={translations}
                          actions={actions}
-                         state={state.get('tender')}
+                         state={state.get('competitiveness')}
                          width={width}
                      />
-                 )
+                 );
+                 case tabs.EFFICIENCY: return (
+                     <Efficiency
+                         translations={translations}
+                         actions={actions}
+                         state={state.get('efficiency')}
+                         width={width}
+                     />
+                 );
+                 case tabs.E_PROCUREMENT: return (
+                     <EProcurement
+                         translations={translations}
+                         actions={actions}
+                         state={state.get('eProcurement')}
+                         width={width}
+                     />
+                 );
                }
              }(globalState.get('tab'), this.props)}
                <div className="col-sm-12 thick-red-line"></div>
