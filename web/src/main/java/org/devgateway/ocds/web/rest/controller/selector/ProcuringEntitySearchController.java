@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
@@ -31,7 +32,8 @@ public class ProcuringEntitySearchController extends GenericOCDSController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("/api/ocds/organization/procuringEntity/all")
+	@RequestMapping(value="/api/ocds/organization/procuringEntity/all",
+			method = RequestMethod.GET, produces = "application/json")
 	@ApiOperation(value = "Lists all procuring entities in the database. "
 			+ "Procuring entities are organizations that have the property procuringEntity set to true. "
 			+ "Allows full text search using the text parameter.")
