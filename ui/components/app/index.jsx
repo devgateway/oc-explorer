@@ -93,6 +93,7 @@ export default class App extends translatable(Component){
                <div className="col-sm-12 thick-red-line"></div>
         </div>
       </div>
+      <footer className="col-sm-12 main-footer">&nbsp;</footer>
     </div>;
 
     return (
