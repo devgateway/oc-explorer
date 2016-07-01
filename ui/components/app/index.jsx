@@ -47,7 +47,7 @@ export default class App extends translatable(Component){
         <div className="row">
           <div role="navigation">
                {navigationLink(this.__("Overview"), 'search', tabs.OVERVIEW)}
-               {navigationLink(this.__("Planning"), 'map-marker', tabs.PLANNING)}
+               {navigationLink(this.__("Location"), 'map-marker', tabs.PLANNING)}
                {navigationLink(this.__("Tender"), 'time', tabs.TENDER_AWARD)}
           </div>
           <section className="col-sm-12 description">
