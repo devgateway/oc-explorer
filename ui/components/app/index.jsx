@@ -14,21 +14,21 @@ require('./style.less');
 
 export default class App extends translatable(Component){
   componentDidMount(){
-    this.props.actions.changeContentWidth(document.querySelector('.years-bar').offsetWidth);
+    // this.props.actions.changeContentWidth(document.querySelector('.years-bar').offsetWidth);
   }
 
   render(){
     let {state, actions, translations} = this.props;
     return <div className="container-fluid">
       <header className="branding row">
-        <div className="col-sm-offset-1 col-sm-5">
+        <div className="col-sm-offset-1 col-sm-4">
           <h1>
             {this.__('e-Procurement')}
             <small>{this.__('Toolkit')}</small>
           </h1>
         </div>
-        <div className="col-sm-5 menu">
-          <div>Filter the data</div>
+        <div className="col-sm-6 menu">
+          <Filters {...this.props}/>
           <div>Compare</div>
           <div>Export</div>
         </div>
@@ -62,7 +62,7 @@ export default class App extends translatable(Component){
                 </small>
               </p>
             </section>
-            <Filters {...this.props}/>
+
             <ComparisonCriteria {...this.props}/>
 
           </div>
