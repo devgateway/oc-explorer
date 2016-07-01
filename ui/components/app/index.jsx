@@ -93,24 +93,25 @@ export default class App extends translatable(Component){
                <div className="col-sm-12 thick-red-line"></div>
         </div>
       </div>
+      <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 years-bar" role="navigation">
+           {globalState.hasIn(['filters', 'years']) && globalState.getIn(['filters', 'years']).map((selected, year) => (
+               <a
+                   key={year}
+                   href="javascript:void(0);"
+                   className={cn({active: true === selected})}
+                   onClick={e => actions.toggleYear(year, !selected)}
+               >
+                 <i className="glyphicon glyphicon-ok-circle"></i> {year}
+               </a>
+           )).toArray()}
+      </div>
       <footer className="col-sm-12 main-footer">&nbsp;</footer>
     </div>;
 
     return (
       <div className="container-fluid">
 
-        <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 years-bar" role="navigation">
-          {globalState.hasIn(['filters', 'years']) && globalState.getIn(['filters', 'years']).map((selected, year) => (
-            <a
-              key={year}
-              href="javascript:void(0);"
-              className={cn({active: true === selected})}
-              onClick={e => actions.toggleYear(year, !selected)}
-            >
-              <i className="glyphicon glyphicon-ok-circle"></i> {year}
-            </a>
-          )).toArray()}
-        </div>
+
 
       </div>
     )
