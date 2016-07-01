@@ -195,6 +195,10 @@ let getAvgTenders = mkDataGetter({
   path: "avgTenders"
 });
 
+let getPercentEbid = mkDataGetter({
+  path: "percentEbid"
+});
+
 let getTender = [
     ['globalState', 'compareBy'],
     getCostEffectiveness,
@@ -202,21 +206,22 @@ let getTender = [
     getBidType,
     getCancelled,
     getCancelledPercents,
-    getAvgTenders,
     ['globalState', 'showPercentsCancelled'],
-    cacheFn(
-      (compare, costEffectiveness, bidPeriod, bidType, cancelled, cancelledPercents, avgNrBids, showPercentsCancelled) => {
-        return {
-          compare,
-          costEffectiveness,
-          bidPeriod,
-          bidType,
-          cancelled: showPercentsCancelled ? cancelledPercents : cancelled,
-          avgNrBids,
-          showPercentsCancelled
-        }
+    getAvgTenders,
+    getPercentEbid,
+    (compare, costEffectiveness, bidPeriod, bidType, cancelled, cancelledPercents, showPercentsCancelled, avgNrBids,
+    percentEbid) => {
+      return {
+        compare,
+        costEffectiveness,
+        bidPeriod,
+        bidType,
+        showPercentsCancelled,
+        cancelled: showPercentsCancelled ? cancelledPercents : cancelled,
+        avgNrBids,
+        percentEbid
       }
-    )
+    }
 ];
 
 let getGlobalState = [
