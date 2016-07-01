@@ -1,69 +1,88 @@
 @red: #cc3c3b;
 
 .content{
-  margin-top: 2em;
+  margin-top: 3em;
+  margin-bottom: 64px;
 }
 
 .container-fluid{
   padding: 0;
 }
 
+header.branding{
+  background-color: @red;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 64px;
+  z-index: 1;
+
+  h1, small{
+    color: white;
+  }
+
+  h1{
+    font-size: 24px;
+    margin-top: 10px;
+    small{
+      text-transform: uppercase;
+      display: block;
+      font-size: 18px;
+    }
+  }
+
+  .menu{
+    color: white;
+    text-transform: uppercase;
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-start;
+    &>div{
+      cursor: pointer;
+      padding: 20px;
+    }
+  }
+
+  .language-switcher{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 aside {
   z-index: 1;
   position: fixed!important;
-  top: 0;
+  top: 64px;
   bottom: 0;
   height: auto;
   background-color: #f2f2f2;
-  box-shadow: #333 1px 4px 10px;
+  border-right: 1px solid #333;
 
   section.col-sm-12 {
     padding: 15px 20px 15px 20px;
     border-bottom: 1px solid #ccc;
   }
 
-  section.branding{
-    background-color: @red;
-    h1, small{
-      color: white;
-    }
-
-    h1 small{
-      text-transform: uppercase;
-    }
-
-    @media all and (max-width: 1700px) {
-      h1 {
-        font-size: 28px;
-      }
-    }
-    @media all and (max-width: 1450px) {
-      h1 {
-        font-size: 24px;
-      }
-    }
-    h1 small {
-      display: block;
-    }
-  }
-
   section.description strong{
     color: @red;
-  }
-
-  section.language-switcher img{
-    cursor: pointer;
   }
 }
 
 .years-bar {
   position: fixed;
-  top: 0;
-  z-index: 1002;
-  padding-left: 5px;
+  bottom: 34px;
+  z-index: 1;
+  padding-left: 0;
   padding-right: 0;
   display: table;
-  box-shadow: #333 5px 5px 10px;
+  height: 30px;
   a {
     display: table-cell;
     background-color: #e6e6e6;
@@ -87,7 +106,12 @@ aside {
   }
 }
 
-.thick-red-line{
-  background-color: @red;
-  height: 5vh;
+footer.main-footer{
+  position: fixed;
+  height: 34px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: @red;
+  z-index: 1;
 }

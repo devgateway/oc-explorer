@@ -1,22 +1,19 @@
 import Component from "../../../pure-render-component";
-import cn from "classnames";
 import translatable from "../../../translatable";
 import style from "./style.less";
 
 export default class TypeAhead extends translatable(Component){
   render(){
-    var {query, actions, state, slug} = this.props;
+    let {query, actions, state, slug} = this.props;
     if(!state) return null;
-    var options = state.get('options');
-    var selectedCount = options.filter(option => option.get('selected')).count();
-    var totalOptions = options.count();
-    var open = state.get('open');
-    var haveQuery = query.length >= 3;
+    let options = state.get('options');
+    let selectedCount = options.filter(option => option.get('selected')).count();
+    let totalOptions = options.count();
+    let haveQuery = query.length >= 3;
     return (
-        <section className={cn('field procuring-entities', {open: open})}>
-          <header onClick={e => actions.toggleFilter(slug, !open)}>
-            <i className="glyphicon glyphicon-menu-right"/>{this.__('Procuring Entity')}
-            <span className="pull-right count">({selectedCount}/{totalOptions})</span>
+        <section className="col-sm-4 field procuring-entities">
+          <header>
+            {this.__('Procuring Entity')} <span className="pull-right count">({selectedCount}/{totalOptions})</span>
           </header>
           <section className="options">
             <input
