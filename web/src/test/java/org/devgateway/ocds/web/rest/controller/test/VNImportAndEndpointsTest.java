@@ -10,7 +10,7 @@ import org.devgateway.ocds.web.rest.controller.AverageTenderAndAwardPeriodsContr
 import org.devgateway.ocds.web.rest.controller.CostEffectivenessVisualsController;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
-import org.devgateway.ocds.web.rest.controller.request.ProcuringEntitySearchRequest;
+import org.devgateway.ocds.web.rest.controller.request.OrganizationSearchRequest;
 import org.devgateway.ocds.web.rest.controller.selector.ProcuringEntitySearchController;
 import org.devgateway.ocvn.persistence.mongo.dao.ImportFileTypes;
 import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
@@ -140,7 +140,7 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
 	@Test
 	public void testProcuringEntitySearchController() {
 		List<VNOrganization> procuringEntities = procuringEntitySearchController
-				.procuringEntitySearchText(new ProcuringEntitySearchRequest());
+				.procuringEntitySearchText(new OrganizationSearchRequest());
 		Assert.assertEquals(procuringEntities.size(), 2, 0);
 	}
 

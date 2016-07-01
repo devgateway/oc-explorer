@@ -4,16 +4,14 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.ocds.web.rest.controller.request.OrganizationSearchRequest;
 import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
-import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.core.query.TextQuery;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,7 +23,7 @@ import io.swagger.annotations.ApiOperation;
  * 
  */
 @RestController
-public class ProcuringEntitySearchController extends OrganizationSearchController {
+public class ProcuringEntitySearchController extends GenericOCDSController {
 	/**
 	 * Searches the {@link VNOrganization} based on a given text. The text has
 	 * to have minimum 3 characters and max 30
