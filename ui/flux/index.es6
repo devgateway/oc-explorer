@@ -199,36 +199,41 @@ let getPercentEbid = mkDataGetter({
   path: "percentEbid"
 });
 
-let getTender = [
-    ['globalState', 'compareBy'],
-    getCostEffectiveness,
-    getBidPeriod,
-    getBidType,
-    getCancelled,
-    getCancelledPercents,
-    ['globalState', 'showPercentsCancelled'],
-    getAvgTenders,
-    getPercentEbid,
-    (compare, costEffectiveness, bidPeriod, bidType, cancelled, cancelledPercents, showPercentsCancelled, avgNrBids,
-    percentEbid) => {
-      return {
-        compare,
-        costEffectiveness,
-        bidPeriod,
-        bidType,
-        showPercentsCancelled,
-        cancelled: showPercentsCancelled ? cancelledPercents : cancelled,
-        avgNrBids,
-        percentEbid
-      }
-    }
+let getCompetitiveness = [
+  ['globalState', 'compareBy'],
+  getAvgTenders,
+  getBidType,
+  getCostEffectiveness,
+  (compare, avgNrBids, bidType, costEffectiveness) => ({compare, avgNrBids, bidType, costEffectiveness})
+];
+
+let getEfficiency = [
+  ['globalState', 'compareBy'],
+  getBidPeriod,
+  getCancelled,
+  getCancelledPercents,
+  ['globalState', 'showPercentsCancelled'],
+  (compare, bidPeriod, cancelled, cancelledPercents, showPercentsCancelled) => ({
+    compare,
+    bidPeriod,
+    showPercentsCancelled,
+    cancelled: showPercentsCancelled ? cancelledPercents : cancelled,
+  })
+];
+
+let getEProcurement = [
+  ['globalState', 'compareBy'],
+  getPercentEbid,
+  (compare, percentEbid) => ({compare, percentEbid})
 ];
 
 let getGlobalState = [
     [],
     state => state
         .set('overview', dispatcher.evaluate(getOverview))
-        .set('tender', dispatcher.evaluate(getTender))
+        .set('competitiveness', dispatcher.evaluate(getCompetitiveness))
+        .set('efficiency', dispatcher.evaluate(getEfficiency))
+        .set('eProcurement', dispatcher.evaluate(getEProcurement))
 ];
 
 export default {
