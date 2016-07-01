@@ -10,7 +10,10 @@ import org.devgateway.ocds.web.rest.controller.AverageTenderAndAwardPeriodsContr
 import org.devgateway.ocds.web.rest.controller.CostEffectivenessVisualsController;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.ProcuringEntitySearchRequest;
+import org.devgateway.ocds.web.rest.controller.selector.ProcuringEntitySearchController;
 import org.devgateway.ocvn.persistence.mongo.dao.ImportFileTypes;
+import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
 import org.devgateway.toolkit.persistence.mongo.test.AbstractMongoTest;
 import org.junit.Assert;
 import org.junit.Before;
@@ -39,6 +42,9 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
 	
 	@Autowired
 	private AverageTenderAndAwardPeriodsController averageTenderAndAwardPeriodsController;
+	
+	@Autowired
+	private ProcuringEntitySearchController procuringEntitySearchController;
 
 	private static boolean initialized = false;
 
@@ -56,6 +62,7 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
 				loadResourceStreamAsByteArray("/testImport/test_egp_Jun21_Import.xlsx"),
 				loadResourceStreamAsByteArray("/testImport/test_Location_Table_Geocoded.xlsx"),
 				loadResourceStreamAsByteArray("/testImport/test_UM_PUBINSTITU_SUPPLIERS_DQA.xlsx"), true, false);
+		initialized = true;
 	}
 
 	@Test
@@ -128,6 +135,13 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
 
 		n = (double) root.get("averageTenderDays");
 		Assert.assertEquals(15, n, 0);
+	}
+	
+	@Test
+	public void testProcuringEntitySearchController() {
+		List<VNOrganization> procuringEntities = procuringEntitySearchController
+				.procuringEntitySearchText(new ProcuringEntitySearchRequest());
+		Assert.assertEquals(procuringEntities.size(), 2, 0);
 	}
 
 }
