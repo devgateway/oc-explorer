@@ -1,6 +1,5 @@
 import Component from "../../../pure-render-component";
 import style from "./style.less";
-import cn from "classnames";
 
 export default class MultipleSelect extends Component{
   render(){
@@ -9,9 +8,8 @@ export default class MultipleSelect extends Component{
     let options = state.get('options');
     let selectedCount = options.filter(option => option.get('selected')).count();
     let totalOptions = options.count();
-    let open = state.get('open');
     return (
-        <section className={cn('col-sm-4', 'field', {open: open})}>
+        <section className="col-sm-4 field">
           <header>
             {title} <span className="count">({selectedCount}/{totalOptions})</span>
           </header>
