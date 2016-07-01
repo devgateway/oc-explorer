@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.Location;
+import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
 import org.slf4j.Logger;
@@ -66,6 +67,7 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.tenderPeriod.endDate", Direction.ASC));
         mongoTemplate.indexOps(Release.class)
                 .ensureIndex(new Index().on("tender.items.classification._id", Direction.ASC));
+
 		mongoTemplate.indexOps(VNOrganization.class).ensureIndex(new Index().on("identifier._id", Direction.ASC));
 		mongoTemplate.indexOps(VNOrganization.class)
 				.ensureIndex(new Index().on("additionalIdentifiers._id", Direction.ASC));
