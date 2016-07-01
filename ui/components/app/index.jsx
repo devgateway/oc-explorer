@@ -29,7 +29,7 @@ export default class App extends translatable(Component){
         </div>
         <div className="col-sm-6 menu">
           <Filters {...this.props}/>
-          <div>Compare</div>
+          <ComparisonCriteria {...this.props}/>
           <div>Export</div>
         </div>
         <div className="col-sm-1 language-switcher">
@@ -62,9 +62,6 @@ export default class App extends translatable(Component){
                 </small>
               </p>
             </section>
-
-            <ComparisonCriteria {...this.props}/>
-
           </div>
         </aside>
         <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 years-bar" role="navigation">
