@@ -40,11 +40,11 @@ class Filters extends translatable(Component){
         />
         <section className="buttons col-sm-12">
           <button className="btn btn-primary" onClick={e => actions.applyFilters()}>
-                  {this.__('Apply')}
+            {this.__('Apply')}
           </button>
           &nbsp;
           <button className="btn btn-default" onClick={e => actions.resetFilters()}>
-                  {this.__('Reset')}
+            {this.__('Reset')}
           </button>
         </section>
       </div>
