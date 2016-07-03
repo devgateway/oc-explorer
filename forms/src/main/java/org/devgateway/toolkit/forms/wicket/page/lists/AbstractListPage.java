@@ -19,6 +19,8 @@ import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulato
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterToolbar;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.IFilteredColumn;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
@@ -31,12 +33,14 @@ import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.forms.exceptions.NullEditPageClassException;
 import org.devgateway.toolkit.forms.exceptions.NullJpaRepositoryException;
 import org.devgateway.toolkit.forms.wicket.components.table.AjaxFallbackBootstrapDataTable;
+import org.devgateway.toolkit.forms.wicket.components.table.JpaFilterState;
+import org.devgateway.toolkit.forms.wicket.components.table.ResettingFilterForm;
 import org.devgateway.toolkit.forms.wicket.page.BasePage;
 import org.devgateway.toolkit.forms.wicket.page.RevisionsPage;
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.forms.wicket.providers.SortableJpaRepositoryDataProvider;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.devgateway.toolkit.persistence.repository.BaseJpaRepository;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapBookmarkablePageLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
@@ -45,8 +49,10 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeIc
 
 /**
  * @author mpostelnicu This class can be use to display a list of Categories
+ *
+ * T - entity type
+ * Y - filter
  */
-
 public abstract class AbstractListPage<T extends GenericPersistable> extends BasePage {
 	private static final long serialVersionUID = 1958350868666244087L;
 
@@ -105,13 +111,13 @@ public abstract class AbstractListPage<T extends GenericPersistable> extends Bas
 	protected AjaxFallbackBootstrapDataTable<T, String> dataTable;
 	protected List<IColumn<T, String>> columns;
 
-	protected JpaRepository<T, Long> jpaRepository;
+	protected BaseJpaRepository<T, Long> jpaRepository;
 
 	public AbstractListPage(final PageParameters parameters) {
 		super(parameters);
 
 		columns = new ArrayList<>();
-		columns.add(new PropertyColumn<T, String>(new Model<>("ID"), "id"));
+		columns.add(new PropertyColumn<T, String>(new Model<>("ID"), "id", "id"));
 	}
 
 	public ActionPanel getActionPanel(final String id, final IModel<T> model) {
@@ -129,6 +135,9 @@ public abstract class AbstractListPage<T extends GenericPersistable> extends Bas
 			throw new NullEditPageClassException();
 		}
 
+		SortableJpaRepositoryDataProvider<T> dataProvider = new SortableJpaRepositoryDataProvider<>(jpaRepository);
+		dataProvider.setFilterState(newFilterState());
+
 		// add the 'Edit' button
 		columns.add(new AbstractColumn<T, String>(new StringResourceModel("actionsColumn", this, null)) {
 			private static final long serialVersionUID = -7447601118569862123L;
@@ -139,9 +148,16 @@ public abstract class AbstractListPage<T extends GenericPersistable> extends Bas
 				cellItem.add(getActionPanel(componentId, model));
 			}
 		});
-		dataTable = new AjaxFallbackBootstrapDataTable<>("table", columns,
-				new SortableJpaRepositoryDataProvider<>(jpaRepository), WebConstants.PAGE_SIZE);
-		add(dataTable);
+		dataTable = new AjaxFallbackBootstrapDataTable<>("table", columns, dataProvider, WebConstants.PAGE_SIZE);
+
+		ResettingFilterForm<JpaFilterState<T>> filterForm =
+				new ResettingFilterForm<>("filterForm", dataProvider, dataTable);
+		filterForm.add(dataTable);
+		add(filterForm);
+
+		if (hasFilteredColumns()) {
+			dataTable.addTopToolbar(new FilterToolbar(dataTable, filterForm));
+		}
 
 		PageParameters pageParameters = new PageParameters();
 		pageParameters.set(WebConstants.PARAM_ID, null);
@@ -151,6 +167,19 @@ public abstract class AbstractListPage<T extends GenericPersistable> extends Bas
 				.setLabel(new StringResourceModel("new", AbstractListPage.this, null));
 
 		add(editPageLink);
+	}
+
+	private boolean hasFilteredColumns() {
+		for (IColumn column : columns) {
+			if (column instanceof IFilteredColumn) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public JpaFilterState<T> newFilterState() {
+		return new JpaFilterState<>();
 	}
 
 	protected String getClassName() {
