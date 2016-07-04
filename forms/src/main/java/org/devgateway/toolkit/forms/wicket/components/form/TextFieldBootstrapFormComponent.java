@@ -72,6 +72,11 @@ public class TextFieldBootstrapFormComponent<TYPE> extends GenericBootstrapFormC
 		return this;
 	}
 
+	public TextFieldBootstrapFormComponent<TYPE> asDouble() {
+		field.setType(Double.class);
+		return this;
+	}
+
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
