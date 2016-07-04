@@ -52,6 +52,7 @@ let store = Store({
     this.on(constants.AVERAGED_TENDERS_DATA_UPDATED, updateData('avgTenders'));
     this.on(constants.MENU_BOX_CHANGED, (state, slug) => state.set('menuBox', slug));
     this.on(constants.PERCENT_EBID_DATA_UPDATED, updateData('percentEbid'));
+    this.on(constants.PERCENT_EPROCUREMENT_DATA_UPDATED, updateData('percentEprocurement'));
     this.on(constants.FILTERS_DATA_UPDATED, (state, data) => state.set('filters', toImmutable(data)));
     this.on(constants.FILTER_OPTIONS_TOGGLED, (state, {slug, option, selected}) =>
       state.setIn(['filters', slug, 'options', option, 'selected'], selected)
@@ -84,7 +85,7 @@ let store = Store({
         state.setIn(['comparisonData', 'bidType'], data.map(toImmutable)));
     this.on(constants.CANCELLED_COMPARISON_DATA_UPDATED, (state, data) =>
         state.setIn(['comparisonData', 'cancelled'], data));
-    this.on(constants.COMPARISON_CRITERIA_NAMES_UPDATED, (state, names) => state.set('comparisonCriteriaNames', names))
+    this.on(constants.COMPARISON_CRITERIA_NAMES_UPDATED, (state, names) => state.set('comparisonCriteriaNames', names));
     
     this.on(constants.LOCALE_CHANGED, (state, loc) => state.set('locale', loc));
 

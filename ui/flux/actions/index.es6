@@ -121,6 +121,8 @@ export default {
     load('/api/percentTendersCancelled').then(data => dispatcher.dispatch(constants.CANCELLED_PERCENTS_DATA_UPDATED, data));
 
     load('/api/percentTendersUsingEBid').then(data => dispatcher.dispatch(constants.PERCENT_EBID_DATA_UPDATED, data));
+
+    load('/api/percentTendersUsingEgp').then(data => dispatcher.dispatch(constants.PERCENT_EPROCUREMENT_DATA_UPDATED, data));
   },
 
   bootstrap(){
