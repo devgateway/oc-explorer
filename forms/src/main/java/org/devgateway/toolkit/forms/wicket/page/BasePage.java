@@ -141,7 +141,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 		NavbarButton<LogoutPage> logoutMenu = new NavbarButton<LogoutPage>(LogoutPage.class,
 				new StringResourceModel("navbar.logout", this, null));
 		logoutMenu.setIconType(GlyphIconType.logout);
-		MetaDataRoleAuthorizationStrategy.authorize(logoutMenu, Component.RENDER, SecurityConstants.Roles.ROLE_EDITOR);
+		MetaDataRoleAuthorizationStrategy.authorize(logoutMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
 
 		navbar.setPosition(Navbar.Position.TOP);
 		navbar.setInverted(true);
@@ -156,13 +156,13 @@ public abstract class BasePage extends GenericWebPage<Void> {
 		NavbarButton<EditUserPage> accountMenu = new NavbarButton<>(EditUserPage.class, pageParametersForAccountPage,
 				account);
 		accountMenu.setIconType(GlyphIconType.user);
-		MetaDataRoleAuthorizationStrategy.authorize(accountMenu, Component.RENDER, SecurityConstants.Roles.ROLE_EDITOR);
+		MetaDataRoleAuthorizationStrategy.authorize(accountMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
 
 		// home
 		NavbarButton<Homepage> homeMenu = new NavbarButton<>(Homepage.class, pageParametersForAccountPage,
 				Model.of("Home"));
 		homeMenu.setIconType(GlyphIconType.home);
-		MetaDataRoleAuthorizationStrategy.authorize(homeMenu, Component.RENDER, SecurityConstants.Roles.ROLE_EDITOR);
+		MetaDataRoleAuthorizationStrategy.authorize(homeMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
 
 		// admin menu
 		NavbarDropDownButton adminMenu = new NavbarDropDownButton(new StringResourceModel("navbar.admin", this, null)) {
