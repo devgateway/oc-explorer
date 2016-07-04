@@ -2,16 +2,16 @@ import React from "react";
 import Plot from "../plot";
 import {pluck} from "../../tools";
 
-export default class PercentEbid extends Plot{
+export default class PercentEProcurement extends Plot{
   getTitle() {
-    return "% of tenders using eBid"
+    return "% of tenders using eProcurement"
   }
 
   getData(){
     let {data} = this.props;
     return [{
       x: data.map(pluck('year')),
-      y: data.map(pluck('percentageTendersUsingEbid')),
+      y: data.map(pluck('percentEgp')),
       type: 'scatter',
       fill: 'tonexty'
     }];

@@ -116,11 +116,13 @@ export default {
         .then(transformCancelledData)
         .then(data => dispatcher.dispatch(constants.CANCELLED_DATA_UPDATED, data));
 
-    load('/api/averageNumberOfTenderers').then(data => dispatcher.dispatch(constants.AVERAGED_TENDERS_DATA_UPDATED, data));
+    load(endpoints.AVERAGE_NUMBER_OF_TENDERERS).then(data => dispatcher.dispatch(constants.AVERAGED_TENDERS_DATA_UPDATED, data));
 
-    load('/api/percentTendersCancelled').then(data => dispatcher.dispatch(constants.CANCELLED_PERCENTS_DATA_UPDATED, data));
+    load(endpoints.PERCENT_TENDERS_CANCELLED).then(data => dispatcher.dispatch(constants.CANCELLED_PERCENTS_DATA_UPDATED, data));
 
-    load('/api/percentTendersUsingEBid').then(data => dispatcher.dispatch(constants.PERCENT_EBID_DATA_UPDATED, data));
+    load(endpoints.PERCENT_TENDERS_USING_E_BID).then(data => dispatcher.dispatch(constants.PERCENT_EBID_DATA_UPDATED, data));
+
+    load(endpoints.PERCENT_TENDERS_USING_E_PROCUREMENT).then(data => dispatcher.dispatch(constants.PERCENT_EPROCUREMENT_DATA_UPDATED, data));
   },
 
   bootstrap(){
@@ -207,6 +209,18 @@ export default {
       load(endpoints.TOTAL_CANCELLED_TENDERS_BY_YEAR)
           .then(data => data.map(transformCancelledData))
           .then(data => dispatcher.dispatch(constants.CANCELLED_COMPARISON_DATA_UPDATED, data));
+
+      load(endpoints.AVERAGE_NUMBER_OF_TENDERERS)
+          .then(data => dispatcher.dispatch(constants.AVERAGED_TENDERS_COMPARISON_DATA_UPDATED, data));
+
+      load(endpoints.PERCENT_TENDERS_CANCELLED)
+          .then(data => dispatcher.dispatch(constants.CANCELLED_PERCENTS_COMPARISON_DATA_UPDATED, data));
+
+      load(endpoints.PERCENT_TENDERS_USING_E_BID)
+          .then(data => dispatcher.dispatch(constants.PERCENT_EBID_COMPARISON_DATA_UPDATED, data));
+
+      load(endpoints.PERCENT_TENDERS_USING_E_PROCUREMENT)
+          .then(data => dispatcher.dispatch(constants.PERCENT_EPROCUREMENT_COMPARISON_DATA_UPDATED, data));
     });
   },
 

@@ -32,6 +32,8 @@ let store = Store({
 
   initialize(){
     let updateData = (path, pipe = identity) => (state, data) => state.setIn(['data', path], pipe(data));
+    let updateComparisonData =
+        (path, pipe = identity) => (state, data) => state.setIn(['comparisonData', path], pipe(data));
 
     this.on(constants.TAB_CHANGED, (state, tab) => state.set('tab', tab));
     this.on(constants.YEAR_TOGGLED, (state, {year, selected}) => {
@@ -50,8 +52,10 @@ let store = Store({
     this.on(constants.TOP_TENDERS_DATA_UPDATED, updateData('topTenders'));
     this.on(constants.TOP_AWARDS_DATA_UPDATED, updateData('topAwards'));
     this.on(constants.AVERAGED_TENDERS_DATA_UPDATED, updateData('avgTenders'));
-    this.on(constants.MENU_BOX_CHANGED, (state, slug) => state.set('menuBox', slug));
     this.on(constants.PERCENT_EBID_DATA_UPDATED, updateData('percentEbid'));
+    this.on(constants.PERCENT_EPROCUREMENT_DATA_UPDATED, updateData('percentEprocurement'));
+
+    this.on(constants.MENU_BOX_CHANGED, (state, slug) => state.set('menuBox', slug));
     this.on(constants.FILTERS_DATA_UPDATED, (state, data) => state.set('filters', toImmutable(data)));
     this.on(constants.FILTER_OPTIONS_TOGGLED, (state, {slug, option, selected}) =>
       state.setIn(['filters', slug, 'options', option, 'selected'], selected)
@@ -75,16 +79,18 @@ let store = Store({
       actions.loadComparisonData(newState.get('compareBy'), newState.get('filters').toJS());
       return newState;
     });
-    this.on(constants.OVERVIEW_COMPARISON_DATA_UPDATED, (state, data) => state.setIn(['comparisonData', 'overview'], data));
-    this.on(constants.COST_EFFECTIVENESS_COMPARISON_DATA_UPDATED, (state, data) =>
-        state.setIn(['comparisonData', 'costEffectiveness'], data));
-    this.on(constants.BID_PERIOD_COMPARISON_DATA_UPDATED, (state, data) =>
-        state.setIn(['comparisonData', 'bidPeriod'], data));
-    this.on(constants.BID_TYPE_COMPARISON_DATA_UPDATED, (state, data) =>
-        state.setIn(['comparisonData', 'bidType'], data.map(toImmutable)));
-    this.on(constants.CANCELLED_COMPARISON_DATA_UPDATED, (state, data) =>
-        state.setIn(['comparisonData', 'cancelled'], data));
-    this.on(constants.COMPARISON_CRITERIA_NAMES_UPDATED, (state, names) => state.set('comparisonCriteriaNames', names))
+    this.on(constants.OVERVIEW_COMPARISON_DATA_UPDATED, updateComparisonData('overview'));
+    this.on(constants.COST_EFFECTIVENESS_COMPARISON_DATA_UPDATED, updateComparisonData('costEffectiveness'));
+    this.on(constants.BID_PERIOD_COMPARISON_DATA_UPDATED, updateComparisonData('bidPeriod'));
+    this.on(constants.BID_TYPE_COMPARISON_DATA_UPDATED, updateComparisonData('bidType', toImmutable));
+    this.on(constants.CANCELLED_COMPARISON_DATA_UPDATED, updateComparisonData('cancelled'));
+
+    this.on(constants.AVERAGED_TENDERS_COMPARISON_DATA_UPDATED, updateComparisonData('avgTenders'));
+    this.on(constants.CANCELLED_PERCENTS_COMPARISON_DATA_UPDATED, updateComparisonData('cancelledPercents'));
+    this.on(constants.PERCENT_EBID_COMPARISON_DATA_UPDATED, updateComparisonData('percentEbid'));
+    this.on(constants.PERCENT_EPROCUREMENT_COMPARISON_DATA_UPDATED, updateComparisonData('percentEprocurement'));
+
+    this.on(constants.COMPARISON_CRITERIA_NAMES_UPDATED, (state, names) => state.set('comparisonCriteriaNames', names));
     
     this.on(constants.LOCALE_CHANGED, (state, loc) => state.set('locale', loc));
 

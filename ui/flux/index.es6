@@ -195,10 +195,6 @@ let getAvgTenders = mkDataGetter({
   path: "avgTenders"
 });
 
-let getPercentEbid = mkDataGetter({
-  path: "percentEbid"
-});
-
 let getCompetitiveness = [
   ['globalState', 'compareBy'],
   getAvgTenders,
@@ -221,10 +217,19 @@ let getEfficiency = [
   })
 ];
 
+let getPercentEbid = mkDataGetter({
+  path: "percentEbid"
+});
+
+let getPercentEprocurement = mkDataGetter({
+  path: "percentEprocurement"
+});
+
 let getEProcurement = [
   ['globalState', 'compareBy'],
   getPercentEbid,
-  (compare, percentEbid) => ({compare, percentEbid})
+  getPercentEprocurement,
+  (compare, percentEbid, percentEprocurement) => ({compare, percentEbid, percentEprocurement})
 ];
 
 let getGlobalState = [
