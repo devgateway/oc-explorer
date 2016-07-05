@@ -7,9 +7,11 @@ import org.devgateway.toolkit.persistence.mongo.test.AbstractMongoTest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -20,24 +22,49 @@ public class XMLFileImportTest extends AbstractMongoTest {
     @Autowired
     private ReleaseRepository releaseRepository;
 
-    public class XMLFileImportDefault extends XMLFileImport {
-        public XMLFileImportDefault(ReleaseRepository releaseRepository, File file) throws IOException {
-            super(releaseRepository, file);
-        }
+    @Autowired
+    @Qualifier("XMLFileImportDefault")
+    private XMLFile xmlFile;
 
-        @Override
-        protected Release processRelease(Release release) {
-            return release;
-        }
+    @Test
+    public void process() throws Exception {
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(classLoader.getResource("xml/release.xml").getFile());
+        xmlFile.process(file);
 
-        @Override
-        protected AbstractRulesModule getAbstractRulesModule() {
-            return new TestRules();
-        }
+        List<Release> releases = releaseRepository.findAll();
+        Assert.assertNotNull(releases);
+
+        Release release = releaseRepository.findById("xmlimport-123");
+        Assert.assertNotNull(release);
+        Assert.assertEquals("check field", release.getLanguage(), "en");
+    }
+}
+
+@Service
+@Transactional
+class XMLFileImportDefault extends XMLFileImport {
+    @Override
+    protected Release processRelease(Release release) {
+        return release;
     }
 
-    public class TestRules extends AbstractRulesModule {
+    @Override
+    protected AbstractRulesModule getAbstractRulesModule() {
+        return new TestRules();
+    }
 
+    @Override
+    public StringBuffer getMsgBuffer() {
+        return null;
+    }
+
+    @Override
+    public void logMessage(String message) {
+
+    }
+
+    class TestRules extends AbstractRulesModule {
         @Override
         protected void configure() {
             forPattern("test/release")
@@ -53,20 +80,5 @@ public class XMLFileImportTest extends AbstractMongoTest {
 
             forPattern("test/release/language").setBeanProperty().withName("language");
         }
-    }
-
-    @Test
-    public void process() throws Exception {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("xml/release.xml").getFile());
-        XMLFile xmlFile = new XMLFileImportDefault(releaseRepository, file);
-        xmlFile.process();
-
-        List<Release> releases = releaseRepository.findAll();
-        Assert.assertNotNull(releases);
-
-        Release release = releaseRepository.findById("123");
-        Assert.assertNotNull(release);
-        Assert.assertEquals("check field", release.getLanguage(), "en");
     }
 }

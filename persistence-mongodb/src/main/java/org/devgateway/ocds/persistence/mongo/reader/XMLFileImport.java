@@ -5,6 +5,8 @@ import org.apache.commons.digester3.binder.AbstractRulesModule;
 import org.apache.commons.digester3.binder.DigesterLoader;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.xml.sax.SAXException;
 
 import java.io.File;
@@ -17,26 +19,22 @@ import java.io.InputStream;
  * @since 6/27/16
  */
 public abstract class XMLFileImport implements XMLFile {
-    private final ReleaseRepository releaseRepository;
+    @Autowired
+    private ReleaseRepository releaseRepository;
 
-    private final InputStream inputStream;
-
-    public XMLFileImport(final ReleaseRepository releaseRepository, final InputStream inputStream) {
-        this.releaseRepository = releaseRepository;
-        this.inputStream = inputStream;
-    }
-
-    public XMLFileImport(final ReleaseRepository releaseRepository, final File file) throws IOException {
-        this(releaseRepository, new FileInputStream(file));
-    }
-
-    public void process() throws IOException, SAXException {
+    @Async
+    public void process(final InputStream inputStream) throws IOException, SAXException {
         DigesterLoader digesterLoader = DigesterLoader.newLoader(getAbstractRulesModule());
         Digester digester = digesterLoader.newDigester();
 
         // Push this object onto Digester's stack to handle object save operation (call saveRelease method)
         digester.push(this);
         digester.parse(inputStream);
+    }
+
+    @Async
+    public void process(final File file) throws IOException, SAXException {
+        process(new FileInputStream(file));
     }
 
     /**
