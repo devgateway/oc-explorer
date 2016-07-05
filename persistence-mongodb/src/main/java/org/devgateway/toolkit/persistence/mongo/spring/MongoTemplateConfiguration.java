@@ -54,7 +54,7 @@ public class MongoTemplateConfiguration {
                 .ensureIndex(new Index().on("tender.procurementMethodRationale", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.status", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("awards.status", Direction.ASC));
-        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("awards.date", Direction.ASC));        
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("awards.date", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("awards.value.amount", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.value.amount", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.contrMethod._id", Direction.ASC));
@@ -68,12 +68,12 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(Release.class)
                 .ensureIndex(new Index().on("tender.items.classification._id", Direction.ASC));
 
-		mongoTemplate.indexOps(VNOrganization.class).ensureIndex(new Index().on("identifier._id", Direction.ASC));
-		mongoTemplate.indexOps(VNOrganization.class)
-				.ensureIndex(new Index().on("additionalIdentifiers._id", Direction.ASC));
-		mongoTemplate.indexOps(VNOrganization.class)
-				.ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());        
-        
+        mongoTemplate.indexOps(VNOrganization.class).ensureIndex(new Index().on("identifier._id", Direction.ASC));
+        mongoTemplate.indexOps(VNOrganization.class)
+                .ensureIndex(new Index().on("additionalIdentifiers._id", Direction.ASC));
+        mongoTemplate.indexOps(VNOrganization.class)
+                .ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());
+
         logger.info("Added extra Mongo indexes");
 
         ScriptOperations scriptOps = mongoTemplate.scriptOps();
