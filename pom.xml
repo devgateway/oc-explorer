@@ -71,12 +71,6 @@
 	</distributionManagement>
 
 	<repositories>
-	
-	  <repository>
-            <id>spring-milestones</id>
-            <url>http://repo.spring.io/milestone</url>
-        </repository>
-	
 		<repository>
 			<id>DGToolkit</id>
 			<name>DGToolkit</name>
@@ -88,11 +82,6 @@
 	</repositories>
 
 	<pluginRepositories>
-	
-	 <pluginRepository>
-            <id>spring-milestones</id>
-            <url>http://repo.spring.io/milestone</url>
-        </pluginRepository>
 	
 		<pluginRepository>
 			<id>DGToolkit</id>
