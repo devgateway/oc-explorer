@@ -56,6 +56,7 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 	protected TooltipLabel tooltipLabel;
 	protected IModel<String> labelModel;
 	protected boolean nextYear = false;
+	protected boolean labelHidden;
 
 	@Override
 	public void onEvent(final IEvent<?> event) {
@@ -179,7 +180,7 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 	}
 
 	public GenericBootstrapFormComponent<TYPE, FIELD> hideLabel() {
-		field.setLabel(null);
+		labelHidden = true;
 		return this;
 	}
 
@@ -206,7 +207,9 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 	protected void onInitialize() {
 		super.onInitialize();
 
-		field.setLabel(labelModel);
+		if (!labelHidden) {
+			field.setLabel(labelModel);
+		}
 
 		if ((field instanceof RadioGroup) || (field instanceof CheckGroup)) {
 			getAjaxFormChoiceComponentUpdatingBehavior();
