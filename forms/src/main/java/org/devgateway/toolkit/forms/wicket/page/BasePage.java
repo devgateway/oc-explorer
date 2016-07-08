@@ -32,6 +32,7 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.resource.JQueryResourceReference;
+import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.security.SecurityUtil;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListGroupPage;
@@ -151,6 +152,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 		Model<String> account = null;
 		if (person != null) {
 			account = Model.of(person.getFirstName());
+			pageParametersForAccountPage.add(WebConstants.PARAM_ID, person.getId());
 		}
 
 		NavbarButton<EditUserPage> accountMenu = new NavbarButton<>(EditUserPage.class, pageParametersForAccountPage,
@@ -159,8 +161,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 		MetaDataRoleAuthorizationStrategy.authorize(accountMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
 
 		// home
-		NavbarButton<Homepage> homeMenu = new NavbarButton<>(Homepage.class, pageParametersForAccountPage,
-				Model.of("Home"));
+		NavbarButton<Homepage> homeMenu = new NavbarButton<>(Homepage.class, Model.of("Home"));
 		homeMenu.setIconType(GlyphIconType.home);
 		MetaDataRoleAuthorizationStrategy.authorize(homeMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
 
