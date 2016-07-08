@@ -459,6 +459,12 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
         return checkBox;
     }
 
+    public TextAreaFieldBootstrapFormComponent<String> addTextAreaField(String name) {
+        TextAreaFieldBootstrapFormComponent<String> textAreaField = new TextAreaFieldBootstrapFormComponent<>(name);
+        editForm.add(textAreaField);
+        return textAreaField;
+    }
+
     public TextFieldBootstrapFormComponent<String> addTextField(String name) {
         TextFieldBootstrapFormComponent<String> textField = new TextFieldBootstrapFormComponent<>(name);
         editForm.add(textField);
