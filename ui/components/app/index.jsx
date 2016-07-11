@@ -6,7 +6,6 @@ import Planning from "../planning";
 import Competitiveness from "../competitiveness";
 import Efficiency from "../efficiency";
 import EProcurement from "../e-procurement";
-import NavigationLink from "./navigation-link";
 import cn from "classnames";
 import {toImmutable} from "nuclear-js";
 import Filters from "./filters";

@@ -4,20 +4,30 @@ import ReactDOM from "react-dom";
 import flux from "./flux";
 import {debounce} from "./tools";
 import OCApp from "./oce";
+import styles from "./style.less";
+
 var TRANSLATIONS = {
   en: require('./languages/en_US.json'),
   vn: require('./languages/vn_VN.json')
 };
 
 class OCVN extends OCApp{
-  constructor(props){
+  constructor(props) {
     super(props, {
+      tabs: [{
+        name: () => this.__("Overview"),
+        icon: "search"
+      }, {
+        name: () => this.__("Location"),
+        icon: "map-marker"
+      }, {
+        name: () => this.__("Competitiveness")
+      }, {
+        name: () => this.__("Efficiency")
+      }, {
+        name: () => this.__("eProcurement")
+      }]
       /*
-       {navigationLink(this.__("Overview"), 'search', tabs.OVERVIEW)}
-       {navigationLink(this.__("Location"), 'map-marker', tabs.PLANNING)}
-       {navigationLink(this.__("Competitiveness"), '', tabs.COMPETITIVENESS)}
-       {navigationLink(this.__("Efficiency"), '', tabs.EFFICIENCY)}
-       {navigationLink(this.__("eProcurement"), '', tabs.E_PROCUREMENT)}
 
        {function(tab, props){
        let {state, actions} = props;
