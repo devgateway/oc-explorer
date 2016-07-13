@@ -6,7 +6,6 @@ export default class OverviewPlot extends translatable(Plot){
   getData(){
     var {data} = this.props;
     if(!data) return [];
-    console.log(data.toJS());
     let LINES = {
       award: this.__("Award"),
       bidplan: this.__("Bid plan"),
