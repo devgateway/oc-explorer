@@ -5,11 +5,17 @@ import flux from "./flux";
 import {debounce} from "./tools";
 import OCApp from "./oce";
 import styles from "./style.less";
+import OverviewChart from "./components/overview/overview-chart";
 
 var TRANSLATIONS = {
   en: require('./languages/en_US.json'),
   vn: require('./languages/vn_VN.json')
 };
+
+let response2obj = (field, arr) => arr.reduce((obj, elem) => {
+  obj[elem._id] = elem[field];
+  return obj;
+}, {});
 
 class OCVN extends OCApp{
   constructor(props) {
@@ -18,7 +24,19 @@ class OCVN extends OCApp{
         name: () => this.__("Overview"),
         icon: "search",
         sections: [{
-
+          endpoints: ['countBidPlansByYear', 'countTendersByYear', 'countAwardsByYear'],
+          transform: ([bidplansResponse, tendersResponse, awardsResponse]) => {
+            let bidplans = response2obj('count', bidplansResponse);
+            let tenders = response2obj('count', tendersResponse);
+            let awards = response2obj('count', awardsResponse);
+            return Object.keys(tenders).map(year => ({
+              year: year,
+              bidplan: bidplans[year],
+              tender: tenders[year],
+              award: awards[year]
+            }));
+          },
+          Component: OverviewChart
         }]
       }, {
         name: () => this.__("Location"),

@@ -25,19 +25,6 @@ let response2obj = (field, arr) => arr.reduce((obj, elem) => {
   return obj;
 }, {});
 
-
-let transformOverviewData = ([bidplansResponse, tendersResponse, awardsResponse]) => {
-  let bidplans = response2obj('count', bidplansResponse);
-  let tenders = response2obj('count', tendersResponse);
-  let awards = response2obj('count', awardsResponse);
-  return Object.keys(tenders).map(year => ({
-    year: year,
-    bidplan: bidplans[year],
-    tender: tenders[year],
-    award: awards[year]
-  }));
-};
-
 let transformCostEffectivenessData = ([tenderResponse, awardResponse]) => {
   let tender = response2obj('totalTenderAmount', tenderResponse);
   let award = response2obj('totalAwardAmount', awardResponse);

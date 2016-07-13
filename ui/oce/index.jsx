@@ -1,13 +1,25 @@
 import React from "react";
 import cn from "classnames";
+import {fetchJson, identity} from "../tools";
+import {fromJS} from "immutable";
 
 export default class OCApp extends React.Component{
   constructor(props, config){
     super(props);
     this.config = config;
     this.state = {
-      currentTab: 0
-    }
+      currentTab: 0,
+      data: fromJS({})
+    };
+
+    let tab = this.config.tabs[this.state.currentTab];
+    tab.sections.map(
+        ({endpoints, transform = identity}, index) =>
+            Promise.all(endpoints.map(ep => fetchJson(`/api/${ep}`)))
+                .then(transform)
+                .then(fromJS)
+                .then(data => this.setState({data: this.state.data.setIn([this.state.currentTab, index], data)}))
+    );
   }
 
   __(text){
@@ -38,9 +50,20 @@ export default class OCApp extends React.Component{
     return this.config.tabs.map((tab, index) => this.navigationLink(tab, index));
   }
 
+  section({Component}, index){
+    let {data, currentTab} = this.state;
+    return <Component
+        key={index}
+        data={data.getIn([currentTab, index])}
+    />
+  }
+
   content(){
     let tab = this.config.tabs[this.state.currentTab];
     if(tab.Component) return <tab.Component/>;
+    if(tab.sections){
+      return tab.sections.map((config, index) => this.section(config, index));
+    }
     return <h1>content</h1>
   }
 
