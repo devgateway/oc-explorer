@@ -1,4 +1,5 @@
 @red: #cc3c3b;
+@base-unit: 1em;
 
 .content{
   margin-top: 3em;
@@ -53,6 +54,9 @@ header.branding{
     display: flex;
     align-items: center;
     justify-content: center;
+    img {
+    margin-left: @base-unit / 2.5;
+    }
   }
 }
 
@@ -62,16 +66,23 @@ aside {
   top: 64px;
   bottom: 0;
   height: auto;
-  background-color: #f2f2f2;
-  border-right: 1px solid #333;
+  background-color: #e9e9e9;
+  border-right: 2px solid #c5c5c5;
 
   section.col-sm-12 {
     padding: 15px 20px 15px 20px;
     border-bottom: 1px solid #ccc;
   }
 
-  section.description strong{
-    color: @red;
+  section.description{
+    background: #ffffff;
+    line-height: 120%;
+    h3 {
+      color: @red;
+      font-size: 1em;
+      margin-top: 10px;
+      text-transform: uppercase;
+    }
   }
 }
 

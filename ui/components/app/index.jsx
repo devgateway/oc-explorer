@@ -55,7 +55,7 @@ export default class App extends translatable(Component){
                {navigationLink(this.__("eProcurement"), '', tabs.E_PROCUREMENT)}
           </div>
           <section className="col-sm-12 description">
-            <p><strong>{this.__("Toolkit description")}</strong></p>
+            <h3><strong>{this.__("Toolkit description")}</strong></h3>
             <p>
               <small>
                 {this.__("The Procurement M&E Prototype is an interactive platform for analyzing, monitoring, and evaluating information on procurement in Vietnam. All data in the dashboard are collected from the Vietnam Government eProcurement system (eGP).")}
