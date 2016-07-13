@@ -39,8 +39,10 @@ import org.devgateway.toolkit.forms.wicket.page.lists.ListGroupPage;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListTestFormPage;
 import org.devgateway.toolkit.forms.wicket.page.user.EditUserPage;
 import org.devgateway.toolkit.forms.wicket.page.user.LogoutPage;
+import org.devgateway.toolkit.forms.wicket.styles.BaseStyles;
 import org.devgateway.toolkit.persistence.dao.Person;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.dropdown.MenuBookmarkablePageLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.html.HtmlTag;
@@ -111,6 +113,9 @@ public abstract class BasePage extends GenericWebPage<Void> {
 		navbar = newNavbar("navbar");
 		header.add(navbar);
 
+		// Add information about navbar position on header element.
+		header.add(new CssClassNameAppender("with-" + navbar.getPosition().cssClassName()));
+
 		footer = new Footer("footer");
 
 		add(header);
@@ -144,6 +149,10 @@ public abstract class BasePage extends GenericWebPage<Void> {
 		logoutMenu.setIconType(GlyphIconType.logout);
 		MetaDataRoleAuthorizationStrategy.authorize(logoutMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
 
+		/**
+		 * Make sure to update the BaseStyles when the navbar position changes.
+		 * @see org.devgateway.toolkit.forms.wicket.styles.BaseStyles
+		 */
 		navbar.setPosition(Navbar.Position.TOP);
 		navbar.setInverted(true);
 
@@ -212,9 +221,9 @@ public abstract class BasePage extends GenericWebPage<Void> {
 				list.add(uiBrowserLink);
 
 
-                list.add(new MenuBookmarkablePageLink<Void>(EditAdminSettingsPage.class,
-                        new StringResourceModel("navbar.adminSettings", BasePage.this, null)).
-                        setIconType(FontAwesomeIconType.briefcase));
+				list.add(new MenuBookmarkablePageLink<Void>(EditAdminSettingsPage.class,
+						new StringResourceModel("navbar.adminSettings", BasePage.this, null)).
+						setIconType(FontAwesomeIconType.briefcase));
 
 				return list;
 			}
@@ -233,17 +242,18 @@ public abstract class BasePage extends GenericWebPage<Void> {
 	public void renderHead(final IHeaderResponse response) {
 		super.renderHead(response);
 
-		// response.render(CssHeaderItem.forReference(MainCss.INSTANCE));
-
-		response.render(RespondJavaScriptReference.headerItem());
-
+		// Load Styles.
+		response.render(CssHeaderItem.forReference(BaseStyles.INSTANCE));
 		response.render(CssHeaderItem.forReference(BootstrapCssReference.instance()));
 		response.render(CssHeaderItem.forReference(FontAwesomeCssReference.instance()));
 
+		// Load Scripts.
+		response.render(RespondJavaScriptReference.headerItem());
 		response.render(JavaScriptHeaderItem.forReference(JQueryResourceReference.get()));
-		// response.render(JavaScriptHeaderItem.forReference(new
-		// JavaScriptResourceReference(MainCss.class,
-		// "/assets/js/fileupload.js")));
+
+		// response.render(JavaScriptHeaderItem.forReference(
+		// 		new JavaScriptResourceReference(MainCss.class, "/assets/js/fileupload.js")
+		// ));
 
 	}
 }
