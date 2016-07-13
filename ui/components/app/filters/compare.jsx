@@ -31,22 +31,6 @@ export default class ComparisionCriteria extends translatable(Component){
           </select>
         </div>
       </div>
-    </div>
-    return (
-        <section
-            onClick={e => actions.setMenuBox(open ? "" : "compare")}
-            className={cn("filters", {open})}
-        >
-          <div className="row">
-            <div className="col-sm-10 text">
-
-            </div>
-            <div className="col-sm-1 end arrow">
-              <i className="glyphicon glyphicon-menu-right"></i>
-            </div>
-
-          </div>
-        </section>
-    )
+    </div>;
   }
 }
