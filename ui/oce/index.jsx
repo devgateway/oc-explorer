@@ -2,6 +2,9 @@ import React from "react";
 import cn from "classnames";
 import {fetchJson, identity} from "../tools";
 import {fromJS} from "immutable";
+import Compare from "../components/app/filters/compare";
+
+const MENU_BOX_COMPARE = "compare";
 
 export default class OCApp extends React.Component{
   constructor(props, config){
@@ -9,6 +12,8 @@ export default class OCApp extends React.Component{
     this.config = config;
     this.state = {
       currentTab: 0,
+      menuBox: "",
+      compareBy: "",
       data: fromJS({})
     };
 
@@ -30,8 +35,18 @@ export default class OCApp extends React.Component{
     return <h1>filters</h1>
   }
 
+  updateComparisonCriteria(compareBy){
+    this.setState({compareBy});
+  }
+
   comparison(){
-    return <h1>comparison</h1>
+    let {menuBox, compareBy} = this.state;
+    return <Compare
+        open={menuBox == MENU_BOX_COMPARE}
+        compareBy={compareBy}
+        onClick={_ => this.setState({menuBox: MENU_BOX_COMPARE == menuBox ? "" : MENU_BOX_COMPARE})}
+        onChange={compareBy => this.updateComparisonCriteria(compareBy)}
+    />
   }
 
   navigationLink({name, icon}, index){
