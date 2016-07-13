@@ -54,8 +54,19 @@ header.branding{
     display: flex;
     align-items: center;
     justify-content: center;
-    img {
-    margin-left: @base-unit / 2.5;
+    .flag {
+      box-shadow: 0px 1px 10px 1px #B53636;
+      -webkit-box-shadow: 0px 1px 10px 1px #B53636;
+      -moz-box-shadow: 0px 1px 10px 1px #B53636;
+      -o-box-shadow: 0px 1px 10px 1px #B53636;
+      margin-left: @base-unit / 2.5;
+      width: 2.2em;
+      &:hover {
+        box-shadow: 0px 1px 10px 1px #db5151;
+        -webkit-box-shadow: 0px 1px 10px 1px #db5151;
+        -moz-box-shadow: 0px 1px 10px 1px #db5151;
+        -o-box-shadow: 0px 1px 10px 1px #db5151;
+      }
     }
   }
 }

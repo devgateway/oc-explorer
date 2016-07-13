@@ -41,8 +41,8 @@ export default class App extends translatable(Component){
           </div>
         </div>
         <div className="col-sm-1 language-switcher">
-          <img src="assets/flags/us.png" alt="" onClick={e => actions.setLocale("en")}/>
-          <img src="assets/flags/vn.png" alt="" onClick={e => actions.setLocale("vn")}/>
+          <img className="flag" src="assets/flags/us.png" alt="US flag" onClick={e => actions.setLocale("en")}/>
+          <img className="flag" src="assets/flags/vn.png" alt="Vietnam flag" onClick={e => actions.setLocale("vn")}/>
         </div>
       </header>
       <aside className="col-xs-4 col-md-3 col-lg-2">
