@@ -16,10 +16,14 @@ class OCVN extends OCApp{
     super(props, {
       tabs: [{
         name: () => this.__("Overview"),
-        icon: "search"
+        icon: "search",
+        sections: [{
+
+        }]
       }, {
         name: () => this.__("Location"),
-        icon: "map-marker"
+        icon: "map-marker",
+        Component: () => <h1>here be map</h1>
       }, {
         name: () => this.__("Competitiveness")
       }, {
@@ -126,7 +130,9 @@ class OCVN extends OCApp{
       </aside>
       <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10">
         <div className="row">
-          {this.content()}
+          <div className="col-sm-12 content">
+            {this.content()}
+          </div>
         </div>
       </div>
       <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 years-bar" role="navigation">

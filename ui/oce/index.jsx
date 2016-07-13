@@ -39,6 +39,8 @@ export default class OCApp extends React.Component{
   }
 
   content(){
+    let tab = this.config.tabs[this.state.currentTab];
+    if(tab.Component) return <tab.Component/>;
     return <h1>content</h1>
   }
 
