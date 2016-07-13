@@ -1,18 +1,23 @@
 import Plot from "../plot";
-import {pluck} from "../../tools";
+import {pluckImm} from "../../tools";
 import translatable from "../translatable";
 
 export default class OverviewPlot extends translatable(Plot){
   getData(){
     var {data} = this.props;
-    return data ? ['award', 'bidplan', 'tender'].map(key => {
-      return {
-        x: data.map(pluck('year')),
-        y: data.map(pluck(key)),
+    if(!data) return [];
+    let LINES = {
+      award: this.__("Award"),
+      bidplan: this.__("Bid plan"),
+      tender: this.__("Tender")
+    };
+    return Object.keys(LINES).map(key => ({
+        x: data.map(pluckImm('year')),
+        y: data.map(pluckImm(key)),
         type: 'scatter',
-        name: key
-      }
-    }) : [];
+        name: LINES[key]
+      })
+    );
   }
 
   getLayout(){
