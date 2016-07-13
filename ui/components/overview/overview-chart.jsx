@@ -6,14 +6,16 @@ export default class OverviewPlot extends translatable(Plot){
   getData(){
     var {data} = this.props;
     if(!data) return [];
+    console.log(data.toJS());
     let LINES = {
       award: this.__("Award"),
       bidplan: this.__("Bid plan"),
       tender: this.__("Tender")
     };
+    let years = data.map(pluckImm('year')).toJS();
     return Object.keys(LINES).map(key => ({
-        x: data.map(pluckImm('year')),
-        y: data.map(pluckImm(key)),
+        x: years,
+        y: data.map(pluckImm(key)).toJS(),
         type: 'scatter',
         name: LINES[key]
       })
