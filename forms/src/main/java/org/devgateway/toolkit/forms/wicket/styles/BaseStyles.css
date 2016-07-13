@@ -21,6 +21,8 @@ html {
 .main-header.with-navbar-fixed-top {
     /*
      * The default bootstrap navbar is 50px height and has a bottom margin of 20px for the default font size.
+     * TODO: Convert to LESS and use Bootstrap variables.
      */
-    min-height: 70px;
+    min-height: 50px;
+    margin-bottom: 20px;
 }
