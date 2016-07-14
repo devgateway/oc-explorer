@@ -48,11 +48,22 @@ export default class App extends translatable(Component){
       <aside className="col-xs-4 col-md-3 col-lg-2">
         <div className="row">
           <div role="navigation">
-               {navigationLink(this.__("Overview"), 'search', tabs.OVERVIEW)}
-               {navigationLink(this.__("Location"), 'map-marker', tabs.PLANNING)}
-               {navigationLink(this.__("Competitiveness"), '', tabs.COMPETITIVENESS)}
-               {navigationLink(this.__("Efficiency"), '', tabs.EFFICIENCY)}
-               {navigationLink(this.__("e-Procurement"), '', tabs.E_PROCUREMENT)}
+          <a className="col-sm-12">
+          <span className="circle"><i className="glyphicon glyphicon-search"></i></span>Overview
+          </a>
+          <a className="col-sm-12">
+          <span className="circle"><i className="glyphicon glyphicon-map-marker"></i></span>Planning
+          </a>
+          <a className="col-sm-12">
+          <span className="circle"><i className="glyphicon glyphicon-"></i></span>Competitiveness
+          </a>
+          <a className="col-sm-12">
+          <span className="circle"><i className="glyphicon glyphicon-"></i></span>Efficiency
+          </a>
+          <a className="col-sm-12">
+          <span className="circle"><i className="glyphicon glyphicon-"></i></span>E-procurement
+          </a>
+
           </div>
           <section className="col-sm-12 description">
             <h3><strong>{this.__("Toolkit description")}</strong></h3>
