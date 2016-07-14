@@ -36,11 +36,11 @@ export default class App extends translatable(Component){
         <div className="col-sm-6 menu">
           <Filters {...this.props}/>
           <ComparisonCriteria {...this.props}/>
-          <div>
+          <div className="filters">
             <i className="glyphicon glyphicon-download-alt"></i> Export <i className="glyphicon glyphicon-menu-down"></i>
           </div>
         </div>
-        <div className="col-sm-1 language-switcher">
+        <div className="col-sm-2 language-switcher">
           <img className="flag" src="assets/flags/us.png" alt="US flag" onClick={e => actions.setLocale("en")}/>
           <img className="flag" src="assets/flags/vn.png" alt="Vietnam flag" onClick={e => actions.setLocale("vn")}/>
         </div>
@@ -52,7 +52,7 @@ export default class App extends translatable(Component){
                {navigationLink(this.__("Location"), 'map-marker', tabs.PLANNING)}
                {navigationLink(this.__("Competitiveness"), '', tabs.COMPETITIVENESS)}
                {navigationLink(this.__("Efficiency"), '', tabs.EFFICIENCY)}
-               {navigationLink(this.__("eProcurement"), '', tabs.E_PROCUREMENT)}
+               {navigationLink(this.__("e-Procurement"), '', tabs.E_PROCUREMENT)}
           </div>
           <section className="col-sm-12 description">
             <h3><strong>{this.__("Toolkit description")}</strong></h3>

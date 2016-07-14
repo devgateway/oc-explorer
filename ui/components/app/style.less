@@ -39,10 +39,14 @@ header.branding{
 
   .menu{
     color: white;
+    display: inline-block;
+    float: right;
+    padding-left: 15%;
     text-transform: uppercase;
-    display: flex;
-    align-items: stretch;
-    justify-content: flex-start;
+    width: 100%;
+    @media only screen and (max-width: 1280px) {
+      margin-left: -140px;
+    }
     &>div{
       cursor: pointer;
       padding: 20px;
@@ -59,7 +63,7 @@ header.branding{
       -webkit-box-shadow: 0px 1px 10px 1px #B53636;
       -moz-box-shadow: 0px 1px 10px 1px #B53636;
       -o-box-shadow: 0px 1px 10px 1px #B53636;
-      margin-left: @base-unit / 2.5;
+      margin-right: @base-unit / 2.5;
       width: 2.2em;
       &:hover {
         box-shadow: 0px 1px 10px 1px #db5151;
