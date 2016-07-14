@@ -23,7 +23,7 @@ class OCVN extends OCApp{
       tabs: [{
         name: () => this.__("Overview"),
         icon: "search",
-        sections: [{
+        visualizations: [{
           endpoints: ['countBidPlansByYear', 'countTendersByYear', 'countAwardsByYear'],
           transform: ([bidplansResponse, tendersResponse, awardsResponse]) => {
             let bidplans = response2obj('count', bidplansResponse);

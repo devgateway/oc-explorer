@@ -18,7 +18,7 @@ export default class OCApp extends React.Component{
     };
 
     let tab = this.config.tabs[this.state.currentTab];
-    tab.sections.map(
+    tab.visualizations.map(
         ({endpoints, transform = identity}, index) =>
             Promise.all(endpoints.map(ep => fetchJson(`/api/${ep}`)))
                 .then(transform)
@@ -65,7 +65,7 @@ export default class OCApp extends React.Component{
     return this.config.tabs.map((tab, index) => this.navigationLink(tab, index));
   }
 
-  section({Component}, index){
+  visualization({Component}, index){
     let {data, currentTab} = this.state;
     return <Component
         key={index}
@@ -76,8 +76,8 @@ export default class OCApp extends React.Component{
   content(){
     let tab = this.config.tabs[this.state.currentTab];
     if(tab.Component) return <tab.Component/>;
-    if(tab.sections){
-      return tab.sections.map((config, index) => this.section(config, index));
+    if(tab.visualizations){
+      return tab.visualizations.map((config, index) => this.visualization(config, index));
     }
     return <h1>content</h1>
   }
