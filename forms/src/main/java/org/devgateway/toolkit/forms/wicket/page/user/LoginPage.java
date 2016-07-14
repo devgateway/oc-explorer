@@ -146,12 +146,4 @@ public class LoginPage extends BasePage {
         LoginForm loginForm = new LoginForm("loginform");
         add(loginForm);
     }
-
-    @Override
-    protected void onInitialize() {
-        super.onInitialize();
-
-        // hide footer since it's not stick to the bottom of the page
-        footer.setVisibilityAllowed(false);
-    }
 }
