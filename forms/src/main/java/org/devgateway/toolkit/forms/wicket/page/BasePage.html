@@ -4,30 +4,32 @@
         <meta charset="utf-8">
         <title>DGToolkit</title>
     </head>
-
     <body>
         <wicket:container wicket:id="scripts-container"/>
 
-        <div class="container-fluid">
-            <header class="main-header" wicket:id="header"></header>
+        <header wicket:id="mainHeader" class="mainHeader"></header>
 
+        <div wicket:id="mainContainer" class="mainContainer">
+            <!-- TODO: Remove! -->
             <div class="row">
-                <div class="text-center">
-                    <h3 wicket:id="pageTitle"></h3>
+                <div class="col-xs-12 col-md-8 col-md-offset-2 text-center">
+                    <h1 class="pageTitle" wicket:id="pageTitle"></h1>
                 </div>
             </div>
 
-            <div class="main-container">
-                <wicket:child />
-                <div class="row">
-                    <div class="col-md-10 col-md-offset-1">
-                        <span wicket:id="feedback" class="feedbackPanel"></span>
-                    </div>
-                </div>
+            <!-- TODO: Add "row" class here!?! -->
+            <div>
+                <wicket:child/>
             </div>
 
-            <footer class="main-footer" wicket:id="footer"></footer>
+            <!-- TODO: Remove! -->
+            <div class="row">
+                <div class="col-xs-12 col-md-8 col-md-offset-2">
+                    <span wicket:id="feedback" class="feedbackPanel"></span>
+                </div>
+            </div>
         </div>
 
+        <footer wicket:id="mainFooter" class="mainFooter"></footer>
     </body>
 </html>
