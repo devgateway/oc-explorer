@@ -1,12 +1,17 @@
 aside [role=navigation] a{
   display: block;
   color: #707070;
+  cursor: pointer;
   font-size: 1.05em;
-  line-height: 160%;
+  line-height: 190%;
   text-transform: uppercase;
   border-bottom: 1px solid #c5c5c5;
   padding: 15px 0 15px 20px;
   text-decoration: none;
+  &:hover {
+    background-color: #808080;
+    color: #f2f2f2;
+  }
   &.active{
     background-color: #808080;
     color: #f2f2f2;
@@ -19,14 +24,19 @@ aside [role=navigation] a{
     background-color: #666;
     border-radius: 50%;
     color: #f2f2f2;
-    display: inline-block;
+    display: block;
+    float: left;
     margin-right: 0.4em;
     text-align: center;
     height: 1.6em;
     width: 1.6em;
-    .glyphicon {
-      font-size: 14px;
-      padding-top: 4px;
-    }
   }
+}
+
+.nav-icon {
+  display:block;
+  height:1.28em;
+  width: 1.28em;
+  margin: auto;
+  padding-top: 5px;
 }

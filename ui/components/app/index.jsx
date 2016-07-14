@@ -49,19 +49,34 @@ export default class App extends translatable(Component){
         <div className="row">
           <div role="navigation">
           <a className="col-sm-12">
-          <span className="circle"><i className="glyphicon glyphicon-search"></i></span>Overview
+          <span className="circle">
+            <img className="nav-icon" src="assets/icons/overview.svg"/>
+          </span>
+          Overview
           </a>
           <a className="col-sm-12">
-          <span className="circle"><i className="glyphicon glyphicon-map-marker"></i></span>Planning
+          <span className="circle">
+            <img className="nav-icon" src="assets/icons/planning.svg"/>
+          </span>
+          Planning
           </a>
           <a className="col-sm-12">
-          <span className="circle"><i className="glyphicon glyphicon-"></i></span>Competitiveness
+          <span className="circle">
+            <img className="nav-icon" src="assets/icons/competitive.svg"/>
+          </span>
+          Competitiveness
           </a>
           <a className="col-sm-12">
-          <span className="circle"><i className="glyphicon glyphicon-"></i></span>Efficiency
+          <span className="circle">
+            <img className="nav-icon" src="assets/icons/efficiency.svg"/>
+          </span>
+          Efficiency
           </a>
           <a className="col-sm-12">
-          <span className="circle"><i className="glyphicon glyphicon-"></i></span>E-procurement
+          <span className="circle">
+            <img className="nav-icon" src="assets/icons/eprocurement.svg"/>
+          </span>
+          E-procurement
           </a>
 
           </div>
