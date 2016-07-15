@@ -265,7 +265,7 @@ public class TenderRowImporter extends ReleaseRowImporter {
 						classification.setDescription("EPC");
 						break;
 					default:
-						classification.setDescription("Undefined");
+						classification.setDescription("Unspecified");
 						break;
 					}
 					classification = classificationRepository.insert(classification);
