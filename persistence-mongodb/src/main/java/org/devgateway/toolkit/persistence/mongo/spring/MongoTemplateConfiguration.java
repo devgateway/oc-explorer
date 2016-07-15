@@ -64,6 +64,8 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.tenderPeriod.endDate", Direction.ASC));
         mongoTemplate.indexOps(Release.class)
                 .ensureIndex(new Index().on("tender.items.classification._id", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
+        		on("tender.items.deliveryLocation._id", Direction.ASC));
         
 		mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("identifier._id", Direction.ASC));
 		mongoTemplate.indexOps(Organization.class)

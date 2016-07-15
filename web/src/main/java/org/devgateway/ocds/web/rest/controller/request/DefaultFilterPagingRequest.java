@@ -29,6 +29,10 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 	@ApiModelProperty(value = "This will filter after tender.contrMethod.id, Values range from 1 to 5.")
 	@EachPattern(regexp = "^[a-zA-Z0-9]*$")
 	private List<String> contrMethod;
+	
+	
+	@ApiModelProperty(value = "This will filter after tender.items.deliveryLocation._id")
+	private List<String> tenderDeliveryLocationIdentifier;
 
 	/**
 	 * This parameter will invert (negate) all existing filtering parameters. So
@@ -86,6 +90,14 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
 	public void setContrMethod(List<String> contrMethod) {
 		this.contrMethod = contrMethod;
+	}
+
+	public List<String> getTenderDeliveryLocationIdentifier() {
+		return tenderDeliveryLocationIdentifier;
+	}
+
+	public void setTenderDeliveryLocationIdentifier(List<String> tenderDeliveryLocationGazetteerIdentifier) {
+		this.tenderDeliveryLocationIdentifier = tenderDeliveryLocationGazetteerIdentifier;
 	}
 
 
