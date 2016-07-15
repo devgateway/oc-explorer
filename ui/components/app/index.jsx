@@ -37,7 +37,7 @@ export default class App extends translatable(Component){
           <Filters {...this.props}/>
           <ComparisonCriteria {...this.props}/>
           <div className="filters">
-            <i className="glyphicon glyphicon-download-alt"></i> Export <i className="glyphicon glyphicon-menu-down"></i>
+            <img className="top-nav-icon" src="assets/icons/export.svg"/> Export <i className="glyphicon glyphicon-menu-down"></i>
           </div>
         </div>
         <div className="col-sm-2 language-switcher">
