@@ -36,7 +36,8 @@ public class Item {
 	 * into the OCDS standard since it seems this will be rolled into OCDS 1.1
 	 * see https://jira.dgfoundation.org/browse/OCE-35
 	 */
-	private Location<?> deliveryLocation;
+	@SuppressWarnings("rawtypes")
+	private Location deliveryLocation;
 	
     /**
      * A local identifier to reference and merge the items by. Must be unique within a given array of items.
