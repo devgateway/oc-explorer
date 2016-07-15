@@ -1,16 +1,17 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
  * A good, service, or work to be contracted.
@@ -25,10 +26,19 @@ import java.util.Set;
         "classification",
         "additionalClassifications",
         "quantity",
-        "unit"
+        "unit",
+        "deliveryLocation"
 })
 public class Item {
 
+	/**
+	 * This is part of the OCDS location extension. We have decided to plug this
+	 * into the OCDS standard since it seems this will be rolled into OCDS 1.1
+	 * see https://jira.dgfoundation.org/browse/OCE-35
+	 */
+	@SuppressWarnings("rawtypes")
+	private Location deliveryLocation;
+	
     /**
      * A local identifier to reference and merge the items by. Must be unique within a given array of items.
      * (Required)
@@ -234,6 +244,7 @@ public class Item {
                 append(additionalClassifications).
                 append(quantity).
                 append(unit).
+                append(deliveryLocation).
                 toHashCode();
     }
 
@@ -253,7 +264,16 @@ public class Item {
                 append(additionalClassifications, rhs.additionalClassifications).
                 append(quantity, rhs.quantity).
                 append(unit, rhs.unit).
+                append(deliveryLocation, rhs.deliveryLocation).
                 isEquals();
     }
+
+	public Location<?> getDeliveryLocation() {
+		return deliveryLocation;
+	}
+
+	public void setDeliveryLocation(Location<?> deliveryLocation) {
+		this.deliveryLocation = deliveryLocation;
+	}
 
 }
