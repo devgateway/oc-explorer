@@ -110,6 +110,11 @@ public class EditUserPage extends AbstractEditPage<Person> {
         }
     };
 
+    @Override
+    public Boolean fluidContainer() {
+        return false;
+    }
+
     public EditUserPage(final PageParameters parameters) {
         super(parameters);
 
