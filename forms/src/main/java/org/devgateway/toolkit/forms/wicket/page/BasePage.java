@@ -42,6 +42,7 @@ import org.devgateway.toolkit.forms.wicket.page.lists.ListUserPage;
 import org.devgateway.toolkit.forms.wicket.page.user.EditUserPage;
 import org.devgateway.toolkit.forms.wicket.page.user.LogoutPage;
 import org.devgateway.toolkit.forms.wicket.styles.BaseStyles;
+import org.devgateway.toolkit.forms.wicket.styles.MainCss;
 import org.devgateway.toolkit.persistence.dao.Person;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
@@ -281,6 +282,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
 		// Load Styles.
 		response.render(CssHeaderItem.forReference(BaseStyles.INSTANCE));
+		response.render(CssHeaderItem.forReference(MainCss.INSTANCE));
 		response.render(CssHeaderItem.forReference(BootstrapCssReference.instance()));
 		response.render(CssHeaderItem.forReference(FontAwesomeCssReference.instance()));
 
