@@ -9,6 +9,7 @@ import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.ocds.web.rest.controller.request.OrganizationSearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -39,9 +40,10 @@ public class OrganizationSearchController extends GenericOCDSController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value ="/api/ocds/organization/id/{id:^[a-zA-Z0-9]*$}",
-			method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/api/ocds/organization/id/{id:^[a-zA-Z0-9]*$}",
+			method = RequestMethod.GET, produces = "application/json")	
 	@ApiOperation(value = "Finds organization entity by the given id")
+	@Cacheable("organizationsJson")
 	public Organization organizationId(@PathVariable final String id) {
 
 		Organization org = organizationRepository.findOne(id);
@@ -55,10 +57,11 @@ public class OrganizationSearchController extends GenericOCDSController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value="/api/ocds/organization/all",
+	@RequestMapping(value = "/api/ocds/organization/all",
 			method = RequestMethod.GET, produces = "application/json")
 	@ApiOperation(value = "Lists all organizations in the database. "
 			+ "Allows full text search using the text parameter.")
+	@Cacheable(cacheNames = "genericPagingRequestJson", keyGenerator = "genericPagingRequestKeyGenerator")
 	public List<Organization> organizationSearchText(@Valid final OrganizationSearchRequest request) {
 
 		PageRequest pageRequest = new PageRequest(request.getPageNumber(), request.getPageSize());

@@ -28,6 +28,8 @@ import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomGroupingOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -48,6 +50,8 @@ import io.swagger.annotations.ApiOperation;
  *
  */
 @RestController
+@CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
+@Cacheable
 public class TenderPercentagesController extends GenericOCDSController {
 
 	@ApiOperation("Returns the percent of tenders that were cancelled, grouped by year."

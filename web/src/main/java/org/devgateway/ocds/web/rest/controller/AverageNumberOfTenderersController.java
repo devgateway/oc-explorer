@@ -27,6 +27,8 @@ import javax.validation.Valid;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomSortingOperation;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -47,11 +49,14 @@ import io.swagger.annotations.ApiOperation;
  *
  */
 @RestController
+@CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
+@Cacheable
 public class AverageNumberOfTenderersController extends GenericOCDSController {
 
 	@ApiOperation(value = "Calculate average number of tenderers, by year. The endpoint can be filtered"
 			+ "by year read from tender.tenderPeriod.startDate. "
 			+ "The number of tenderers are read from tender.numberOfTenderers")
+
 	@RequestMapping(value = "/api/averageNumberOfTenderers", method = RequestMethod.GET, produces = "application/json")
 	public List<DBObject> averageNumberOfTenderers(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 

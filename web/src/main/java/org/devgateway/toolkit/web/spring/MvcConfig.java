@@ -11,8 +11,12 @@
  *******************************************************************************/
 package org.devgateway.toolkit.web.spring;
 
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
+
+import org.devgateway.ocds.web.cache.generators.GenericPagingRequestKeyGenerator;
 import org.devgateway.ocds.web.rest.serializers.GeoJsonPointSerializer;
+import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
@@ -20,8 +24,8 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import java.text.SimpleDateFormat;
-import java.util.TimeZone;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
 public class MvcConfig extends WebMvcConfigurerAdapter {
@@ -44,6 +48,11 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 		builder.serializerByType(GeoJsonPoint.class, new GeoJsonPointSerializer());
 
 		return builder;
+	}
+	
+	@Bean(name = "genericPagingRequestKeyGenerator")
+	public KeyGenerator genericPagingRequestKeyGenerator(ObjectMapper objectMapper) {
+		return new GenericPagingRequestKeyGenerator(objectMapper);
 	}
 
 }

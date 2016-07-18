@@ -18,6 +18,8 @@ import io.swagger.annotations.ApiOperation;
 
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -44,6 +46,8 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
  *
  */
 @RestController
+@CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
+@Cacheable
 public class CountPlansTendersAwardsController extends GenericOCDSController {
 
 	/**
@@ -57,7 +61,7 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
 	@ApiOperation(value = "Count of bid plans, by year. This will count the releases that have the field"
 			+ "planning.bidPlanProjectDateApprove populated. "
 			+ "The year grouping is taken from planning.bidPlanProjectDateApprove")
-	@RequestMapping(value = "/api/countBidPlansByYear", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/api/countBidPlansByYear", method = RequestMethod.GET, produces = "application/json")	
 	public List<DBObject> countBidPlansByYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
