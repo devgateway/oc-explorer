@@ -15,6 +15,9 @@
 
 	<defaultCache eternal="true" overflowToDisk="false"
 		statistics="true" maxEntriesLocalHeap="100000"/>
+
+	<cache name="classifications" eternal="true" overflowToDisk="false"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="100000"/>
 		
 	<!-- EhCache Config for Pentaho Reports -->
 	<!-- Defines the caches used by libloader. This cache holds the raw binary data loaded via libloader. -->
