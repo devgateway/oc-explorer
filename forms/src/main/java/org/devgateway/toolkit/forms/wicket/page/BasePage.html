@@ -5,25 +5,32 @@
     <title>Open Contracting Explorer</title>
 </head>
 
-<body>
-<wicket:container wicket:id="scripts-container"/>
-<header wicket:id="header"></header>
-<div class="container-fluid">
-    <div class="page-header">
-        <div class="text-center">
-            <h3 wicket:id="pageTitle"></h3>
+    <body>
+        <wicket:container wicket:id="scripts-container"/>
+
+        <header wicket:id="mainHeader" class="mainHeader"></header>
+
+        <div wicket:id="mainContainer" class="mainContainer">
+            <!-- TODO: Remove! -->
+            <div class="row">
+                <div class="col-xs-12 col-md-8 col-md-offset-2 text-center">
+                    <h1 class="pageTitle" wicket:id="pageTitle"></h1>
+                </div>
+            </div>
+
+            <!-- TODO: Add "row" class here!?! -->
+            <div>
+                <wicket:child/>
+            </div>
+
+            <!-- TODO: Remove! -->
+            <div class="row">
+                <div class="col-xs-12 col-md-8 col-md-offset-2">
+                    <span wicket:id="feedback" class="feedbackPanel"></span>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <div class="container-fluid">
-        <wicket:child />
-        <div class="row-fluid">
-            <span wicket:id="feedback" class="feedbackPanel"></span>
-        </div>
-    </div>
-</div>
-
-<footer class="footer" wicket:id="footer"></footer>
-
-</body>
+        <footer wicket:id="mainFooter" class="mainFooter"></footer>
+    </body>
 </html>

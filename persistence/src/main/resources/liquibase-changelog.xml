@@ -59,4 +59,13 @@
         <sqlFile path="Person_roles.sql"/>
     </changeSet>
 
+    <changeSet id="9" author="Octavian Ciubotaru">
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="PERSON_ROLES" />
+            <tableExists tableName="ROLE" />
+            <tableExists tableName="PERSON" />
+        </preConditions>
+        <sqlFile path="Renamed_roles.sql"/>
+    </changeSet>
+
 </databaseChangeLog>

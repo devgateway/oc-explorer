@@ -9,17 +9,24 @@
  * Contributors:
  * Development Gateway - initial API and implementation
  *******************************************************************************/
-package org.devgateway.toolkit.persistence.repository;
+package org.devgateway.toolkit.forms.wicket.styles;
 
-import org.devgateway.toolkit.persistence.dao.TestForm;
-import org.springframework.transaction.annotation.Transactional;
+import org.apache.wicket.request.resource.CssResourceReference;
 
 /**
- * 
- * @author mpostelnicu
+ * The base CSS for the project.
  *
+ * TODO: Convert to LESS; Bootstrap also uses LESS.
  */
-@Transactional
-public interface TestFormRepository extends BaseJpaRepository<TestForm, Long> {
+public class BaseStyles extends CssResourceReference {
+	private static final long serialVersionUID = 1L;
 
+	public static final BaseStyles INSTANCE = new BaseStyles();
+
+	/**
+	 * Construct.
+	 */
+	public BaseStyles() {
+		super(BaseStyles.class, "BaseStyles.css");
+	}
 }

@@ -5,7 +5,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.wicketstuff.annotation.mount.MountPath;
 
-@AuthorizeInstantiation(SecurityConstants.Roles.ROLE_EDITOR)
+@AuthorizeInstantiation(SecurityConstants.Roles.ROLE_USER)
 @MountPath(value = "/changePassword")
 public class ChangePasswordPage extends EditUserPage {
     private static final long serialVersionUID = 7378006795457575557L;

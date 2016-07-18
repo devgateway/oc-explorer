@@ -168,6 +168,8 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
 			getResourceSettings().setCssCompressor(new YuiCssCompressor());
 
 			getFrameworkSettings().setSerializer(new DeflatedJavaSerializer(getApplicationKey()));
+
+			getMarkupSettings().setStripComments(true);
 		} else {
 			getResourceSettings().setCachingStrategy(new NoOpResourceCachingStrategy());
 		}

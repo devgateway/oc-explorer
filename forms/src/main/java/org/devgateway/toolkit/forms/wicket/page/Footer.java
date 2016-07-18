@@ -47,13 +47,5 @@ public class Footer extends Panel {
 
 		add(new Label("toolkit-version", Model.of(prop.getProperty("toolkit.version"))));
 		add(new Label("toolkit-year", Calendar.getInstance().get(Calendar.YEAR)));
-
-		WebMarkupContainer login = new TransparentWebMarkupContainer("login");
-		// hide the login link if the user is already logged in
-		if (!(SecurityUtil.getCurrentAuthenticatedPerson() == null)) {
-			login.setVisibilityAllowed(false);
-		}
-		add(login);
 	}
-
 }
