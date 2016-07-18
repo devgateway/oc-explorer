@@ -1,6 +1,8 @@
 package org.devgateway.ocds.web.rest.controller;
 
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.ScriptOperations;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +20,8 @@ import java.util.Arrays;
  *
  */
 @RestController
+@CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
+@Cacheable
 public class TenderBidPeriodPercentilesByYearController extends GenericOCDSController {
 
 	@ApiOperation(value = "Returns the tender bid period percentiles: min, q1, median, a3 and max. "

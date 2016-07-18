@@ -30,6 +30,8 @@ import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingReques
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomGroupingOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -50,24 +52,26 @@ import io.swagger.annotations.ApiOperation;
  *
  */
 @RestController
+@CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
+@Cacheable
 public class CostEffectivenessVisualsController extends GenericOCDSController {
-	
+
 	@ApiOperation(value = "Cost effectiveness of Awards: Displays the total amount of active awards grouped by year."
 			+ "The tender entity, for each award, has to have amount value. The year is calculated from awards.date")
-	@RequestMapping(value = "/api/costEffectivenessAwardAmount",
+	@RequestMapping(value = "/api/costEffectivenessAwardAmount", 
 	method = RequestMethod.GET, produces = "application/json")
 	public List<DBObject> costEffectivenessAwardAmount(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
-		
+
 		DBObject project = new BasicDBObject();
-		project.put("year", new BasicDBObject("$year", "$awards.date"));        
+		project.put("year", new BasicDBObject("$year", "$awards.date"));
 		project.put("awards.value.amount", 1);
-		project.put("totalAwardsWithTender", new BasicDBObject("$cond", Arrays.asList(new BasicDBObject("$gt",
-				Arrays.asList("$tender.tenderPeriod.startDate", null)), 1,
-				0)));
-		project.put("awardsWithTenderValue", new BasicDBObject("$cond", Arrays.asList(new BasicDBObject("$gt",
-				Arrays.asList("$tender.tenderPeriod.startDate", null)), "$awards.value.amount",
-				0)));
-		
+		project.put("totalAwardsWithTender", new BasicDBObject("$cond",
+				Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$tender.tenderPeriod.startDate", null)), 1, 0)));
+		project.put("awardsWithTenderValue",
+				new BasicDBObject("$cond",
+						Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$tender.tenderPeriod.startDate", null)),
+								"$awards.value.amount", 0)));
+
 		DBObject project1 = new BasicDBObject();
 		project1.put(Fields.UNDERSCORE_ID, 1);
 		project1.put("totalAwardAmount", 1);
@@ -96,23 +100,24 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 			+ " Displays the total amount of the active tenders that have active awards, "
 			+ "grouped by year. Only tenders.status=active"
 			+ "are taken into account. The year is calculated from tenderPeriod.startDate")
-	@RequestMapping(value = "/api/costEffectivenessTenderAmount", 
-	method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/api/costEffectivenessTenderAmount",
+	method = RequestMethod.GET, produces = "application/json")	
 	public List<DBObject> costEffectivenessTenderAmount(
 			@ModelAttribute @Valid final GroupingFilterPagingRequest filter) {
-	
+
 		DBObject project = new BasicDBObject();
 		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
 		project.put("tender.value.amount", 1);
-	    project.put(Fields.UNDERSCORE_ID, "$tender._id");
-		project.put("tenderWithAwards", new BasicDBObject("$cond", Arrays.asList(new BasicDBObject("$eq",
-				Arrays.asList("$awards.status", Award.Status.active.toString())), 1,
-				0)));
-		project.put("tenderWithAwardsValue", new BasicDBObject("$cond", Arrays.asList(new BasicDBObject("$eq",
-				Arrays.asList("$awards.status", Award.Status.active.toString())), "$tender.value.amount",
-				0)));
+		project.put(Fields.UNDERSCORE_ID, "$tender._id");
+		project.put("tenderWithAwards",
+				new BasicDBObject("$cond", Arrays.asList(
+						new BasicDBObject("$eq", Arrays.asList("$awards.status", Award.Status.active.toString())), 1,
+						0)));
+		project.put("tenderWithAwardsValue", new BasicDBObject("$cond",
+				Arrays.asList(new BasicDBObject("$eq", Arrays.asList("$awards.status", Award.Status.active.toString())),
+						"$tender.value.amount", 0)));
 		project.putAll(filterProjectMap);
-		
+
 		DBObject group1 = new BasicDBObject();
 		group1.put(Fields.UNDERSCORE_ID, Fields.UNDERSCORE_ID_REF);
 		group1.put("year", new BasicDBObject("$first", "$year"));
@@ -120,7 +125,6 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 		group1.put("tenderWithAwardsValue", new BasicDBObject("$max", "$tenderWithAwardsValue"));
 		group1.put("tenderAmount", new BasicDBObject("$first", "$tender.value.amount"));
 		filterProjectMap.forEach((k, v) -> group1.put(k.replace(".", ""), new BasicDBObject("$first", "$" + k)));
-		
 
 		DBObject project2 = new BasicDBObject();
 		project2.put(Fields.UNDERSCORE_ID, Fields.UNDERSCORE_ID_REF);
@@ -129,22 +133,20 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 		project2.put("totalTenderWithAwards", 1);
 		project2.put("percentageTendersWithAwards", new BasicDBObject("$multiply", Arrays
 				.asList(new BasicDBObject("$divide", Arrays.asList("$totalTenderWithAwards", "$totalTenders")), 100)));
-		
+
 		Aggregation agg = Aggregation.newAggregation(
-				match(where("tender.status").is(Tender.Status.active.toString()).
-						and("tender.tenderPeriod.startDate").exists(true)),				
-				getMatchDefaultFilterOperation(filter),
-				unwind("$awards"),
-				new CustomProjectionOperation(project),
-				new CustomGroupingOperation(group1),				
-				getTopXFilterOperation(filter, "$year").sum("tenderWithAwardsValue").as("totalTenderAmount")
-				.count().as("totalTenders").sum("tenderWithAwards").as("totalTenderWithAwards"),
-				new CustomProjectionOperation(project2),
-				sort(Direction.DESC, "totalTenderAmount"), skip(filter.getSkip()), limit(filter.getPageSize()));
+				match(where("tender.status").is(Tender.Status.active.toString()).and("tender.tenderPeriod.startDate")
+						.exists(true)),
+				getMatchDefaultFilterOperation(filter), unwind("$awards"), new CustomProjectionOperation(project),
+				new CustomGroupingOperation(group1),
+				getTopXFilterOperation(filter, "$year").sum("tenderWithAwardsValue").as("totalTenderAmount").count()
+						.as("totalTenders").sum("tenderWithAwards").as("totalTenderWithAwards"),
+				new CustomProjectionOperation(project2), sort(Direction.DESC, "totalTenderAmount"),
+				skip(filter.getSkip()), limit(filter.getPageSize()));
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-		List<DBObject> tagCount = results.getMappedResults();		
-		
+		List<DBObject> tagCount = results.getMappedResults();
+
 		return tagCount;
 
 	}

@@ -18,6 +18,8 @@ import io.swagger.annotations.ApiOperation;
 
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +37,8 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.newA
  *
  */
 @RestController
+@Cacheable
+@CacheConfig(cacheNames = "bidSelectionMethodsJson")
 public class BidSelectionMethodSearchController extends GenericOCDSController {
 
     /**

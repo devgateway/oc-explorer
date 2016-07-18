@@ -15,6 +15,8 @@ import org.devgateway.ocds.persistence.mongo.Classification;
 import org.devgateway.ocds.persistence.mongo.repository.ClassificationRepository;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +33,8 @@ import java.util.List;
  *
  */
 @RestController
+@Cacheable
+@CacheConfig(cacheNames = "bidTypesJson")
 public class BidTypesSearchController extends GenericOCDSController {
 
     @Autowired
