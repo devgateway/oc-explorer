@@ -11,18 +11,9 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.page;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.dropdown.MenuBookmarkablePageLink;
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
-import de.agilecoders.wicket.core.markup.html.bootstrap.html.HtmlTag;
-import de.agilecoders.wicket.core.markup.html.bootstrap.image.GlyphIconType;
-import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
-import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton;
-import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarComponents;
-import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarDropDownButton;
-import de.agilecoders.wicket.core.markup.html.references.RespondJavaScriptReference;
-import de.agilecoders.wicket.core.markup.html.themes.bootstrap.BootstrapCssReference;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeCssReference;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeIconType;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
@@ -32,6 +23,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.GenericWebPage;
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.pages.RedirectPage;
@@ -42,6 +34,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.resource.JQueryResourceReference;
 import org.devgateway.ocvn.forms.wicket.page.VietnamImportPage;
+import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.security.SecurityUtil;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListGroupPage;
@@ -49,11 +42,23 @@ import org.devgateway.toolkit.forms.wicket.page.lists.ListUserPage;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListVietnamImportSourceFiles;
 import org.devgateway.toolkit.forms.wicket.page.user.EditUserPage;
 import org.devgateway.toolkit.forms.wicket.page.user.LogoutPage;
-import org.devgateway.toolkit.forms.wicket.styles.MainCss;
+import org.devgateway.toolkit.forms.wicket.styles.BaseStyles;
 import org.devgateway.toolkit.persistence.dao.Person;
 
-import java.util.ArrayList;
-import java.util.List;
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.dropdown.MenuBookmarkablePageLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.html.HtmlTag;
+import de.agilecoders.wicket.core.markup.html.bootstrap.image.GlyphIconType;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarComponents;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarDropDownButton;
+import de.agilecoders.wicket.core.markup.html.references.RespondJavaScriptReference;
+import de.agilecoders.wicket.core.markup.html.themes.bootstrap.BootstrapCssReference;
+import de.agilecoders.wicket.core.util.CssClassNames;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeCssReference;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeIconType;
 
 /**
  * Base wicket-bootstrap {@link org.apache.wicket.Page}
@@ -65,13 +70,24 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
     protected static Logger logger = Logger.getLogger(BasePage.class);
 
-    protected NotificationPanel feedbackPanel;
-    protected Header header;
-    protected Footer footer;
+	protected TransparentWebMarkupContainer mainContainer;
+
+	protected Header mainHeader;
+
+	protected Footer mainFooter;
 
     protected Label pageTitle;
 
     private Navbar navbar;
+
+	protected NotificationPanel feedbackPanel;
+
+	/**
+	 * Determines if this page has a fluid container for the content or not.
+	 */
+	public Boolean fluidContainer() {
+		return true;
+	}
 
     public static class HALRedirectPage extends RedirectPage {
         private static final long serialVersionUID = -750983217518258464L;
@@ -101,21 +117,41 @@ public abstract class BasePage extends GenericWebPage<Void> {
         super(parameters);
 
         add(new HtmlTag("html"));
-        // add javascript files at the bottom of the page
+
+		// Add javascript files.
         add(new HeaderResponseContainer("scripts-container", "scripts-bucket"));
 
         feedbackPanel = createFeedbackPanel();
         add(feedbackPanel);
 
-        header = new Header("header", parameters);
+		mainContainer = new TransparentWebMarkupContainer("mainContainer");
+		add(mainContainer);
+
+		// Set the bootstrap container class.
+		// @see https://getbootstrap.com/css/#grid
+		if (fluidContainer()) {
+			mainContainer.add(new CssClassNameAppender(CssClassNames.Grid.containerFluid));
+		}
+		else {
+			mainContainer.add(new CssClassNameAppender(CssClassNames.Grid.container));
+		}
+
+		mainHeader = new Header("mainHeader", parameters);
+		add(mainHeader);
 
         navbar = newNavbar("navbar");
-        header.add(navbar);
+		mainHeader.add(navbar);
 
-        footer = new Footer("footer");
+		// Add information about navbar position on mainHeader element.
+		if (navbar.getPosition().equals(Navbar.Position.DEFAULT)) {
+			mainHeader.add(new CssClassNameAppender("with-navbar-default"));
+		}
+		else {
+			mainHeader.add(new CssClassNameAppender("with-" + navbar.getPosition().cssClassName()));
+		}
 
-        add(header);
-        add(footer);
+		mainFooter = new Footer("mainFooter");
+		add(mainFooter);
 
         pageTitle = new Label("pageTitle", new ResourceModel("page.title"));
         add(pageTitle);
@@ -143,8 +179,12 @@ public abstract class BasePage extends GenericWebPage<Void> {
         NavbarButton<LogoutPage> logoutMenu = new NavbarButton<LogoutPage>(LogoutPage.class,
                 new StringResourceModel("navbar.logout", this, null));
         logoutMenu.setIconType(GlyphIconType.logout);
-        MetaDataRoleAuthorizationStrategy.authorize(logoutMenu, Component.RENDER, SecurityConstants.Roles.ROLE_EDITOR);
+		MetaDataRoleAuthorizationStrategy.authorize(logoutMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
 
+		/**
+		 * Make sure to update the BaseStyles when the navbar position changes.
+		 * @see org.devgateway.toolkit.forms.wicket.styles.BaseStyles
+		 */
         navbar.setPosition(Navbar.Position.TOP);
         navbar.setInverted(true);
 
@@ -153,18 +193,19 @@ public abstract class BasePage extends GenericWebPage<Void> {
         Model<String> account = null;
         if (person != null) {
             account = Model.of(person.getFirstName());
+			pageParametersForAccountPage.add(WebConstants.PARAM_ID, person.getId());
         }
 
         NavbarButton<EditUserPage> accountMenu = new NavbarButton<>(EditUserPage.class, pageParametersForAccountPage,
                 account);
         accountMenu.setIconType(GlyphIconType.user);
-        MetaDataRoleAuthorizationStrategy.authorize(accountMenu, Component.RENDER, SecurityConstants.Roles.ROLE_EDITOR);
+		MetaDataRoleAuthorizationStrategy.authorize(accountMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
 
         // home
         NavbarButton<Homepage> homeMenu = new NavbarButton<>(Homepage.class, pageParametersForAccountPage,
                 new ResourceModel("home"));
         homeMenu.setIconType(GlyphIconType.home);
-        MetaDataRoleAuthorizationStrategy.authorize(homeMenu, Component.RENDER, SecurityConstants.Roles.ROLE_EDITOR);
+		MetaDataRoleAuthorizationStrategy.authorize(homeMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
 
         // admin menu
         NavbarDropDownButton adminMenu = new NavbarDropDownButton(new StringResourceModel("navbar.admin", this, null)) {
@@ -248,19 +289,19 @@ public abstract class BasePage extends GenericWebPage<Void> {
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
 
-        response.render(CssHeaderItem.forReference(MainCss.INSTANCE));
+		// Load Styles.
+		response.render(CssHeaderItem.forReference(BaseStyles.INSTANCE));
+		response.render(CssHeaderItem.forReference(BootstrapCssReference.instance()));
+		response.render(CssHeaderItem.forReference(FontAwesomeCssReference.instance()));
 
-        response.render(RespondJavaScriptReference.headerItem());
-
-        response.render(CssHeaderItem.forReference(BootstrapCssReference.instance()));
-        response.render(CssHeaderItem.forReference(FontAwesomeCssReference.instance()));
-
+		// Load Scripts.
+		response.render(RespondJavaScriptReference.headerItem());
         response.render(JavaScriptHeaderItem.forReference(JQueryResourceReference.get()));
 
         //response.render(CssHeaderItem.forReference(Select2BoostrapCssResourceReference.INSTANCE));
-        // response.render(JavaScriptHeaderItem.forReference(new
-        // JavaScriptResourceReference(MainCss.class,
-        // "/assets/js/fileupload.js")));
 
+		//response.render(JavaScriptHeaderItem.forReference(
+		//		new JavaScriptResourceReference(MainCss.class, "/assets/js/fileupload.js")
+		//));
     }
 }

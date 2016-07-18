@@ -49,6 +49,11 @@ public class LoginPage extends BasePage {
 
     private static final int HIDE_NOTIFICATION_SECONDS = 15;
 
+    @Override
+    public Boolean fluidContainer() {
+        return false;
+    }
+
     class LoginForm extends BootstrapForm<Void> {
         private static final long serialVersionUID = 2066636625524650473L;
 
@@ -133,7 +138,7 @@ public class LoginPage extends BasePage {
     }
 
     /**
-     * @param parameters
+     * @param parameters  The page parameters.
      */
     public LoginPage(final PageParameters parameters) {
         super(parameters);
@@ -145,13 +150,5 @@ public class LoginPage extends BasePage {
 
         LoginForm loginForm = new LoginForm("loginform");
         add(loginForm);
-    }
-
-    @Override
-    protected void onInitialize() {
-        super.onInitialize();
-
-        // hide footer since it's not stick to the bottom of the page
-        footer.setVisibilityAllowed(false);
     }
 }

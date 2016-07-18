@@ -28,18 +28,21 @@ import org.apache.wicket.util.lang.Classes;
 import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
+import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
+import org.apache.wicket.validation.validator.EmailAddressValidator;
+import org.apache.wicket.validation.validator.RangeValidator;
 import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.forms.exceptions.NullJpaRepositoryException;
 import org.devgateway.toolkit.forms.exceptions.NullListPageClassException;
 import org.devgateway.toolkit.forms.util.MarkupCacheService;
 import org.devgateway.toolkit.forms.wicket.components.ComponentUtil;
-import org.devgateway.toolkit.forms.wicket.components.form.BootstrapCancelButton;
-import org.devgateway.toolkit.forms.wicket.components.form.BootstrapDeleteButton;
-import org.devgateway.toolkit.forms.wicket.components.form.BootstrapSubmitButton;
-import org.devgateway.toolkit.forms.wicket.components.form.GenericBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.*;
 import org.devgateway.toolkit.forms.wicket.page.BasePage;
+import org.devgateway.toolkit.forms.wicket.providers.GenericPersistableJpaRepositoryTextChoiceProvider;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
+import org.devgateway.toolkit.persistence.dao.Labelable;
+import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -47,6 +50,8 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationMessa
 import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapForm;
 import de.agilecoders.wicket.core.util.Attributes;
 import nl.dries.wicket.hibernate.dozer.DozerModel;
+
+import java.io.Serializable;
 
 /**
  * @author mpostelnicu Page used to make editing easy, extend to get easy access
@@ -429,4 +434,63 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
 	protected String getClassName() {
 		return Classes.simpleName(getClass());
 	}
+
+    public IValidator<? super String> isEmail() {
+        return EmailAddressValidator.getInstance();
+    }
+
+    public <P extends Comparable<? super P> & Serializable> RangeValidator<P> inRange(P min, P max) {
+        return new RangeValidator<>(min, max);
+    }
+
+    public CheckBoxBootstrapFormComponent addCheckBox(String name) {
+        CheckBoxBootstrapFormComponent checkBox = new CheckBoxBootstrapFormComponent(name);
+        editForm.add(checkBox);
+        return checkBox;
+    }
+
+    public TextAreaFieldBootstrapFormComponent<String> addTextAreaField(String name) {
+        TextAreaFieldBootstrapFormComponent<String> textAreaField = new TextAreaFieldBootstrapFormComponent<>(name);
+        editForm.add(textAreaField);
+        return textAreaField;
+    }
+
+    public TextFieldBootstrapFormComponent<String> addTextField(String name) {
+        TextFieldBootstrapFormComponent<String> textField = new TextFieldBootstrapFormComponent<>(name);
+        editForm.add(textField);
+        return textField;
+    }
+
+    public TextFieldBootstrapFormComponent<Integer> addIntegerTextField(String name) {
+        TextFieldBootstrapFormComponent<Integer> textField = new TextFieldBootstrapFormComponent<>(name);
+        textField.integer();
+        editForm.add(textField);
+        return textField;
+    }
+
+    public TextFieldBootstrapFormComponent<String> addDoubleField(String name) {
+        TextFieldBootstrapFormComponent<String> textField = new TextFieldBootstrapFormComponent<>(name);
+        textField.asDouble();
+        editForm.add(textField);
+        return textField;
+    }
+
+    public DateTimeFieldBootstrapFormComponent addDateTimeField(String name) {
+        DateTimeFieldBootstrapFormComponent field = new DateTimeFieldBootstrapFormComponent(name);
+        editForm.add(field);
+        return field;
+    }
+
+    public DateFieldBootstrapFormComponent addDateField(String name) {
+        DateFieldBootstrapFormComponent field = new DateFieldBootstrapFormComponent(name);
+        editForm.add(field);
+        return field;
+    }
+
+    public <E extends GenericPersistable & Labelable> Select2ChoiceBootstrapFormComponent<E> addSelect2ChoiceField(String name, TextSearchableRepository<E, Long> repository) {
+        GenericPersistableJpaRepositoryTextChoiceProvider<E> choiceProvider = new GenericPersistableJpaRepositoryTextChoiceProvider<>(repository);
+        Select2ChoiceBootstrapFormComponent<E> component = new Select2ChoiceBootstrapFormComponent<>(name, choiceProvider);
+        editForm.add(component);
+        return component;
+    }
 }
