@@ -7,6 +7,8 @@ import io.swagger.annotations.ApiOperation;
 
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -32,6 +34,8 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
  *
  */
 @RestController
+@CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
+@Cacheable
 public class TenderPriceByTypeYearController extends GenericOCDSController {
 
 	@ApiOperation(value = "Returns the tender price by OCDS type (procurementMethod), by year. "
