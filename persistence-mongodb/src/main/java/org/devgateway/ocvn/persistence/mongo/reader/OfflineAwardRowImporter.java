@@ -56,7 +56,7 @@ public class OfflineAwardRowImporter extends ReleaseRowImporter {
 			release.setTender(tender);
 		}
 
-		release.getTender().getSubmissionMethod().add(Tender.SubmissionMethod.written.toString());
+		release.getTender().getSubmissionMethod().add(Tender.SubmissionMethod.written.toString());	
 
 		VNAward award = new VNAward();
 		award.setId(release.getOcid() + "-award-" + release.getAwards().size());
@@ -126,6 +126,9 @@ public class OfflineAwardRowImporter extends ReleaseRowImporter {
 		}
 
 		release.getTender().setNumberOfTenderers(release.getTender().getTenderers().size());
+		
+		//copy items from tender
+		award.getItems().addAll(release.getTender().getItems());
 
 		return release;
 	}
