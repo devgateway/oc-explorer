@@ -15,7 +15,31 @@
 
 	<defaultCache eternal="true" overflowToDisk="false"
 		statistics="true" maxEntriesLocalHeap="100000"/>
+
+	<cache name="classifications" eternal="true" overflowToDisk="false"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="100000"/>
 		
+	<cache name="genericPagingRequestJson" eternal="true" overflowToDisk="false"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="100000"/>		
+
+	<cache name="bidSelectionMethodsJson" eternal="true" overflowToDisk="false"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="100000"/>			
+
+	<cache name="bidTypesJson" eternal="true" overflowToDisk="false"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="100000"/>			
+
+	<cache name="organizationsJson" eternal="true" overflowToDisk="false"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="100000"/>		
+		
+	<cache name="organizations" eternal="true" overflowToDisk="false"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="100000"/>
+		
+	<cache name="locations" eternal="true" overflowToDisk="false"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="100000"/>
+		
+	<cache name="contrMethods" eternal="true" overflowToDisk="false"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="100000"/>
+			
 	<!-- EhCache Config for Pentaho Reports -->
 	<!-- Defines the caches used by libloader. This cache holds the raw binary data loaded via libloader. -->
 	<cache name="libloader-data" eternal="true" overflowToDisk="false"

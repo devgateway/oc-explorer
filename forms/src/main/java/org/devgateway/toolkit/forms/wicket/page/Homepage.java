@@ -22,7 +22,7 @@ import org.devgateway.toolkit.forms.security.SecurityConstants;
  * @author mpostelnicu
  *
  */
-@AuthorizeInstantiation(SecurityConstants.Roles.ROLE_EDITOR)
+@AuthorizeInstantiation(SecurityConstants.Roles.ROLE_USER)
 public class Homepage extends BasePage {
     private static final long serialVersionUID = 1L;
 

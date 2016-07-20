@@ -52,7 +52,7 @@ import org.wicketstuff.annotation.mount.MountPath;
 import java.util.Collection;
 import java.util.List;
 
-@AuthorizeInstantiation(SecurityConstants.Roles.ROLE_EDITOR)
+@AuthorizeInstantiation(SecurityConstants.Roles.ROLE_USER)
 @MountPath(value = "/account")
 public class EditUserPage extends AbstractEditPage<Person> {
     private static final long serialVersionUID = 5208480049061989277L;
@@ -125,14 +125,9 @@ public class EditUserPage extends AbstractEditPage<Person> {
         public void validate(final IValidatable<Collection<Role>> validatable) {
             Collection<Role> value = validatable.getValue();
             Role roleAdmin = roleRepository.findByAuthority(SecurityConstants.Roles.ROLE_ADMIN);
-            Role roleUser = roleRepository.findByAuthority(SecurityConstants.Roles.ROLE_EDITOR);
-            Role roleValidator = roleRepository.findByAuthority(SecurityConstants.Roles.ROLE_VALIDATOR);
+            Role roleUser = roleRepository.findByAuthority(SecurityConstants.Roles.ROLE_USER);
 
-            if (!value.contains(roleAdmin) && value.contains(roleValidator) && !value.contains(roleUser)) {
-                validatable.error(new ValidationError(getString("validatorRoleValidator")));
-            }
-
-            if (value.contains(roleAdmin) && (!value.contains(roleValidator) || !value.contains(roleUser))) {
+            if (value.contains(roleAdmin) && (!value.contains(roleUser))) {
                 validatable.error(new ValidationError(getString("adminRoleValidator")));
             }
         }

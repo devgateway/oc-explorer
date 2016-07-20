@@ -99,6 +99,17 @@ public class GenericOCDSController {
         return createFilterCriteria("tender.items.classification._id", filter.getBidTypeId(), filter);
     }
 
+    
+    /**
+     * Appends the tender.items.deliveryLocation._id
+     *
+     * @param filter
+     * @return the {@link Criteria} for this filter
+     */
+    protected Criteria getByTenderDeliveryLocationIdentifier(final DefaultFilterPagingRequest filter) {
+        return createFilterCriteria("tender.items.deliveryLocation._id",
+        		filter.getTenderDeliveryLocationIdentifier(), filter);
+    }
     /**
      * Appends the contrMethod filter, based on tender.contrMethod
      *
@@ -158,6 +169,7 @@ public class GenericOCDSController {
 		tmpMap.put("tender.procuringEntity._id", 1);
 		tmpMap.put("tender.items.classification._id", 1);
 		tmpMap.put("tender.procurementMethodDetails", 1);
+		tmpMap.put("tender.items.deliveryLocation._id", 1);		
 		tmpMap.put("tender.contrMethod", 1);
 		filterProjectMap = Collections.unmodifiableMap(tmpMap);
 	}
@@ -193,7 +205,8 @@ public class GenericOCDSController {
 
     protected Criteria getDefaultFilterCriteria(final DefaultFilterPagingRequest filter) {
         return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
-                getBidSelectionMethod(filter), getContrMethodFilterCriteria(filter));
+                getBidSelectionMethod(filter), getContrMethodFilterCriteria(filter),
+                getByTenderDeliveryLocationIdentifier(filter));
     }
 
     protected MatchOperation getMatchDefaultFilterOperation(final DefaultFilterPagingRequest filter) {

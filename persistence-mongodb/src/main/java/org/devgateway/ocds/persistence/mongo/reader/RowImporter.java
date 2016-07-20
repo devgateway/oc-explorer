@@ -112,6 +112,10 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 			calendar = DateUtil.getJavaCalendar(Double.parseDouble(string));
 			if (calendar.get(Calendar.YEAR) < MongoConstants.MINIMUM_MONGO_YEAR) {
 				throw new RuntimeException("Years below " + MongoConstants.MINIMUM_MONGO_YEAR + " are not allowed"
+						+ " (" + calendar.get(Calendar.YEAR) + ").");		
+			}
+			if (calendar.get(Calendar.YEAR) > MongoConstants.MAXIMUM_MONGO_YEAR) {
+				throw new RuntimeException("Years above " + MongoConstants.MAXIMUM_MONGO_YEAR + " are not allowed"
 						+ " (" + calendar.get(Calendar.YEAR) + ").");
 			}
 		} catch (NumberFormatException e) {

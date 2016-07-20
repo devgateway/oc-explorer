@@ -9,19 +9,24 @@
  * Contributors:
  * Development Gateway - initial API and implementation
  *******************************************************************************/
-package org.devgateway.ocds.persistence.mongo.constants;
+package org.devgateway.toolkit.forms.wicket.styles;
 
-public final class MongoConstants {
+import org.apache.wicket.request.resource.CssResourceReference;
 
-    private MongoConstants() {
-    }
+/**
+ * The base CSS for the project.
+ *
+ * TODO: Convert to LESS; Bootstrap also uses LESS.
+ */
+public class BaseStyles extends CssResourceReference {
+	private static final long serialVersionUID = 1L;
 
+	public static final BaseStyles INSTANCE = new BaseStyles();
 
-    public static final String OCDS_PREFIX = "ocds-ep75k8-";
-
-    public static final int IMPORT_ROW_BATCH = 1000;
-    
-	public static final int MINIMUM_MONGO_YEAR = 2010;
-	
-	public static final int MAXIMUM_MONGO_YEAR = 2020;	
+	/**
+	 * Construct.
+	 */
+	public BaseStyles() {
+		super(BaseStyles.class, "BaseStyles.css");
+	}
 }

@@ -12,31 +12,6 @@
 	font-size: 14px;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-	position: relative;
-	min-height: 100%;
-}
-
-body {
-	/* Margin bottom by footer height */
-	margin-bottom: 60px;
-	/* Padding top for fluid navbar */
-	padding-top: 60px;
-}
-
-.footer {
-	position: absolute;
-	bottom: 0;
-	width: 100%;
-	/* Set the fixed height of the footer here */
-	height: 60px;
-	background-color: #101010;
-	color: #9d9d9d;
-}
-
-
 .log-text {
  	white-space: pre-wrap;
  	font-family: monospace;

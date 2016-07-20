@@ -28,6 +28,8 @@ import javax.validation.Valid;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -48,6 +50,8 @@ import io.swagger.annotations.ApiOperation;
  *
  */
 @RestController
+@CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
+@Cacheable
 public class AverageTenderAndAwardPeriodsController extends GenericOCDSController {
 
 	private static final int DAY_MS = 86400000;
@@ -166,7 +170,8 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 	
 	@ApiOperation(value = "Quality indicator for averageAwardPeriod endpoint, "
 			+ "showing the percentage of awards that have start and end dates vs the total tenders in the system")
-	@RequestMapping(value = "/api/qualityAverageAwardPeriod", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/api/qualityAverageAwardPeriod", 
+	method = RequestMethod.GET, produces = "application/json")	
 	public List<DBObject> qualityAverageAwardPeriod(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
