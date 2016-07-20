@@ -1,113 +1,25 @@
-import App from "./components/app";
-import React from "react";
 import ReactDOM from "react-dom";
-import flux from "./flux";
-import {debounce} from "./tools";
 import OCApp from "./oce";
+import OverviewTab from './oce/tabs/overview';
+import LocationTab from './oce/tabs/location';
+import CompetitivenessTab from './oce/tabs/competitiveness';
+import EfficiencyTab from './oce/tabs/efficiency';
+import EProcurementTab from './oce/tabs/e-procurement';
 import styles from "./style.less";
-import OverviewChart from "./components/overview/overview-chart";
 
 var TRANSLATIONS = {
   en: require('./languages/en_US.json'),
   vn: require('./languages/vn_VN.json')
 };
 
-let response2obj = (field, arr) => arr.reduce((obj, elem) => {
-  obj[elem._id] = elem[field];
-  return obj;
-}, {});
-
 class OCVN extends OCApp{
   constructor(props) {
-    super(props, {
-      tabs: [{
-        name: () => this.__("Overview"),
-        icon: "search",
-        visualizations: [{
-          endpoints: ['countBidPlansByYear', 'countTendersByYear', 'countAwardsByYear'],
-          transform: ([bidplansResponse, tendersResponse, awardsResponse]) => {
-            let bidplans = response2obj('count', bidplansResponse);
-            let tenders = response2obj('count', tendersResponse);
-            let awards = response2obj('count', awardsResponse);
-            return Object.keys(tenders).map(year => ({
-              year: year,
-              bidplan: bidplans[year],
-              tender: tenders[year],
-              award: awards[year]
-            }));
-          },
-          Component: OverviewChart
-        }]
-      }, {
-        name: () => this.__("Location"),
-        icon: "map-marker",
-        Component: () => <h1>here be map</h1>
-      }, {
-        name: () => this.__("Competitiveness")
-      }, {
-        name: () => this.__("Efficiency")
-      }, {
-        name: () => this.__("eProcurement")
-      }]
-      /*
-
-       {function(tab, props){
-       let {state, actions} = props;
-       switch(tab){
-       case tabs.OVERVIEW:
-       return <Overview
-       translations={translations}
-       actions={actions}
-       state={state.get('overview')}
-       width={width}
-       />;
-       case tabs.PLANNING: return (
-       <Planning
-       translations={translations}
-       width={globalState.get('contentWidth')}
-       years={globalState.getIn(['filters', 'years'])}
-       locations={globalState.getIn(['data', 'locations'])}
-       />
-       );
-       case tabs.COMPETITIVENESS: return (
-       <Competitiveness
-       translations={translations}
-       actions={actions}
-       state={state.get('competitiveness')}
-       width={width}
-       />
-       );
-       case tabs.EFFICIENCY: return (
-       <Efficiency
-       translations={translations}
-       actions={actions}
-       state={state.get('efficiency')}
-       width={width}
-       />
-       );
-       case tabs.E_PROCUREMENT: return (
-       <EProcurement
-       translations={translations}
-       actions={actions}
-       state={state.get('eProcurement')}
-       width={width}
-       />
-       );
-       }
-       }(globalState.get('tab'), this.props)}
-
-       {globalState.hasIn(['filters', 'years']) && globalState.getIn(['filters', 'years']).map((selected, year) => (
-       <a
-       key={year}
-       href="javascript:void(0);"
-       className={cn({active: true === selected})}
-       onClick={e => actions.toggleYear(year, !selected)}
-       >
-       <i className="glyphicon glyphicon-ok-circle"></i> {year}
-       </a>
-       )).toArray()}
-       */
-    });
+    super(props);
+    this.registerTab(OverviewTab);
+    this.registerTab(LocationTab);
+    this.registerTab(CompetitivenessTab);
+    this.registerTab(EfficiencyTab);
+    this.registerTab(EProcurementTab);
   }
 
   render(){
@@ -148,9 +60,7 @@ class OCVN extends OCApp{
       </aside>
       <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10">
         <div className="row">
-          <div className="col-sm-12 content">
-            {this.content()}
-          </div>
+          {this.content()}
         </div>
       </div>
       <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 years-bar" role="navigation">
@@ -162,11 +72,6 @@ class OCVN extends OCApp{
 }
 
 ReactDOM.render(<OCVN/>, document.getElementById('dg-container'));
-
-window.addEventListener("resize", debounce(function(){
-  flux.actions.changeContentWidth(document.querySelector('.years-bar').offsetWidth)
-}));
-
 
 if("ocvn.developmentgateway.org" == location.hostname){
   (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
