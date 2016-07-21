@@ -17,7 +17,7 @@ class Tab extends DataFetcher{
     let {compareWith: CustomComparison} = Component;
     let Comparison = CustomComparison || DefaultComparison;
     return <Comparison
-        key={Component}
+        key={Component.name}
         compareBy={compareBy}
         comparisonData={comparisonData.get(index, List())}
         comparisonCriteriaValues={comparisonCriteriaValues}
@@ -37,7 +37,7 @@ class Tab extends DataFetcher{
             compareBy && Component.comparable ? this.compare(Component, index) :
             this.maybeWrap(Component, index,
               <Component
-                key={index}
+                key={Component.name}
                 filters={filters}
                 requestNewData={(_, data) => requestNewData([index], data)}
                 data={data.get(index)}
