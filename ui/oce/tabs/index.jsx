@@ -35,7 +35,7 @@ class Tab extends DataFetcher{
     let {filters, compareBy, requestNewData, data, years, width} = this.props;
     return <div className="col-sm-12 content">
         {this.constructor.visualizations.map((Component, index) => {
-            Console.log(Component.name);
+            console.log(Component.name);
             return compareBy && Component.comparable ? this.compare(Component, index) :
             this.maybeWrap(Component, index,
               <Component
