@@ -23,7 +23,7 @@ class Awards extends Table{
         <thead>
         <tr>
           <th>{this.__('Number')}</th>
-          <th>{this.__('Price')}</th>
+          <th>{this.__('Value')}</th>
           <th>{this.__('Supplier')}</th>
           <th>{this.__('Date')}</th>
         </tr>
