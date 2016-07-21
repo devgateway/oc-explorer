@@ -35,7 +35,7 @@ export default class OCApp extends React.Component{
   }
 
   filters(){
-    return null;
+    return <img className="top-nav-icon" src="assets/icons/filter.svg"/>;
   }
 
   updateComparisonCriteria(criteria){
@@ -76,7 +76,7 @@ export default class OCApp extends React.Component{
         onClick={_ => this.setState({menuBox: menuBox == MENU_BOX_COMPARISON ? "" : MENU_BOX_COMPARISON})}
         className={cn("filters compare", {open: menuBox == MENU_BOX_COMPARISON})}
     >
-      <i className="glyphicon glyphicon-th-large"></i> {this.__('Compare')} <i className="glyphicon glyphicon-menu-down"></i>
+      <img className="top-nav-icon" src="assets/icons/compare.svg"/> {this.__('Compare')} <i className="glyphicon glyphicon-menu-down"></i>
       <div className="box" onClick={e => e.stopPropagation()}>
         <div className="col-sm-6">
           <label>{this.__('Comparison criteria')}</label>
@@ -142,8 +142,8 @@ export default class OCApp extends React.Component{
     let {currentTab, compareBy, data, selectedYears, comparisonData} = this.state;
     let tab = this.tabs[currentTab];
     let years = (compareBy && tab.computeComparisonYears ?
-        tab.computeComparisonYears(comparisonData.get(currentTab)) :
-        tab.computeYears(data.get(currentTab))
+            tab.computeComparisonYears(comparisonData.get(currentTab)) :
+            tab.computeYears(data.get(currentTab))
     );
 
     return years.sort().map(year =>
@@ -153,8 +153,8 @@ export default class OCApp extends React.Component{
             className={cn({active: selectedYears.has(+year)})}
             onClick={_ => this.setState({
               selectedYears: selectedYears.has(+year) ?
-                selectedYears.delete(+year) :
-                selectedYears.add(+year)
+                  selectedYears.delete(+year) :
+                  selectedYears.add(+year)
             })}
         >
           <i className="glyphicon glyphicon-ok-circle"></i> {year}
