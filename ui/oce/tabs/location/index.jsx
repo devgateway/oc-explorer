@@ -54,7 +54,7 @@ class LocationTab extends frontendYearFilterable(Tab){
   }
 }
 
-LocationTab.icon = "map-marker";
+LocationTab.icon = "planning";
 LocationTab.endpoint = 'plannedFundingByLocation';
 LocationTab.computeComparisonYears = null;
 

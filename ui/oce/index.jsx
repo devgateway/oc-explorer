@@ -35,7 +35,9 @@ export default class OCApp extends React.Component{
   }
 
   filters(){
-    return <img className="top-nav-icon" src="assets/icons/filter.svg"/>;
+    return <div className="filters">
+      <img className="top-nav-icon" src="assets/icons/filter.svg"/> {this.__('Filter the data')} <i className="glyphicon glyphicon-menu-down"></i>
+    </div>
   }
 
   updateComparisonCriteria(criteria){
@@ -102,6 +104,7 @@ export default class OCApp extends React.Component{
               className={cn("col-sm-12", {active: index == this.state.currentTab})}
               onClick={_ => this.setState({currentTab: index})}>
           <span className="circle">
+            <img className="nav-icon" src={`assets/icons/${icon}.svg`}/>
             <i className={`glyphicon glyphicon-${icon}`}/>
           </span>
       &nbsp;

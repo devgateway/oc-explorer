@@ -6,6 +6,7 @@ class Efficiency extends Tab{
   static name(__){return __('Efficiency')}
 }
 
+Efficiency.icon = "efficiency";
 Efficiency.visualizations = [BidPeriod, Cancelled];
 
 export default Efficiency;
