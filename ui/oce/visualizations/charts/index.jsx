@@ -27,14 +27,17 @@ class Chart extends Visualization{
     Plotly.newPlot(this.refs.chartContainer, this.getData(), this.getDecoratedLayout());
   }
 
+  componentWillUnmount(){
+    Plotly.Plots.purge(this.refs.chartContainer);
+  }
+
   componentDidUpdate(prevProps){
     super.componentDidUpdate(prevProps);
     if(this.constructor.UPDATABLE_FIELDS.some(prop => prevProps[prop] != this.props[prop])){
       this.refs.chartContainer.data = this.getData();
+      this.refs.chartContainer.layout = this.getDecoratedLayout();
       setTimeout(() => Plotly.redraw(this.refs.chartContainer));
-    }
-
-    if(['title', 'width', 'xAxisRange', 'yAxisRange'].some(prop => prevProps[prop] != this.props[prop])){
+    }else if(['title', 'width', 'xAxisRange', 'yAxisRange'].some(prop => prevProps[prop] != this.props[prop])){
       setTimeout(() => Plotly.relayout(this.refs.chartContainer, this.getDecoratedLayout()));
     }
   }
