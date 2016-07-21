@@ -64,7 +64,6 @@ export default class OCApp extends React.Component{
     });
 
     window.addEventListener("resize", debounce(() => {
-      console.log('resize');
       this.setState({
         width: document.querySelector('.years-bar').offsetWidth
       });
