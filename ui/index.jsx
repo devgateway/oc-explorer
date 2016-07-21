@@ -34,13 +34,13 @@ class OCVN extends OCApp{
         <div className="col-sm-6 menu">
           {this.filters()}
           {this.comparison()}
-          <div>
-            <i className="glyphicon glyphicon-download-alt"></i> Export <i className="glyphicon glyphicon-menu-down"></i>
+          <div className="filters">
+            <img className="top-nav-icon" src="assets/icons/export.svg"/> {this.__('Export')} <i className="glyphicon glyphicon-menu-down"></i>
           </div>
         </div>
         <div className="col-sm-1 language-switcher">
-          <img src="assets/flags/us.png" alt="" onClick={e => actions.setLocale("en")}/>
-          <img src="assets/flags/vn.png" alt="" onClick={e => actions.setLocale("vn")}/>
+          <img className="flag" src="assets/flags/us.png" alt="US flag" onClick={e => actions.setLocale("en")}/>
+          <img className="flag" src="assets/flags/vn.png" alt="Vietnam flag" onClick={e => actions.setLocale("vn")}/>
         </div>
       </header>
       <aside className="col-xs-4 col-md-3 col-lg-2">
@@ -50,11 +50,11 @@ class OCVN extends OCApp{
           </div>
           <section className="col-sm-12 description">
             <p><strong>{this.__("Toolkit description")}</strong></p>
-            <p>
+            <h3>
               <small>
                 {this.__("The Procurement M&E Prototype is an interactive platform for analyzing, monitoring, and evaluating information on procurement in Vietnam. All data in the dashboard are collected from the Vietnam Government eProcurement system (eGP).")}
               </small>
-            </p>
+            </h3>
           </section>
         </div>
       </aside>
