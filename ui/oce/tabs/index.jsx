@@ -16,6 +16,7 @@ class Tab extends DataFetcher{
         , width} = this.props;
     let {compareWith: CustomComparison} = Component;
     let Comparison = CustomComparison || DefaultComparison;
+    console.log(Component.name);
     return <Comparison
         key={Component.name}
         compareBy={compareBy}
@@ -33,8 +34,9 @@ class Tab extends DataFetcher{
   render(){
     let {filters, compareBy, requestNewData, data, years, width} = this.props;
     return <div className="col-sm-12 content">
-        {this.constructor.visualizations.map((Component, index) =>
-            compareBy && Component.comparable ? this.compare(Component, index) :
+        {this.constructor.visualizations.map((Component, index) => {
+            Console.log(Component.name);
+            return compareBy && Component.comparable ? this.compare(Component, index) :
             this.maybeWrap(Component, index,
               <Component
                 key={Component.name}
@@ -44,7 +46,7 @@ class Tab extends DataFetcher{
                 years={years}
                 width={width}
               />
-            )
+            )}
         )}
     </div>
   }
