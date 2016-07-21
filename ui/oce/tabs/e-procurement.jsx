@@ -6,6 +6,7 @@ class EProcurement extends Tab{
   static name(__){return __('E-Procurement')}
 }
 
+EProcurement.icon = "eprocurement";
 EProcurement.visualizations = [PercentEProcurement, PercentEBid];
 
 export default EProcurement;

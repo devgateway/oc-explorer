@@ -11,6 +11,6 @@ class Overview extends Tab{
 
 Overview.visualizations = [OverviewChart, TendersTable, AwardsTable];
 
-Overview.icon = "search";
+Overview.icon = "overview";
 
 export default Overview;
