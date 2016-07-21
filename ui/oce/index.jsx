@@ -58,7 +58,7 @@ export default class OCApp extends React.Component{
     fetchJson('/api/ocds/bidType/all').then(data =>
         this.setState({bidTypes: data.reduce((map, datum) => map.set(datum.id, datum.description), Map())})
     );
-    this.updateComparisonCriteria('bidTypeId');
+
     this.setState({
       width: document.querySelector('.years-bar').offsetWidth
     });
