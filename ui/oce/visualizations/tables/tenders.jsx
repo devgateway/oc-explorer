@@ -24,8 +24,8 @@ class Tenders extends Table{
           <th>{this.__("Number")}</th>
           <th>{this.__("Start date")}</th>
           <th>{this.__("End date")}</th>
-          <th>{this.__("Procuring Entity")}</th>
-          <th>{this.__("Estimated price")}</th>
+          <th>{this.__("Procuring entity")}</th>
+          <th>{this.__("Estimated value")}</th>
         </tr>
         </thead>
         <tbody>
