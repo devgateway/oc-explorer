@@ -31,11 +31,11 @@ class Chart extends Visualization{
     super.componentDidUpdate(prevProps);
     if(this.constructor.UPDATABLE_FIELDS.some(prop => prevProps[prop] != this.props[prop])){
       this.refs.chartContainer.data = this.getData();
-      Plotly.redraw(this.refs.chartContainer);
+      setTimeout(() => Plotly.redraw(this.refs.chartContainer));
     }
 
     if(['title', 'width', 'xAxisRange', 'yAxisRange'].some(prop => prevProps[prop] != this.props[prop])){
-      Plotly.relayout(this.refs.chartContainer, this.getDecoratedLayout());
+      setTimeout(() => Plotly.relayout(this.refs.chartContainer, this.getDecoratedLayout()));
     }
   }
 
