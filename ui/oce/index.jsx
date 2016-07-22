@@ -7,6 +7,7 @@ let range = (from, to) => from > to ? [] : [from].concat(range(from + 1, to));
 const MIN_YEAR = 2010;
 const MAX_YEAR = 2020;
 const MENU_BOX_COMPARISON = "menu-box";
+const MENU_BOX_FILTERS = 'filters';
 
 export default class OCApp extends React.Component{
   constructor(props){
@@ -32,12 +33,6 @@ export default class OCApp extends React.Component{
 
   __(text){
     return text;
-  }
-
-  filters(){
-    return <div className="filters">
-      <img className="top-nav-icon" src="assets/icons/filter.svg"/> {this.__('Filter the data')} <i className="glyphicon glyphicon-menu-down"></i>
-    </div>
   }
 
   updateComparisonCriteria(criteria){
@@ -76,10 +71,22 @@ export default class OCApp extends React.Component{
     }));
   }
 
+  setMenuBox(e, slug){
+    let {menuBox} = this.state;
+    e.stopPropagation();
+    this.setState({menuBox: menuBox == slug ? "" : slug})
+  }
+
+  filters(){
+    return <div className="filters">
+      <img className="top-nav-icon" src="assets/icons/filter.svg"/> {this.__('Filter the data')} <i className="glyphicon glyphicon-menu-down"></i>
+    </div>
+  }
+
   comparison(){
     let {menuBox, compareBy} = this.state;
     return <div
-        onClick={_ => this.setState({menuBox: menuBox == MENU_BOX_COMPARISON ? "" : MENU_BOX_COMPARISON})}
+        onClick={e => this.setMenuBox(e, MENU_BOX_COMPARISON)}
         className={cn("filters compare", {open: menuBox == MENU_BOX_COMPARISON})}
     >
       <img className="top-nav-icon" src="assets/icons/compare.svg"/> {this.__('Compare')} <i className="glyphicon glyphicon-menu-down"></i>
