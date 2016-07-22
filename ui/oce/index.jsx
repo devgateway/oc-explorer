@@ -2,6 +2,7 @@ import cn from "classnames";
 import {fromJS, Map, Set} from "immutable";
 import {fetchJson, debounce} from "./tools";
 import URI from "urijs";
+import Filters from "./filters";
 
 let range = (from, to) => from > to ? [] : [from].concat(range(from + 1, to));
 const MIN_YEAR = 2010;
@@ -16,7 +17,7 @@ export default class OCApp extends React.Component{
     this.state = {
       width: 0,
       currentTab: 0,
-      menuBox: "",
+      menuBox: MENU_BOX_FILTERS,
       compareBy: "",
       comparisonCriteriaValues: [],
       selectedYears: Set(range(MIN_YEAR, MAX_YEAR)),
@@ -60,6 +61,9 @@ export default class OCApp extends React.Component{
   componentDidMount(){
     this.fetchBidTypes();
 
+  componentDidMount(){
+    this.fetchBidTypes();
+
     this.setState({
       width: document.querySelector('.years-bar').offsetWidth
     });
@@ -81,6 +85,21 @@ export default class OCApp extends React.Component{
     return <div className="filters">
       <img className="top-nav-icon" src="assets/icons/filter.svg"/> {this.__('Filter the data')} <i className="glyphicon glyphicon-menu-down"></i>
     </div>
+  }
+
+  setMenuBox(e, slug){
+    let {menuBox} = this.state;
+    e.stopPropagation();
+    this.setState({menuBox: menuBox == slug ? "" : slug})
+  }
+
+  filters(){
+    let {menuBox} = this.state;
+    return <this.constructor.Filters
+        onClick={e => this.setMenuBox(e, MENU_BOX_FILTERS)}
+        onUpdate={filters => this.setState({filters, menuBox: ""})}
+        open={menuBox == MENU_BOX_FILTERS}
+    />
   }
 
   comparison(){
