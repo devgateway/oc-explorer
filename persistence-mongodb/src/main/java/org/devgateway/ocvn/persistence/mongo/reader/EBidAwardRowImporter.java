@@ -106,6 +106,10 @@ public class EBidAwardRowImporter extends ReleaseRowImporter {
 		release.getTender().getTenderers().add(supplier);
 
 		release.getTender().setNumberOfTenderers(release.getTender().getTenderers().size());
+		
+		//copy items from tender
+		award.getItems().addAll(release.getTender().getItems());
+
 
 		return release;
 	}

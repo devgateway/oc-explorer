@@ -91,6 +91,89 @@ public class TenderPercentagesController extends GenericOCDSController {
         return list;
     }
 	
+	@ApiOperation("Percentage of tenders with >1 tenderer/bidder): "
+			+ "Count of tenders with numberOfTenderers >1 divided by total count of tenders."
+			+ "This endpoint uses tender.tenderPeriod.startDate to calculate the tender year.")
+	@RequestMapping(value = "/api/percentTendersWithTwoOrMoreTenderers", 
+	method = RequestMethod.GET, produces = "application/json")
+    public List<DBObject> percentTendersWithTwoOrMoreTenderers(@ModelAttribute 
+    		@Valid final DefaultFilterPagingRequest filter) {
+
+        DBObject project1 = new BasicDBObject();
+        project1.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+        project1.put("tender.numberOfTenderers", 1);
+
+        DBObject group = new BasicDBObject();
+        group.put(Fields.UNDERSCORE_ID, "$year");
+        group.put("totalTenders", new BasicDBObject("$sum", 1));
+        group.put("totalTendersWithTwoOrMoreTenderers", new BasicDBObject("$sum", new BasicDBObject("$cond",
+                Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$tender.numberOfTenderers", 1)), 1, 0))));        
+
+        DBObject project2 = new BasicDBObject();
+        project2.put(Fields.UNDERSCORE_ID, 0);
+        project2.put("year", Fields.UNDERSCORE_ID_REF);
+        project2.put("totalTenders", 1);
+        project2.put("totalTendersWithTwoOrMoreTenderers", 1);
+		project2.put("percentTenders", new BasicDBObject("$multiply", Arrays.asList(
+				new BasicDBObject("$divide", Arrays.asList("$totalTendersWithTwoOrMoreTenderers", "$totalTenders")),
+				100)));
+
+        Aggregation agg = newAggregation(
+                match(where("tender.tenderPeriod.startDate").exists(true)
+                        .andOperator(getDefaultFilterCriteria(filter))),
+                new CustomProjectionOperation(project1), new CustomGroupingOperation(group),
+                new CustomProjectionOperation(project2),
+                sort(Direction.ASC, "year"), skip(filter.getSkip()), limit(filter.getPageSize())
+        );
+
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+        List<DBObject> list = results.getMappedResults();
+        return list;
+    }
+	
+	@ApiOperation("Percent of awarded tenders with >1 tenderer/bidder"
+			+ "Count of tenders with numberOfTenderers >1 divided by total count of tenders with numberOfTenderers >0"
+			+ "This endpoint uses tender.tenderPeriod.startDate to calculate the tender year.")
+    @RequestMapping(value = "/api/percentTendersAwardedWithTwoOrMoreTenderers", 
+    method = RequestMethod.GET, produces = "application/json")
+    public List<DBObject> percentTendersAwarded(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+
+        DBObject project1 = new BasicDBObject();
+        project1.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+        project1.put("tender.numberOfTenderers", 1);
+
+        DBObject group = new BasicDBObject();
+        group.put(Fields.UNDERSCORE_ID, "$year");
+        group.put("totalTendersWithOneOrMoreTenderers", new BasicDBObject("$sum", new BasicDBObject("$cond",
+                Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$tender.numberOfTenderers", 0)), 1, 0))));        
+        
+        group.put("totalTendersWithTwoOrMoreTenderers", new BasicDBObject("$sum", new BasicDBObject("$cond",
+                Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$tender.numberOfTenderers", 1)), 1, 0))));        
+
+        DBObject project2 = new BasicDBObject();
+        project2.put(Fields.UNDERSCORE_ID, 0);
+        project2.put("year", Fields.UNDERSCORE_ID_REF);
+        project2.put("totalTendersWithOneOrMoreTenderers", 1);
+        project2.put("totalTendersWithTwoOrMoreTenderers", 1);
+		project2.put("percentTenders",
+				new BasicDBObject("$multiply", Arrays.asList(new BasicDBObject("$divide",
+						Arrays.asList("$totalTendersWithTwoOrMoreTenderers", "$totalTendersWithOneOrMoreTenderers")),
+						100)));
+
+        Aggregation agg = newAggregation(
+                match(where("tender.tenderPeriod.startDate").exists(true).and("tender.numberOfTenderers").gt(0)
+                        .andOperator(getDefaultFilterCriteria(filter))),
+                new CustomProjectionOperation(project1), new CustomGroupingOperation(group),
+                new CustomProjectionOperation(project2),
+                sort(Direction.ASC, "year"), skip(filter.getSkip()), limit(filter.getPageSize())
+        );
+
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+        List<DBObject> list = results.getMappedResults();
+        return list;
+    }
+	
+	
 	
 	@ApiOperation("Returns the percent of tenders with active awards, "
 			+ "with tender.submissionMethod='electronicSubmission'."
