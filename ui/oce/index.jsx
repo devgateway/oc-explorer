@@ -56,10 +56,14 @@ export default class OCApp extends React.Component{
     }));
   }
 
-  componentDidMount(){
+  fetchBidTypes(){
     fetchJson('/api/ocds/bidType/all').then(data =>
         this.setState({bidTypes: data.reduce((map, datum) => map.set(datum.id, datum.description), Map())})
     );
+  }
+
+  componentDidMount(){
+    this.fetchBidTypes();
 
     this.setState({
       width: document.querySelector('.years-bar').offsetWidth
