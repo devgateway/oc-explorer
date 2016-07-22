@@ -5,7 +5,16 @@ import LocationTab from './oce/tabs/location';
 import CompetitivenessTab from './oce/tabs/competitiveness';
 import EfficiencyTab from './oce/tabs/efficiency';
 import EProcurementTab from './oce/tabs/e-procurement';
+import {fetchJson} from "./oce/tools";
 import styles from "./style.less";
+
+function getBidTypeDescription({id, description}){
+  switch(+id){
+    case 12: return "Unspecified #1";
+    case 15: return "Unspecified #2";
+    default: return description;
+  }
+}
 
 var TRANSLATIONS = {
   en: require('./languages/en_US.json'),
@@ -20,6 +29,12 @@ class OCVN extends OCApp{
     this.registerTab(CompetitivenessTab);
     this.registerTab(EfficiencyTab);
     this.registerTab(EProcurementTab);
+  }
+
+  fetchBidTypes(){
+    fetchJson('/api/ocds/bidType/all').then(data =>
+        this.setState({bidTypes: data.reduce((map, datum) => map.set(datum.id, getBidTypeDescription(datum)), Map())})
+    );
   }
 
   render(){
