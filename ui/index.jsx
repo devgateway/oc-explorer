@@ -7,6 +7,7 @@ import EfficiencyTab from './oce/tabs/efficiency';
 import EProcurementTab from './oce/tabs/e-procurement';
 import {fetchJson} from "./oce/tools";
 import {Map} from "immutable";
+import OCVNFilters from "./ocvn/filters";
 import styles from "./style.less";
 
 function getBidTypeDescription({id, description}){
@@ -86,6 +87,8 @@ class OCVN extends OCApp{
     </div>;
   }
 }
+
+OCVN.Filters = OCVNFilters;
 
 ReactDOM.render(<OCVN/>, document.getElementById('dg-container'));
 

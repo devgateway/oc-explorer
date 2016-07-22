@@ -38,15 +38,7 @@ class Filters extends translatable(Component){
             actions={actions}
             translations={translations}
         />
-        <section className="buttons col-sm-12">
-          <button className="btn btn-primary" onClick={e => actions.applyFilters()}>
-            {this.__('Apply')}
-          </button>
-          &nbsp;
-          <button className="btn btn-default" onClick={e => actions.resetFilters()}>
-            {this.__('Reset')}
-          </button>
-        </section>
+
       </div>
     </div>
   }
