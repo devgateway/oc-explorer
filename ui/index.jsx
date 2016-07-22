@@ -6,6 +6,7 @@ import CompetitivenessTab from './oce/tabs/competitiveness';
 import EfficiencyTab from './oce/tabs/efficiency';
 import EProcurementTab from './oce/tabs/e-procurement';
 import {fetchJson} from "./oce/tools";
+import {Map} from "immutable";
 import styles from "./style.less";
 
 function getBidTypeDescription({id, description}){
@@ -38,7 +39,7 @@ class OCVN extends OCApp{
   }
 
   render(){
-    return <div className="container-fluid">
+    return <div className="container-fluid" onClick={_ => this.setState({menuBox: ""})}>
       <header className="branding row">
         <div className="col-sm-offset-1 col-sm-4">
           <h1>
