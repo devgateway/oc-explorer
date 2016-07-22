@@ -94,9 +94,10 @@ public class TenderPercentagesController extends GenericOCDSController {
 	@ApiOperation("Percentage of tenders with >1 tenderer/bidder): "
 			+ "Count of tenders with numberOfTenderers >1 divided by total count of tenders."
 			+ "This endpoint uses tender.tenderPeriod.startDate to calculate the tender year.")
-	@RequestMapping(value = "/api/percentTendersWithTenderers", 
+	@RequestMapping(value = "/api/percentTendersWithTwoOrMoreTenderers", 
 	method = RequestMethod.GET, produces = "application/json")
-    public List<DBObject> percentTendersWithTenderers(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+    public List<DBObject> percentTendersWithTwoOrMoreTenderers(@ModelAttribute 
+    		@Valid final DefaultFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
         project1.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
@@ -133,7 +134,8 @@ public class TenderPercentagesController extends GenericOCDSController {
 	@ApiOperation("Percent of awarded tenders with >1 tenderer/bidder"
 			+ "Count of tenders with numberOfTenderers >1 divided by total count of tenders with numberOfTenderers >0"
 			+ "This endpoint uses tender.tenderPeriod.startDate to calculate the tender year.")
-    @RequestMapping(value = "/api/percentTendersAwarded", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/api/percentTendersAwardedWithTwoOrMoreTenderers", 
+    method = RequestMethod.GET, produces = "application/json")
     public List<DBObject> percentTendersAwarded(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();

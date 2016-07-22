@@ -69,7 +69,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				"/api/ocds/location/all/**", "/api/ocds/location/search/**", "/api/averageNumberOfTenderers/**",
 				"/api/percentTendersCancelled/**", "/api/percentTendersUsingEBid/**",
 				"/api/percentTendersUsingEgp/**", 	"/api/qualityAverageTenderPeriod/**", "/api/qualityAverageAwardPeriod/**", 
-				"/api/fundingByTenderDeliveryLocation/**", "/api/percentTendersAwarded","/api/percentTendersWithTenderers"
+				"/api/fundingByTenderDeliveryLocation/**", "/api/percentTendersAwardedWithTwoOrMoreTenderers/**",
+				"/api/percentTendersWithTwoOrMoreTenderers/**"
 			};
 	}
 
