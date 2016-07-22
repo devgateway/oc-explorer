@@ -15,7 +15,7 @@ public class OcdsSchemaValidationConfiguration {
     public OcdsSchemaValidation ocdsSchemaValidation() {
         OcdsSchemaValidation jsonSchemaValidation = new OcdsSchemaValidation(jacksonObjectMapper);
         jsonSchemaValidation
-                //.withJsonPatches(OcdsSchemaValidation.OCDS_1_0_LOCATION_PATCH_LOCATION)
+               	.withJsonPatches(OcdsSchemaValidation.OCDS_1_0_LOCATION_PATCH_LOCATION)
                 .init();
         return jsonSchemaValidation;
     }
