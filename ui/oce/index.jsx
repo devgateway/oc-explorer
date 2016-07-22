@@ -61,9 +61,6 @@ export default class OCApp extends React.Component{
   componentDidMount(){
     this.fetchBidTypes();
 
-  componentDidMount(){
-    this.fetchBidTypes();
-
     this.setState({
       width: document.querySelector('.years-bar').offsetWidth
     });
