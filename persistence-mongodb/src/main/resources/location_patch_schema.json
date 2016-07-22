@@ -39,7 +39,7 @@
                         "identifiers": {
                             "description": "An array of one or more codes drawn from the gazetteer indicated in scheme.",
                             "type": ["array", "null"],
-                            "items": ["string","null"]
+                            "items": { "type": ["string","null"] }
                         }
                     }
                 },
