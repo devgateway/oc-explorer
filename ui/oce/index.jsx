@@ -91,11 +91,12 @@ export default class OCApp extends React.Component{
   }
 
   filters(){
-    let {menuBox} = this.state;
+    let {menuBox, bidTypes} = this.state;
     return <this.constructor.Filters
         onClick={e => this.setMenuBox(e, MENU_BOX_FILTERS)}
         onUpdate={filters => this.setState({filters, menuBox: ""})}
         open={menuBox == MENU_BOX_FILTERS}
+        bidTypes={bidTypes}
     />
   }
 

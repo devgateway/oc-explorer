@@ -32,10 +32,12 @@ class Filters extends translatable(Component){
 
   content(){
     let {currentTab, state} = this.state;
+    let {bidTypes} = this.props;
     let Component = this.constructor.TABS[currentTab];
     return <Component
         state={state}
         onUpdate={(key, update) => this.setState({state: state.set(key, update)})}
+        bidTypes={bidTypes}
     />
   }
 
