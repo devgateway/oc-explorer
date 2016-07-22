@@ -1,18 +1,31 @@
 import translatable from "../../translatable";
 import Component from "../../pure-render-component";
 import {fromJS} from "immutable";
+import {fetchJson} from "../../tools";
 
 class MultipleSelect extends translatable(Component){
   constructor(props){
     super(props);
+    this.state = {
+      options: fromJS([])
+    }
   }
 
   getOptions(){
-    return fromJS([]);
+    return this.state.options;
   }
 
   getSelectedCount(){
     return this.getOptions().filter((_, id) => this.props.selected.has(id)).count();
+  }
+
+  transform(datum){
+    return datum;
+  }
+
+  componentDidMount(){
+    let {ENDPOINT} = this.constructor;
+    if(ENDPOINT) fetchJson(`/api/${ENDPOINT}`).then(data => this.setState({options: fromJS(this.transform(data))}));
   }
 
   render(){
