@@ -213,7 +213,7 @@ export default class OCApp extends React.Component{
   }
 
   downloadExcel(){
-    fetch('/excelExport', {
+    fetch('/api/ocds/excelExport', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
