@@ -18,7 +18,7 @@ export default class OCApp extends React.Component{
       locale: localStorage.locale || "us",
       width: 0,
       currentTab: 0,
-      menuBox: MENU_BOX_FILTERS,
+      menuBox: "",
       compareBy: "",
       comparisonCriteriaValues: [],
       selectedYears: Set(range(MIN_YEAR, MAX_YEAR)),
@@ -203,12 +203,34 @@ export default class OCApp extends React.Component{
 
   languageSwitcher(){
     return Object.keys(this.constructor.TRANSLATIONS).map(locale =>
-      <img className="flag"
-           src={`assets/flags/${locale}.png`}
-           alt={`${locale} flag`}
-           onClick={e => this.setLocale(locale)}
-           key={locale}
-      />
+        <img className="flag"
+             src={`assets/flags/${locale}.png`}
+             alt={`${locale} flag`}
+             onClick={e => this.setLocale(locale)}
+             key={locale}
+        />
     )
+  }
+
+  downloadExcel(){
+    fetch('/excelExport', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.state.filters)
+    }).then(response => {
+      var link = document.createElement('a');
+      link.href = URL.createObjectURL(response.blob());
+      link.download = "export.xls";
+      link.click();
+    }).catch((...args) => console.log(args));
+  }
+
+  exportBtn(){
+    return <div className="filters" onClick={e => this.downloadExcel()}>
+      <img className="top-nav-icon" src="assets/icons/export.svg"/> {this.__('Export')} <i className="glyphicon glyphicon-menu-down"></i>
+    </div>
   }
 }
