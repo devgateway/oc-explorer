@@ -13,7 +13,7 @@ class Tab extends DataFetcher{
 
   compare(Component, index){
     let {compareBy, comparisonData, comparisonCriteriaValues, filters, requestNewComparisonData, years, bidTypes
-        , width} = this.props;
+        , width, translations} = this.props;
     let {compareWith: CustomComparison} = Component;
     let Comparison = CustomComparison || DefaultComparison;
     return <Comparison
@@ -27,11 +27,12 @@ class Tab extends DataFetcher{
         Component={Component}
         bidTypes={bidTypes}
         width={width}
+        translations={translations}
     />
   }
 
   render(){
-    let {filters, compareBy, requestNewData, data, years, width} = this.props;
+    let {filters, compareBy, requestNewData, data, years, width, translations} = this.props;
     return <div className="col-sm-12 content">
         {this.constructor.visualizations.map((Component, index) =>
             compareBy && Component.comparable ? this.compare(Component, index) :
@@ -43,6 +44,7 @@ class Tab extends DataFetcher{
                 data={data.get(index)}
                 years={years}
                 width={width}
+                translations={translations}
               />
             )
         )}

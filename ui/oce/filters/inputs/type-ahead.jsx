@@ -45,6 +45,7 @@ class TypeAhead extends translatable(Component){
                 <div className="checkbox" >
                   <label key={option.get('id')}>
                     <input
+                        key={option.get('id')}
                         type="checkbox"
                         checked={selected.has(option.get('id'))}
                         onChange={e => onToggle(option.get('id'))}
