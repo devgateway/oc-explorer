@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.Location;
 import org.devgateway.ocds.persistence.mongo.Release;
+import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
 import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,6 +75,9 @@ public class MongoTemplateConfiguration {
                 .ensureIndex(new Index().on("additionalIdentifiers._id", Direction.ASC));
         mongoTemplate.indexOps(VNOrganization.class)
                 .ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());
+        
+    	mongoTemplate.indexOps(VNLocation.class)
+    	.ensureIndex(new TextIndexDefinitionBuilder().onField("description").onField("uri").build());
 
         logger.info("Added extra Mongo indexes");
 

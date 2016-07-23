@@ -5,11 +5,13 @@ package org.devgateway.ocvn.persistence.mongo.dao;
 
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author mihai
  *
  */
+@Document(collection = "contrMethod")
 public class ContrMethod {
     @Id
     private String id;
