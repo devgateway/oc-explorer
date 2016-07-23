@@ -18,15 +18,15 @@ class Filters extends translatable(Component){
   listTabs(){
     let {currentTab} = this.state;
     return this.constructor.TABS.map((Tab, index) => <li
-        key={index}
-        role="presentation"
-        className={cn({active: index == currentTab})}
-        onClick={_ => this.setState({currentTab: index})}
-      >
-        <a href="javascript:void(0);">
-          {Tab.getName(this.__.bind(this))}
-        </a>
-      </li>
+            key={index}
+            role="presentation"
+            className={cn({active: index == currentTab})}
+            onClick={_ => this.setState({currentTab: index})}
+        >
+          <a href="javascript:void(0);">
+            {Tab.getName(this.__.bind(this))}
+          </a>
+        </li>
     );
   }
 
@@ -40,6 +40,11 @@ class Filters extends translatable(Component){
         bidTypes={bidTypes}
         translations={translations}
     />
+  }
+
+  reset(){
+    this.setState({state: Map()});
+    this.props.onUpdate(Map())
   }
 
   render(){
@@ -58,7 +63,7 @@ class Filters extends translatable(Component){
             {this.__('Apply')}
           </button>
           &nbsp;
-          <button className="btn btn-default" onClick={e => this.setState({state: Map()})}>
+          <button className="btn btn-default" onClick={e => this.reset()}>
             {this.__('Reset')}
           </button>
         </section>
