@@ -46,9 +46,7 @@ class OCVN extends OCApp{
         <div className="col-sm-6 menu">
           {this.filters()}
           {this.comparison()}
-          <div className="filters">
-            <img className="top-nav-icon" src="assets/icons/export.svg"/> {this.__('Export')} <i className="glyphicon glyphicon-menu-down"></i>
-          </div>
+          {this.exportBtn()}
         </div>
         <div className="col-sm-2 language-switcher">
           {this.languageSwitcher()}
