@@ -17,7 +17,7 @@ class Filters extends translatable(Component){
         onClick={e => actions.setMenuBox(open ? "" : "filters")}
         className={cn("filters", {open})}
     >
-      {icon('filter')} {this.__('Filter the data')} {icon('menu-down')}
+      {<img className="top-nav-icon" src="assets/icons/filter.svg"/>} {this.__('Filter the data')} {icon('menu-down')}
       <div className="box" onClick={e => e.stopPropagation()}>
         <MultipleSelect
             title={this.__("Bid type")}
@@ -38,15 +38,7 @@ class Filters extends translatable(Component){
             actions={actions}
             translations={translations}
         />
-        <section className="buttons col-sm-12">
-          <button className="btn btn-primary" onClick={e => actions.applyFilters()}>
-            {this.__('Apply')}
-          </button>
-          &nbsp;
-          <button className="btn btn-default" onClick={e => actions.resetFilters()}>
-            {this.__('Reset')}
-          </button>
-        </section>
+
       </div>
     </div>
   }
