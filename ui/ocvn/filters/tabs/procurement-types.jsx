@@ -5,7 +5,7 @@ import BidSelectionMethod from "../bid-selection-method";
 
 class ProcurementTypes extends Tab{
   render(){
-    let {state, onUpdate, bidTypes} = this.props;
+    let {state, onUpdate, bidTypes, translations} = this.props;
     let selectedBidTypesIds = state.get('bidTypeId', Set());
     let selectedBidSelectionMethods = state.get("bidSelectionMethod", Set());
     return <div>
@@ -16,6 +16,7 @@ class ProcurementTypes extends Tab{
               selectedBidTypesIds.delete(id) :
               selectedBidTypesIds.add(id))
           }
+          translations={translations}
       />
 
       <BidSelectionMethod
@@ -24,6 +25,7 @@ class ProcurementTypes extends Tab{
               selectedBidSelectionMethods.delete(id) :
               selectedBidSelectionMethods.add(id))
           }
+          translations={translations}
       />
     </div>
   }

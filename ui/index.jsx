@@ -18,11 +18,6 @@ function getBidTypeDescription({id, description}){
   }
 }
 
-var TRANSLATIONS = {
-  en: require('./languages/en_US.json'),
-  vn: require('./languages/vn_VN.json')
-};
-
 class OCVN extends OCApp{
   constructor(props) {
     super(props);
@@ -56,8 +51,7 @@ class OCVN extends OCApp{
           </div>
         </div>
         <div className="col-sm-2 language-switcher">
-          <img className="flag" src="assets/flags/us.png" alt="US flag" onClick={e => actions.setLocale("en")}/>
-          <img className="flag" src="assets/flags/vn.png" alt="Vietnam flag" onClick={e => actions.setLocale("vn")}/>
+          {this.languageSwitcher()}
         </div>
       </header>
       <aside className="col-xs-4 col-md-3 col-lg-2">
@@ -89,6 +83,11 @@ class OCVN extends OCApp{
 }
 
 OCVN.Filters = OCVNFilters;
+
+OCVN.TRANSLATIONS = {
+  us: {},
+  vn: require('./languages/vn_VN.json')
+};
 
 ReactDOM.render(<OCVN/>, document.getElementById('dg-container'));
 
