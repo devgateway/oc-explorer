@@ -4,7 +4,7 @@ import {Set} from "immutable";
 
 class Organizations extends Tab{
   render(){
-    let {state, onUpdate} = this.props;
+    let {state, onUpdate, translations} = this.props;
     let selectedProcuringEntitiesId = state.get('procuringEntityId', Set());
     return <ProcuringEntity
         selected={selectedProcuringEntitiesId}
@@ -12,6 +12,7 @@ class Organizations extends Tab{
             selectedProcuringEntitiesId.delete(id) :
             selectedProcuringEntitiesId.add(id))
         }
+        translations={translations}
     />
   }
 }

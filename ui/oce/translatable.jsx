@@ -1,6 +1,7 @@
 var translatable = Class => class Translatable extends Class{
   __(text){
     var translations = this.props.translations || {};
+    if(!this.props.translations) console.error('Missing translations', this.constructor.name);
     return translations[text] || text;
   }
 

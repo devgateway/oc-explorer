@@ -15,6 +15,7 @@ export default class OCApp extends React.Component{
     super(props);
     this.tabs = [];
     this.state = {
+      locale: localStorage.locale || "us",
       width: 0,
       currentTab: 0,
       menuBox: MENU_BOX_FILTERS,
@@ -33,7 +34,7 @@ export default class OCApp extends React.Component{
   }
 
   __(text){
-    return text;
+    return this.constructor.TRANSLATIONS[this.state.locale][text] || text;
   }
 
   updateComparisonCriteria(criteria){
@@ -91,12 +92,13 @@ export default class OCApp extends React.Component{
   }
 
   filters(){
-    let {menuBox, bidTypes} = this.state;
+    let {menuBox, bidTypes, locale} = this.state;
     return <this.constructor.Filters
         onClick={e => this.setMenuBox(e, MENU_BOX_FILTERS)}
         onUpdate={filters => this.setState({filters, menuBox: ""})}
         open={menuBox == MENU_BOX_FILTERS}
         bidTypes={bidTypes}
+        translations={this.constructor.TRANSLATIONS[locale]}
     />
   }
 
@@ -136,7 +138,7 @@ export default class OCApp extends React.Component{
             <i className={`glyphicon glyphicon-${icon}`}/>
           </span>
       &nbsp;
-      {name(this.__)}
+      {name(this.__.bind(this))}
     </a>
   }
 
@@ -153,7 +155,7 @@ export default class OCApp extends React.Component{
   }
 
   content(){
-    let {filters, compareBy, comparisonCriteriaValues, currentTab, selectedYears, bidTypes, width} = this.state;
+    let {filters, compareBy, comparisonCriteriaValues, currentTab, selectedYears, bidTypes, width, locale} = this.state;
     let Tab = this.tabs[currentTab];
     return <Tab
         filters={filters}
@@ -166,6 +168,7 @@ export default class OCApp extends React.Component{
         years={selectedYears}
         bidTypes={bidTypes}
         width={width}
+        translations={this.constructor.TRANSLATIONS[locale]}
     />;
   }
 
@@ -191,5 +194,21 @@ export default class OCApp extends React.Component{
           <i className="glyphicon glyphicon-ok-circle"></i> {year}
         </a>
     ).toArray();
+  }
+
+  setLocale(locale){
+    this.setState({locale});
+    localStorage.locale = locale;
+  }
+
+  languageSwitcher(){
+    return Object.keys(this.constructor.TRANSLATIONS).map(locale =>
+      <img className="flag"
+           src={`assets/flags/${locale}.png`}
+           alt={`${locale} flag`}
+           onClick={e => this.setLocale(locale)}
+           key={locale}
+      />
+    )
   }
 }

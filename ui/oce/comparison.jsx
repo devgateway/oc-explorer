@@ -32,7 +32,8 @@ class Comparison extends translatable(PureRenderCompoent){
   }
 
   render(){
-    let {compareBy, comparisonData, comparisonCriteriaValues, filters, requestNewComparisonData, years, width} = this.props;
+    let {compareBy, comparisonData, comparisonCriteriaValues, filters, requestNewComparisonData, years, width
+      , translations} = this.props;
     if(!comparisonCriteriaValues.length) return null;
     let Component = this.getComponent();
     let decoratedFilters = this.constructor.decorateFilters(filters, compareBy, comparisonCriteriaValues);
@@ -61,6 +62,7 @@ class Comparison extends translatable(PureRenderCompoent){
               years={years}
               title={this.getTitle(index)}
               width={width / 2}
+              translations={translations}
               {...rangeProp}
           />
       </div>
