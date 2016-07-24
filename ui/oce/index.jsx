@@ -1,8 +1,7 @@
 import cn from "classnames";
 import {fromJS, Map, Set} from "immutable";
-import {fetchJson, debounce} from "./tools";
+import {fetchJson, debounce, callFunc} from "./tools";
 import URI from "urijs";
-import Filters from "./filters";
 
 let range = (from, to) => from > to ? [] : [from].concat(range(from + 1, to));
 const MIN_YEAR = 2010;
@@ -15,6 +14,7 @@ export default class OCApp extends React.Component{
     super(props);
     this.tabs = [];
     this.state = {
+      exporting: false,
       locale: localStorage.locale || "us",
       width: 0,
       currentTab: 0,
@@ -213,22 +213,38 @@ export default class OCApp extends React.Component{
   }
 
   downloadExcel(){
-    fetch('/excelExport', {
+    this.setState({exporting: true});
+    fetch('/api/ocds/excelExport', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(this.state.filters)
-    }).then(response => {
+    }).then(callFunc('blob')).then(blob => {
       var link = document.createElement('a');
-      link.href = URL.createObjectURL(response.blob());
+      link.href = URL.createObjectURL(blob);
       link.download = "export.xls";
       link.click();
-    }).catch((...args) => console.log(args));
+      this.setState({exporting: false})
+    }).catch((...args) => {
+      alert(this.__("An error occured during exporting!"));
+      this.setState({exporting: false})
+    });
   }
 
   exportBtn(){
+    if(this.state.exporting){
+      return (
+          <div className="filters">
+            <div className="progress">
+              <div className="progress-bar progress-bar-danger" role="progressbar" style={{width: "100%"}}>
+                {this.__('Exporting...')}
+              </div>
+            </div>
+          </div>
+      )
+    }
     return <div className="filters" onClick={e => this.downloadExcel()}>
       <img className="top-nav-icon" src="assets/icons/export.svg"/> {this.__('Export')} <i className="glyphicon glyphicon-menu-down"></i>
     </div>
