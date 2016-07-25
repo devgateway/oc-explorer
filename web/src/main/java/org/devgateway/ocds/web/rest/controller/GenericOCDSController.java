@@ -108,7 +108,7 @@ public class GenericOCDSController {
      */
     protected Criteria getByTenderDeliveryLocationIdentifier(final DefaultFilterPagingRequest filter) {
         return createFilterCriteria("tender.items.deliveryLocation._id",
-        		filter.getTenderDeliveryLocationIdentifier(), filter);
+        		filter.getTenderLoc(), filter);
     }
     /**
      * Appends the contrMethod filter, based on tender.contrMethod
