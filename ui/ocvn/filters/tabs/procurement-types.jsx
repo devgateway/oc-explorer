@@ -2,6 +2,7 @@ import Tab from "../../../oce/filters/tabs";
 import BidTypes from "../bid-types";
 import {Set} from "immutable";
 import BidSelectionMethod from "../bid-selection-method";
+import ContractMethod from "../contract-method";
 
 class ProcurementTypes extends Tab{
   render(){
@@ -19,14 +20,8 @@ class ProcurementTypes extends Tab{
           translations={translations}
       />
 
-      <BidSelectionMethod
-          selected={selectedBidSelectionMethods}
-          onToggle={id => onUpdate('bidSelectionMethod', selectedBidSelectionMethods.has(id) ?
-              selectedBidSelectionMethods.delete(id) :
-              selectedBidSelectionMethods.add(id))
-          }
-          translations={translations}
-      />
+      {this.renderChild(BidSelectionMethod, 'bidSelectionMethod')}
+      {this.renderChild(ContractMethod, 'contrMethod')}
     </div>
   }
 }
