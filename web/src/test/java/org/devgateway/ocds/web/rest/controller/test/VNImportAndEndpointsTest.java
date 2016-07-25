@@ -138,6 +138,41 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
 	}
 	
 	@Test
+	public void testQualityAverageTenderPeriod() {
+		List<DBObject> qAverageTenderPeriod = averageTenderAndAwardPeriodsController
+				.qualityAverageTenderPeriod(new DefaultFilterPagingRequest());
+
+		DBObject root = qAverageTenderPeriod.get(0);
+
+		int totalTenderWithStartEndDates = (int) root.get("totalTenderWithStartEndDates");
+		Assert.assertEquals(2, totalTenderWithStartEndDates);
+
+		int totalTenders = (int) root.get("totalTenders");
+		Assert.assertEquals(2, totalTenders);
+
+		double percentageTenderWithStartEndDates = (double) root.get("percentageTenderWithStartEndDates");
+		Assert.assertEquals(100, percentageTenderWithStartEndDates, 0);
+	}
+
+	@Test
+	public void testQualityAverageAwardPeriod() {
+		List<DBObject> qAverageTenderPeriod = averageTenderAndAwardPeriodsController
+				.qualityAverageAwardPeriod(new DefaultFilterPagingRequest());
+
+		DBObject root = qAverageTenderPeriod.get(0);
+
+		int totalAwardWithStartEndDates = (int) root.get("totalAwardWithStartEndDates");
+		Assert.assertEquals(4, totalAwardWithStartEndDates);
+
+		int totalAwards = (int) root.get("totalAwards");
+		Assert.assertEquals(4, totalAwards);
+
+		double percentageAwardWithStartEndDates = (double) root.get("percentageAwardWithStartEndDates");
+		Assert.assertEquals(100, percentageAwardWithStartEndDates, 0);
+	}
+	
+	
+	@Test
 	public void testProcuringEntitySearchController() {
 		List<VNOrganization> procuringEntities = procuringEntitySearchController
 				.procuringEntitySearchText(new OrganizationSearchRequest());
