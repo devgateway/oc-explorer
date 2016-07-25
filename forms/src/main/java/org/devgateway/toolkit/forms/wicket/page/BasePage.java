@@ -13,9 +13,11 @@ package org.devgateway.toolkit.forms.wicket.page;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
+import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -31,8 +33,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.resource.JQueryResourceReference;
+import org.apache.wicket.util.string.StringValue;
 import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.security.SecurityUtil;
@@ -105,6 +109,18 @@ public abstract class BasePage extends GenericWebPage<Void> {
 	}
 
 	/**
+	 * Selects/changes the default language in the current session. If the
+	 * {@link WebConstants#LANGUAGE_PARAM} is found in the
+	 * {@link PageParameters} then its contents is set as language in the
+	 * session object.
+	 */
+	protected void selectLanguage() {
+		StringValue lang = this.getPageParameters().get(WebConstants.LANGUAGE_PARAM);
+		if (!lang.isEmpty())
+			WebSession.get().setLocale(new Locale(lang.toString()));
+	}
+
+	/**
 	 * Construct.
 	 *
 	 * @param parameters
@@ -112,6 +128,8 @@ public abstract class BasePage extends GenericWebPage<Void> {
 	 */
 	public BasePage(final PageParameters parameters) {
 		super(parameters);
+		
+		selectLanguage();
 
 		add(new HtmlTag("html"));
 
@@ -133,7 +151,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 			mainContainer.add(new CssClassNameAppender(CssClassNames.Grid.container));
 		}
 
-		mainHeader = new Header("mainHeader", parameters);
+		mainHeader = new Header("mainHeader", this.getPageParameters());
 		add(mainHeader);
 
 		navbar = newNavbar("navbar");
@@ -152,6 +170,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
 		pageTitle = new Label("pageTitle", new ResourceModel("page.title"));
 		add(pageTitle);
+	
 	}
 
 	protected NotificationPanel createFeedbackPanel() {
@@ -159,32 +178,44 @@ public abstract class BasePage extends GenericWebPage<Void> {
 		notificationPanel.setOutputMarkupId(true);
 		return notificationPanel;
 	}
+	
+	public NavbarDropDownButton newLanguageMenu() {
+		final NavbarDropDownButton languageDropDown = new NavbarDropDownButton(new StringResourceModel("navbar.lang", this,
+				null)) {
+				
+			private static final long serialVersionUID = 319842753824102674L;
+				
+			@Override
+			protected List<AbstractLink> newSubMenuButtons(final String buttonMarkupId) {
+				final List<AbstractLink> list = new ArrayList<>();
+		
+				for (final Locale l : WebConstants.availableLocales) {
+					final PageParameters params = new PageParameters(BasePage.this.getPageParameters());
+					params.set(WebConstants.LANGUAGE_PARAM, l.getLanguage());
+					list.add(new MenuBookmarkablePageLink<Page>(BasePage.this.getPageClass(), params, Model.of(l
+							.getDisplayName())));
+				}
 
-	/**
-	 * creates a new {@link Navbar} instance
-	 *
-	 * @param markupId
-	 *            The components markup id.
-	 * @return a new {@link Navbar} instance
-	 */
-	protected Navbar newNavbar(final String markupId) {
-
-		PageParameters pageParametersForAccountPage = new PageParameters();
-		Navbar navbar = new Navbar(markupId);
-
+				return list;
+			}
+		};
+		languageDropDown.setIconType(GlyphIconType.flag);		
+		return languageDropDown;
+	}
+	
+	
+	protected NavbarButton<LogoutPage> newLogoutMenu() {
 		// logout menu
 		NavbarButton<LogoutPage> logoutMenu = new NavbarButton<LogoutPage>(LogoutPage.class,
 				new StringResourceModel("navbar.logout", this, null));
 		logoutMenu.setIconType(GlyphIconType.logout);
 		MetaDataRoleAuthorizationStrategy.authorize(logoutMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
-
-		/**
-		 * Make sure to update the BaseStyles when the navbar position changes.
-		 * @see org.devgateway.toolkit.forms.wicket.styles.BaseStyles
-		 */
-		navbar.setPosition(Navbar.Position.TOP);
-		navbar.setInverted(true);
-
+		
+		return logoutMenu;
+	}
+	
+	protected NavbarButton<EditUserPage> newAccountMenu() {
+		PageParameters pageParametersForAccountPage = new PageParameters();
 		Person person = SecurityUtil.getCurrentAuthenticatedPerson();
 		// account menu
 		Model<String> account = null;
@@ -197,11 +228,19 @@ public abstract class BasePage extends GenericWebPage<Void> {
 				account);
 		accountMenu.setIconType(GlyphIconType.user);
 		MetaDataRoleAuthorizationStrategy.authorize(accountMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
-
+		return accountMenu;
+	}
+	
+	
+	protected NavbarButton<Homepage> newHomeMenu() {
 		// home
 		NavbarButton<Homepage> homeMenu = new NavbarButton<>(Homepage.class, Model.of("Home"));
 		homeMenu.setIconType(GlyphIconType.home);
 		MetaDataRoleAuthorizationStrategy.authorize(homeMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
+		return homeMenu;
+	}
+	 
+	protected NavbarDropDownButton newAdminMenu() {
 
 		// admin menu
 		NavbarDropDownButton adminMenu = new NavbarDropDownButton(new StringResourceModel("navbar.admin", this, null)) {
@@ -221,8 +260,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 						new StringResourceModel("navbar.springendpoints", this, null))
 								.setIconType(FontAwesomeIconType.anchor));
 
-				MenuBookmarkablePageLink<HALRedirectPage> halBrowserLink = 
-						new MenuBookmarkablePageLink<HALRedirectPage>(
+				MenuBookmarkablePageLink<HALRedirectPage> halBrowserLink = new MenuBookmarkablePageLink<HALRedirectPage>(
 						HALRedirectPage.class, null, new StringResourceModel("navbar.halbrowser", this, null)) {
 					private static final long serialVersionUID = 1L;
 
@@ -249,21 +287,43 @@ public abstract class BasePage extends GenericWebPage<Void> {
 				uiBrowserLink.setIconType(FontAwesomeIconType.rocket).setEnabled(true);
 				list.add(uiBrowserLink);
 
-
 				list.add(new MenuBookmarkablePageLink<Void>(EditAdminSettingsPage.class,
-						new StringResourceModel("navbar.adminSettings", BasePage.this, null)).
-						setIconType(FontAwesomeIconType.briefcase));
+						new StringResourceModel("navbar.adminSettings", BasePage.this, null))
+								.setIconType(FontAwesomeIconType.briefcase));
 
 				return list;
 			}
 		};
-
+		
 		adminMenu.setIconType(GlyphIconType.cog);
 		MetaDataRoleAuthorizationStrategy.authorize(adminMenu, Component.RENDER, SecurityConstants.Roles.ROLE_ADMIN);
 
-		navbar.addComponents(NavbarComponents.transform(Navbar.ComponentPosition.RIGHT, homeMenu, adminMenu,
-				accountMenu, logoutMenu));
+		return adminMenu;
+	}
 
+	/**
+	 * creates a new {@link Navbar} instance
+	 *
+	 * @param markupId
+	 *            The components markup id.
+	 * @return a new {@link Navbar} instance
+	 */
+	protected Navbar newNavbar(final String markupId) {
+
+		Navbar navbar = new Navbar(markupId);
+
+		/**
+		 * Make sure to update the BaseStyles when the navbar position changes.
+		 * @see org.devgateway.toolkit.forms.wicket.styles.BaseStyles
+		 */
+		navbar.setPosition(Navbar.Position.TOP);
+		navbar.setInverted(true);
+	
+		navbar.addComponents(NavbarComponents.transform(Navbar.ComponentPosition.RIGHT, newHomeMenu(), newAdminMenu(),
+				newAccountMenu(), newLogoutMenu()));
+
+		navbar.addComponents(NavbarComponents.transform(Navbar.ComponentPosition.LEFT, newLanguageMenu()));
+		
 		return navbar;
 	}
 
