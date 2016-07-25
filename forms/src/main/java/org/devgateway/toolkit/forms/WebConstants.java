@@ -11,14 +11,20 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+
 import org.apache.wicket.validation.validator.StringValidator;
 import org.devgateway.toolkit.persistence.dao.DBConstants;
 
 public final class WebConstants {
-	
+
 	private WebConstants() {
-		
+
 	}
+
 	public static final int PAGE_SIZE = 10;
 	public static final int SELECT_PAGE_SIZE = 25;
 
@@ -28,10 +34,18 @@ public final class WebConstants {
 	public static final String PARAM_REVISION_ID = "revisionId";
 	public static final String PARAM_ENTITY_CLASS = "class";
 
+	public final static String LANGUAGE_PARAM = "lang";
+
 	public static final class StringValidators {
 		public static final StringValidator MAXIMUM_LENGTH_VALIDATOR_ONE_LINE_TEXT = StringValidator
 				.maximumLength(DBConstants.MAX_DEFAULT_TEXT_LENGTH_ONE_LINE);
 		public static final StringValidator MAXIMUM_LENGTH_VALIDATOR_ONE_LINE_TEXTAREA = StringValidator
 				.maximumLength(DBConstants.MAX_DEFAULT_TEXT_AREA);
 	}
+
+	// add more languages here. It is pointless to make this dynamic because the
+	// wicket i18n is in .properties files so we need
+	// to change the src code anyway.
+	public static final List<Locale> availableLocales = Collections.unmodifiableList(Arrays.asList(new Locale("en")));
+
 }
