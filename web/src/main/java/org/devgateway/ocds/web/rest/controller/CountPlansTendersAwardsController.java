@@ -61,7 +61,8 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
 	@ApiOperation(value = "Count of bid plans, by year. This will count the releases that have the field"
 			+ "planning.bidPlanProjectDateApprove populated. "
 			+ "The year grouping is taken from planning.bidPlanProjectDateApprove")
-	@RequestMapping(value = "/api/countBidPlansByYear", method = RequestMethod.GET, produces = "application/json")	
+	@RequestMapping(value = "/api/countBidPlansByYear", 
+	method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")	
 	public List<DBObject> countBidPlansByYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
@@ -88,7 +89,8 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
 	 */
 	@ApiOperation(value = "Count the tenders and group the results by year. The year is calculated from "
 			+ "tender.tenderPeriod.startDate.")
-	@RequestMapping(value = "/api/countTendersByYear", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/api/countTendersByYear", 
+	method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
 	public List<DBObject> countTendersByYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
@@ -114,7 +116,8 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
 	 */
 	@ApiOperation(value = "Count the awards and group the results by year. "
 			+ "The year is calculated from the awards.date field.")
-	@RequestMapping(value = "/api/countAwardsByYear", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/api/countAwardsByYear", 
+	method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
 	public List<DBObject> countAwardsByYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project0 = new BasicDBObject();

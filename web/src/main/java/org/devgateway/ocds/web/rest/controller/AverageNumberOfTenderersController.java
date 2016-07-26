@@ -57,7 +57,8 @@ public class AverageNumberOfTenderersController extends GenericOCDSController {
 			+ "by year read from tender.tenderPeriod.startDate. "
 			+ "The number of tenderers are read from tender.numberOfTenderers")
 
-	@RequestMapping(value = "/api/averageNumberOfTenderers", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/api/averageNumberOfTenderers", 
+	method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
 	public List<DBObject> averageNumberOfTenderers(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();

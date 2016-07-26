@@ -41,7 +41,7 @@ public class OrganizationSearchController extends GenericOCDSController {
 	 * @return
 	 */
 	@RequestMapping(value = "/api/ocds/organization/id/{id:^[a-zA-Z0-9]*$}",
-			method = RequestMethod.GET, produces = "application/json")	
+			method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")	
 	@ApiOperation(value = "Finds organization entity by the given id")
 	@Cacheable("organizationsJson")
 	public Organization organizationId(@PathVariable final String id) {
@@ -58,7 +58,7 @@ public class OrganizationSearchController extends GenericOCDSController {
 	 * @return
 	 */
 	@RequestMapping(value = "/api/ocds/organization/all",
-			method = RequestMethod.GET, produces = "application/json")
+			method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
 	@ApiOperation(value = "Lists all organizations in the database. "
 			+ "Allows full text search using the text parameter.")
 	@Cacheable(cacheNames = "genericPagingRequestJson", keyGenerator = "genericPagingRequestKeyGenerator")

@@ -27,8 +27,8 @@ public class TenderBidPeriodPercentilesByYearController extends GenericOCDSContr
 	@ApiOperation(value = "Returns the tender bid period percentiles: min, q1, median, a3 and max. "
 			+ "The tender length in days is "
 			+ "calculated from tender.tenderPeriod.startDate and tender.tenderPeriod.endDate")
-	@RequestMapping(value = "/api/tenderBidPeriodPercentiles", method = RequestMethod.GET,
-			 produces = "application/json")
+	@RequestMapping(value = "/api/tenderBidPeriodPercentiles", 
+			method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
 	public Object tenderBidPeriodPercentiles(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
 		ScriptOperations scriptOps = mongoTemplate.scriptOps();

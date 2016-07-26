@@ -59,7 +59,8 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 	@ApiOperation(value = "Calculates the average tender period, per each year. The year is taken from "
 			+ "tender.tenderPeriod.startDate and the duration is taken by counting the days"
 			+ "between tender.tenderPeriod.endDate and tender.tenderPeriod.startDate")
-	@RequestMapping(value = "/api/averageTenderPeriod", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/api/averageTenderPeriod", method = { RequestMethod.POST, RequestMethod.GET },
+	produces = "application/json")
 	public List<DBObject> averageTenderPeriod(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject year = new BasicDBObject("$year", "$tender.tenderPeriod.startDate");
@@ -92,7 +93,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 	@ApiOperation(value = "Quality indicator for averageTenderPeriod endpoint, "
 			+ "showing the percentage of tenders that have start and end dates vs the total tenders in the system")
 	@RequestMapping(value = "/api/qualityAverageTenderPeriod", 
-	method = RequestMethod.GET, produces = "application/json")
+			method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
 	public List<DBObject> qualityAverageTenderPeriod(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
@@ -126,7 +127,8 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 	@ApiOperation(value = "Calculates the average award period, per each year. The year is taken from "
 			+ "awards.date and the duration is taken by counting the days"
 			+ "between tender.tenderPeriod.endDate and tender.tenderPeriod.startDate. The award has to be active.")
-	@RequestMapping(value = "/api/averageAwardPeriod", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/api/averageAwardPeriod", method = { RequestMethod.POST, RequestMethod.GET }, 
+	produces = "application/json")
 	public List<DBObject> averageAwardPeriod(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 		DBObject year = new BasicDBObject("$year", "$awards.date");
 
@@ -171,7 +173,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 	@ApiOperation(value = "Quality indicator for averageAwardPeriod endpoint, "
 			+ "showing the percentage of awards that have start and end dates vs the total tenders in the system")
 	@RequestMapping(value = "/api/qualityAverageAwardPeriod", 
-	method = RequestMethod.GET, produces = "application/json")	
+			method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")	
 	public List<DBObject> qualityAverageAwardPeriod(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
