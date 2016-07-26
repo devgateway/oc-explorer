@@ -56,7 +56,8 @@ public class FundingByLocationController extends GenericOCDSController {
 	@ApiOperation(value = "Planned funding by location by year. Returns the total amount of planning.budget"
 			+ " available per planning.budget.projectLocation, grouped by year. "
 			+ "This will return full location information, including geocoding data.")
-    @RequestMapping(value = "/api/plannedFundingByLocation", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/api/plannedFundingByLocation", 
+    method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
     public List<DBObject> plannedFundingByLocation(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
         DBObject vars = new BasicDBObject();
@@ -96,8 +97,8 @@ public class FundingByLocationController extends GenericOCDSController {
 			+ "tender.items.deliveryLocation and also grouped by year."
 			+ " The endpoint also returns the count of tenders for each location. "
 			+ "It responds to all filters. The year is calculated based on tender.tenderPeriod.startDate")
-	@RequestMapping(value = "/api/fundingByTenderDeliveryLocation", 
-	method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/api/fundingByTenderDeliveryLocation", method = { RequestMethod.POST,
+			RequestMethod.GET }, produces = "application/json")
 	public List<DBObject> fundingByTenderDeliveryLocation(
 			@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 

@@ -37,6 +37,7 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,8 +60,10 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 	@ApiOperation(value = "Cost effectiveness of Awards: Displays the total amount of active awards grouped by year."
 			+ "The tender entity, for each award, has to have amount value. The year is calculated from awards.date")
 	@RequestMapping(value = "/api/costEffectivenessAwardAmount", 
-	method = RequestMethod.GET, produces = "application/json")
-	public List<DBObject> costEffectivenessAwardAmount(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+			method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
+	public List<DBObject> costEffectivenessAwardAmount(
+			@RequestBody 
+			@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
 		project.put("year", new BasicDBObject("$year", "$awards.date"));
@@ -101,7 +104,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 			+ "grouped by year. Only tenders.status=active"
 			+ "are taken into account. The year is calculated from tenderPeriod.startDate")
 	@RequestMapping(value = "/api/costEffectivenessTenderAmount",
-	method = RequestMethod.GET, produces = "application/json")	
+			method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")	
 	public List<DBObject> costEffectivenessTenderAmount(
 			@ModelAttribute @Valid final GroupingFilterPagingRequest filter) {
 
