@@ -106,7 +106,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
         private static final long serialVersionUID = -750983217518258464L;
 
         public UIRedirectPage() {
-            super(WebApplication.get().getServletContext().getContextPath() + "/ui/index.html");
+            super(WebApplication.get().getServletContext().getContextPath() + "/dashboard");
         }
 
     }
@@ -119,8 +119,9 @@ public abstract class BasePage extends GenericWebPage<Void> {
 	 */
 	protected void selectLanguage() {
 		StringValue lang = this.getPageParameters().get(WebConstants.LANGUAGE_PARAM);
-		if (!lang.isEmpty())
+		if (!lang.isEmpty()) {
 			WebSession.get().setLocale(new Locale(lang.toString()));
+		}
 	}
 
 	/**
@@ -182,7 +183,8 @@ public abstract class BasePage extends GenericWebPage<Void> {
     }
 
 	public NavbarDropDownButton newLanguageMenu() {
-		final NavbarDropDownButton languageDropDown = new NavbarDropDownButton(new StringResourceModel("navbar.lang", this,
+		final NavbarDropDownButton languageDropDown = new NavbarDropDownButton(
+				new StringResourceModel("navbar.lang", this,
 				null)) {
 				
 			private static final long serialVersionUID = 319842753824102674L;
