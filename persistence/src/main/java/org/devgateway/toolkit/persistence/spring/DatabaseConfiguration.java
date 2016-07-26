@@ -107,7 +107,7 @@ public class DatabaseConfiguration {
     @Bean
     @DependsOn(value = { "derbyServer"})
     public DataSource dataSource() {
-        HikariDataSource ds = new HikariDataSource();
+    	HikariDataSource ds = new HikariDataSource();
 		ds.setTransactionIsolation(springDatasourceTransactionIsolation);
 		ds.setJdbcUrl(springDatasourceUrl);
 		ds.setUsername(springDatasourceUsername);
@@ -131,5 +131,4 @@ public class DatabaseConfiguration {
         nsc.start(new PrintWriter(java.lang.System.out, true));
         return nsc;
     }
-
 }

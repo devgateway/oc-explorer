@@ -17,7 +17,7 @@ class Tab extends DataFetcher{
     let {compareWith: CustomComparison} = Component;
     let Comparison = CustomComparison || DefaultComparison;
     return <Comparison
-        key={Component}
+        key={index}
         compareBy={compareBy}
         comparisonData={comparisonData.get(index, List())}
         comparisonCriteriaValues={comparisonCriteriaValues}

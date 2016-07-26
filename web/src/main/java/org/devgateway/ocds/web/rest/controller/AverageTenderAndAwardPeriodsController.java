@@ -107,6 +107,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 								1, 0)));
 
 		DBObject project1 = new BasicDBObject();
+		project1.put(Fields.UNDERSCORE_ID, 0);
 		project1.put("totalTenderWithStartEndDates", 1);
 		project1.put("totalTenders", 1);
 		project1.put("percentageTenderWithStartEndDates",
@@ -118,6 +119,9 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 				new CustomProjectionOperation(project),
 				group().sum("tenderWithStartEndDates").as("totalTenderWithStartEndDates").count().as("totalTenders"),
 				new CustomProjectionOperation(project1));
+		
+
+
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> list = results.getMappedResults();
@@ -163,7 +167,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 				new CustomOperation(new BasicDBObject("$group", group)),
 				new CustomOperation(new BasicDBObject("$sort", sort)), skip(filter.getSkip()),
 				limit(filter.getPageSize()));
-
+		
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> list = results.getMappedResults();
 		return list;
@@ -187,6 +191,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 								1, 0)));
 
 		DBObject project1 = new BasicDBObject();
+		project1.put(Fields.UNDERSCORE_ID, 0);
 		project1.put("totalAwardWithStartEndDates", 1);
 		project1.put("totalAwards", 1);
 		project1.put("percentageAwardWithStartEndDates",
@@ -199,7 +204,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 				new CustomProjectionOperation(project),
 				group().sum("awardWithStartEndDates").as("totalAwardWithStartEndDates").count().as("totalAwards"),
 				new CustomProjectionOperation(project1));
-		
+				
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> list = results.getMappedResults();
 		return list;

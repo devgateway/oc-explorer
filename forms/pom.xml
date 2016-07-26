@@ -17,13 +17,13 @@
     <artifactId>forms</artifactId>
     <packaging>jar</packaging>
 
-    <name>OCExplorer Forms</name>
-    <description>OCExplorer Forms</description>
+    <name>OCVN Forms</name>
+    <description>OCVN Forms</description>
 
     <parent>
-        <groupId>org.devgateway.ocds</groupId>
-        <artifactId>oce</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <groupId>org.devgateway.ocvn</groupId>
+        <artifactId>ocvn</artifactId>
+        <version>0.3.1-SNAPSHOT</version>
     </parent>
 
     <properties>
@@ -38,27 +38,27 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.devgateway.ocds</groupId>
+            <groupId>org.devgateway.ocvn</groupId>
             <artifactId>persistence</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>org.devgateway.ocds</groupId>
+            <groupId>org.devgateway.ocvn</groupId>
             <artifactId>persistence-mongodb</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>org.devgateway.ocds</groupId>
+            <groupId>org.devgateway.ocvn</groupId>
             <artifactId>ui</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>org.devgateway.ocds</groupId>
+            <groupId>org.devgateway.ocvn</groupId>
             <artifactId>web</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.3.1-SNAPSHOT</version>
         </dependency>
 
         <!--
@@ -221,6 +221,7 @@
             <artifactId>mail</artifactId>
             <version>1.4.7</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
@@ -346,6 +347,4 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-
 </project>

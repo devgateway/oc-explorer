@@ -1,4 +1,4 @@
-# OC Explorer UI Module
+# OCVN UI Module
 ## Prerequisites
 In order to be able to work efficiently you should familiarize yourself with the following technologies:
 
