@@ -77,7 +77,8 @@ public class OcdsController extends GenericOCDSController {
     }
 
 	@ApiOperation(value = "Returns a release entity for the given open contracting id (OCID).")
-    @RequestMapping(value = "/api/ocds/release/ocid/{ocid}", method = RequestMethod.GET,
+    @RequestMapping(value = "/api/ocds/release/ocid/{ocid}",  
+    method = { RequestMethod.POST, RequestMethod.GET },
             produces = "application/json")
     public Release ocdsByOcid(@PathVariable final String ocid) {
 
