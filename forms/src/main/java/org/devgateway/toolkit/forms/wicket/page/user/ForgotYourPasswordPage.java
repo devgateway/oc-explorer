@@ -117,12 +117,4 @@ public class ForgotYourPasswordPage extends BasePage {
             add(goBack);
         }
     }
-
-    @Override
-    protected void onInitialize() {
-        super.onInitialize();
-
-        // hide footer since it's not sticked to the bottom of the page
-        footer.setVisibilityAllowed(false);
-    }
 }

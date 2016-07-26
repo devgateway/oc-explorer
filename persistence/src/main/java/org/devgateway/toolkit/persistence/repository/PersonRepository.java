@@ -11,12 +11,11 @@
  *******************************************************************************/
 package org.devgateway.toolkit.persistence.repository;
 
-import java.util.List;
-
 import org.devgateway.toolkit.persistence.dao.Person;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  *
@@ -24,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  */
 @Transactional
-public interface PersonRepository extends JpaRepository<Person, Long> {
+public interface PersonRepository extends BaseJpaRepository<Person, Long> {
 
     @Query("select p from Person p where p.username = ?1")
     List<Person> findByName(String username);
