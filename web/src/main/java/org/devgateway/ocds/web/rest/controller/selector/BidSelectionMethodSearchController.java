@@ -49,7 +49,8 @@ public class BidSelectionMethodSearchController extends GenericOCDSController {
      */
 	@ApiOperation(value = "Display the available bid selection methods. "
 			+ "These are taken from tender.procurementMethodDetails")
-    @RequestMapping(value = "/api/ocds/bidSelectionMethod/all", method = RequestMethod.GET,
+    @RequestMapping(value = "/api/ocds/bidSelectionMethod/all", 
+    method = { RequestMethod.POST, RequestMethod.GET },
             produces = "application/json")
     public List<DBObject> bidSelectionMethods() {
 
