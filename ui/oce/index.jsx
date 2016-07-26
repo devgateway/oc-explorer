@@ -224,11 +224,11 @@ export default class OCApp extends React.Component{
     }).then(callFunc('blob')).then(blob => {
       var link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      link.download = "export.xls";
+      link.download = "export.xlsx";
       link.click();
       this.setState({exporting: false})
     }).catch((...args) => {
-      alert(this.__("An error occured during exporting!"));
+      alert(this.__("An error occurred during export!"));
       this.setState({exporting: false})
     });
   }
