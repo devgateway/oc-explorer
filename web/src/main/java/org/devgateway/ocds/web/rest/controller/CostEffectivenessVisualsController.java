@@ -37,7 +37,6 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,7 +61,6 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 	@RequestMapping(value = "/api/costEffectivenessAwardAmount", 
 			method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
 	public List<DBObject> costEffectivenessAwardAmount(
-			@RequestBody 
 			@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
