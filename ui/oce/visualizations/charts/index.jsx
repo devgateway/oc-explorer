@@ -37,7 +37,7 @@ class Chart extends Visualization{
       this.refs.chartContainer.data = this.getData();
       this.refs.chartContainer.layout = this.getDecoratedLayout();
       setTimeout(() => Plotly.redraw(this.refs.chartContainer));
-    } else if(['title', 'width', 'xAxisRange', 'yAxisRange'].some(prop => prevProps[prop] != this.props[prop])){
+    } else if(['title', 'width', 'xAxisRange', 'yAxisRange', 'translations'].some(prop => prevProps[prop] != this.props[prop])){
       setTimeout(() => Plotly.relayout(this.refs.chartContainer, this.getDecoratedLayout()));
     }
   }
