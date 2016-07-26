@@ -53,6 +53,6 @@ class OverviewChart extends FrontendYearFilterableChart{
 
 OverviewChart.endpoints = ['countBidPlansByYear', 'countTendersByYear', 'countAwardsByYear'];
 
-OverviewChart.getName = __ => __("Overview");
+OverviewChart.getName = __ => __("Procurement activity by year");
 
 export default OverviewChart;

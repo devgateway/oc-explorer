@@ -35,7 +35,7 @@ class BidSelectionMethod extends FrontendYearFilterableChart{
   getLayout(){
     return {
       xaxis: {
-        title: this.__("Category"),
+        title: this.__("Method"),
         type: "category",
         titlefont: {
           color: "#cc3c3b"

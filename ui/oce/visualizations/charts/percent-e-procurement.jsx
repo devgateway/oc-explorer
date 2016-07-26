@@ -16,7 +16,7 @@ class PercentEProcurement extends FrontendYearFilterableChart{
   getLayout(){
     return {
       xaxis: {
-        title: "Years",
+        title: this.__("Years"),
         type: 'category',
         titlefont: {
           color: "#cc3c3b"
@@ -35,7 +35,7 @@ class PercentEProcurement extends FrontendYearFilterableChart{
 
 
 PercentEProcurement.endpoint = 'percentTendersUsingEgp';
-PercentEProcurement.getName = __ => __('% of tenders using eProcurement');
+PercentEProcurement.getName = __ => __('Percent of tenders using eProcurement');
 PercentEProcurement.getMaxField = imm => imm.get('percentEgp', 0);
 
 export default PercentEProcurement;
