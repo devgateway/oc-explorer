@@ -33,11 +33,11 @@ class Chart extends Visualization{
 
   componentDidUpdate(prevProps){
     super.componentDidUpdate(prevProps);
-    if(this.constructor.UPDATABLE_FIELDS.some(prop => prevProps[prop] != this.props[prop])){
+    if(this.constructor.UPDATABLE_FIELDS.some(prop => prevProps[prop] != this.props[prop]) || this.props.translations != prevProps.translations){
       this.refs.chartContainer.data = this.getData();
       this.refs.chartContainer.layout = this.getDecoratedLayout();
       setTimeout(() => Plotly.redraw(this.refs.chartContainer));
-    } else if(['title', 'width', 'xAxisRange', 'yAxisRange', 'translations'].some(prop => prevProps[prop] != this.props[prop])){
+    } else if(['title', 'width', 'xAxisRange', 'yAxisRange'].some(prop => prevProps[prop] != this.props[prop])){
       setTimeout(() => Plotly.relayout(this.refs.chartContainer, this.getDecoratedLayout()));
     }
   }
