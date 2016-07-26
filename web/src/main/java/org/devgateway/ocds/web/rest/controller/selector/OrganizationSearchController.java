@@ -43,7 +43,6 @@ public class OrganizationSearchController extends GenericOCDSController {
 	@RequestMapping(value = "/api/ocds/organization/id/{id:^[a-zA-Z0-9]*$}",
 			method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")	
 	@ApiOperation(value = "Finds organization entity by the given id")
-	@Cacheable("organizationsJson")
 	public Organization organizationId(@PathVariable final String id) {
 
 		Organization org = organizationRepository.findOne(id);
