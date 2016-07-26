@@ -42,7 +42,8 @@ public class BidTypesSearchController extends GenericOCDSController {
 
 	@ApiOperation(value = "Display the available bid types. "
 			+ "These are the Classification entities in OCDS")
-    @RequestMapping(value = "/api/ocds/bidType/all", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/api/ocds/bidType/all",
+    method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
     public List<Classification> bidTypes() {
 
         return classificationRepository.findAll(new Sort(Direction.ASC, "description"));

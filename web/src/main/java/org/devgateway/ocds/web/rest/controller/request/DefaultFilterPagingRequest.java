@@ -32,7 +32,7 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 	
 	
 	@ApiModelProperty(value = "This will filter after tender.items.deliveryLocation._id")
-	private List<String> tenderDeliveryLocationIdentifier;
+	private List<String> tenderLoc;
 
 	/**
 	 * This parameter will invert (negate) all existing filtering parameters. So
@@ -92,12 +92,12 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 		this.contrMethod = contrMethod;
 	}
 
-	public List<String> getTenderDeliveryLocationIdentifier() {
-		return tenderDeliveryLocationIdentifier;
+	public List<String> getTenderLoc() {
+		return tenderLoc;
 	}
 
-	public void setTenderDeliveryLocationIdentifier(List<String> tenderDeliveryLocationGazetteerIdentifier) {
-		this.tenderDeliveryLocationIdentifier = tenderDeliveryLocationGazetteerIdentifier;
+	public void setTenderLoc(List<String> tenderDeliveryLocationGazetteerIdentifier) {
+		this.tenderLoc = tenderDeliveryLocationGazetteerIdentifier;
 	}
 
 

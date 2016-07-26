@@ -65,7 +65,8 @@ public class TopTenController extends GenericOCDSController {
 			+ "the following fields: "
 			+ "planning.bidNo, awards.date, awards.suppliers.name, "
 			+ "awards.value, awards.suppliers.name, planning.budget (if any)")
-    @RequestMapping(value = "/api/topTenLargestAwards", method = RequestMethod.GET,
+	@RequestMapping(value = "/api/topTenLargestAwards", method = { RequestMethod.POST,
+			RequestMethod.GET },
             produces = "application/json")
     public List<DBObject> topTenLargestAwards(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
@@ -102,7 +103,7 @@ public class TopTenController extends GenericOCDSController {
 			+ " The amount is taken from the tender.value field." + " The returned data will contain"
 			+ "the following fields: " + "planning.bidNo, tender.date, tender.value, tender.tenderPeriod, "
 					+ "tender.procuringEntity.name")
-    @RequestMapping(value = "/api/topTenLargestTenders", method = RequestMethod.GET,
+    @RequestMapping(value = "/api/topTenLargestTenders", method = { RequestMethod.POST, RequestMethod.GET },
             produces = "application/json")
     public List<DBObject> topTenLargestTenders(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 

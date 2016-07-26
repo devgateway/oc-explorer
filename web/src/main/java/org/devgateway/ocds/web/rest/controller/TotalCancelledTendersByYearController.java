@@ -50,7 +50,7 @@ public class TotalCancelledTendersByYearController extends GenericOCDSController
 
 	@ApiOperation(value = "Total Cancelled tenders by year. The tender amount is read from tender.value."
 			+ "The tender status has to be 'cancelled'. The year is retrieved from tender.tenderPeriod.startDate.")
-    @RequestMapping(value = "/api/totalCancelledTendersByYear", method = RequestMethod.GET,
+    @RequestMapping(value = "/api/totalCancelledTendersByYear", method = { RequestMethod.POST, RequestMethod.GET },
             produces = "application/json")
     public List<DBObject> totalCancelledTendersByYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
