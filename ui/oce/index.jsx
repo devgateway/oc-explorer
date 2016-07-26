@@ -63,12 +63,12 @@ export default class OCApp extends React.Component{
     this.fetchBidTypes();
 
     this.setState({
-      width: document.querySelector('.years-bar').offsetWidth
+      width: document.querySelector('.years-bar').offsetWidth - 30
     });
 
     window.addEventListener("resize", debounce(() => {
       this.setState({
-        width: document.querySelector('.years-bar').offsetWidth
+        width: document.querySelector('.years-bar').offsetWidth - 30
       });
     }));
   }
