@@ -39,14 +39,16 @@ public class LocationSearchController extends GenericOCDSController {
 	@Autowired
 	private VNLocationRepository locationRepository;
 
-	@RequestMapping(value = "/api/ocds/location/all", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/api/ocds/location/all", 
+			method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
 	public List<VNLocation> locationsAll() {
 
 		return locationRepository.findAll(new Sort(Direction.ASC, Fields.UNDERSCORE_ID));
 
 	}
 
-	@RequestMapping(value = "/api/ocds/location/search", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/api/ocds/location/search", 
+			method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
 	public List<VNLocation> locationsSearch(@ModelAttribute @Valid final TextSearchRequest request) {
 		return genericSearchRequest(request, null, VNLocation.class);
 

@@ -228,7 +228,8 @@ public class TenderPercentagesController extends GenericOCDSController {
 	
 	@ApiOperation("Returns the percent of tenders that are using eProcurement."
 			+ " This is read from tender.publicationMethod='eGP'")
-	@RequestMapping(value = "/api/percentTendersUsingEgp", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/api/percentTendersUsingEgp",  
+	method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
 	public List<DBObject> percentTendersUsingEgp(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project1 = new BasicDBObject();
