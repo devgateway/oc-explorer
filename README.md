@@ -70,3 +70,22 @@ If you have JRebel license, then don't use spring-boot-devtools. Best is to star
 `java -Xverify:none -noverify -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -jar fat.jar`
 
 ... And then for example in STS you can add a new Debug Configuration->Remote Java Application and specify localhost and port 5005.
+## Running dg-toolkit
+
+DG-toolkit is a package of several modules, among which forms and web are runnable. See the [forms](https://github.com/devgateway/dg-toolkit/tree/master/forms) and/or the [web](https://github.com/devgateway/dg-toolkit/tree/master/web) modules documentation for starting the project.
+
+## Installing dg-toolkit as system service on the production server
+
+We are closely following the spring boot executable/fat jar documentation which provides an extremely nice way to run a jar as a linux system service. This works for both the old System V and the new systemd. You can find [the full Spring documentation here] (http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#deployment-service).
+
+
+## Thanks!
+
+![YourKit](https://www.yourkit.com/images/yklogo.png)
+
+OCVN uses YourKit Java Profiler for Performance Tuning. 
+
+YourKit supports open source projects with its full-featured Java Profiler.
+YourKit, LLC is the creator of <a href="https://www.yourkit.com/java/profiler/index.jsp">YourKit Java Profiler</a>
+and <a href="https://www.yourkit.com/.net/profiler/index.jsp">YourKit .NET Profiler</a>,
+innovative and intelligent tools for profiling Java and .NET applications.

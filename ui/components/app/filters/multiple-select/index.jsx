@@ -1,20 +1,17 @@
 import Component from "../../../pure-render-component";
 import style from "./style.less";
-import cn from "classnames";
 
 export default class MultipleSelect extends Component{
   render(){
-    var {title, state, slug, actions} = this.props;
+    let {title, state, slug, actions} = this.props;
     if(!state) return null;
-    var options = state.get('options');
-    var selectedCount = options.filter(option => option.get('selected')).count();
-    var totalOptions = options.count();
-    var open = state.get('open');
+    let options = state.get('options');
+    let selectedCount = options.filter(option => option.get('selected')).count();
+    let totalOptions = options.count();
     return (
-        <section className={cn('field', {open: open})}>
-          <header onClick={e => actions.toggleFilter(slug, !open)}>
-            <i className="glyphicon glyphicon-menu-right"></i> {title}
-            <span className="pull-right count">({selectedCount}/{totalOptions})</span>
+        <section className="col-sm-4 field">
+          <header>
+            {title} <span className="count">({selectedCount}/{totalOptions})</span>
           </header>
           <section className="options">
             {options.map(option => (
@@ -22,7 +19,7 @@ export default class MultipleSelect extends Component{
                   <label>
                     <input
                         type="checkbox"
-                        value={option.get('selected')}
+                        checked={option.get('selected')}
                         onChange={e => actions.toggleFilterOption(slug, option.get('id'), !option.get('selected'))}
                     /> {option.get('description')}
                   </label>

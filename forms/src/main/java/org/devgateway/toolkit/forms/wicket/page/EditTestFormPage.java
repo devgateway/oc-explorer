@@ -45,7 +45,7 @@ import org.wicketstuff.annotation.mount.MountPath;
  *
  */
 
-@AuthorizeInstantiation(SecurityConstants.Roles.ROLE_EDITOR)
+@AuthorizeInstantiation(SecurityConstants.Roles.ROLE_USER)
 @MountPath("/editTestForm")
 public class EditTestFormPage extends AbstractEditPage<TestForm> {
 

@@ -13,14 +13,10 @@ package org.devgateway.toolkit.forms.wicket.styles;
 
 import java.util.List;
 
-import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
 
 import com.google.common.collect.Lists;
-
-import de.agilecoders.wicket.core.markup.html.themes.bootstrap.BootstrapCssReference;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeCssReference;
 
 /**
  * @author idobre
@@ -36,18 +32,12 @@ public class MainCss extends CssResourceReference {
 	 * Construct.
 	 */
 	public MainCss() {
-		super(MainCss.class, "main-new.css");
+		super(MainCss.class, "main.css");
 	}
 
 	@Override
 	public List<HeaderItem> getDependencies() {
 		final List<HeaderItem> dependencies = Lists.newArrayList(super.getDependencies());
-
-		dependencies.add(CssHeaderItem.forReference(BootstrapCssReference.instance()));
-		dependencies.add(CssHeaderItem.forReference(FontAwesomeCssReference.instance()));
-
-	//	dependencies.add(CssHeaderItem.forReference(DatatableStyleResourceReference.INSTANCE));
-
 		return dependencies;
 	}
 }

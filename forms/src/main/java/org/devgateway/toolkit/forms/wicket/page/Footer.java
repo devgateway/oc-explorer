@@ -11,11 +11,6 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.page;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Calendar;
-import java.util.Properties;
-
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -23,37 +18,35 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.devgateway.toolkit.forms.security.SecurityUtil;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Calendar;
+import java.util.Properties;
+
 public class Footer extends Panel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Construct.
-	 *
-	 * @param markupId
-	 *            The components markup id.
-	 */
-	public Footer(final String markupId) {
-		super(markupId);
+    /**
+     * Construct.
+     *
+     * @param markupId
+     *            The components markup id.
+     */
+    public Footer(final String markupId) {
+        super(markupId);
 
-		InputStream inputStream = getClass().getClassLoader().getResourceAsStream("version.properties");
-		Properties prop = new Properties();
-		try {
-			prop.load(inputStream);
-			inputStream.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("version.properties");
+        Properties prop = new Properties();
+        try {
+            prop.load(inputStream);
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-		add(new Label("toolkit-version", Model.of(prop.getProperty("toolkit.version"))));
-		add(new Label("toolkit-year", Calendar.getInstance().get(Calendar.YEAR)));
-
-		WebMarkupContainer login = new TransparentWebMarkupContainer("login");
-		// hide the login link if the user is already logged in
-		if (!(SecurityUtil.getCurrentAuthenticatedPerson() == null)) {
-			login.setVisibilityAllowed(false);
-		}
-		add(login);
-	}
+        add(new Label("toolkit-version", Model.of(prop.getProperty("toolkit.version"))));
+        add(new Label("toolkit-year", Calendar.getInstance().get(Calendar.YEAR)));
+    }
 
 }
