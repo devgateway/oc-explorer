@@ -31,6 +31,7 @@
   "Exporting...": "Đang xuất dữ liệu",
   "Filter the data": "Lọc dữ liệu",
   "Location": "Địa điểm (tỉnh thành)",
+  "Locations": "Địa điểm (tỉnh thành)",
   "None": "Không có",
   "Number": "Số TBMT",
   "Organizations": "Tổ chức",
@@ -58,5 +59,7 @@
   "Amount (in VDN)": "Số tiền (VNĐ)",
   "Overview": "Tổng quan",
   "Toolkit description": "Mô tả bộ công cụ",
-  "Bid types": "Phương thức gói thầu"
+  "Bid types": "Phương thức gói thầu",
+  "Procurement types": "Hình thức đấu thầu",
+  "Contract method": "Loại hợp đồng"
 }
