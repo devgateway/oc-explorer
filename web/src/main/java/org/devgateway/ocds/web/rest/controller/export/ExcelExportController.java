@@ -6,17 +6,23 @@ import org.devgateway.ocds.persistence.mongo.excel.ExcelFile;
 import org.devgateway.ocds.persistence.mongo.excel.ReleaseExportFile;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
+import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
+
+import static org.springframework.data.mongodb.core.query.Query.query;
 
 /**
  * @author idobre
@@ -31,8 +37,16 @@ public class ExcelExportController extends GenericOCDSController {
 
     @RequestMapping(value = "/api/ocds/excelExport", method = {RequestMethod.GET, RequestMethod.POST})
     // @Cacheable("excelExport")
-    public void excelExport(HttpServletResponse response) throws IOException {
-        List<Release> releases = releaseRepository.findAll(new PageRequest(0, 1000)).getContent();
+    public void excelExport(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+                            HttpServletResponse response) throws IOException {
+        // export only first 10000 releases
+        PageRequest pageRequest = new PageRequest(0, 10000, Sort.Direction.ASC, "id");
+
+        // List<Release> releases = mongoTemplate
+        //         .find(query(getYearFilterCriteria("planning.bidPlanProjectDateApprove", filter)
+        //                 .andOperator(getDefaultFilterCriteria(filter))).with(pageRequest), Release.class);
+        List<Release> releases = mongoTemplate.find(query(getDefaultFilterCriteria(filter))
+                .with(pageRequest), Release.class);
 
         ExcelFile releaseExcelFile = new ReleaseExportFile(releases);
         Workbook workbook = releaseExcelFile.createWorkbook();
