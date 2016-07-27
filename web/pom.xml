@@ -3,14 +3,15 @@
 	are made available under the terms of the MIT License (MIT) which accompanies this distribution, and is available at https://opensource.org/licenses/MIT 
 	Contributors: Development Gateway - initial API and implementation -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>web</artifactId>
 	<packaging>jar</packaging>
 
-	<name>OCVN Web</name>
-	<description>OCVN Web Module</description>
+    <name>OCExplorer Web</name>
+    <description>OCExplorer Web Module</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,23 +20,10 @@
 	</properties>
 
 	<parent>
-		<groupId>org.devgateway.ocvn</groupId>
-		<artifactId>ocvn</artifactId>
-		<version>0.3.2-SNAPSHOT</version>
+        <groupId>org.devgateway.ocds</groupId>
+        <artifactId>oce</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
 	</parent>
-
-	<repositories>
-		<repository>
-			<id>DG Central</id>
-			<name>DG Central Repo</name>
-			<url>http://artifactory.ampdev.net/artifactory/ccrs/</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-
-	</repositories>
-
 
 	<dependencies>
 
@@ -56,6 +44,18 @@
 	</dependency>
 	
 	<dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+
+        <dependency>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-jetty</artifactId>
 	</dependency>
@@ -92,15 +92,15 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.devgateway.ocvn</groupId>
+			<groupId>org.devgateway.ocds</groupId>
 			<artifactId>persistence</artifactId>
-			<version>0.3.2-SNAPSHOT</version>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
-			<groupId>org.devgateway.ocvn</groupId>
+			<groupId>org.devgateway.ocds</groupId>
 			<artifactId>persistence-mongodb</artifactId>
-			<version>0.3.2-SNAPSHOT</version>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
 
@@ -110,7 +110,29 @@
 			<version>1.4</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-rest</artifactId>
+			<exclusions>
+				<exclusion>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+					<groupId>org.springframework.boot</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+        
 
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.mongo</artifactId>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 
 	<build>
@@ -155,6 +177,14 @@
 						<nonFilteredFileExtension>xlsx</nonFilteredFileExtension>						
 					</nonFilteredFileExtensions>
 				</configuration>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.shared</groupId>
+                        <artifactId>maven-filtering</artifactId>
+                        <version>1.3</version>
+                    </dependency>
+                </dependencies>
 			</plugin>
 		
 

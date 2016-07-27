@@ -10,7 +10,7 @@
  * Development Gateway - initial API and implementation
  *******************************************************************************/
 /**
- * 
+ *
  */
 package org.devgateway.toolkit.forms.wicket.page;
 
@@ -22,20 +22,15 @@ import org.devgateway.toolkit.forms.security.SecurityConstants;
  * @author mpostelnicu
  *
  */
-@AuthorizeInstantiation(SecurityConstants.Roles.ROLE_EDITOR)
+@AuthorizeInstantiation(SecurityConstants.Roles.ROLE_USER)
 public class Homepage extends BasePage {
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * @param parameters
-	 */
-	public Homepage(final PageParameters parameters) {
-		super(parameters);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param parameters
+     */
+    public Homepage(final PageParameters parameters) {
+        super(parameters);
+    }
 
 }

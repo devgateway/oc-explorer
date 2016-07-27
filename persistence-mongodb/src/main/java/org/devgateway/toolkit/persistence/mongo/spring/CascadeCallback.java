@@ -1,11 +1,12 @@
 package org.devgateway.toolkit.persistence.mongo.spring;
 
-import java.lang.reflect.Field;
-import java.util.Collection;
-
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
+import java.util.Collection;
+
+@Deprecated
 public class CascadeCallback implements ReflectionUtils.FieldCallback {
 
     private Object source;
@@ -17,30 +18,32 @@ public class CascadeCallback implements ReflectionUtils.FieldCallback {
     }
 
     public void saveValue(Object fieldValue) {
-    	   final FieldCallback callback = new FieldCallback();
+        final FieldCallback callback = new FieldCallback();
 
-           ReflectionUtils.doWithFields(fieldValue.getClass(), callback);
+        ReflectionUtils.doWithFields(fieldValue.getClass(), callback);
 
-           getMongoOperations().save(fieldValue);
+        getMongoOperations().save(fieldValue);
     }
-    
-	@Override
-	public void doWith(final Field field) throws IllegalArgumentException, IllegalAccessException {
-		ReflectionUtils.makeAccessible(field);
 
-		if (field.isAnnotationPresent(CascadeSave.class)) {
-			final Object fieldValue = field.get(getSource());
-			if (fieldValue != null) {
-				if (Collection.class.isAssignableFrom(field.getType())) {
-					Collection<?> c = (Collection<?>) fieldValue;
-					for (Object o : c)
-						saveValue(o);
-				} else
-					saveValue(fieldValue);
-			}
-		}
+    @Override
+    public void doWith(final Field field) throws IllegalArgumentException, IllegalAccessException {
+        ReflectionUtils.makeAccessible(field);
 
-	}
+        if (field.isAnnotationPresent(CascadeSave.class)) {
+            final Object fieldValue = field.get(getSource());
+            if (fieldValue != null) {
+                if (Collection.class.isAssignableFrom(field.getType())) {
+                    Collection<?> c = (Collection<?>) fieldValue;
+                    for (Object o : c) {
+                        saveValue(o);
+                    }
+                } else {
+                    saveValue(fieldValue);
+                }
+            }
+        }
+
+    }
 
     public Object getSource() {
         return source;

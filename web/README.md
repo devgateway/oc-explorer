@@ -1,4 +1,4 @@
-# OCVN web module
+# OC Explorer web module
 
 This module provides REST endpoints for the services needed, as well as basic security. It depends on the **persistence** module and on the **persitence-mongodb**.
 
@@ -64,6 +64,8 @@ Example: `/api/ocds/release/planningBidNo/20100300191`
 
 ### Visualization 1 - Cost Effectiveness
 
+Shows the difference between the average tender amount and the average winning bid price annually. 
+
 #### Endpoint 1 - Cost Effectiveness Award Amount
 
 `/api/costEffectivenessAwardAmount?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]`
@@ -75,15 +77,20 @@ Example: `/api/ocds/release/planningBidNo/20100300191`
 
 ### Visualization 2 - Planned Locations
 
+A map that includes information on planned funding by location (with each location represented by a point, using a reference table).
+
 `/api/costEffectivenessTenderAmount?procuringEntityId=[proc1]&procuringEntityId=[proc2]`
 
 
 ### Visualization 3 - Bidding Period
 
+Visualization of distribution of bidding period (e.g. bid end date - bid start date). Visualization is be a box and whisker plot with: min, quartile 1, median, quartile 3, max
+
 `/api/tenderBidPeriodPercentiles?year=[year1]&year=[year2]...&bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]`
 
 ### Visualization 4 - Funding by Bid Type
 
+A visualization of distribution of funding by type of bid used in tendering process; clustered bar chart by year. 
 
 #### Endpoint 1 - Tender Price By OCDS Types
 
@@ -95,6 +102,12 @@ Example: `/api/ocds/release/planningBidNo/20100300191`
 
 
 ### Visualization 5 - Counts for Tenders, Awards, Bid Plans Per Year
+
+This is a line chart displaying (by year) the COUNT of:
+1) Bid plans
+2) Tenders
+3) Awards
+
 
 #### Endpoint 1 - Count of Bid Plans Per Year
 
@@ -110,6 +123,8 @@ Example: `/api/ocds/release/planningBidNo/20100300191`
 
 ### Visualization 6 - Timeline Chart
 
+Shows the average length of bid period and award period; displays averages by year and is responsive to all filters.
+
 #### Endpoint 1 - Average Tender Period
 
 `/api/averageTenderPeriod?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]`
@@ -119,6 +134,8 @@ Example: `/api/ocds/release/planningBidNo/20100300191`
 `/api/averageAwardPeriod?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]`
 
 ## Visualization 7 Largest Tenders/Awards
+
+Table showing the top 10 largest tenders and the 10 largest awards, including amount, tender/award number, supplier and date.
 
 ### Endpoint 1 - Top 10 largest tenders
 

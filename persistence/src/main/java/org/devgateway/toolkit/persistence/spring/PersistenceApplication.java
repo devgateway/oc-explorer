@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.devgateway.toolkit.persistence.spring;
 
-import org.devgateway.toolkit.persistence.dao.GenericPersistable;
-import org.devgateway.toolkit.persistence.repository.RoleRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.orm.jpa.EntityScan;
@@ -29,13 +27,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  *
  */
 @SpringBootApplication
-@EnableJpaRepositories(basePackageClasses = RoleRepository.class)
+@EnableJpaRepositories(basePackages = "org.devgateway")
 @EnableTransactionManagement
-@EntityScan(basePackageClasses = GenericPersistable.class)
+@EntityScan(basePackages = "org.devgateway")
 @PropertySource("classpath:/org/devgateway/toolkit/persistence/application.properties")
-@ComponentScan("org.devgateway.toolkit")
+@ComponentScan("org.devgateway")
 public class PersistenceApplication {
-	
+
 	public static void main(final String[] args) {
 		SpringApplication.run(PersistenceApplication.class, args);
 	}

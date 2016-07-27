@@ -12,7 +12,6 @@
 package org.devgateway.toolkit.forms.wicket.page;
 
 import org.apache.log4j.Logger;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -26,8 +25,6 @@ public class Header extends Panel {
 
 	protected static Logger logger = Logger.getLogger(Header.class);
 
-	protected WebMarkupContainer countryBar;
-
 	public Header(final String markupId) {
 		this(markupId, null);
 	}
@@ -35,5 +32,4 @@ public class Header extends Panel {
 	public Header(final String markupId, final PageParameters parameters) {
 		super(markupId);
 	}
-
 }

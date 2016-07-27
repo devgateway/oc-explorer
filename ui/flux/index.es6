@@ -9,25 +9,25 @@ dispatcher.registerStores({
   globalState: globalStateStore
 });
 
-var ensureArray = maybeArray => Array.isArray(maybeArray) ? maybeArray : [];
+let ensureArray = maybeArray => Array.isArray(maybeArray) ? maybeArray : [];
 
-var ensureList = maybeList => maybeList || List();
+let ensureList = maybeList => maybeList || List();
 
-var obj2arr = obj => Object.keys(obj).map(key => obj[key]);
+let obj2arr = obj => Object.keys(obj).map(key => obj[key]);
 
-var getSelectedYears = [
+let getSelectedYears = [
   ['globalState', 'filters', 'years'],
   years => years ? years.filter(identity).keySeq().toArray() : []
 ];
 
-var yearOnly = year => ({
+let yearOnly = year => ({
   year: year
 });
 
-var maxFieldExceptYear = datum =>
+let maxFieldExceptYear = datum =>
     Math.max.apply(Math, Object.keys(datum).filter(key => "year" != key).map(key => datum[key] || 0));
 
-var getCriteriaNames = (compare, comparisonCriteriaNames, filters) => {
+let getCriteriaNames = (compare, comparisonCriteriaNames, filters) => {
   switch(compare){
     case "bidTypeId":
       return ensureArray(comparisonCriteriaNames).map(name =>
@@ -38,7 +38,7 @@ var getCriteriaNames = (compare, comparisonCriteriaNames, filters) => {
   }
 }
 
-var mkDataGetter = ({path, getFillerDatum = yearOnly, horizontal = false, getMaxField =  maxFieldExceptYear}) => [
+let mkDataGetter = ({path, getFillerDatum = yearOnly, horizontal = false, getMaxField =  maxFieldExceptYear}) => [
   ['globalState', 'compareBy'],
   ['globalState', 'data', path],
   ['globalState', 'comparisonData', path],
@@ -46,8 +46,8 @@ var mkDataGetter = ({path, getFillerDatum = yearOnly, horizontal = false, getMax
   ['globalState', 'comparisonCriteriaNames'],
   ['globalState', 'filters'],
   (compare, rawData, comparisonData, years, comparisonCriteriaNames, filters) => {
-    var parse = data => {
-      var dataByYear = [];
+    let parse = data => {
+      let dataByYear = [];
       years.forEach(year => dataByYear[year] = getFillerDatum(year));
       data.forEach(datum => {
         if(dataByYear[+datum.year]) dataByYear[+datum.year] = datum
@@ -55,8 +55,8 @@ var mkDataGetter = ({path, getFillerDatum = yearOnly, horizontal = false, getMax
       return obj2arr(dataByYear);
     };
     if(compare){
-      var arrOfData = ensureArray(comparisonData).map(parse);
-      var maxValue = Math.max.apply(Math, arrOfData.map(data =>
+      let arrOfData = ensureArray(comparisonData).map(parse);
+      let maxValue = Math.max.apply(Math, arrOfData.map(data =>
         Math.max.apply(Math, data.map(getMaxField))
       ));
       return {
@@ -70,11 +70,11 @@ var mkDataGetter = ({path, getFillerDatum = yearOnly, horizontal = false, getMax
   }
 ];
 
-var getOverviewData = mkDataGetter({
+let getOverviewData = mkDataGetter({
   path: "overview"
 });
 
-var getOverview = [
+let getOverview = [
     ['globalState', 'compareBy'],
     getOverviewData,
     ['globalState', 'data', 'topTenders'],
@@ -89,7 +89,7 @@ var getOverview = [
     }
 ];
 
-var getCostEffectiveness = mkDataGetter({
+let getCostEffectiveness = mkDataGetter({
   path: "costEffectiveness",
   getFillerDatum(year){
     return {
@@ -103,7 +103,7 @@ var getCostEffectiveness = mkDataGetter({
   }
 });
 
-var getBidPeriod = mkDataGetter({
+let getBidPeriod = mkDataGetter({
   path: "bidPeriod",
   horizontal: true,
   getMaxField({tender, award}){
@@ -111,11 +111,15 @@ var getBidPeriod = mkDataGetter({
   }
 });
 
-var getCancelled = mkDataGetter({
+let getCancelled = mkDataGetter({
   path: "cancelled"
 });
 
-var getBidType = [
+let getCancelledPercents = mkDataGetter({
+  path: "cancelledPercents"
+});
+
+let getBidType = [
   ['globalState', 'compareBy'],
   ['globalState', 'data', 'bidType'],
   ['globalState', 'comparisonData', 'bidType'],
@@ -123,12 +127,12 @@ var getBidType = [
   ['globalState', 'comparisonCriteriaNames'],
   ['globalState', 'filters'],
   (compare, rawData, comparisonData, rawYears, comparisonCriteriaNames, filters) => {
-    var years = ensureList(rawYears);
-    var collectCats = arrOfData => arrOfData.reduce((cats, data) => data
+    let years = ensureList(rawYears);
+    let collectCats = arrOfData => arrOfData.reduce((cats, data) => data
       .filter(bidType => years.get(bidType.get('year')), false)
       .groupBy(bidType => bidType.get('procurementMethodDetails'))
       .reduce((cats, bidTypes) => {
-        var name = bidTypes.getIn([0, 'procurementMethodDetails']) || 'unspecified';
+        let name = bidTypes.getIn([0, 'procurementMethodDetails']) || 'unspecified';
         return cats.set(name, Map({
           _id: name,
           totalTenderAmount: 0
@@ -136,18 +140,18 @@ var getBidType = [
       }, cats)
     , Map());
 
-    var parse = cats => data => data
+    let parse = cats => data => data
       .reduce((cats, datum) => {
-        var name = datum.get('procurementMethodDetails') || 'unspecified';
-        var path = [name, 'totalTenderAmount'];
+        let name = datum.get('procurementMethodDetails') || 'unspecified';
+        let path = [name, 'totalTenderAmount'];
         return cats.setIn(path, cats.getIn(path) + datum.get('totalTenderAmount'));
       }, cats)
       .toList().toJS()
 
     if (compare) {
-      var cats = collectCats(ensureArray(comparisonData));
-      var arrOfData = ensureArray(comparisonData).map(parse(cats));
-      var maxValue = Math.max.apply(Math, arrOfData.map(data =>
+      let cats = collectCats(ensureArray(comparisonData));
+      let arrOfData = ensureArray(comparisonData).map(parse(cats));
+      let maxValue = Math.max.apply(Math, arrOfData.map(data =>
           Math.max.apply(Math, data.map(pluck('totalTenderAmount')))
       ));
       return {
@@ -156,31 +160,47 @@ var getBidType = [
         data: arrOfData
       }
     } else {
-      var data = ensureList(rawData);
-      var cats = collectCats([data]);
+      let data = ensureList(rawData);
+      let cats = collectCats([data]);
       return parse(cats)(data);
     }
   }
 ];
 
-var getTender = [
+let getAvgTenders = mkDataGetter({
+  path: "avgTenders"
+});
+
+let getPercentEbid = mkDataGetter({
+  path: "percentEbid"
+});
+
+let getTender = [
     ['globalState', 'compareBy'],
     getCostEffectiveness,
     getBidPeriod,
     getBidType,
     getCancelled,
-    (compare, costEffectiveness, bidPeriod, bidType, cancelled) => {
+    getCancelledPercents,
+    ['globalState', 'showPercentsCancelled'],
+    getAvgTenders,
+    getPercentEbid,
+    (compare, costEffectiveness, bidPeriod, bidType, cancelled, cancelledPercents, showPercentsCancelled, avgNrBids,
+    percentEbid) => {
       return {
-        compare: compare,
-        costEffectiveness: costEffectiveness,
-        bidPeriod: bidPeriod,
-        bidType: bidType,
-        cancelled: cancelled
+        compare,
+        costEffectiveness,
+        bidPeriod,
+        bidType,
+        showPercentsCancelled,
+        cancelled: showPercentsCancelled ? cancelledPercents : cancelled,
+        avgNrBids,
+        percentEbid
       }
     }
 ];
 
-var getGlobalState = [
+let getGlobalState = [
     [],
     state => state
         .set('overview', dispatcher.evaluate(getOverview))

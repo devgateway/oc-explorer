@@ -10,7 +10,7 @@
  * Development Gateway - initial API and implementation
  *******************************************************************************/
 /**
- * 
+ *
  */
 package org.devgateway.toolkit.persistence.spring;
 
@@ -22,8 +22,8 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import org.apache.derby.drda.NetworkServerControl;
-import org.apache.derby.jdbc.ClientDriver40;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -44,74 +44,92 @@ import com.zaxxer.hikari.HikariDataSource;
 @Profile("!integration")
 public class DatabaseConfiguration {
 
-	private static final int DERBY_PORT = 1527;
-	protected static Logger logger = Logger.getLogger(DatabaseConfiguration.class);
+	@Value("${spring.datasource.username}")
+	private String springDatasourceUsername;
+	
+	@Value("${spring.datasource.password}")
+	private String springDatasourcePassword;	
+	
+	@Value("${spring.datasource.url}")
+	private String springDatasourceUrl;
+	
+	@Value("${spring.datasource.driver-class-name}")
+	private String springDatasourceDriverClassName;
+	
+	@Value("${spring.datasource.transaction-isolation}")
+	private String springDatasourceTransactionIsolation;
+	
+	@Value("${dg-toolkit.derby.port}")
+	private int DERBY_PORT;
+	
+	@Value("${dg-toolkit.datasource.jndi-name}")
+	private String datasourceJndiName;
+	
+    protected static Logger logger = Logger.getLogger(DatabaseConfiguration.class);
 
-	/**
-	 * This bean creates the JNDI tree and registers the
-	 * {@link javax.sql.DataSource} to this tree. This allows Pentaho Classic
-	 * Engine to use a {@link javax.sql.DataSource} ,in our case backed by a
-	 * connection pool instead of always opening up JDBC connections. Should
-	 * significantly improve performance of all classic reports. In PRD use
-	 * connection type=JNDI and name toolkitDS. To use it in PRD you need to add
-	 * the configuration to the local PRD. Edit
-	 * ~/.pentaho/simple-jndi/default.properties and add the following:
-	 * toolkitDS/type=javax.sqlf.DataSource
-	 * toolkitDS/driver=org.apache.derby.jdbc.ClientDriver toolkitDS/user=app
-	 * toolkitDS/password=app
-	 * toolkitDS/url=jdbc:derby://localhost//derby/toolkit
-	 * 
-	 * @return
-	 */
-	@Bean
-	public SimpleNamingContextBuilder jndiBuilder() {
-		SimpleNamingContextBuilder builder = new SimpleNamingContextBuilder();
-		builder.bind("toolkitDS", dataSource());
-		try {
-			builder.activate();
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return builder;
-	}
+    /**
+     * This bean creates the JNDI tree and registers the
+     * {@link javax.sql.DataSource} to this tree. This allows Pentaho Classic
+     * Engine to use a {@link javax.sql.DataSource} ,in our case backed by a
+     * connection pool instead of always opening up JDBC connections. Should
+     * significantly improve performance of all classic reports. In PRD use
+     * connection type=JNDI and name toolkitDS. To use it in PRD you need to add
+     * the configuration to the local PRD. Edit
+     * ~/.pentaho/simple-jndi/default.properties and add the following:
+     * toolkitDS/type=javax.sqlf.DataSource
+     * toolkitDS/driver=org.apache.derby.jdbc.ClientDriver toolkitDS/user=app
+     * toolkitDS/password=app
+     * toolkitDS/url=jdbc:derby://localhost//derby/toolkit
+     *
+     * @return
+     */
+    @Bean
+    public SimpleNamingContextBuilder jndiBuilder() {
+        SimpleNamingContextBuilder builder = new SimpleNamingContextBuilder();
+		builder.bind(datasourceJndiName, dataSource());
+        try {
+            builder.activate();
+        } catch (IllegalStateException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (NamingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return builder;
+    }
 
-	/**
-	 * Creates a {@link javax.sql.DataSource} based on Tomcat {@link DataSource}
-	 * 
-	 * @return
-	 */
-	@Bean
-	@DependsOn(value = { "derbyServer"})
-	public DataSource dataSource() {
-		HikariDataSource ds = new HikariDataSource();
-		ds.setTransactionIsolation("TRANSACTION_READ_COMMITTED");
+    /**
+     * Creates a {@link javax.sql.DataSource} based on Tomcat {@link DataSource}
+     *
+     * @return
+     */
+    @Bean
+    @DependsOn(value = { "derbyServer"})
+    public DataSource dataSource() {
+        HikariDataSource ds = new HikariDataSource();
+		ds.setTransactionIsolation(springDatasourceTransactionIsolation);
+		ds.setJdbcUrl(springDatasourceUrl);
+		ds.setUsername(springDatasourceUsername);
+		ds.setPassword(springDatasourcePassword);
+		ds.setDriverClassName(springDatasourceDriverClassName);
+        return ds;
+    }
 
-		ds.setJdbcUrl("jdbc:derby://localhost//derby/ocvn;create=true");		
-		ds.setUsername("app");
-		ds.setPassword("app");
-		ds.setDriverClassName(ClientDriver40.class.getName());
-
-		return ds;
-	}
-
-	/**
-	 * Graciously starts a Derby Database Server when the application starts up
-	 * 
-	 * @return
-	 * @throws Exception
-	 */
-	@Bean(destroyMethod = "shutdown")
-	public NetworkServerControl derbyServer() throws Exception {
-		Properties p = System.getProperties();
-		p.put("derby.storage.pageCacheSize", "30000");
-		p.put("derby.language.maxMemoryPerTable", "20000");
-		NetworkServerControl nsc = new NetworkServerControl(InetAddress.getByName("localhost"), DERBY_PORT);
-		nsc.start(new PrintWriter(java.lang.System.out, true));
-		return nsc;
-	}
+    /**
+     * Graciously starts a Derby Database Server when the application starts up
+     *
+     * @return
+     * @throws Exception
+     */
+    @Bean(destroyMethod = "shutdown")
+    public NetworkServerControl derbyServer() throws Exception {
+        Properties p = System.getProperties();
+        p.put("derby.storage.pageCacheSize", "30000");
+        p.put("derby.language.maxMemoryPerTable", "20000");
+        NetworkServerControl nsc = new NetworkServerControl(InetAddress.getByName("localhost"), DERBY_PORT);
+        nsc.start(new PrintWriter(java.lang.System.out, true));
+        return nsc;
+    }
 
 }

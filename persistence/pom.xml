@@ -11,8 +11,8 @@
 	<artifactId>persistence</artifactId>
 	<packaging>jar</packaging>
 
-	<name>OCVN Persistence</name>
-	<description>OCVN Persistence</description>
+    <name>OCExplorer Persistence</name>
+    <description>OCExplorer Persistence</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -25,37 +25,13 @@
 	</properties>
 
 <parent>
-    <groupId>org.devgateway.ocvn</groupId>
-    <artifactId>ocvn</artifactId>
-    <version>0.3.2-SNAPSHOT</version>
+        <groupId>org.devgateway.ocds</groupId>
+        <artifactId>oce</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
  </parent>
-
-  <repositories>
-        <repository>
-            <id>DG Central</id>
-            <name>DG Central Repo</name>
-            <url>http://artifactory.ampdev.net/artifactory/ccrs/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-
-    </repositories>
-
 
 	<dependencies>	
 	    <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-rest</artifactId>
-            <exclusions>
-            	<exclusion>
-            		<artifactId>spring-boot-starter-tomcat</artifactId>
-            		<groupId>org.springframework.boot</groupId>
-            	</exclusion>
-            </exclusions>
-	    </dependency>
-
-	<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>			
 			<scope>test</scope>
@@ -121,6 +97,11 @@
 		</dependency>
 		
 		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
@@ -160,6 +141,12 @@
             </exclusions>
 		</dependency>            
 		
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-jpamodelgen</artifactId>
+			<version>${hibernate.core.version}</version>
+		</dependency>
+
 		<dependency>
 		    <groupId>dozer-hibernate-model</groupId>
 		    <artifactId>dozer-hibernate-model</artifactId>
@@ -257,7 +244,43 @@
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
+					<compilerArgument>-proc:none</compilerArgument>
+                </configuration>
+            </plugin>
+			<plugin>
+				<groupId>org.bsc.maven</groupId>
+				<artifactId>maven-processor-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>process</id>
+						<goals>
+							<goal>process</goal>
+						</goals>
+						<phase>generate-sources</phase>
+						<configuration>
+							<outputDirectory>target/metamodel</outputDirectory>
 				</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.3</version>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>target/metamodel</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

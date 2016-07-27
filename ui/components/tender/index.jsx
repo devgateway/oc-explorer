@@ -4,122 +4,18 @@ import CostEffectiveness from "./cost-effectiveness";
 import FundingByBidType from "./funding-by-bid-type";
 import BiddingPeriod from "./bidding-period";
 import Cancelled from "./cancelled";
+import CancelledPercents from "./cancelled-percents";
+import AvgNrBids from "./avg-nr-bids";
+import PercentEbid from "./percent-ebid";
 import {toImmutable} from "nuclear-js";
 import Comparison from "../comparison";
-import {pluck} from "../../tools";
+import translatable from "../translatable";
 
-export default class Tender extends Component{
-  getBiddingPeriod(){
-    var globalState = this.props.state.get('globalState');
-    var selectedYears = globalState.getIn(['filters', 'years']);
-    var width = globalState.get('contentWidth');
-    var data = globalState.get('data');
-    if(globalState.get('compareBy')){
-      var bidPeriodData = globalState.getIn(['comparisonData', 'bidPeriod']);
-      if(!bidPeriodData) return null;
-      var minValue = Math.min.apply(Math, bidPeriodData.map(datum =>
-          Math.min.apply(Math, ["award", "tender"].map(key =>
-              Math.min.apply(Math, datum.map(pluck(key)))
-          ))
-      ));
-      var maxValue = Math.max.apply(Math, bidPeriodData.map(datum =>
-          Math.max.apply(Math, ["award", "tender"].map(key =>
-              Math.max.apply(Math, datum.map(pluck(key)))
-          ))
-      ));
-      return (
-          <Comparison
-              years={selectedYears}
-              width={width}
-              data={bidPeriodData}
-              Component={BiddingPeriod}
-              xAxisRange={[minValue, maxValue]}
-          />
-      )
-    } else {
-      return (
-          <BiddingPeriod
-              years={selectedYears}
-              width={width}
-              data={data.get('bidPeriod')}
-          />
-      )
-    }
-  }
-
-  getBidType(){
-    var globalState = this.props.state.get('globalState');
-    var selectedYears = globalState.getIn(['filters', 'years']);
-    var width = globalState.get('contentWidth');
-    var data = globalState.get('data');
-    if(globalState.get('compareBy')){
-      var bidTypeData = globalState.getIn(['comparisonData', 'bidType']);
-      if(!bidTypeData) return null;
-      var filteredBidTypeData = bidTypeData.map(filterBidTypeData(selectedYears));
-      var minValue = Math.min.apply(Math, filteredBidTypeData.map(datum =>
-          Math.min.apply(Math, datum.map(pluck("totalTenderAmount")))
-      ));
-      var maxValue = Math.max.apply(Math, filteredBidTypeData.map(datum =>
-          Math.max.apply(Math, datum.map(pluck("totalTenderAmount")))
-      ));
-      return (
-          <Comparison
-            years={selectedYears}
-            width={width}
-            data={filteredBidTypeData}
-            Component={FundingByBidType}
-            yAxisRange={[minValue, maxValue]}
-          />
-      )
-    } else {
-      var bidTypeData = data.get('bidType');
-      if(!bidTypeData) return null;
-      return (
-          <FundingByBidType
-              width={width}
-              data={filterBidTypeData(selectedYears)(bidTypeData)}
-          />
-      )
-    }
-  }
-
-  getCancelled(){
-    var globalState = this.props.state.get('globalState');
-    var selectedYears = globalState.getIn(['filters', 'years']);
-    var width = globalState.get('contentWidth');
-    var data = globalState.get('data');
-    if(globalState.get('compareBy')) {
-      var cancelledData = globalState.getIn(['comparisonData', 'cancelled']);
-      if(!cancelledData) return null;
-      var minValue = Math.min.apply(Math, cancelledData.map(datum =>
-          Math.min.apply(Math, datum.map(pluck("totalCancelledTendersAmount")))
-      ));
-      var maxValue = Math.max.apply(Math, cancelledData.map(datum =>
-          Math.max.apply(Math, datum.map(pluck("totalCancelledTendersAmount")))
-      ));
-      return (
-          <Comparison
-              years={selectedYears}
-              width={width}
-              data={cancelledData}
-              Component={Cancelled}
-              yAxisRange={[minValue, maxValue]}
-          />
-      )
-    } else {
-      return (
-          <Cancelled
-              years={selectedYears}
-              width={width}
-              data={data.get('cancelled')}
-          />
-      )
-    }
-  }
-
+export default class Tender extends translatable(Component){
   render(){
-    var {state, width} = this.props;
-    var {compare, costEffectiveness, bidPeriod, bidType, cancelled} = state;
+    let {state, width, actions} = this.props;
+    let {compare, costEffectiveness, bidPeriod, bidType, cancelled, avgNrBids, showPercentsCancelled,
+        percentEbid} = state;
     return (
         <div className="col-sm-12 content">
           {compare ?
@@ -167,28 +63,70 @@ export default class Tender extends Component{
               />
           }
 
-          {compare ?
+          {showPercentsCancelled ?
+            (compare ?
+              <Comparison
+                  width={width}
+                  state={cancelled}
+                  Component={CancelledPercents}
+                  title={this.__("Cancelled funding percentage")}
+                  actions={actions}
+              />
+              :
+              <CancelledPercents
+                  title={this.__("Cancelled funding percentage")}
+                  actions={actions}
+                  data={cancelled}
+                  width={width}
+              />
+            ) : (compare ?
               <Comparison
                   width={width}
                   state={cancelled}
                   Component={Cancelled}
-                  title="Cancelled funding"
+                  title={this.__("Cancelled funding")}
+                  actions={actions}
               />
               :
               <Cancelled
-                  title="Cancelled funding"
+                  title={this.__("Cancelled funding")}
+                  actions={actions}
                   data={cancelled}
+                  width={width}
+              />
+            )
+          }
+
+          {compare ?
+              <Comparison
+                  width={width}
+                  state={avgNrBids}
+                  Component={AvgNrBids}
+                  title={this.__("Average number of bids")}
+              />
+              :
+              <AvgNrBids
+                  title={this.__("Average number of bids")}
+                  data={avgNrBids}
+                  width={width}
+              />
+          }
+
+          {compare ?
+              <Comparison
+                  width={width}
+                  state={percentEbid}
+                  Component={PercentEbid}
+                  title={this.__("% of tenders using eBid")}
+              />
+              :
+              <PercentEbid
+                  title={this.__("% of tenders using eBid")}
+                  data={percentEbid}
                   width={width}
               />
           }
         </div>
     );
-
-    return (
-        <div className="col-sm-12 content">
-          {this.getBidType()}
-          {this.getCancelled()}
-        </div>
-    )
   }
 }

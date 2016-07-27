@@ -1,0 +1,19 @@
+import translatable from "../../translatable";
+import {Set} from "immutable";
+
+class Tab extends translatable(React.Component){
+  renderChild(Component, slug){
+    let {onUpdate, translations, state} = this.props;
+    let selected = state.get(slug, Set());
+    return <Component
+        selected={selected}
+        onToggle={id => onUpdate(slug, selected.has(id) ?
+            selected.delete(id) :
+            selected.add(id))
+        }
+        translations={translations}
+    />
+  }
+}
+
+export default Tab;

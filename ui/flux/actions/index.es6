@@ -5,11 +5,11 @@ import URI from "urijs";
 import {toImmutable} from "nuclear-js";
 import * as endpoints from "./endpoints";
 
-var options2arr = options => Object.keys(options)
+let options2arr = options => Object.keys(options)
     .filter(key => options[key].selected)
     .map(identity);
 
-var addFilters = (filters, url) => null === filters ? url :
+let addFilters = (filters, url) => null === filters ? url :
     new URI(url).addSearch({
       bidTypeId: options2arr(filters.bidTypes.options),
       bidSelectionMethod: options2arr(filters.bidSelectionMethods.options),
@@ -17,21 +17,19 @@ var addFilters = (filters, url) => null === filters ? url :
       year: Object.keys(filters.years).filter(year => filters.years[year])
     }).toString();
 
-/*
-  Given [[1,2,3], ['a','b','c']] will produce [[1, 'a'], [2, 'b'], [3, 'c']]
- */
-var transpose = ([head, ...tail]) => head.map((el, index) => [el].concat(tail.map(pluck(index))));
+//Given [[1,2,3], ['a','b','c']] will produce [[1, 'a'], [2, 'b'], [3, 'c']]
+let transpose = ([head, ...tail]) => head.map((el, index) => [el].concat(tail.map(pluck(index))));
 
-var response2obj = (field, arr) => arr.reduce((obj, elem) => {
+let response2obj = (field, arr) => arr.reduce((obj, elem) => {
   obj[elem._id] = elem[field];
   return obj;
 }, {});
 
 
-var transformOverviewData = ([bidplansResponse, tendersResponse, awardsResponse]) => {
-  var bidplans = response2obj('count', bidplansResponse);
-  var tenders = response2obj('count', tendersResponse);
-  var awards = response2obj('count', awardsResponse);
+let transformOverviewData = ([bidplansResponse, tendersResponse, awardsResponse]) => {
+  let bidplans = response2obj('count', bidplansResponse);
+  let tenders = response2obj('count', tendersResponse);
+  let awards = response2obj('count', awardsResponse);
   return Object.keys(tenders).map(year => ({
     year: year,
     bidplan: bidplans[year],
@@ -40,9 +38,9 @@ var transformOverviewData = ([bidplansResponse, tendersResponse, awardsResponse]
   }));
 };
 
-var transformCostEffectivenessData = ([tenderResponse, awardResponse]) => {
-  var tender = response2obj('totalTenderAmount', tenderResponse);
-  var award = response2obj('totalAwardAmount', awardResponse);
+let transformCostEffectivenessData = ([tenderResponse, awardResponse]) => {
+  let tender = response2obj('totalTenderAmount', tenderResponse);
+  let award = response2obj('totalAwardAmount', awardResponse);
   return Object.keys(tender).map(year => ({
     year: year,
     tender: tender[year],
@@ -50,8 +48,8 @@ var transformCostEffectivenessData = ([tenderResponse, awardResponse]) => {
   }))
 };
 
-var transformBidPeriodData = ([tenders, awards]) => {
-  var awardsHash = response2obj('averageAwardDays', awards);
+let transformBidPeriodData = ([tenders, awards]) => {
+  let awardsHash = response2obj('averageAwardDays', awards);
   return tenders.map(tender => ({
       year: tender._id,
       tender: tender.averageTenderDays,
@@ -60,7 +58,7 @@ var transformBidPeriodData = ([tenders, awards]) => {
   )
 };
 
-var transformCancelledData = raw => raw.map(({_id, totalCancelledTendersAmount}) => ({
+let transformCancelledData = raw => raw.map(({_id, totalCancelledTendersAmount}) => ({
   year: _id,
   count: totalCancelledTendersAmount
 }));
@@ -82,13 +80,13 @@ export default {
   },
 
   loadServerSideYearFilteredData(filters = null){
-    var load = url => fetchJson(addFilters(filters, url));
+    let load = url => fetchJson(addFilters(filters, url));
     load('/api/topTenLargestTenders').then(data => dispatcher.dispatch(constants.TOP_TENDERS_DATA_UPDATED, data));
     load('/api/topTenLargestAwards').then(data => dispatcher.dispatch(constants.TOP_AWARDS_DATA_UPDATED, data));
   },
 
   loadData(filters = null){
-    var load = url => fetchJson(addFilters(filters, url));
+    let load = url => fetchJson(addFilters(filters, url));
     this.loadServerSideYearFilteredData(filters);
     Promise.all([
       load(endpoints.COUNT_BID_PLANS_BY_YEAR),
@@ -117,6 +115,12 @@ export default {
     load(endpoints.TOTAL_CANCELLED_TENDERS_BY_YEAR)
         .then(transformCancelledData)
         .then(data => dispatcher.dispatch(constants.CANCELLED_DATA_UPDATED, data));
+
+    load('/api/averageNumberOfTenderers').then(data => dispatcher.dispatch(constants.AVERAGED_TENDERS_DATA_UPDATED, data));
+
+    load('/api/percentTendersCancelled').then(data => dispatcher.dispatch(constants.CANCELLED_PERCENTS_DATA_UPDATED, data));
+
+    load('/api/percentTendersUsingEBid').then(data => dispatcher.dispatch(constants.PERCENT_EBID_DATA_UPDATED, data));
   },
 
   bootstrap(){
@@ -129,7 +133,7 @@ export default {
       bidTypes: {
         open: true,
         options: bidTypes.reduce((accum, bidType) => {
-          var {id} = bidType;
+          let {id} = bidType;
           accum[id] = {
             id: id,
             description: bidType.description,
@@ -160,15 +164,15 @@ export default {
 
   loadComparisonData(criteria, filters){
     if("none" == criteria) return;
-    var comparisonUrl = new URI(endpoints.COST_EFFECTIVENESS_TENDER_AMOUNT).addSearch({
+    let comparisonUrl = new URI(endpoints.COST_EFFECTIVENESS_TENDER_AMOUNT).addSearch({
       groupByCategory: criteria,
       pageSize: 3
     }).toString();
     fetchJson(addFilters(filters, comparisonUrl)).then(comparisonData => {
       dispatcher.dispatch(constants.COMPARISON_CRITERIA_NAMES_UPDATED, comparisonData);
-      var addComparisonFilters = url => {
-        var uri = new URI(addFilters(filters, url));
-        var criteriaValues = comparisonData.map(pluck("bidTypeId" == criteria ? "0" : "_id"));
+      let addComparisonFilters = url => {
+        let uri = new URI(addFilters(filters, url));
+        let criteriaValues = comparisonData.map(pluck("bidTypeId" == criteria ? "0" : "_id"));
         return criteriaValues
             .map(criteriaValue => uri.clone().addSearch(criteria, criteriaValue).toString())
             .concat([
@@ -176,7 +180,7 @@ export default {
             ]);
       };
 
-      var load = url => Promise.all(addComparisonFilters(url).map(fetchJson));
+      let load = url => Promise.all(addComparisonFilters(url).map(fetchJson));
 
       Promise.all([
           load(endpoints.COUNT_BID_PLANS_BY_YEAR),
@@ -221,11 +225,7 @@ export default {
   },
 
   toggleFilterOption(slug, option, selected){
-    dispatcher.dispatch(constants.FILTER_OPTIONS_TOGGLED, {
-      slug: slug,
-      option: option,
-      selected: selected
-    })
+    dispatcher.dispatch(constants.FILTER_OPTIONS_TOGGLED, {slug, option, selected});
   },
 
   updateProcuringEntityQuery(newQuery){
@@ -234,7 +234,7 @@ export default {
       fetchJson(new URI('/api/ocds/organization/procuringEntity/all').addSearch('text', newQuery).toString())
           .then(data => {
             dispatcher.dispatch(constants.PROCURING_ENTITIES_UPDATED, data.reduce((accum, procuringEntity) => {
-              var {id} = procuringEntity;
+              let {id} = procuringEntity;
               accum[id] = procuringEntity;
               return accum;
             }, {}))
@@ -244,5 +244,22 @@ export default {
 
   updateComparisonCriteria(criteria){
     dispatcher.dispatch(constants.COMPARISON_CRITERIA_UPDATED, criteria);
+  },
+  
+  setLocale(loc){
+    localStorage.lang = loc;
+    dispatcher.dispatch(constants.LOCALE_CHANGED, loc);
+  },
+
+  applyFilters(){
+    dispatcher.dispatch(constants.FILTERS_APPLIED);
+  },
+
+  resetFilters(){
+    dispatcher.dispatch(constants.FILTERS_RESET);
+  },
+
+  toggleCancelledPercents(bool){
+    dispatcher.dispatch(constants.CANCELLED_TYPE_TOGGLED, bool);
   }
 }
