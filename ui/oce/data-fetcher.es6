@@ -1,9 +1,17 @@
 import translatable from "./translatable";
 import Component from "./pure-render-component";
-import {fetchJson} from "./tools";
+import {callFunc} from "./tools";
 import {fromJS} from "immutable";
 import URI from "urijs";
 const API_ROOT = '/api';
+
+let fetchEP = url => fetch(url.clone().query(""), {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  },
+  body: url.query()
+}).then(callFunc('json'));
 
 class DataFetcher extends translatable(Component){
   buildUrl(ep){
@@ -15,8 +23,8 @@ class DataFetcher extends translatable(Component){
     let {endpoint, endpoints} = this.constructor;
     let {requestNewData} = this.props;
     let promise = false;
-    if(endpoint) promise = fetchJson(this.buildUrl(endpoint));
-    if(endpoints) promise = Promise.all(endpoints.map(this.buildUrl.bind(this)).map(fetchJson));
+    if(endpoint) promise = fetchEP(this.buildUrl(endpoint));
+    if(endpoints) promise = Promise.all(endpoints.map(this.buildUrl.bind(this)).map(fetchEP));
     if(!promise) return;
     promise.then(this.transform).then(fromJS).then(data => requestNewData([], data));
   }
