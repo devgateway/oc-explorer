@@ -80,6 +80,18 @@ export default class OCApp extends React.Component{
   }
 
   filters(){
+    return <div className="filters">
+      <img className="top-nav-icon" src="assets/icons/filter.svg"/> {this.__('Filter the data')} <i className="glyphicon glyphicon-menu-down"></i>
+    </div>
+  }
+
+  setMenuBox(e, slug){
+    let {menuBox} = this.state;
+    e.stopPropagation();
+    this.setState({menuBox: menuBox == slug ? "" : slug})
+  }
+
+  filters(){
     let {menuBox, bidTypes, locale} = this.state;
     return <this.constructor.Filters
         onClick={e => this.setMenuBox(e, MENU_BOX_FILTERS)}
@@ -202,17 +214,18 @@ export default class OCApp extends React.Component{
 
   downloadExcel(){
     this.setState({exporting: true});
-        let url = new URI('/api/ocds/excelExport').addSearch(this.state.filters.toJS()).addSearch('year', this.state.selectedYears.toArray());
-        fetch(url.clone().query(""), {
+    let url = new URI('/api/ocds/excelExport').addSearch(this.state.filters.toJS()).addSearch('year', this.state.selectedYears.toArray());
+    fetch(url.clone().query(""), {
       method: 'POST',
       headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded'
       },
-            body: url.query()
+      body: url.query()
     }).then(callFunc('blob')).then(blob => {
       var link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-            link.download = "excel-export.xlsx";
+      link.download = "excel-export.xlsx";
+      document.body.appendChild(link);
       link.click();
       this.setState({exporting: false})
     }).catch((...args) => {
