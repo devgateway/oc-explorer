@@ -202,17 +202,17 @@ export default class OCApp extends React.Component{
 
   downloadExcel(){
     this.setState({exporting: true});
-    fetch('/api/ocds/excelExport', {
+        let url = new URI('/api/ocds/excelExport').addSearch(this.state.filters.toJS()).addSearch('year', this.state.selectedYears.toArray());
+        fetch(url.clone().query(""), {
       method: 'POST',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+                'Content-Type': 'application/x-www-form-urlencoded'
       },
-      body: JSON.stringify(this.state.filters)
+            body: url.query()
     }).then(callFunc('blob')).then(blob => {
       var link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      link.download = "export.xlsx";
+            link.download = "excel-export.xlsx";
       link.click();
       this.setState({exporting: false})
     }).catch((...args) => {
