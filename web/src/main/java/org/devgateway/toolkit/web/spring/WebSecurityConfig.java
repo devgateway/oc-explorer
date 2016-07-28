@@ -26,7 +26,7 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
 /**
- * 
+ *
  * @author mpostelnicu This configures the spring security for the Web project.
  *         An
  *
@@ -70,7 +70,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				"/api/percentTendersCancelled/**", "/api/percentTendersUsingEBid/**",
 				"/api/qualityAverageTenderPeriod/**", "/api/qualityAverageAwardPeriod/**",
 				"/api/fundingByTenderDeliveryLocation/**", "/api/percentTendersAwardedWithTwoOrMoreTenderers/**",
-				"/api/percentTendersWithTwoOrMoreTenderers/**" };
+				"/api/percentTendersWithTwoOrMoreTenderers/**",
+                "/api/ocds/excelExport"
+		};
 	}
 
 	@Override
