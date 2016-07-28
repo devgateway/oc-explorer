@@ -8,7 +8,6 @@ class ProcurementTypes extends Tab{
   render(){
     let {state, onUpdate, bidTypes, translations} = this.props;
     let selectedBidTypesIds = state.get('bidTypeId', Set());
-    let selectedBidSelectionMethods = state.get("bidSelectionMethod", Set());
     return <div>
       <BidTypes
           options={bidTypes}
