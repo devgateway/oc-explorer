@@ -36,7 +36,7 @@ import net.sf.ehcache.management.ManagementService;
 @EnableCaching
 public class CacheConfiguration {
 
-	@Autowired(required=false)
+	@Autowired(required = false)
 	private MBeanServer mbeanServer;
 
 	@Bean
@@ -46,16 +46,17 @@ public class CacheConfiguration {
 		ehCacheManagerFactoryBean.setShared(true);
 		return ehCacheManagerFactoryBean;
 	}
-	
+
 	@Bean
-	public CacheManager cacheManager(EhCacheManagerFactoryBean factory) {
+	public CacheManager cacheManager(final EhCacheManagerFactoryBean factory) {
 		return new EhCacheCacheManager(factory.getObject());
 	}
-	
+
 	@Bean(destroyMethod = "dispose", initMethod = "init")
 	@Profile("!integration")
-	public ManagementService ehCacheManagementService(EhCacheManagerFactoryBean factory) {
-		ManagementService managementService = new ManagementService(factory.getObject(), mbeanServer, true, true, true, true);
+	public ManagementService ehCacheManagementService(final EhCacheManagerFactoryBean factory) {
+		ManagementService managementService = new ManagementService(factory.getObject(), mbeanServer, true, true, true,
+				true);
 		return managementService;
 	}
 
