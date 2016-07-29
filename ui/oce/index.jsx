@@ -117,7 +117,7 @@ export default class OCApp extends React.Component{
     </div>;
   }
 
-  navigationLink({name, icon}, index){
+  navigationLink({getName, icon}, index){
     return <a href="javascript:void(0);" key={index}
               className={cn("col-sm-12", {active: index == this.state.currentTab})}
               onClick={_ => this.setState({currentTab: index})}>
@@ -126,7 +126,7 @@ export default class OCApp extends React.Component{
             <i className={`glyphicon glyphicon-${icon}`}/>
           </span>
       &nbsp;
-      {name(this.__.bind(this))}
+      {getName(this.__.bind(this))}
     </a>
   }
 
