@@ -88,7 +88,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 	 * Determines if this page has a fluid container for the content or not.
 	 */
 	public Boolean fluidContainer() {
-		return true;
+		return false;
 	}
 
 	public static class HALRedirectPage extends RedirectPage {
