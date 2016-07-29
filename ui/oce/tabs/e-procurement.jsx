@@ -3,7 +3,7 @@ import PercentEProcurement from "../visualizations/charts/percent-e-procurement"
 import PercentEBid from "../visualizations/charts/percent-e-bid";
 
 class EProcurement extends Tab{
-  static name(__){return __('E-Procurement')}
+  static getName(__){return __('E-Procurement')}
 }
 
 EProcurement.icon = "eprocurement";
