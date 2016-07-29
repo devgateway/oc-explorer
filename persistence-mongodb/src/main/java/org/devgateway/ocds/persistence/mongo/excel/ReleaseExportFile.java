@@ -2,7 +2,6 @@ package org.devgateway.ocds.persistence.mongo.excel;
 
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.devgateway.ocds.persistence.mongo.Release;
 
 import java.util.ArrayList;

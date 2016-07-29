@@ -11,8 +11,10 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.page.edit;
 
-import javax.persistence.EntityManager;
-
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationMessage;
+import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapForm;
+import de.agilecoders.wicket.core.util.Attributes;
+import nl.dries.wicket.hibernate.dozer.DozerModel;
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.ComponentTag;
@@ -37,7 +39,16 @@ import org.devgateway.toolkit.forms.exceptions.NullJpaRepositoryException;
 import org.devgateway.toolkit.forms.exceptions.NullListPageClassException;
 import org.devgateway.toolkit.forms.util.MarkupCacheService;
 import org.devgateway.toolkit.forms.wicket.components.ComponentUtil;
-import org.devgateway.toolkit.forms.wicket.components.form.*;
+import org.devgateway.toolkit.forms.wicket.components.form.BootstrapCancelButton;
+import org.devgateway.toolkit.forms.wicket.components.form.BootstrapDeleteButton;
+import org.devgateway.toolkit.forms.wicket.components.form.BootstrapSubmitButton;
+import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.DateFieldBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.DateTimeFieldBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.GenericBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.Select2ChoiceBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.TextAreaFieldBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.page.BasePage;
 import org.devgateway.toolkit.forms.wicket.providers.GenericPersistableJpaRepositoryTextChoiceProvider;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
@@ -46,11 +57,7 @@ import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepo
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationMessage;
-import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapForm;
-import de.agilecoders.wicket.core.util.Attributes;
-import nl.dries.wicket.hibernate.dozer.DozerModel;
-
+import javax.persistence.EntityManager;
 import java.io.Serializable;
 
 /**
@@ -487,9 +494,12 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
         return field;
     }
 
-    public <E extends GenericPersistable & Labelable> Select2ChoiceBootstrapFormComponent<E> addSelect2ChoiceField(String name, TextSearchableRepository<E, Long> repository) {
-        GenericPersistableJpaRepositoryTextChoiceProvider<E> choiceProvider = new GenericPersistableJpaRepositoryTextChoiceProvider<>(repository);
-        Select2ChoiceBootstrapFormComponent<E> component = new Select2ChoiceBootstrapFormComponent<>(name, choiceProvider);
+    public <E extends GenericPersistable & Labelable> Select2ChoiceBootstrapFormComponent<E> addSelect2ChoiceField(
+            String name, TextSearchableRepository<E, Long> repository) {
+        GenericPersistableJpaRepositoryTextChoiceProvider<E> choiceProvider =
+                new GenericPersistableJpaRepositoryTextChoiceProvider<>(repository);
+        Select2ChoiceBootstrapFormComponent<E> component =
+                new Select2ChoiceBootstrapFormComponent<>(name, choiceProvider);
         editForm.add(component);
         return component;
     }

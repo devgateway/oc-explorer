@@ -34,7 +34,7 @@ public final class WebConstants {
 	public static final String PARAM_REVISION_ID = "revisionId";
 	public static final String PARAM_ENTITY_CLASS = "class";
 
-	public final static String LANGUAGE_PARAM = "lang";
+	public static final String LANGUAGE_PARAM = "lang";
 
 	public static final class StringValidators {
 		public static final StringValidator MAXIMUM_LENGTH_VALIDATOR_ONE_LINE_TEXT = StringValidator
