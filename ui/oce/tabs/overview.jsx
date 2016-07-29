@@ -4,7 +4,7 @@ import TendersTable from "../visualizations/tables/tenders";
 import AwardsTable from "../visualizations/tables/awards";
 
 class Overview extends Tab{
-  static name(__){
+  static getName(__){
     return __("Overview")
   }
 }
