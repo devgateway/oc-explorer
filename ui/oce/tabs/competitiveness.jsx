@@ -4,7 +4,7 @@ import BidSelectionMethod from "../visualizations/charts/bid-selection-method";
 import AvgNrBids from "../visualizations/charts/avg-nr-bids";
 
 class Competitiveness extends Tab{
-  static name(__){return __('Competitiveness')}
+  static getName(__){return __('Competitiveness')}
 }
 
 Competitiveness.icon = "competitive";
