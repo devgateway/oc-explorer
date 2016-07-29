@@ -18,16 +18,16 @@ public interface XMLFile extends ImportService {
      * @throws IOException
      * @throws SAXException
      */
-    void process(final InputStream inputStream) throws IOException, SAXException;
+    public void process(final InputStream inputStream) throws IOException, SAXException;
 
-    void process(final File file) throws IOException, SAXException;
+    public void process(final File file) throws IOException, SAXException;
 
     /**
      * Save a particular release into database.
      *
      * @param obj
      */
-    void saveRelease(Object obj);
+    public void saveRelease(Object obj);
 
     /**
      * Returns a StringBuffer with import statistics

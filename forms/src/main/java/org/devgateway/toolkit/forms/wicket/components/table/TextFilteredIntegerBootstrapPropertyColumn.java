@@ -20,8 +20,7 @@ import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFor
  */
 public class TextFilteredIntegerBootstrapPropertyColumn<T, F, S> extends TextFilteredPropertyColumn<T, F, S> {
 
-    public TextFilteredIntegerBootstrapPropertyColumn(IModel<String> displayModel, S sortProperty,
-                                                      String propertyExpression) {
+    public TextFilteredIntegerBootstrapPropertyColumn(IModel<String> displayModel, S sortProperty, String propertyExpression) {
         super(displayModel, sortProperty, propertyExpression);
     }
 
