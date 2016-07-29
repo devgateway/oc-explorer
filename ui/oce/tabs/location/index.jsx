@@ -28,7 +28,7 @@ class LocationTab extends frontendYearFilterable(Tab){
     return Math.max(0, ...this.getData().map(pluck('amount')));
   }
 
-  static name(__){
+  static getName(__){
     return __("Location")
   }
 
