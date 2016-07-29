@@ -202,20 +202,30 @@ export default class OCApp extends React.Component{
 
   downloadExcel(){
     this.setState({exporting: true});
-    let url = new URI('/api/ocds/excelExport').addSearch(this.state.filters.toJS()).addSearch('year', this.state.selectedYears.toArray());
+    let isSafari = navigator.userAgent.indexOf("Safari");
+    let url = new URI('/api/ocds/excelExport').addSearch(this.state.filters.toJS())//.addSearch('year', this.state.selectedYears.toArray());
+    if(isSafari){
+      window.open(url, "_blank");
+      this.setState({exporting: false});
+      return;
+    }
     fetch(url.clone().query(""), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: url.query()
-    }).then(callFunc('blob')).then(blob => {
-      var link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = "excel-export.xlsx";
-      document.body.appendChild(link);
-      link.click();
-      this.setState({exporting: false})
+    }).then(response => {
+      let [_, filename] = response.headers.get('Content-Disposition').split("filename=");
+      response.blob().then(blob => {
+        var link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        this.setState({exporting: false})
+      });
+      return response;
     }).catch((...args) => {
       alert(this.__("An error occurred during export!"));
       this.setState({exporting: false})
