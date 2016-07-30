@@ -198,7 +198,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 			protected List<AbstractLink> newSubMenuButtons(final String buttonMarkupId) {
 				final List<AbstractLink> list = new ArrayList<>();
 		
-				for (final Locale l : WebConstants.availableLocales) {
+				for (final Locale l : WebConstants.AVAILABLE_LOCALES) {
 					final PageParameters params = new PageParameters(BasePage.this.getPageParameters());
 					params.set(WebConstants.LANGUAGE_PARAM, l.getLanguage());
 					list.add(new MenuBookmarkablePageLink<Page>(BasePage.this.getPageClass(), params, Model.of(l

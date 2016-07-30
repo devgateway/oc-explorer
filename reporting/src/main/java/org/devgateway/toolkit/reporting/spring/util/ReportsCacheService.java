@@ -11,10 +11,7 @@
  *******************************************************************************/
 package org.devgateway.toolkit.reporting.spring.util;
 
-import javax.sql.DataSource;
-
 import org.pentaho.reporting.engine.classic.core.cache.DataCacheFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -28,8 +25,8 @@ import org.springframework.stereotype.Component;
 @Profile("reports")
 public class ReportsCacheService {
 
-	@Autowired
-	private DataSource dataSource;
+	// @Autowired
+	// private DataSource dataSource;
 
 	/**
 	 * Flush mondrian and reports classic cache

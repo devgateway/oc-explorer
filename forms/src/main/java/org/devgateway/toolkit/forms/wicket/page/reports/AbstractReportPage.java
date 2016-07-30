@@ -272,7 +272,10 @@ public abstract class AbstractReportPage extends BasePage {
         super.onInitialize();
 
         add(new AjaxLazyLoadPanel("htmlReportPanel") {
-            @Override
+
+			private static final long serialVersionUID = 5167275188250433603L;
+
+			@Override
             public Component getLazyLoadComponent(final String id) {
                 htmlReportPanel = new ResourceStreamPanel(id, AbstractReportPage.this);
                 return htmlReportPanel;
@@ -366,31 +369,31 @@ public abstract class AbstractReportPage extends BasePage {
         try {
             // Greate the report processor for the specified output type
             switch (outputType) {
-                case PDF: {
-                    final PdfOutputProcessor target = new PdfOutputProcessor(report.getConfiguration(),
+                case PDF: 
+                    final PdfOutputProcessor targetPdf = new PdfOutputProcessor(report.getConfiguration(),
                             outputStream, report.getResourceManager());
-                    reportProcessor = new PageableReportProcessor(report, target);
+                    reportProcessor = new PageableReportProcessor(report, targetPdf);
                     reportProcessor.processReport();
                     break;
-                }
+              
 
-                case EXCEL: {
-                    final FlowExcelOutputProcessor target = new FlowExcelOutputProcessor(report.getConfiguration(),
+                case EXCEL: 
+                    final FlowExcelOutputProcessor targetExcel = new FlowExcelOutputProcessor(report.getConfiguration(),
                             outputStream, report.getResourceManager());
-                    reportProcessor = new FlowReportProcessor(report, target);
+                    reportProcessor = new FlowReportProcessor(report, targetExcel);
                     reportProcessor.processReport();
                     break;
-                }
+                
 
-                case RTF: {
-                    final FlowRTFOutputProcessor target = new FlowRTFOutputProcessor(report.getConfiguration(),
+                case RTF: 
+                    final FlowRTFOutputProcessor targetRtf = new FlowRTFOutputProcessor(report.getConfiguration(),
                             outputStream, report.getResourceManager());
-                    reportProcessor = new FlowReportProcessor(report, target);
+                    reportProcessor = new FlowReportProcessor(report, targetRtf);
                     reportProcessor.processReport();
                     break;
-                }
+                
 
-                case HTML: {
+                case HTML:
                     ContentLocation targetRoot = null;
                     File tempDir = null;
                     try {
@@ -436,8 +439,7 @@ public abstract class AbstractReportPage extends BasePage {
                     IOUtils.copy(indexFileStream, outputStream);
                     indexFileStream.close();
 
-                    break;
-                }
+                    break;                
 
                 default: throw new RuntimeException("Unknown output type provided!");
             }

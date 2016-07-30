@@ -60,7 +60,7 @@ public class DatabaseConfiguration {
 	private String springDatasourceTransactionIsolation;
 	
 	@Value("${dg-toolkit.derby.port}")
-	private int DERBY_PORT;
+	private int derbyPort;
 	
 	@Value("${dg-toolkit.datasource.jndi-name}")
 	private String datasourceJndiName;
@@ -127,7 +127,7 @@ public class DatabaseConfiguration {
 		Properties p = System.getProperties();
 		p.put("derby.storage.pageCacheSize", "30000");
 		p.put("derby.language.maxMemoryPerTable", "20000");
-		NetworkServerControl nsc = new NetworkServerControl(InetAddress.getByName("localhost"), DERBY_PORT);
+		NetworkServerControl nsc = new NetworkServerControl(InetAddress.getByName("localhost"), derbyPort);
 		nsc.start(new PrintWriter(java.lang.System.out, true));
 		return nsc;
 	}
