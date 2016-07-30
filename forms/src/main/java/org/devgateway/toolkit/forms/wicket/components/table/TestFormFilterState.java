@@ -14,7 +14,8 @@ import java.util.List;
  */
 public class TestFormFilterState extends JpaFilterState<TestForm> {
 
-    private String textField;
+	private static final long serialVersionUID = 8005371716983257722L;
+	private String textField;
 
     @Override
     public Specification<TestForm> getSpecification() {
@@ -31,7 +32,7 @@ public class TestFormFilterState extends JpaFilterState<TestForm> {
         return textField;
     }
 
-    public void setTextField(String textField) {
+    public void setTextField(final String textField) {
         this.textField = textField;
     }
 }

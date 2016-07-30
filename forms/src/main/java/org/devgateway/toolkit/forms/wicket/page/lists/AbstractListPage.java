@@ -170,7 +170,7 @@ public abstract class AbstractListPage<T extends GenericPersistable> extends Bas
 	}
 
 	private boolean hasFilteredColumns() {
-		for (IColumn column : columns) {
+		for (IColumn<?, ?> column : columns) {
 			if (column instanceof IFilteredColumn) {
 				return true;
 			}
