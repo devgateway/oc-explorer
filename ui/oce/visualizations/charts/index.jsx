@@ -2,6 +2,8 @@ import Visualization from "../../visualization";
 import ReactIgnore from "../../react-ignore";
 import {max} from "../../tools";
 import {Map} from "immutable";
+import cn from "classnames";
+import styles from "./index.less";
 import Plotly from "plotly.js/lib/core";
 Plotly.register([
   require('plotly.js/lib/bar')
@@ -42,10 +44,18 @@ class Chart extends Visualization{
     }
   }
 
+  hasNoData(){
+    return 0 == this.getData().length;
+  }
+
   render(){
-    return <ReactIgnore>
-      <div ref="chartContainer"/>
-    </ReactIgnore>
+    let hasNoData = this.hasNoData();
+    return <div className={cn("chart-container", {"no-data": hasNoData})}>
+      {hasNoData && <div className="no-data-msg">{this.__('No data')}</div>}
+      <ReactIgnore>
+        <div ref="chartContainer"/>
+      </ReactIgnore>
+    </div>
   }
 }
 
