@@ -26,6 +26,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
+import org.devgateway.toolkit.persistence.mongo.aggregate.CustomGroupingOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.cache.annotation.CacheConfig;
@@ -33,6 +34,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -55,7 +57,8 @@ public class FundingByLocationController extends GenericOCDSController {
 
 	@ApiOperation(value = "Planned funding by location by year. Returns the total amount of planning.budget"
 			+ " available per planning.budget.projectLocation, grouped by year. "
-			+ "This will return full location information, including geocoding data.")
+			+ "This will return full location information, including geocoding data."
+			+ "Responds only to the procuring entity id filter: tender.procuringEntity._id")
     @RequestMapping(value = "/api/plannedFundingByLocation", 
     method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
     public List<DBObject> plannedFundingByLocation(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
@@ -91,6 +94,49 @@ public class FundingByLocationController extends GenericOCDSController {
         return tagCount;
 
     }
+	
+	
+	@ApiOperation("Calculates percentage of releases with planning with at least one specified location,"
+			+ " that is the array planning.budget.projectLocation has to be initialzied."
+			+ "Filters out stub planning, therefore planning.budget.amount has to exist."
+			+ "Responds only to the procuring entity id filter: tender.procuringEntity._id")
+	@RequestMapping(value = "/api/qualityPlannedFundingByLocation", method = { RequestMethod.POST,
+			RequestMethod.GET }, produces = "application/json")
+	public List<DBObject> qualityPlannedFundingByLocation(
+			@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+
+		DBObject project = new BasicDBObject();
+		project.putAll(filterProjectMap);
+		project.put("planning.budget.projectLocation", 1);
+		project.put("planning.budget.amount", 1);
+		project.put(Fields.UNDERSCORE_ID, 0);
+
+		DBObject group = new BasicDBObject();
+		group.put(Fields.UNDERSCORE_ID, null);
+		group.put("totalPlansWithAmounts", new BasicDBObject("$sum", 1));
+		group.put("totalPlansWithAmountsAndLocation", new BasicDBObject("$sum", new BasicDBObject("$cond", Arrays
+				.asList(new BasicDBObject("$gt", Arrays.asList("$planning.budget.projectLocation", null)), 1, 0))));
+
+		DBObject project2 = new BasicDBObject();
+		project2.put(Fields.UNDERSCORE_ID, 0);
+		project2.put("totalPlansWithAmounts", 1);
+		project2.put("totalPlansWithAmountsAndLocation", 1);
+		project2.put("percentPlansWithAmountsAndLocation",
+				new BasicDBObject("$multiply",
+						Arrays.asList(
+								new BasicDBObject("$divide",
+										Arrays.asList("$totalPlansWithAmountsAndLocation", "$totalPlansWithAmounts")),
+								100)));
+
+		Aggregation agg = newAggregation(new CustomProjectionOperation(project),
+				match(where("planning.budget.amount").exists(true).andOperator(getProcuringEntityIdCriteria(filter))),
+				new CustomGroupingOperation(group), new CustomProjectionOperation(project2), skip(filter.getSkip()),
+				limit(filter.getPageSize()));
+
+		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+		List<DBObject> tagCount = results.getMappedResults();
+		return tagCount;
+	}
 	
 	
 	@ApiOperation(value = "Total estimated funding (tender.value) grouped by "
