@@ -14,6 +14,7 @@ package org.devgateway.toolkit.web.spring;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
+import org.apache.commons.io.FileCleaningTracker;
 import org.devgateway.ocds.web.cache.generators.GenericPagingRequestKeyGenerator;
 import org.devgateway.ocds.web.rest.serializers.GeoJsonPointSerializer;
 import org.springframework.cache.interceptor.KeyGenerator;
@@ -53,4 +54,8 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 		return new GenericPagingRequestKeyGenerator(objectMapper);
 	}
 
+    @Bean(destroyMethod = "exitWhenFinished")
+    public FileCleaningTracker fileCleaningTracker() {
+        return new FileCleaningTracker();
+    }
 }
