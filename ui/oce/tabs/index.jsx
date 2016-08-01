@@ -1,9 +1,9 @@
-import DataFetcher from "../data-fetcher";
+import Visualization from "../visualization";
 import {Set, List} from "immutable";
 import {Map} from "immutable";
 import DefaultComparison from "../comparison";
 
-class Tab extends DataFetcher{
+class Tab extends Visualization{
   maybeWrap({dontWrap, getName}, index, rendered){
     return dontWrap ? rendered : <section key={index}>
       <h4 className="page-header">{getName(this.__.bind(this))}</h4>
@@ -17,7 +17,7 @@ class Tab extends DataFetcher{
     let {compareWith: CustomComparison} = Component;
     let Comparison = CustomComparison || DefaultComparison;
     return <Comparison
-        key={Component}
+        key={index}
         compareBy={compareBy}
         comparisonData={comparisonData.get(index, List())}
         comparisonCriteriaValues={comparisonCriteriaValues}
@@ -34,43 +34,43 @@ class Tab extends DataFetcher{
   render(){
     let {filters, compareBy, requestNewData, data, years, width, translations} = this.props;
     return <div className="col-sm-12 content">
-        {this.constructor.visualizations.map((Component, index) =>
-            compareBy && Component.comparable ? this.compare(Component, index) :
-            this.maybeWrap(Component, index,
-              <Component
-                key={index}
-                filters={filters}
-                requestNewData={(_, data) => requestNewData([index], data)}
-                data={data.get(index)}
-                years={years}
-                width={width}
-                translations={translations}
-              />
-            )
-        )}
+      {this.constructor.visualizations.map((Component, index) =>
+          compareBy && Component.comparable ? this.compare(Component, index) :
+              this.maybeWrap(Component, index,
+                  <Component
+                      key={index}
+                      filters={filters}
+                      requestNewData={(_, data) => requestNewData([index], data)}
+                      data={data.get(index)}
+                      years={years}
+                      width={width}
+                      translations={translations}
+                  />
+              )
+      )}
     </div>
   }
 
   static computeYears(data){
     if(!data) return Set();
     return this.visualizations.reduce((years, visualization, index) =>
-        visualization.computeYears ?
-            years.union(visualization.computeYears(data.get(index))) :
-            years
-    , Set())
+            visualization.computeYears ?
+                years.union(visualization.computeYears(data.get(index))) :
+                years
+        , Set())
   }
 
   static computeComparisonYears(data){
     if(!data) return Set();
     return this.visualizations.reduce((years, visualization, index) =>
-      years.union(
-          data.get(index, List()).reduce((years, data, index) =>
-            visualization.computeYears ?
-                years.union(visualization.computeYears(data)) :
-                years
+            years.union(
+                data.get(index, List()).reduce((years, data, index) =>
+                        visualization.computeYears ?
+                            years.union(visualization.computeYears(data)) :
+                            years
+                    , Set())
+            )
         , Set())
-      )
-    , Set())
   }
 }
 
