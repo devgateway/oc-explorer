@@ -2,17 +2,16 @@ import FrontendYearFilterableChart from "./frontend-filterable";
 import {pluckImm, max} from "../../tools";
 import {Map, Set} from "immutable";
 import Comparison from "../../comparison";
-import Plotly from "plotly.js/lib/core";
 
 class BidSelectionMethod extends FrontendYearFilterableChart{
   static toCats(data){
     if(!data) return Map();
     return data
-      .groupBy(pluckImm('procurementMethodDetails'))
-      .map((bidTypes, _id) => Map({
-        _id,
-        totalTenderAmount: bidTypes.map(pluckImm('totalTenderAmount')).reduce((a, b) => a + b, 0)
-      }));
+        .groupBy(pluckImm('procurementMethodDetails'))
+        .map((bidTypes, _id) => Map({
+          _id,
+          totalTenderAmount: bidTypes.map(pluckImm('totalTenderAmount')).reduce((a, b) => a + b, 0)
+        }));
   }
 
   getCats(data){
@@ -57,7 +56,7 @@ BidSelectionMethod.UPDATABLE_FIELDS = ['data', 'years', 'cats'];
 
 class BidSelectionMethodComparison extends Comparison{
   render(){
-    let {compareBy, comparisonData, comparisonCriteriaValues, filters, requestNewComparisonData, years} = this.props;
+    let {compareBy, comparisonData, comparisonCriteriaValues, filters, requestNewComparisonData, years, translations} = this.props;
     if(!comparisonCriteriaValues.length) return null;
     let Component = this.getComponent();
     let decoratedFilters = this.constructor.decorateFilters(filters, compareBy, comparisonCriteriaValues);
@@ -69,7 +68,7 @@ class BidSelectionMethodComparison extends Comparison{
       ).reduce(
           (a, b) => a.mergeWith(
               (a, b) => a.get('totalTenderAmount') > b.get('totalTenderAmount') ? a : b
-          , b)
+              , b)
       );
 
       let maxValue = uniformData.map(pluckImm('totalTenderAmount')).reduce(max, 0);
@@ -92,6 +91,7 @@ class BidSelectionMethodComparison extends Comparison{
               years={years}
               title={this.getTitle(index)}
               cats={cats}
+              translations={translations}
               {...rangeProp}
           />
         </div>
