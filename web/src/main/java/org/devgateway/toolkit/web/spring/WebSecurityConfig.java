@@ -71,7 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/api/percentTendersUsingEgp/**", 	"/api/qualityAverageTenderPeriod/**", "/api/qualityAverageAwardPeriod/**",
                 "/api/fundingByTenderDeliveryLocation/**", "/api/percentTendersAwardedWithTwoOrMoreTenderers/**",
                 "/api/ocds/excelExport",
-                "/api/percentTendersWithTwoOrMoreTenderers/**"
+                "/api/percentTendersWithTwoOrMoreTenderers/**","/api/qualityPlannedFundingByLocation"
         };
     }
 
