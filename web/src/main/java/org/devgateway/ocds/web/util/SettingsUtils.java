@@ -1,4 +1,4 @@
-package org.devgateway.toolkit.forms.util;
+package org.devgateway.ocds.web.util;
 
 import org.devgateway.toolkit.persistence.dao.AdminSettings;
 import org.devgateway.toolkit.persistence.repository.AdminSettingsRepository;
@@ -17,6 +17,8 @@ import java.util.List;
 public class SettingsUtils {
     protected static Logger logger = LoggerFactory.getLogger(SettingsUtils.class);
 
+    private static final Integer EXCELBATCHSIZEDEFAULT = 10000;
+
     @Autowired
     private AdminSettingsRepository adminSettingsRepository;
 
@@ -27,5 +29,13 @@ public class SettingsUtils {
         } else {
             return list.get(0);
         }
+    }
+
+    public Integer getExcelBatchSize() {
+        AdminSettings adminSettings = getSettings();
+        if (adminSettings.getExcelBatchSize() == null) {
+            return EXCELBATCHSIZEDEFAULT;
+        }
+        return adminSettings.getExcelBatchSize();
     }
 }

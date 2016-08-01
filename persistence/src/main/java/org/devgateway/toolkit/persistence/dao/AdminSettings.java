@@ -15,11 +15,21 @@ import java.io.Serializable;
 @Audited
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AdminSettings extends AbstractAuditableEntity implements Serializable {
+    private Integer excelBatchSize;
+
     private Boolean rebootServer = false;
 
     @Override
     public AbstractAuditableEntity getParent() {
         return null;
+    }
+
+    public Integer getExcelBatchSize() {
+        return excelBatchSize;
+    }
+
+    public void setExcelBatchSize(Integer excelBatchSize) {
+        this.excelBatchSize = excelBatchSize;
     }
 
     public Boolean getRebootServer() {
