@@ -49,11 +49,6 @@ public class LoginPage extends BasePage {
 
     private static final int HIDE_NOTIFICATION_SECONDS = 15;
 
-    @Override
-    public Boolean fluidContainer() {
-        return false;
-    }
-
     class LoginForm extends BootstrapForm<Void> {
         private static final long serialVersionUID = 2066636625524650473L;
 

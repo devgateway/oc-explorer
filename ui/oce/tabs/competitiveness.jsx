@@ -1,6 +1,5 @@
 import Tab from "./index";
 import CostEffectiveness from "../visualizations/charts/cost-effectiveness";
-import BidSelectionMethod from "../visualizations/charts/bid-selection-method";
 import AvgNrBids from "../visualizations/charts/avg-nr-bids";
 
 class Competitiveness extends Tab{
@@ -8,5 +7,5 @@ class Competitiveness extends Tab{
 }
 
 Competitiveness.icon = "competitive";
-Competitiveness.visualizations = [CostEffectiveness, BidSelectionMethod, AvgNrBids];
+Competitiveness.visualizations = [CostEffectiveness, AvgNrBids];
 export default Competitiveness;

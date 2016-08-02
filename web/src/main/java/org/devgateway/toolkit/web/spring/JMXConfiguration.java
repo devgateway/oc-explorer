@@ -23,7 +23,7 @@ public class JMXConfiguration {
 	}
 
 	@Bean
-	public ServletRegistrationBean jminiXServletRegistration(MiniConsoleApplication miniConsoleApplication) {
+	public ServletRegistrationBean jminiXServletRegistration(final MiniConsoleApplication miniConsoleApplication) {
 		ServletRegistrationBean registration = new ServletRegistrationBean(new SpringMiniConsoleServlet());
 		registration.addUrlMappings("/jminix/*");
 		return registration;

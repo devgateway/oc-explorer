@@ -107,7 +107,8 @@ public class MarkupCacheService {
         // get the reports cache "reportsCache", declared in ehcache.xml
         Cache cache = cm.getCache("reportsCache");
 
-        List<String> cacheKeys = cache.getKeys();
+        @SuppressWarnings("unchecked")
+		List<String> cacheKeys = cache.getKeys();
         long size = 0;
         for (String k : cacheKeys) {
             logger.info("key: " + k);
