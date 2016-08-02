@@ -6,6 +6,15 @@ This project has the aim of creating a boilerplate template for small and medium
 
 It is created as a mavenized multi-module project. Each module can be started independently of the rest. All modules are based on [Spring Boot](http://projects.spring.io/spring-boot/) templates. Modules currently present:
 
+## Visual Identity
+SVG and raster version of the logo and favicon can be found in the [`docs/images`](./docs/images/) directory.
+
+### Logo:
+![DT Toolkit logo](./docs/images/raster/toolkit-logo-0256.png)
+
+### Favicon:
+![DT Toolkit favicon](./docs/images/raster/toolkit-favicon-0032.png)
+
 # Modules
 
 - [persistence](https://github.com/devgateway/dg-toolkit/tree/master/persistence) - this is a module responsible with [JPA 2.0](https://en.wikipedia.org/wiki/Java_Persistence_API) data persistence. It is also provides [HATEOAS](https://en.wikipedia.org/wiki/HATEOAS) services on top of the existing entities.
