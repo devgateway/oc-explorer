@@ -3,9 +3,7 @@ import CostEffectiveness from "../../oce/visualizations/charts/cost-effectivenes
 import BidSelectionMethod from "../visualizations/bid-selection-method";
 import AvgNrBids from "../../oce/visualizations/charts/avg-nr-bids";
 
-
 class OCVNCompetitiveness extends Competitiveness{}
 
-OCVNCompetitiveness.icon = "competitive";
 OCVNCompetitiveness.visualizations = [CostEffectiveness, BidSelectionMethod, AvgNrBids];
 export default OCVNCompetitiveness;
