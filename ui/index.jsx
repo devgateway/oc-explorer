@@ -2,7 +2,7 @@ import ReactDOM from "react-dom";
 import OCApp from "./oce";
 import OverviewTab from './oce/tabs/overview';
 import LocationTab from './oce/tabs/location';
-import CompetitivenessTab from './oce/tabs/competitiveness';
+import OCVNCompetitiveness from './ocvn/tabs/competitiveness';
 import EfficiencyTab from './oce/tabs/efficiency';
 import EProcurementTab from './oce/tabs/e-procurement';
 import {fetchJson} from "./oce/tools";
@@ -23,7 +23,7 @@ class OCVN extends OCApp{
     super(props);
     this.registerTab(OverviewTab);
     this.registerTab(LocationTab);
-    this.registerTab(CompetitivenessTab);
+    this.registerTab(OCVNCompetitiveness);
     this.registerTab(EfficiencyTab);
     this.registerTab(EProcurementTab);
   }
