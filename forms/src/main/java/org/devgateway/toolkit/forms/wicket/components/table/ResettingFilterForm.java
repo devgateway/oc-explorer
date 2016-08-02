@@ -11,9 +11,10 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.IFilt
  */
 public class ResettingFilterForm<T> extends FilterForm<T> {
 
-    private DataTable<?, ?> dataTable;
+	private static final long serialVersionUID = 7877429240496220944L;
+	private DataTable<?, ?> dataTable;
 
-    public ResettingFilterForm(String id, IFilterStateLocator<T> locator, DataTable<?, ?> dataTable) {
+    public ResettingFilterForm(final String id, final IFilterStateLocator<T> locator, final DataTable<?, ?> dataTable) {
         super(id, locator);
         this.dataTable = dataTable;
     }

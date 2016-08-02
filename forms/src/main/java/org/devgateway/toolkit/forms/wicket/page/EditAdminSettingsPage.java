@@ -1,5 +1,7 @@
 package org.devgateway.toolkit.forms.wicket.page;
 
+import java.util.List;
+
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.StringResourceModel;
@@ -12,11 +14,7 @@ import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFor
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.persistence.dao.AdminSettings;
 import org.devgateway.toolkit.persistence.repository.AdminSettingsRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.wicketstuff.annotation.mount.MountPath;
-
-import java.util.List;
 
 /**
  * @author idobre
@@ -25,7 +23,8 @@ import java.util.List;
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_ADMIN)
 @MountPath(value = "/adminsettings")
 public class EditAdminSettingsPage extends AbstractEditPage<AdminSettings> {
-    private static Logger logger = LoggerFactory.getLogger(EditAdminSettingsPage.class);
+
+	private static final long serialVersionUID = 5742724046825803877L;
 
     private TextFieldBootstrapFormComponent<Integer> excelBatchSize;
 
