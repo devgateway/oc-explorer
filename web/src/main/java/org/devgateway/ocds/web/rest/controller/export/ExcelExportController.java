@@ -38,10 +38,10 @@ public class ExcelExportController extends GenericOCDSController {
     protected final Logger logger = LoggerFactory.getLogger(ExcelExportController.class);
 
     @Autowired
-    SettingsUtils settingsUtils;
+    private SettingsUtils settingsUtils;
 
     @Autowired
-    ExcelGenerator excelGenerator;
+    private ExcelGenerator excelGenerator;
 
     @Autowired
     private FileCleaningTracker fileCleaningTracker;
@@ -74,8 +74,8 @@ public class ExcelExportController extends GenericOCDSController {
             zout.setMethod(ZipOutputStream.DEFLATED);
             zout.setLevel(Deflater.BEST_COMPRESSION);
 
-            int numberOfPages = (int)Math.ceil((double) numberOfReleases / filter.getPageSize());
-            for(int i = 0; i < numberOfPages; i++) {
+            int numberOfPages = (int) Math.ceil((double) numberOfReleases / filter.getPageSize());
+            for (int i = 0; i < numberOfPages; i++) {
                 filter.setPageNumber(i);
 
                 ZipEntry ze = new ZipEntry("excel-export-page " + (i + 1) + ".xlsx");

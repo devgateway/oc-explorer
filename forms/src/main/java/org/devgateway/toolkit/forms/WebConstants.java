@@ -34,7 +34,7 @@ public final class WebConstants {
 	public static final String PARAM_REVISION_ID = "revisionId";
 	public static final String PARAM_ENTITY_CLASS = "class";
 
-	public final static String LANGUAGE_PARAM = "lang";
+	public static final String LANGUAGE_PARAM = "lang";
 
 	public static final class StringValidators {
 		public static final StringValidator MAXIMUM_LENGTH_VALIDATOR_ONE_LINE_TEXT = StringValidator
@@ -46,6 +46,6 @@ public final class WebConstants {
 	// add more languages here. It is pointless to make this dynamic because the
 	// wicket i18n is in .properties files so we need
 	// to change the src code anyway.
-	public static final List<Locale> availableLocales = Collections.unmodifiableList(Arrays.asList(new Locale("en")));
+	public static final List<Locale> AVAILABLE_LOCALES = Collections.unmodifiableList(Arrays.asList(new Locale("en")));
 
 }
