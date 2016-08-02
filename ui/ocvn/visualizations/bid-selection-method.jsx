@@ -1,7 +1,7 @@
 import FrontendYearFilterableChart from "../../oce/visualizations/charts/frontend-filterable";
 import {pluckImm, max} from "../../oce/tools";
 import {Map, Set} from "immutable";
-import Comparison from "../../comparison";
+import Comparison from "../../oce/comparison";
 
 class BidSelectionMethod extends FrontendYearFilterableChart{
   static toCats(data){
