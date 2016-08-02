@@ -1,7 +1,8 @@
 import cn from "classnames";
 import {fromJS, Map, Set} from "immutable";
-import {fetchJson, debounce, callFunc} from "./tools";
+import {fetchJson, debounce} from "./tools";
 import URI from "urijs";
+import Filters from "./filters";
 
 let range = (from, to) => from > to ? [] : [from].concat(range(from + 1, to));
 const MIN_YEAR = 2010;
@@ -9,7 +10,7 @@ const MAX_YEAR = 2020;
 const MENU_BOX_COMPARISON = "menu-box";
 const MENU_BOX_FILTERS = 'filters';
 
-export default class OCApp extends React.Component{
+class OCApp extends React.Component{
   constructor(props){
     super(props);
     this.tabs = [];
@@ -249,3 +250,11 @@ export default class OCApp extends React.Component{
     </div>
   }
 }
+
+OCApp.TRANSLATIONS = {
+  us: {}
+};
+
+OCApp.Filters = Filters;
+
+export default OCApp;
