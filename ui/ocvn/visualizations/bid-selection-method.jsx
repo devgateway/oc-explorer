@@ -1,5 +1,5 @@
-import FrontendYearFilterableChart from "./frontend-filterable";
-import {pluckImm, max} from "../../tools";
+import FrontendYearFilterableChart from "../../oce/visualizations/charts/frontend-filterable";
+import {pluckImm, max} from "../../oce/tools";
 import {Map, Set} from "immutable";
 import Comparison from "../../comparison";
 
