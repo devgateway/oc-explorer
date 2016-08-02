@@ -19,7 +19,8 @@ import org.apache.wicket.model.IModel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.ButtonGroup;
 import de.agilecoders.wicket.core.util.Attributes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkbox.bootstrapcheckbox.BootstrapCheckBoxPicker;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkbox.bootstrapcheckbox.BootstrapCheckBoxPickerConfig;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.
+form.checkbox.bootstrapcheckbox.BootstrapCheckBoxPickerConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeIconType;
 
 /**

@@ -16,12 +16,9 @@ import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Properties;
 
-import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
-import org.devgateway.toolkit.forms.security.SecurityUtil;
 
 public class Footer extends Panel {
 

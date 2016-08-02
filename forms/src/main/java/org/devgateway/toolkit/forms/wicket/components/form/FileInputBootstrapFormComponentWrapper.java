@@ -104,6 +104,7 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
 		return this;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
@@ -216,6 +217,7 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
 				IndicatingAjaxLink<Void> delete = new IndicatingAjaxLink<Void>("delete") {
 					private static final long serialVersionUID = 1L;
 
+					@SuppressWarnings("unchecked")
 					@Override
 					public void onClick(final AjaxRequestTarget target) {
 						filesModel.remove(item.getModelObject());
@@ -322,6 +324,7 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
 				IndicatingAjaxLink<Void> delete = new IndicatingAjaxLink<Void>("delete") {
 					private static final long serialVersionUID = 1L;
 
+					@SuppressWarnings("unchecked")
 					@Override
 					public void onClick(final AjaxRequestTarget target) {
 						filesModel.remove(item.getModelObject());
@@ -383,6 +386,7 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
 		bootstrapFileInput = new BootstrapFileInput("bootstrapFileInput", internalUploadModel, fileInputConfig) {
 			private static final long serialVersionUID = 1L;
 
+			@SuppressWarnings("unchecked")
 			@Override
 			protected void onSubmit(final AjaxRequestTarget target) {
 				super.onSubmit(target);
@@ -453,6 +457,7 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
 		ComponentUtil.enableDisableEvent(this, event);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void convertInput() {
 		final Collection<FileMetadata> modelObject = filesModel;
