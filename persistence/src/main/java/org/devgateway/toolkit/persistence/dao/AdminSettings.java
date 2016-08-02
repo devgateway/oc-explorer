@@ -15,6 +15,8 @@ import java.io.Serializable;
 @Audited
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AdminSettings extends AbstractAuditableEntity implements Serializable {
+    private static final long serialVersionUID = -1051140524022133178L;
+
     private Integer excelBatchSize;
 
     private Boolean rebootServer = false;
