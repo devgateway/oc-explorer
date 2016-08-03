@@ -35,6 +35,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
+import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -166,6 +167,49 @@ public class FundingByLocationController extends GenericOCDSController {
 		List<DBObject> tagCount = results.getMappedResults();
 		return tagCount;
 	}
+	
+	
+	@ApiOperation("Calculates percentage of releases with tender with at least one specified delivery location,"
+			+ " that is the array tender.items.deliveryLocation has to have items."
+			+ "Filters out stub tenders, therefore tender.tenderPeriod.startDate has to exist.")
+	@RequestMapping(value = "/api/qualityFundingByTenderDeliveryLocation", method = { RequestMethod.POST,
+			RequestMethod.GET }, produces = "application/json")
+	public List<DBObject> qualityFundingByTenderDeliveryLocation(
+			@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+
+		DBObject project = new BasicDBObject();
+		project.putAll(filterProjectMap);
+		project.put(Fields.UNDERSCORE_ID, "$tender._id");
+		project.put("tenderItemsDeliveryLocation", new BasicDBObject("$cond",
+				Arrays.asList(new BasicDBObject("$gt", 
+						Arrays.asList("$tender.items.deliveryLocation", null)), 1, 0)));	
+		
+
+		DBObject project1 = new BasicDBObject();
+		project1.put(Fields.UNDERSCORE_ID, 0);
+		project1.put("totalTendersWithStartDate", 1);
+		project1.put("totalTendersWithStartDateAndLocation", 1);
+		project1.put("percentTendersWithStartDateAndLocation",
+				new BasicDBObject("$multiply",
+						Arrays.asList(new BasicDBObject("$divide",
+								Arrays.asList("$totalTendersWithStartDateAndLocation", "$totalTendersWithStartDate")),
+								100)));
+
+		Aggregation agg = newAggregation(
+				match(where("tender.tenderPeriod.startDate").exists(true)
+						.andOperator(getDefaultFilterCriteria(filter))),
+				unwind("$tender.items"), new CustomProjectionOperation(project),
+				group(Fields.UNDERSCORE_ID_REF).max("tenderItemsDeliveryLocation").as("hasTenderItemsDeliverLocation"),
+				group().count().as("totalTendersWithStartDate").sum("hasTenderItemsDeliverLocation")
+						.as("totalTendersWithStartDateAndLocation"),
+				new CustomProjectionOperation(project1), skip(filter.getSkip()),
+				limit(filter.getPageSize()));
+
+		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+		List<DBObject> tagCount = results.getMappedResults();
+		return tagCount;
+	}
+	
 
 
 }
