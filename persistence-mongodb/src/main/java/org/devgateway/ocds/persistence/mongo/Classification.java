@@ -1,6 +1,5 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -13,7 +12,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 /**
  * Classification OCDS Entity http://standard.open-contracting.org/latest/en/schema/reference/#classification
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "scheme",
         "id",
