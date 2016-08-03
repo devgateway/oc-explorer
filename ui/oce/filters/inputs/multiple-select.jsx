@@ -16,7 +16,7 @@ class MultipleSelect extends translatable(Component){
   }
 
   getSelectedCount(){
-    return this.getOptions().filter((_, id) => this.props.selected.has(id)).count();
+    return this.getOptions().filter((option, key) => this.props.selected.has(this.getId(option, key))).count();
   }
 
   transform(datum){
