@@ -1,7 +1,6 @@
 
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -11,7 +10,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 /**
  * http://standard.open-contracting.org/latest/en/schema/reference/#changes
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "property",
         "former_value"

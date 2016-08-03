@@ -58,6 +58,14 @@
                     "description": "Construction work for highways",
                     "uri": "http://cpv.data.ac.uk/code-45233130"
                 },
+                "additionalClassifications": [
+                    {
+                        "scheme": "CPV",
+                        "id": "45233162-2",
+                        "description": "Cycle path construction work",
+                        "uri": "http://cpv.data.ac.uk/code-45233162.html"
+                    }
+                ],
                 "quantity": 8,
                 "unit": {
                     "name": "Miles",
@@ -105,6 +113,12 @@
                 "legalName": "London Borough of Barnet",
                 "uri": "http://www.barnet.gov.uk/"
             },
+            "additionalIdentifiers": [{
+                "scheme": "additional-GB-LAC",
+                "id": "additional-E09000003",
+                "legalName": "additional-London Borough of Barnet",
+                "uri": "http://www.barnet.gov.uk/additional"
+            }],
             "name": "London Borough of Barnet",
             "address": {
                 "streetAddress": "4, North London Business Park, Oakleigh Rd S",
@@ -208,6 +222,12 @@
             "legalName": "London Borough of Barnet",
             "uri": "http://www.barnet.gov.uk/"
         },
+        "additionalIdentifiers": [{
+            "scheme": "additional-GB-LAC",
+            "id": "additional-E09000003",
+            "legalName": "additional-London Borough of Barnet",
+            "uri": "http://www.barnet.gov.uk/additional"
+        }],
         "name": "London Borough of Barnet",
         "address": {
             "streetAddress": "4, North London Business Park, Oakleigh Rd S",
@@ -243,6 +263,12 @@
                         "legalName": "AnyCorp Ltd",
                         "uri": "http://www.anycorp.example"
                     },
+                    "additionalIdentifiers": [{
+                        "scheme": "additional-GB-LAC",
+                        "id": "additional-E09000003",
+                        "legalName": "additional-London Borough of Barnet",
+                        "uri": "http://www.barnet.gov.uk/additional"
+                    }],
                     "name": "AnyCorp Cycle Provision",
                     "address": {
                         "streetAddress": "100 Anytown Lane",
