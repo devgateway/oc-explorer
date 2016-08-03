@@ -55,7 +55,6 @@ class LocationTab extends frontendYearFilterable(Tab){
 }
 
 LocationTab.icon = "planning";
-LocationTab.endpoint = 'plannedFundingByLocation';
 LocationTab.computeComparisonYears = null;
 
 export default LocationTab;
