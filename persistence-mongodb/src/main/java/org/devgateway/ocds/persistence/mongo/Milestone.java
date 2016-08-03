@@ -1,7 +1,6 @@
 package org.devgateway.ocds.persistence.mongo;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -20,7 +19,6 @@ import java.util.Set;
 /**
  * Milestone OCDS entity http://standard.open-contracting.org/latest/en/schema/reference/#milestone
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "id",
         "title",

@@ -1,6 +1,5 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -16,7 +15,6 @@ import org.springframework.data.mongodb.core.geo.GeoJson;
  * A location can be described by either a geometry (point location, line or polygon), or a gazetteer entry, or both.
  *
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "description",
         "geometry",
