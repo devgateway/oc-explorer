@@ -75,12 +75,6 @@ Shows the difference between the average tender amount and the average winning b
 
 `/api/costEffectivenessTenderAmount?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]`
 
-### Visualization 2 - Planned Locations
-
-A map that includes information on planned funding by location (with each location represented by a point, using a reference table).
-
-`/api/costEffectivenessTenderAmount?procuringEntityId=[proc1]&procuringEntityId=[proc2]`
-
 
 ### Visualization 3 - Bidding Period
 
