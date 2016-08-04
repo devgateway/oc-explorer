@@ -22,11 +22,6 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 			+ "Corresponds to the OCDS Organization.identifier")
 	private List<String> procuringEntityId;
 
-	@ApiModelProperty(value = "This will filter after tender.contrMethod.id, Values range from 1 to 5.")
-	@EachPattern(regexp = "^[a-zA-Z0-9]*$")
-	private List<String> contrMethod;
-	
-	
 	@ApiModelProperty(value = "This will filter after tender.items.deliveryLocation._id")
 	private List<String> tenderLoc;
 
@@ -70,14 +65,6 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
 	public void setInvert(final Boolean invert) {
 		this.invert = invert;
-	}
-
-	public List<String> getContrMethod() {
-		return contrMethod;
-	}
-
-	public void setContrMethod(List<String> contrMethod) {
-		this.contrMethod = contrMethod;
 	}
 
 	public List<String> getTenderLoc() {

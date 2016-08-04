@@ -110,38 +110,6 @@ public class GenericOCDSController {
         return createFilterCriteria("tender.items.deliveryLocation._id",
         		filter.getTenderLoc(), filter);
     }
-    /**
-     * Appends the contrMethod filter, based on tender.contrMethod
-     *
-     * @param filter
-     * @return the {@link Criteria} for this filter
-     */
-	protected Criteria getContrMethodFilterCriteria(final DefaultFilterPagingRequest filter) {
-		return filter.getContrMethod() == null ? new Criteria()
-				: createFilterCriteria("tender.contrMethod._id",
-						filter.getContrMethod().stream().map(s -> new ObjectId(s)).collect(Collectors.toList()),
-						filter);
-	}
-
-    protected <S> List<S> genericSearchRequest(TextSearchRequest request, Criteria criteria, Class<S> clazz) {
-
-        PageRequest pageRequest = new PageRequest(request.getPageNumber(), request.getPageSize());
-
-        Query query = null;
-
-        if (request.getText() == null) {
-            query = new Query();
-        } else {
-            query = TextQuery.queryText(new TextCriteria().matching(request.getText())).sortByScore();
-        }
-        if (criteria != null) {
-            query.addCriteria(criteria);
-        }
-
-        query.with(pageRequest);
-
-        return mongoTemplate.find(query, clazz);
-    }
 
     private <S> Criteria createFilterCriteria(final String filterName, final List<S> filterValues,
                                               final DefaultFilterPagingRequest filter) {
@@ -169,7 +137,6 @@ public class GenericOCDSController {
 		tmpMap.put("tender.procuringEntity._id", 1);
 		tmpMap.put("tender.items.classification._id", 1);
 		tmpMap.put("tender.items.deliveryLocation._id", 1);
-		tmpMap.put("tender.contrMethod", 1);
 		filterProjectMap = Collections.unmodifiableMap(tmpMap);
 	}
 
@@ -193,7 +160,7 @@ public class GenericOCDSController {
 
     protected Criteria getDefaultFilterCriteria(final DefaultFilterPagingRequest filter) {
         return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
-                getContrMethodFilterCriteria(filter), getByTenderDeliveryLocationIdentifier(filter));
+                getByTenderDeliveryLocationIdentifier(filter));
     }
 
     protected MatchOperation getMatchDefaultFilterOperation(final DefaultFilterPagingRequest filter) {
