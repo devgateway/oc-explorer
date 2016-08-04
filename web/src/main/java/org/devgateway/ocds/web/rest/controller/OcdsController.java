@@ -120,8 +120,7 @@ public class OcdsController extends GenericOCDSController {
                 Direction.ASC, "id");
 
         List<Release> find = mongoTemplate
-                .find(query(getYearFilterCriteria("planning.bidPlanProjectDateApprove", releaseRequest)
-                        .andOperator(getDefaultFilterCriteria(releaseRequest))).with(pageRequest), Release.class);
+                .find(query(getDefaultFilterCriteria(releaseRequest)).with(pageRequest), Release.class);
 
         return find;
 
