@@ -57,7 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected String[] allowedApiEndpoints() {
 		return new String[] { "/api/tenderPriceByOcdsTypeYear/**", "/api/tenderPriceByVnTypeYear/**",
 				"/api/tenderBidPeriodPercentiles/**", "/api/ocds/release/budgetProjectId/**",
-				"/api/ocds/release/planningBidNo/**", "/api/plannedFundingByLocation/**",
+				"/api/ocds/release/planningBidNo/**", 
 				"/api/costEffectivenessAwardAmount/**", "/api/costEffectivenessTenderAmount/**",
 				"/api/ocds/organization/all**", "/api/ocds/organization/id/**", "/api/ocds/release/all/**",
 				"/api/countBidPlansByYear/**", "/api/countTendersByYear/**", "/api/countAwardsByYear/**",
@@ -71,7 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				"/api/qualityAverageTenderPeriod/**", "/api/qualityAverageAwardPeriod/**",
 				"/api/fundingByTenderDeliveryLocation/**", "/api/percentTendersAwardedWithTwoOrMoreTenderers/**",
 				"/api/percentTendersWithTwoOrMoreTenderers/**",
-                "/api/ocds/excelExport", "/api/qualityPlannedFundingByLocation",
+                "/api/ocds/excelExport", 
                 "/api/qualityFundingByTenderDeliveryLocation"
 		};
 	}
