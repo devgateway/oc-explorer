@@ -4,8 +4,8 @@ import {Map} from "immutable";
 
 let ensureNonNegative = a => a < 0 ? 0 : a;
 
-class BidPeriod extends FrontendYearFilterableChart{
-  transform([tenders, awards]){
+class BidPeriod extends FrontendYearFilterableChart {
+  transform([tenders, awards]) {
     let awardsHash = response2obj('averageAwardDays', awards);
     return tenders.map(tender => ({
       year: tender._id,
@@ -14,9 +14,9 @@ class BidPeriod extends FrontendYearFilterableChart{
     }))
   };
 
-  getData(){
+  getData() {
     let data = super.getData();
-    if(!data) return [];
+    if (!data) return [];
     let years = data.map(pluckImm('year')).toArray();
     return [{
       x: data.map(pluckImm('tender')).map(ensureNonNegative).toArray(),
@@ -33,8 +33,25 @@ class BidPeriod extends FrontendYearFilterableChart{
     }];
   }
 
-  getLayout(){
+  getLayout() {
+    let annotations = [];
+    let data = super.getData();
+    if(data){
+      annotations = data.map((imm, index) => {
+        let sum = (ensureNonNegative(imm.get('tender')) + ensureNonNegative(imm.get('award'))).toFixed(2);
+        return {
+          y: index,
+          x: sum,
+          xanchor: 'left',
+          yanchor: 'middle',
+          text: this.__('Total:') + ' ' + sum,
+          showarrow: false
+        }
+      }).toArray();
+    }
+
     return {
+      annotations,
       barmode: "stack",
       xaxis: {
         title: this.__("Days"),
