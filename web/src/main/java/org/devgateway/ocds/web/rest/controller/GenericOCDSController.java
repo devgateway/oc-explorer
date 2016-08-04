@@ -168,8 +168,7 @@ public class GenericOCDSController {
 		Map<String, Object> tmpMap = new HashMap<>();
 		tmpMap.put("tender.procuringEntity._id", 1);
 		tmpMap.put("tender.items.classification._id", 1);
-		tmpMap.put("tender.procurementMethodDetails", 1);
-		tmpMap.put("tender.items.deliveryLocation._id", 1);		
+		tmpMap.put("tender.items.deliveryLocation._id", 1);
 		tmpMap.put("tender.contrMethod", 1);
 		filterProjectMap = Collections.unmodifiableMap(tmpMap);
 	}
@@ -192,21 +191,9 @@ public class GenericOCDSController {
         return filter.getInvert() ? criteria.norOperator(yearCriteria) : criteria.orOperator(yearCriteria);
     }
 
-    /**
-     * Appends the bid selection method to the filter, this will filter based on
-     * tender.procurementMethodDetails. It accepts multiple elements
-     *
-     * @param filter
-     * @return the {@link Criteria} for this filter
-     */
-    protected Criteria getBidSelectionMethod(final DefaultFilterPagingRequest filter) {
-        return createFilterCriteria("tender.procurementMethodDetails", filter.getBidSelectionMethod(), filter);
-    }
-
     protected Criteria getDefaultFilterCriteria(final DefaultFilterPagingRequest filter) {
         return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
-                getBidSelectionMethod(filter), getContrMethodFilterCriteria(filter),
-                getByTenderDeliveryLocationIdentifier(filter));
+                getContrMethodFilterCriteria(filter), getByTenderDeliveryLocationIdentifier(filter));
     }
 
     protected MatchOperation getMatchDefaultFilterOperation(final DefaultFilterPagingRequest filter) {
@@ -246,9 +233,7 @@ public class GenericOCDSController {
     }
 
     private String getGroupByCategory(final GroupingFilterPagingRequest filter) {
-        if ("bidSelectionMethod".equals(filter.getGroupByCategory())) {
-            return "tender.procurementMethodDetails".replace(".", "");
-        } else if ("bidTypeId".equals(filter.getGroupByCategory())) {
+        if ("bidTypeId".equals(filter.getGroupByCategory())) {
             return "tender.items.classification._id".replace(".", "");
         } else if ("procuringEntityId".equals(filter.getGroupByCategory())) {
             return "tender.procuringEntity._id".replace(".", "");
