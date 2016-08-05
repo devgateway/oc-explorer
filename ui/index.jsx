@@ -90,6 +90,13 @@ OCVN.TRANSLATIONS = {
   vn: require('./languages/vn_VN.json')
 };
 
+OCVN.STYLING = {
+  charts: {
+    axisLabelColor: "#cc3c3b",
+    traceColors: ["#234e6d", "#3f7499", "#80b1d3", "#afd5ee", "#d9effd"]
+  }
+};
+
 ReactDOM.render(<OCVN/>, document.getElementById('dg-container'));
 
 if("ocvn.developmentgateway.org" == location.hostname){
