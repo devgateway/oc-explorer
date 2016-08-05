@@ -10,7 +10,12 @@ class LocationTab extends Tab{
   }
 
   static computeYears(data){
-    return Set();
+    if(!data) return Set();
+    return this.LAYERS.reduce((years, visualization, index) =>
+            visualization.computeYears ?
+                years.union(visualization.computeYears(data.get(index))) :
+                years
+        , Set())
   }
 
   constructor(props){
@@ -32,10 +37,10 @@ class LocationTab extends Tab{
           </button>
           <ul className="dropdown-menu">
             {LAYERS.map((layer, index) => <li key={index}>
-                <a href="javascript:void(0)" onClick={e => this.setState({currentLayer: index})}>
-                  {LAYERS[index].getLayerName(this.__.bind(this))}
-                </a>
-              </li>
+                  <a href="javascript:void(0)" onClick={e => this.setState({currentLayer: index})}>
+                    {LAYERS[index].getLayerName(this.__.bind(this))}
+                  </a>
+                </li>
             )}
           </ul>
         </div>
@@ -50,9 +55,9 @@ class LocationTab extends Tab{
     return <div className="col-sm-12 content map-content">
       {this.maybeGetSwitcher()}
       <Map
-        {...this.props}
-        data={data.get(currentLayer)}
-        requestNewData={(_, data) => requestNewData([currentLayer], data)}
+          {...this.props}
+          data={data.get(currentLayer)}
+          requestNewData={(_, data) => requestNewData([currentLayer], data)}
       />
     </div>
   }
