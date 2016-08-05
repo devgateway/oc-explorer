@@ -22,9 +22,6 @@
     <cache name="genericPagingRequestJson" eternal="true" overflowToDisk="false"
            diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="10000"/>
 
-    <cache name="bidSelectionMethodsJson" eternal="true" overflowToDisk="false"
-           diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="1000"/>
-
     <cache name="bidTypesJson" eternal="true" overflowToDisk="false"
            diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="1000"/>
 
