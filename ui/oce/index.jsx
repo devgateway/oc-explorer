@@ -258,4 +258,11 @@ OCApp.TRANSLATIONS = {
 
 OCApp.Filters = Filters;
 
+OCApp.STYLING = {
+  charts: {
+    axisLabelColor: undefined,
+    traceColors: []
+  }
+};
+
 export default OCApp;
