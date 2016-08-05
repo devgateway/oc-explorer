@@ -39,6 +39,7 @@ public class TenderBidPeriodPercentilesByYearController extends GenericOCDSContr
 						: Arrays.toString(filter.getProcuringEntityId().toArray()).replace("[", "").replace("]", ""),
 				filter.getBidTypeId() == null ? null
 						: Arrays.toString(filter.getBidTypeId().toArray()).replace("[", "").replace("]", "")
+
 		);
 
 		return object;

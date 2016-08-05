@@ -21,7 +21,7 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 	@ApiModelProperty(value = "This is the id of the organization/procuring entity. "
 			+ "Corresponds to the OCDS Organization.identifier")
 	private List<String> procuringEntityId;
-	
+
 	@ApiModelProperty(value = "This will filter after tender.items.deliveryLocation._id")
 	private List<String> tenderLoc;
 
@@ -58,8 +58,6 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 	public void setProcuringEntityId(final List<String> procuringEntityId) {
 		this.procuringEntityId = procuringEntityId;
 	}
-
-
 
 	public Boolean getInvert() {
 		return invert;
