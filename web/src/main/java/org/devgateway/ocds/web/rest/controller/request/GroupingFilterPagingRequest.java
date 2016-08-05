@@ -12,7 +12,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class GroupingFilterPagingRequest extends DefaultFilterPagingRequest {
 
 	@ApiModelProperty(value = "This parameter specified which category can be used for grouping the results."
-			+ " Possible values here are: bidSelectionMethod, bidTypeId, procuringEntityId.")
+			+ " Possible values here are: bidTypeId, procuringEntityId.")
 	private String groupByCategory;
 
 	public String getGroupByCategory() {
