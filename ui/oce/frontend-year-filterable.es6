@@ -11,7 +11,9 @@ let frontendYearFilterable = Class => {
     }
   }
 
+  Filterable.propTypes = Filterable.propTypes || {};
   Filterable.propTypes.years = React.PropTypes.object.isRequired;
+
   Filterable.computeYears = cacheFn(data => {
     if(!data) return Set();
     return Set(data.map(datum => {
