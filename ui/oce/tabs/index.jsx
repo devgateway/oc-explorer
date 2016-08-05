@@ -13,7 +13,7 @@ class Tab extends Visualization{
 
   compare(Component, index){
     let {compareBy, comparisonData, comparisonCriteriaValues, filters, requestNewComparisonData, years, bidTypes
-        , width, translations} = this.props;
+        , width, translations, styling} = this.props;
     let {compareWith: CustomComparison} = Component;
     let Comparison = CustomComparison || DefaultComparison;
     return <Comparison
@@ -28,11 +28,12 @@ class Tab extends Visualization{
         bidTypes={bidTypes}
         width={width}
         translations={translations}
+        styling={styling}
     />
   }
 
   render(){
-    let {filters, compareBy, requestNewData, data, years, width, translations} = this.props;
+    let {filters, compareBy, requestNewData, data, years, width, translations, styling} = this.props;
     return <div className="col-sm-12 content">
       {this.constructor.visualizations.map((Component, index) =>
           compareBy && Component.comparable ? this.compare(Component, index) :
@@ -45,6 +46,7 @@ class Tab extends Visualization{
                       years={years}
                       width={width}
                       translations={translations}
+                      styling={styling}
                   />
               )
       )}

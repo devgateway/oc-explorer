@@ -158,6 +158,7 @@ class OCApp extends React.Component{
         bidTypes={bidTypes}
         width={width}
         translations={this.constructor.TRANSLATIONS[locale]}
+        styling={this.constructor.STYLING}
     />;
   }
 
