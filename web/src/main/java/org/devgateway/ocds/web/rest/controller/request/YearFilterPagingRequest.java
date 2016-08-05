@@ -21,6 +21,9 @@ public class YearFilterPagingRequest extends DefaultFilterPagingRequest {
 	@EachRange(min = MIN_REQ_YEAR, max = MAX_REQ_YEAR)
 	protected List<Integer> year;
 
+	/**
+	 * 
+	 */
 	public YearFilterPagingRequest() {
 		super();
 	}
