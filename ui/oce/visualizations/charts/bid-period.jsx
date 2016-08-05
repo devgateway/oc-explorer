@@ -23,13 +23,19 @@ class BidPeriod extends FrontendYearFilterableChart {
       y: years,
       name: this.__("Tender"),
       type: "bar",
-      orientation: 'h'
+      orientation: 'h',
+      marker: {
+        color: this.props.styling.charts.traceColors[0]
+      }
     }, {
       x: data.map(pluckImm('award')).map(ensureNonNegative).toArray(),
       y: years,
       name: this.__("Award"),
       type: "bar",
-      orientation: 'h'
+      orientation: 'h',
+      marker: {
+        color: this.props.styling.charts.traceColors[1]
+      }
     }];
   }
 
@@ -54,17 +60,11 @@ class BidPeriod extends FrontendYearFilterableChart {
       annotations,
       barmode: "stack",
       xaxis: {
-        title: this.__("Days"),
-        titlefont: {
-          color: "#cc3c3b"
-        }
+        title: this.__("Days")
       },
       yaxis: {
         title: this.__("Years"),
-        type: "category",
-        titlefont: {
-          color: "#cc3c3b"
-        }
+        type: "category"
       }
     }
   }

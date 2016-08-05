@@ -16,7 +16,10 @@ class CancelledFunding extends FrontendYearFilterableChart{
       x: data.map(pluckImm('year')).toArray(),
       y: data.map(pluckImm('count')).toArray(),
       type: 'scatter',
-      fill: 'tonexty'
+      fill: 'tonexty',
+      marker: {
+        color: this.props.styling.charts.traceColors[0]
+      }
     }];
   }
 
@@ -24,17 +27,10 @@ class CancelledFunding extends FrontendYearFilterableChart{
     return {
       xaxis: {
         title: this.__("Years"),
-        type: 'category',
-        titlefont: {
-          color: "#cc3c3b"
-        }
+        type: 'category'
       },
       yaxis: {
-        title: this.__("Amount"),
-        titlefont: {
-          color: "#cc3c3b"
-        },
-        range: this.props.yAxisRange
+        title: this.__("Amount")
       }
     }
   }
