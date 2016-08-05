@@ -27,7 +27,10 @@ class BidSelectionMethod extends FrontendYearFilterableChart{
     return [{
       x: data.map(imm => imm.get('_id') || this.__('Unspecified')).toArray(),
       y: data.map(pluckImm('totalTenderAmount')).toArray(),
-      type: 'bar'
+      type: 'bar',
+      marker: {
+        color: this.props.styling.charts.traceColors[0]
+      }
     }];
   }
 
@@ -35,16 +38,10 @@ class BidSelectionMethod extends FrontendYearFilterableChart{
     return {
       xaxis: {
         title: this.__("Method"),
-        type: "category",
-        titlefont: {
-          color: "#cc3c3b"
-        }
+        type: "category"
       },
       yaxis: {
-        title: this.__("Amount"),
-        titlefont: {
-          color: "#cc3c3b"
-        }
+        title: this.__("Amount")
       }
     }
   }
@@ -56,7 +53,8 @@ BidSelectionMethod.UPDATABLE_FIELDS = ['data', 'years', 'cats'];
 
 class BidSelectionMethodComparison extends Comparison{
   render(){
-    let {compareBy, comparisonData, comparisonCriteriaValues, filters, requestNewComparisonData, years, translations} = this.props;
+    let {compareBy, comparisonData, comparisonCriteriaValues, filters, requestNewComparisonData, years, translations,
+      styling} = this.props;
     if(!comparisonCriteriaValues.length) return null;
     let Component = this.getComponent();
     let decoratedFilters = this.constructor.decorateFilters(filters, compareBy, comparisonCriteriaValues);
@@ -92,6 +90,7 @@ class BidSelectionMethodComparison extends Comparison{
               title={this.getTitle(index)}
               cats={cats}
               translations={translations}
+              styling={styling}
               {...rangeProp}
           />
         </div>
