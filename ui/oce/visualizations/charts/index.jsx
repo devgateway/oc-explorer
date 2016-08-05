@@ -15,12 +15,21 @@ class Chart extends Visualization{
   }
 
   getDecoratedLayout(){
-    var {title, xAxisRange, yAxisRange} = this.props;
+    var {title, xAxisRange, yAxisRange, styling} = this.props;
     var layout = this.getLayout();
     layout.width = this.props.width;
     if(title) layout.title = title;
     if(xAxisRange) layout.xaxis.range = xAxisRange;
     if(yAxisRange) layout.yaxis.range = yAxisRange;
+    if(styling){
+      layout.xaxis.titlefont = {
+        color: styling.charts.axisLabelColor
+      };
+
+      layout.yaxis.titlefont = {
+        color: styling.charts.axisLabelColor
+      }
+    }
     return layout;
   }
 
@@ -64,5 +73,12 @@ Chart.getFillerDatum = year => Map({year});
 Chart.getMaxField = data => data.flatten().filter((value, key) => value && "year" != key).reduce(max, 0);
 
 Chart.UPDATABLE_FIELDS = ['data'];
+
+Chart.propTypes.styling = React.PropTypes.shape({
+  charts: React.PropTypes.shape({
+    axisLabelColor: React.PropTypes.string.isRequired,
+    traceColors: React.PropTypes.arrayOf(React.PropTypes.string).isRequired
+  }).isRequired
+}).isRequired;
 
 export default Chart;
