@@ -7,6 +7,11 @@ delete config.devtool;
 config.plugins = config.plugins.filter(function(plugin){
   return !(plugin instanceof webpack.HotModuleReplacementPlugin);
 }).concat([
+  new webpack.DefinePlugin({
+    "process.env": {
+      NODE_ENV: JSON.stringify("production")
+    }
+  }),
   new webpack.optimize.DedupePlugin(),
   new webpack.optimize.UglifyJsPlugin({
     sourceMap: false

@@ -160,16 +160,18 @@ public class VNImportService implements ExcelImportService {
         try {
             reader = new XExcelFileReader(fileUrl.getFile(), sheetName);
 
-            List<String[]> rows = null;
+            List<String[]> rows;
             long startTime = System.currentTimeMillis();
             long rowNo = 0;
-            while (!(rows = reader.readRows(importRowBatch)).isEmpty()) {
+            rows = reader.readRows(importRowBatch);
+            while (!rows.isEmpty()) {
                 importer.importRows(rows);
                 rowNo += importRowBatch;
                 if (rowNo % LOG_IMPORT_EVERY == 0) {
                     logMessage("Import Speed " + rowNo * MS_IN_SECOND / (System.currentTimeMillis() - startTime)
                             + " rows per second.");
                 }
+                rows = reader.readRows(importRowBatch);
             }
 
         } catch (Exception e) {

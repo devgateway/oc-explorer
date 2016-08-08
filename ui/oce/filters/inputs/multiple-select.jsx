@@ -1,6 +1,6 @@
 import translatable from "../../translatable";
 import Component from "../../pure-render-component";
-import {fromJS} from "immutable";
+import {fromJS, Set} from "immutable";
 import {fetchJson} from "../../tools";
 
 class MultipleSelect extends translatable(Component){
@@ -28,6 +28,18 @@ class MultipleSelect extends translatable(Component){
     if(ENDPOINT) fetchJson(`/api/${ENDPOINT}`).then(data => this.setState({options: fromJS(this.transform(data))}));
   }
 
+  selectAll(){
+    this.props.onUpdateAll(
+        Set(
+            this.getOptions().map(this.getId).toArray()
+        )
+    );
+  }
+
+  selectNone(){
+    this.props.onUpdateAll(Set());
+  }
+
   render(){
     let options = this.getOptions();
     let {selected, onToggle} = this.props;
@@ -36,6 +48,15 @@ class MultipleSelect extends translatable(Component){
         <section className="field">
           <header>
             {this.getTitle()} <span className="count">({this.getSelectedCount()}/{totalOptions})</span>
+            <div className="pull-right">
+              <a href="javascript:void(0)" onClick={e => this.selectAll()}>
+                {this.__('Select all')}
+              </a>
+              &nbsp;|&nbsp;
+              <a href="javascript:void(0)" onClick={e => this.selectNone()}>
+                {this.__('Select none')}
+              </a>
+            </div>
           </header>
           <section className="options">
             {options.map((option, key) => (

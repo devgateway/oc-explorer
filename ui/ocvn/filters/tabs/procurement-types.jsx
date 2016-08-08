@@ -16,6 +16,7 @@ class ProcurementTypes extends Tab{
               selectedBidTypesIds.delete(id) :
               selectedBidTypesIds.add(id))
           }
+          onUpdateAll={onUpdate.bind(null, 'bidTypeId')}
           translations={translations}
       />
 

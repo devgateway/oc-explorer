@@ -11,6 +11,7 @@ class Tab extends translatable(React.Component){
             selected.delete(id) :
             selected.add(id))
         }
+        onUpdateAll={onUpdate.bind(null, slug)}
         translations={translations}
     />
   }

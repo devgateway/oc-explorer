@@ -1,20 +1,20 @@
 package org.devgateway.toolkit.forms.wicket.page;
 
+import java.util.List;
+
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.validator.RangeValidator;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxToggleBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.persistence.dao.AdminSettings;
 import org.devgateway.toolkit.persistence.repository.AdminSettingsRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.wicketstuff.annotation.mount.MountPath;
-
-import java.util.List;
 
 /**
  * @author idobre
@@ -23,7 +23,10 @@ import java.util.List;
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_ADMIN)
 @MountPath(value = "/adminsettings")
 public class EditAdminSettingsPage extends AbstractEditPage<AdminSettings> {
-    private static Logger logger = LoggerFactory.getLogger(EditAdminSettingsPage.class);
+
+	private static final long serialVersionUID = 5742724046825803877L;
+
+    private TextFieldBootstrapFormComponent<Integer> excelBatchSize;
 
     private CheckBoxToggleBootstrapFormComponent rebootServer;
 
@@ -53,6 +56,14 @@ public class EditAdminSettingsPage extends AbstractEditPage<AdminSettings> {
     @Override
     protected void onInitialize() {
         super.onInitialize();
+
+        editForm.add(new Label("excelTitle", new StringResourceModel("excelTitle", this, null)));
+
+        excelBatchSize = new TextFieldBootstrapFormComponent<>("excelBatchSize");
+        excelBatchSize.integer();
+        excelBatchSize.getField().add(new RangeValidator(1, 10000));
+        excelBatchSize.required();
+        editForm.add(excelBatchSize);
 
         editForm.add(new Label("systemTitle", new StringResourceModel("systemTitle", this, null)));
 

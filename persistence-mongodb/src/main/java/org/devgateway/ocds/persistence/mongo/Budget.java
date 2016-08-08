@@ -1,6 +1,5 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -22,7 +21,6 @@ import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
  *  http://standard.open-contracting.org/latest/en/schema/reference/#budget
  *
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "source",
         "id",
