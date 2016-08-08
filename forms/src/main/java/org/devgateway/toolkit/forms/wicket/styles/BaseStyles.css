@@ -12,7 +12,7 @@ html {
 }
 
 .mainHeader.with-navbar-default .navbar-default {
-    /**
+    /*
      * The mainHeader navbar should not have rounded borders when it is not fixed.
      *
      * @see: Navbar.Position.DEFAULT
@@ -22,7 +22,7 @@ html {
 }
 
 .mainHeader.with-navbar-fixed-top {
-    /**
+    /*
      * The mainHeader doesn't have any height when the navbar is fixed, and other elements are behind it.
      *
      * HACK: The default bootstrap navbar is 50px height and has a bottom margin of 20px for the default font size.
@@ -36,8 +36,16 @@ html {
 }
 
 .mainContainer {
-    /**
+    /*
      * The main page content should have some height.
      */
     min-height: 20em;
+}
+
+.mainFooter {
+    /*
+     * Add some spacing around the footer.
+     */
+    margin-top: 2em;
+    margin-bottom: 2em;
 }

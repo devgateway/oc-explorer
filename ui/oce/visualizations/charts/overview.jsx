@@ -23,11 +23,14 @@ class OverviewChart extends FrontendYearFilterableChart{
       tender: this.__("Tender")
     };
     let years = data.map(pluckImm('year')).toArray();
-    return Object.keys(LINES).map(key => ({
+    return Object.keys(LINES).map((key, index) => ({
           x: years,
           y: data.map(pluckImm(key)).toArray(),
           type: 'scatter',
-          name: LINES[key]
+          name: LINES[key],
+          marker: {
+            color: this.props.styling.charts.traceColors[index]
+          }
         })
     );
   }
@@ -36,16 +39,10 @@ class OverviewChart extends FrontendYearFilterableChart{
     return {
       xaxis: {
         title: this.__("Years"),
-        type: "category",
-        titlefont: {
-          color: "#cc3c3b"
-        }
+        type: "category"
       },
       yaxis: {
-        title: this.__("Count"),
-        titlefont: {
-          color: "#cc3c3b"
-        }
+        title: this.__("Count")
       }
     }
   }

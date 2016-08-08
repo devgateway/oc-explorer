@@ -2,6 +2,8 @@ import Visualization from "../../visualization";
 import ReactIgnore from "../../react-ignore";
 import {max} from "../../tools";
 import {Map} from "immutable";
+import cn from "classnames";
+import styles from "./index.less";
 import Plotly from "plotly.js/lib/core";
 Plotly.register([
   require('plotly.js/lib/bar')
@@ -13,12 +15,21 @@ class Chart extends Visualization{
   }
 
   getDecoratedLayout(){
-    var {title, xAxisRange, yAxisRange} = this.props;
+    var {title, xAxisRange, yAxisRange, styling} = this.props;
     var layout = this.getLayout();
     layout.width = this.props.width;
     if(title) layout.title = title;
     if(xAxisRange) layout.xaxis.range = xAxisRange;
     if(yAxisRange) layout.yaxis.range = yAxisRange;
+    if(styling){
+      layout.xaxis.titlefont = {
+        color: styling.charts.axisLabelColor
+      };
+
+      layout.yaxis.titlefont = {
+        color: styling.charts.axisLabelColor
+      }
+    }
     return layout;
   }
 
@@ -42,10 +53,18 @@ class Chart extends Visualization{
     }
   }
 
+  hasNoData(){
+    return 0 == this.getData().length;
+  }
+
   render(){
-    return <ReactIgnore>
-      <div ref="chartContainer"/>
-    </ReactIgnore>
+    let hasNoData = this.hasNoData();
+    return <div className={cn("chart-container", {"no-data": hasNoData})}>
+      {hasNoData && <div className="no-data-msg">{this.__('No data')}</div>}
+      <ReactIgnore>
+        <div ref="chartContainer"/>
+      </ReactIgnore>
+    </div>
   }
 }
 
@@ -54,5 +73,12 @@ Chart.getFillerDatum = year => Map({year});
 Chart.getMaxField = data => data.flatten().filter((value, key) => value && "year" != key).reduce(max, 0);
 
 Chart.UPDATABLE_FIELDS = ['data'];
+
+Chart.propTypes.styling = React.PropTypes.shape({
+  charts: React.PropTypes.shape({
+    axisLabelColor: React.PropTypes.string.isRequired,
+    traceColors: React.PropTypes.arrayOf(React.PropTypes.string).isRequired
+  }).isRequired
+}).isRequired;
 
 export default Chart;

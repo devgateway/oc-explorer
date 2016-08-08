@@ -90,7 +90,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 	 * Determines if this page has a fluid container for the content or not.
 	 */
 	public Boolean fluidContainer() {
-		return true;
+		return false;
 	}
 
     public static class HALRedirectPage extends RedirectPage {
@@ -102,6 +102,15 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
     }
 
+	public static class JminixRedirectPage extends RedirectPage {
+		private static final long serialVersionUID = -750983217518258464L;
+
+		public JminixRedirectPage() {
+			super(WebApplication.get().getServletContext().getContextPath() + "/jminix/");
+		}
+
+	}
+	
     public static class UIRedirectPage extends RedirectPage {
         private static final long serialVersionUID = -750983217518258464L;
 
@@ -150,8 +159,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 		// @see https://getbootstrap.com/css/#grid
 		if (fluidContainer()) {
 			mainContainer.add(new CssClassNameAppender(CssClassNames.Grid.containerFluid));
-		}
-		else {
+		} else {
 			mainContainer.add(new CssClassNameAppender(CssClassNames.Grid.container));
 		}
 
@@ -164,8 +172,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 		// Add information about navbar position on mainHeader element.
 		if (navbar.getPosition().equals(Navbar.Position.DEFAULT)) {
 			mainHeader.add(new CssClassNameAppender("with-navbar-default"));
-		}
-		else {
+		} else {
 			mainHeader.add(new CssClassNameAppender("with-" + navbar.getPosition().cssClassName()));
 		}
 
@@ -193,7 +200,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 			protected List<AbstractLink> newSubMenuButtons(final String buttonMarkupId) {
 				final List<AbstractLink> list = new ArrayList<>();
 		
-				for (final Locale l : WebConstants.availableLocales) {
+				for (final Locale l : WebConstants.AVAILABLE_LOCALES) {
 					final PageParameters params = new PageParameters(BasePage.this.getPageParameters());
 					params.set(WebConstants.LANGUAGE_PARAM, l.getLanguage());
 					list.add(new MenuBookmarkablePageLink<Page>(BasePage.this.getPageClass(), params, Model.of(l
@@ -268,6 +275,11 @@ public abstract class BasePage extends GenericWebPage<Void> {
                 list.add(new MenuBookmarkablePageLink<SpringEndpointsPage>(SpringEndpointsPage.class, null,
                         new StringResourceModel("navbar.springendpoints", this, null))
                         .setIconType(FontAwesomeIconType.anchor));
+                        
+				list.add(new MenuBookmarkablePageLink<JminixRedirectPage>(JminixRedirectPage.class, null,
+						new StringResourceModel("navbar.jminix", this, null))
+								.setIconType(FontAwesomeIconType.bug));
+                        
 
                 // MenuBookmarkablePageLink<HALRedirectPage> halBrowserLink =
                 // new MenuBookmarkablePageLink<HALRedirectPage>(

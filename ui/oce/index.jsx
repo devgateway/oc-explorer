@@ -1,7 +1,8 @@
 import cn from "classnames";
 import {fromJS, Map, Set} from "immutable";
-import {fetchJson, debounce, callFunc} from "./tools";
+import {fetchJson, debounce} from "./tools";
 import URI from "urijs";
+import Filters from "./filters";
 
 let range = (from, to) => from > to ? [] : [from].concat(range(from + 1, to));
 const MIN_YEAR = 2010;
@@ -9,7 +10,7 @@ const MAX_YEAR = 2020;
 const MENU_BOX_COMPARISON = "menu-box";
 const MENU_BOX_FILTERS = 'filters';
 
-export default class OCApp extends React.Component{
+class OCApp extends React.Component{
   constructor(props){
     super(props);
     this.tabs = [];
@@ -157,6 +158,7 @@ export default class OCApp extends React.Component{
         bidTypes={bidTypes}
         width={width}
         translations={this.constructor.TRANSLATIONS[locale]}
+        styling={this.constructor.STYLING}
     />;
   }
 
@@ -202,13 +204,7 @@ export default class OCApp extends React.Component{
 
   downloadExcel(){
     this.setState({exporting: true});
-    let isSafari = navigator.userAgent.indexOf("Safari") && !navigator.userAgent.indexOf("Chrom");//excludes both Chrome and Chromium
     let url = new URI('/api/ocds/excelExport').addSearch(this.state.filters.toJS()).addSearch('year', this.state.selectedYears.toArray());
-    if(isSafari){
-      window.open(url, "_blank");
-      this.setState({exporting: false});
-      return;
-    }
     fetch(url.clone().query(""), {
       method: 'POST',
       headers: {
@@ -216,6 +212,13 @@ export default class OCApp extends React.Component{
       },
       body: url.query()
     }).then(response => {
+      let {userAgent} = navigator;
+      let isSafari =  -1 < userAgent.indexOf("Safari") && -1 == userAgent.indexOf("Chrom");//excludes both Chrome and Chromium
+      if(isSafari){
+        location.href = url;
+        this.setState({exporting: false});
+        return;
+      }
       let [_, filename] = response.headers.get('Content-Disposition').split("filename=");
       response.blob().then(blob => {
         var link = document.createElement('a');
@@ -249,3 +252,18 @@ export default class OCApp extends React.Component{
     </div>
   }
 }
+
+OCApp.TRANSLATIONS = {
+  us: {}
+};
+
+OCApp.Filters = Filters;
+
+OCApp.STYLING = {
+  charts: {
+    axisLabelColor: undefined,
+    traceColors: []
+  }
+};
+
+export default OCApp;

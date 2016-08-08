@@ -1,17 +1,15 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * A good, service, or work to be contracted.
@@ -19,7 +17,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  * http://standard.open-contracting.org/latest/en/schema/reference/#item
  *
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "id",
         "description",

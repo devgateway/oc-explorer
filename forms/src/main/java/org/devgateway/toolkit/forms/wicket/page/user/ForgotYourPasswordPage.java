@@ -28,6 +28,8 @@ public class ForgotYourPasswordPage extends BasePage {
     @SpringBean
     private SendEmailService sendEmailService;
 
+	public static final int RANDOM_PASSWORD_LENGTH = 16;
+
     public ForgotYourPasswordPage(final PageParameters parameters) {
         super(parameters);
 
@@ -77,7 +79,7 @@ public class ForgotYourPasswordPage extends BasePage {
                     if (person == null) {
                         feedbackPanel.error("Email address not found");
                     } else {
-                        String newPassword = RandomStringUtils.random(16, true, true);
+                        String newPassword = RandomStringUtils.random(RANDOM_PASSWORD_LENGTH, true, true);
                         person.setPassword(encoder.encode(newPassword));
                         person.setChangePassword(true);
 

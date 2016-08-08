@@ -22,12 +22,18 @@ class CostEffectiveness extends FrontendYearFilterableChart{
       x: years,
       y: data.map(pluckImm('tender')).toArray(),
       name: this.__('Bid price'),
-      type: 'bar'
+      type: 'bar',
+      marker: {
+        color: this.props.styling.charts.traceColors[0]
+      }
     }, {
       x: years,
       y: data.map(pluckImm('diff')).toArray(),
       name: this.__('Difference'),
-      type: 'bar'
+      type: 'bar',
+      marker: {
+        color: this.props.styling.charts.traceColors[1]
+      }
     }];
   }
 
@@ -36,16 +42,10 @@ class CostEffectiveness extends FrontendYearFilterableChart{
       barmode: "stack",
       xaxis: {
         title: this.__("Years"),
-        type: "category",
-        titlefont: {
-          color: "#cc3c3b"
-        }
+        type: "category"
       },
       yaxis: {
-        title: this.__("Amount"),
-        titlefont: {
-          color: "#cc3c3b"
-        }
+        title: this.__("Amount")
       }
     }
   }
