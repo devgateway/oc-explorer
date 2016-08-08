@@ -1,4 +1,5 @@
-import Map from "./index.jsx";
+import Map from "../index.jsx";
+import Location from './location';
 
 class TenderLocations extends Map{
   transform(data){
@@ -37,5 +38,6 @@ class TenderLocations extends Map{
 }
 
 TenderLocations.endpoint = 'fundingByTenderDeliveryLocation';
+TenderLocations.Location = Location;
 
 export default TenderLocations;
