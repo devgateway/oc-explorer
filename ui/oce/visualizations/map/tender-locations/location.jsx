@@ -3,6 +3,7 @@ import Component from "../../../pure-render-component";
 import {Popup} from "react-leaflet";
 import translatable from "../../../translatable";
 import cn from "classnames";
+import OverviewChart from "../../../../oce/visualizations/charts/overview";
 
 class LocationWrapper extends translatable(Component){
   constructor(props){
@@ -14,7 +15,7 @@ class LocationWrapper extends translatable(Component){
 
   render(){
     let {currentTab} = this.state;
-    let {data, translations} = this.props;
+    let {data, translations, filters, years, styling} = this.props;
     let CurrentTab = this.constructor.TABS[currentTab];
     return (
         <Marker {...this.props}>
@@ -22,7 +23,10 @@ class LocationWrapper extends translatable(Component){
             <div>
               <ul className="nav nav-tabs">
                 {this.constructor.TABS.map((Tab, index) =>
-                  <li className={cn({active: index == currentTab})} onClick={e => this.setState({currentTab: index})}>
+                  <li key={index}
+                      className={cn({active: index == currentTab})}
+                      onClick={e => this.setState({currentTab: index})}
+                  >
                     <a href="javascript:void(0);">{Tab.getName(this.__.bind(this))}</a>
                   </li>
                 )}
@@ -30,6 +34,9 @@ class LocationWrapper extends translatable(Component){
               <CurrentTab
                   data={data}
                   translations={translations}
+                  filters={filters}
+                  years={years}
+                  styling={styling}
               />
             </div>
           </Popup>
@@ -60,9 +67,20 @@ class Overview extends Tab{
   }
 }
 
-class OverviewChart extends Tab{
+class OverviewChartTab extends Tab{
   static getName(__){
     return __('Overview chart');
+  }
+
+  render(){
+    let {filters, styling, years} = this.props;
+    return <div>
+      <OverviewChart
+          filters={filters}
+          styling={styling}
+          years={years}
+      />
+    </div>
   }
 }
 
@@ -78,6 +96,6 @@ class ProcurementMethod extends Tab{
   }
 }
 
-LocationWrapper.TABS = [Overview, OverviewChart, CostEffectiveness, ProcurementMethod];
+LocationWrapper.TABS = [Overview, OverviewChartTab, CostEffectiveness, ProcurementMethod];
 
 export default LocationWrapper;
