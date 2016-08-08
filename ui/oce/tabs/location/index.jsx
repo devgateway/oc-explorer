@@ -50,7 +50,7 @@ class LocationTab extends Tab{
 
   render(){
     let {currentLayer} = this.state;
-    let {data, requestNewData, translations} = this.props;
+    let {data, requestNewData, translations, filters, years, styling} = this.props;
     let Map = this.constructor.LAYERS[currentLayer];
     return <div className="col-sm-12 content map-content">
       {this.maybeGetSwitcher()}
@@ -59,6 +59,9 @@ class LocationTab extends Tab{
           data={data.get(currentLayer)}
           requestNewData={(_, data) => requestNewData([currentLayer], data)}
           translations={translations}
+          filters={filters}
+          years={years}
+          styling={styling}
       />
     </div>
   }

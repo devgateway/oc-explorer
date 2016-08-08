@@ -12,7 +12,7 @@ class MapVisual extends frontendYearFilterable(Visualization){
   }
 
   render(){
-    let {translations} = this.props;
+    let {translations, filters, years, styling} = this.props;
     return <Map center={[14.5, 105]} zoom={5}>
       <TileLayer
           url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
@@ -26,6 +26,9 @@ class MapVisual extends frontendYearFilterable(Visualization){
                 maxAmount={this.getMaxAmount()}
                 data={location}
                 translations={translations}
+                filters={filters}
+                years={years}
+                styling={styling}
             />
         ))}
       </Cluster>
