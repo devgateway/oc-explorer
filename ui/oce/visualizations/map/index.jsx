@@ -18,7 +18,7 @@ class MapVisual extends frontendYearFilterable(Visualization){
       />
       <Cluster maxAmount={this.getMaxAmount()}>
         {this.getData().map(location => (
-            <Location
+            <this.constructor.Location
                 key={location._id}
                 position={location.coords.reverse()}
                 maxAmount={this.getMaxAmount()}
@@ -32,5 +32,6 @@ class MapVisual extends frontendYearFilterable(Visualization){
 
 MapVisual.propTypes = {};
 MapVisual.computeComparisonYears = null;
+MapVisual.Location = Location;
 
 export default MapVisual;
