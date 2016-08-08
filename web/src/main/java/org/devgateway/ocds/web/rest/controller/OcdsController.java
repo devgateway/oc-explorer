@@ -16,6 +16,7 @@ import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.ReleasePackage;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
+import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -41,7 +42,7 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 @RestController
 public class OcdsController extends GenericOCDSController {
 
-    private static final String SERVER_DOMAIN = "http://ocexplorer.dgstg.org";
+    private static final String SERVER_DOMAIN = "http://ocvn.developmentgateway.org";
 
     @Autowired
     private ReleaseRepository releaseRepository;
@@ -58,7 +59,8 @@ public class OcdsController extends GenericOCDSController {
     }
 
     /**
-     * Returns one {@link Release} entity found based on bidNo
+     * Returns one {@link Release} entity found based on
+     * {@link VNPlanning#getBidNo()}
      *
      * @param bidNo
      *            the bidNo

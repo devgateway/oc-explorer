@@ -7,8 +7,9 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.Location;
-import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Release;
+import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
+import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,6 @@ import org.springframework.data.mongodb.core.script.NamedMongoScript;
 
 @Configuration
 public class MongoTemplateConfiguration {
-
     private final Logger logger = LoggerFactory.getLogger(MongoTemplateConfiguration.class);
 
     @Autowired
@@ -54,11 +54,14 @@ public class MongoTemplateConfiguration {
                 .ensureIndex(new Index().on("tender.procurementMethodRationale", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.status", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("awards.status", Direction.ASC));
-        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("awards.date", Direction.ASC));        
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("awards.date", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("awards.value.amount", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.value.amount", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.contrMethod._id", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.contrMethod.details", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.numberOfTenderers", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.submissionMethod", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.publicationMethod", Direction.ASC));
         mongoTemplate.indexOps(Release.class)
                 .ensureIndex(new Index().on("tender.tenderPeriod.startDate", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.tenderPeriod.endDate", Direction.ASC));
@@ -66,13 +69,15 @@ public class MongoTemplateConfiguration {
                 .ensureIndex(new Index().on("tender.items.classification._id", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
         		on("tender.items.deliveryLocation._id", Direction.ASC));
-        
-		mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("identifier._id", Direction.ASC));
-		mongoTemplate.indexOps(Organization.class)
-				.ensureIndex(new Index().on("additionalIdentifiers._id", Direction.ASC));
-		mongoTemplate.indexOps(Organization.class)
-				.ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());        
 
+        mongoTemplate.indexOps(VNOrganization.class).ensureIndex(new Index().on("identifier._id", Direction.ASC));
+        mongoTemplate.indexOps(VNOrganization.class)
+                .ensureIndex(new Index().on("additionalIdentifiers._id", Direction.ASC));
+        mongoTemplate.indexOps(VNOrganization.class)
+                .ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());
+        
+    	mongoTemplate.indexOps(VNLocation.class)
+    	.ensureIndex(new TextIndexDefinitionBuilder().onField("description").onField("uri").build());
 
         logger.info("Added extra Mongo indexes");
 
@@ -99,5 +104,4 @@ public class MongoTemplateConfiguration {
         }
 
     }
-
 }

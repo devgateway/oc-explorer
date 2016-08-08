@@ -36,49 +36,73 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
 
 @Configuration
 @Order(2) // this loads the security config after the forms security (if you use
-			// them overlayed, it must pick that one first)
+// them overlayed, it must pick that one first)
 @EnableWebSecurity
 @PropertySource("classpath:allowedApiEndpoints.properties")
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	protected CustomJPAUserDetailsService customJPAUserDetailsService;
-	
+    @Autowired
+    protected CustomJPAUserDetailsService customJPAUserDetailsService;
+
 	@Value("${allowedApiEndpoints}")
 	private String[] allowedApiEndpoints;
 
-	@Bean
-	public HttpSessionSecurityContextRepository httpSessionSecurityContextRepository() {
-		return new HttpSessionSecurityContextRepository();
-	}
+    @Bean
+    public HttpSessionSecurityContextRepository httpSessionSecurityContextRepository() {
+        return new HttpSessionSecurityContextRepository();
+    }
 
-	@Bean
-	public SecurityContextPersistenceFilter securityContextPersistenceFilter() {
+    @Bean
+    public SecurityContextPersistenceFilter securityContextPersistenceFilter() {
 
-		SecurityContextPersistenceFilter securityContextPersistenceFilter = new SecurityContextPersistenceFilter(
-				httpSessionSecurityContextRepository());
-		return securityContextPersistenceFilter;
-	}
+        SecurityContextPersistenceFilter securityContextPersistenceFilter = new SecurityContextPersistenceFilter(
+                httpSessionSecurityContextRepository());
+        return securityContextPersistenceFilter;
+    }
 
-	@Override
-	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/", "/home", "/v2/api-docs/**", "/swagger-ui.html**", "/webjars/**", "/images/**",
+    protected String[] allowedApiEndpoints() {
+        return new String[] { "/api/tenderPriceByOcdsTypeYear/**", "/api/tenderPriceByVnTypeYear/**",
+                "/api/tenderBidPeriodPercentiles/**", "/api/ocds/release/budgetProjectId/**",
+                "/api/ocds/release/planningBidNo/**", "/api/plannedFundingByLocation/**",
+                "/api/costEffectivenessAwardAmount/**", "/api/costEffectivenessTenderAmount/**",
+                "/api/ocds/organization/all**", "/api/ocds/organization/procuringEntity/all**",
+                "/api/ocds/organization/id/**", "/api/ocds/release/all/**",
+                "/api/countBidPlansByYear/**", "/api/countTendersByYear/**", "/api/countAwardsByYear/**",
+                "/api/totalCancelledTendersByYear**", "/api/averageTenderPeriod**",
+                "/api/ocds/bidSelectionMethod/all**", "/api/topTenLargestAwards**", "/api/topTenLargestTenders**",
+                "/api/averageAwardPeriod**", "/api/ocds/release/ocid/**", "/api/ocds/bidType/all**",
+                "/api/ocds/contrMethod/all/**", "/api/ocds/package/budgetProjectId/**",
+                "/api/ocds/package/planningBidNo/**", "/api/ocds/package/all/**", "/api/ocds/package/ocid/**",
+                "/api/ocds/location/all/**", "/api/ocds/location/search/**", "/api/averageNumberOfTenderers/**",
+                "/api/percentTendersCancelled/**", "/api/percentTendersUsingEBid/**",
+                "/api/percentTendersUsingEgp/**", 	"/api/qualityAverageTenderPeriod/**",
+                "/api/qualityAverageAwardPeriod/**",
+                "/api/fundingByTenderDeliveryLocation/**", "/api/percentTendersAwardedWithTwoOrMoreTenderers/**",
+                "/api/ocds/excelExport",
+                "/api/percentTendersWithTwoOrMoreTenderers/**", "/api/qualityPlannedFundingByLocation",
+                 "/api/qualityFundingByTenderDeliveryLocation"
+        };
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/", "/home", "/v2/api-docs/**", "/swagger-ui.html**", "/webjars/**", "/images/**",
 				"/configuration/**", "/swagger-resources/**", "/dashboard").antMatchers(allowedApiEndpoints);
 
-	}
+    }
 
-	@Override
-	protected void configure(final HttpSecurity http) throws Exception {
-		http.authorizeRequests().anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll().and()
-				.logout().permitAll().and().sessionManagement().and().csrf().disable();
-		http.addFilter(securityContextPersistenceFilter());
-	}
+    @Override
+    protected void configure(final HttpSecurity http) throws Exception {
+        http.authorizeRequests().anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll().and()
+                .logout().permitAll().and().sessionManagement().and().csrf().disable();
+        http.addFilter(securityContextPersistenceFilter());
+    }
 
-	@Autowired
-	public void configureGlobal(final AuthenticationManagerBuilder auth) throws Exception {
-		// we use standard password encoder for all passwords
-		StandardPasswordEncoder spe = new StandardPasswordEncoder();
-		auth.userDetailsService(customJPAUserDetailsService).passwordEncoder(spe);
-	}
+    @Autowired
+    public void configureGlobal(final AuthenticationManagerBuilder auth) throws Exception {
+        // we use standard password encoder for all passwords
+        StandardPasswordEncoder spe = new StandardPasswordEncoder();
+        auth.userDetailsService(customJPAUserDetailsService).passwordEncoder(spe);
+    }
 
 }

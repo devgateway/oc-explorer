@@ -31,7 +31,6 @@ import java.util.Set;
 })
 @Document
 public class Organization implements Identifiable {
-    @ExcelExport
     @Id
     private String id;
 

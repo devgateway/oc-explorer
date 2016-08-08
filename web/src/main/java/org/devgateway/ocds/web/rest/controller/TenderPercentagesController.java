@@ -226,5 +226,43 @@ public class TenderPercentagesController extends GenericOCDSController {
     }
 	
 	
+	@ApiOperation("Returns the percent of tenders that are using eProcurement."
+			+ " This is read from tender.publicationMethod='eGP'")
+	@RequestMapping(value = "/api/percentTendersUsingEgp",  
+	method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
+	public List<DBObject> percentTendersUsingEgp(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+
+		DBObject project1 = new BasicDBObject();
+		project1.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+		project1.put("tender.publicationMethod", 1);
+
+		DBObject group = new BasicDBObject();
+		group.put(Fields.UNDERSCORE_ID, "$year");
+		group.put("totalTenders", new BasicDBObject("$sum", 1));
+		group.put("totalEgp", new BasicDBObject("$sum", new BasicDBObject("$cond",
+				Arrays.asList(new BasicDBObject("$eq", Arrays.asList("$tender.publicationMethod", "eGP")), 1, 0))));
+
+		DBObject project2 = new BasicDBObject();
+		project2.put(Fields.UNDERSCORE_ID, 0);
+		project2.put("year", Fields.UNDERSCORE_ID_REF);
+		project2.put("totalTenders", 1);
+		project2.put("totalEgp", 1);
+		project2.put("percentEgp", new BasicDBObject("$multiply",
+				Arrays.asList(new BasicDBObject("$divide", Arrays.asList("$totalEgp", "$totalTenders")), 100)));
+
+		Aggregation agg = newAggregation(
+				match(where("tender.tenderPeriod.startDate").exists(true)
+						.andOperator(getDefaultFilterCriteria(filter))),
+				new CustomProjectionOperation(project1), new CustomGroupingOperation(group),
+				new CustomProjectionOperation(project2), sort(Direction.ASC, "year"), skip(filter.getSkip()),
+				limit(filter.getPageSize()));
+
+		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+		List<DBObject> list = results.getMappedResults();
+		return list;
+    }
+	
+	
+	
 
 }
