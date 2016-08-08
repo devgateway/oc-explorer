@@ -8,8 +8,9 @@ cache:
         - ui/node
 env:
     global:
-        - MAVEN_OPTS="-XX:MaxPermSize=2g -Xmx4g"
-        - JAVA_OPTS="-XX:MaxPermSize=2g -Xmx4g"
-script: mvn test -B --quiet
+        - MAVEN_OPTS="-XX:MaxMetaspaceSize=256m -Xmx4g"
+        - JAVA_OPTS="-XX:MaxMetaspaceSize=256m -Xmx4g"
+install: mvn install -T 64C -Dskip.frontend.build=true -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+script: mvn test -T 64C -Dskip.frontend.build=true -B --quiet
 jdk:
     - oraclejdk8
