@@ -4,6 +4,7 @@ import {pluck} from "../../tools";
 import Cluster from "./cluster";
 import Location from "./location";
 import Visualization from "../../visualization";
+import style from "./style.less";
 
 class MapVisual extends frontendYearFilterable(Visualization){
   getMaxAmount(){
