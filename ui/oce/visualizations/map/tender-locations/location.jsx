@@ -91,7 +91,14 @@ export class ChartTab extends Tab{
           translations={translations}
           data={this.state.chartData}
           requestNewData={(_, chartData) => this.setState({chartData})}
-          width={400}
+          width={450}
+          height={350}
+          margin={{
+            t: 0,
+            l: 50,
+            r: 50,
+            b: 50
+          }}
       />
     </div>
   }
