@@ -4,6 +4,7 @@ import {Popup} from "react-leaflet";
 import translatable from "../../../translatable";
 import cn from "classnames";
 import OverviewChart from "../../../../oce/visualizations/charts/overview";
+import CostEffectiveness from "../../../../oce/visualizations/charts/cost-effectiveness";
 import {cacheFn} from "../../../tools"
 
 class LocationWrapper extends translatable(Component){
@@ -69,10 +70,10 @@ class Overview extends Tab{
 }
 
 let addTenderDeliveryLocationId = cacheFn(
-    (filters, id) => filters.set('tenderDeliveryLocationIdentifier', id)
+    (filters, id) => filters.set('tenderLoc', id)
 );
 
-class ChartTab extends Tab{
+export class ChartTab extends Tab{
   constructor(props){
     super(props);
     this.state = {
@@ -104,18 +105,14 @@ class OverviewChartTab extends ChartTab{
 
 OverviewChartTab.Chart = OverviewChart;
 
-class CostEffectiveness extends Tab{
+class CostEffectivenessTab extends ChartTab{
   static getName(__){
     return __('Cost effectiveness');
   }
 }
 
-class ProcurementMethod extends Tab{
-  static getName(__){
-    return __('Procurement method');
-  }
-}
+CostEffectivenessTab.Chart = CostEffectiveness;
 
-LocationWrapper.TABS = [Overview, OverviewChartTab, CostEffectiveness, ProcurementMethod];
+LocationWrapper.TABS = [Overview, OverviewChartTab, CostEffectivenessTab];
 
 export default LocationWrapper;
