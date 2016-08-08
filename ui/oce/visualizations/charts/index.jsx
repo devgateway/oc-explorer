@@ -15,9 +15,11 @@ class Chart extends Visualization{
   }
 
   getDecoratedLayout(){
-    var {title, xAxisRange, yAxisRange, styling} = this.props;
+    var {title, xAxisRange, yAxisRange, styling, width, height, margin} = this.props;
     var layout = this.getLayout();
-    layout.width = this.props.width;
+    layout.width = width;
+    layout.height = height;
+    layout.margin = margin;
     if(title) layout.title = title;
     if(xAxisRange) layout.xaxis.range = xAxisRange;
     if(yAxisRange) layout.yaxis.range = yAxisRange;
