@@ -30,8 +30,8 @@ public class MongoTemplateConfiguration {
     private MongoTemplate mongoTemplate;
 
     public void createMandatoryImportIndexes() {
-        // mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.budget.projectID", Direction.ASC));
-        // mongoTemplate.indexOps(Location.class).ensureIndex(new Index().on("description", Direction.ASC));
+        //mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.budget.projectID", Direction.ASC));
+        //mongoTemplate.indexOps(Location.class).ensureIndex(new Index().on("description", Direction.ASC));
     }
 
     @PostConstruct
