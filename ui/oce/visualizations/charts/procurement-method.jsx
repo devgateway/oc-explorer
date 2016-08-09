@@ -7,7 +7,7 @@ class ProcurementMethod extends FrontendYearFilterableChart{
   static toCats(data){
     if(!data) return Map();
     return data
-        .groupBy(pluckImm('procurementMethodDetails'))
+        .groupBy(pluckImm(this.PROCUREMENT_METHOD_FIELD))
         .map((bidTypes, _id) => Map({
           _id,
           totalTenderAmount: bidTypes.map(pluckImm('totalTenderAmount')).reduce((a, b) => a + b, 0)
@@ -47,9 +47,10 @@ class ProcurementMethod extends FrontendYearFilterableChart{
   }
 }
 
-ProcurementMethod.endpoint = 'tenderPriceByVnTypeYear';
+ProcurementMethod.endpoint = 'tenderPriceByOcdsTypeYear';
 ProcurementMethod.getName = __ => __('Procurement method');
 ProcurementMethod.UPDATABLE_FIELDS = ['data', 'years', 'cats'];
+ProcurementMethod.PROCUREMENT_METHOD_FIELD = 'procurementMethod';
 
 class ProcurementMethodComparison extends Comparison{
   render(){
