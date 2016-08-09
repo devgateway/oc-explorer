@@ -33,16 +33,16 @@ public class TenderBidPeriodPercentilesByYearController extends GenericOCDSContr
 
         ScriptOperations scriptOps = mongoTemplate.scriptOps();
 
-        Object object = scriptOps.call("tenderBidPeriodPercentiles",
-                filter.getYear() == null ? null : Arrays.toString(filter.getYear().toArray()),
-                filter.getProcuringEntityId() == null ? null
-                        : Arrays.toString(filter.getProcuringEntityId().toArray()).replace("[", "").replace("]", ""),
-                filter.getBidTypeId() == null ? null
-                        : Arrays.toString(filter.getBidTypeId().toArray()).replace("[", "").replace("]", ""),
-                filter.getBidSelectionMethod() == null ? null
-                        : Arrays.toString(filter.getBidSelectionMethod().toArray()).replace("[", "").replace("]", "")
+		Object object = scriptOps.call("tenderBidPeriodPercentiles",
+				filter.getYear() == null ? null : Arrays.toString(filter.getYear().toArray()),
+				filter.getProcuringEntityId() == null ? null
+						: Arrays.toString(filter.getProcuringEntityId().toArray()).replace("[", "").replace("]", ""),
+				filter.getBidTypeId() == null ? null
+						: Arrays.toString(filter.getBidTypeId().toArray()).replace("[", "").replace("]", ""),
+				filter.getBidSelectionMethod() == null ? null
+						: Arrays.toString(filter.getBidSelectionMethod().toArray()).replace("[", "").replace("]", "")
 
-        );
+		);
 
         return object;
     }
