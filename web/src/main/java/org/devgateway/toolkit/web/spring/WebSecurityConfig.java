@@ -60,30 +60,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return securityContextPersistenceFilter;
     }
 
-    protected String[] allowedApiEndpoints() {
-        return new String[] { "/api/tenderPriceByOcdsTypeYear/**", "/api/tenderPriceByVnTypeYear/**",
-                "/api/tenderBidPeriodPercentiles/**", "/api/ocds/release/budgetProjectId/**",
-                "/api/ocds/release/planningBidNo/**", "/api/plannedFundingByLocation/**",
-                "/api/costEffectivenessAwardAmount/**", "/api/costEffectivenessTenderAmount/**",
-                "/api/ocds/organization/all**", "/api/ocds/organization/procuringEntity/all**",
-                "/api/ocds/organization/id/**", "/api/ocds/release/all/**",
-                "/api/countBidPlansByYear/**", "/api/countTendersByYear/**", "/api/countAwardsByYear/**",
-                "/api/totalCancelledTendersByYear**", "/api/averageTenderPeriod**",
-                "/api/ocds/bidSelectionMethod/all**", "/api/topTenLargestAwards**", "/api/topTenLargestTenders**",
-                "/api/averageAwardPeriod**", "/api/ocds/release/ocid/**", "/api/ocds/bidType/all**",
-                "/api/ocds/contrMethod/all/**", "/api/ocds/package/budgetProjectId/**",
-                "/api/ocds/package/planningBidNo/**", "/api/ocds/package/all/**", "/api/ocds/package/ocid/**",
-                "/api/ocds/location/all/**", "/api/ocds/location/search/**", "/api/averageNumberOfTenderers/**",
-                "/api/percentTendersCancelled/**", "/api/percentTendersUsingEBid/**",
-                "/api/percentTendersUsingEgp/**", 	"/api/qualityAverageTenderPeriod/**",
-                "/api/qualityAverageAwardPeriod/**",
-                "/api/fundingByTenderDeliveryLocation/**", "/api/percentTendersAwardedWithTwoOrMoreTenderers/**",
-                "/api/ocds/excelExport",
-                "/api/percentTendersWithTwoOrMoreTenderers/**", "/api/qualityPlannedFundingByLocation",
-                 "/api/qualityFundingByTenderDeliveryLocation"
-        };
-    }
-
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/", "/home", "/v2/api-docs/**", "/swagger-ui.html**", "/webjars/**", "/images/**",
