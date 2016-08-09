@@ -15,9 +15,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import org.bson.types.ObjectId;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.TextSearchRequest;
@@ -109,26 +111,6 @@ public class GenericOCDSController {
         		filter.getTenderLoc(), filter);
     }
 
-    protected <S> List<S> genericSearchRequest(TextSearchRequest request, Criteria criteria, Class<S> clazz) {
-
-        PageRequest pageRequest = new PageRequest(request.getPageNumber(), request.getPageSize());
-
-        Query query = null;
-
-        if (request.getText() == null) {
-            query = new Query();
-        } else {
-            query = TextQuery.queryText(new TextCriteria().matching(request.getText())).sortByScore();
-        }
-        if (criteria != null) {
-            query.addCriteria(criteria);
-        }
-
-        query.with(pageRequest);
-
-        return mongoTemplate.find(query, clazz);
-    }
-
     private <S> Criteria createFilterCriteria(final String filterName, final List<S> filterValues,
                                               final DefaultFilterPagingRequest filter) {
         if (filterValues == null) {
@@ -153,8 +135,8 @@ public class GenericOCDSController {
 	protected void init() {
 		Map<String, Object> tmpMap = new HashMap<>();
 		tmpMap.put("tender.procuringEntity._id", 1);
-		tmpMap.put("tender.items.classification._id", 1);		
-		tmpMap.put("tender.items.deliveryLocation._id", 1);				
+		tmpMap.put("tender.items.classification._id", 1);
+		tmpMap.put("tender.items.deliveryLocation._id", 1);
 		filterProjectMap = Collections.unmodifiableMap(tmpMap);
 	}
 
@@ -176,11 +158,10 @@ public class GenericOCDSController {
         return filter.getInvert() ? criteria.norOperator(yearCriteria) : criteria.orOperator(yearCriteria);
     }
 
-
-	protected Criteria getDefaultFilterCriteria(final DefaultFilterPagingRequest filter) {
-		return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
-				getByTenderDeliveryLocationIdentifier(filter));
-	}
+    protected Criteria getDefaultFilterCriteria(final DefaultFilterPagingRequest filter) {
+        return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
+                getByTenderDeliveryLocationIdentifier(filter));
+    }
 
     protected MatchOperation getMatchDefaultFilterOperation(final DefaultFilterPagingRequest filter) {
         return match(getDefaultFilterCriteria(filter));

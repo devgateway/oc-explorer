@@ -61,5 +61,4 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
         return tagCount;
 
     }
-
 }
