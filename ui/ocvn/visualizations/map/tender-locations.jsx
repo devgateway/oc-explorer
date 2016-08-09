@@ -4,7 +4,7 @@ import BidSelectionMethod from "../../visualizations/bid-selection-method";
 
 class BidSelectionMethodTab extends ChartTab{
   static getName(__){
-    return __('Procurement method');
+    return __('Bid selection method');
   }
 }
 
