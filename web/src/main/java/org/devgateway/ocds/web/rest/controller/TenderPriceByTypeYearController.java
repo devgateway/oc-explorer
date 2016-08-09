@@ -41,49 +41,49 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
 	@ApiOperation(value = "Returns the tender price by OCDS type (procurementMethod), by year. "
 			+ "The OCDS type is read from tender.procurementMethod. The tender price is read from "
 			+ "tender.value.amount")
-    @RequestMapping(value = "/api/tenderPriceByOcdsTypeYear", method = { RequestMethod.POST, RequestMethod.GET },
-            produces = "application/json")
-    public List<DBObject> tenderPriceByOcdsTypeYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+	@RequestMapping(value = "/api/tenderPriceByOcdsTypeYear", method = { RequestMethod.POST,
+			RequestMethod.GET }, produces = "application/json")
+	public List<DBObject> tenderPriceByOcdsTypeYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
-        DBObject project = new BasicDBObject();
-        project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
-        project.put("tender.procurementMethod", 1);
-        project.put("tender.value", 1);
+		DBObject project = new BasicDBObject();
+		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+		project.put("tender.procurementMethod", 1);
+		project.put("tender.value", 1);
 
-        Aggregation agg = newAggregation(
-                match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),
-                getMatchDefaultFilterOperation(filter), new CustomProjectionOperation(project),
-                group("year", "tender.procurementMethod").sum("$tender.value.amount").as("totalTenderAmount"),
-                sort(Direction.DESC, "totalTenderAmount"), skip(filter.getSkip()), limit(filter.getPageSize()));
+		Aggregation agg = newAggregation(
+				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),
+				getMatchDefaultFilterOperation(filter), new CustomProjectionOperation(project),
+				group("year", "tender.procurementMethod").sum("$tender.value.amount").as("totalTenderAmount"),
+				sort(Direction.DESC, "totalTenderAmount"), skip(filter.getSkip()), limit(filter.getPageSize()));
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> tagCount = results.getMappedResults();
-        return tagCount;
+		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+		List<DBObject> tagCount = results.getMappedResults();
+		return tagCount;
 
-    }
+	}
 
 	@ApiOperation(value = "Returns the tender price by Vietnam type (procurementMethodDetails), by year. "
 			+ "The OCDS type is read from tender.procurementMethodDetails. The tender price is read from "
 			+ "tender.value.amount")
-    @RequestMapping(value = "/api/tenderPriceByVnTypeYear", method = { RequestMethod.POST, RequestMethod.GET },
-            produces = "application/json")
-    public List<DBObject> tenderPriceByVnTypeYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+	@RequestMapping(value = "/api/tenderPriceByVnTypeYear", method = { RequestMethod.POST,
+			RequestMethod.GET }, produces = "application/json")
+	public List<DBObject> tenderPriceByVnTypeYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
-        DBObject project = new BasicDBObject();
-        project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
-        project.put("tender.procurementMethodDetails", 1);
-        project.put("tender.value", 1);
+		DBObject project = new BasicDBObject();
+		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+		project.put("tender.procurementMethodDetails", 1);
+		project.put("tender.value", 1);
 
-        Aggregation agg = newAggregation(
-                match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),
-                getMatchDefaultFilterOperation(filter), new CustomProjectionOperation(project),
-                group("year", "tender.procurementMethodDetails").sum("$tender.value.amount").as("totalTenderAmount"),
-                sort(Direction.ASC, "year"));
+		Aggregation agg = newAggregation(
+				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),
+				getMatchDefaultFilterOperation(filter), new CustomProjectionOperation(project),
+				group("year", "tender.procurementMethodDetails").sum("$tender.value.amount").as("totalTenderAmount"),
+				sort(Direction.ASC, "year"));
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> tagCount = results.getMappedResults();
-        return tagCount;
+		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+		List<DBObject> tagCount = results.getMappedResults();
+		return tagCount;
 
-    }
+	}
 
 }
