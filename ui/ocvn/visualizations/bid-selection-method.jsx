@@ -4,5 +4,6 @@ class BidSelectionMethod extends ProcurementMethod{}
 
 BidSelectionMethod.endpoint = 'tenderPriceByVnTypeYear';
 BidSelectionMethod.getName = __ => __('Bid selection method');
+ProcurementMethod.PROCUREMENT_METHOD_FIELD = 'procurementMethodDetails';
 
 export default BidSelectionMethod;
