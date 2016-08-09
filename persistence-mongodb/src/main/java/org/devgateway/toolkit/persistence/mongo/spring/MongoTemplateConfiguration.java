@@ -30,10 +30,8 @@ public class MongoTemplateConfiguration {
     private MongoTemplate mongoTemplate;
 
     public void createMandatoryImportIndexes() {
-        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.budget.projectID", Direction.ASC));
-        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.bidNo", Direction.ASC));
-        mongoTemplate.indexOps(Location.class).ensureIndex(new Index().on("description", Direction.ASC));
-
+        //mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.budget.projectID", Direction.ASC));
+        //mongoTemplate.indexOps(Location.class).ensureIndex(new Index().on("description", Direction.ASC));
     }
 
     @PostConstruct
@@ -45,8 +43,6 @@ public class MongoTemplateConfiguration {
     public void createPostImportStructures() {
 
         // initialize some extra indexes
-        mongoTemplate.indexOps(Release.class)
-                .ensureIndex(new Index().on("planning.bidPlanProjectDateApprove", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("ocid", Direction.ASC));
 
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.procurementMethod", Direction.ASC));

@@ -125,26 +125,6 @@ public class GenericOCDSController {
 	}
      
 
-    protected <S> List<S> genericSearchRequest(TextSearchRequest request, Criteria criteria, Class<S> clazz) {
-
-        PageRequest pageRequest = new PageRequest(request.getPageNumber(), request.getPageSize());
-
-        Query query = null;
-
-        if (request.getText() == null) {
-            query = new Query();
-        } else {
-            query = TextQuery.queryText(new TextCriteria().matching(request.getText())).sortByScore();
-        }
-        if (criteria != null) {
-            query.addCriteria(criteria);
-        }
-
-        query.with(pageRequest);
-
-        return mongoTemplate.find(query, clazz);
-    }
-
     private <S> Criteria createFilterCriteria(final String filterName, final List<S> filterValues,
                                               final DefaultFilterPagingRequest filter) {
         if (filterValues == null) {

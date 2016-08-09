@@ -50,7 +50,7 @@ public class OrganizationSearchController extends GenericOCDSController {
 	}
 
 	/**
-	 * Searches the {@link VNOrganization} based on a given text. The text has
+	 * Searches the {@link Organization} based on a given text. The text has
 	 * to have minimum 3 characters and max 30
 	 * 
 	 * @param request
