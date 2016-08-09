@@ -97,7 +97,7 @@ public class GenericOCDSController {
         return createFilterCriteria("tender.items.classification._id", filter.getBidTypeId(), filter);
     }
 
-    
+
     /**
      * Appends the tender.items.deliveryLocation._id
      *
@@ -107,26 +107,6 @@ public class GenericOCDSController {
     protected Criteria getByTenderDeliveryLocationIdentifier(final DefaultFilterPagingRequest filter) {
         return createFilterCriteria("tender.items.deliveryLocation._id",
         		filter.getTenderLoc(), filter);
-    }
-
-    protected <S> List<S> genericSearchRequest(TextSearchRequest request, Criteria criteria, Class<S> clazz) {
-
-        PageRequest pageRequest = new PageRequest(request.getPageNumber(), request.getPageSize());
-
-        Query query = null;
-
-        if (request.getText() == null) {
-            query = new Query();
-        } else {
-            query = TextQuery.queryText(new TextCriteria().matching(request.getText())).sortByScore();
-        }
-        if (criteria != null) {
-            query.addCriteria(criteria);
-        }
-
-        query.with(pageRequest);
-
-        return mongoTemplate.find(query, clazz);
     }
 
     private <S> Criteria createFilterCriteria(final String filterName, final List<S> filterValues,
@@ -153,8 +133,8 @@ public class GenericOCDSController {
 	protected void init() {
 		Map<String, Object> tmpMap = new HashMap<>();
 		tmpMap.put("tender.procuringEntity._id", 1);
-		tmpMap.put("tender.items.classification._id", 1);		
-		tmpMap.put("tender.items.deliveryLocation._id", 1);				
+		tmpMap.put("tender.items.classification._id", 1);
+		tmpMap.put("tender.items.deliveryLocation._id", 1);
 		filterProjectMap = Collections.unmodifiableMap(tmpMap);
 	}
 

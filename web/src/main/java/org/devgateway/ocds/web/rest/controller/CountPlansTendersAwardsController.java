@@ -49,36 +49,6 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
 @Cacheable
 public class CountPlansTendersAwardsController extends GenericOCDSController {
-
-	/**
-	 * db.release.aggregate( [ {$match : { "planning.bidPlanProjectDateApprove":
-	 * { $exists: true } }}, {$project: { planning:1, year: {$year :
-	 * "$planning.bidPlanProjectDateApprove"} } }, {$group: {_id: "$year",
-	 * count: { $sum:1}}}, {$sort: { _id:1}} ])
-	 * 
-	 * @return
-	 */
-	@ApiOperation(value = "Count of bid plans, by year. This will count the releases that have the field"
-			+ "planning.bidPlanProjectDateApprove populated. "
-			+ "The year grouping is taken from planning.bidPlanProjectDateApprove")
-	@RequestMapping(value = "/api/countBidPlansByYear", 
-	method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")	
-	public List<DBObject> countBidPlansByYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
-
-		DBObject project = new BasicDBObject();
-		project.put("year", new BasicDBObject("$year", "$planning.bidPlanProjectDateApprove"));
-
-		Aggregation agg = Aggregation.newAggregation(match(where("planning.bidPlanProjectDateApprove").exists(true)),
-				getMatchDefaultFilterOperation(filter), new CustomOperation(new BasicDBObject("$project", project)),
-				group("$year").count().as("count"), sort(Direction.DESC, Fields.UNDERSCORE_ID), skip(filter.getSkip()),
-				limit(filter.getPageSize()));
-
-		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-		List<DBObject> tagCount = results.getMappedResults();
-		return tagCount;
-
-	}
-
 	/**
 	 * db.release.aggregate( [ {$match : { "tender.tenderPeriod.startDate": {
 	 * $exists: true } }}, {$project: { year: {$year :

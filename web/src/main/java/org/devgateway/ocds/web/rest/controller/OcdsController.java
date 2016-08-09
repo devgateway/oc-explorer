@@ -57,25 +57,6 @@ public class OcdsController extends GenericOCDSController {
         return release;
     }
 
-    /**
-     * Returns one {@link Release} entity found based on bidNo
-     *
-     * @param bidNo
-     *            the bidNo
-     * @return the release
-     */
-	
-	@ApiOperation(value = "Returns a release entity for the given Planning Bid Number."
-			+ "The planning bid number is taken from planning.bidNo")    
-    @RequestMapping(value = "/api/ocds/release/planningBidNo/{bidNo:^[a-zA-Z0-9]*$}", 
-    method = { RequestMethod.POST, RequestMethod.GET },
-            produces = "application/json")
-    public Release ocdsByPlanningBidNo(@PathVariable final String bidNo) {
-
-        Release release = releaseRepository.findByPlanningBidNo(bidNo);
-        return release;
-    }
-
 	@ApiOperation(value = "Returns a release entity for the given open contracting id (OCID).")
     @RequestMapping(value = "/api/ocds/release/ocid/{ocid}",  
     method = { RequestMethod.POST, RequestMethod.GET },
@@ -113,17 +94,6 @@ public class OcdsController extends GenericOCDSController {
         return releasePackage;
     }
 
-	@ApiOperation(value = "Returns a release package for the given open contracting id (OCID)."
-			+ "This will contain the OCDS package information (metadata about publisher) plus the release itself.")
-    @RequestMapping(value = "/api/ocds/package/planningBidNo/{bidNo:^[a-zA-Z0-9]*$}", 
-    method = { RequestMethod.POST, RequestMethod.GET },
-            produces = "application/json")
-    public ReleasePackage packagedReleaseByPlanningBidNo(@PathVariable final String bidNo) {
-        Release release = ocdsByPlanningBidNo(bidNo);
-
-        return createReleasePackage(release);
-    }
-
 	@ApiOperation(value = "Returns a release package for the given project id. "
 			+ "The project id is read from planning.budget.projectID."
 			+ "This will contain the OCDS package information (metadata about publisher) plus the release itself.") 
@@ -150,8 +120,7 @@ public class OcdsController extends GenericOCDSController {
                 Direction.ASC, "id");
 
         List<Release> find = mongoTemplate
-                .find(query(getYearFilterCriteria("planning.bidPlanProjectDateApprove", releaseRequest)
-                        .andOperator(getDefaultFilterCriteria(releaseRequest))).with(pageRequest), Release.class);
+                .find(query(getDefaultFilterCriteria(releaseRequest)).with(pageRequest), Release.class);
 
         return find;
 
