@@ -3,9 +3,10 @@ import Component from "../../../pure-render-component";
 import {Popup} from "react-leaflet";
 import translatable from "../../../translatable";
 import cn from "classnames";
-import OverviewChart from "../../../../oce/visualizations/charts/overview";
-import CostEffectiveness from "../../../../oce/visualizations/charts/cost-effectiveness";
+import OverviewChart from "../../../visualizations/charts/overview";
+import CostEffectiveness from "../../../visualizations/charts/cost-effectiveness";
 import {cacheFn} from "../../../tools"
+import ProcurementMethodChart from '../../../visualizations/charts/procurement-method';
 
 class LocationWrapper extends translatable(Component){
   constructor(props){
@@ -25,12 +26,12 @@ class LocationWrapper extends translatable(Component){
             <div>
               <ul className="nav nav-tabs">
                 {this.constructor.TABS.map((Tab, index) =>
-                  <li key={index}
-                      className={cn({active: index == currentTab})}
-                      onClick={e => this.setState({currentTab: index})}
-                  >
-                    <a href="javascript:void(0);">{Tab.getName(this.__.bind(this))}</a>
-                  </li>
+                    <li key={index}
+                        className={cn({active: index == currentTab})}
+                        onClick={e => this.setState({currentTab: index})}
+                    >
+                      <a href="javascript:void(0);">{Tab.getName(this.__.bind(this))}</a>
+                    </li>
                 )}
               </ul>
               <CurrentTab
@@ -49,7 +50,7 @@ class LocationWrapper extends translatable(Component){
 
 class Tab extends translatable(Component){}
 
-class Overview extends Tab{
+export class OverviewTab extends Tab{
   static getName(__){
     return __('Overview');
   }
@@ -104,7 +105,7 @@ export class ChartTab extends Tab{
   }
 }
 
-class OverviewChartTab extends ChartTab{
+export class OverviewChartTab extends ChartTab{
   static getName(__){
     return __('Overview chart');
   }
@@ -112,7 +113,7 @@ class OverviewChartTab extends ChartTab{
 
 OverviewChartTab.Chart = OverviewChart;
 
-class CostEffectivenessTab extends ChartTab{
+export class CostEffectivenessTab extends ChartTab{
   static getName(__){
     return __('Cost effectiveness');
   }
@@ -120,6 +121,14 @@ class CostEffectivenessTab extends ChartTab{
 
 CostEffectivenessTab.Chart = CostEffectiveness;
 
-LocationWrapper.TABS = [Overview, OverviewChartTab, CostEffectivenessTab];
+class ProcurementMethodTab extends ChartTab{
+  static getName(__){
+    return __('Procurement method');
+  }
+}
+
+ProcurementMethodTab.Chart = ProcurementMethodChart;
+
+LocationWrapper.TABS = [OverviewTab, OverviewChartTab, CostEffectivenessTab, ProcurementMethodTab];
 
 export default LocationWrapper;
