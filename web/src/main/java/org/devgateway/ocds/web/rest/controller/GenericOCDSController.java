@@ -22,22 +22,17 @@ import javax.annotation.PostConstruct;
 import org.bson.types.ObjectId;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
-import org.devgateway.ocds.web.rest.controller.request.TextSearchRequest;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.TextCriteria;
-import org.springframework.data.mongodb.core.query.TextQuery;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -124,26 +119,6 @@ public class GenericOCDSController {
 						filter);
 	}
      
-
-    protected <S> List<S> genericSearchRequest(TextSearchRequest request, Criteria criteria, Class<S> clazz) {
-
-        PageRequest pageRequest = new PageRequest(request.getPageNumber(), request.getPageSize());
-
-        Query query = null;
-
-        if (request.getText() == null) {
-            query = new Query();
-        } else {
-            query = TextQuery.queryText(new TextCriteria().matching(request.getText())).sortByScore();
-        }
-        if (criteria != null) {
-            query.addCriteria(criteria);
-        }
-
-        query.with(pageRequest);
-
-        return mongoTemplate.find(query, clazz);
-    }
 
     private <S> Criteria createFilterCriteria(final String filterName, final List<S> filterValues,
                                               final DefaultFilterPagingRequest filter) {

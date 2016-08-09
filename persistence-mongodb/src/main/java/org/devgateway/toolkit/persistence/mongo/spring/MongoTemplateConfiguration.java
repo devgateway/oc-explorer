@@ -29,12 +29,12 @@ public class MongoTemplateConfiguration {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public void createMandatoryImportIndexes() {
-        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.budget.projectID", Direction.ASC));
-        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.bidNo", Direction.ASC));
-        mongoTemplate.indexOps(Location.class).ensureIndex(new Index().on("description", Direction.ASC));
-
-    }
+	public void createMandatoryImportIndexes() {
+		// vietnam specific indexes
+		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.budget.projectID", Direction.ASC));
+		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.bidNo", Direction.ASC));
+		mongoTemplate.indexOps(Location.class).ensureIndex(new Index().on("description", Direction.ASC));
+	}
 
     @PostConstruct
     public void mongoPostInit() {
@@ -45,8 +45,6 @@ public class MongoTemplateConfiguration {
     public void createPostImportStructures() {
 
         // initialize some extra indexes
-        mongoTemplate.indexOps(Release.class)
-                .ensureIndex(new Index().on("planning.bidPlanProjectDateApprove", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("ocid", Direction.ASC));
 
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.procurementMethod", Direction.ASC));
@@ -78,6 +76,10 @@ public class MongoTemplateConfiguration {
         
     	mongoTemplate.indexOps(VNLocation.class)
     	.ensureIndex(new TextIndexDefinitionBuilder().onField("description").onField("uri").build());
+    	
+    	//vietnam specific indexes:
+    	  mongoTemplate.indexOps(Release.class)
+    	  .ensureIndex(new Index().on("planning.bidPlanProjectDateApprove", Direction.ASC));
 
         logger.info("Added extra Mongo indexes");
 
