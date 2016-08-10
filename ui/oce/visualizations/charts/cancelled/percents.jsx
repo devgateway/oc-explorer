@@ -23,7 +23,8 @@ class CancelledPercents extends FrontendYearFilterableChart{
         type: 'category'
       },
       yaxis: {
-        title: this.__("Percent")
+        title: this.__("Percent"),
+        hoverformat: '.2f'
       }
     }
   }

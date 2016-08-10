@@ -24,7 +24,8 @@ class AvgNrBids extends FrontendYearFilterableChart{
         type: "category"
       },
       yaxis: {
-        title: this.__("Number")
+        title: this.__("Number"),
+        hoverformat: '.2f'
       }
     }
   }

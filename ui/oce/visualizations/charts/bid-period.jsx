@@ -9,8 +9,8 @@ class BidPeriod extends FrontendYearFilterableChart {
     let awardsHash = response2obj('averageAwardDays', awards);
     return tenders.map(tender => ({
       year: tender._id,
-      tender: +tender.averageTenderDays.toFixed(2),
-      award: +(awardsHash[tender._id] || 0).toFixed(2)
+      tender: +tender.averageTenderDays,
+      award: +(awardsHash[tender._id] || 0)
     }))
   };
 
@@ -60,7 +60,8 @@ class BidPeriod extends FrontendYearFilterableChart {
       annotations,
       barmode: "stack",
       xaxis: {
-        title: this.__("Number of days")
+        title: this.__("Number of days"),
+        hoverformat: '.2f'
       },
       yaxis: {
         title: this.__("Year"),
