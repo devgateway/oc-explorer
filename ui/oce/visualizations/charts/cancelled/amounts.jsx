@@ -26,7 +26,7 @@ class CancelledFunding extends FrontendYearFilterableChart{
   getLayout(){
     return {
       xaxis: {
-        title: this.__("Years"),
+        title: this.__("Year"),
         type: 'category'
       },
       yaxis: {
