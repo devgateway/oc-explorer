@@ -24,4 +24,6 @@ public final class MongoConstants {
 	public static final int MINIMUM_MONGO_YEAR = 2010;
 	
 	public static final int MAXIMUM_MONGO_YEAR = 2020;	
+	
+	public static final String DEFAULT_IMPORT_TIMEZONE = "America/New_York";
 }
