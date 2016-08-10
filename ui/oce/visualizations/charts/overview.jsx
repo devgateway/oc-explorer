@@ -19,7 +19,7 @@ class OverviewChart extends FrontendYearFilterableChart{
     if(!data) return [];
     let LINES = {
       award: this.__("Award"),
-      bidplan: this.__("Bid plan"),
+      bidplan: this.__("Bidplan"),
       tender: this.__("Tender")
     };
     let years = data.map(pluckImm('year')).toArray();
