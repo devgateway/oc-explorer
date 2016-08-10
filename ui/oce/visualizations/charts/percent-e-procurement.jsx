@@ -23,7 +23,7 @@ class PercentEProcurement extends FrontendYearFilterableChart{
         type: 'category'
       },
       yaxis: {
-        title: "%"
+        title: this.__("Percent")
       }
     }
   }

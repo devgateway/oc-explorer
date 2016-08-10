@@ -30,7 +30,7 @@ class CancelledFunding extends FrontendYearFilterableChart{
         type: 'category'
       },
       yaxis: {
-        title: this.__("Amount")
+        title: this.__("Amount (in VND)")
       }
     }
   }
