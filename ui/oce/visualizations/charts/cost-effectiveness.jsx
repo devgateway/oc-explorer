@@ -41,11 +41,11 @@ class CostEffectiveness extends FrontendYearFilterableChart{
     return {
       barmode: "stack",
       xaxis: {
-        title: this.__("Years"),
+        title: this.__("Year"),
         type: "category"
       },
       yaxis: {
-        title: this.__("Amount")
+        title: this.__("Amount (in VND)")
       }
     }
   }
