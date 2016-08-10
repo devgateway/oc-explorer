@@ -31,7 +31,7 @@ class PercentEProcurement extends FrontendYearFilterableChart{
 
 
 PercentEProcurement.endpoint = 'percentTendersUsingEgp';
-PercentEProcurement.getName = __ => __('Percent of tenders using eProcurement');
+PercentEProcurement.getName = __ => __('Percent of Tenders Using e-Procurement');
 PercentEProcurement.getMaxField = imm => imm.get('percentEgp', 0);
 
 export default PercentEProcurement;

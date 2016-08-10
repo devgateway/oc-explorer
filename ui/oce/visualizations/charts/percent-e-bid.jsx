@@ -30,7 +30,7 @@ class PercentEbid extends FrontendYearFilterableChart{
 }
 
 PercentEbid.endpoint = 'percentTendersUsingEBid';
-PercentEbid.getName = __ => __('Percent of tenders using eBid');
+PercentEbid.getName = __ => __('Percent of Tenders Using e-Bid');
 PercentEbid.getMaxField = pluckImm('percentageTendersUsingEbid');
 
 export default PercentEbid;
