@@ -60,7 +60,7 @@ class BidPeriod extends FrontendYearFilterableChart {
       annotations,
       barmode: "stack",
       xaxis: {
-        title: this.__("Days")
+        title: this.__("Number of days")
       },
       yaxis: {
         title: this.__("Year"),
