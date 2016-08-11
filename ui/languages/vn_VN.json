@@ -61,5 +61,12 @@
   "Toolkit description": "Mô tả bộ công cụ",
   "Bid types": "Phương thức gói thầu",
   "Procurement types": "Hình thức đấu thầu",
-  "Contract method": "Loại hợp đồng"
+  "Contract method": "Loại hợp đồng",
+  "Select all": "Chọn tất cả",
+  "Select none": "Không chọn mục nào",
+  "Planning": "Lập kế hoạch",
+  "Tender locations": "Địa điểm đấu thầu",
+  "Overview chart": "Đồ thị Tổng quan",
+  "Count (in VND)":	"Giá trị (số tiền bằng VND)",
+  "Number of days": "Số ngày thực hiện"
 }
