@@ -6,7 +6,6 @@ import java.net.URL;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.IOUtils;
-import org.devgateway.ocds.persistence.mongo.Location;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
 import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
@@ -32,8 +31,7 @@ public class MongoTemplateConfiguration {
 	public void createMandatoryImportIndexes() {
 		// vietnam specific indexes
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.budget.projectID", Direction.ASC));
-		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.bidNo", Direction.ASC));
-		mongoTemplate.indexOps(Location.class).ensureIndex(new Index().on("description", Direction.ASC));
+		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.bidNo", Direction.ASC));		
 	}
 
     @PostConstruct
