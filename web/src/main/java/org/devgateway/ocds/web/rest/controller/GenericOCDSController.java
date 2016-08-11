@@ -188,16 +188,6 @@ public class GenericOCDSController {
         return group(groupBy.toArray(new String[0]));
     }
 
-    @Deprecated
-    protected AggregationOperation getTopXFilterOperation(final GroupingFilterPagingRequest filter,
-                                                          final DBObject group) {
-        if (filter.getGroupByCategory() != null) {
-            group.removeField(Fields.UNDERSCORE_ID);
-            group.put(Fields.UNDERSCORE_ID, "$" + getGroupByCategory(filter));
-        }
-        return new CustomOperation(new BasicDBObject("$group", group));
-    }
-
     private String getGroupByCategory(final GroupingFilterPagingRequest filter) {
         if ("bidTypeId".equals(filter.getGroupByCategory())) {
             return "tender.items.classification._id".replace(".", "");
