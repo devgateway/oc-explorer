@@ -20,25 +20,14 @@ import javax.annotation.PostConstruct;
 
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
-import org.devgateway.ocds.web.rest.controller.request.TextSearchRequest;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
-import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
-import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.TextCriteria;
-import org.springframework.data.mongodb.core.query.TextQuery;
-
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 
 /**
  * @author mpostelnicu
@@ -108,6 +97,40 @@ public class GenericOCDSController {
         return createFilterCriteria("tender.items.deliveryLocation._id",
         		filter.getTenderLoc(), filter);
     }
+    
+    protected Criteria getByTenderAmount(final DefaultFilterPagingRequest filter) {
+        return createFilterCriteria("tender.value.amount",
+        		filter.getTenderLoc(), filter);
+    }
+    
+	/**
+	 * Creates a search criteria filter based on tender.value.amount and uses
+	 * {@link DefaultFilterPagingRequest#getMinTenderValueAmount()} and
+	 * {@link DefaultFilterPagingRequest#getMaxTenderValueAmount()} to create
+	 * interval search
+	 * 
+	 * @param filter
+	 * @return
+	 */
+	private Criteria getByTenderAmountIntervalCriteria(final DefaultFilterPagingRequest filter) {
+		if (filter.getMaxTenderValueAmount() == null && filter.getMinTenderValueAmount() == null) {
+			return new Criteria();
+		}
+		Criteria criteria = where("tender.value.amount");
+		if (filter.getMinTenderValueAmount() != null) {
+			if (filter.getInvert()) {
+				criteria = criteria.not();
+			}
+			criteria = criteria.gte(filter.getMinTenderValueAmount().doubleValue());
+		}
+		if (filter.getMaxTenderValueAmount() != null) {
+			if (filter.getInvert()) {
+				criteria = criteria.not();
+			}
+			criteria = criteria.lte(filter.getMaxTenderValueAmount().doubleValue());
+		}
+		return criteria;
+	}
 
     private <S> Criteria createFilterCriteria(final String filterName, final List<S> filterValues,
                                               final DefaultFilterPagingRequest filter) {
@@ -135,6 +158,7 @@ public class GenericOCDSController {
 		tmpMap.put("tender.procuringEntity._id", 1);
 		tmpMap.put("tender.items.classification._id", 1);
 		tmpMap.put("tender.items.deliveryLocation._id", 1);
+		tmpMap.put("tender.value.amount", 1);
 		filterProjectMap = Collections.unmodifiableMap(tmpMap);
 	}
 
@@ -159,7 +183,7 @@ public class GenericOCDSController {
 
 	protected Criteria getDefaultFilterCriteria(final DefaultFilterPagingRequest filter) {
 		return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
-				getByTenderDeliveryLocationIdentifier(filter));
+				getByTenderDeliveryLocationIdentifier(filter), getByTenderAmountIntervalCriteria(filter));
 	}
 
     protected MatchOperation getMatchDefaultFilterOperation(final DefaultFilterPagingRequest filter) {
@@ -186,16 +210,6 @@ public class GenericOCDSController {
         }
 
         return group(groupBy.toArray(new String[0]));
-    }
-
-    @Deprecated
-    protected AggregationOperation getTopXFilterOperation(final GroupingFilterPagingRequest filter,
-                                                          final DBObject group) {
-        if (filter.getGroupByCategory() != null) {
-            group.removeField(Fields.UNDERSCORE_ID);
-            group.put(Fields.UNDERSCORE_ID, "$" + getGroupByCategory(filter));
-        }
-        return new CustomOperation(new BasicDBObject("$group", group));
     }
 
     private String getGroupByCategory(final GroupingFilterPagingRequest filter) {

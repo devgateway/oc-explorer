@@ -3,6 +3,7 @@
  */
 package org.devgateway.ocds.web.rest.controller.request;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import cz.jirutka.validator.collection.constraints.EachPattern;
@@ -24,6 +25,14 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 	
 	@ApiModelProperty(value = "This will filter after tender.items.deliveryLocation._id")
 	private List<String> tenderLoc;
+	
+	@ApiModelProperty(value = "This will filter after tender.value.amount and will specify a minimum"
+			+ "Use /api/tenderValueInterval to get the minimum allowed.")
+	private BigDecimal minTenderValueAmount;
+	
+	@ApiModelProperty(value = "This will filter after tender.value.amount and will specify a maximum."
+			+ "Use /api/tenderValueInterval to get the maximum allowed.")
+	private BigDecimal maxTenderValueAmount;
 
 	/**
 	 * This parameter will invert (negate) all existing filtering parameters. So
@@ -75,6 +84,22 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
 	public void setTenderLoc(List<String> tenderDeliveryLocationGazetteerIdentifier) {
 		this.tenderLoc = tenderDeliveryLocationGazetteerIdentifier;
+	}
+
+	public BigDecimal getMinTenderValueAmount() {
+		return minTenderValueAmount;
+	}
+
+	public void setMinTenderValueAmount(BigDecimal minTenderValueAmount) {
+		this.minTenderValueAmount = minTenderValueAmount;
+	}
+
+	public BigDecimal getMaxTenderValueAmount() {
+		return maxTenderValueAmount;
+	}
+
+	public void setMaxTenderValueAmount(BigDecimal maxTenderValueAmount) {
+		this.maxTenderValueAmount = maxTenderValueAmount;
 	}
 
 
