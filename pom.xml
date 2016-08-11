@@ -60,7 +60,6 @@
         <tag>0.0.3-SNAPSHOT</tag>
     </scm>
 
-
     <distributionManagement>
         <repository>
             <id>oc-explorer-releases</id>
@@ -70,7 +69,6 @@
     </distributionManagement>
 
     <repositories>
-
         <repository>
             <id>OCVN</id>
             <name>OCVN</name>
@@ -94,15 +92,12 @@
     </pluginRepositories>
 
     <dependencies>
-
         <dependency>
             <groupId>org.apache.derby</groupId>
             <artifactId>derby</artifactId>
             <version>${derby.version}</version>
         </dependency>
-
     </dependencies>
-
 
     <dependencyManagement>
         <dependencies>
@@ -116,7 +111,6 @@
 
     <build>
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -133,8 +127,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
