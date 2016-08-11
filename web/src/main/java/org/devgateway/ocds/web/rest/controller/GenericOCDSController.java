@@ -105,29 +105,29 @@ public class GenericOCDSController {
     
 	/**
 	 * Creates a search criteria filter based on tender.value.amount and uses
-	 * {@link DefaultFilterPagingRequest#getMinTenderValueAmount()} and
-	 * {@link DefaultFilterPagingRequest#getMaxTenderValueAmount()} to create
+	 * {@link DefaultFilterPagingRequest#getMinTenderValue()} and
+	 * {@link DefaultFilterPagingRequest#getMaxTenderValue()} to create
 	 * interval search
 	 * 
 	 * @param filter
 	 * @return
 	 */
 	private Criteria getByTenderAmountIntervalCriteria(final DefaultFilterPagingRequest filter) {
-		if (filter.getMaxTenderValueAmount() == null && filter.getMinTenderValueAmount() == null) {
+		if (filter.getMaxTenderValue() == null && filter.getMinTenderValue() == null) {
 			return new Criteria();
 		}
 		Criteria criteria = where("tender.value.amount");
-		if (filter.getMinTenderValueAmount() != null) {
+		if (filter.getMinTenderValue() != null) {
 			if (filter.getInvert()) {
 				criteria = criteria.not();
 			}
-			criteria = criteria.gte(filter.getMinTenderValueAmount().doubleValue());
+			criteria = criteria.gte(filter.getMinTenderValue().doubleValue());
 		}
-		if (filter.getMaxTenderValueAmount() != null) {
+		if (filter.getMaxTenderValue() != null) {
 			if (filter.getInvert()) {
 				criteria = criteria.not();
 			}
-			criteria = criteria.lte(filter.getMaxTenderValueAmount().doubleValue());
+			criteria = criteria.lte(filter.getMaxTenderValue().doubleValue());
 		}
 		return criteria;
 	}

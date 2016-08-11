@@ -28,11 +28,11 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 	
 	@ApiModelProperty(value = "This will filter after tender.value.amount and will specify a minimum"
 			+ "Use /api/tenderValueInterval to get the minimum allowed.")
-	private BigDecimal minTenderValueAmount;
+	private BigDecimal minTenderValue;
 	
 	@ApiModelProperty(value = "This will filter after tender.value.amount and will specify a maximum."
 			+ "Use /api/tenderValueInterval to get the maximum allowed.")
-	private BigDecimal maxTenderValueAmount;
+	private BigDecimal maxTenderValue;
 
 	/**
 	 * This parameter will invert (negate) all existing filtering parameters. So
@@ -86,20 +86,20 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 		this.tenderLoc = tenderDeliveryLocationGazetteerIdentifier;
 	}
 
-	public BigDecimal getMinTenderValueAmount() {
-		return minTenderValueAmount;
+	public BigDecimal getMinTenderValue() {
+		return minTenderValue;
 	}
 
-	public void setMinTenderValueAmount(BigDecimal minTenderValueAmount) {
-		this.minTenderValueAmount = minTenderValueAmount;
+	public void setMinTenderValue(BigDecimal minTenderValueAmount) {
+		this.minTenderValue = minTenderValueAmount;
 	}
 
-	public BigDecimal getMaxTenderValueAmount() {
-		return maxTenderValueAmount;
+	public BigDecimal getMaxTenderValue() {
+		return maxTenderValue;
 	}
 
-	public void setMaxTenderValueAmount(BigDecimal maxTenderValueAmount) {
-		this.maxTenderValueAmount = maxTenderValueAmount;
+	public void setMaxTenderValue(BigDecimal maxTenderValueAmount) {
+		this.maxTenderValue = maxTenderValueAmount;
 	}
 
 
