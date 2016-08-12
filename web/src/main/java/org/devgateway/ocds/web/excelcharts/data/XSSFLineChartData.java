@@ -15,13 +15,15 @@
    limitations under the License.
    ==================================================================== */
 
-package org.devgateway.ocds.web.excelcharts.linechart;
+package org.devgateway.ocds.web.excelcharts.data;
 
 import org.apache.poi.ss.usermodel.Chart;
 import org.apache.poi.ss.usermodel.charts.ChartAxis;
 import org.apache.poi.ss.usermodel.charts.ChartDataSource;
 import org.apache.poi.xssf.usermodel.XSSFChart;
 import org.apache.poi.xssf.usermodel.charts.AbstractXSSFChartSeries;
+import org.devgateway.ocds.web.excelcharts.CustomChartData;
+import org.devgateway.ocds.web.excelcharts.CustomChartSeries;
 import org.devgateway.ocds.web.excelcharts.util.XSSFChartUtil;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTAxDataSource;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTCatAx;
@@ -39,7 +41,7 @@ import java.util.List;
 /**
  * Holds data for a XSSF Line Chart
  */
-public class XSSFLineChartData implements LineChartData {
+public class XSSFLineChartData implements CustomChartData {
 
     /**
      * List of all data series.
@@ -50,7 +52,7 @@ public class XSSFLineChartData implements LineChartData {
         series = new ArrayList<Series>();
     }
 
-    static class Series extends AbstractXSSFChartSeries implements LineChartSeries {
+    static class Series extends AbstractXSSFChartSeries implements CustomChartSeries {
         private int id;
         private int order;
         private ChartDataSource<?> categories;
@@ -92,7 +94,7 @@ public class XSSFLineChartData implements LineChartData {
         }
     }
 
-    public LineChartSeries addSeries(ChartDataSource<?> categoryAxisData, ChartDataSource<? extends Number> values) {
+    public CustomChartSeries addSeries(ChartDataSource<?> categoryAxisData, ChartDataSource<? extends Number> values) {
         if (!values.isNumeric()) {
             throw new IllegalArgumentException("Value data source must be numeric.");
         }
@@ -102,7 +104,7 @@ public class XSSFLineChartData implements LineChartData {
         return newSeries;
     }
 
-    public List<? extends LineChartSeries> getSeries() {
+    public List<? extends CustomChartSeries> getSeries() {
         return series;
     }
 

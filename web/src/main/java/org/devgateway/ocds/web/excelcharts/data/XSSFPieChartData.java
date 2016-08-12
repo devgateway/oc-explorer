@@ -1,15 +1,17 @@
-package org.devgateway.ocds.web.excelcharts.areachart;
+package org.devgateway.ocds.web.excelcharts.data;
 
 import org.apache.poi.ss.usermodel.Chart;
 import org.apache.poi.ss.usermodel.charts.ChartAxis;
 import org.apache.poi.ss.usermodel.charts.ChartDataSource;
 import org.apache.poi.xssf.usermodel.XSSFChart;
 import org.apache.poi.xssf.usermodel.charts.AbstractXSSFChartSeries;
+import org.devgateway.ocds.web.excelcharts.CustomChartData;
+import org.devgateway.ocds.web.excelcharts.CustomChartSeries;
 import org.devgateway.ocds.web.excelcharts.util.XSSFChartUtil;
-import org.openxmlformats.schemas.drawingml.x2006.chart.CTAreaChart;
-import org.openxmlformats.schemas.drawingml.x2006.chart.CTAreaSer;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTAxDataSource;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumDataSource;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTPieChart;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTPieSer;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTPlotArea;
 
 import java.util.ArrayList;
@@ -18,19 +20,19 @@ import java.util.List;
 /**
  * @author idobre
  * @since 8/8/16
- * Holds data for a XSSF Area Chart
+ * Holds data for a XSSF Pie Chart
  */
-public class XSSFAreaChartData implements AreaChartData {
+public class XSSFPieChartData implements CustomChartData {
     /**
      * List of all data series.
      */
     private List<Series> series;
 
-    public XSSFAreaChartData() {
+    public XSSFPieChartData() {
         series = new ArrayList<Series>();
     }
 
-    static class Series extends AbstractXSSFChartSeries implements AreaChartSeries {
+    static class Series extends AbstractXSSFChartSeries implements CustomChartSeries {
         private int id;
         private int order;
         private ChartDataSource<?> categories;
@@ -53,35 +55,35 @@ public class XSSFAreaChartData implements AreaChartData {
             return values;
         }
 
-        protected void addToChart(CTAreaChart ctAreaChart) {
-            CTAreaSer ctAreaSer = ctAreaChart.addNewSer();
-            ctAreaSer.addNewIdx().setVal(id);
-            ctAreaSer.addNewOrder().setVal(order);
+        protected void addToChart(CTPieChart ctPieChart) {
+            CTPieSer ctPieSer = ctPieChart.addNewSer();
+            ctPieSer.addNewIdx().setVal(id);
+            ctPieSer.addNewOrder().setVal(order);
 
-            CTAxDataSource catDS = ctAreaSer.addNewCat();
+            CTAxDataSource catDS = ctPieSer.addNewCat();
             XSSFChartUtil.buildAxDataSource(catDS, categories);
 
-            CTNumDataSource valueDS = ctAreaSer.addNewVal();
+            CTNumDataSource valueDS = ctPieSer.addNewVal();
             XSSFChartUtil.buildNumDataSource(valueDS, values);
 
             if (isTitleSet()) {
-                ctAreaSer.setTx(getCTSerTx());
+                ctPieSer.setTx(getCTSerTx());
             }
         }
     }
 
-    public AreaChartSeries addSeries(ChartDataSource<?> categoryAxisData, ChartDataSource<? extends Number> values) {
+    public CustomChartSeries addSeries(ChartDataSource<?> categoryAxisData, ChartDataSource<? extends Number> values) {
         if (!values.isNumeric()) {
             throw new IllegalArgumentException("Value data source must be numeric.");
         }
         int numOfSeries = series.size();
-        XSSFAreaChartData.Series newSeries =
-                new XSSFAreaChartData.Series(numOfSeries, numOfSeries, categoryAxisData, values);
+        XSSFPieChartData.Series newSeries =
+                new XSSFPieChartData.Series(numOfSeries, numOfSeries, categoryAxisData, values);
         series.add(newSeries);
         return newSeries;
     }
 
-    public List<? extends AreaChartSeries> getSeries() {
+    public List<? extends CustomChartSeries> getSeries() {
         return series;
     }
 
@@ -92,15 +94,11 @@ public class XSSFAreaChartData implements AreaChartData {
 
         XSSFChart xssfChart = (XSSFChart) chart;
         CTPlotArea plotArea = xssfChart.getCTChart().getPlotArea();
-        CTAreaChart areChart = plotArea.addNewAreaChart();
-        areChart.addNewVaryColors().setVal(false);
+        CTPieChart pieChart = plotArea.addNewPieChart();
+        pieChart.addNewVaryColors().setVal(true);
 
-        for (XSSFAreaChartData.Series s : series) {
-            s.addToChart(areChart);
-        }
-
-        for (ChartAxis ax : axis) {
-            areChart.addNewAxId().setVal(ax.getId());
+        for (XSSFPieChartData.Series s : series) {
+            s.addToChart(pieChart);
         }
     }
 }

@@ -1,14 +1,15 @@
-package org.devgateway.ocds.web.excelcharts.barchart;
+package org.devgateway.ocds.web.excelcharts;
 
 import org.apache.poi.ss.usermodel.charts.ChartDataSource;
+import org.apache.poi.ss.usermodel.charts.ChartSeries;
 
 /**
  * @author idobre
- * @since 8/8/16
+ * @since 8/12/16
  *
- * Represents a bar chart series.
+ * Represents a chart series.
  */
-public interface BarChartSeries {
+public interface CustomChartSeries extends ChartSeries {
     /**
      * @return data source used for category axis data.
      */

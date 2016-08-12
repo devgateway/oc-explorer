@@ -15,13 +15,15 @@
    limitations under the License.
    ==================================================================== */
 
-package org.devgateway.ocds.web.excelcharts.scatterchart;
+package org.devgateway.ocds.web.excelcharts.data;
 
 import org.apache.poi.ss.usermodel.Chart;
 import org.apache.poi.ss.usermodel.charts.ChartAxis;
 import org.apache.poi.ss.usermodel.charts.ChartDataSource;
 import org.apache.poi.xssf.usermodel.XSSFChart;
 import org.apache.poi.xssf.usermodel.charts.AbstractXSSFChartSeries;
+import org.devgateway.ocds.web.excelcharts.CustomChartData;
+import org.devgateway.ocds.web.excelcharts.CustomChartSeries;
 import org.devgateway.ocds.web.excelcharts.util.XSSFChartUtil;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTAxDataSource;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTCatAx;
@@ -41,7 +43,7 @@ import java.util.List;
 /**
  * Represents DrawingML scatter charts.
  */
-public class XSSFScatterChartData implements ScatterChartData {
+public class XSSFScatterChartData implements CustomChartData {
 
     /**
      * List of all data series.
@@ -55,7 +57,7 @@ public class XSSFScatterChartData implements ScatterChartData {
     /**
      * Package private ScatterChartSerie implementation.
      */
-    static class Series extends AbstractXSSFChartSeries implements ScatterChartSeries {
+    static class Series extends AbstractXSSFChartSeries implements CustomChartSeries {
         private int id;
         private int order;
         private ChartDataSource<?> xs;
@@ -75,7 +77,7 @@ public class XSSFScatterChartData implements ScatterChartData {
          * Returns data source used for X axis values.
          * @return data source used for X axis values
          */
-        public ChartDataSource<?> getXValues() {
+        public ChartDataSource<?> getCategoryAxisData() {
             return xs;
         }
 
@@ -83,7 +85,7 @@ public class XSSFScatterChartData implements ScatterChartData {
          * Returns data source used for Y axis values.
          * @return data source used for Y axis values
          */
-        public ChartDataSource<? extends Number> getYValues() {
+        public ChartDataSource<? extends Number> getValues() {
             return ys;
         }
 
@@ -104,7 +106,7 @@ public class XSSFScatterChartData implements ScatterChartData {
         }
     }
 
-    public ScatterChartSeries addSerie(ChartDataSource<?> xs,
+    public CustomChartSeries addSeries(ChartDataSource<?> xs,
                                        ChartDataSource<? extends Number> ys) {
         if (!ys.isNumeric()) {
             throw new IllegalArgumentException("Y axis data source must be numeric.");
@@ -123,6 +125,7 @@ public class XSSFScatterChartData implements ScatterChartData {
         XSSFChart xssfChart = (XSSFChart) chart;
         CTPlotArea plotArea = xssfChart.getCTChart().getPlotArea();
         CTScatterChart scatterChart = plotArea.addNewScatterChart();
+        addStyle(scatterChart);
 
         for (Series s : series) {
             s.addToChart(scatterChart);
