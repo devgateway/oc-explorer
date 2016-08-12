@@ -4,8 +4,7 @@ import org.apache.poi.ss.usermodel.Chart;
 import org.apache.poi.ss.usermodel.charts.ChartAxis;
 import org.apache.poi.ss.usermodel.charts.ChartDataSource;
 import org.apache.poi.xssf.usermodel.XSSFChart;
-import org.apache.poi.xssf.usermodel.charts.AbstractXSSFChartSeries;
-import org.devgateway.ocds.web.excelcharts.CustomChartData;
+import org.apache.xmlbeans.XmlObject;
 import org.devgateway.ocds.web.excelcharts.CustomChartSeries;
 import org.devgateway.ocds.web.excelcharts.util.XSSFChartUtil;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTAxDataSource;
@@ -15,77 +14,32 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumDataSource;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTPlotArea;
 import org.openxmlformats.schemas.drawingml.x2006.chart.STBarDir;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author idobre
  * @since 8/8/16
  * Holds data for a XSSF Bar Chart
  */
-public class XSSFBarChartData implements CustomChartData {
-    /**
-     * List of all data series.
-     */
-    private List<Series> series;
+public class XSSFBarChartData extends AbstarctXSSFChartData {
+    protected CustomChartSeries createNewSerie(int id, int order, ChartDataSource<?> categories,
+                                               ChartDataSource<? extends Number> values) {
+        return new AbstractSeries(id, order, categories, values) {
+            public void addToChart(XmlObject ctChart) {
+                CTBarChart ctBarChart = (CTBarChart) ctChart;
+                CTBarSer ctBarSer = ctBarChart.addNewSer();
+                ctBarSer.addNewIdx().setVal(id);
+                ctBarSer.addNewOrder().setVal(order);
 
-    public XSSFBarChartData() {
-        series = new ArrayList<Series>();
-    }
+                CTAxDataSource catDS = ctBarSer.addNewCat();
+                XSSFChartUtil.buildAxDataSource(catDS, categories);
 
-    static class Series extends AbstractXSSFChartSeries implements CustomChartSeries {
-        private int id;
-        private int order;
-        private ChartDataSource<?> categories;
-        private ChartDataSource<? extends Number> values;
+                CTNumDataSource valueDS = ctBarSer.addNewVal();
+                XSSFChartUtil.buildNumDataSource(valueDS, values);
 
-        protected Series(int id, int order,
-                         ChartDataSource<?> categories,
-                         ChartDataSource<? extends Number> values) {
-            this.id = id;
-            this.order = order;
-            this.categories = categories;
-            this.values = values;
-        }
-
-        public ChartDataSource<?> getCategoryAxisData() {
-            return categories;
-        }
-
-        public ChartDataSource<? extends Number> getValues() {
-            return values;
-        }
-
-        protected void addToChart(CTBarChart ctBarChart) {
-            CTBarSer ctBarSer = ctBarChart.addNewSer();
-            ctBarSer.addNewIdx().setVal(id);
-            ctBarSer.addNewOrder().setVal(order);
-
-            CTAxDataSource catDS = ctBarSer.addNewCat();
-            XSSFChartUtil.buildAxDataSource(catDS, categories);
-
-            CTNumDataSource valueDS = ctBarSer.addNewVal();
-            XSSFChartUtil.buildNumDataSource(valueDS, values);
-
-            if (isTitleSet()) {
-                ctBarSer.setTx(getCTSerTx());
+                if (isTitleSet()) {
+                    ctBarSer.setTx(getCTSerTx());
+                }
             }
-        }
-    }
-
-    public CustomChartSeries addSeries(ChartDataSource<?> categoryAxisData, ChartDataSource<? extends Number> values) {
-        if (!values.isNumeric()) {
-            throw new IllegalArgumentException("Value data source must be numeric.");
-        }
-        int numOfSeries = series.size();
-        XSSFBarChartData.Series newSeries =
-                new XSSFBarChartData.Series(numOfSeries, numOfSeries, categoryAxisData, values);
-        series.add(newSeries);
-        return newSeries;
-    }
-
-    public List<? extends CustomChartSeries> getSeries() {
-        return series;
+        };
     }
 
     public void fillChart(Chart chart, ChartAxis... axis) {
@@ -102,7 +56,7 @@ public class XSSFBarChartData implements CustomChartData {
         // set bars orientation
         barChart.addNewBarDir().setVal(STBarDir.COL);
 
-        for (XSSFBarChartData.Series s : series) {
+        for (CustomChartSeries s : series) {
             s.addToChart(barChart);
         }
 

@@ -1,28 +1,10 @@
-/* ====================================================================
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-   ==================================================================== */
-
 package org.devgateway.ocds.web.excelcharts.data;
 
 import org.apache.poi.ss.usermodel.Chart;
 import org.apache.poi.ss.usermodel.charts.ChartAxis;
 import org.apache.poi.ss.usermodel.charts.ChartDataSource;
 import org.apache.poi.xssf.usermodel.XSSFChart;
-import org.apache.poi.xssf.usermodel.charts.AbstractXSSFChartSeries;
-import org.devgateway.ocds.web.excelcharts.CustomChartData;
+import org.apache.xmlbeans.XmlObject;
 import org.devgateway.ocds.web.excelcharts.CustomChartSeries;
 import org.devgateway.ocds.web.excelcharts.util.XSSFChartUtil;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTAxDataSource;
@@ -36,85 +18,35 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.CTValAx;
 import org.openxmlformats.schemas.drawingml.x2006.chart.STScatterStyle;
 import org.openxmlformats.schemas.drawingml.x2006.main.CTSRgbColor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
- * Represents DrawingML scatter charts.
+ * @author idobre
+ * @since 8/12/16
+ *
+ * Holds data for a XSSF Scatter Chart
  */
-public class XSSFScatterChartData implements CustomChartData {
+public class XSSFScatterChartData extends AbstarctXSSFChartData {
+    protected CustomChartSeries createNewSerie(int id, int order, ChartDataSource<?> categories,
+                                               ChartDataSource<? extends Number> values) {
+        return new AbstractSeries(id, order, categories, values) {
+            public void addToChart(XmlObject ctChart) {
+                CTScatterChart ctScatterChart = (CTScatterChart) ctChart;
+                CTScatterSer scatterSer = ctScatterChart.addNewSer();
 
-    /**
-     * List of all data series.
-     */
-    private List<Series> series;
+                scatterSer.addNewIdx().setVal(this.id);
+                scatterSer.addNewOrder().setVal(this.order);
 
-    public XSSFScatterChartData() {
-        series = new ArrayList<Series>();
-    }
+                CTAxDataSource catDS = scatterSer.addNewXVal();
+                XSSFChartUtil.buildAxDataSource(catDS, categories);
 
-    /**
-     * Package private ScatterChartSerie implementation.
-     */
-    static class Series extends AbstractXSSFChartSeries implements CustomChartSeries {
-        private int id;
-        private int order;
-        private ChartDataSource<?> xs;
-        private ChartDataSource<? extends Number> ys;
+                CTNumDataSource valueDS = scatterSer.addNewYVal();
+                XSSFChartUtil.buildNumDataSource(valueDS, values);
 
-        protected Series(int id, int order,
-                        ChartDataSource<?> xs,
-                        ChartDataSource<? extends Number> ys) {
-            super();
-            this.id = id;
-            this.order = order;
-            this.xs = xs;
-            this.ys = ys;
-        }
-
-        /**
-         * Returns data source used for X axis values.
-         * @return data source used for X axis values
-         */
-        public ChartDataSource<?> getCategoryAxisData() {
-            return xs;
-        }
-
-        /**
-         * Returns data source used for Y axis values.
-         * @return data source used for Y axis values
-         */
-        public ChartDataSource<? extends Number> getValues() {
-            return ys;
-        }
-
-        protected void addToChart(CTScatterChart ctScatterChart) {
-            CTScatterSer scatterSer = ctScatterChart.addNewSer();
-            scatterSer.addNewIdx().setVal(this.id);
-            scatterSer.addNewOrder().setVal(this.order);
-
-            CTAxDataSource xVal = scatterSer.addNewXVal();
-            XSSFChartUtil.buildAxDataSource(xVal, xs);
-
-            CTNumDataSource yVal = scatterSer.addNewYVal();
-            XSSFChartUtil.buildNumDataSource(yVal, ys);
-
-			if (isTitleSet()) {
-				scatterSer.setTx(getCTSerTx());
-			}
-        }
-    }
-
-    public CustomChartSeries addSeries(ChartDataSource<?> xs,
-                                       ChartDataSource<? extends Number> ys) {
-        if (!ys.isNumeric()) {
-            throw new IllegalArgumentException("Y axis data source must be numeric.");
-        }
-        int numOfSeries = series.size();
-        Series newSerie = new Series(numOfSeries, numOfSeries, xs, ys);
-        series.add(newSerie);
-        return newSerie;
+                if (isTitleSet()) {
+                    scatterSer.setTx(getCTSerTx());
+                }
+            }
+        };
     }
 
     public void fillChart(Chart chart, ChartAxis... axis) {
@@ -127,7 +59,7 @@ public class XSSFScatterChartData implements CustomChartData {
         CTScatterChart scatterChart = plotArea.addNewScatterChart();
         addStyle(scatterChart);
 
-        for (Series s : series) {
+        for (CustomChartSeries s : series) {
             s.addToChart(scatterChart);
         }
 
@@ -148,10 +80,6 @@ public class XSSFScatterChartData implements CustomChartData {
         if (ctValAx.length != 0) {
             ctValAx[0].addNewMajorGridlines().addNewSpPr().addNewSolidFill().setSrgbClr(rgb);
         }
-    }
-
-    public List<? extends Series> getSeries() {
-        return series;
     }
 
     private void addStyle(CTScatterChart ctScatterChart) {

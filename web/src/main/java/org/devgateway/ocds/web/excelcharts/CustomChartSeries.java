@@ -2,6 +2,7 @@ package org.devgateway.ocds.web.excelcharts;
 
 import org.apache.poi.ss.usermodel.charts.ChartDataSource;
 import org.apache.poi.ss.usermodel.charts.ChartSeries;
+import org.apache.xmlbeans.XmlObject;
 
 /**
  * @author idobre
@@ -19,4 +20,11 @@ public interface CustomChartSeries extends ChartSeries {
      * @return data source used for value axis.
      */
     ChartDataSource<? extends Number> getValues();
+
+    /**
+     * Add a series to the chart.
+     *
+     * @param ctChart
+     */
+    void addToChart(XmlObject ctChart);
 }
