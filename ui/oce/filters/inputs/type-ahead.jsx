@@ -29,7 +29,7 @@ class TypeAhead extends translatable(Component){
     let haveQuery = query.length >= MIN_QUERY_LENGTH;
     return (
         <section className="field type-ahead">
-          <header>{this.__('Procuring Entity')}</header>
+          <header>{this.__('Procuring Entity')} ({selected.count()})</header>
           <section className="options">
             <input
                 type="text"
