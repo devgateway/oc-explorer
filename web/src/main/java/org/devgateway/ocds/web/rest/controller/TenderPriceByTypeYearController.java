@@ -68,7 +68,8 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
 			+ "tender.value.amount")
 	@RequestMapping(value = "/api/tenderPriceByBidSelectionMethodYear", method = { RequestMethod.POST,
 			RequestMethod.GET }, produces = "application/json")
-	public List<DBObject> tenderPriceByBidSelectionMethodYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+	public List<DBObject> tenderPriceByBidSelectionMethodYear(
+			@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
 		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
