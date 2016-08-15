@@ -26,5 +26,5 @@ public interface CustomChartSeries extends ChartSeries {
      *
      * @param ctChart
      */
-    void addToChart(XmlObject ctChart);
+    void addToChart(final XmlObject ctChart);
 }

@@ -17,7 +17,7 @@ public interface CustomChartData extends ChartData {
      * @param values     data source for values.
      * @return a new chart serie.
      */
-    CustomChartSeries addSeries(ChartDataSource<?> categories, ChartDataSource<? extends Number> values);
+    CustomChartSeries addSeries(final ChartDataSource<?> categories, final ChartDataSource<? extends Number> values);
 
     /**
      * @return list of all series.

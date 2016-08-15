@@ -24,10 +24,11 @@ import org.openxmlformats.schemas.drawingml.x2006.main.CTSRgbColor;
  * Holds data for a XSSF Line Chart
  */
 public class XSSFLineChartData extends AbstarctXSSFChartData {
-    protected CustomChartSeries createNewSerie(int id, int order, ChartDataSource<?> categories,
-                                               ChartDataSource<? extends Number> values) {
+    @Override
+    protected CustomChartSeries createNewSerie(final int id, final int order, final ChartDataSource<?> categories,
+                                               final ChartDataSource<? extends Number> values) {
         return new AbstractSeries(id, order, categories, values) {
-            public void addToChart(XmlObject ctChart) {
+            public void addToChart(final XmlObject ctChart) {
                 CTLineChart ctLineChart = (CTLineChart) ctChart;
                 CTLineSer ctLineSer = ctLineChart.addNewSer();
                 ctLineSer.addNewIdx().setVal(id);
@@ -49,7 +50,7 @@ public class XSSFLineChartData extends AbstarctXSSFChartData {
         };
     }
 
-    public void fillChart(Chart chart, ChartAxis... axis) {
+    public void fillChart(final Chart chart, final ChartAxis... axis) {
         if (!(chart instanceof XSSFChart)) {
             throw new IllegalArgumentException("Chart must be instance of XSSFChart");
         }

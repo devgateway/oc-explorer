@@ -1,7 +1,5 @@
 package org.devgateway.ocds.web.excelcharts.data;
 
-import org.apache.poi.ss.usermodel.Chart;
-import org.apache.poi.ss.usermodel.charts.ChartAxis;
 import org.apache.poi.ss.usermodel.charts.ChartDataSource;
 import org.devgateway.ocds.web.excelcharts.CustomChartData;
 import org.devgateway.ocds.web.excelcharts.CustomChartSeries;
@@ -24,7 +22,8 @@ public abstract class AbstarctXSSFChartData implements CustomChartData {
     }
 
 
-    public CustomChartSeries addSeries(ChartDataSource<?> categoryAxisData, ChartDataSource<? extends Number> values) {
+    public CustomChartSeries addSeries(final ChartDataSource<?> categoryAxisData,
+                                       final ChartDataSource<? extends Number> values) {
         if (!values.isNumeric()) {
             throw new IllegalArgumentException("Value data source must be numeric.");
         }
@@ -32,6 +31,7 @@ public abstract class AbstarctXSSFChartData implements CustomChartData {
         int numOfSeries = series.size();
         CustomChartSeries newSeries = createNewSerie(numOfSeries, numOfSeries, categoryAxisData, values);
         series.add(newSeries);
+
         return newSeries;
     }
 
@@ -39,10 +39,16 @@ public abstract class AbstarctXSSFChartData implements CustomChartData {
         return series;
     }
 
-    protected abstract CustomChartSeries createNewSerie(int id,
-                                                        int order,
-                                                        ChartDataSource<?> categories,
-                                                        ChartDataSource<? extends Number> values);
-
-    public abstract void fillChart(Chart chart, ChartAxis... axis);
+    /**
+     * Add a new Serie specific to each AbstarctXSSFChartData implementation.
+     *
+     * @param id
+     * @param order
+     * @param categories
+     * @param values
+     * @return
+     */
+    protected abstract CustomChartSeries createNewSerie(final int id, final int order,
+                                                        final ChartDataSource<?> categories,
+                                                        final ChartDataSource<? extends Number> values);
 }

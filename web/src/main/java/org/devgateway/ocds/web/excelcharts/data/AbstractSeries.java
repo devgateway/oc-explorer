@@ -10,14 +10,17 @@ import org.devgateway.ocds.web.excelcharts.CustomChartSeries;
  */
 public abstract class AbstractSeries extends AbstractXSSFChartSeries implements CustomChartSeries {
     protected int id;
+
     protected int order;
+
     protected ChartDataSource<?> categories;
+
     protected ChartDataSource<? extends Number> values;
 
-    public AbstractSeries(int id,
-                          int order,
-                          ChartDataSource<?> categories,
-                          ChartDataSource<? extends Number> values) {
+    public AbstractSeries(final int id,
+                          final int order,
+                          final ChartDataSource<?> categories,
+                          final ChartDataSource<? extends Number> values) {
         this.id = id;
         this.order = order;
         this.categories = categories;
