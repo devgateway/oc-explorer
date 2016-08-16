@@ -12,6 +12,6 @@ import org.devgateway.ocds.persistence.mongo.Organization.OrganizationType;
  */
 public interface OrganizationRepository extends GenericOrganizationRepository<Organization> {
 
-	public Organization findByIdAndTypes(String id, OrganizationType type);
+	Organization findByIdAndTypes(String id, OrganizationType type);
 
 }

@@ -40,7 +40,8 @@ public class ProcuringEntitySearchController extends AbstractOrganizationSearchC
 	@RequestMapping(value = "/api/ocds/organization/procuringEntity/all",
 			method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
 	@ApiOperation(value = "Lists all procuring entities in the database. "
-			+ "Procuring entities are organizations that have the label 'procuringEntity' assigned to organization.types array"
+			+ "Procuring entities are organizations that have the label 'procuringEntity' "
+			+ "assigned to organization.types array"
 			+ "Allows full text search using the text parameter.")
 	public List<Organization> searchText(@Valid final OrganizationSearchRequest request) {
 
