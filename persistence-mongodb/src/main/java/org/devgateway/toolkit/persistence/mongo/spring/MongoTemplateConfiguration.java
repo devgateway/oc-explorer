@@ -67,7 +67,7 @@ public class MongoTemplateConfiguration {
                 .ensureIndex(new Index().on("additionalIdentifiers._id", Direction.ASC));
         mongoTemplate.indexOps(Organization.class)
                 .ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());
-
+        mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("types", Direction.ASC));
 
         logger.info("Added extra Mongo indexes");
 
