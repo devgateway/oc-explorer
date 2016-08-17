@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -52,7 +53,16 @@ public class ProcurementActivityByYearController extends GenericOCDSController {
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + "procurement activity by year.xlsx");
-        response.getOutputStream().write(excelChartGenerator.getExcelChart(ChartType.line, categories, values));
+        response.getOutputStream().write(
+                excelChartGenerator.getExcelChart(
+                        ChartType.line,
+                        "procurement activity by year",
+                        Arrays.asList(
+                                "Award",
+                                "Tender"),
+                        categories, values));
+
+
     }
 
     /**

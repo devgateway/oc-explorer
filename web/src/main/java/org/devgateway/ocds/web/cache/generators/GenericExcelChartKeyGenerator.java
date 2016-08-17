@@ -23,7 +23,7 @@ public class GenericExcelChartKeyGenerator implements KeyGenerator {
 
     @Override
     public Object generate(Object target, Method method, Object... params) {
-        if (params.length != 3) {
+        if (params.length != 5) {
             throw new RuntimeException(
                     "Wrong parameters received for generating custom GenericExcelChartKeyGenerator key!");
         }
@@ -33,6 +33,8 @@ public class GenericExcelChartKeyGenerator implements KeyGenerator {
                     .append(objectMapper.writeValueAsString(params[0]))
                     .append(objectMapper.writeValueAsString(params[1]))
                     .append(objectMapper.writeValueAsString(params[2]))
+                    .append(objectMapper.writeValueAsString(params[3]))
+                    .append(objectMapper.writeValueAsString(params[4]))
                     .toString().hashCode();
         } catch (JsonProcessingException e) {
             logger.error(e.getMessage());
