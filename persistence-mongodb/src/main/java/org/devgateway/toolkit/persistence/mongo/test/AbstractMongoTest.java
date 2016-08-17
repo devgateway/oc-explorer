@@ -14,5 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ActiveProfiles("integration")
 @TestPropertySource("classpath:test.properties")
 public abstract class AbstractMongoTest {
+	
+	protected boolean testDataInitialized = false;
 
 }

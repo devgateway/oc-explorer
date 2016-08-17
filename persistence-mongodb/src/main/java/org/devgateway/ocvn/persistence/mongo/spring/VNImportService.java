@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -18,6 +17,7 @@ import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.repository.ClassificationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ExcelImportService;
 import org.devgateway.ocds.persistence.mongo.spring.OcdsSchemaValidation;
@@ -32,7 +32,6 @@ import org.devgateway.ocvn.persistence.mongo.reader.SupplierRowImporter;
 import org.devgateway.ocvn.persistence.mongo.reader.TenderRowImporter;
 import org.devgateway.ocvn.persistence.mongo.repository.ContrMethodRepository;
 import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
-import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository;
 import org.devgateway.toolkit.persistence.mongo.reader.XExcelFileReader;
 import org.devgateway.toolkit.persistence.mongo.spring.MongoTemplateConfiguration;
 import org.slf4j.Logger;
@@ -69,7 +68,7 @@ public class VNImportService implements ExcelImportService {
     private ReleaseRepository releaseRepository;
 
     @Autowired
-    private VNOrganizationRepository organizationRepository;
+    private OrganizationRepository organizationRepository;
 
     @Autowired
     private ClassificationRepository classificationRepository;
