@@ -8,7 +8,7 @@ import org.devgateway.ocds.web.excelcharts.CustomChartSeries;
  * @author idobre
  * @since 8/12/16
  */
-abstract class AbstractSeries extends AbstractXSSFChartSeries implements CustomChartSeries {
+public abstract class AbstractSeries extends AbstractXSSFChartSeries implements CustomChartSeries {
     protected final int id;
 
     protected final int order;
