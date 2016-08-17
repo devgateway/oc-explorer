@@ -26,7 +26,7 @@ public final class XSSFChartUtil {
      * @param ctAxDataSource OOXML data source to build
      * @param dataSource POI data source to use
      */
-    public static void buildAxDataSource(CTAxDataSource ctAxDataSource, ChartDataSource<?> dataSource) {
+    public static void buildAxDataSource(final CTAxDataSource ctAxDataSource, final ChartDataSource<?> dataSource) {
         if (dataSource.isNumeric()) {
             if (dataSource.isReference()) {
                 buildNumRef(ctAxDataSource.addNewNumRef(), dataSource);
@@ -47,8 +47,8 @@ public final class XSSFChartUtil {
      * @param ctNumDataSource OOXML data source to build
      * @param dataSource POI data source to use
      */
-    public static void buildNumDataSource(CTNumDataSource ctNumDataSource,
-                                          ChartDataSource<? extends Number> dataSource) {
+    public static void buildNumDataSource(final CTNumDataSource ctNumDataSource,
+                                          final ChartDataSource<? extends Number> dataSource) {
         if (dataSource.isReference()) {
             buildNumRef(ctNumDataSource.addNewNumRef(), dataSource);
         } else {
@@ -56,27 +56,27 @@ public final class XSSFChartUtil {
         }
     }
 
-    private static void buildNumRef(CTNumRef ctNumRef, ChartDataSource<?> dataSource) {
+    private static void buildNumRef(final CTNumRef ctNumRef, final ChartDataSource<?> dataSource) {
         ctNumRef.setF(dataSource.getFormulaString());
         CTNumData cache = ctNumRef.addNewNumCache();
         fillNumCache(cache, dataSource);
     }
 
-    private static void buildNumLit(CTNumData ctNumData, ChartDataSource<?> dataSource) {
+    private static void buildNumLit(final CTNumData ctNumData, final ChartDataSource<?> dataSource) {
         fillNumCache(ctNumData, dataSource);
     }
 
-    private static void buildStrRef(CTStrRef ctStrRef, ChartDataSource<?> dataSource) {
+    private static void buildStrRef(final CTStrRef ctStrRef, final ChartDataSource<?> dataSource) {
         ctStrRef.setF(dataSource.getFormulaString());
         CTStrData cache = ctStrRef.addNewStrCache();
         fillStringCache(cache, dataSource);
     }
 
-    private static void buildStrLit(CTStrData ctStrData, ChartDataSource<?> dataSource) {
+    private static void buildStrLit(final CTStrData ctStrData, final ChartDataSource<?> dataSource) {
         fillStringCache(ctStrData, dataSource);
     }
 
-    private static void fillStringCache(CTStrData cache, ChartDataSource<?> dataSource) {
+    private static void fillStringCache(final CTStrData cache, final ChartDataSource<?> dataSource) {
         int numOfPoints = dataSource.getPointCount();
         cache.addNewPtCount().setVal(numOfPoints);
         for (int i = 0; i < numOfPoints; ++i) {
@@ -89,7 +89,7 @@ public final class XSSFChartUtil {
         }
     }
 
-    private static void fillNumCache(CTNumData cache, ChartDataSource<?> dataSource) {
+    private static void fillNumCache(final CTNumData cache, final ChartDataSource<?> dataSource) {
         int numOfPoints = dataSource.getPointCount();
         cache.addNewPtCount().setVal(numOfPoints);
         for (int i = 0; i < numOfPoints; ++i) {
