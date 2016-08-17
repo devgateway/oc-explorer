@@ -32,6 +32,7 @@ public class MongoTemplateConfiguration {
 		// vietnam specific indexes
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.budget.projectID", Direction.ASC));
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.bidNo", Direction.ASC));		
+    	logger.info("Added mandatory Mongo indexes");
 	}
 
     @PostConstruct
