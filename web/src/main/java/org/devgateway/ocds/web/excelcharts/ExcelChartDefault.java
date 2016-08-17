@@ -51,7 +51,7 @@ public class ExcelChartDefault implements ExcelChart {
         addValues(excelChartSheet);
 
         final CustomChartDataFactory customChartDataFactory = new CustomChartDataFactoryDefault();
-        final CustomChartData data = customChartDataFactory.createChartData(ChartType.line, "chart title");
+        final CustomChartData data = customChartDataFactory.createChartData(type, "chart title");
 
         // Use a category axis for the bottom axis.
         final ChartAxis bottomAxis = chart.getChartAxisFactory().createCategoryAxis(AxisPosition.BOTTOM);
