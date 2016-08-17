@@ -109,9 +109,9 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 	}
 
 	private SecurityExpressionHandler<FilterInvocation> webExpressionHandler() {
-		DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
-		defaultWebSecurityExpressionHandler.setRoleHierarchy(roleHierarchy());
-		return defaultWebSecurityExpressionHandler;
+		DefaultWebSecurityExpressionHandler handler = new DefaultWebSecurityExpressionHandler();
+		handler.setRoleHierarchy(roleHierarchy());
+		return handler;
 	}
 
 	/**
@@ -119,8 +119,6 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 	 * Hierarchy is specified as a string. Space separates rules and > symbol has the meaning of 'includes'.
 	 * <p>Example: role1 > role2 > role3 role2 > role4</p>
 	 * <p>Here role1 includes role2 role3 and role4 (indirectly). And role2 includes role4.</p>
-	 *
-	 * <a href='http://docs.spring.io/spring-security/site/docs/4.1.2.RELEASE/reference/htmlsingle/#authz-hierarchical-roles'>Hierarchical Roles documentation</a>
 	 */
 	@Bean
 	RoleHierarchy roleHierarchy() {
