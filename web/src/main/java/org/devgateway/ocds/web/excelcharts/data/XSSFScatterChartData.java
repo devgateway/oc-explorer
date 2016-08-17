@@ -36,17 +36,17 @@ public class XSSFScatterChartData extends AbstractXSSFChartData {
         return new AbstractSeries(id, order, categories, values) {
             @Override
             public void addToChart(final XmlObject ctChart) {
-                CTScatterChart ctScatterChart = (CTScatterChart) ctChart;
-                CTScatterSer scatterSer = ctScatterChart.addNewSer();
+                final CTScatterChart ctScatterChart = (CTScatterChart) ctChart;
+                final CTScatterSer scatterSer = ctScatterChart.addNewSer();
 
                 scatterSer.addNewIdx().setVal(this.id);
                 scatterSer.addNewOrder().setVal(this.order);
 
-                CTAxDataSource catDS = scatterSer.addNewXVal();
-                XSSFChartUtil.buildAxDataSource(catDS, categories);
+                final CTAxDataSource catDS = scatterSer.addNewXVal();
+                XSSFChartUtil.buildAxDataSource(catDS, this.categories);
 
-                CTNumDataSource valueDS = scatterSer.addNewYVal();
-                XSSFChartUtil.buildNumDataSource(valueDS, values);
+                final CTNumDataSource valueDS = scatterSer.addNewYVal();
+                XSSFChartUtil.buildNumDataSource(valueDS, this.values);
 
                 if (isTitleSet()) {
                     scatterSer.setTx(getCTSerTx());
@@ -61,9 +61,9 @@ public class XSSFScatterChartData extends AbstractXSSFChartData {
             throw new IllegalArgumentException("Chart must be instance of XSSFChart");
         }
 
-        XSSFChart xssfChart = (XSSFChart) chart;
-        CTPlotArea plotArea = xssfChart.getCTChart().getPlotArea();
-        CTScatterChart scatterChart = plotArea.addNewScatterChart();
+        final XSSFChart xssfChart = (XSSFChart) chart;
+        final CTPlotArea plotArea = xssfChart.getCTChart().getPlotArea();
+        final CTScatterChart scatterChart = plotArea.addNewScatterChart();
         addStyle(scatterChart);
 
         for (CustomChartSeries s : series) {
@@ -77,7 +77,7 @@ public class XSSFScatterChartData extends AbstractXSSFChartData {
         xssfChart.setTitle(this.title);
 
         // add grid lines
-        CTSRgbColor rgb = CTSRgbColor.Factory.newInstance();
+        final CTSRgbColor rgb = CTSRgbColor.Factory.newInstance();
         rgb.setVal(new byte[]{(byte) 0, (byte) 0, (byte) 0});
 
         CTCatAx[] ctCatAx = plotArea.getCatAxArray();
@@ -92,7 +92,7 @@ public class XSSFScatterChartData extends AbstractXSSFChartData {
     }
 
     private static void addStyle(final CTScatterChart ctScatterChart) {
-        CTScatterStyle scatterStyle = ctScatterChart.addNewScatterStyle();
+        final CTScatterStyle scatterStyle = ctScatterChart.addNewScatterStyle();
         scatterStyle.setVal(STScatterStyle.LINE_MARKER);
     }
 }

@@ -17,6 +17,8 @@ import java.util.List;
 /**
  * @author idobre
  * @since 8/16/16
+ *
+ * Class that returns Workbook with a chart based on categories/values provided.
  */
 public class ExcelChartDefault implements ExcelChart {
     private final ChartType type;
@@ -51,12 +53,7 @@ public class ExcelChartDefault implements ExcelChart {
         addValues(excelChartSheet);
 
         final CustomChartDataFactory customChartDataFactory = new CustomChartDataFactoryDefault();
-        final CustomChartData data = customChartDataFactory.createChartData(type, "chart title");
-
-        // Use a category axis for the bottom axis.
-        final ChartAxis bottomAxis = chart.getChartAxisFactory().createCategoryAxis(AxisPosition.BOTTOM);
-        final ValueAxis leftAxis = chart.getChartAxisFactory().createValueAxis(AxisPosition.LEFT);
-        leftAxis.setCrosses(AxisCrosses.AUTO_ZERO);
+        final CustomChartData data = customChartDataFactory.createChartData(type, "Chart Title");
 
         final ChartDataSource<String> categoryDataSource = excelChartSheet.getCategoryChartDataSource();
         final List<ChartDataSource<Number>> valuesDataSource = excelChartSheet.getValuesChartDataSource();
@@ -64,11 +61,24 @@ public class ExcelChartDefault implements ExcelChart {
             data.addSeries(categoryDataSource, valueDataSource);
         }
 
-        chart.plot(data, bottomAxis, leftAxis);
+        // we don't have any axis for a pie chart
+        if (type.equals(ChartType.pie)) {
+            chart.plot(data);
+        } else {
+            // Use a category axis for the bottom axis.
+            final ChartAxis bottomAxis = chart.getChartAxisFactory().createCategoryAxis(AxisPosition.BOTTOM);
+            final ValueAxis leftAxis = chart.getChartAxisFactory().createValueAxis(AxisPosition.LEFT);
+            leftAxis.setCrosses(AxisCrosses.AUTO_ZERO);
+
+            chart.plot(data, bottomAxis, leftAxis);
+        }
 
         return workbook;
     }
 
+    /**
+     * Add a row with the categories.
+     */
     private void addCategories(final ExcelChartSheet excelChartSheet) {
         final Row row = excelChartSheet.createRow();
         int coll = 0;
@@ -77,6 +87,9 @@ public class ExcelChartDefault implements ExcelChart {
         }
     }
 
+    /**
+     * Add one or multiple rows with the values.
+     */
     private void addValues(final ExcelChartSheet excelChartSheet) {
         for (List<? extends Number> value : values) {
             final Row row = excelChartSheet.createRow();

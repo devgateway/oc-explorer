@@ -34,20 +34,20 @@ public class XSSFLineChartData extends AbstractXSSFChartData {
         return new AbstractSeries(id, order, categories, values) {
             @Override
             public void addToChart(final XmlObject ctChart) {
-                CTLineChart ctLineChart = (CTLineChart) ctChart;
-                CTLineSer ctLineSer = ctLineChart.addNewSer();
+                final CTLineChart ctLineChart = (CTLineChart) ctChart;
+                final CTLineSer ctLineSer = ctLineChart.addNewSer();
 
-                ctLineSer.addNewIdx().setVal(id);
-                ctLineSer.addNewOrder().setVal(order);
+                ctLineSer.addNewIdx().setVal(this.id);
+                ctLineSer.addNewOrder().setVal(this.order);
 
                 // No marker symbol on the chart line.
                 ctLineSer.addNewMarker().addNewSymbol().setVal(STMarkerStyle.NONE);
 
-                CTAxDataSource catDS = ctLineSer.addNewCat();
-                XSSFChartUtil.buildAxDataSource(catDS, categories);
+                final CTAxDataSource catDS = ctLineSer.addNewCat();
+                XSSFChartUtil.buildAxDataSource(catDS, this.categories);
 
-                CTNumDataSource valueDS = ctLineSer.addNewVal();
-                XSSFChartUtil.buildNumDataSource(valueDS, values);
+                final CTNumDataSource valueDS = ctLineSer.addNewVal();
+                XSSFChartUtil.buildNumDataSource(valueDS, this.values);
 
                 if (isTitleSet()) {
                     ctLineSer.setTx(getCTSerTx());
@@ -62,9 +62,9 @@ public class XSSFLineChartData extends AbstractXSSFChartData {
             throw new IllegalArgumentException("Chart must be instance of XSSFChart");
         }
 
-        XSSFChart xssfChart = (XSSFChart) chart;
-        CTPlotArea plotArea = xssfChart.getCTChart().getPlotArea();
-        CTLineChart lineChart = plotArea.addNewLineChart();
+        final XSSFChart xssfChart = (XSSFChart) chart;
+        final CTPlotArea plotArea = xssfChart.getCTChart().getPlotArea();
+        final CTLineChart lineChart = plotArea.addNewLineChart();
         lineChart.addNewVaryColors().setVal(false);
 
         for (CustomChartSeries s : series) {
@@ -78,7 +78,7 @@ public class XSSFLineChartData extends AbstractXSSFChartData {
         xssfChart.setTitle(this.title);
 
         // add grid lines
-        CTSRgbColor rgb = CTSRgbColor.Factory.newInstance();
+        final CTSRgbColor rgb = CTSRgbColor.Factory.newInstance();
         rgb.setVal(new byte[]{(byte) 0, (byte) 0, (byte) 0});
 
         CTCatAx[] ctCatAx = plotArea.getCatAxArray();

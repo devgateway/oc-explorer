@@ -10,6 +10,8 @@ import java.util.List;
 /**
  * @author idobre
  * @since 8/12/16
+ *
+ * General class for creating a CustomChartData object.
  */
 public abstract class AbstractXSSFChartData implements CustomChartData {
     /**
@@ -45,7 +47,7 @@ public abstract class AbstractXSSFChartData implements CustomChartData {
         }
 
         int numOfSeries = series.size();
-        CustomChartSeries newSeries = createNewSerie(numOfSeries, numOfSeries, categoryAxisData, values);
+        final CustomChartSeries newSeries = createNewSerie(numOfSeries, numOfSeries, categoryAxisData, values);
         if (title != null) {
             newSeries.setTitle(title);
         }
