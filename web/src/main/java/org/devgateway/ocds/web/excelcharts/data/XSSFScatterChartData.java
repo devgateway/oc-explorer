@@ -23,13 +23,18 @@ import org.openxmlformats.schemas.drawingml.x2006.main.CTSRgbColor;
  * @author idobre
  * @since 8/12/16
  *
- * Holds data for a XSSF Scatter Chart
+ * Holds data for a XSSF Scatter Chart.
  */
-public class XSSFScatterChartData extends AbstarctXSSFChartData {
+public class XSSFScatterChartData extends AbstractXSSFChartData {
+    public XSSFScatterChartData(final String title) {
+        super(title);
+    }
+
     @Override
-    protected CustomChartSeries createNewSerie(final int id, final int order, final ChartDataSource<?> categories,
+    protected CustomChartSeries createNewSerie(final int id, final int order, final ChartDataSource<String> categories,
                                                final ChartDataSource<? extends Number> values) {
         return new AbstractSeries(id, order, categories, values) {
+            @Override
             public void addToChart(final XmlObject ctChart) {
                 CTScatterChart ctScatterChart = (CTScatterChart) ctChart;
                 CTScatterSer scatterSer = ctScatterChart.addNewSer();
@@ -50,6 +55,7 @@ public class XSSFScatterChartData extends AbstarctXSSFChartData {
         };
     }
 
+    @Override
     public void fillChart(final Chart chart, final ChartAxis... axis) {
         if (!(chart instanceof XSSFChart)) {
             throw new IllegalArgumentException("Chart must be instance of XSSFChart");
@@ -68,6 +74,8 @@ public class XSSFScatterChartData extends AbstarctXSSFChartData {
             scatterChart.addNewAxId().setVal(ax.getId());
         }
 
+        xssfChart.setTitle(this.title);
+
         // add grid lines
         CTSRgbColor rgb = CTSRgbColor.Factory.newInstance();
         rgb.setVal(new byte[]{(byte) 0, (byte) 0, (byte) 0});
@@ -83,7 +91,7 @@ public class XSSFScatterChartData extends AbstarctXSSFChartData {
         }
     }
 
-    private void addStyle(final CTScatterChart ctScatterChart) {
+    private static void addStyle(final CTScatterChart ctScatterChart) {
         CTScatterStyle scatterStyle = ctScatterChart.addNewScatterStyle();
         scatterStyle.setVal(STScatterStyle.LINE_MARKER);
     }

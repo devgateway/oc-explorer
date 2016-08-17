@@ -1,5 +1,6 @@
 package org.devgateway.ocds.web.excelcharts.util;
 
+import org.devgateway.ocds.web.excelcharts.ChartType;
 import org.devgateway.ocds.web.excelcharts.CustomChartData;
 
 /**
@@ -10,32 +11,7 @@ import org.devgateway.ocds.web.excelcharts.CustomChartData;
  */
 public interface CustomChartDataFactory {
     /**
-     * @return an appropriate ScatterChartData instance
+     * @return an appropriate CustomChartData instance
      */
-    CustomChartData createScatterChartData();
-
-    /**
-     * @return a LineChartData instance
-     */
-    CustomChartData createLineChartData();
-
-    /**
-     * @return a AreaChartData instance
-     */
-    CustomChartData createAreaChartData();
-
-    /**
-     * @return a BarChartData instance
-     */
-    CustomChartData createBarChartData();
-
-    /**
-     * @return a PieChartData instance
-     */
-    CustomChartData createPieChartData();
-
-    /**
-     * @return a StackedBarChartData instance
-     */
-    CustomChartData createStackedBarChartData();
+    CustomChartData createChartData(final ChartType type, final String title);
 }

@@ -1,8 +1,8 @@
 package org.devgateway.ocds.web.excelcharts;
 
-import org.apache.poi.ss.usermodel.charts.ChartDataSource;
 import org.apache.poi.ss.usermodel.charts.ChartSeries;
 import org.apache.xmlbeans.XmlObject;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTPlotArea;
 
 /**
  * @author idobre
@@ -12,19 +12,9 @@ import org.apache.xmlbeans.XmlObject;
  */
 public interface CustomChartSeries extends ChartSeries {
     /**
-     * @return data source used for category axis data.
-     */
-    ChartDataSource<?> getCategoryAxisData();
-
-    /**
-     * @return data source used for value axis.
-     */
-    ChartDataSource<? extends Number> getValues();
-
-    /**
      * Add a series to the chart.
      *
-     * @param ctChart
+     * @param ctChart - chart created from a {@link CTPlotArea}
      */
     void addToChart(final XmlObject ctChart);
 }

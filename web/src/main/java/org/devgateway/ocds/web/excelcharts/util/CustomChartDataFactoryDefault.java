@@ -1,5 +1,6 @@
 package org.devgateway.ocds.web.excelcharts.util;
 
+import org.devgateway.ocds.web.excelcharts.ChartType;
 import org.devgateway.ocds.web.excelcharts.CustomChartData;
 import org.devgateway.ocds.web.excelcharts.data.XSSFAreaChartData;
 import org.devgateway.ocds.web.excelcharts.data.XSSFBarChartData;
@@ -14,44 +15,34 @@ import org.devgateway.ocds.web.excelcharts.data.XSSFStackedBarChartData;
  */
 public class CustomChartDataFactoryDefault implements CustomChartDataFactory {
     /**
-     * @return new scatter charts data instance
+     * @return new chart data instance
      */
-    public CustomChartData createScatterChartData() {
-        return new XSSFScatterChartData();
-    }
+    @Override
+    public CustomChartData createChartData(final ChartType type, final String title) {
+        final CustomChartData chartData;
+        switch (type) {
+            case area:
+                chartData = new XSSFAreaChartData(title);
+                break;
+            case bar:
+                chartData = new XSSFBarChartData(title);
+                break;
+            case stacked:
+                chartData = new XSSFStackedBarChartData(title);
+                break;
+            case line:
+                chartData = new XSSFLineChartData(title);
+                break;
+            case pie:
+                chartData = new XSSFPieChartData(title);
+                break;
+            case scatter:
+                chartData = new XSSFScatterChartData(title);
+                break;
+            default:
+                chartData = null;
+        }
 
-    /**
-     * @return new line charts data instance
-     */
-    public CustomChartData createLineChartData() {
-        return new XSSFLineChartData();
-    }
-
-    /**
-     * @return new area charts data instance
-     */
-    public CustomChartData createAreaChartData() {
-        return new XSSFAreaChartData();
-    }
-
-    /**
-     * @return new bar charts data instance
-     */
-    public CustomChartData createBarChartData() {
-        return new XSSFBarChartData();
-    }
-
-    /**
-     * @return new pie charts data instance
-     */
-    public CustomChartData createPieChartData() {
-        return new XSSFPieChartData();
-    }
-
-    /**
-     * @return new stacked bar charts data instance
-     */
-    public CustomChartData createStackedBarChartData() {
-        return new XSSFStackedBarChartData();
+        return chartData;
     }
 }

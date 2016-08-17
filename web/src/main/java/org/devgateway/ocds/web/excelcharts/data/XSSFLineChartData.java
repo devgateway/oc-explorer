@@ -21,16 +21,22 @@ import org.openxmlformats.schemas.drawingml.x2006.main.CTSRgbColor;
  * @author idobre
  * @since 8/12/16
  *
- * Holds data for a XSSF Line Chart
+ * Holds data for a XSSF Line Chart.
  */
-public class XSSFLineChartData extends AbstarctXSSFChartData {
+public class XSSFLineChartData extends AbstractXSSFChartData {
+    public XSSFLineChartData(final String title) {
+        super(title);
+    }
+
     @Override
-    protected CustomChartSeries createNewSerie(final int id, final int order, final ChartDataSource<?> categories,
+    protected CustomChartSeries createNewSerie(final int id, final int order, final ChartDataSource<String> categories,
                                                final ChartDataSource<? extends Number> values) {
         return new AbstractSeries(id, order, categories, values) {
+            @Override
             public void addToChart(final XmlObject ctChart) {
                 CTLineChart ctLineChart = (CTLineChart) ctChart;
                 CTLineSer ctLineSer = ctLineChart.addNewSer();
+
                 ctLineSer.addNewIdx().setVal(id);
                 ctLineSer.addNewOrder().setVal(order);
 
@@ -50,6 +56,7 @@ public class XSSFLineChartData extends AbstarctXSSFChartData {
         };
     }
 
+    @Override
     public void fillChart(final Chart chart, final ChartAxis... axis) {
         if (!(chart instanceof XSSFChart)) {
             throw new IllegalArgumentException("Chart must be instance of XSSFChart");
@@ -67,6 +74,8 @@ public class XSSFLineChartData extends AbstarctXSSFChartData {
         for (ChartAxis ax : axis) {
             lineChart.addNewAxId().setVal(ax.getId());
         }
+
+        xssfChart.setTitle(this.title);
 
         // add grid lines
         CTSRgbColor rgb = CTSRgbColor.Factory.newInstance();

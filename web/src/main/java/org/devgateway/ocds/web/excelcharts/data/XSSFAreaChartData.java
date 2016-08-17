@@ -16,17 +16,23 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.CTPlotArea;
 /**
  * @author idobre
  * @since 8/8/16
- * Holds data for a XSSF Area Chart
+ *
+ * Holds data for a XSSF Area Chart.
  */
-public class XSSFAreaChartData extends AbstarctXSSFChartData {
+public class XSSFAreaChartData extends AbstractXSSFChartData {
+    public XSSFAreaChartData(final String title) {
+        super(title);
+    }
 
     @Override
-    protected CustomChartSeries createNewSerie(final int id, final int order, final ChartDataSource<?> categories,
+    protected CustomChartSeries createNewSerie(final int id, final int order, final ChartDataSource<String> categories,
                                                final ChartDataSource<? extends Number> values) {
         return new AbstractSeries(id, order, categories, values) {
+            @Override
             public void addToChart(final XmlObject ctChart) {
                 CTAreaChart ctAreaChart = (CTAreaChart) ctChart;
                 CTAreaSer ctAreaSer = ctAreaChart.addNewSer();
+
                 ctAreaSer.addNewIdx().setVal(id);
                 ctAreaSer.addNewOrder().setVal(order);
 
@@ -43,6 +49,7 @@ public class XSSFAreaChartData extends AbstarctXSSFChartData {
         };
     }
 
+    @Override
     public void fillChart(final Chart chart, final ChartAxis... axis) {
         if (!(chart instanceof XSSFChart)) {
             throw new IllegalArgumentException("Chart must be instance of XSSFChart");
@@ -52,6 +59,8 @@ public class XSSFAreaChartData extends AbstarctXSSFChartData {
         CTPlotArea plotArea = xssfChart.getCTChart().getPlotArea();
         CTAreaChart areChart = plotArea.addNewAreaChart();
         areChart.addNewVaryColors().setVal(false);
+
+        xssfChart.setTitle(this.title);
 
         for (CustomChartSeries s : series) {
             s.addToChart(areChart);

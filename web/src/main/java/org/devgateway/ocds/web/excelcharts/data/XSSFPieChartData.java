@@ -17,16 +17,22 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.CTPlotArea;
  * @author idobre
  * @since 8/8/16
  *
- * Holds data for a XSSF Pie Chart
+ * Holds data for a XSSF Pie Chart.
  */
-public class XSSFPieChartData extends AbstarctXSSFChartData {
+public class XSSFPieChartData extends AbstractXSSFChartData {
+    public XSSFPieChartData(final String title) {
+        super(title);
+    }
+
     @Override
-    protected CustomChartSeries createNewSerie(final int id, final int order, final ChartDataSource<?> categories,
+    protected CustomChartSeries createNewSerie(final int id, final int order, final ChartDataSource<String> categories,
                                                final ChartDataSource<? extends Number> values) {
         return new AbstractSeries(id, order, categories, values) {
+            @Override
             public void addToChart(final XmlObject ctChart) {
                 CTPieChart ctPieChart = (CTPieChart) ctChart;
                 CTPieSer ctPieSer = ctPieChart.addNewSer();
+
                 ctPieSer.addNewIdx().setVal(id);
                 ctPieSer.addNewOrder().setVal(order);
 
@@ -43,6 +49,7 @@ public class XSSFPieChartData extends AbstarctXSSFChartData {
         };
     }
 
+    @Override
     public void fillChart(final Chart chart, final ChartAxis... axis) {
         if (!(chart instanceof XSSFChart)) {
             throw new IllegalArgumentException("Chart must be instance of XSSFChart");
@@ -52,6 +59,8 @@ public class XSSFPieChartData extends AbstarctXSSFChartData {
         CTPlotArea plotArea = xssfChart.getCTChart().getPlotArea();
         CTPieChart pieChart = plotArea.addNewPieChart();
         pieChart.addNewVaryColors().setVal(true);
+
+        xssfChart.setTitle(this.title);
 
         for (CustomChartSeries s : series) {
             s.addToChart(pieChart);
