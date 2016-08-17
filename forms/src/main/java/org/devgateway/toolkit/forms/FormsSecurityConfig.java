@@ -16,14 +16,22 @@ import org.devgateway.toolkit.web.spring.WebSecurityConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.access.expression.SecurityExpressionHandler;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.RememberMeAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.FilterInvocation;
+import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
+
+import static org.devgateway.toolkit.forms.security.SecurityConstants.Roles.ROLE_ADMIN;
+import static org.devgateway.toolkit.forms.security.SecurityConstants.Roles.ROLE_USER;
 
 @Configuration
 @EnableWebSecurity
@@ -87,8 +95,8 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 				sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER).
 				//we let Wicket create and manage sessions, so we disable
 				//session creation by spring
-				and().csrf().disable(); // csrf protection interferes with some wicket
-								// stuff 
+				and().csrf().disable()  // csrf protection interferes with some wicket stuff
+				.authorizeRequests().expressionHandler(webExpressionHandler()); // inject role hierarchy
 
 		// we enable http rememberMe cookie for autologin
 		// http.rememberMe().key(UNIQUE_SECRET_REMEMBER_ME_KEY);
@@ -98,5 +106,28 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 		http.headers().contentTypeOptions().and().xssProtection().and().cacheControl().and()
 				.httpStrictTransportSecurity().and().frameOptions().sameOrigin();
 
+	}
+
+	private SecurityExpressionHandler<FilterInvocation> webExpressionHandler() {
+		DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
+		defaultWebSecurityExpressionHandler.setRoleHierarchy(roleHierarchy());
+		return defaultWebSecurityExpressionHandler;
+	}
+
+	/**
+	 * Defines role hierarchy.
+	 * Hierarchy is specified as a string. Space separates rules and > symbol has the meaning of 'includes'.
+	 * <p>Example: role1 > role2 > role3 role2 > role4</p>
+	 * <p>Here role1 includes role2 role3 and role4 (indirectly). And role2 includes role4.</p>
+	 *
+	 * <a href='http://docs.spring.io/spring-security/site/docs/4.1.2.RELEASE/reference/htmlsingle/#authz-hierarchical-roles'>Hierarchical Roles documentation</a>
+	 */
+	@Bean
+	RoleHierarchy roleHierarchy() {
+		RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+		roleHierarchy.setHierarchy(
+				ROLE_ADMIN + " > " + ROLE_USER
+		);
+		return roleHierarchy;
 	}
 }
