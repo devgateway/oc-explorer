@@ -31,17 +31,17 @@ public class XSSFBarChartData extends AbstractXSSFChartData {
         return new AbstractSeries(id, order, categories, values) {
             @Override
             public void addToChart(final XmlObject ctChart) {
-                CTBarChart ctBarChart = (CTBarChart) ctChart;
-                CTBarSer ctBarSer = ctBarChart.addNewSer();
+                final CTBarChart ctBarChart = (CTBarChart) ctChart;
+                final CTBarSer ctBarSer = ctBarChart.addNewSer();
 
-                ctBarSer.addNewIdx().setVal(id);
-                ctBarSer.addNewOrder().setVal(order);
+                ctBarSer.addNewIdx().setVal(this.id);
+                ctBarSer.addNewOrder().setVal(this.order);
 
-                CTAxDataSource catDS = ctBarSer.addNewCat();
-                XSSFChartUtil.buildAxDataSource(catDS, categories);
+                final CTAxDataSource catDS = ctBarSer.addNewCat();
+                XSSFChartUtil.buildAxDataSource(catDS, this.categories);
 
-                CTNumDataSource valueDS = ctBarSer.addNewVal();
-                XSSFChartUtil.buildNumDataSource(valueDS, values);
+                final CTNumDataSource valueDS = ctBarSer.addNewVal();
+                XSSFChartUtil.buildNumDataSource(valueDS, this.values);
 
                 if (isTitleSet()) {
                     ctBarSer.setTx(getCTSerTx());
@@ -56,9 +56,9 @@ public class XSSFBarChartData extends AbstractXSSFChartData {
             throw new IllegalArgumentException("Chart must be instance of XSSFChart");
         }
 
-        XSSFChart xssfChart = (XSSFChart) chart;
-        CTPlotArea plotArea = xssfChart.getCTChart().getPlotArea();
-        CTBarChart barChart = plotArea.addNewBarChart();
+        final XSSFChart xssfChart = (XSSFChart) chart;
+        final CTPlotArea plotArea = xssfChart.getCTChart().getPlotArea();
+        final CTBarChart barChart = plotArea.addNewBarChart();
 
         barChart.addNewVaryColors().setVal(false);
 

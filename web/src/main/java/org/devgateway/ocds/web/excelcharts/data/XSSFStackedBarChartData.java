@@ -26,9 +26,9 @@ public class XSSFStackedBarChartData extends XSSFBarChartData {
             throw new IllegalArgumentException("Chart must be instance of XSSFChart");
         }
 
-        XSSFChart xssfChart = (XSSFChart) chart;
-        CTPlotArea plotArea = xssfChart.getCTChart().getPlotArea();
-        CTBarChart barChart = plotArea.addNewBarChart();
+        final XSSFChart xssfChart = (XSSFChart) chart;
+        final CTPlotArea plotArea = xssfChart.getCTChart().getPlotArea();
+        final CTBarChart barChart = plotArea.addNewBarChart();
 
         // create a stacked bar
         barChart.addNewGrouping().setVal(STBarGrouping.PERCENT_STACKED);

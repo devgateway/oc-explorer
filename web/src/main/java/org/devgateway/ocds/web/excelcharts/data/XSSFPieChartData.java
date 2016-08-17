@@ -30,17 +30,17 @@ public class XSSFPieChartData extends AbstractXSSFChartData {
         return new AbstractSeries(id, order, categories, values) {
             @Override
             public void addToChart(final XmlObject ctChart) {
-                CTPieChart ctPieChart = (CTPieChart) ctChart;
-                CTPieSer ctPieSer = ctPieChart.addNewSer();
+                final CTPieChart ctPieChart = (CTPieChart) ctChart;
+                final CTPieSer ctPieSer = ctPieChart.addNewSer();
 
-                ctPieSer.addNewIdx().setVal(id);
-                ctPieSer.addNewOrder().setVal(order);
+                ctPieSer.addNewIdx().setVal(this.id);
+                ctPieSer.addNewOrder().setVal(this.order);
 
-                CTAxDataSource catDS = ctPieSer.addNewCat();
-                XSSFChartUtil.buildAxDataSource(catDS, categories);
+                final CTAxDataSource catDS = ctPieSer.addNewCat();
+                XSSFChartUtil.buildAxDataSource(catDS, this.categories);
 
-                CTNumDataSource valueDS = ctPieSer.addNewVal();
-                XSSFChartUtil.buildNumDataSource(valueDS, values);
+                final CTNumDataSource valueDS = ctPieSer.addNewVal();
+                XSSFChartUtil.buildNumDataSource(valueDS, this.values);
 
                 if (isTitleSet()) {
                     ctPieSer.setTx(getCTSerTx());
@@ -55,9 +55,9 @@ public class XSSFPieChartData extends AbstractXSSFChartData {
             throw new IllegalArgumentException("Chart must be instance of XSSFChart");
         }
 
-        XSSFChart xssfChart = (XSSFChart) chart;
-        CTPlotArea plotArea = xssfChart.getCTChart().getPlotArea();
-        CTPieChart pieChart = plotArea.addNewPieChart();
+        final XSSFChart xssfChart = (XSSFChart) chart;
+        final CTPlotArea plotArea = xssfChart.getCTChart().getPlotArea();
+        final CTPieChart pieChart = plotArea.addNewPieChart();
         pieChart.addNewVaryColors().setVal(true);
 
         xssfChart.setTitle(this.title);

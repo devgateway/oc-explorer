@@ -31,13 +31,13 @@ import java.util.Set;
  * @since 8/16/16
  */
 public final class ExcelChartSheetDefault implements ExcelChartSheet {
-    public static final int DATAFONTHEIGHT = 12;
+    private static final int DATAFONTHEIGHT = 12;
 
-    public static final int HEADERFONTHEIGHT = 14;
+    private static final int HEADERFONTHEIGHT = 14;
 
-    public static final int ROWHEADERHEIGHT = 800;
+    private static final int ROWHEADERHEIGHT = 800;
 
-    public static final int ROWHEIGHT = 600;
+    private static final int ROWHEIGHT = 600;
 
     private final Sheet excelSheet;
 
@@ -175,6 +175,9 @@ public final class ExcelChartSheetDefault implements ExcelChartSheet {
         return chart;
     }
 
+    /**
+     * Returns a ChartDataSource with the categories. Categories should be on the first row of the excel sheet
+     */
     @Override
     public ChartDataSource<String> getCategoryChartDataSource() {
         if (excelSheet.getRow(0) == null) {
@@ -183,6 +186,9 @@ public final class ExcelChartSheetDefault implements ExcelChartSheet {
         return getChartDataSource(0);      // categories should always be on the first row
     }
 
+    /**
+     * Returns a List of ChartDataSource with the values. Values should always be present after the first row (category)
+     */
     @Override
     public List<ChartDataSource<Number>> getValuesChartDataSource() {
         if (excelSheet.getPhysicalNumberOfRows() <= 1) {
