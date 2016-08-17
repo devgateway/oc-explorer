@@ -21,7 +21,7 @@ public class GenericPagingRequestKeyGenerator implements KeyGenerator {
 
     private final Logger logger = LoggerFactory.getLogger(GenericPagingRequestKeyGenerator.class);
 
-    final private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     public GenericPagingRequestKeyGenerator(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;

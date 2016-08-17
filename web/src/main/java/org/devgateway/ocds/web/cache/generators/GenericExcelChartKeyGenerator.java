@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
 public class GenericExcelChartKeyGenerator implements KeyGenerator {
     private final Logger logger = LoggerFactory.getLogger(GenericExcelChartKeyGenerator.class);
 
-    final private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     public GenericExcelChartKeyGenerator(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
