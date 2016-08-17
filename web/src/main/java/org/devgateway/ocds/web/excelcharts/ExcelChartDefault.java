@@ -65,7 +65,7 @@ public class ExcelChartDefault implements ExcelChart {
 
         final ChartDataSource<String> categoryDataSource = excelChartSheet.getCategoryChartDataSource();
         final List<ChartDataSource<Number>> valuesDataSource = excelChartSheet.getValuesChartDataSource();
-        for(int i = 0; i < valuesDataSource.size(); i++) {
+        for (int i = 0; i < valuesDataSource.size(); i++) {
             final ChartDataSource<Number> valueDataSource = valuesDataSource.get(i);
             if (seriesTitle.isEmpty()) {
                 data.addSeries(categoryDataSource, valueDataSource);
