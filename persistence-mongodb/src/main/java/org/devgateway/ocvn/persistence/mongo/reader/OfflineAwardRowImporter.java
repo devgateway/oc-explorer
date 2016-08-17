@@ -84,6 +84,11 @@ public class OfflineAwardRowImporter extends ReleaseRowImporter {
 				supplier.setId(getRowCell(row, 3));
 				supplier.getTypes().add(Organization.OrganizationType.supplier);
 				supplier = organizationRepository.insert(supplier);
+			} else {
+				if (!supplier.getTypes().contains(Organization.OrganizationType.supplier)) {
+					supplier.getTypes().add(Organization.OrganizationType.supplier);
+					supplier = organizationRepository.save(supplier);
+				}
 			}
 		}
 

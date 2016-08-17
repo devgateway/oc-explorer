@@ -76,7 +76,12 @@ public class EBidAwardRowImporter extends ReleaseRowImporter {
 			supplier.setName(getRowCell(row, 2));
 			supplier.getTypes().add(Organization.OrganizationType.supplier);
 			supplier = organizationRepository.insert(supplier);
-		}		
+		} else {
+			if (!supplier.getTypes().contains(Organization.OrganizationType.supplier)) {
+				supplier.getTypes().add(Organization.OrganizationType.supplier);
+				supplier = organizationRepository.save(supplier);
+			}
+		}
 
 		award.setStatus("Y".equals(getRowCell(row, 5)) ? Award.Status.active : Award.Status.unsuccessful);
 		

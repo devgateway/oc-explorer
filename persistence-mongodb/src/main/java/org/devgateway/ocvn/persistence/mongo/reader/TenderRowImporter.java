@@ -265,7 +265,7 @@ public class TenderRowImporter extends ReleaseRowImporter {
 			procuringEntity.setIdentifier(procuringEntityIdentifier);
 			procuringEntity = organizationRepository.insert(procuringEntity);
 		} else {
-			if (procuringEntity.getTypes().contains(Organization.OrganizationType.procuringEntity)) {
+			if (!procuringEntity.getTypes().contains(Organization.OrganizationType.procuringEntity)) {
 				procuringEntity.getTypes().add(Organization.OrganizationType.procuringEntity);
 				procuringEntity = organizationRepository.save(procuringEntity);
 			}
@@ -282,7 +282,7 @@ public class TenderRowImporter extends ReleaseRowImporter {
 			orderInstituCd.getTypes().add(Organization.OrganizationType.buyer);
 			orderInstituCd = organizationRepository.insert(orderInstituCd);
 		} else {
-			if (orderInstituCd.getTypes().contains(Organization.OrganizationType.buyer)) {
+			if (!orderInstituCd.getTypes().contains(Organization.OrganizationType.buyer)) {
 				orderInstituCd.getTypes().add(Organization.OrganizationType.buyer);
 				orderInstituCd = organizationRepository.save(orderInstituCd);
 			}
