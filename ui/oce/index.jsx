@@ -3,6 +3,7 @@ import {fromJS, Map, Set} from "immutable";
 import {fetchJson, debounce} from "./tools";
 import URI from "urijs";
 import Filters from "./filters";
+import OCEStyle from "./style.less";
 
 let range = (from, to) => from > to ? [] : [from].concat(range(from + 1, to));
 const MIN_YEAR = 2010;
