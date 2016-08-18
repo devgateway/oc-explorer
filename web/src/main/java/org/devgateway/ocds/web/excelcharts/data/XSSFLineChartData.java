@@ -15,7 +15,6 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumDataSource;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTPlotArea;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTValAx;
 import org.openxmlformats.schemas.drawingml.x2006.chart.STMarkerStyle;
-import org.openxmlformats.schemas.drawingml.x2006.main.CTSRgbColor;
 
 /**
  * @author idobre
@@ -78,17 +77,14 @@ public class XSSFLineChartData extends AbstractXSSFChartData {
         xssfChart.setTitle(this.title);
 
         // add grid lines
-        final CTSRgbColor rgb = CTSRgbColor.Factory.newInstance();
-        rgb.setVal(new byte[]{(byte) 0, (byte) 0, (byte) 0});
-
         CTCatAx[] ctCatAx = plotArea.getCatAxArray();
         if (ctCatAx.length != 0) {
-            ctCatAx[0].addNewMajorGridlines().addNewSpPr().addNewSolidFill().setSrgbClr(rgb);
+            ctCatAx[0].addNewMajorGridlines().addNewSpPr().addNewSolidFill();
         }
 
         CTValAx[] ctValAx = plotArea.getValAxArray();
         if (ctValAx.length != 0) {
-            ctValAx[0].addNewMajorGridlines().addNewSpPr().addNewSolidFill().setSrgbClr(rgb);
+            ctValAx[0].addNewMajorGridlines().addNewSpPr().addNewSolidFill();
         }
     }
 }

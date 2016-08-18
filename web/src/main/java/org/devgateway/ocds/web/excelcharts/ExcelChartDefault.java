@@ -5,7 +5,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.charts.AxisCrosses;
 import org.apache.poi.ss.usermodel.charts.AxisPosition;
-import org.apache.poi.ss.usermodel.charts.AxisTickMark;
 import org.apache.poi.ss.usermodel.charts.ChartAxis;
 import org.apache.poi.ss.usermodel.charts.ChartDataSource;
 import org.apache.poi.ss.usermodel.charts.ValueAxis;
