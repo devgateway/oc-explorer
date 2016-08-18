@@ -28,9 +28,12 @@ public class ExcelChartGenerator {
      */
     @Cacheable
     public byte[] getExcelChart(final ChartType type,
+                                final String title,
+                                final List<String> seriesTitle,
                                 final List<String> categories,
                                 final List<List<? extends Number>> values) throws IOException {
-        final ExcelChart excelChart = new ExcelChartDefault(type, categories, values);
+        final ExcelChart excelChart = new ExcelChartDefault(title, type, categories, values);
+        excelChart.configureSeriesTitle(seriesTitle);
         final Workbook workbook = excelChart.createWorkbook();
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();

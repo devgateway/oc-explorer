@@ -2,6 +2,8 @@ package org.devgateway.ocds.web.excelcharts;
 
 import org.apache.poi.ss.usermodel.Workbook;
 
+import java.util.List;
+
 /**
  * @author idobre
  * @since 8/16/16
@@ -10,4 +12,6 @@ import org.apache.poi.ss.usermodel.Workbook;
  */
 public interface ExcelChart {
     Workbook createWorkbook();
+
+    void configureSeriesTitle(final List<String> seriesTitle);
 }

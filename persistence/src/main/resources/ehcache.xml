@@ -46,6 +46,15 @@
            statistics="true">
     </cache>
 
+    <cache name="excelChartHelper"
+           eternal="true"
+           diskPersistent="false"
+           diskExpiryThreadIntervalSeconds="120"
+           memoryStoreEvictionPolicy="LRU"
+           maxEntriesLocalHeap="100000"
+           statistics="true">
+    </cache>
+
     <!-- EhCache Config for Pentaho Reports -->
     <!-- Defines the caches used by libloader. This cache holds the raw binary data loaded via libloader. -->
     <cache name="libloader-data" eternal="true" overflowToDisk="false"
