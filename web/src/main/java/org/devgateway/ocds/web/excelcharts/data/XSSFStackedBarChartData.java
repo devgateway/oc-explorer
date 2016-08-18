@@ -6,8 +6,9 @@ import org.apache.poi.xssf.usermodel.XSSFChart;
 import org.devgateway.ocds.web.excelcharts.CustomChartSeries;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTBarChart;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTPlotArea;
-import org.openxmlformats.schemas.drawingml.x2006.chart.STBarDir;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTValAx;
 import org.openxmlformats.schemas.drawingml.x2006.chart.STBarGrouping;
+import org.openxmlformats.schemas.drawingml.x2006.chart.STCrossBetween;
 
 /**
  * @author idobre
@@ -16,6 +17,8 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.STBarGrouping;
  * Holds data for a XSSF Stacked Bar Chart.
  */
 public class XSSFStackedBarChartData extends XSSFBarChartData {
+    private STBarGrouping.Enum barGrouping = STBarGrouping.STACKED;
+
     public XSSFStackedBarChartData(final String title) {
         super(title);
     }
@@ -30,16 +33,22 @@ public class XSSFStackedBarChartData extends XSSFBarChartData {
         final CTPlotArea plotArea = xssfChart.getCTChart().getPlotArea();
         final CTBarChart barChart = plotArea.addNewBarChart();
 
-        // create a stacked bar
-        barChart.addNewGrouping().setVal(STBarGrouping.PERCENT_STACKED);
-        barChart.addNewOverlap().setVal((byte) 100);
-
         barChart.addNewVaryColors().setVal(false);
 
+        // create a stacked bar
+        barChart.addNewGrouping().setVal(barGrouping);
+        barChart.addNewOverlap().setVal((byte) 100);
+
         // set bars orientation
-        barChart.addNewBarDir().setVal(STBarDir.COL);
+        barChart.addNewBarDir().setVal(barDir);
 
         xssfChart.setTitle(this.title);
+
+        CTValAx[] ctValAx = plotArea.getValAxArray();
+        if (ctValAx.length != 0) {
+            ctValAx[0].addNewMajorGridlines().addNewSpPr().addNewSolidFill();
+            ctValAx[0].getCrossBetween().setVal(STCrossBetween.BETWEEN);
+        }
 
         for (CustomChartSeries s : series) {
             s.addToChart(barChart);
@@ -48,5 +57,9 @@ public class XSSFStackedBarChartData extends XSSFBarChartData {
         for (ChartAxis ax : axis) {
             barChart.addNewAxId().setVal(ax.getId());
         }
+    }
+
+    public void setBarGrouping(final STBarGrouping.Enum barGrouping) {
+        this.barGrouping = barGrouping;
     }
 }

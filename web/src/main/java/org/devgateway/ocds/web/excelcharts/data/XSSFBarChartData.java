@@ -12,7 +12,9 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.CTBarChart;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTBarSer;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumDataSource;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTPlotArea;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTValAx;
 import org.openxmlformats.schemas.drawingml.x2006.chart.STBarDir;
+import org.openxmlformats.schemas.drawingml.x2006.chart.STCrossBetween;
 
 /**
  * @author idobre
@@ -21,6 +23,8 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.STBarDir;
  * Holds data for a XSSF Bar Chart.
  */
 public class XSSFBarChartData extends AbstractXSSFChartData {
+    protected STBarDir.Enum barDir = STBarDir.COL;
+
     public XSSFBarChartData(final String title) {
         super(title);
     }
@@ -63,9 +67,15 @@ public class XSSFBarChartData extends AbstractXSSFChartData {
         barChart.addNewVaryColors().setVal(false);
 
         // set bars orientation
-        barChart.addNewBarDir().setVal(STBarDir.COL);
+        barChart.addNewBarDir().setVal(barDir);
 
         xssfChart.setTitle(this.title);
+
+        CTValAx[] ctValAx = plotArea.getValAxArray();
+        if (ctValAx.length != 0) {
+            ctValAx[0].addNewMajorGridlines().addNewSpPr().addNewSolidFill();
+            ctValAx[0].getCrossBetween().setVal(STCrossBetween.BETWEEN);
+        }
 
         for (CustomChartSeries s : series) {
             s.addToChart(barChart);
@@ -74,5 +84,9 @@ public class XSSFBarChartData extends AbstractXSSFChartData {
         for (ChartAxis ax : axis) {
             barChart.addNewAxId().setVal(ax.getId());
         }
+    }
+
+    public void setBarDir(final STBarDir.Enum barDir) {
+        this.barDir = barDir;
     }
 }

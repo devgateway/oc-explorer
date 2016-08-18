@@ -41,7 +41,7 @@ public class XSSFLineChartData extends AbstractXSSFChartData {
                 ctLineSer.addNewOrder().setVal(this.order);
 
                 // No marker symbol on the chart line.
-                ctLineSer.addNewMarker().addNewSymbol().setVal(STMarkerStyle.NONE);
+                ctLineSer.addNewMarker().addNewSymbol().setVal(STMarkerStyle.CIRCLE);
 
                 final CTAxDataSource catDS = ctLineSer.addNewCat();
                 XSSFChartUtil.buildAxDataSource(catDS, this.categories);

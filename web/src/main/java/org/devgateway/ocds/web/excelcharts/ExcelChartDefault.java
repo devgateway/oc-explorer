@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.charts.AxisCrosses;
 import org.apache.poi.ss.usermodel.charts.AxisPosition;
+import org.apache.poi.ss.usermodel.charts.AxisTickMark;
 import org.apache.poi.ss.usermodel.charts.ChartAxis;
 import org.apache.poi.ss.usermodel.charts.ChartDataSource;
 import org.apache.poi.ss.usermodel.charts.ValueAxis;
@@ -61,29 +62,29 @@ public class ExcelChartDefault implements ExcelChart {
         addValues(excelChartSheet);
 
         final CustomChartDataFactory customChartDataFactory = new CustomChartDataFactoryDefault();
-        final CustomChartData data = customChartDataFactory.createChartData(type, title);
+        final CustomChartData chartData = customChartDataFactory.createChartData(type, title);
 
         final ChartDataSource<String> categoryDataSource = excelChartSheet.getCategoryChartDataSource();
         final List<ChartDataSource<Number>> valuesDataSource = excelChartSheet.getValuesChartDataSource();
         for (int i = 0; i < valuesDataSource.size(); i++) {
             final ChartDataSource<Number> valueDataSource = valuesDataSource.get(i);
             if (seriesTitle.isEmpty()) {
-                data.addSeries(categoryDataSource, valueDataSource);
+                chartData.addSeries(categoryDataSource, valueDataSource);
             } else {
-                data.addSeries(seriesTitle.get(i), categoryDataSource, valueDataSource);
+                chartData.addSeries(seriesTitle.get(i), categoryDataSource, valueDataSource);
             }
         }
 
         // we don't have any axis for a pie chart
         if (type.equals(ChartType.pie)) {
-            chart.plot(data);
+            chart.plot(chartData);
         } else {
             // Use a category axis for the bottom axis.
             final ChartAxis bottomAxis = chart.getChartAxisFactory().createCategoryAxis(AxisPosition.BOTTOM);
             final ValueAxis leftAxis = chart.getChartAxisFactory().createValueAxis(AxisPosition.LEFT);
             leftAxis.setCrosses(AxisCrosses.AUTO_ZERO);
 
-            chart.plot(data, bottomAxis, leftAxis);
+            chart.plot(chartData, bottomAxis, leftAxis);
         }
 
         return workbook;
@@ -104,7 +105,9 @@ public class ExcelChartDefault implements ExcelChart {
         final Row row = excelChartSheet.createRow();
         int coll = 0;
         for (String category : categories) {
-            excelChartSheet.writeCell(category, row, coll++);
+            excelChartSheet.writeCell(category, row, coll);
+            excelChartSheet.setColumnWidth(coll, 3500);
+            coll++;
         }
     }
 
