@@ -3,24 +3,24 @@
  */
 package org.devgateway.ocvn.persistence.mongo.reader;
 
+import java.text.ParseException;
+
 import org.devgateway.ocds.persistence.mongo.Address;
 import org.devgateway.ocds.persistence.mongo.ContactPoint;
 import org.devgateway.ocds.persistence.mongo.Identifier;
+import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
+import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
-import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
-import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository;
-
-import java.text.ParseException;
 
 /**
  * @author mihai Specific {@link RowImporter} for Public Institutions, in the
  *         custom Excel format provided by Vietnam
  * @see VNOrganization
  */
-public class PublicInstitutionRowImporter extends RowImporter<VNOrganization, VNOrganizationRepository> {
+public class PublicInstitutionRowImporter extends RowImporter<Organization, OrganizationRepository> {
 
-	public PublicInstitutionRowImporter(final VNOrganizationRepository repository, final ImportService importService,
+	public PublicInstitutionRowImporter(final OrganizationRepository repository, final ImportService importService,
 			final int skipRows) {
 		super(repository, importService, skipRows);
 	}
@@ -30,11 +30,11 @@ public class PublicInstitutionRowImporter extends RowImporter<VNOrganization, VN
 		if (getRowCell(row, 0) == null) {
 			throw new RuntimeException("Main identifier empty!");
 		}
-		VNOrganization organization = repository.findOne(getRowCell(row, 0));
+		Organization organization = repository.findOne(getRowCell(row, 0));
 		if (organization != null) {
 			throw new RuntimeException("Duplicate identifer for organization " + organization);
 		}
-		organization = new VNOrganization();
+		organization = new Organization();
 		Identifier identifier = new Identifier();
 
 		identifier.setId(getRowCell(row, 0));

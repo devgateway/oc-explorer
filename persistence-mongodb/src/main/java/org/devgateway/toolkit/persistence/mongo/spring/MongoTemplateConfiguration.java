@@ -6,9 +6,9 @@ import java.net.URL;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.IOUtils;
+import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
-import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +32,7 @@ public class MongoTemplateConfiguration {
 		// vietnam specific indexes
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.budget.projectID", Direction.ASC));
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.bidNo", Direction.ASC));		
+    	logger.info("Added mandatory Mongo indexes");
 	}
 
     @PostConstruct
@@ -66,11 +67,12 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
         		on("tender.items.deliveryLocation._id", Direction.ASC));
 
-        mongoTemplate.indexOps(VNOrganization.class).ensureIndex(new Index().on("identifier._id", Direction.ASC));
-        mongoTemplate.indexOps(VNOrganization.class)
+        mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("identifier._id", Direction.ASC));
+        mongoTemplate.indexOps(Organization.class)
                 .ensureIndex(new Index().on("additionalIdentifiers._id", Direction.ASC));
-        mongoTemplate.indexOps(VNOrganization.class)
+        mongoTemplate.indexOps(Organization.class)
                 .ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());
+        mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("types", Direction.ASC));
         
     	mongoTemplate.indexOps(VNLocation.class)
     	.ensureIndex(new TextIndexDefinitionBuilder().onField("description").onField("uri").build());

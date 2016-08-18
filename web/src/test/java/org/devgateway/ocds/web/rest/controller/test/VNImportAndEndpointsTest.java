@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.spring.ExcelImportService;
 import org.devgateway.ocds.web.rest.controller.AverageNumberOfTenderersController;
 import org.devgateway.ocds.web.rest.controller.AverageTenderAndAwardPeriodsController;
@@ -13,7 +14,6 @@ import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingReque
 import org.devgateway.ocds.web.rest.controller.request.OrganizationSearchRequest;
 import org.devgateway.ocds.web.rest.controller.selector.ProcuringEntitySearchController;
 import org.devgateway.ocvn.persistence.mongo.dao.ImportFileTypes;
-import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
 import org.devgateway.toolkit.persistence.mongo.test.AbstractMongoTest;
 import org.junit.Assert;
 import org.junit.Before;
@@ -174,8 +174,8 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
 	
 	@Test
 	public void testProcuringEntitySearchController() {
-		List<VNOrganization> procuringEntities = procuringEntitySearchController
-				.procuringEntitySearchText(new OrganizationSearchRequest());
+		List<Organization> procuringEntities = procuringEntitySearchController.searchText
+				(new OrganizationSearchRequest());
 		Assert.assertEquals(procuringEntities.size(), 2, 0);
 	}
 
