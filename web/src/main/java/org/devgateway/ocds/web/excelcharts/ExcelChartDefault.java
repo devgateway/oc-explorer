@@ -82,8 +82,6 @@ public class ExcelChartDefault implements ExcelChart {
             // Use a category axis for the bottom axis.
             final ChartAxis bottomAxis = chart.getChartAxisFactory().createCategoryAxis(AxisPosition.BOTTOM);
             final ValueAxis leftAxis = chart.getChartAxisFactory().createValueAxis(AxisPosition.LEFT);
-
-            leftAxis.setMinorTickMark(AxisTickMark.IN);
             leftAxis.setCrosses(AxisCrosses.AUTO_ZERO);
 
             chart.plot(chartData, bottomAxis, leftAxis);
