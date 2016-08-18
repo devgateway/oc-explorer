@@ -13,21 +13,15 @@ package org.devgateway.toolkit.forms;
 
 import org.devgateway.toolkit.persistence.spring.CustomJPAUserDetailsService;
 import org.devgateway.toolkit.web.spring.WebSecurityConfig;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.access.expression.SecurityExpressionHandler;
-import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
-import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.RememberMeAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.FilterInvocation;
-import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 
@@ -40,9 +34,6 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 	 * Remember me key for {@link TokenBasedRememberMeServices}
 	 */
 	private static final String UNIQUE_SECRET_REMEMBER_ME_KEY = "secret";
-
-	@Value("${roleHierarchy}")
-	private String roleHierarchyStringRepresentation;
 
 	/**
 	 * We ensure the superclass configuration is being applied Take note the
@@ -94,8 +85,7 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 				sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER).
 				//we let Wicket create and manage sessions, so we disable
 				//session creation by spring
-				and().csrf().disable()  // csrf protection interferes with some wicket stuff
-				.authorizeRequests().expressionHandler(webExpressionHandler()); // inject role hierarchy
+				and().csrf().disable();  // csrf protection interferes with some wicket stuff
 
 		// we enable http rememberMe cookie for autologin
 		// http.rememberMe().key(UNIQUE_SECRET_REMEMBER_ME_KEY);
@@ -105,21 +95,5 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 		http.headers().contentTypeOptions().and().xssProtection().and().cacheControl().and()
 				.httpStrictTransportSecurity().and().frameOptions().sameOrigin();
 
-	}
-
-	private SecurityExpressionHandler<FilterInvocation> webExpressionHandler() {
-		DefaultWebSecurityExpressionHandler handler = new DefaultWebSecurityExpressionHandler();
-		handler.setRoleHierarchy(roleHierarchy());
-		return handler;
-	}
-
-	/**
-	 * Enable hierarchical roles.
-	 */
-	@Bean
-	RoleHierarchy roleHierarchy() {
-		RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-		roleHierarchy.setHierarchy(roleHierarchyStringRepresentation);
-		return roleHierarchy;
 	}
 }
