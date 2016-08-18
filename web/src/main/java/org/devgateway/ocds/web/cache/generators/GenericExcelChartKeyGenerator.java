@@ -11,6 +11,9 @@ import java.lang.reflect.Method;
 /**
  * @author idobre
  * @since 8/17/16
+ *
+ * {@link KeyGenerator} that uses all parameters to create a key.
+ * This KeyGenerator is used to cache Excel Charts data
  */
 public class GenericExcelChartKeyGenerator implements KeyGenerator {
     private final Logger logger = LoggerFactory.getLogger(GenericExcelChartKeyGenerator.class);
@@ -23,19 +26,18 @@ public class GenericExcelChartKeyGenerator implements KeyGenerator {
 
     @Override
     public Object generate(Object target, Method method, Object... params) {
-        if (params.length != 5) {
+        if (params.length < 1) {
             throw new RuntimeException(
                     "Wrong parameters received for generating custom GenericExcelChartKeyGenerator key!");
         }
 
         try {
-            return new StringBuilder(method.toString())
-                    .append(objectMapper.writeValueAsString(params[0]))
-                    .append(objectMapper.writeValueAsString(params[1]))
-                    .append(objectMapper.writeValueAsString(params[2]))
-                    .append(objectMapper.writeValueAsString(params[3]))
-                    .append(objectMapper.writeValueAsString(params[4]))
-                    .toString().hashCode();
+            StringBuilder key = new StringBuilder(method.toString());
+            for (Object param : params) {
+                key.append(objectMapper.writeValueAsString(param));
+            }
+
+            return key.toString().hashCode();
         } catch (JsonProcessingException e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);
