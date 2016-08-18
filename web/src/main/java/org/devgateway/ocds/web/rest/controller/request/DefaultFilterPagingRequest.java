@@ -33,6 +33,14 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 	@ApiModelProperty(value = "This will filter after tender.value.amount and will specify a maximum."
 			+ "Use /api/tenderValueInterval to get the maximum allowed.")
 	private BigDecimal maxTenderValue;
+		
+	@ApiModelProperty(value = "This will filter after awards.value.amount and will specify a minimum"
+			+ "Use /api/awardValueInterval to get the minimum allowed.")
+	private BigDecimal minAwardValue;
+	
+	@ApiModelProperty(value = "This will filter after awards.value.amount and will specify a maximum."
+			+ "Use /api/awardValueInterval to get the maximum allowed.")
+	private BigDecimal maxAwardValue;
 
 	/**
 	 * This parameter will invert (negate) all existing filtering parameters. So
@@ -100,6 +108,22 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
 	public void setMaxTenderValue(BigDecimal maxTenderValueAmount) {
 		this.maxTenderValue = maxTenderValueAmount;
+	}
+
+	public BigDecimal getMinAwardValue() {
+		return minAwardValue;
+	}
+
+	public void setMinAwardValue(BigDecimal minAwardValue) {
+		this.minAwardValue = minAwardValue;
+	}
+
+	public BigDecimal getMaxAwardValue() {
+		return maxAwardValue;
+	}
+
+	public void setMaxAwardValue(BigDecimal maxAwardValue) {
+		this.maxAwardValue = maxAwardValue;
 	}
 
 
