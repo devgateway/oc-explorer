@@ -129,7 +129,34 @@ public class GenericOCDSController {
 		return criteria;
 	}
 	
-	
+	/**
+	 * Creates a search criteria filter based on awards.value.amount and uses
+	 * {@link DefaultFilterPagingRequest#getMinAwardValue()} and
+	 * {@link DefaultFilterPagingRequest#getMaxAwardValue()} to create
+	 * interval search
+	 * 
+	 * @param filter
+	 * @return
+	 */
+	private Criteria getByAwardAmountIntervalCriteria(final DefaultFilterPagingRequest filter) {
+		if (filter.getMaxAwardValue() == null && filter.getMinAwardValue() == null) {
+			return new Criteria();
+		}
+		Criteria criteria = where("awards.value.amount");
+		if (filter.getMinAwardValue() != null) {
+			if (filter.getInvert()) {
+				criteria = criteria.not();
+			}
+			criteria = criteria.gte(filter.getMinAwardValue().doubleValue());
+		}
+		if (filter.getMaxAwardValue() != null) {
+			if (filter.getInvert()) {
+				criteria = criteria.not();
+			}
+			criteria = criteria.lte(filter.getMaxAwardValue().doubleValue());
+		}
+		return criteria;
+	}
 	
 	
 	/**
@@ -175,6 +202,7 @@ public class GenericOCDSController {
 		tmpMap.put("tender.procurementMethodDetails", 1);
 		tmpMap.put("tender.contrMethod", 1);
 		tmpMap.put("tender.value.amount", 1);
+		tmpMap.put("awards.value.amount", 1);
 		filterProjectMap = Collections.unmodifiableMap(tmpMap);
 	}
 
@@ -210,7 +238,8 @@ public class GenericOCDSController {
 	protected Criteria getDefaultFilterCriteria(final DefaultFilterPagingRequest filter) {
 		return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
 				getBidSelectionMethod(filter), getContrMethodFilterCriteria(filter),
-				getByTenderDeliveryLocationIdentifier(filter), getByTenderAmountIntervalCriteria(filter));
+				getByTenderDeliveryLocationIdentifier(filter), getByTenderAmountIntervalCriteria(filter),
+				getByAwardAmountIntervalCriteria(filter));
 	}
 
     protected MatchOperation getMatchDefaultFilterOperation(final DefaultFilterPagingRequest filter) {
