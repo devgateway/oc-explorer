@@ -13,6 +13,7 @@ package org.devgateway.toolkit.forms;
 
 import org.devgateway.toolkit.persistence.spring.CustomJPAUserDetailsService;
 import org.devgateway.toolkit.web.spring.WebSecurityConfig;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -30,9 +31,6 @@ import org.springframework.security.web.access.expression.DefaultWebSecurityExpr
 import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 
-import static org.devgateway.toolkit.forms.security.SecurityConstants.Roles.ROLE_ADMIN;
-import static org.devgateway.toolkit.forms.security.SecurityConstants.Roles.ROLE_USER;
-
 @Configuration
 @EnableWebSecurity
 @Order(1) // this ensures the forms security comes first
@@ -43,7 +41,8 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 	 */
 	private static final String UNIQUE_SECRET_REMEMBER_ME_KEY = "secret";
 
-
+	@Value("${roleHierarchy}")
+	private String roleHierarchyStringRepresentation;
 
 	/**
 	 * We ensure the superclass configuration is being applied Take note the
@@ -115,17 +114,12 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 	}
 
 	/**
-	 * Defines role hierarchy.
-	 * Hierarchy is specified as a string. Space separates rules and > symbol has the meaning of 'includes'.
-	 * <p>Example: role1 > role2 > role3 role2 > role4</p>
-	 * <p>Here role1 includes role2 role3 and role4 (indirectly). And role2 includes role4.</p>
+	 * Enable hierarchical roles.
 	 */
 	@Bean
 	RoleHierarchy roleHierarchy() {
 		RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-		roleHierarchy.setHierarchy(
-				ROLE_ADMIN + " > " + ROLE_USER
-		);
+		roleHierarchy.setHierarchy(roleHierarchyStringRepresentation);
 		return roleHierarchy;
 	}
 }
