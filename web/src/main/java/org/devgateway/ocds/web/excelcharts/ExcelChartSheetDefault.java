@@ -98,7 +98,7 @@ public final class ExcelChartSheetDefault implements ExcelChartSheet {
                     cell = row.createCell(column, Cell.CELL_TYPE_NUMERIC);
                     cell.setCellValue((Integer) value);
                 } else {
-                    if (value instanceof BigDecimal) {
+                    if (value instanceof Number) {
                         cell = row.createCell(column, Cell.CELL_TYPE_NUMERIC);
                         cell.setCellValue(((Number) value).doubleValue());
                     } else {
