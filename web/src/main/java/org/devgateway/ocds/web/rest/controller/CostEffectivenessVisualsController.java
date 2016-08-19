@@ -19,8 +19,13 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -151,5 +156,43 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 		return tagCount;
 
 	}
+	
+	
+	@ApiOperation(value = "Aggregated version of /api/costEffectivenessTenderAmount and "
+			+ "/api/costEffectivenessAwardAmount."
+			+ "This endpoint aggregates the responses from the specified endpoints, per year. "
+			+ "Responds to the same filters.")
+	@RequestMapping(value = "/api/costEffectivenessTenderAwardAmount", method = { RequestMethod.POST,
+			RequestMethod.GET }, produces = "application/json")
+	public List<DBObject> costEffectivenessTenderAwardAmount(
+			@ModelAttribute @Valid final GroupingFilterPagingRequest filter) {
+
+		List<DBObject> costEffectivenessAwardAmount = costEffectivenessAwardAmount(filter);
+		List<DBObject> costEffectivenessTenderAmount = costEffectivenessTenderAmount(filter);
+		
+		LinkedHashMap<Integer, DBObject> response = new LinkedHashMap<>();
+		
+		costEffectivenessAwardAmount.forEach(dbobj -> response.put((Integer) dbobj.get(Fields.UNDERSCORE_ID), dbobj));
+		costEffectivenessTenderAmount.forEach(dbobj -> {
+			if (response.containsKey(dbobj.get(Fields.UNDERSCORE_ID))) {
+				Map<?, ?> map = dbobj.toMap();
+				map.remove(Fields.UNDERSCORE_ID);
+				response.get(dbobj.get(Fields.UNDERSCORE_ID)).putAll(map);
+			} else {
+				response.put((Integer) dbobj.get(Fields.UNDERSCORE_ID), dbobj);
+			}
+		}
+		);
+		
+		Collection<DBObject> respCollection = response.values();
+		respCollection.forEach(dbobj -> {
+			dbobj.put("diffTenderAwardAmount", BigDecimal.valueOf((double) dbobj.get("totalTenderAmount"))
+					.subtract(BigDecimal.valueOf((double) dbobj.get("totalAwardAmount"))));
+		});
+		
+		return new ArrayList<>(respCollection);
+	}
+	
+	
 
 }
