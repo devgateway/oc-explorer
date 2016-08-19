@@ -19,8 +19,10 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -182,7 +184,13 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 		}
 		);
 		
-		return new ArrayList<>(response.values());
+		Collection<DBObject> respCollection = response.values();
+		respCollection.forEach(dbobj -> {
+			dbobj.put("diffTenderAwardAmount", BigDecimal.valueOf((double) dbobj.get("totalTenderAmount"))
+					.subtract(BigDecimal.valueOf((double) dbobj.get("totalAwardAmount"))));
+		});
+		
+		return new ArrayList<>(respCollection);
 	}
 	
 	
