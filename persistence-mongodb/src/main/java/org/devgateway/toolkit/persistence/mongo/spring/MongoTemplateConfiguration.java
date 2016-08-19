@@ -57,6 +57,8 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.contrMethod._id", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.contrMethod.details", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.numberOfTenderers", Direction.ASC));
+		mongoTemplate.indexOps(Release.class)
+				.ensureIndex(new Index().on("tender.cancellationRationale", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.submissionMethod", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.publicationMethod", Direction.ASC));
         mongoTemplate.indexOps(Release.class)
