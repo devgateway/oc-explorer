@@ -47,7 +47,6 @@ public final class ExcelChartSheetDefault implements ExcelChartSheet {
 
     public ExcelChartSheetDefault(final Workbook workbook, final String excelSheetName) {
         this.excelSheet = workbook.createSheet(excelSheetName);
-        // this.excelSheet.setColumnWidth(0, 5000); - TODO
 
         // get the styles from workbook without creating them again (by default the workbook has already 1 style)
         if (workbook.getNumCellStyles() > 1) {
@@ -145,7 +144,7 @@ public final class ExcelChartSheetDefault implements ExcelChartSheet {
         if (rowNumber < 1) {
             row.setHeight((short) ROWHEADERHEIGHT);             // 40px (800 / 10 / 2)
         } else {
-            row.setHeight((short) ROWHEIGHT);             // 30px (600 / 10 / 2)
+            row.setHeight((short) ROWHEIGHT);                   // 30px (600 / 10 / 2)
         }
 
         return row;
@@ -160,13 +159,18 @@ public final class ExcelChartSheetDefault implements ExcelChartSheet {
         return createRow(excelSheet.getPhysicalNumberOfRows());
     }
 
+    @Override
+    public void setColumnWidth(final int collNumber, final int size) {
+        excelSheet.setColumnWidth(collNumber, size);
+    }
+
     /**
      * Creates a chart and also attaches a legend to it.
      */
     @Override
     public Chart createChartAndLegend() {
         final Drawing drawing = excelSheet.createDrawingPatriarch();
-        final ClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 0, 5, 15, 20);
+        final ClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 0, 5, 15, 25);
         final Chart chart = drawing.createChart(anchor);
 
         final ChartLegend legend = chart.getOrCreateLegend();

@@ -7,22 +7,20 @@ import org.apache.poi.xssf.usermodel.XSSFChart;
 import org.apache.xmlbeans.XmlObject;
 import org.devgateway.ocds.web.excelcharts.CustomChartSeries;
 import org.devgateway.ocds.web.excelcharts.util.XSSFChartUtil;
-import org.openxmlformats.schemas.drawingml.x2006.chart.CTAreaChart;
-import org.openxmlformats.schemas.drawingml.x2006.chart.CTAreaSer;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTAxDataSource;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTBubbleChart;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTBubbleSer;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumDataSource;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTPlotArea;
-import org.openxmlformats.schemas.drawingml.x2006.chart.CTValAx;
-import org.openxmlformats.schemas.drawingml.x2006.chart.STCrossBetween;
 
 /**
  * @author idobre
- * @since 8/8/16
+ * @since 8/12/16
  *
- * Holds data for a XSSF Area Chart.
+ * Holds data for a XSSF Bubble Chart.
  */
-public class XSSFAreaChartData extends AbstractXSSFChartData {
-    public XSSFAreaChartData(final String title) {
+public class XSSFBubbleChartData extends AbstractXSSFChartData {
+    public XSSFBubbleChartData(final String title) {
         super(title);
     }
 
@@ -32,20 +30,20 @@ public class XSSFAreaChartData extends AbstractXSSFChartData {
         return new AbstractSeries(id, order, categories, values) {
             @Override
             public void addToChart(final XmlObject ctChart) {
-                final CTAreaChart ctAreaChart = (CTAreaChart) ctChart;
-                final CTAreaSer ctAreaSer = ctAreaChart.addNewSer();
+                final CTBubbleChart ctBubbleChart = (CTBubbleChart) ctChart;
+                final CTBubbleSer bubbleSer = ctBubbleChart.addNewSer();
 
-                ctAreaSer.addNewIdx().setVal(this.id);
-                ctAreaSer.addNewOrder().setVal(this.order);
+                bubbleSer.addNewIdx().setVal(this.id);
+                bubbleSer.addNewOrder().setVal(this.order);
 
-                final CTAxDataSource catDS = ctAreaSer.addNewCat();
+                final CTAxDataSource catDS = bubbleSer.addNewXVal();
                 XSSFChartUtil.buildAxDataSource(catDS, this.categories);
 
-                final CTNumDataSource valueDS = ctAreaSer.addNewVal();
+                final CTNumDataSource valueDS = bubbleSer.addNewBubbleSize();
                 XSSFChartUtil.buildNumDataSource(valueDS, this.values);
 
                 if (isTitleSet()) {
-                    ctAreaSer.setTx(getCTSerTx());
+                    bubbleSer.setTx(getCTSerTx());
                 }
             }
         };
@@ -59,23 +57,17 @@ public class XSSFAreaChartData extends AbstractXSSFChartData {
 
         final XSSFChart xssfChart = (XSSFChart) chart;
         final CTPlotArea plotArea = xssfChart.getCTChart().getPlotArea();
-        final CTAreaChart areChart = plotArea.addNewAreaChart();
-        areChart.addNewVaryColors().setVal(false);
-
-        xssfChart.setTitle(this.title);
-
-        CTValAx[] ctValAx = plotArea.getValAxArray();
-        if (ctValAx.length != 0) {
-            ctValAx[0].addNewMajorGridlines().addNewSpPr().addNewSolidFill();
-            ctValAx[0].getCrossBetween().setVal(STCrossBetween.BETWEEN);
-        }
+        final CTBubbleChart bubbleChart = plotArea.addNewBubbleChart();
 
         for (CustomChartSeries s : series) {
-            s.addToChart(areChart);
+            s.addToChart(bubbleChart);
         }
 
         for (ChartAxis ax : axis) {
-            areChart.addNewAxId().setVal(ax.getId());
+            bubbleChart.addNewAxId().setVal(ax.getId());
         }
+
+        xssfChart.setTitle(this.title);
     }
 }
+

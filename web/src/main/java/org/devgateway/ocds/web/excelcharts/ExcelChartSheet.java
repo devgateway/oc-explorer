@@ -19,6 +19,8 @@ public interface ExcelChartSheet {
 
     Row createRow();
 
+    void setColumnWidth(final int collNumber, final int size);
+
     Chart createChartAndLegend();
 
     ChartDataSource getCategoryChartDataSource();

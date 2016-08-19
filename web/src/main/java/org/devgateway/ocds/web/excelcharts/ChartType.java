@@ -8,6 +8,8 @@ package org.devgateway.ocds.web.excelcharts;
 public enum ChartType {
     bar("bar"),
 
+    barcol("barcol"),
+
     area("area"),
 
     line("line"),
@@ -16,7 +18,11 @@ public enum ChartType {
 
     scatter("scatter"),
 
-    stacked("stacked");
+    stacked("stacked"),
+
+    stackedpercentage("stackedpercentage"),
+
+    bubble("bubble");
 
     private final String value;
 
