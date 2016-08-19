@@ -56,7 +56,7 @@ public class ExcelChartHelper {
             Optional<DBObject> result = list.parallelStream().filter(
                     val -> val.toMap().get(catKey).equals(Integer.parseInt(cat))).findFirst();
             if (result.isPresent()) {
-                values.add((int) result.get().toMap().get(valKey));
+                values.add((Number) result.get().toMap().get(valKey));
             } else {
                 values.add(null);
             }
