@@ -142,8 +142,8 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
 
 		Aggregation agg = Aggregation.newAggregation(match(where("planning.bidPlanProjectDateApprove").exists(true)),
 				getMatchDefaultFilterOperation(filter), new CustomOperation(new BasicDBObject("$project", project)),
-				group("$year").count().as("count"), sort(Direction.DESC, Fields.UNDERSCORE_ID), skip(filter.getSkip()),
-				limit(filter.getPageSize()));
+				group("$year").count().as(Keys.COUNT), sort(Direction.ASC, Fields.UNDERSCORE_ID),
+				skip(filter.getSkip()), limit(filter.getPageSize()));
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();

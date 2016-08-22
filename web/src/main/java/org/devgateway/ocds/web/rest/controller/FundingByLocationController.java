@@ -60,9 +60,15 @@ public class FundingByLocationController extends GenericOCDSController {
 		public static final String TENDERS_COUNT = "tendersCount";
 		public static final String TOTAL_TENDERS_WITH_START_DATE_AND_LOCATION = "totalTendersWithStartDateAndLocation";
 		public static final String TOTAL_TENDERS_WITH_START_DATE = "totalTendersWithStartDate";
-		public static final String PERCENT_TENDERS_WITH_START_DATE_AND_LOCATION =
+		public static final String PERCENT_TENDERS_WITH_START_DATE_AND_LOCATION = 
 				"percentTendersWithStartDateAndLocation";
 		public static final String YEAR = "year";
+		public static final String TOTAL_PLANNED_AMOUNT = "totalPlannedAmount";
+		public static final String RECORDS_COUNT = "recordsCount";
+		public static final String TOTAL_PLANS_WITH_AMOUNTS = "totalPlansWithAmounts";
+		public static final String TOTAL_PLANS_WITH_AMOUNTS_AND_LOCATION = "totalPlansWithAmountsAndLocation";
+		public static final String PERCENT_PLANS_WITH_AMOUNTS_AND_LOCATION = "percentPlansWithAmountsAndLocation";
+		public static final String BUDGET_PROJECT_LOCATION = "budget.projectLocation";
 	}
 	
 	@ApiOperation(value = "Total estimated funding (tender.value) grouped by "
@@ -160,15 +166,15 @@ public class FundingByLocationController extends GenericOCDSController {
         project.put("cntprj", new BasicDBObject("$literal", 1));
         project.put("planning.budget.amount.amount", 1);
         project.put("dividedTotal", dividedTotal);
-        project.put("year", new BasicDBObject("$year", "$planning.bidPlanProjectDateApprove"));
+        project.put(Keys.YEAR, new BasicDBObject("$year", "$planning.bidPlanProjectDateApprove"));
 
-        Aggregation agg = newAggregation(
-                match(where("planning").exists(true).and("planning.budget.projectLocation.0").exists(true)
-                        .andOperator(getProcuringEntityIdCriteria(filter))),
-                new CustomProjectionOperation(project), unwind("$planning.budget.projectLocation"),
-                group("year", "planning.budget.projectLocation").sum("$dividedTotal").as("totalPlannedAmount")
-                        .sum("$cntprj").as("recordsCount"),
-                sort(Direction.DESC, "totalPlannedAmount"), skip(filter.getSkip()), limit(filter.getPageSize()));
+		Aggregation agg = newAggregation(
+				match(where("planning").exists(true).and("planning.budget.projectLocation.0").exists(true)
+						.andOperator(getProcuringEntityIdCriteria(filter))),
+				new CustomProjectionOperation(project), unwind("$planning.budget.projectLocation"),
+				group(Keys.YEAR, "planning." + Keys.BUDGET_PROJECT_LOCATION).sum("$dividedTotal")
+						.as(Keys.TOTAL_PLANNED_AMOUNT).sum("$cntprj").as(Keys.RECORDS_COUNT),
+				sort(Direction.ASC, Keys.YEAR), skip(filter.getSkip()), limit(filter.getPageSize()));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
@@ -188,21 +194,24 @@ public class FundingByLocationController extends GenericOCDSController {
 
 		DBObject project = new BasicDBObject();
 		project.putAll(filterProjectMap);
-		project.put("planning.budget.projectLocation", 1);
+		project.put("planning." + Keys.BUDGET_PROJECT_LOCATION, 1);
 		project.put("planning.budget.amount", 1);
 		project.put(Fields.UNDERSCORE_ID, 0);
 
 		DBObject group = new BasicDBObject();
 		group.put(Fields.UNDERSCORE_ID, null);
-		group.put("totalPlansWithAmounts", new BasicDBObject("$sum", 1));
-		group.put("totalPlansWithAmountsAndLocation", new BasicDBObject("$sum", new BasicDBObject("$cond", Arrays
-				.asList(new BasicDBObject("$gt", Arrays.asList("$planning.budget.projectLocation", null)), 1, 0))));
+		group.put(Keys.TOTAL_PLANS_WITH_AMOUNTS, new BasicDBObject("$sum", 1));
+		group.put(Keys.TOTAL_PLANS_WITH_AMOUNTS_AND_LOCATION,
+				new BasicDBObject("$sum",
+						new BasicDBObject("$cond", Arrays.asList(
+								new BasicDBObject("$gt", Arrays.asList("$planning.budget.projectLocation", null)), 1,
+								0))));
 
 		DBObject project2 = new BasicDBObject();
 		project2.put(Fields.UNDERSCORE_ID, 0);
-		project2.put("totalPlansWithAmounts", 1);
-		project2.put("totalPlansWithAmountsAndLocation", 1);
-		project2.put("percentPlansWithAmountsAndLocation",
+		project2.put(Keys.TOTAL_PLANS_WITH_AMOUNTS, 1);
+		project2.put(Keys.TOTAL_PLANS_WITH_AMOUNTS_AND_LOCATION, 1);
+		project2.put(Keys.PERCENT_PLANS_WITH_AMOUNTS_AND_LOCATION,
 				new BasicDBObject("$multiply",
 						Arrays.asList(
 								new BasicDBObject("$divide",
