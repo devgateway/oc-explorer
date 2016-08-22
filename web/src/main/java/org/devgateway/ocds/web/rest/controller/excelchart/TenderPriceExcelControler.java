@@ -45,7 +45,7 @@ public class TenderPriceExcelControler extends GenericOCDSController {
                             HttpServletResponse response) throws IOException {
         final String chartTitle = "Bid selection";
 
-        // fetch the data that will be displayed in the chart (we have multiple sources for this dashboard)
+        // fetch the data that will be displayed in the chart
         final List<DBObject> tenderPriceByBidSelection =
                 tenderPriceByTypeYearController.tenderPriceByBidSelectionMethodYear(filter);
 
