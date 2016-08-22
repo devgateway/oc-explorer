@@ -67,7 +67,7 @@ public class AverageNumberOfTenderersController extends GenericOCDSController {
 	public List<DBObject> averageNumberOfTenderers(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
-		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+		project.put(Keys.YEAR, new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
 		project.put("tender.numberOfTenderers", 1);
 
 		Aggregation agg = newAggregation(
@@ -78,7 +78,7 @@ public class AverageNumberOfTenderersController extends GenericOCDSController {
 				project(Fields.from(Fields.field("year", Fields.UNDERSCORE_ID_REF))).
 				andInclude(Keys.AVERAGE_NO_OF_TENDERERS)
 						.andExclude(Fields.UNDERSCORE_ID),
-				new CustomSortingOperation(new BasicDBObject("year", 1)), sort(Direction.ASC, "year"),
+				new CustomSortingOperation(new BasicDBObject(Keys.YEAR, 1)), sort(Direction.ASC, Keys.YEAR),
 				skip(filter.getSkip()), limit(filter.getPageSize()));
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);

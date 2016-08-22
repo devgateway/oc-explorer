@@ -67,7 +67,7 @@ public class NumberOfTendersByItemClassification extends GenericOCDSController {
 
         DBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
-        project.put("year", year);
+        project.put(Keys.YEAR, year);
 		project.put("tender." + Keys.ITEMS_CLASSIFICATION, 1);
 
 		Aggregation agg = newAggregation(
@@ -75,7 +75,7 @@ public class NumberOfTendersByItemClassification extends GenericOCDSController {
 				getMatchDefaultFilterOperation(filter), new CustomProjectionOperation(project),
 				unwind("tender.items"),
 				group("$year", "$tender." + Keys.ITEMS_CLASSIFICATION).count().as(Keys.TOTAL_TENDERS),
-				sort(Direction.ASC, Fields.UNDERSCORE_ID));
+				sort(Direction.ASC, Keys.YEAR));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> list = results.getMappedResults();

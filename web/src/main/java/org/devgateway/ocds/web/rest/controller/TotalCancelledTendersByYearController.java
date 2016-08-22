@@ -52,6 +52,7 @@ public class TotalCancelledTendersByYearController extends GenericOCDSController
 	
 	public static final class Keys {
 		public static final String TOTAL_CANCELLED_TENDERS_AMOUNT = "totalCancelledTendersAmount";
+		public static final String YEAR="year";
 	}
 
 	@ApiOperation(value = "Total Cancelled tenders by year. The tender amount is read from tender.value."
@@ -91,7 +92,7 @@ public class TotalCancelledTendersByYearController extends GenericOCDSController
 
         DBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
-        project.put("year", year);
+        project.put(Keys.YEAR, year);
         project.put("tender.value.amount", 1);
         project.put("tender.cancellationRationale", 1);
 
@@ -100,7 +101,7 @@ public class TotalCancelledTendersByYearController extends GenericOCDSController
 				getMatchDefaultFilterOperation(filter), new CustomProjectionOperation(project),
 				group("$year", "$tender.cancellationRationale").sum("$tender.value.amount")
 						.as("totalCancelledTendersAmount"),
-				sort(Direction.ASC, Fields.UNDERSCORE_ID));
+				sort(Direction.ASC, Keys.YEAR));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> list = results.getMappedResults();

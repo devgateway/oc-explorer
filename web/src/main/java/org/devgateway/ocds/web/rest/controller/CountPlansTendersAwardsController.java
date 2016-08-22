@@ -73,7 +73,7 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
 
 		Aggregation agg = Aggregation.newAggregation(match(where("tender.tenderPeriod.startDate").exists(true)),
 				getMatchDefaultFilterOperation(filter), new CustomOperation(new BasicDBObject("$project", project)),
-				group("$year").count().as(Keys.COUNT), sort(Direction.DESC, Fields.UNDERSCORE_ID),
+				group("$year").count().as(Keys.COUNT), sort(Direction.ASC, Fields.UNDERSCORE_ID),
 				skip(filter.getSkip()), limit(filter.getPageSize()));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
@@ -107,7 +107,7 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
 		group.put(Keys.COUNT, new BasicDBObject("$sum", 1));
 
 		DBObject sort = new BasicDBObject();
-		sort.put(Keys.COUNT, -1);
+		sort.put(Fields.UNDERSCORE_ID, 1);
 
         Aggregation agg = Aggregation.newAggregation(match(where("awards.0").exists(true)),
 				getMatchDefaultFilterOperation(filter), new CustomOperation(new BasicDBObject("$project", project0)),
