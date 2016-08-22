@@ -41,26 +41,19 @@ public class CostEffectivenessExcelControler extends GenericOCDSController {
                             HttpServletResponse response) throws IOException {
         final String chartTitle = "cost effectiveness";
 
-        // fetch the data that will be displayed in the chart (we have multiple sources for this dashboard)
-        final List<DBObject> costEffectivenessAwardAmount =
-                costEffectivenessVisualsController.costEffectivenessAwardAmount(filter);
-        final List<DBObject> costEffectivenessTenderAmount =
-                costEffectivenessVisualsController.costEffectivenessTenderAmount(filter);
+        // fetch the data that will be displayed in the chart
+        final List<DBObject> costEffectivenessTenderAwardAmount =
+                costEffectivenessVisualsController.costEffectivenessTenderAwardAmount(filter);
 
         final List<String> categories = excelChartHelper.getCategoriesFromDBObject(Fields.UNDERSCORE_ID,
-                costEffectivenessAwardAmount, costEffectivenessTenderAmount);
+                costEffectivenessTenderAwardAmount);
+
         final List<List<? extends Number>> values = new ArrayList<>();
 
-        final List<Number> tenderPrice = excelChartHelper.getValuesFromDBObject(costEffectivenessTenderAmount,
-                categories, Fields.UNDERSCORE_ID, "totalTenderAmount");
-        final List<Number> awardPrice = excelChartHelper.getValuesFromDBObject(costEffectivenessAwardAmount,
-                categories,  Fields.UNDERSCORE_ID, "totalAwardAmount");
-
-        // calculate the difference
-        final List<Number> diffPrice = new ArrayList<>();
-        for (int i = 0; i < tenderPrice.size(); i++) {
-            diffPrice.add((double) tenderPrice.get(i) - (double) awardPrice.get(i));
-        }
+        final List<Number> tenderPrice = excelChartHelper.getValuesFromDBObject(costEffectivenessTenderAwardAmount,
+                categories, Fields.UNDERSCORE_ID, CostEffectivenessVisualsController.Keys.TOTAL_TENDER_AMOUNT);
+        final List<Number> diffPrice = excelChartHelper.getValuesFromDBObject(costEffectivenessTenderAwardAmount,
+                categories,  Fields.UNDERSCORE_ID, CostEffectivenessVisualsController.Keys.DIFF_TENDER_AWARD_AMOUNT);
         values.add(tenderPrice);
         values.add(diffPrice);
 
