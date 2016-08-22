@@ -55,13 +55,13 @@ public class ProcurementActivityByYearController extends GenericOCDSController {
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> valueAwards = excelChartHelper.getValuesFromDBObject(countAwardsByYear, categories,
-                Fields.UNDERSCORE_ID, "count");
+                Fields.UNDERSCORE_ID, CountPlansTendersAwardsController.Keys.COUNT);
         final List<Number> valueTenders = excelChartHelper.getValuesFromDBObject(countTendersByYear, categories,
-                Fields.UNDERSCORE_ID, "count");
+                Fields.UNDERSCORE_ID, CountPlansTendersAwardsController.Keys.COUNT);
         values.add(valueAwards);
         values.add(valueTenders);
 
-         final List<String> seriesTitle = Arrays.asList(
+        final List<String> seriesTitle = Arrays.asList(
                 "Award",
                 "Tender");
 
