@@ -50,7 +50,7 @@ public class ProcurementActivityByYearController extends GenericOCDSController {
         final List<DBObject> countAwardsByYear = countPlansTendersAwardsController.countAwardsByYear(filter);
         final List<DBObject> countTendersByYear = countPlansTendersAwardsController.countTendersByYear(filter);
 
-        final List<String> categories = excelChartHelper.getCategoriesFromDBObject(Fields.UNDERSCORE_ID,
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(Fields.UNDERSCORE_ID,
                 countAwardsByYear, countTendersByYear);
         final List<List<? extends Number>> values = new ArrayList<>();
 
@@ -61,7 +61,7 @@ public class ProcurementActivityByYearController extends GenericOCDSController {
         values.add(valueAwards);
         values.add(valueTenders);
 
-         final List<String> seriesTitle = Arrays.asList(
+        final List<String> seriesTitle = Arrays.asList(
                 "Award",
                 "Tender");
 

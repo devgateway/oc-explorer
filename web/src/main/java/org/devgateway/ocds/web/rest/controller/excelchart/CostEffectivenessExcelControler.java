@@ -47,7 +47,7 @@ public class CostEffectivenessExcelControler extends GenericOCDSController {
         final List<DBObject> costEffectivenessTenderAwardAmount =
                 costEffectivenessVisualsController.costEffectivenessTenderAwardAmount(filter);
 
-        final List<String> categories = excelChartHelper.getCategoriesFromDBObject(Fields.UNDERSCORE_ID,
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(Fields.UNDERSCORE_ID,
                 costEffectivenessTenderAwardAmount);
 
         final List<List<? extends Number>> values = new ArrayList<>();
