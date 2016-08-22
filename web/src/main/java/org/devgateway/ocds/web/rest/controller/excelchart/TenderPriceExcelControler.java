@@ -75,7 +75,7 @@ public class TenderPriceExcelControler extends GenericOCDSController {
         );
         List<DBObject> respCollection = new ArrayList(result.values());
 
-        final List<String> categories = excelChartHelper.getCategoriesFromDBObject(
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(
                 TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS, respCollection);
 
         final List<List<? extends Number>> values = new ArrayList<>();
