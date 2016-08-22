@@ -3,9 +3,9 @@ package org.devgateway.ocds.web.rest.controller.excelchart;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
 import org.devgateway.ocds.web.excelcharts.ChartType;
-import org.devgateway.ocds.web.rest.controller.CostEffectivenessVisualsController;
+import org.devgateway.ocds.web.rest.controller.AverageTenderAndAwardPeriodsController;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
-import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,12 +22,12 @@ import java.util.List;
 
 /**
  * @author idobre
- * @since 8/19/16
+ * @since 8/22/16
  *
- * Exports an excel chart based on *Cost effectiveness* dashboard
+ * Exports an excel chart based on *Bid period* dashboard
  */
 @RestController
-public class CostEffectivenessExcelControler extends GenericOCDSController {
+public class AverageTenderAndAwardsExcelController extends GenericOCDSController {
     @Autowired
     private ExcelChartGenerator excelChartGenerator;
 
@@ -35,41 +35,38 @@ public class CostEffectivenessExcelControler extends GenericOCDSController {
     private ExcelChartHelper excelChartHelper;
 
     @Autowired
-    private CostEffectivenessVisualsController costEffectivenessVisualsController;
+    private AverageTenderAndAwardPeriodsController averageTenderAndAwardPeriodsController;
 
-    @ApiOperation(value = "Exports *Cost effectiveness* dashboard in Excel format.")
-    @RequestMapping(value = "/api/ocds/costEffectivenessExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
-    public void excelExport(@ModelAttribute @Valid final GroupingFilterPagingRequest filter,
+    @ApiOperation(value = "Exports *Bid period* dashboard in Excel format.")
+    @RequestMapping(value = "/api/ocds/bidPeriodExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
+    public void excelExport(@ModelAttribute @Valid final YearFilterPagingRequest filter,
                             HttpServletResponse response) throws IOException {
-        final String chartTitle = "cost effectiveness";
+        final String chartTitle = "Bid period";
 
-        // fetch the data that will be displayed in the chart
-        final List<DBObject> costEffectivenessTenderAwardAmount =
-                costEffectivenessVisualsController.costEffectivenessTenderAwardAmount(filter);
+        // fetch the data that will be displayed in the chart (we have multiple sources for this dashboard)
+        final List<DBObject> averageAwardPeriod = averageTenderAndAwardPeriodsController.averageAwardPeriod(filter);
+        final List<DBObject> averageTenderPeriod = averageTenderAndAwardPeriodsController.averageTenderPeriod(filter);
 
         final List<?> categories = excelChartHelper.getCategoriesFromDBObject(Fields.UNDERSCORE_ID,
-                costEffectivenessTenderAwardAmount);
-
+                averageTenderPeriod, averageAwardPeriod);
         final List<List<? extends Number>> values = new ArrayList<>();
 
-        final List<Number> tenderPrice = excelChartHelper.getValuesFromDBObject(costEffectivenessTenderAwardAmount,
-                categories, Fields.UNDERSCORE_ID, CostEffectivenessVisualsController.Keys.TOTAL_TENDER_AMOUNT);
-        final List<Number> diffPrice = excelChartHelper.getValuesFromDBObject(costEffectivenessTenderAwardAmount,
-                categories,  Fields.UNDERSCORE_ID, CostEffectivenessVisualsController.Keys.DIFF_TENDER_AWARD_AMOUNT);
-        values.add(tenderPrice);
-        values.add(diffPrice);
+        final List<Number> valueAwards = excelChartHelper.getValuesFromDBObject(averageAwardPeriod, categories,
+                Fields.UNDERSCORE_ID, AverageTenderAndAwardPeriodsController.Keys.AVERAGE_AWARD_DAYS);
+        final List<Number> valueTenders = excelChartHelper.getValuesFromDBObject(averageTenderPeriod, categories,
+                Fields.UNDERSCORE_ID, AverageTenderAndAwardPeriodsController.Keys.AVERAGE_TENDER_DAYS);
+        values.add(valueAwards);
+        values.add(valueTenders);
 
         final List<String> seriesTitle = Arrays.asList(
-                "Bid price",
-                "Difference"
-        );
+                "Award",
+                "Tender");
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
-
         response.getOutputStream().write(
                 excelChartGenerator.getExcelChart(
-                        ChartType.stackedcol,
+                        ChartType.stacked,
                         chartTitle,
                         seriesTitle,
                         categories, values));
