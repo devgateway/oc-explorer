@@ -47,6 +47,10 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
 @Cacheable
 public class TotalCancelledTendersByYearController extends GenericOCDSController {
+	
+	public static final class Keys {
+		public static final String TOTAL_CANCELLED_TENDERS_AMOUNT = "totalCancelledTendersAmount";
+	}
 
 	@ApiOperation(value = "Total Cancelled tenders by year. The tender amount is read from tender.value."
 			+ "The tender status has to be 'cancelled'. The year is retrieved from tender.tenderPeriod.startDate.")
@@ -64,7 +68,7 @@ public class TotalCancelledTendersByYearController extends GenericOCDSController
 		Aggregation agg = newAggregation(
 				match(where("tender.status").is("cancelled").and("tender.tenderPeriod.startDate").exists(true)),
 				getMatchDefaultFilterOperation(filter), new CustomOperation(new BasicDBObject("$project", project)),
-				group("$year").sum("$tender.value.amount").as("totalCancelledTendersAmount"),
+				group("$year").sum("$tender.value.amount").as(Keys.TOTAL_CANCELLED_TENDERS_AMOUNT),
 				sort(Direction.ASC, Fields.UNDERSCORE_ID));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);

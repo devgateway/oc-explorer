@@ -49,6 +49,17 @@ import io.swagger.annotations.ApiOperation;
 @CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
 @Cacheable
 public class TopTenController extends GenericOCDSController {
+	
+	public static final class Keys {
+		public static final String AWARDS = "awards";
+		public static final String DATE = "date";
+		public static final String SUPPLIERS = "suppliers";
+		public static final String VALUE = "value";
+		public static final String NAME = "name";
+		public static final String TENDER = "tender";
+		public static final String TENDER_PERIOD = "tenderPeriod";
+		public static final String PROCURING_ENTITY = "procuringEntity";
+	}
 
     /**
      * db.release.aggregate( [ {$match: {"awards.value.amount": {$exists:
@@ -64,7 +75,7 @@ public class TopTenController extends GenericOCDSController {
 			+ " The amount is taken from the award.value field. The returned data will contain"
 			+ "the following fields: "
 			+ "awards.date, awards.suppliers.name, "
-			+ "awards.value, awards.suppliers.name, planning.budget (if any)")
+			+ "awards.value.amount, awards.suppliers.name, planning.budget (if any)")
 	@RequestMapping(value = "/api/topTenLargestAwards", method = { RequestMethod.POST,
 			RequestMethod.GET },
             produces = "application/json")
@@ -74,7 +85,7 @@ public class TopTenController extends GenericOCDSController {
         project.put(Fields.UNDERSCORE_ID, 0);
         project.put("awards.date", 1);
         project.put("awards.suppliers.name", 1);
-        project.put("awards.value", 1);
+        project.put("awards.value.amount", 1);
         project.put("planning.budget", 1);
 
         Aggregation agg = newAggregation(
@@ -99,8 +110,8 @@ public class TopTenController extends GenericOCDSController {
      * @return
      */
 	@ApiOperation(value = "Returns the top ten largest active tenders."
-			+ " The amount is taken from the tender.value field." + " The returned data will contain"
-			+ "the following fields: " + "tender.date, tender.value, tender.tenderPeriod, "
+			+ " The amount is taken from the tender.value.amount field." + " The returned data will contain"
+			+ "the following fields: " + "tender.date, tender.value.amount, tender.tenderPeriod, "
 					+ "tender.procuringEntity.name")
     @RequestMapping(value = "/api/topTenLargestTenders", method = { RequestMethod.POST, RequestMethod.GET },
             produces = "application/json")
@@ -108,7 +119,7 @@ public class TopTenController extends GenericOCDSController {
 
         BasicDBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
-        project.put("tender.value", 1);
+        project.put("tender.value.amount", 1);
         project.put("tender.tenderPeriod", 1);
         project.put("tender.procuringEntity.name", 1);
 
