@@ -52,7 +52,7 @@ public class TotalCancelledTendersByYearController extends GenericOCDSController
 	
 	public static final class Keys {
 		public static final String TOTAL_CANCELLED_TENDERS_AMOUNT = "totalCancelledTendersAmount";
-		public static final String YEAR="year";
+		public static final String YEAR = "year";
 	}
 
 	@ApiOperation(value = "Total Cancelled tenders by year. The tender amount is read from tender.value."
