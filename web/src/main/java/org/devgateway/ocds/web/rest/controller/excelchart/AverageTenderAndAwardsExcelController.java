@@ -66,7 +66,7 @@ public class AverageTenderAndAwardsExcelController extends GenericOCDSController
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
         response.getOutputStream().write(
                 excelChartGenerator.getExcelChart(
-                        ChartType.stacked,
+                        ChartType.stackedbar,
                         chartTitle,
                         seriesTitle,
                         categories, values));

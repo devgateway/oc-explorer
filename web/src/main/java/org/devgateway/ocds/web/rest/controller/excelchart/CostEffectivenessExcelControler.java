@@ -69,7 +69,7 @@ public class CostEffectivenessExcelControler extends GenericOCDSController {
 
         response.getOutputStream().write(
                 excelChartGenerator.getExcelChart(
-                        ChartType.stacked,
+                        ChartType.stackedcol,
                         chartTitle,
                         seriesTitle,
                         categories, values));
