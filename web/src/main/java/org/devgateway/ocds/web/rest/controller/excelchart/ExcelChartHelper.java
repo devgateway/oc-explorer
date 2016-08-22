@@ -54,7 +54,8 @@ public class ExcelChartHelper {
         categories.forEach(cat -> {
             // check if the category 'cat' is present in the list of DBObjects and extract the value
             Optional<DBObject> result = list.parallelStream().filter(
-                    val -> val.toMap().get(catKey).equals(Integer.parseInt(cat))).findFirst();
+                    val -> val.toMap().get(catKey) != null && val.toMap().get(catKey).equals(cat)
+            ).findFirst();
             if (result.isPresent()) {
                 values.add((Number) result.get().toMap().get(valKey));
             } else {

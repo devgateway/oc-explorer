@@ -23,6 +23,8 @@ import java.util.List;
 /**
  * @author idobre
  * @since 8/19/16
+ *
+ * Exports an excel chart based on *Cost effectiveness* dashboard
  */
 @RestController
 public class CostEffectivenessExcelControler extends GenericOCDSController {
