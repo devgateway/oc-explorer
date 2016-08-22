@@ -42,7 +42,8 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
 		public static final String YEAR = "year";
 		public static final String TOTAL_TENDER_AMOUNT = "totalTenderAmount";
 		public static final String PROCUREMENT_METHOD = "procurementMethod";
-	}
+        public static final String PROCUREMENT_METHOD_DETAILS = "procurementMethodDetails";
+    }
 
 	@ApiOperation(value = "Returns the tender price by OCDS type (procurementMethod), by year. "
 			+ "The OCDS type is read from tender.procurementMethod. The tender price is read from "
