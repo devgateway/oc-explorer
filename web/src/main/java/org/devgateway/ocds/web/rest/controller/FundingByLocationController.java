@@ -61,6 +61,7 @@ public class FundingByLocationController extends GenericOCDSController {
 		public static final String TOTAL_TENDERS_WITH_START_DATE = "totalTendersWithStartDate";
 		public static final String PERCENT_TENDERS_WITH_START_DATE_AND_LOCATION =
 				"percentTendersWithStartDateAndLocation";
+		public static final String YEAR = "year";
 	}
 	
 	@ApiOperation(value = "Total estimated funding (tender.value) grouped by "
@@ -75,16 +76,16 @@ public class FundingByLocationController extends GenericOCDSController {
 		DBObject project = new BasicDBObject();
 		project.put("tender.items.deliveryLocation", 1);
 		project.put("tender.value.amount", 1);
-		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+		project.put(Keys.YEAR, new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
 
 		Aggregation agg = newAggregation(
 				match(where("tender").exists(true).and("tender.tenderPeriod.startDate").exists(true)
 						.and("tender.value.amount").exists(true).andOperator(getDefaultFilterCriteria(filter))),
 				new CustomProjectionOperation(project), unwind("$tender.items"),
 				unwind("$tender.items.deliveryLocation"), match(where("tender.items.deliveryLocation").exists(true)),
-				group("year", "tender." + Keys.ITEMS_DELIVERY_LOCATION).sum("$tender.value.amount")
+				group(Keys.YEAR, "tender." + Keys.ITEMS_DELIVERY_LOCATION).sum("$tender.value.amount")
 						.as(Keys.TOTAL_TENDERS_AMOUNT).count().as(Keys.TENDERS_COUNT),
-				sort(Direction.DESC, Keys.TOTAL_TENDERS_AMOUNT), skip(filter.getSkip()), limit(filter.getPageSize()));
+				sort(Direction.ASC, Keys.YEAR), skip(filter.getSkip()), limit(filter.getPageSize()));
 			
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();
