@@ -39,8 +39,8 @@ public class TotalCancelledTendersExcelController extends GenericOCDSController 
 
     @ApiOperation(value = "Exports *Cancelled funding* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/cancelledFundingExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
-    public void excelExport(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
-                            HttpServletResponse response) throws IOException {
+    public void cancelledFundingExcelChart(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
+                                           HttpServletResponse response) throws IOException {
         final String chartTitle = "Cancelled funding";
 
         // fetch the data that will be displayed in the chart
