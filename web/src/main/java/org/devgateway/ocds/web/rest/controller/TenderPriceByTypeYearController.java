@@ -80,7 +80,7 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
             @ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
-        project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+        project.put(Keys.YEAR, new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
         project.put("tender.procurementMethodDetails", 1);
         project.put("tender.value", 1);
 
@@ -88,7 +88,7 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
                 match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),
                 getMatchDefaultFilterOperation(filter), new CustomProjectionOperation(project),
                 group("year", "tender.procurementMethodDetails").sum("$tender.value.amount").as("totalTenderAmount"),
-                sort(Direction.ASC, "year"));
+                sort(Direction.ASC, Keys.YEAR));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
