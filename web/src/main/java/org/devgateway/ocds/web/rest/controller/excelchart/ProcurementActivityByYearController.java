@@ -43,7 +43,7 @@ public class ProcurementActivityByYearController extends GenericOCDSController {
     @ApiOperation(value = "Exports *Procurement activity by year* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/procurementActivityExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
     public void procurementActivityExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
-                                              HttpServletResponse response) throws IOException {
+                                              final HttpServletResponse response) throws IOException {
         final String chartTitle = "procurement activity by year";
 
         // fetch the data that will be displayed in the chart (we have multiple sources for this dashboard)

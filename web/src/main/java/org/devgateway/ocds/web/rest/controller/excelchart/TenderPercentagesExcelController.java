@@ -40,7 +40,7 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
     @RequestMapping(value = "/api/ocds/cancelledFundingPercentageExcelChart",
             method = {RequestMethod.GET, RequestMethod.POST})
     public void cancelledFundingPercentageExcelChart(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
-                            HttpServletResponse response) throws IOException {
+                            final HttpServletResponse response) throws IOException {
         final String chartTitle = "Cancelled funding (percentage)";
 
         // fetch the data that will be displayed in the chart
@@ -71,7 +71,7 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
     @RequestMapping(value = "/api/ocds/percentTendersUsingEBidExcelChart",
             method = {RequestMethod.GET, RequestMethod.POST})
     public void percentTendersUsingEBidExcelChart(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
-                            HttpServletResponse response) throws IOException {
+                            final HttpServletResponse response) throws IOException {
         final String chartTitle = "Percent of Tenders Using e-Bid";
 
         // fetch the data that will be displayed in the chart

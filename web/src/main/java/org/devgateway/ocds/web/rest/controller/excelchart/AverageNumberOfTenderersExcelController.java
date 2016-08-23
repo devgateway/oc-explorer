@@ -40,7 +40,7 @@ public class AverageNumberOfTenderersExcelController extends GenericOCDSControll
     @ApiOperation(value = "Exports *Average number of bids* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/averageNumberBidsExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
     public void averageNumberBidsExcelChart(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
-                                            HttpServletResponse response) throws IOException {
+                                            final HttpServletResponse response) throws IOException {
         final String chartTitle = "Average number of bids";
 
         // fetch the data that will be displayed in the chart
