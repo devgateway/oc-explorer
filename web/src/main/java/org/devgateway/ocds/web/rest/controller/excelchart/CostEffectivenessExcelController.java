@@ -27,7 +27,7 @@ import java.util.List;
  * Exports an excel chart based on *Cost effectiveness* dashboard
  */
 @RestController
-public class CostEffectivenessExcelControler extends GenericOCDSController {
+public class CostEffectivenessExcelController extends GenericOCDSController {
     @Autowired
     private ExcelChartGenerator excelChartGenerator;
 
