@@ -3,6 +3,7 @@ import {fromJS, Map, Set} from "immutable";
 import {fetchJson, debounce} from "./tools";
 import URI from "urijs";
 import Filters from "./filters";
+import OCEStyle from "./style.less";
 
 let range = (from, to) => from > to ? [] : [from].concat(range(from + 1, to));
 const MIN_YEAR = 2010;
@@ -109,8 +110,7 @@ class OCApp extends React.Component{
               onChange={e => this.updateComparisonCriteria(e.target.value)}
           >
             <option value="">{this.__('None')}</option>
-            <option value="bidTypeId">{this.__('Bid Type')}</option>
-            <option value="bidSelectionMethod">{this.__('Bid Selection Method')}</option>
+            <option value="bidTypeId">{this.__('Bid Type')}</option>            
             <option value="procuringEntityId">{this.__('Procuring Entity')}</option>
           </select>
         </div>

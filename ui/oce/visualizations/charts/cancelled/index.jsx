@@ -3,6 +3,7 @@ import Percents from "./percents";
 import translatable from "../../../translatable";
 import {Set} from "immutable";
 import Comparison from "../../../comparison";
+import ReactDOM from "react-dom";
 
 class Cancelled extends translatable(React.Component){
   constructor(props){
@@ -17,12 +18,17 @@ class Cancelled extends translatable(React.Component){
     let Chart = percents ? Percents : Amounts;
     return <section>
       <h4 className="page-header">
-        {percents ? this.__('Cancelled funding percentage') : this.__('Cancelled funding')}
+        {percents ? this.__('Cancelled funding (%)') : this.__('Cancelled funding')}
         &nbsp;
         <button
             className="btn btn-default btn-sm"
             onClick={_ => this.setState({percents: !percents})}
             dangerouslySetInnerHTML={{__html: percents ? '&#8363;' : '%'}}
+        />
+        <img
+            src="assets/icons/camera.svg"
+            className="camera-icon"
+            onClick={e => ReactDOM.findDOMNode(this).querySelector(".modebar-btn:first-child").click()}
         />
       </h4>
       <Chart {...this.props}/>
@@ -53,7 +59,7 @@ Cancelled.compareWith = class CancelledComparison extends Comparison{
     let {percents} = this.state;
     return <div>
       <h3 className="page-header">
-        {percents ? this.__('Cancelled funding percentage') : this.__('Cancelled funding')}
+        {percents ? this.__('Cancelled funding (%)') : this.__('Cancelled funding')}
         &nbsp;
         <button
             className="btn btn-default btn-sm"

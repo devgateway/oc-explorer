@@ -22,5 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  *
  */
 public abstract class AbstractMongoTest {
+	
+	protected boolean testDataInitialized = false;
 
 }
