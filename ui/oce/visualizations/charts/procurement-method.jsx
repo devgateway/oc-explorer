@@ -105,17 +105,17 @@ class ProcurementMethodComparison extends Comparison{
 
     return this.wrap(decoratedFilters.map((comparisonFilters, index) => {
       let ref = `visualization${index}`;
-      return <div className="col-md-6" key={index}>
-          <Component
-              filters={comparisonFilters}
-              requestNewData={(_, data) => requestNewComparisonData([index], data)}
-              data={uniformData.get(index)}
-              years={years}
-              title={this.getTitle(index)}
-              translations={translations}
-              styling={styling}
-              {...rangeProp}
-          />
+      return <div className="col-md-6 comparison" key={index}>
+        <Component
+            filters={comparisonFilters}
+            requestNewData={(_, data) => requestNewComparisonData([index], data)}
+            data={uniformData.get(index)}
+            years={years}
+            title={this.getTitle(index)}
+            translations={translations}
+            styling={styling}
+            {...rangeProp}
+        />
         <div className="chart-toolbar"
              onClick={e => this.refs[ref].querySelector(".modebar-btn:first-child").click()}
         >
@@ -123,7 +123,7 @@ class ProcurementMethodComparison extends Comparison{
             <img src="assets/icons/camera.svg"/>
           </div>
         </div>
-        </div>
+      </div>
     }));
   }
 }
