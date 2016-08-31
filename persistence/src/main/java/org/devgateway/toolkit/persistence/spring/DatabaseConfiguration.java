@@ -60,6 +60,12 @@ public class DatabaseConfiguration {
 	@Value("${spring.datasource.transaction-isolation}")
 	private int springDatasourceTransactionIsolation;
 	
+	@Value("${spring.datasource.initial-size}")
+	private int springDatasourceInitialSize;
+	
+	@Value("${spring.datasource.max-active}")
+	private int springDatasourceMaxActive;
+	
 	@Value("${dg-toolkit.derby.port}")
 	private int derbyPort;
 	
@@ -108,11 +114,11 @@ public class DatabaseConfiguration {
 	@Bean
 	@DependsOn(value = { "derbyServer"})
 	public DataSource dataSource() {
-		PoolProperties pp=new PoolProperties();		
+		PoolProperties pp = new PoolProperties();
 		pp.setJmxEnabled(true);
 		pp.setDefaultTransactionIsolation(springDatasourceTransactionIsolation);
-		pp.setInitialSize(50);
-		pp.setMaxActive(3000);	
+		pp.setInitialSize(springDatasourceInitialSize);
+		pp.setMaxActive(springDatasourceMaxActive);
 		
 		DataSource dataSource = new DataSource(pp);
 		
