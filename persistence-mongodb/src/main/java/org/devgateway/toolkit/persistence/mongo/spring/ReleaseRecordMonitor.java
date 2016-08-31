@@ -20,8 +20,8 @@ import org.springframework.stereotype.Component;
 /**
  * @author mihai
  * 
- *         AOP Monitor that saves new {@link Release}S in {@link Record}S
- *         for archiving purposes.
+ *         AOP Monitor that saves new {@link Release}S in {@link Record}S for
+ *         archiving purposes.
  *         http://standard.open-contracting.org/latest/en/getting_started/releases_and_records/#records
  * 
  *         Whenever a new release is identified, the {@link Release} save action
@@ -50,10 +50,10 @@ public class ReleaseRecordMonitor {
 	@AfterReturning(value = "execution(*"
 			+ " org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository+.insert(..))", returning = "release")
 	public Record saveRecordForRelease(JoinPoint jp, Release release) {
-		logger.debug("Release archival triggered by" + jp);
+		logger.debug("Release archival triggered by " + jp);
 		return saveRecordForRelease(release);
 	}
-	
+
 	public Record saveRecordForRelease(Release release) {
 		Record record = recordRepository.findByOcid(release.getOcid());
 		if (record == null) {
