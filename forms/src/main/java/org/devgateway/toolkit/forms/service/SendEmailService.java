@@ -40,33 +40,6 @@ public class SendEmailService {
 	}
 
 	/**
-	 * Send a validation email to the user
-	 * @param person
-	 * @param urlEnable URL with a key, to validate the user email
-	 */
-	public void sendEmailToEnable(final Person person, final String urlEnable) {
-
-		SimpleMailMessage msg = new SimpleMailMessage();
-		msg.setTo(person.getEmail());
-		msg.setFrom("support@developmentgateway.org");
-		msg.setSubject("Activate your account");
-		msg.setText("Dear " + person.getFirstName() + " " + person.getLastName() + ",\n\n"
-				+ "To re-enable your account, please use the following link:\n\n"
-				+ urlEnable + person.getSecret() + "\n\n"
-				+ "The system will then prompt you to log in with your current password."
-				+ " If you don't know your current password, please use the 'Forgot your password?' button."
-				+ " Note that the email address you enter must match the address connected to your account.\n\n"
-				+ "Thank you,\n"
-				+ "DG Team");
-		try {
-			javaMailSenderImpl.send(msg);
-		} catch (MailException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	/**
 	 * Send a reset password email. This is UNSAFE because passwords are sent in clear text.
 	 * Nevertheless some customers will ask for these emails to be sent, so ... 
 	 * @param person
