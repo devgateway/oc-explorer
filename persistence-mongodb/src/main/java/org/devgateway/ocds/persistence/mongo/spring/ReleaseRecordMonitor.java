@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.devgateway.toolkit.persistence.mongo.spring;
+package org.devgateway.ocds.persistence.mongo.spring;
 
 import java.util.List;
 import java.util.stream.Collectors;
