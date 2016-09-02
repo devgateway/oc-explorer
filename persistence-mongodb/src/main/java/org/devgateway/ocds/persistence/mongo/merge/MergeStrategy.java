@@ -23,6 +23,7 @@ public enum MergeStrategy {
 	/**
 	 * Append arrays. Works only with arrays.
 	 */
+	@Deprecated
 	append,
 
 	/**
@@ -67,6 +68,7 @@ public enum MergeStrategy {
 	 * the strategy specified further down in the hierarchy (e.g. in properties,
 	 * patternProperties or additionalProperties schema keywords).
 	 */
+	@Deprecated
 	objectMerge,
 
 	/**
@@ -81,6 +83,7 @@ public enum MergeStrategy {
 	 * document, no new version will be appended. You can change this by setting
 	 * ignoreDups option to false.
 	 */
+	@Deprecated
 	version,
 
 	/**
