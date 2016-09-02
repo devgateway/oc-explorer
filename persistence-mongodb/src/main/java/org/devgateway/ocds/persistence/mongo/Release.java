@@ -164,7 +164,7 @@ public class Release implements Identifiable {
     @ExcelExportSepareteSheet
     @JsonProperty("awards")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
-	@Merge(value = MergeStrategy.arrayMergeById)
+	@Merge(MergeStrategy.arrayMergeById)
     private Set<Award> awards = new LinkedHashSet<Award>();
 
     /**
@@ -177,7 +177,7 @@ public class Release implements Identifiable {
     @ExcelExportSepareteSheet
     @JsonProperty("contracts")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
-    @Merge(value = MergeStrategy.arrayMergeById)
+    @Merge(MergeStrategy.arrayMergeById)
     private Set<Contract> contracts = new LinkedHashSet<Contract>();
 
     /**
@@ -189,7 +189,7 @@ public class Release implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("language")
-	@Merge(value = MergeStrategy.ocdsVersion)
+	@Merge(MergeStrategy.ocdsVersion)
     private String language = "en";
 
 
