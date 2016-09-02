@@ -42,7 +42,7 @@ import java.util.Set;
         "amendment",
         "implementation"
 })
-public class Contract {
+public class Contract implements Identifiable {
 
     /**
      * Contract ID

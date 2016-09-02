@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "format",
         "language"
 })
-public class Document {
+public class Document implements Identifiable {
 
     /**
      * A local, unique identifier for this document. This field is used to keep track of multiple revisions

@@ -29,7 +29,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
         "unit",
         "deliveryLocation"
 })
-public class Item {
+public class Item implements Identifiable {
 
 	/**
 	 * This is part of the OCDS location extension. We have decided to plug this

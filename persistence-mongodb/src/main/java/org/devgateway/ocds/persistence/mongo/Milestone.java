@@ -30,7 +30,7 @@ import java.util.Set;
         "status",
         "documents"
 })
-public class Milestone {
+public class Milestone implements Identifiable {
 
     /**
      * A local identifier for this milestone, unique within this block. This field is used to keep track of

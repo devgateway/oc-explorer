@@ -58,7 +58,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
         "milestones",
         "amendment"
 })
-public class Tender {
+public class Tender implements Identifiable {
 
     /**
      * Tender ID

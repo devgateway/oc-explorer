@@ -43,7 +43,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
         "documents",
         "amendment"
 })
-public class Award {
+public class Award implements Identifiable {
     /**
      * Award ID
      * <p>

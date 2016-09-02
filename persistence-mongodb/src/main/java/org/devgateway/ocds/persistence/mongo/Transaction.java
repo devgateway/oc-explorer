@@ -35,7 +35,7 @@ import java.util.Date;
         "receiverOrganization",
         "uri"
 })
-public class Transaction {
+public class Transaction implements Identifiable {
 
     /**
      * A unique identifier for this transaction. This identifier should be possible to cross-reference against the
