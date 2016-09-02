@@ -3,21 +3,6 @@
  */
 package org.devgateway.ocds.web.rest.controller;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
-import static org.springframework.data.mongodb.core.query.Criteria.where;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
-
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
@@ -28,6 +13,20 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
+
+import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
  * @author mpostelnicu
