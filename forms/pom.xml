@@ -70,7 +70,6 @@
             </exclusions>
         </dependency>
 
-
         <dependency>
             <groupId>org.devgateway.toolkit</groupId>
             <artifactId>web</artifactId>
@@ -271,7 +270,6 @@
         </resources>
 
         <plugins>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -349,6 +347,4 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-
 </project>
