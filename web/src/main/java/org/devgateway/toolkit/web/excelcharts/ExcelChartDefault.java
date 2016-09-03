@@ -34,6 +34,8 @@ public class ExcelChartDefault implements ExcelChart {
 
     private final List<String> seriesTitle;
 
+    private static final int COLUMNWIDTH = 3500;
+
     public ExcelChartDefault(final String title,
                              final ChartType type,
                              final List<?> categories,
@@ -105,7 +107,7 @@ public class ExcelChartDefault implements ExcelChart {
         int coll = 0;
         for (Object category : categories) {
             excelChartSheet.writeCell(category, row, coll);
-            excelChartSheet.setColumnWidth(coll, 3500);
+            excelChartSheet.setColumnWidth(coll, COLUMNWIDTH);
             coll++;
         }
     }

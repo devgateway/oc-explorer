@@ -19,6 +19,8 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.STCrossBetween;
 public class XSSFStackedBarChartData extends XSSFBarChartData {
     private STBarGrouping.Enum barGrouping = STBarGrouping.STACKED;
 
+    private static final int OVERLAPPERCENTAGE = 100;
+
     public XSSFStackedBarChartData(final String title) {
         super(title);
     }
@@ -37,7 +39,7 @@ public class XSSFStackedBarChartData extends XSSFBarChartData {
 
         // create a stacked bar
         barChart.addNewGrouping().setVal(barGrouping);
-        barChart.addNewOverlap().setVal((byte) 100);
+        barChart.addNewOverlap().setVal((byte) OVERLAPPERCENTAGE);
 
         // set bars orientation
         barChart.addNewBarDir().setVal(barDir);
