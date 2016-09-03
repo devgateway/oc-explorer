@@ -20,6 +20,27 @@ import java.util.List;
  * @since 8/16/16
  *
  * Class that returns Workbook with a chart based on categories/values provided.
+ *
+ * Examples of usage:
+ *
+ * private static final List<?> categories = Arrays.asList(
+ *      "cat 1",
+ *      "cat 2",
+ *      "cat 3"
+ *  );
+ *
+ * private static final List<List<? extends Number>> values = Arrays.asList(
+ *      Arrays.asList(5, 7, 10),
+ *      Arrays.asList(20, 12, 10)
+ *  );
+ *
+ * final ExcelChart excelChart = new ExcelChartDefault("line chart", ChartType.line, categories, values);
+ * final Workbook workbook = excelChart.createWorkbook();
+ *
+ * OR
+ *
+ * final ExcelChart excelChart = new ExcelChartDefault("stacked chart", ChartType.stackedcol, categories, values);
+ * final Workbook workbook = excelChart.createWorkbook();
  */
 public class ExcelChartDefault implements ExcelChart {
     private final ChartType type;
