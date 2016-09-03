@@ -32,7 +32,6 @@
         <wicket.version>7.4.0</wicket.version>
         <wicket.bootstrap.version>0.10.8</wicket.bootstrap.version>
         <zt.zip.version>1.9</zt.zip.version>
-        <poi.version>3.13</poi.version>
         <wicket.webjars.version>0.5.5</wicket.webjars.version>
     </properties>
 
@@ -243,6 +242,7 @@
             <artifactId>mail</artifactId>
             <version>1.4.7</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
