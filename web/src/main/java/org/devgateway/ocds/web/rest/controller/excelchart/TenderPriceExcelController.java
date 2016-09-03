@@ -39,7 +39,7 @@ public class TenderPriceExcelController extends GenericOCDSController {
 
     @ApiOperation(value = "Exports *Procurement method* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/procurementMethodExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
-    public void bidSelectionExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+    public void procurementMethodExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
                                        final HttpServletResponse response) throws IOException {
         final String chartTitle = "Procurement method";
 
