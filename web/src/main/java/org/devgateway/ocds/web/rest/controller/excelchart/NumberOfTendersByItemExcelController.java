@@ -37,7 +37,8 @@ public class NumberOfTendersByItemExcelController extends GenericOCDSController 
     private NumberOfTendersByItemClassification numberOfTendersByItemClassification;
 
     @ApiOperation(value = "Exports *Number of bids by item* dashboard in Excel format.")
-    @RequestMapping(value = "/api/ocds/numberOfTendersByItemExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/api/ocds/numberOfTendersByItemExcelChart",
+            method = {RequestMethod.GET, RequestMethod.POST})
     public void numberOfTendersByItemExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
                                                 final HttpServletResponse response) throws IOException {
         final String chartTitle = "Number of bids by item";
