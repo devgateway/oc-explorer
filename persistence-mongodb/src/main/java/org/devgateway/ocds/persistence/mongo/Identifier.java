@@ -1,11 +1,14 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  *  Identifier OCDS entity http://standard.open-contracting.org/latest/en/schema/reference/#identifier
@@ -28,6 +31,7 @@ public class Identifier {
      */
     @ExcelExport
     @JsonProperty("scheme")
+    @Merge(MergeStrategy.ocdsVersion)
     private String scheme;
 
     /**
@@ -36,6 +40,7 @@ public class Identifier {
      */
     @ExcelExport
     @JsonProperty("id")
+    @Merge(MergeStrategy.ocdsVersion)
     private String id;
 
     /**
@@ -44,6 +49,7 @@ public class Identifier {
      */
     @ExcelExport
     @JsonProperty("legalName")
+    @Merge(MergeStrategy.ocdsVersion)
     private String legalName;
 
     /**
@@ -55,6 +61,7 @@ public class Identifier {
      */
     @ExcelExport
     @JsonProperty("uri")
+    @Merge(MergeStrategy.ocdsVersion)
     private String uri;
 
     /**

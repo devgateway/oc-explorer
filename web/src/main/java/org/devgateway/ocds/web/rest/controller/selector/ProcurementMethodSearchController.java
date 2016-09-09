@@ -38,33 +38,26 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.newA
  */
 @RestController
 @Cacheable
-@CacheConfig(cacheNames = "bidSelectionMethodsJson")
-public class BidSelectionMethodSearchController extends GenericOCDSController {
+@CacheConfig(cacheNames = "procurementMethodsJson")
+public class ProcurementMethodSearchController extends GenericOCDSController {
 
-    /**
-     * db.release.aggregate([ {$project : {"tender.procurementMethodDetails":1}
-     * }, {$group: {_id: "$tender.procurementMethodDetails" }} ])
-     *
-     * @return
-     */
-	@ApiOperation(value = "Display the available bid selection methods. "
-			+ "These are taken from tender.procurementMethodDetails")
-    @RequestMapping(value = "/api/ocds/bidSelectionMethod/all", 
-    method = { RequestMethod.POST, RequestMethod.GET },
-            produces = "application/json")
-    public List<DBObject> bidSelectionMethods() {
+	@ApiOperation(value = "Display the available procurement methods. "
+			+ "These are taken from tender.procurementMethod")
+	@RequestMapping(value = "/api/ocds/procurementMethod/all", method = { RequestMethod.POST,
+			RequestMethod.GET }, produces = "application/json")
+	public List<DBObject> procurementMethods() {
 
-        DBObject project = new BasicDBObject("tender.procurementMethodDetails", 1);
+		DBObject project = new BasicDBObject("tender.procurementMethod", 1);
 
-        Aggregation agg = newAggregation(new CustomOperation(new BasicDBObject("$project", project)),
-                group("$tender.procurementMethodDetails"));
+		Aggregation agg = newAggregation(new CustomOperation(new BasicDBObject("$project", project)),
+				group("$tender.procurementMethod"));
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 
-        List<DBObject> mappedResults = results.getMappedResults();
+		List<DBObject> mappedResults = results.getMappedResults();
 
-        return mappedResults;
+		return mappedResults;
 
-    }
+	}
 
 }
