@@ -311,7 +311,7 @@ public class Tender implements Identifiable {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -333,7 +333,7 @@ public class Tender implements Identifiable {
      *     The title
      */
     @JsonProperty("title")
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -355,7 +355,7 @@ public class Tender implements Identifiable {
      *     The description
      */
     @JsonProperty("description")
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -383,7 +383,7 @@ public class Tender implements Identifiable {
      *     The status
      */
     @JsonProperty("status")
-    public void setStatus(Status status) {
+    public void setStatus(final Status status) {
         this.status = status;
     }
 
@@ -411,7 +411,7 @@ public class Tender implements Identifiable {
      *     The items
      */
     @JsonProperty("items")
-    public void setItems(Set<Item> items) {
+    public void setItems(final Set<Item> items) {
         this.items = items;
     }
 
@@ -431,7 +431,7 @@ public class Tender implements Identifiable {
      *     The minValue
      */
     @JsonProperty("minValue")
-    public void setMinValue(Amount minValue) {
+    public void setMinValue(final Amount minValue) {
         this.minValue = minValue;
     }
 
@@ -451,7 +451,7 @@ public class Tender implements Identifiable {
      *     The value
      */
     @JsonProperty("value")
-    public void setValue(Amount value) {
+    public void setValue(final Amount value) {
         this.value = value;
     }
 
@@ -477,7 +477,7 @@ public class Tender implements Identifiable {
      *     The procurementMethod
      */
     @JsonProperty("procurementMethod")
-    public void setProcurementMethod(ProcurementMethod procurementMethod) {
+    public void setProcurementMethod(final ProcurementMethod procurementMethod) {
         this.procurementMethod = procurementMethod;
     }
 
@@ -499,7 +499,7 @@ public class Tender implements Identifiable {
      *     The procurementMethodRationale
      */
     @JsonProperty("procurementMethodRationale")
-    public void setProcurementMethodRationale(String procurementMethodRationale) {
+    public void setProcurementMethodRationale(final String procurementMethodRationale) {
         this.procurementMethodRationale = procurementMethodRationale;
     }
 
@@ -523,7 +523,7 @@ public class Tender implements Identifiable {
      *     The awardCriteria
      */
     @JsonProperty("awardCriteria")
-    public void setAwardCriteria(String awardCriteria) {
+    public void setAwardCriteria(final String awardCriteria) {
         this.awardCriteria = awardCriteria;
     }
 
@@ -545,7 +545,7 @@ public class Tender implements Identifiable {
      *     The awardCriteriaDetails
      */
     @JsonProperty("awardCriteriaDetails")
-    public void setAwardCriteriaDetails(String awardCriteriaDetails) {
+    public void setAwardCriteriaDetails(final String awardCriteriaDetails) {
         this.awardCriteriaDetails = awardCriteriaDetails;
     }
 
@@ -573,7 +573,7 @@ public class Tender implements Identifiable {
      *     The submissionMethod
      */
     @JsonProperty("submissionMethod")
-    public void setSubmissionMethod(Set<String> submissionMethod) {
+    public void setSubmissionMethod(final Set<String> submissionMethod) {
         this.submissionMethod = submissionMethod;
     }
 
@@ -599,7 +599,7 @@ public class Tender implements Identifiable {
      *     The submissionMethodDetails
      */
     @JsonProperty("submissionMethodDetails")
-    public void setSubmissionMethodDetails(String submissionMethodDetails) {
+    public void setSubmissionMethodDetails(final String submissionMethodDetails) {
         this.submissionMethodDetails = submissionMethodDetails;
     }
 
@@ -625,7 +625,7 @@ public class Tender implements Identifiable {
      *     The tenderPeriod
      */
     @JsonProperty("tenderPeriod")
-    public void setTenderPeriod(Period tenderPeriod) {
+    public void setTenderPeriod(final Period tenderPeriod) {
         this.tenderPeriod = tenderPeriod;
     }
 
@@ -651,7 +651,7 @@ public class Tender implements Identifiable {
      *     The enquiryPeriod
      */
     @JsonProperty("enquiryPeriod")
-    public void setEnquiryPeriod(Period enquiryPeriod) {
+    public void setEnquiryPeriod(final Period enquiryPeriod) {
         this.enquiryPeriod = enquiryPeriod;
     }
 
@@ -673,7 +673,7 @@ public class Tender implements Identifiable {
      *     The hasEnquiries
      */
     @JsonProperty("hasEnquiries")
-    public void setHasEnquiries(Boolean hasEnquiries) {
+    public void setHasEnquiries(final Boolean hasEnquiries) {
         this.hasEnquiries = hasEnquiries;
     }
 
@@ -695,7 +695,7 @@ public class Tender implements Identifiable {
      *     The eligibilityCriteria
      */
     @JsonProperty("eligibilityCriteria")
-    public void setEligibilityCriteria(String eligibilityCriteria) {
+    public void setEligibilityCriteria(final String eligibilityCriteria) {
         this.eligibilityCriteria = eligibilityCriteria;
     }
 
@@ -721,7 +721,7 @@ public class Tender implements Identifiable {
      *     The awardPeriod
      */
     @JsonProperty("awardPeriod")
-    public void setAwardPeriod(Period awardPeriod) {
+    public void setAwardPeriod(final Period awardPeriod) {
         this.awardPeriod = awardPeriod;
     }
 
@@ -741,7 +741,7 @@ public class Tender implements Identifiable {
      *     The numberOfTenderers
      */
     @JsonProperty("numberOfTenderers")
-    public void setNumberOfTenderers(Integer numberOfTenderers) {
+    public void setNumberOfTenderers(final Integer numberOfTenderers) {
         this.numberOfTenderers = numberOfTenderers;
     }
 
@@ -763,7 +763,7 @@ public class Tender implements Identifiable {
      *     The tenderers
      */
     @JsonProperty("tenderers")
-    public void setTenderers(Set<Organization> tenderers) {
+    public void setTenderers(final Set<Organization> tenderers) {
         this.tenderers = tenderers;
     }
 
@@ -789,7 +789,7 @@ public class Tender implements Identifiable {
      *     The procuringEntity
      */
     @JsonProperty("procuringEntity")
-    public void setProcuringEntity(Organization procuringEntity) {
+    public void setProcuringEntity(final Organization procuringEntity) {
         this.procuringEntity = procuringEntity;
     }
 
@@ -815,7 +815,7 @@ public class Tender implements Identifiable {
      *     The documents
      */
     @JsonProperty("documents")
-    public void setDocuments(List<Document> documents) {
+    public void setDocuments(final List<Document> documents) {
         this.documents = documents;
     }
 
@@ -837,7 +837,7 @@ public class Tender implements Identifiable {
      *     The milestones
      */
     @JsonProperty("milestones")
-    public void setMilestones(List<Milestone> milestones) {
+    public void setMilestones(final List<Milestone> milestones) {
         this.milestones = milestones;
     }
 
@@ -863,7 +863,7 @@ public class Tender implements Identifiable {
      *     The amendment
      */
     @JsonProperty("amendment")
-    public void setAmendment(Amendment amendment) {
+    public void setAmendment(final Amendment amendment) {
         this.amendment = amendment;
     }
 
@@ -902,7 +902,7 @@ public class Tender implements Identifiable {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }
@@ -955,7 +955,7 @@ public class Tender implements Identifiable {
             }
         }
 
-        ProcurementMethod(String value) {
+        ProcurementMethod(final String value) {
             this.value = value;
         }
 
@@ -966,7 +966,7 @@ public class Tender implements Identifiable {
         }
 
         @JsonCreator
-        public static ProcurementMethod fromValue(String value) {
+        public static ProcurementMethod fromValue(final String value) {
             ProcurementMethod constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
@@ -998,7 +998,7 @@ public class Tender implements Identifiable {
             }
         }
 
-        SubmissionMethod(String value) {
+        SubmissionMethod(final String value) {
             this.value = value;
         }
 
@@ -1009,7 +1009,7 @@ public class Tender implements Identifiable {
         }
 
         @JsonCreator
-        public static SubmissionMethod fromValue(String value) {
+        public static SubmissionMethod fromValue(final String value) {
             SubmissionMethod constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
@@ -1041,7 +1041,7 @@ public class Tender implements Identifiable {
             }
         }
 
-        Status(String value) {
+        Status(final String value) {
             this.value = value;
         }
 
@@ -1052,7 +1052,7 @@ public class Tender implements Identifiable {
         }
 
         @JsonCreator
-        public static Status fromValue(String value) {
+        public static Status fromValue(final String value) {
             Status constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
