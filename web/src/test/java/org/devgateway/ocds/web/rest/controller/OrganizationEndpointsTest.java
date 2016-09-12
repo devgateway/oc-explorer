@@ -1,8 +1,5 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import java.io.IOException;
-import java.util.List;
-
 import org.devgateway.ocds.persistence.mongo.Address;
 import org.devgateway.ocds.persistence.mongo.ContactPoint;
 import org.devgateway.ocds.persistence.mongo.Identifier;
@@ -19,9 +16,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.web.WebAppConfiguration;
 
-@WebAppConfiguration
+import java.io.IOException;
+import java.util.List;
+
 public class OrganizationEndpointsTest extends AbstractMongoTest {
 
     @Autowired
