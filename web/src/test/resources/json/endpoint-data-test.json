@@ -1,5 +1,5 @@
 {
-    "publishedDate":"2009-03-15T14:45:00Z",
+    "publishedDate":"2016-03-15T14:45:00Z",
     "publisher": {
         "scheme": "OCDS-scheme",
         "uid": "10389383",
@@ -22,12 +22,12 @@
                     "currency": "USD"
                 }
             },
-            "rationale": "[ocds-endpoint-001] - planning"
+            "rationale": "[ocds-endpoint-001] - planning rationale"
         },
         "tender": {
-            "id": "ocds-full-001-tender",
-            "title": "[ocds-full-001-tender] - Title",
-            "description": "[ocds-full-001-tender] - Description",
+            "id": "ocds-endpoint-001-tender",
+            "title": "[ocds-endpoint-001-tender] - Title",
+            "description": "[ocds-endpoint-001-tender] - Description",
             "status": "active",
             "items": [
                 {
@@ -56,7 +56,7 @@
             "numberOfTenderers": 10,
             "procuringEntity": {
                 "identifier": {
-                    "id": "E09000003",
+                    "id": "E09000001",
                     "legalName": "[ocds-endpoint-001] procuringEntity"
                 },
                 "name": "[ocds-endpoint-001] procuringEntity name",
@@ -79,7 +79,7 @@
                 {
                     "identifier": {
                         "scheme": "GB-LAC",
-                        "id": "E09000003",
+                        "id": "E09000002",
                         "legalName": "Tenderer 01",
                         "uri": "http://www.example.com/tenderer01"
                     },
@@ -104,7 +104,7 @@
         "buyer": {
             "identifier": {
                 "scheme": "GB-LAC",
-                "id": "E09000001",
+                "id": "E09000003",
                 "legalName": "Buyer 01",
                 "uri": "http://www.example.com/buyer01"
             },
@@ -126,7 +126,7 @@
         },
         "awards": [
             {
-                "id": "ocds-full-001-awards",
+                "id": "ocds-endpoint-001-awards",
                 "title": "Award of contract to build...",
                 "status": "pending",
                 "date": "2016-05-10T09:30:00Z",
@@ -179,8 +179,8 @@
         ],
         "contracts": [
             {
-                "id": "ocds-full-001-contract",
-                "awardID": "ocds-full-001-contract-award-01",
+                "id": "ocds-endpoint-001-contract",
+                "awardID": "ocds-endpoint-001-contract-award-01",
                 "title": "Contract 01 Title",
                 "status": "active",
                 "period": {
@@ -203,12 +203,12 @@
                         }
                     }
                 ],
-                "dateSigned": "2016-06-10T14:23:12Z",
+                "dateSigned": "2016-08-10T14:23:12Z",
                 "implementation": {
                     "transactions": [
                         {
-                            "id": "ocds-full-001-contract-1",
-                            "source": "https://www.example.com/ocds-full-001-contract-1",
+                            "id": "ocds-endpoint-001-contract-1",
+                            "source": "https://www.example.com/ocds-endpoint-001-contract-1",
                             "date": "2016-08-01T00:00:00Z",
                             "amount": {
                                 "amount": 500000,
@@ -249,9 +249,9 @@
             "rationale": "[ocds-endpoint-002] - planning"
         },
         "tender": {
-            "id": "ocds-full-002-tender",
-            "title": "[ocds-full-002-tender] - Title",
-            "description": "[ocds-full-002-tender] - Description",
+            "id": "ocds-endpoint-002-tender",
+            "title": "[ocds-endpoint-002-tender] - Title",
+            "description": "[ocds-endpoint-002-tender] - Description",
             "status": "active",
             "items": [
                 {
@@ -280,7 +280,7 @@
             "numberOfTenderers": 5,
             "procuringEntity": {
                 "identifier": {
-                    "id": "E09000003",
+                    "id": "E09000005",
                     "legalName": "[ocds-endpoint-002] procuringEntity"
                 },
                 "name": "[ocds-endpoint-002] procuringEntity name",
@@ -303,8 +303,8 @@
                 {
                     "identifier": {
                         "scheme": "GB-LAC",
-                        "id": "E09000003",
-                        "legalName": "Tenderer 01",
+                        "id": "E09000006",
+                        "legalName": "Tenderer 02",
                         "uri": "http://www.example.com/tenderer01"
                     },
                     "name": "Organization name",
@@ -328,7 +328,7 @@
         "buyer": {
             "identifier": {
                 "scheme": "GB-LAC",
-                "id": "E09000002",
+                "id": "E09000007",
                 "legalName": "Buyer 02",
                 "uri": "http://www.example.com/buyer02"
             },
@@ -350,7 +350,7 @@
         },
         "awards": [
             {
-                "id": "ocds-full-002-awards",
+                "id": "ocds-endpoint-002-awards",
                 "title": "Award of contract to build...",
                 "status": "pending",
                 "date": "2016-05-10T09:30:00Z",
@@ -362,9 +362,9 @@
                     {
                         "identifier": {
                             "scheme": "GB-COH",
-                            "id": "1234567844",
+                            "id": "1234567845",
                             "legalName": "Supplier 02",
-                            "url": "http://example.com/supplier01/"
+                            "url": "http://example.com/supplier02/"
                         },
                         "name": "Supplier 02 name",
                         "address": {
@@ -403,9 +403,9 @@
         ],
         "contracts": [
             {
-                "id": "ocds-full-002-contract",
-                "awardID": "ocds-full-002-contract-award-01",
-                "title": "Contract 01 Title",
+                "id": "ocds-endpoint-002-contract",
+                "awardID": "ocds-endpoint-002-contract-01",
+                "title": "Contract 02 Title",
                 "status": "active",
                 "period": {
                     "startDate": "2015-07-01T00:00:00Z",
@@ -431,8 +431,8 @@
                 "implementation": {
                     "transactions": [
                         {
-                            "id": "ocds-full-002-contract-1",
-                            "source": "https://www.example.com/ocds-full-002-contract-1",
+                            "id": "ocds-endpoint-002-contract-2",
+                            "source": "https://www.example.com/ocds-endpoint-002-contract-2",
                             "date": "2016-08-01T00:00:00Z",
                             "amount": {
                                 "amount": 500000,
@@ -440,13 +440,13 @@
                             },
                             "providerOrganization": {
                                 "scheme": "GB-LAC",
-                                "id": "E09000007",
+                                "id": "E09000008",
                                 "legalName": "Barnet Ltd",
                                 "uri": "http://www.example.com/barnet"
                             },
                             "receiverOrganization": {
                                 "scheme": "GB-COH",
-                                "id": "1234567844",
+                                "id": "1234567846",
                                 "legalName": "AnyCorp Ltd",
                                 "uri": "http://www.anycorp.example"
                             }
@@ -473,9 +473,9 @@
             "rationale": "[ocds-endpoint-003] - planning"
         },
         "tender": {
-            "id": "ocds-full-003-tender",
-            "title": "[ocds-full-003-tender] - Title",
-            "description": "[ocds-full-003-tender] - Description",
+            "id": "ocds-endpoint-003-tender",
+            "title": "[ocds-endpoint-003-tender] - Title",
+            "description": "[ocds-endpoint-003-tender] - Description",
             "status": "active",
             "items": [
                 {
@@ -529,7 +529,7 @@
                         "scheme": "GB-LAC",
                         "id": "E09000003",
                         "legalName": "Tenderer 03",
-                        "uri": "http://www.example.com/tenderer01"
+                        "uri": "http://www.example.com/tenderer03"
                     },
                     "name": "Organization name",
                     "address": {
@@ -552,9 +552,9 @@
         "buyer": {
             "identifier": {
                 "scheme": "GB-LAC",
-                "id": "E09000003",
-                "legalName": "Buyer 01",
-                "uri": "http://www.example.com/buyer01"
+                "id": "E09000009",
+                "legalName": "Buyer 03",
+                "uri": "http://www.example.com/buyer03"
             },
             "name": "Buyer 03 name",
             "address": {
@@ -574,7 +574,7 @@
         },
         "awards": [
             {
-                "id": "ocds-full-003-awards",
+                "id": "ocds-endpoint-003-awards",
                 "title": "Award of contract to build...",
                 "status": "pending",
                 "date": "2016-05-10T09:30:00Z",
@@ -627,8 +627,8 @@
         ],
         "contracts": [
             {
-                "id": "ocds-full-003-contract",
-                "awardID": "ocds-full-003-contract-award-01",
+                "id": "ocds-endpoint-003-contract",
+                "awardID": "ocds-endpoint-003-contract-03",
                 "title": "Contract 01 Title",
                 "status": "active",
                 "period": {
@@ -655,8 +655,8 @@
                 "implementation": {
                     "transactions": [
                         {
-                            "id": "ocds-full-003-contract-1",
-                            "source": "https://www.example.com/ocds-full-001-contract-3",
+                            "id": "ocds-endpoint-003-contract-1",
+                            "source": "https://www.example.com/ocds-endpoint-001-contract-3",
                             "date": "2016-08-01T00:00:00Z",
                             "amount": {
                                 "amount": 500000,
