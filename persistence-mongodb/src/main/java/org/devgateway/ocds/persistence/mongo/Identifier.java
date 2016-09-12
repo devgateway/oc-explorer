@@ -90,7 +90,7 @@ public class Identifier {
      *     The scheme
      */
     @JsonProperty("scheme")
-    public void setScheme(String scheme) {
+    public void setScheme(final String scheme) {
         this.scheme = scheme;
     }
 
@@ -112,7 +112,7 @@ public class Identifier {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -134,7 +134,7 @@ public class Identifier {
      *     The legalName
      */
     @JsonProperty("legalName")
-    public void setLegalName(String legalName) {
+    public void setLegalName(final String legalName) {
         this.legalName = legalName;
     }
 
@@ -162,7 +162,7 @@ public class Identifier {
      *     The uri
      */
     @JsonProperty("uri")
-    public void setUri(String uri) {
+    public void setUri(final String uri) {
         this.uri = uri;
     }
 
@@ -182,7 +182,7 @@ public class Identifier {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }
