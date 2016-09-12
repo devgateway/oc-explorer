@@ -12,9 +12,9 @@ import java.util.List;
  * @author idobre
  * @since 9/12/16
  *
- * @see {@link EndPointControllerTest}
+ * @see {@link AbstractEndPointControllerTest}
  */
-public class AverageNumberOfTenderersControllerTest extends EndPointControllerTest {
+public class AverageNumberOfTenderersControllerTest extends AbstractEndPointControllerTest {
     @Autowired
     private AverageNumberOfTenderersController averageNumberOfTenderersController;
 
