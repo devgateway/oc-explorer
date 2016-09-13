@@ -58,7 +58,7 @@ public class Publisher {
      *     The name
      */
     @JsonProperty("name")
-    public void setName(final String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -80,7 +80,7 @@ public class Publisher {
      *     The scheme
      */
     @JsonProperty("scheme")
-    public void setScheme(final String scheme) {
+    public void setScheme(String scheme) {
         this.scheme = scheme;
     }
 
@@ -102,7 +102,7 @@ public class Publisher {
      *     The uid
      */
     @JsonProperty("uid")
-    public void setUid(final String uid) {
+    public void setUid(String uid) {
         this.uid = uid;
     }
 
@@ -122,7 +122,7 @@ public class Publisher {
      *     The uri
      */
     @JsonProperty("uri")
-    public void setUri(final String uri) {
+    public void setUri(String uri) {
         this.uri = uri;
     }
 
@@ -142,7 +142,7 @@ public class Publisher {
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }

@@ -1,18 +1,15 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
-import org.devgateway.ocds.persistence.mongo.merge.Merge;
-import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * A good, service, or work to be contracted.
@@ -29,14 +26,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
         "unit",
         "deliveryLocation"
 })
-public class Item implements Identifiable {
+public class Item {
 
 	/**
 	 * This is part of the OCDS location extension. We have decided to plug this
 	 * into the OCDS standard since it seems this will be rolled into OCDS 1.1
 	 * see https://jira.dgfoundation.org/browse/OCE-35
 	 */
-	@SuppressWarnings("rawtypes")	
+	@SuppressWarnings("rawtypes")
 	private Location deliveryLocation;
 	
     /**
@@ -46,7 +43,6 @@ public class Item implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("id")
-    @Merge(MergeStrategy.overwrite)
     private String id;
 
     /**
@@ -55,7 +51,6 @@ public class Item implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("description")
-    @Merge(MergeStrategy.ocdsVersion)
     private String description;
 
     @ExcelExport
@@ -72,7 +67,6 @@ public class Item implements Identifiable {
      */
     @JsonProperty("additionalClassifications")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
-    @Merge(MergeStrategy.ocdsVersion)
     private Set<Classification> additionalClassifications = new LinkedHashSet<Classification>();
 
     /**
@@ -81,7 +75,6 @@ public class Item implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("quantity")
-    @Merge(MergeStrategy.ocdsVersion)
     private Integer quantity;
 
     /**
@@ -112,7 +105,7 @@ public class Item implements Identifiable {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(final String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -134,7 +127,7 @@ public class Item implements Identifiable {
      *     The description
      */
     @JsonProperty("description")
-    public void setDescription(final String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -154,7 +147,7 @@ public class Item implements Identifiable {
      *     The classification
      */
     @JsonProperty("classification")
-    public void setClassification(final Classification classification) {
+    public void setClassification(Classification classification) {
         this.classification = classification;
     }
 
@@ -184,7 +177,7 @@ public class Item implements Identifiable {
      *     The additionalClassifications
      */
     @JsonProperty("additionalClassifications")
-    public void setAdditionalClassifications(final Set<Classification> additionalClassifications) {
+    public void setAdditionalClassifications(Set<Classification> additionalClassifications) {
         this.additionalClassifications = additionalClassifications;
     }
 
@@ -206,7 +199,7 @@ public class Item implements Identifiable {
      *     The quantity
      */
     @JsonProperty("quantity")
-    public void setQuantity(final Integer quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 
@@ -230,7 +223,7 @@ public class Item implements Identifiable {
      *     The unit
      */
     @JsonProperty("unit")
-    public void setUnit(final Unit unit) {
+    public void setUnit(Unit unit) {
         this.unit = unit;
     }
 
@@ -253,7 +246,7 @@ public class Item implements Identifiable {
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
@@ -276,7 +269,7 @@ public class Item implements Identifiable {
 		return deliveryLocation;
 	}
 
-	public void setDeliveryLocation(final Location<?> deliveryLocation) {
+	public void setDeliveryLocation(Location<?> deliveryLocation) {
 		this.deliveryLocation = deliveryLocation;
 	}
 

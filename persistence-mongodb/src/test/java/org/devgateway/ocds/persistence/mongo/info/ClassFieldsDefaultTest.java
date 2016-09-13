@@ -31,12 +31,12 @@ public class ClassFieldsDefaultTest {
     public void getFields() throws Exception {
         final String[] expectedFields = {"id", "label"};
 
-        final ClassFields classFields = new ClassFieldsDefault(TestClass.class);
-        final Iterator<Field> fields = classFields.getFields();
+        ClassFields classFields = new ClassFieldsDefault(TestClass.class);
+        Iterator<Field> fields = classFields.getFields();
 
-        final List<String> actualFields = new ArrayList<>();
-        while (fields.hasNext()) {
-            final Field f = fields.next();
+        List<String> actualFields = new ArrayList<>();
+        while(fields.hasNext()) {
+            Field f = fields.next();
             actualFields.add(f.getName());
         }
 
@@ -47,12 +47,12 @@ public class ClassFieldsDefaultTest {
     public void getInheritedFields() throws Exception {
         final String[] expectedFields = {"id", "label", "valid"};
 
-        final ClassFields classFields = new ClassFieldsDefault(TestClassImproved.class, true);
-        final Iterator<Field> fields = classFields.getFields();
+        ClassFields classFields = new ClassFieldsDefault(TestClassImproved.class, true);
+        Iterator<Field> fields = classFields.getFields();
 
-        final List<String> actualFields = new ArrayList<>();
-        while (fields.hasNext()) {
-            final Field f = fields.next();
+        List<String> actualFields = new ArrayList<>();
+        while(fields.hasNext()) {
+            Field f = fields.next();
             actualFields.add(f.getName());
         }
 

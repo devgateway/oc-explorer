@@ -1,10 +1,8 @@
 
 package org.devgateway.ocds.persistence.mongo;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -12,8 +10,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @JsonPropertyOrder({
         "ocid",
@@ -33,7 +32,7 @@ public class Record implements Identifiable {
      *
      */
     @JsonProperty("ocid")
-    @Id    
+    @Id
     private String ocid;
     /**
      * Linked releases
@@ -43,7 +42,8 @@ public class Record implements Identifiable {
      * from oldest (at position 0) to newest (last). (Required)
      *
      */
-    @JsonProperty("releases")    
+    @JsonProperty("releases")
+    @DBRef
     private List<Release> releases = new ArrayList<Release>();
 
     /**
@@ -93,7 +93,7 @@ public class Record implements Identifiable {
      *            The ocid
      */
     @JsonProperty("ocid")
-    public void setOcid(final String ocid) {
+    public void setOcid(String ocid) {
         this.ocid = ocid;
     }
 
@@ -104,7 +104,7 @@ public class Record implements Identifiable {
     }
 
     @JsonProperty("releaseReferences")
-    public void setReleaseReferences(final List<ReleaseReference> releaseReferences) {
+    public void setReleaseReferences(List<ReleaseReference> releaseReferences) {
         this.releaseReferences = releaseReferences;
     }
 
@@ -133,7 +133,7 @@ public class Record implements Identifiable {
      *            The releases
      */
     @JsonProperty("releases")
-    public void setReleases(final List<Release> releases) {
+    public void setReleases(List<Release> releases) {
         this.releases = releases;
     }
 
@@ -158,7 +158,7 @@ public class Record implements Identifiable {
      *            The compiledRelease
      */
     @JsonProperty("compiledRelease")
-    public void setCompiledRelease(final Release compiledRelease) {
+    public void setCompiledRelease(Release compiledRelease) {
         this.compiledRelease = compiledRelease;
     }
 
@@ -176,7 +176,7 @@ public class Record implements Identifiable {
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }

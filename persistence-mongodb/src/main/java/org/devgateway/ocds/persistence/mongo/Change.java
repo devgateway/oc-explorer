@@ -54,7 +54,7 @@ public class Change {
      *     The property
      */
     @JsonProperty("property")
-    public void setProperty(final String property) {
+    public void setProperty(String property) {
         this.property = property;
     }
 
@@ -76,7 +76,7 @@ public class Change {
      *     The former_value
      */
     @JsonProperty("former_value")
-    public void setFormerValue(final String formerValue) {
+    public void setFormerValue(String formerValue) {
         this.formerValue = formerValue;
     }
 
@@ -94,7 +94,7 @@ public class Change {
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }

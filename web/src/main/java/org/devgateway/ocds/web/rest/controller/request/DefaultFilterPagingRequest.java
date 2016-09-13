@@ -23,11 +23,6 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 			+ "Corresponds to the OCDS Organization.identifier")
 	private List<String> procuringEntityId;
 	
-	//@EachPattern(regexp = "^[\\p{L}0-9]*$")
-	@ApiModelProperty(value = "This is the id of the organization/supplier entity. "
-			+ "Corresponds to the OCDS Organization.identifier")
-	private List<String> supplierId;
-	
 	@ApiModelProperty(value = "This will filter after tender.items.deliveryLocation._id")
 	private List<String> tenderLoc;
 	
@@ -95,7 +90,7 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 		return tenderLoc;
 	}
 
-	public void setTenderLoc(final List<String> tenderDeliveryLocationGazetteerIdentifier) {
+	public void setTenderLoc(List<String> tenderDeliveryLocationGazetteerIdentifier) {
 		this.tenderLoc = tenderDeliveryLocationGazetteerIdentifier;
 	}
 
@@ -103,7 +98,7 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 		return minTenderValue;
 	}
 
-	public void setMinTenderValue(final BigDecimal minTenderValueAmount) {
+	public void setMinTenderValue(BigDecimal minTenderValueAmount) {
 		this.minTenderValue = minTenderValueAmount;
 	}
 
@@ -111,7 +106,7 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 		return maxTenderValue;
 	}
 
-	public void setMaxTenderValue(final BigDecimal maxTenderValueAmount) {
+	public void setMaxTenderValue(BigDecimal maxTenderValueAmount) {
 		this.maxTenderValue = maxTenderValueAmount;
 	}
 
@@ -119,7 +114,7 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 		return minAwardValue;
 	}
 
-	public void setMinAwardValue(final BigDecimal minAwardValue) {
+	public void setMinAwardValue(BigDecimal minAwardValue) {
 		this.minAwardValue = minAwardValue;
 	}
 
@@ -127,16 +122,8 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 		return maxAwardValue;
 	}
 
-	public void setMaxAwardValue(final BigDecimal maxAwardValue) {
+	public void setMaxAwardValue(BigDecimal maxAwardValue) {
 		this.maxAwardValue = maxAwardValue;
-	}
-
-	public List<String> getSupplierId() {
-		return supplierId;
-	}
-
-	public void setSupplierId(final List<String> supplierId) {
-		this.supplierId = supplierId;
 	}
 
 

@@ -1,5 +1,5 @@
 import Chart from "./index";
-import {download} from "../../tools";
+import {pluckImm} from "../../tools";
 import {Map, OrderedMap, Set} from "immutable";
 import Comparison from "../../comparison";
 import backendYearFilterable from "../../backend-year-filterable";
@@ -48,7 +48,6 @@ class ProcurementMethod extends backendYearFilterable(Chart){
 }
 
 ProcurementMethod.endpoint = 'tenderPriceByProcurementMethod';
-ProcurementMethod.excelEP = 'procurementMethodExcelChart';
 ProcurementMethod.getName = __ => __('Procurement method');
 ProcurementMethod.UPDATABLE_FIELDS = ['data'];
 ProcurementMethod.PROCUREMENT_METHOD_FIELD = 'procurementMethod';
@@ -106,12 +105,6 @@ class ProcurementMethodComparison extends Comparison{
 
     return this.wrap(decoratedFilters.map((comparisonFilters, index) => {
       let ref = `visualization${index}`;
-      let downloadExcel = e => download({
-        ep: Component.excelEP,
-        filters: comparisonFilters,
-        years,
-        __: this.__.bind(this)
-      });
       return <div className="col-md-6 comparison" key={index}>
         <Component
             filters={comparisonFilters}
@@ -123,12 +116,10 @@ class ProcurementMethodComparison extends Comparison{
             styling={styling}
             {...rangeProp}
         />
-        <div className="chart-toolbar">
-          <div className="btn btn-default" onClick={downloadExcel}>
-            <img src="assets/icons/export-black.svg" width="16" height="16"/>
-          </div>
-
-          <div className="btn btn-default" onClick={e => this.refs[ref].querySelector(".modebar-btn:first-child").click()}>
+        <div className="chart-toolbar"
+             onClick={e => this.refs[ref].querySelector(".modebar-btn:first-child").click()}
+        >
+          <div className="btn btn-default">
             <img src="assets/icons/camera.svg"/>
           </div>
         </div>

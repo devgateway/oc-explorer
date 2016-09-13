@@ -6,8 +6,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
-import org.devgateway.ocds.persistence.mongo.merge.Merge;
-import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
 import java.util.Date;
 
@@ -35,7 +33,7 @@ import java.util.Date;
         "receiverOrganization",
         "uri"
 })
-public class Transaction implements Identifiable {
+public class Transaction {
 
     /**
      * A unique identifier for this transaction. This identifier should be possible to cross-reference against the
@@ -44,7 +42,6 @@ public class Transaction implements Identifiable {
      *
      */
     @JsonProperty("id")
-    @Merge(MergeStrategy.overwrite)
     private String id;
 
     /**
@@ -57,7 +54,6 @@ public class Transaction implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("source")
-    @Merge(MergeStrategy.ocdsVersion)
     private String source;
 
     /**
@@ -66,7 +62,6 @@ public class Transaction implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("date")
-    @Merge(MergeStrategy.ocdsVersion)
     private Date date;
 
     @ExcelExport
@@ -88,7 +83,6 @@ public class Transaction implements Identifiable {
      *
      */
     @JsonProperty("uri")
-    @Merge(MergeStrategy.ocdsVersion)
     private String uri;
 
     /**
@@ -113,7 +107,7 @@ public class Transaction implements Identifiable {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(final String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -143,7 +137,7 @@ public class Transaction implements Identifiable {
      *     The source
      */
     @JsonProperty("source")
-    public void setSource(final String source) {
+    public void setSource(String source) {
         this.source = source;
     }
 
@@ -165,7 +159,7 @@ public class Transaction implements Identifiable {
      *     The date
      */
     @JsonProperty("date")
-    public void setDate(final Date date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -185,7 +179,7 @@ public class Transaction implements Identifiable {
      *     The amount
      */
     @JsonProperty("amount")
-    public void setAmount(final Amount amount) {
+    public void setAmount(Amount amount) {
         this.amount = amount;
     }
 
@@ -205,7 +199,7 @@ public class Transaction implements Identifiable {
      *     The providerOrganization
      */
     @JsonProperty("providerOrganization")
-    public void setProviderOrganization(final Identifier providerOrganization) {
+    public void setProviderOrganization(Identifier providerOrganization) {
         this.providerOrganization = providerOrganization;
     }
 
@@ -225,7 +219,7 @@ public class Transaction implements Identifiable {
      *     The receiverOrganization
      */
     @JsonProperty("receiverOrganization")
-    public void setReceiverOrganization(final Identifier receiverOrganization) {
+    public void setReceiverOrganization(Identifier receiverOrganization) {
         this.receiverOrganization = receiverOrganization;
     }
 
@@ -251,7 +245,7 @@ public class Transaction implements Identifiable {
      *     The uri
      */
     @JsonProperty("uri")
-    public void setUri(final String uri) {
+    public void setUri(String uri) {
         this.uri = uri;
     }
 
@@ -274,7 +268,7 @@ public class Transaction implements Identifiable {
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }

@@ -1,15 +1,12 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import java.util.Date;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.devgateway.ocds.persistence.mongo.merge.Merge;
-import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.util.Date;
 
 
 /**
@@ -33,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "format",
         "language"
 })
-public class Document implements Identifiable {
+public class Document {
 
     /**
      * A local, unique identifier for this document. This field is used to keep track of multiple revisions
@@ -42,7 +39,6 @@ public class Document implements Identifiable {
      *
      */
     @JsonProperty("id")
-    @Merge(MergeStrategy.overwrite)
     private String id;
 
     /**
@@ -53,7 +49,6 @@ public class Document implements Identifiable {
      *
      */
     @JsonProperty("documentType")
-    @Merge(MergeStrategy.ocdsVersion)
     private String documentType;
 
     /**
@@ -61,7 +56,6 @@ public class Document implements Identifiable {
      *
      */
     @JsonProperty("title")
-    @Merge(MergeStrategy.ocdsVersion)
     private String title;
 
     /**
@@ -71,7 +65,6 @@ public class Document implements Identifiable {
      *
      */
     @JsonProperty("description")
-    @Merge(MergeStrategy.ocdsVersion)
     private String description;
 
     /**
@@ -80,7 +73,6 @@ public class Document implements Identifiable {
      *
      */
     @JsonProperty("url")
-    @Merge(MergeStrategy.ocdsVersion)
     private String url;
 
     /**
@@ -89,7 +81,6 @@ public class Document implements Identifiable {
      *
      */
     @JsonProperty("datePublished")
-    @Merge(MergeStrategy.ocdsVersion)
     private Date datePublished;
 
     /**
@@ -97,7 +88,6 @@ public class Document implements Identifiable {
      *
      */
     @JsonProperty("dateModified")
-    @Merge(MergeStrategy.ocdsVersion)
     private Date dateModified;
 
     /**
@@ -109,7 +99,6 @@ public class Document implements Identifiable {
      *
      */
     @JsonProperty("format")
-    @Merge(MergeStrategy.ocdsVersion)
     private String format;
 
     /**
@@ -121,7 +110,6 @@ public class Document implements Identifiable {
      *
      */
     @JsonProperty("language")
-    @Merge(MergeStrategy.ocdsVersion)
     private String language;
 
     /**
@@ -146,7 +134,7 @@ public class Document implements Identifiable {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(final String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -174,7 +162,7 @@ public class Document implements Identifiable {
      *     The documentType
      */
     @JsonProperty("documentType")
-    public void setDocumentType(final String documentType) {
+    public void setDocumentType(String documentType) {
         this.documentType = documentType;
     }
 
@@ -196,7 +184,7 @@ public class Document implements Identifiable {
      *     The title
      */
     @JsonProperty("title")
-    public void setTitle(final String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
@@ -222,7 +210,7 @@ public class Document implements Identifiable {
      *     The description
      */
     @JsonProperty("description")
-    public void setDescription(final String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -246,7 +234,7 @@ public class Document implements Identifiable {
      *     The url
      */
     @JsonProperty("url")
-    public void setUrl(final String url) {
+    public void setUrl(String url) {
         this.url = url;
     }
 
@@ -270,7 +258,7 @@ public class Document implements Identifiable {
      *     The datePublished
      */
     @JsonProperty("datePublished")
-    public void setDatePublished(final Date datePublished) {
+    public void setDatePublished(Date datePublished) {
         this.datePublished = datePublished;
     }
 
@@ -292,7 +280,7 @@ public class Document implements Identifiable {
      *     The dateModified
      */
     @JsonProperty("dateModified")
-    public void setDateModified(final Date dateModified) {
+    public void setDateModified(Date dateModified) {
         this.dateModified = dateModified;
     }
 
@@ -322,7 +310,7 @@ public class Document implements Identifiable {
      *     The format
      */
     @JsonProperty("format")
-    public void setFormat(final String format) {
+    public void setFormat(String format) {
         this.format = format;
     }
 
@@ -352,7 +340,7 @@ public class Document implements Identifiable {
      *     The language
      */
     @JsonProperty("language")
-    public void setLanguage(final String language) {
+    public void setLanguage(String language) {
         this.language = language;
     }
 
@@ -377,7 +365,7 @@ public class Document implements Identifiable {
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }

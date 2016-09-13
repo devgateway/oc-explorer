@@ -42,7 +42,7 @@ class OverviewChart extends FrontendYearFilterableChart{
         type: "category"
       },
       yaxis: {
-        title: this.__("Count"),
+        title: this.__("Count (in VND)"),
         exponentformat: 'none'
       }
     }
@@ -50,7 +50,6 @@ class OverviewChart extends FrontendYearFilterableChart{
 }
 
 OverviewChart.endpoints = ['countBidPlansByYear', 'countTendersByYear', 'countAwardsByYear'];
-OverviewChart.excelEP = 'procurementActivityExcelChart';
 
 OverviewChart.getName = __ => __("Procurement activity by year");
 

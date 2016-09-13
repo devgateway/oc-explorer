@@ -51,7 +51,6 @@ class BidsByItem extends backendYearFilterable(Chart){
 }
 
 BidsByItem.endpoint = 'numberOfTendersByItemClassification';
-BidsByItem.excelEP = 'numberOfTendersByItemExcelChart';
 BidsByItem.UPDATABLE_FIELDS = ['data'];
 
 class BidsByItemComparison extends Comparison{

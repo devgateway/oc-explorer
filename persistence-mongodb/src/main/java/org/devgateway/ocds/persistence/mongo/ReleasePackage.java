@@ -113,7 +113,7 @@ public class ReleasePackage implements Identifiable {
      *            The uri
      */
     @JsonProperty("uri")
-    public void setUri(final String uri) {
+    public void setUri(String uri) {
         this.uri = uri;
     }
 
@@ -136,7 +136,7 @@ public class ReleasePackage implements Identifiable {
      *            The publishedDate
      */
     @JsonProperty("publishedDate")
-    public void setPublishedDate(final Date publishedDate) {
+    public void setPublishedDate(Date publishedDate) {
         this.publishedDate = publishedDate;
     }
 
@@ -152,6 +152,18 @@ public class ReleasePackage implements Identifiable {
     }
 
     /**
+     *
+     * (Required)
+     *
+     * @param releases
+     *            The releases
+     */
+    @JsonProperty("releases")
+    public void setReleases(Set<Release> releases) {
+        this.releases = releases;
+    }
+
+    /**
      * Information to uniquely identify the publisher of this package.
      * (Required)
      *
@@ -163,18 +175,6 @@ public class ReleasePackage implements Identifiable {
     }
 
     /**
-     *
-     * (Required)
-     *
-     * @param releases
-     *            The releases
-     */
-    @JsonProperty("releases")
-    public void setReleases(final Set<Release> releases) {
-        this.releases = releases;
-    }
-
-    /**
      * Information to uniquely identify the publisher of this package.
      * (Required)
      *
@@ -182,7 +182,7 @@ public class ReleasePackage implements Identifiable {
      *            The publisher
      */
     @JsonProperty("publisher")
-    public void setPublisher(final Publisher publisher) {
+    public void setPublisher(Publisher publisher) {
         this.publisher = publisher;
     }
 
@@ -211,7 +211,7 @@ public class ReleasePackage implements Identifiable {
      *            The license
      */
     @JsonProperty("license")
-    public void setLicense(final String license) {
+    public void setLicense(String license) {
         this.license = license;
     }
 
@@ -236,7 +236,7 @@ public class ReleasePackage implements Identifiable {
      *            The publicationPolicy
      */
     @JsonProperty("publicationPolicy")
-    public void setPublicationPolicy(final String publicationPolicy) {
+    public void setPublicationPolicy(String publicationPolicy) {
         this.publicationPolicy = publicationPolicy;
     }
 
@@ -257,7 +257,7 @@ public class ReleasePackage implements Identifiable {
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }

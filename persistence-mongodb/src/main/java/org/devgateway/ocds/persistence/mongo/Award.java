@@ -1,24 +1,21 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
-import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
-import org.devgateway.ocds.persistence.mongo.merge.Merge;
-import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -43,7 +40,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
         "documents",
         "amendment"
 })
-public class Award implements Identifiable {
+public class Award {
     /**
      * Award ID
      * <p>
@@ -57,7 +54,6 @@ public class Award implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("id")
-    @Merge(MergeStrategy.overwrite)
     private String id;
 
     /**
@@ -66,7 +62,6 @@ public class Award implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("title")
-    @Merge(MergeStrategy.ocdsVersion)
     private String title;
 
     /**
@@ -75,7 +70,6 @@ public class Award implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("description")
-    @Merge(MergeStrategy.ocdsVersion)
     private String description;
 
     /**
@@ -87,7 +81,6 @@ public class Award implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("status")
-    @Merge(MergeStrategy.ocdsVersion)
     private Status status;
 
     /**
@@ -98,7 +91,6 @@ public class Award implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("date")
-    @Merge(MergeStrategy.ocdsVersion)
     private Date date;
 
     @ExcelExport
@@ -113,7 +105,6 @@ public class Award implements Identifiable {
     @ExcelExport
     @JsonProperty("suppliers")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
-    @Merge(MergeStrategy.ocdsVersion)
     private Set<Organization> suppliers = new LinkedHashSet<Organization>();
 
     /**
@@ -127,7 +118,6 @@ public class Award implements Identifiable {
     @ExcelExportSepareteSheet
     @JsonProperty("items")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
-    @Merge(MergeStrategy.arrayMergeById)
     private Set<Item> items = new LinkedHashSet<Item>();
 
     /**
@@ -145,7 +135,6 @@ public class Award implements Identifiable {
      */
     @JsonProperty("documents")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
-    @Merge(MergeStrategy.arrayMergeById)
     private Set<Document> documents = new LinkedHashSet<Document>();
 
     /**
@@ -189,7 +178,7 @@ public class Award implements Identifiable {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(final String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -211,7 +200,7 @@ public class Award implements Identifiable {
      *     The title
      */
     @JsonProperty("title")
-    public void setTitle(final String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
@@ -224,6 +213,17 @@ public class Award implements Identifiable {
     @JsonProperty("description")
     public String getDescription() {
         return description;
+    }
+
+    /**
+     * Award description
+     *
+     * @param description
+     *     The description
+     */
+    @JsonProperty("description")
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     /**
@@ -241,17 +241,6 @@ public class Award implements Identifiable {
     }
 
     /**
-     * Award description
-     *
-     * @param description
-     *     The description
-     */
-    @JsonProperty("description")
-    public void setDescription(final String description) {
-        this.description = description;
-    }
-
-    /**
      * Award Status
      * <p>
      * The current status of the award drawn from the
@@ -261,7 +250,7 @@ public class Award implements Identifiable {
      *     The status
      */
     @JsonProperty("status")
-    public void setStatus(final Status status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -287,7 +276,7 @@ public class Award implements Identifiable {
      *     The date
      */
     @JsonProperty("date")
-    public void setDate(final Date date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -307,7 +296,7 @@ public class Award implements Identifiable {
      *     The value
      */
     @JsonProperty("value")
-    public void setValue(final Amount value) {
+    public void setValue(Amount value) {
         this.value = value;
     }
 
@@ -331,7 +320,7 @@ public class Award implements Identifiable {
      *     The suppliers
      */
     @JsonProperty("suppliers")
-    public void setSuppliers(final Set<Organization> suppliers) {
+    public void setSuppliers(Set<Organization> suppliers) {
         this.suppliers = suppliers;
     }
 
@@ -359,7 +348,7 @@ public class Award implements Identifiable {
      *     The items
      */
     @JsonProperty("items")
-    public void setItems(final Set<Item> items) {
+    public void setItems(Set<Item> items) {
         this.items = items;
     }
 
@@ -385,7 +374,7 @@ public class Award implements Identifiable {
      *     The contractPeriod
      */
     @JsonProperty("contractPeriod")
-    public void setContractPeriod(final Period contractPeriod) {
+    public void setContractPeriod(Period contractPeriod) {
         this.contractPeriod = contractPeriod;
     }
 
@@ -407,7 +396,7 @@ public class Award implements Identifiable {
      *     The documents
      */
     @JsonProperty("documents")
-    public void setDocuments(final Set<Document> documents) {
+    public void setDocuments(Set<Document> documents) {
         this.documents = documents;
     }
 
@@ -433,7 +422,7 @@ public class Award implements Identifiable {
      *     The amendment
      */
     @JsonProperty("amendment")
-    public void setAmendment(final Amendment amendment) {
+    public void setAmendment(Amendment amendment) {
         this.amendment = amendment;
     }
 
@@ -460,7 +449,7 @@ public class Award implements Identifiable {
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
@@ -502,7 +491,7 @@ public class Award implements Identifiable {
             }
         }
 
-        Status(final String value) {
+        Status(String value) {
             this.value = value;
         }
 
@@ -513,7 +502,7 @@ public class Award implements Identifiable {
         }
 
         @JsonCreator
-        public static Status fromValue(final String value) {
+        public static Status fromValue(String value) {
             Status constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);

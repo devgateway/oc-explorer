@@ -10,8 +10,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
-import org.devgateway.ocds.persistence.mongo.merge.Merge;
-import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -42,7 +40,7 @@ import java.util.Set;
         "amendment",
         "implementation"
 })
-public class Contract implements Identifiable {
+public class Contract {
 
     /**
      * Contract ID
@@ -56,7 +54,6 @@ public class Contract implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("id")
-    @Merge(MergeStrategy.overwrite)
     private String id;
 
     /**
@@ -68,7 +65,6 @@ public class Contract implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("awardID")
-    @Merge(MergeStrategy.ocdsVersion)
     private String awardID;
 
     /**
@@ -77,7 +73,6 @@ public class Contract implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("title")
-    @Merge(MergeStrategy.ocdsVersion)
     private String title;
 
     /**
@@ -86,7 +81,6 @@ public class Contract implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("description")
-    @Merge(MergeStrategy.ocdsVersion)
     private String description;
 
     /**
@@ -99,7 +93,6 @@ public class Contract implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("status")
-    @Merge(MergeStrategy.ocdsVersion)
     private Status status;
 
     /**
@@ -127,7 +120,6 @@ public class Contract implements Identifiable {
     @ExcelExportSepareteSheet
     @JsonProperty("items")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
-    @Merge(MergeStrategy.arrayMergeById)
     private Set<Item> items = new LinkedHashSet<Item>();
 
     /**
@@ -136,7 +128,6 @@ public class Contract implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("dateSigned")
-    @Merge(MergeStrategy.ocdsVersion)
     private Date dateSigned;
 
     /**
@@ -145,7 +136,6 @@ public class Contract implements Identifiable {
      */
     @JsonProperty("documents")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
-    @Merge(MergeStrategy.arrayMergeById)
     private Set<Document> documents = new LinkedHashSet<Document>();
 
     /**
@@ -197,7 +187,7 @@ public class Contract implements Identifiable {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(final String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -225,7 +215,7 @@ public class Contract implements Identifiable {
      *     The awardID
      */
     @JsonProperty("awardID")
-    public void setAwardID(final String awardID) {
+    public void setAwardID(String awardID) {
         this.awardID = awardID;
     }
 
@@ -247,7 +237,7 @@ public class Contract implements Identifiable {
      *     The title
      */
     @JsonProperty("title")
-    public void setTitle(final String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
@@ -269,7 +259,7 @@ public class Contract implements Identifiable {
      *     The description
      */
     @JsonProperty("description")
-    public void setDescription(final String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -299,7 +289,7 @@ public class Contract implements Identifiable {
      *     The status
      */
     @JsonProperty("status")
-    public void setStatus(final Status status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -325,7 +315,7 @@ public class Contract implements Identifiable {
      *     The period
      */
     @JsonProperty("period")
-    public void setPeriod(final Period period) {
+    public void setPeriod(Period period) {
         this.period = period;
     }
 
@@ -345,7 +335,7 @@ public class Contract implements Identifiable {
      *     The value
      */
     @JsonProperty("value")
-    public void setValue(final Amount value) {
+    public void setValue(Amount value) {
         this.value = value;
     }
 
@@ -373,7 +363,7 @@ public class Contract implements Identifiable {
      *     The items
      */
     @JsonProperty("items")
-    public void setItems(final Set<Item> items) {
+    public void setItems(Set<Item> items) {
         this.items = items;
     }
 
@@ -395,7 +385,7 @@ public class Contract implements Identifiable {
      *     The dateSigned
      */
     @JsonProperty("dateSigned")
-    public void setDateSigned(final Date dateSigned) {
+    public void setDateSigned(Date dateSigned) {
         this.dateSigned = dateSigned;
     }
 
@@ -417,7 +407,7 @@ public class Contract implements Identifiable {
      *     The documents
      */
     @JsonProperty("documents")
-    public void setDocuments(final Set<Document> documents) {
+    public void setDocuments(Set<Document> documents) {
         this.documents = documents;
     }
 
@@ -443,7 +433,7 @@ public class Contract implements Identifiable {
      *     The amendment
      */
     @JsonProperty("amendment")
-    public void setAmendment(final Amendment amendment) {
+    public void setAmendment(Amendment amendment) {
         this.amendment = amendment;
     }
 
@@ -469,7 +459,7 @@ public class Contract implements Identifiable {
      *     The implementation
      */
     @JsonProperty("implementation")
-    public void setImplementation(final Implementation implementation) {
+    public void setImplementation(Implementation implementation) {
         this.implementation = implementation;
     }
 
@@ -497,7 +487,7 @@ public class Contract implements Identifiable {
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
@@ -540,7 +530,7 @@ public class Contract implements Identifiable {
             }
         }
 
-        Status(final String value) {
+        Status(String value) {
             this.value = value;
         }
 
@@ -551,7 +541,7 @@ public class Contract implements Identifiable {
         }
 
         @JsonCreator
-        public static Status fromValue(final String value) {
+        public static Status fromValue(String value) {
             Status constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);

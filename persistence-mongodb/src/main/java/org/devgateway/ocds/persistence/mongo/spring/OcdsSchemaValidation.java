@@ -27,16 +27,15 @@ import java.util.stream.Collectors;
  * @author mpostelnicu
  *
  */
-public class OcdsSchemaValidatorService {
-    private final Logger logger = LoggerFactory.getLogger(OcdsSchemaValidatorService.class);
+public class OcdsSchemaValidation {
+    private final Logger logger = LoggerFactory.getLogger(OcdsSchemaValidation.class);
     private JsonSchema schema;
 
-    public static final String OCDS_SCHEMA_LOCATION = "/release-schema.json";
-    public static final String OCDS_LOCATION_PATCH_LOCATION = "/location_patch_schema.json";
+    public static final String OCDS_1_0_SCHEMA_LOCATION = "/release-schema.json";
+    public static final String OCDS_1_0_LOCATION_PATCH_LOCATION = "/location_patch_schema.json";
 
     private ObjectMapper jacksonObjectMapper;
     private String[] patchResourceNames;
-	private JsonNode ocdsSchemaNode;
 
     public class ProcessingReportWithNode {
         private ProcessingReport report;
@@ -61,22 +60,19 @@ public class OcdsSchemaValidatorService {
         }
     }
 
-    public OcdsSchemaValidatorService(final ObjectMapper jacksonObjectMapper) {
+    public OcdsSchemaValidation(final ObjectMapper jacksonObjectMapper) {
         this.jacksonObjectMapper = jacksonObjectMapper;
     }
 
-    public OcdsSchemaValidatorService withJsonPatches(final String... patchResourceNames) {
+    public OcdsSchemaValidation withJsonPatches(final String... patchResourceNames) {
         this.patchResourceNames = patchResourceNames;
         return this;
     }
 
-    /**
-     * Intializes the JSON schema validator plus the provided patches 
-     */
     public void init() {
         try {
 
-            ocdsSchemaNode = JsonLoader.fromResource(OCDS_SCHEMA_LOCATION);
+            JsonNode ocdsSchemaNode = JsonLoader.fromResource(OCDS_1_0_SCHEMA_LOCATION);
 
             if (patchResourceNames != null && patchResourceNames.length > 0) {
                 for (int i = 0; i < patchResourceNames.length; i++) {
@@ -101,11 +97,6 @@ public class OcdsSchemaValidatorService {
         }
     }
 
-    /**
-     * Validates the incoming {@link JsonNode} against OCDS schema
-     * @param jsonNode
-     * @return
-     */
     public ProcessingReportWithNode validate(final JsonNode jsonNode) {
         try {
             ProcessingReport processingReport = schema.validate(jsonNode);
@@ -133,9 +124,5 @@ public class OcdsSchemaValidatorService {
     public <S> List<ProcessingReportWithNode> validateAll(final Collection<S> values) {
         return values.stream().map(this::validate).collect(Collectors.toList());
     }
-    
-    public JsonNode findValueInOcdsSchema(final String fieldName) {
-    	return ocdsSchemaNode.findValue(fieldName);
-    }
-    
+
 }

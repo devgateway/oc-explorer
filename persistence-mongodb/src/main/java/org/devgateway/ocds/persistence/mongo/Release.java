@@ -1,5 +1,19 @@
 package org.devgateway.ocds.persistence.mongo;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -7,23 +21,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
-import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
-import org.devgateway.ocds.persistence.mongo.merge.Merge;
-import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
  * Schema for an Open Contracting Release
@@ -57,8 +54,7 @@ public class Release implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("id")
-    @Id   
-    @Merge(MergeStrategy.ocdsOmit)
+    @Id
     private String id;
 
     /**
@@ -73,7 +69,6 @@ public class Release implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("ocid")
-	@Merge(MergeStrategy.ocdsOmit)
     private String ocid;
 
     /**
@@ -87,7 +82,6 @@ public class Release implements Identifiable {
     @ExcelExport
     @JsonProperty("date")
     @CreatedDate
-    @Merge(MergeStrategy.ocdsOmit)
     private Date date;
 
     /**
@@ -102,7 +96,6 @@ public class Release implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("tag")
-    @Merge(MergeStrategy.ocdsOmit)
     private List<Tag> tag = new ArrayList<Tag>();
 
     /**
@@ -116,7 +109,6 @@ public class Release implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("initiationType")
-    @Merge(MergeStrategy.ocdsVersion)
     private InitiationType initiationType = InitiationType.tender;
 
     /**
@@ -164,7 +156,6 @@ public class Release implements Identifiable {
     @ExcelExportSepareteSheet
     @JsonProperty("awards")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
-	@Merge(MergeStrategy.arrayMergeById)
     private Set<Award> awards = new LinkedHashSet<Award>();
 
     /**
@@ -177,7 +168,6 @@ public class Release implements Identifiable {
     @ExcelExportSepareteSheet
     @JsonProperty("contracts")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
-    @Merge(MergeStrategy.arrayMergeById)
     private Set<Contract> contracts = new LinkedHashSet<Contract>();
 
     /**
@@ -189,7 +179,6 @@ public class Release implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("language")
-	@Merge(MergeStrategy.ocdsVersion)
     private String language = "en";
 
 
@@ -223,7 +212,7 @@ public class Release implements Identifiable {
      *     The ocid
      */
     @JsonProperty("ocid")
-    public void setOcid(final String ocid) {
+    public void setOcid(String ocid) {
         this.ocid = ocid;
     }
 
@@ -254,7 +243,7 @@ public class Release implements Identifiable {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(final String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -284,7 +273,7 @@ public class Release implements Identifiable {
      *     The date
      */
     @JsonProperty("date")
-    public void setDate(final Date date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -318,7 +307,7 @@ public class Release implements Identifiable {
      *     The tag
      */
     @JsonProperty("tag")
-    public void setTag(final List<Tag> tag) {
+    public void setTag(List<Tag> tag) {
         this.tag = tag;
     }
 
@@ -350,7 +339,7 @@ public class Release implements Identifiable {
      *     The initiationType
      */
     @JsonProperty("initiationType")
-    public void setInitiationType(final InitiationType initiationType) {
+    public void setInitiationType(InitiationType initiationType) {
         this.initiationType = initiationType;
     }
 
@@ -380,7 +369,7 @@ public class Release implements Identifiable {
      *     The planning
      */
     @JsonProperty("planning")
-    public void setPlanning(final Planning planning) {
+    public void setPlanning(Planning planning) {
         this.planning = planning;
     }
 
@@ -408,7 +397,7 @@ public class Release implements Identifiable {
      *     The tender
      */
     @JsonProperty("tender")
-    public void setTender(final Tender tender) {
+    public void setTender(Tender tender) {
         this.tender = tender;
     }
 
@@ -434,7 +423,7 @@ public class Release implements Identifiable {
      *     The buyer
      */
     @JsonProperty("buyer")
-    public void setBuyer(final Organization buyer) {
+    public void setBuyer(Organization buyer) {
         this.buyer = buyer;
     }
 
@@ -462,7 +451,7 @@ public class Release implements Identifiable {
      *     The awards
      */
     @JsonProperty("awards")
-    public void setAwards(final Set<Award> awards) {
+    public void setAwards(Set<Award> awards) {
         this.awards = awards;
     }
 
@@ -488,7 +477,7 @@ public class Release implements Identifiable {
      *     The contracts
      */
     @JsonProperty("contracts")
-    public void setContracts(final Set<Contract> contracts) {
+    public void setContracts(Set<Contract> contracts) {
         this.contracts = contracts;
     }
 
@@ -516,7 +505,7 @@ public class Release implements Identifiable {
      *     The language
      */
     @JsonProperty("language")
-    public void setLanguage(final String language) {
+    public void setLanguage(String language) {
         this.language = language;
     }
 
@@ -543,7 +532,7 @@ public class Release implements Identifiable {
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
@@ -579,7 +568,7 @@ public class Release implements Identifiable {
             }
         }
 
-        InitiationType(final String value) {
+        InitiationType(String value) {
             this.value = value;
         }
 
@@ -590,7 +579,7 @@ public class Release implements Identifiable {
         }
 
         @JsonCreator
-        public static InitiationType fromValue(final String value) {
+        public static InitiationType fromValue(String value) {
             InitiationType constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);

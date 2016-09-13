@@ -1,16 +1,13 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import java.math.BigDecimal;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
-import org.devgateway.ocds.persistence.mongo.merge.Merge;
-import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.math.BigDecimal;
 
 /**
  * Value OCDS Entity http://standard.open-contracting.org/latest/en/schema/reference/#value
@@ -31,7 +28,6 @@ public class Amount {
      */
     @ExcelExport
     @JsonProperty("amount")
-    @Merge(MergeStrategy.ocdsVersion)
     private BigDecimal amount;
 
     /**
@@ -40,7 +36,6 @@ public class Amount {
      */
     @ExcelExport
     @JsonProperty("currency")
-    @Merge(MergeStrategy.ocdsVersion)
     private String currency;
 
     /**
@@ -61,7 +56,7 @@ public class Amount {
      *     The amount
      */
     @JsonProperty("amount")
-    public void setAmount(final BigDecimal amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
@@ -83,7 +78,7 @@ public class Amount {
      *     The currency
      */
     @JsonProperty("currency")
-    public void setCurrency(final String currency) {
+    public void setCurrency(String currency) {
         this.currency = currency;
     }
 
@@ -101,7 +96,7 @@ public class Amount {
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }

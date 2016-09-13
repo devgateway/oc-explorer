@@ -7,7 +7,7 @@ import org.devgateway.ocds.persistence.mongo.ContactPoint;
 import org.devgateway.ocds.persistence.mongo.Identifier;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
-import org.devgateway.toolkit.persistence.mongo.AbstractMongoTest;
+import org.devgateway.toolkit.persistence.mongo.test.AbstractMongoTest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,21 +18,22 @@ public class OrganizationRepositoryTest extends AbstractMongoTest {
     @Autowired
     private OrganizationRepository organizationRepository;
 
-    private static final String ORG_ID = "1234";
+    protected String ORG_ID = "1234";
 
-    @Before
-    public void importTestData() throws IOException, InterruptedException {
-        if (testDataInitialized) {
-            return;
-        }
-        // be sure that the organization collection is empty
-        organizationRepository.deleteAll();
+	
+    
+	@Before
+	public void importTestData() throws IOException, InterruptedException {
 
-        final Organization organization = new Organization();
+		if (testDataInitialized) {
+			return;
+		}
+		
+        Organization organization = new Organization();
         organization.setName("Development Gateway");
         organization.setId(ORG_ID);
 
-        final Address address = new Address();
+        Address address=new Address();
         address.setCountryName("Romania");
         address.setLocality("Bucuresti");
         address.setPostalCode("022671");
@@ -41,42 +42,41 @@ public class OrganizationRepositoryTest extends AbstractMongoTest {
         organization.setAddress(address);
 
 
-        final ContactPoint contactPoint = new ContactPoint();
+        ContactPoint contactPoint=new ContactPoint();
         contactPoint.setEmail("mpostelnicu@developmentgateway.org");
         contactPoint.setFaxNumber("01234567");
         contactPoint.setTelephone("01234567");
         contactPoint.setUrl("http://developmentgateway.org");
         organization.setContactPoint(contactPoint);
 
-        final Identifier identifier = new Identifier();
+        Identifier identifier = new Identifier();
         organization.getAdditionalIdentifiers().add(identifier);
         organization.getTypes().add(Organization.OrganizationType.procuringEntity);
         organization.getTypes().add(Organization.OrganizationType.buyer);
-
-        final Organization savedOrganization = organizationRepository.save(organization);
+        
+        Organization savedOrganization = organizationRepository.save(organization);
 
         Assert.assertNotNull(savedOrganization);
         Assert.assertEquals(ORG_ID, savedOrganization.getId());
-
-        testDataInitialized = true;
-    }
+        
+		testDataInitialized = true;
+	}
 
 
     @Test
     public void testOrganizationSaveAndFind() {
-        final Organization foundOrg = organizationRepository.findOne(ORG_ID);
+
+        Organization foundOrg = organizationRepository.findOne(ORG_ID);
         Assert.assertNotNull(foundOrg);
-
-        final Organization foundOrg2 = organizationRepository.findByIdOrNameAndTypes(ORG_ID,
-                Organization.OrganizationType.procuringEntity);
+        
+        Organization foundOrg2 = organizationRepository.findByIdAndTypes(ORG_ID, 
+        		Organization.OrganizationType.procuringEntity);
         Assert.assertNotNull(foundOrg2);
-
-        final Organization foundOrg3 = organizationRepository.findByIdOrNameAndTypes(ORG_ID,
-                Organization.OrganizationType.supplier);
+        
+        Organization foundOrg3 = organizationRepository.findByIdAndTypes(ORG_ID, 
+        		Organization.OrganizationType.supplier);
         Assert.assertNull(foundOrg3);
 
-        final Organization foundOrg4 = organizationRepository.findByIdOrNameAllIgnoreCase(ORG_ID, ORG_ID);
-        Assert.assertNotNull(foundOrg4);
     }
 
 }

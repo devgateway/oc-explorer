@@ -9,6 +9,4 @@ public interface GenericOrganizationRepository<T extends Organization> extends M
 
 	T findOne(String id);
 
-	T findByIdOrNameAllIgnoreCase(String id, String name);
-	
 }

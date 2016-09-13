@@ -8,8 +8,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.devgateway.ocds.persistence.mongo.merge.Merge;
-import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -30,7 +28,7 @@ import java.util.Set;
         "status",
         "documents"
 })
-public class Milestone implements Identifiable {
+public class Milestone {
 
     /**
      * A local identifier for this milestone, unique within this block. This field is used to keep track of
@@ -39,7 +37,6 @@ public class Milestone implements Identifiable {
      *
      */
     @JsonProperty("id")
-    @Merge(MergeStrategy.overwrite)
     private String id;
 
     /**
@@ -47,7 +44,6 @@ public class Milestone implements Identifiable {
      *
      */
     @JsonProperty("title")
-    @Merge(MergeStrategy.ocdsVersion)
     private String title;
 
     /**
@@ -55,7 +51,6 @@ public class Milestone implements Identifiable {
      *
      */
     @JsonProperty("description")
-    @Merge(MergeStrategy.ocdsVersion)
     private String description;
 
     /**
@@ -63,7 +58,6 @@ public class Milestone implements Identifiable {
      *
      */
     @JsonProperty("dueDate")
-    @Merge(MergeStrategy.ocdsVersion)
     private Date dueDate;
 
     /**
@@ -71,7 +65,6 @@ public class Milestone implements Identifiable {
      *
      */
     @JsonProperty("dateModified")
-    @Merge(MergeStrategy.ocdsVersion)
     private Date dateModified;
 
     /**
@@ -81,7 +74,6 @@ public class Milestone implements Identifiable {
      *
      */
     @JsonProperty("status")
-    @Merge(MergeStrategy.ocdsVersion)
     private Milestone.Status status;
 
     /**
@@ -90,7 +82,6 @@ public class Milestone implements Identifiable {
      */
     @JsonProperty("documents")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
-    @Merge(MergeStrategy.arrayMergeById)
     private Set<Document> documents = new LinkedHashSet<Document>();
 
     /**
@@ -115,7 +106,7 @@ public class Milestone implements Identifiable {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(final String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -137,7 +128,7 @@ public class Milestone implements Identifiable {
      *     The title
      */
     @JsonProperty("title")
-    public void setTitle(final String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
@@ -159,7 +150,7 @@ public class Milestone implements Identifiable {
      *     The description
      */
     @JsonProperty("description")
-    public void setDescription(final String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -181,7 +172,7 @@ public class Milestone implements Identifiable {
      *     The dueDate
      */
     @JsonProperty("dueDate")
-    public void setDueDate(final Date dueDate) {
+    public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -203,7 +194,7 @@ public class Milestone implements Identifiable {
      *     The dateModified
      */
     @JsonProperty("dateModified")
-    public void setDateModified(final Date dateModified) {
+    public void setDateModified(Date dateModified) {
         this.dateModified = dateModified;
     }
 
@@ -229,7 +220,7 @@ public class Milestone implements Identifiable {
      *     The status
      */
     @JsonProperty("status")
-    public void setStatus(final Milestone.Status status) {
+    public void setStatus(Milestone.Status status) {
         this.status = status;
     }
 
@@ -251,7 +242,7 @@ public class Milestone implements Identifiable {
      *     The documents
      */
     @JsonProperty("documents")
-    public void setDocuments(final Set<Document> documents) {
+    public void setDocuments(Set<Document> documents) {
         this.documents = documents;
     }
 
@@ -274,7 +265,7 @@ public class Milestone implements Identifiable {
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
@@ -310,7 +301,7 @@ public class Milestone implements Identifiable {
             }
         }
 
-        Status(final String value) {
+        Status(String value) {
             this.value = value;
         }
 
@@ -321,7 +312,7 @@ public class Milestone implements Identifiable {
         }
 
         @JsonCreator
-        public static Milestone.Status fromValue(final String value) {
+        public static Milestone.Status fromValue(String value) {
             Milestone.Status constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);

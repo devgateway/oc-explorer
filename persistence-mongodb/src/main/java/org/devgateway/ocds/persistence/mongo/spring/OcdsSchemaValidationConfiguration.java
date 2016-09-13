@@ -12,10 +12,10 @@ public class OcdsSchemaValidationConfiguration {
     private ObjectMapper jacksonObjectMapper;
 
     @Bean
-    public OcdsSchemaValidatorService ocdsSchemaValidatorService() {
-        OcdsSchemaValidatorService jsonSchemaValidation = new OcdsSchemaValidatorService(jacksonObjectMapper);
+    public OcdsSchemaValidation ocdsSchemaValidation() {
+        OcdsSchemaValidation jsonSchemaValidation = new OcdsSchemaValidation(jacksonObjectMapper);
         jsonSchemaValidation
-               	.withJsonPatches(OcdsSchemaValidatorService.OCDS_LOCATION_PATCH_LOCATION)
+               	.withJsonPatches(OcdsSchemaValidation.OCDS_1_0_LOCATION_PATCH_LOCATION)
                 .init();
         return jsonSchemaValidation;
     }

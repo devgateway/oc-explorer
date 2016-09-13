@@ -31,7 +31,6 @@ class CancelledPercents extends FrontendYearFilterableChart{
 }
 
 CancelledPercents.endpoint = 'percentTendersCancelled';
-CancelledPercents.excelEP = 'cancelledFundingPercentageExcelChart';
 CancelledPercents.getMaxField = imm => imm.get('percentCancelled');
 
 export default CancelledPercents;
