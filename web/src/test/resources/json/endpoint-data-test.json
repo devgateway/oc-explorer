@@ -50,7 +50,7 @@
             "submissionMethodDetails": "Submit through the online portal at http://example.com/submissions/ocds-endpoint-001/",
             "tenderPeriod": {
                 "startDate": "2015-03-01T09:00:00Z",
-                "endDate": "2016-04-01T18:00:00Z"
+                "endDate": "2015-04-01T09:00:00Z"
 
             },
             "numberOfTenderers": 10,
@@ -128,8 +128,8 @@
             {
                 "id": "ocds-endpoint-001-awards",
                 "title": "Award of contract to build...",
-                "status": "pending",
-                "date": "2016-05-10T09:30:00Z",
+                "status": "active",
+                "date": "2016-05-10T09:00:00Z",
                 "value": {
                     "amount": 11000000,
                     "currency": "GBP"
@@ -274,7 +274,7 @@
             "submissionMethodDetails": "Submit through the online portal at http://example.com/submissions/ocds-endpoint-002/",
             "tenderPeriod": {
                 "startDate": "2014-03-01T09:00:00Z",
-                "endDate": "2016-04-01T18:00:00Z"
+                "endDate": "2014-03-16T09:00:00Z"
 
             },
             "numberOfTenderers": 5,
@@ -352,8 +352,8 @@
             {
                 "id": "ocds-endpoint-002-awards",
                 "title": "Award of contract to build...",
-                "status": "pending",
-                "date": "2016-05-10T09:30:00Z",
+                "status": "active",
+                "date": "2015-03-16T09:00:00Z",
                 "value": {
                     "amount": 6000000,
                     "currency": "GBP"
@@ -498,8 +498,7 @@
             "submissionMethodDetails": "Submit through the online portal at http://example.com/submissions/ocds-endpoint-003/",
             "tenderPeriod": {
                 "startDate": "2015-06-01T09:00:00Z",
-                "endDate": "2016-12-01T18:00:00Z"
-
+                "endDate": "2015-08-01T09:00:00Z"
             },
             "numberOfTenderers": 4,
             "procuringEntity": {
