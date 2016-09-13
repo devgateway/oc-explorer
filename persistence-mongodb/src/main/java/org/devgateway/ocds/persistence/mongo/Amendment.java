@@ -1,14 +1,17 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 /**
@@ -32,6 +35,7 @@ public class Amendment {
      */
 
     @JsonProperty("date")
+    @Merge(MergeStrategy.overwrite)
     private Date date;
 
     /**
@@ -41,6 +45,7 @@ public class Amendment {
      *
      */
     @JsonProperty("changes")
+    @Merge(MergeStrategy.ocdsVersion)
     private List<Change> changes = new ArrayList<Change>();
 
     /**
@@ -48,6 +53,7 @@ public class Amendment {
      *
      */
     @JsonProperty("rationale")
+    @Merge(MergeStrategy.ocdsVersion)
     private String rationale;
 
     /**
@@ -72,7 +78,7 @@ public class Amendment {
      *     The date
      */
     @JsonProperty("date")
-    public void setDate(Date date) {
+    public void setDate(final Date date) {
         this.date = date;
     }
 
@@ -98,7 +104,7 @@ public class Amendment {
      *     The changes
      */
     @JsonProperty("changes")
-    public void setChanges(List<Change> changes) {
+    public void setChanges(final List<Change> changes) {
         this.changes = changes;
     }
 
@@ -120,7 +126,7 @@ public class Amendment {
      *     The rationale
      */
     @JsonProperty("rationale")
-    public void setRationale(String rationale) {
+    public void setRationale(final String rationale) {
         this.rationale = rationale;
     }
 
@@ -139,7 +145,7 @@ public class Amendment {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }

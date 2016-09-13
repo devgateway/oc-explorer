@@ -1,11 +1,14 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  *  Identifier OCDS entity http://standard.open-contracting.org/latest/en/schema/reference/#identifier
@@ -28,6 +31,7 @@ public class Identifier {
      */
     @ExcelExport
     @JsonProperty("scheme")
+    @Merge(MergeStrategy.ocdsVersion)
     private String scheme;
 
     /**
@@ -36,6 +40,7 @@ public class Identifier {
      */
     @ExcelExport
     @JsonProperty("id")
+    @Merge(MergeStrategy.ocdsVersion)
     private String id;
 
     /**
@@ -44,6 +49,7 @@ public class Identifier {
      */
     @ExcelExport
     @JsonProperty("legalName")
+    @Merge(MergeStrategy.ocdsVersion)
     private String legalName;
 
     /**
@@ -55,6 +61,7 @@ public class Identifier {
      */
     @ExcelExport
     @JsonProperty("uri")
+    @Merge(MergeStrategy.ocdsVersion)
     private String uri;
 
     /**
@@ -83,7 +90,7 @@ public class Identifier {
      *     The scheme
      */
     @JsonProperty("scheme")
-    public void setScheme(String scheme) {
+    public void setScheme(final String scheme) {
         this.scheme = scheme;
     }
 
@@ -105,7 +112,7 @@ public class Identifier {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -127,7 +134,7 @@ public class Identifier {
      *     The legalName
      */
     @JsonProperty("legalName")
-    public void setLegalName(String legalName) {
+    public void setLegalName(final String legalName) {
         this.legalName = legalName;
     }
 
@@ -155,7 +162,7 @@ public class Identifier {
      *     The uri
      */
     @JsonProperty("uri")
-    public void setUri(String uri) {
+    public void setUri(final String uri) {
         this.uri = uri;
     }
 
@@ -175,7 +182,7 @@ public class Identifier {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }

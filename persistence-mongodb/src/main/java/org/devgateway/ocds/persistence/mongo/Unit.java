@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
 
 /**
@@ -25,6 +27,7 @@ public class Unit {
      *
      */
     @JsonProperty("name")
+    @Merge(MergeStrategy.ocdsVersion)
     private String name;
 
     @JsonProperty("value")
@@ -48,7 +51,7 @@ public class Unit {
      *     The name
      */
     @JsonProperty("name")
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -68,7 +71,7 @@ public class Unit {
      *     The value
      */
     @JsonProperty("value")
-    public void setValue(Amount value) {
+    public void setValue(final Amount value) {
         this.value = value;
     }
 
@@ -86,7 +89,7 @@ public class Unit {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }

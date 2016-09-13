@@ -14,6 +14,10 @@ class BidPeriod extends FrontendYearFilterableChart {
     }))
   };
 
+  getRawData(){
+    return super.getData();
+  }  
+
   getData() {
     let data = super.getData();
     if (!data) return [];
@@ -44,7 +48,7 @@ class BidPeriod extends FrontendYearFilterableChart {
     let data = super.getData();
     if(data){
       annotations = data.map((imm, index) => {
-        let sum = (ensureNonNegative(imm.get('tender')) + ensureNonNegative(imm.get('award'))).toFixed(2);
+			  let sum = imm.reduce((sum, val, key) => "year" == key ? sum : sum + ensureNonNegative(val), 0).toFixed(2);
         return {
           y: index,
           x: sum,
@@ -72,7 +76,8 @@ class BidPeriod extends FrontendYearFilterableChart {
 }
 
 BidPeriod.endpoints = ['averageTenderPeriod', 'averageAwardPeriod'];
-BidPeriod.getName = __ => __('Bid period');
+BidPeriod.excelEP = 'bidTimelineExcelChart';
+BidPeriod.getName = __ => __('Bid Timeline');
 BidPeriod.horizontal = true;
 BidPeriod.getFillerDatum = year => Map({
   year,

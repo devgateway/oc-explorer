@@ -1,21 +1,24 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
-import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 
 /**
@@ -40,7 +43,7 @@ import java.util.Set;
         "documents",
         "amendment"
 })
-public class Award {
+public class Award implements Identifiable {
     /**
      * Award ID
      * <p>
@@ -54,6 +57,7 @@ public class Award {
      */
     @ExcelExport
     @JsonProperty("id")
+    @Merge(MergeStrategy.overwrite)
     private String id;
 
     /**
@@ -62,6 +66,7 @@ public class Award {
      */
     @ExcelExport
     @JsonProperty("title")
+    @Merge(MergeStrategy.ocdsVersion)
     private String title;
 
     /**
@@ -70,6 +75,7 @@ public class Award {
      */
     @ExcelExport
     @JsonProperty("description")
+    @Merge(MergeStrategy.ocdsVersion)
     private String description;
 
     /**
@@ -81,6 +87,7 @@ public class Award {
      */
     @ExcelExport
     @JsonProperty("status")
+    @Merge(MergeStrategy.ocdsVersion)
     private Status status;
 
     /**
@@ -91,6 +98,7 @@ public class Award {
      */
     @ExcelExport
     @JsonProperty("date")
+    @Merge(MergeStrategy.ocdsVersion)
     private Date date;
 
     @ExcelExport
@@ -105,6 +113,7 @@ public class Award {
     @ExcelExport
     @JsonProperty("suppliers")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @Merge(MergeStrategy.ocdsVersion)
     private Set<Organization> suppliers = new LinkedHashSet<Organization>();
 
     /**
@@ -118,6 +127,7 @@ public class Award {
     @ExcelExportSepareteSheet
     @JsonProperty("items")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @Merge(MergeStrategy.arrayMergeById)
     private Set<Item> items = new LinkedHashSet<Item>();
 
     /**
@@ -135,6 +145,7 @@ public class Award {
      */
     @JsonProperty("documents")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @Merge(MergeStrategy.arrayMergeById)
     private Set<Document> documents = new LinkedHashSet<Document>();
 
     /**
@@ -178,7 +189,7 @@ public class Award {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -200,7 +211,7 @@ public class Award {
      *     The title
      */
     @JsonProperty("title")
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -213,17 +224,6 @@ public class Award {
     @JsonProperty("description")
     public String getDescription() {
         return description;
-    }
-
-    /**
-     * Award description
-     *
-     * @param description
-     *     The description
-     */
-    @JsonProperty("description")
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     /**
@@ -241,6 +241,17 @@ public class Award {
     }
 
     /**
+     * Award description
+     *
+     * @param description
+     *     The description
+     */
+    @JsonProperty("description")
+    public void setDescription(final String description) {
+        this.description = description;
+    }
+
+    /**
      * Award Status
      * <p>
      * The current status of the award drawn from the
@@ -250,7 +261,7 @@ public class Award {
      *     The status
      */
     @JsonProperty("status")
-    public void setStatus(Status status) {
+    public void setStatus(final Status status) {
         this.status = status;
     }
 
@@ -276,7 +287,7 @@ public class Award {
      *     The date
      */
     @JsonProperty("date")
-    public void setDate(Date date) {
+    public void setDate(final Date date) {
         this.date = date;
     }
 
@@ -296,7 +307,7 @@ public class Award {
      *     The value
      */
     @JsonProperty("value")
-    public void setValue(Amount value) {
+    public void setValue(final Amount value) {
         this.value = value;
     }
 
@@ -320,7 +331,7 @@ public class Award {
      *     The suppliers
      */
     @JsonProperty("suppliers")
-    public void setSuppliers(Set<Organization> suppliers) {
+    public void setSuppliers(final Set<Organization> suppliers) {
         this.suppliers = suppliers;
     }
 
@@ -348,7 +359,7 @@ public class Award {
      *     The items
      */
     @JsonProperty("items")
-    public void setItems(Set<Item> items) {
+    public void setItems(final Set<Item> items) {
         this.items = items;
     }
 
@@ -374,7 +385,7 @@ public class Award {
      *     The contractPeriod
      */
     @JsonProperty("contractPeriod")
-    public void setContractPeriod(Period contractPeriod) {
+    public void setContractPeriod(final Period contractPeriod) {
         this.contractPeriod = contractPeriod;
     }
 
@@ -396,7 +407,7 @@ public class Award {
      *     The documents
      */
     @JsonProperty("documents")
-    public void setDocuments(Set<Document> documents) {
+    public void setDocuments(final Set<Document> documents) {
         this.documents = documents;
     }
 
@@ -422,7 +433,7 @@ public class Award {
      *     The amendment
      */
     @JsonProperty("amendment")
-    public void setAmendment(Amendment amendment) {
+    public void setAmendment(final Amendment amendment) {
         this.amendment = amendment;
     }
 
@@ -449,7 +460,7 @@ public class Award {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }
@@ -491,7 +502,7 @@ public class Award {
             }
         }
 
-        Status(String value) {
+        Status(final String value) {
             this.value = value;
         }
 
@@ -502,7 +513,7 @@ public class Award {
         }
 
         @JsonCreator
-        public static Status fromValue(String value) {
+        public static Status fromValue(final String value) {
             Status constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);

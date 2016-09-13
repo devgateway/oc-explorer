@@ -10,6 +10,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -40,7 +42,7 @@ import java.util.Set;
         "amendment",
         "implementation"
 })
-public class Contract {
+public class Contract implements Identifiable {
 
     /**
      * Contract ID
@@ -54,6 +56,7 @@ public class Contract {
      */
     @ExcelExport
     @JsonProperty("id")
+    @Merge(MergeStrategy.overwrite)
     private String id;
 
     /**
@@ -65,6 +68,7 @@ public class Contract {
      */
     @ExcelExport
     @JsonProperty("awardID")
+    @Merge(MergeStrategy.ocdsVersion)
     private String awardID;
 
     /**
@@ -73,6 +77,7 @@ public class Contract {
      */
     @ExcelExport
     @JsonProperty("title")
+    @Merge(MergeStrategy.ocdsVersion)
     private String title;
 
     /**
@@ -81,6 +86,7 @@ public class Contract {
      */
     @ExcelExport
     @JsonProperty("description")
+    @Merge(MergeStrategy.ocdsVersion)
     private String description;
 
     /**
@@ -93,6 +99,7 @@ public class Contract {
      */
     @ExcelExport
     @JsonProperty("status")
+    @Merge(MergeStrategy.ocdsVersion)
     private Status status;
 
     /**
@@ -120,6 +127,7 @@ public class Contract {
     @ExcelExportSepareteSheet
     @JsonProperty("items")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @Merge(MergeStrategy.arrayMergeById)
     private Set<Item> items = new LinkedHashSet<Item>();
 
     /**
@@ -128,6 +136,7 @@ public class Contract {
      */
     @ExcelExport
     @JsonProperty("dateSigned")
+    @Merge(MergeStrategy.ocdsVersion)
     private Date dateSigned;
 
     /**
@@ -136,6 +145,7 @@ public class Contract {
      */
     @JsonProperty("documents")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @Merge(MergeStrategy.arrayMergeById)
     private Set<Document> documents = new LinkedHashSet<Document>();
 
     /**
@@ -187,7 +197,7 @@ public class Contract {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -215,7 +225,7 @@ public class Contract {
      *     The awardID
      */
     @JsonProperty("awardID")
-    public void setAwardID(String awardID) {
+    public void setAwardID(final String awardID) {
         this.awardID = awardID;
     }
 
@@ -237,7 +247,7 @@ public class Contract {
      *     The title
      */
     @JsonProperty("title")
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -259,7 +269,7 @@ public class Contract {
      *     The description
      */
     @JsonProperty("description")
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -289,7 +299,7 @@ public class Contract {
      *     The status
      */
     @JsonProperty("status")
-    public void setStatus(Status status) {
+    public void setStatus(final Status status) {
         this.status = status;
     }
 
@@ -315,7 +325,7 @@ public class Contract {
      *     The period
      */
     @JsonProperty("period")
-    public void setPeriod(Period period) {
+    public void setPeriod(final Period period) {
         this.period = period;
     }
 
@@ -335,7 +345,7 @@ public class Contract {
      *     The value
      */
     @JsonProperty("value")
-    public void setValue(Amount value) {
+    public void setValue(final Amount value) {
         this.value = value;
     }
 
@@ -363,7 +373,7 @@ public class Contract {
      *     The items
      */
     @JsonProperty("items")
-    public void setItems(Set<Item> items) {
+    public void setItems(final Set<Item> items) {
         this.items = items;
     }
 
@@ -385,7 +395,7 @@ public class Contract {
      *     The dateSigned
      */
     @JsonProperty("dateSigned")
-    public void setDateSigned(Date dateSigned) {
+    public void setDateSigned(final Date dateSigned) {
         this.dateSigned = dateSigned;
     }
 
@@ -407,7 +417,7 @@ public class Contract {
      *     The documents
      */
     @JsonProperty("documents")
-    public void setDocuments(Set<Document> documents) {
+    public void setDocuments(final Set<Document> documents) {
         this.documents = documents;
     }
 
@@ -433,7 +443,7 @@ public class Contract {
      *     The amendment
      */
     @JsonProperty("amendment")
-    public void setAmendment(Amendment amendment) {
+    public void setAmendment(final Amendment amendment) {
         this.amendment = amendment;
     }
 
@@ -459,7 +469,7 @@ public class Contract {
      *     The implementation
      */
     @JsonProperty("implementation")
-    public void setImplementation(Implementation implementation) {
+    public void setImplementation(final Implementation implementation) {
         this.implementation = implementation;
     }
 
@@ -487,7 +497,7 @@ public class Contract {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }
@@ -530,7 +540,7 @@ public class Contract {
             }
         }
 
-        Status(String value) {
+        Status(final String value) {
             this.value = value;
         }
 
@@ -541,7 +551,7 @@ public class Contract {
         }
 
         @JsonCreator
-        public static Status fromValue(String value) {
+        public static Status fromValue(final String value) {
             Status constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);

@@ -1,16 +1,5 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
-import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -18,6 +7,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 
 /**
@@ -55,7 +58,7 @@ import java.util.TreeSet;
         "milestones",
         "amendment"
 })
-public class Tender {
+public class Tender implements Identifiable {
 
     /**
      * Tender ID
@@ -67,6 +70,7 @@ public class Tender {
      */
     @ExcelExport
     @JsonProperty("id")
+    @Merge(MergeStrategy.ocdsVersion)
     private String id;
 
     /**
@@ -75,6 +79,7 @@ public class Tender {
      */
     @ExcelExport
     @JsonProperty("title")
+    @Merge(MergeStrategy.ocdsVersion)
     private String title;
 
     /**
@@ -83,6 +88,7 @@ public class Tender {
      */
     @ExcelExport
     @JsonProperty("description")
+    @Merge(MergeStrategy.ocdsVersion)
     private String description;
 
     /**
@@ -94,6 +100,7 @@ public class Tender {
      */
     @ExcelExport
     @JsonProperty("status")
+    @Merge(MergeStrategy.ocdsVersion)
     private Status status;
 
     /**
@@ -107,6 +114,7 @@ public class Tender {
     @ExcelExportSepareteSheet
     @JsonProperty("items")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @Merge(MergeStrategy.arrayMergeById)
     private Set<Item> items = new LinkedHashSet<Item>();
 
     @ExcelExport
@@ -126,6 +134,7 @@ public class Tender {
      */
     @ExcelExport
     @JsonProperty("procurementMethod")
+    @Merge(MergeStrategy.ocdsVersion)
     private ProcurementMethod procurementMethod;
 
     /**
@@ -134,6 +143,7 @@ public class Tender {
      */
     @ExcelExport
     @JsonProperty("procurementMethodRationale")
+    @Merge(MergeStrategy.ocdsVersion)
     private String procurementMethodRationale;
 
     /**
@@ -143,6 +153,7 @@ public class Tender {
      */
     @ExcelExport
     @JsonProperty("awardCriteria")
+    @Merge(MergeStrategy.ocdsVersion)
     private String awardCriteria;
 
     /**
@@ -151,6 +162,7 @@ public class Tender {
      */
     @ExcelExport
     @JsonProperty("awardCriteriaDetails")
+    @Merge(MergeStrategy.ocdsVersion)
     private String awardCriteriaDetails;
 
     /**
@@ -162,6 +174,7 @@ public class Tender {
      */
     @ExcelExport
     @JsonProperty("submissionMethod")
+    @Merge(MergeStrategy.ocdsVersion)
     private Set<String> submissionMethod = new TreeSet<String>();
 
     /**
@@ -172,6 +185,7 @@ public class Tender {
      */
     @ExcelExport
     @JsonProperty("submissionMethodDetails")
+    @Merge(MergeStrategy.ocdsVersion)
     private String submissionMethodDetails;
 
     /**
@@ -198,6 +212,7 @@ public class Tender {
      *
      */
     @JsonProperty("hasEnquiries")
+    @Merge(MergeStrategy.ocdsVersion)
     private Boolean hasEnquiries;
 
     /**
@@ -205,6 +220,7 @@ public class Tender {
      *
      */
     @JsonProperty("eligibilityCriteria")
+    @Merge(MergeStrategy.ocdsVersion)
     private String eligibilityCriteria;
 
     /**
@@ -218,6 +234,7 @@ public class Tender {
 
     @ExcelExport
     @JsonProperty("numberOfTenderers")
+    @Merge(MergeStrategy.ocdsVersion)
     private Integer numberOfTenderers;
 
     /**
@@ -227,6 +244,7 @@ public class Tender {
     @ExcelExport
     @JsonProperty("tenderers")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @Merge(MergeStrategy.ocdsVersion)
     private Set<Organization> tenderers = new LinkedHashSet<Organization>();
 
     /**
@@ -247,6 +265,7 @@ public class Tender {
      */
     @ExcelExport
     @JsonProperty("documents")
+    @Merge(MergeStrategy.arrayMergeById)
     private List<Document> documents = new ArrayList<Document>();
 
     /**
@@ -254,6 +273,7 @@ public class Tender {
      *
      */
     @JsonProperty("milestones")
+    @Merge(MergeStrategy.arrayMergeById)
     private List<Milestone> milestones = new ArrayList<Milestone>();
 
     /**
@@ -291,7 +311,7 @@ public class Tender {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -313,7 +333,7 @@ public class Tender {
      *     The title
      */
     @JsonProperty("title")
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -335,7 +355,7 @@ public class Tender {
      *     The description
      */
     @JsonProperty("description")
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -363,7 +383,7 @@ public class Tender {
      *     The status
      */
     @JsonProperty("status")
-    public void setStatus(Status status) {
+    public void setStatus(final Status status) {
         this.status = status;
     }
 
@@ -391,7 +411,7 @@ public class Tender {
      *     The items
      */
     @JsonProperty("items")
-    public void setItems(Set<Item> items) {
+    public void setItems(final Set<Item> items) {
         this.items = items;
     }
 
@@ -411,7 +431,7 @@ public class Tender {
      *     The minValue
      */
     @JsonProperty("minValue")
-    public void setMinValue(Amount minValue) {
+    public void setMinValue(final Amount minValue) {
         this.minValue = minValue;
     }
 
@@ -431,7 +451,7 @@ public class Tender {
      *     The value
      */
     @JsonProperty("value")
-    public void setValue(Amount value) {
+    public void setValue(final Amount value) {
         this.value = value;
     }
 
@@ -457,7 +477,7 @@ public class Tender {
      *     The procurementMethod
      */
     @JsonProperty("procurementMethod")
-    public void setProcurementMethod(ProcurementMethod procurementMethod) {
+    public void setProcurementMethod(final ProcurementMethod procurementMethod) {
         this.procurementMethod = procurementMethod;
     }
 
@@ -479,7 +499,7 @@ public class Tender {
      *     The procurementMethodRationale
      */
     @JsonProperty("procurementMethodRationale")
-    public void setProcurementMethodRationale(String procurementMethodRationale) {
+    public void setProcurementMethodRationale(final String procurementMethodRationale) {
         this.procurementMethodRationale = procurementMethodRationale;
     }
 
@@ -503,7 +523,7 @@ public class Tender {
      *     The awardCriteria
      */
     @JsonProperty("awardCriteria")
-    public void setAwardCriteria(String awardCriteria) {
+    public void setAwardCriteria(final String awardCriteria) {
         this.awardCriteria = awardCriteria;
     }
 
@@ -525,7 +545,7 @@ public class Tender {
      *     The awardCriteriaDetails
      */
     @JsonProperty("awardCriteriaDetails")
-    public void setAwardCriteriaDetails(String awardCriteriaDetails) {
+    public void setAwardCriteriaDetails(final String awardCriteriaDetails) {
         this.awardCriteriaDetails = awardCriteriaDetails;
     }
 
@@ -553,7 +573,7 @@ public class Tender {
      *     The submissionMethod
      */
     @JsonProperty("submissionMethod")
-    public void setSubmissionMethod(Set<String> submissionMethod) {
+    public void setSubmissionMethod(final Set<String> submissionMethod) {
         this.submissionMethod = submissionMethod;
     }
 
@@ -579,7 +599,7 @@ public class Tender {
      *     The submissionMethodDetails
      */
     @JsonProperty("submissionMethodDetails")
-    public void setSubmissionMethodDetails(String submissionMethodDetails) {
+    public void setSubmissionMethodDetails(final String submissionMethodDetails) {
         this.submissionMethodDetails = submissionMethodDetails;
     }
 
@@ -605,7 +625,7 @@ public class Tender {
      *     The tenderPeriod
      */
     @JsonProperty("tenderPeriod")
-    public void setTenderPeriod(Period tenderPeriod) {
+    public void setTenderPeriod(final Period tenderPeriod) {
         this.tenderPeriod = tenderPeriod;
     }
 
@@ -631,7 +651,7 @@ public class Tender {
      *     The enquiryPeriod
      */
     @JsonProperty("enquiryPeriod")
-    public void setEnquiryPeriod(Period enquiryPeriod) {
+    public void setEnquiryPeriod(final Period enquiryPeriod) {
         this.enquiryPeriod = enquiryPeriod;
     }
 
@@ -653,7 +673,7 @@ public class Tender {
      *     The hasEnquiries
      */
     @JsonProperty("hasEnquiries")
-    public void setHasEnquiries(Boolean hasEnquiries) {
+    public void setHasEnquiries(final Boolean hasEnquiries) {
         this.hasEnquiries = hasEnquiries;
     }
 
@@ -675,7 +695,7 @@ public class Tender {
      *     The eligibilityCriteria
      */
     @JsonProperty("eligibilityCriteria")
-    public void setEligibilityCriteria(String eligibilityCriteria) {
+    public void setEligibilityCriteria(final String eligibilityCriteria) {
         this.eligibilityCriteria = eligibilityCriteria;
     }
 
@@ -701,7 +721,7 @@ public class Tender {
      *     The awardPeriod
      */
     @JsonProperty("awardPeriod")
-    public void setAwardPeriod(Period awardPeriod) {
+    public void setAwardPeriod(final Period awardPeriod) {
         this.awardPeriod = awardPeriod;
     }
 
@@ -721,7 +741,7 @@ public class Tender {
      *     The numberOfTenderers
      */
     @JsonProperty("numberOfTenderers")
-    public void setNumberOfTenderers(Integer numberOfTenderers) {
+    public void setNumberOfTenderers(final Integer numberOfTenderers) {
         this.numberOfTenderers = numberOfTenderers;
     }
 
@@ -743,7 +763,7 @@ public class Tender {
      *     The tenderers
      */
     @JsonProperty("tenderers")
-    public void setTenderers(Set<Organization> tenderers) {
+    public void setTenderers(final Set<Organization> tenderers) {
         this.tenderers = tenderers;
     }
 
@@ -769,7 +789,7 @@ public class Tender {
      *     The procuringEntity
      */
     @JsonProperty("procuringEntity")
-    public void setProcuringEntity(Organization procuringEntity) {
+    public void setProcuringEntity(final Organization procuringEntity) {
         this.procuringEntity = procuringEntity;
     }
 
@@ -795,7 +815,7 @@ public class Tender {
      *     The documents
      */
     @JsonProperty("documents")
-    public void setDocuments(List<Document> documents) {
+    public void setDocuments(final List<Document> documents) {
         this.documents = documents;
     }
 
@@ -817,7 +837,7 @@ public class Tender {
      *     The milestones
      */
     @JsonProperty("milestones")
-    public void setMilestones(List<Milestone> milestones) {
+    public void setMilestones(final List<Milestone> milestones) {
         this.milestones = milestones;
     }
 
@@ -843,7 +863,7 @@ public class Tender {
      *     The amendment
      */
     @JsonProperty("amendment")
-    public void setAmendment(Amendment amendment) {
+    public void setAmendment(final Amendment amendment) {
         this.amendment = amendment;
     }
 
@@ -882,7 +902,7 @@ public class Tender {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }
@@ -935,7 +955,7 @@ public class Tender {
             }
         }
 
-        ProcurementMethod(String value) {
+        ProcurementMethod(final String value) {
             this.value = value;
         }
 
@@ -946,7 +966,7 @@ public class Tender {
         }
 
         @JsonCreator
-        public static ProcurementMethod fromValue(String value) {
+        public static ProcurementMethod fromValue(final String value) {
             ProcurementMethod constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
@@ -978,7 +998,7 @@ public class Tender {
             }
         }
 
-        SubmissionMethod(String value) {
+        SubmissionMethod(final String value) {
             this.value = value;
         }
 
@@ -989,7 +1009,7 @@ public class Tender {
         }
 
         @JsonCreator
-        public static SubmissionMethod fromValue(String value) {
+        public static SubmissionMethod fromValue(final String value) {
             SubmissionMethod constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
@@ -1021,7 +1041,7 @@ public class Tender {
             }
         }
 
-        Status(String value) {
+        Status(final String value) {
             this.value = value;
         }
 
@@ -1032,7 +1052,7 @@ public class Tender {
         }
 
         @JsonCreator
-        public static Status fromValue(String value) {
+        public static Status fromValue(final String value) {
             Status constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);

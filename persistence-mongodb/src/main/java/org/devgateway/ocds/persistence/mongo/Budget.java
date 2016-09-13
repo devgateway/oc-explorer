@@ -1,11 +1,14 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * Budget Information
@@ -40,6 +43,7 @@ public class Budget {
      *
      */
     @JsonProperty("source")
+    @Merge(MergeStrategy.ocdsVersion)
     private String source;
 
     /**
@@ -48,6 +52,7 @@ public class Budget {
      *
      */
     @JsonProperty("id")
+    @Merge(MergeStrategy.ocdsVersion)
     private String id;
 
     /**
@@ -59,6 +64,7 @@ public class Budget {
      */
     @ExcelExport
     @JsonProperty("description")
+    @Merge(MergeStrategy.ocdsVersion)
     private String description;
 
     @ExcelExport
@@ -76,6 +82,7 @@ public class Budget {
      */
     @ExcelExport
     @JsonProperty("project")
+    @Merge(MergeStrategy.ocdsVersion)
     private String project;
 
     /**
@@ -87,6 +94,7 @@ public class Budget {
      *
      */
     @JsonProperty("projectID")
+    @Merge(MergeStrategy.ocdsVersion)
     private String projectID;
 
     /**
@@ -97,6 +105,7 @@ public class Budget {
      *
      */
     @JsonProperty("uri")
+    @Merge(MergeStrategy.ocdsVersion)
     private String uri;
 
     /**
@@ -123,7 +132,7 @@ public class Budget {
      *     The source
      */
     @JsonProperty("source")
-    public void setSource(String source) {
+    public void setSource(final String source) {
         this.source = source;
     }
 
@@ -147,7 +156,7 @@ public class Budget {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -175,7 +184,7 @@ public class Budget {
      *     The description
      */
     @JsonProperty("description")
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -195,7 +204,7 @@ public class Budget {
      *     The amount
      */
     @JsonProperty("amount")
-    public void setAmount(Amount amount) {
+    public void setAmount(final Amount amount) {
         this.amount = amount;
     }
 
@@ -227,7 +236,7 @@ public class Budget {
      *     The project
      */
     @JsonProperty("project")
-    public void setProject(String project) {
+    public void setProject(final String project) {
         this.project = project;
     }
 
@@ -257,7 +266,7 @@ public class Budget {
      *     The projectID
      */
     @JsonProperty("projectID")
-    public void setProjectID(String projectID) {
+    public void setProjectID(final String projectID) {
         this.projectID = projectID;
     }
 
@@ -285,7 +294,7 @@ public class Budget {
      *     The uri
      */
     @JsonProperty("uri")
-    public void setUri(String uri) {
+    public void setUri(final String uri) {
         this.uri = uri;
     }
 
@@ -308,7 +317,7 @@ public class Budget {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }

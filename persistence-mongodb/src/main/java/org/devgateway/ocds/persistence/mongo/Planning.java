@@ -1,14 +1,17 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 /**
@@ -49,6 +52,7 @@ public class Planning {
      */
     @ExcelExport
     @JsonProperty("rationale")
+    @Merge(MergeStrategy.ocdsVersion)
     private String rationale;
 
     /**
@@ -56,6 +60,7 @@ public class Planning {
      *
      */
     @JsonProperty("documents")
+    @Merge(MergeStrategy.arrayMergeById)
     private List<Document> documents = new ArrayList<>();
 
     /**
@@ -90,7 +95,7 @@ public class Planning {
      *     The budget
      */
     @JsonProperty("budget")
-    public void setBudget(Budget budget) {
+    public void setBudget(final Budget budget) {
         this.budget = budget;
     }
 
@@ -112,7 +117,7 @@ public class Planning {
      *     The rationale
      */
     @JsonProperty("rationale")
-    public void setRationale(String rationale) {
+    public void setRationale(final String rationale) {
         this.rationale = rationale;
     }
 
@@ -134,7 +139,7 @@ public class Planning {
      *     The documents
      */
     @JsonProperty("documents")
-    public void setDocuments(List<Document> documents) {
+    public void setDocuments(final List<Document> documents) {
         this.documents = documents;
     }
 
@@ -153,7 +158,7 @@ public class Planning {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }

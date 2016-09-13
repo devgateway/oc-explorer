@@ -1,11 +1,14 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 /**
@@ -29,6 +32,7 @@ public class ContactPoint {
      */
     @ExcelExport
     @JsonProperty("name")
+    @Merge(MergeStrategy.ocdsVersion)
     private String name;
 
     /**
@@ -37,6 +41,7 @@ public class ContactPoint {
      */
     @ExcelExport
     @JsonProperty("email")
+    @Merge(MergeStrategy.ocdsVersion)
     private String email;
 
     /**
@@ -45,6 +50,7 @@ public class ContactPoint {
      */
     @ExcelExport
     @JsonProperty("telephone")
+    @Merge(MergeStrategy.ocdsVersion)
     private String telephone;
 
     /**
@@ -53,6 +59,7 @@ public class ContactPoint {
      */
     @ExcelExport
     @JsonProperty("faxNumber")
+    @Merge(MergeStrategy.ocdsVersion)
     private String faxNumber;
 
     /**
@@ -61,6 +68,7 @@ public class ContactPoint {
      */
     @ExcelExport
     @JsonProperty("url")
+    @Merge(MergeStrategy.ocdsVersion)
     private String url;
 
     /**
@@ -83,7 +91,7 @@ public class ContactPoint {
      *     The name
      */
     @JsonProperty("name")
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -105,7 +113,7 @@ public class ContactPoint {
      *     The email
      */
     @JsonProperty("email")
-    public void setEmail(String email) {
+    public void setEmail(final String email) {
         this.email = email;
     }
 
@@ -127,7 +135,7 @@ public class ContactPoint {
      *     The telephone
      */
     @JsonProperty("telephone")
-    public void setTelephone(String telephone) {
+    public void setTelephone(final String telephone) {
         this.telephone = telephone;
     }
 
@@ -149,7 +157,7 @@ public class ContactPoint {
      *     The faxNumber
      */
     @JsonProperty("faxNumber")
-    public void setFaxNumber(String faxNumber) {
+    public void setFaxNumber(final String faxNumber) {
         this.faxNumber = faxNumber;
     }
 
@@ -171,7 +179,7 @@ public class ContactPoint {
      *     The url
      */
     @JsonProperty("url")
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         this.url = url;
     }
 
@@ -192,7 +200,7 @@ public class ContactPoint {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }

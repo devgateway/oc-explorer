@@ -6,6 +6,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
 import java.util.Date;
 
@@ -28,6 +30,7 @@ public class Period {
      */
     @ExcelExport
     @JsonProperty("startDate")
+    @Merge(MergeStrategy.ocdsVersion)
     private Date startDate;
 
     /**
@@ -36,6 +39,7 @@ public class Period {
      */
     @ExcelExport
     @JsonProperty("endDate")
+    @Merge(MergeStrategy.ocdsVersion)
     private Date endDate;
 
     /**
@@ -56,7 +60,7 @@ public class Period {
      *     The startDate
      */
     @JsonProperty("startDate")
-    public void setStartDate(Date startDate) {
+    public void setStartDate(final Date startDate) {
         this.startDate = startDate;
     }
 
@@ -78,7 +82,7 @@ public class Period {
      *     The endDate
      */
     @JsonProperty("endDate")
-    public void setEndDate(Date endDate) {
+    public void setEndDate(final Date endDate) {
         this.endDate = endDate;
     }
 
@@ -96,7 +100,7 @@ public class Period {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }

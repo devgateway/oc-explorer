@@ -1,15 +1,18 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
  * A good, service, or work to be contracted.
@@ -26,14 +29,14 @@ import java.util.Set;
         "unit",
         "deliveryLocation"
 })
-public class Item {
+public class Item implements Identifiable {
 
 	/**
 	 * This is part of the OCDS location extension. We have decided to plug this
 	 * into the OCDS standard since it seems this will be rolled into OCDS 1.1
 	 * see https://jira.dgfoundation.org/browse/OCE-35
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings("rawtypes")	
 	private Location deliveryLocation;
 	
     /**
@@ -43,6 +46,7 @@ public class Item {
      */
     @ExcelExport
     @JsonProperty("id")
+    @Merge(MergeStrategy.overwrite)
     private String id;
 
     /**
@@ -51,6 +55,7 @@ public class Item {
      */
     @ExcelExport
     @JsonProperty("description")
+    @Merge(MergeStrategy.ocdsVersion)
     private String description;
 
     @ExcelExport
@@ -67,6 +72,7 @@ public class Item {
      */
     @JsonProperty("additionalClassifications")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @Merge(MergeStrategy.ocdsVersion)
     private Set<Classification> additionalClassifications = new LinkedHashSet<Classification>();
 
     /**
@@ -75,6 +81,7 @@ public class Item {
      */
     @ExcelExport
     @JsonProperty("quantity")
+    @Merge(MergeStrategy.ocdsVersion)
     private Integer quantity;
 
     /**
@@ -105,7 +112,7 @@ public class Item {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -127,7 +134,7 @@ public class Item {
      *     The description
      */
     @JsonProperty("description")
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -147,7 +154,7 @@ public class Item {
      *     The classification
      */
     @JsonProperty("classification")
-    public void setClassification(Classification classification) {
+    public void setClassification(final Classification classification) {
         this.classification = classification;
     }
 
@@ -177,7 +184,7 @@ public class Item {
      *     The additionalClassifications
      */
     @JsonProperty("additionalClassifications")
-    public void setAdditionalClassifications(Set<Classification> additionalClassifications) {
+    public void setAdditionalClassifications(final Set<Classification> additionalClassifications) {
         this.additionalClassifications = additionalClassifications;
     }
 
@@ -199,7 +206,7 @@ public class Item {
      *     The quantity
      */
     @JsonProperty("quantity")
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(final Integer quantity) {
         this.quantity = quantity;
     }
 
@@ -223,7 +230,7 @@ public class Item {
      *     The unit
      */
     @JsonProperty("unit")
-    public void setUnit(Unit unit) {
+    public void setUnit(final Unit unit) {
         this.unit = unit;
     }
 
@@ -246,7 +253,7 @@ public class Item {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }
@@ -269,7 +276,7 @@ public class Item {
 		return deliveryLocation;
 	}
 
-	public void setDeliveryLocation(Location<?> deliveryLocation) {
+	public void setDeliveryLocation(final Location<?> deliveryLocation) {
 		this.deliveryLocation = deliveryLocation;
 	}
 

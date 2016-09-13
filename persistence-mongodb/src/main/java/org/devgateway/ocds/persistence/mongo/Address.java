@@ -1,11 +1,14 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 /**
@@ -30,6 +33,7 @@ public class Address {
      */
     @ExcelExport
     @JsonProperty("streetAddress")
+    @Merge(MergeStrategy.ocdsVersion)
     private String streetAddress;
 
     /**
@@ -38,6 +42,7 @@ public class Address {
      */
     @ExcelExport
     @JsonProperty("locality")
+    @Merge(MergeStrategy.ocdsVersion)
     private String locality;
 
     /**
@@ -46,6 +51,7 @@ public class Address {
      */
     @ExcelExport
     @JsonProperty("region")
+    @Merge(MergeStrategy.ocdsVersion)
     private String region;
 
     /**
@@ -54,6 +60,7 @@ public class Address {
      */
     @ExcelExport
     @JsonProperty("postalCode")
+    @Merge(MergeStrategy.ocdsVersion)
     private String postalCode;
 
     /**
@@ -62,6 +69,7 @@ public class Address {
      */
     @ExcelExport
     @JsonProperty("countryName")
+    @Merge(MergeStrategy.ocdsVersion)
     private String countryName;
 
     /**
@@ -82,7 +90,7 @@ public class Address {
      *     The streetAddress
      */
     @JsonProperty("streetAddress")
-    public void setStreetAddress(String streetAddress) {
+    public void setStreetAddress(final String streetAddress) {
         this.streetAddress = streetAddress;
     }
 
@@ -104,7 +112,7 @@ public class Address {
      *     The locality
      */
     @JsonProperty("locality")
-    public void setLocality(String locality) {
+    public void setLocality(final String locality) {
         this.locality = locality;
     }
 
@@ -126,7 +134,7 @@ public class Address {
      *     The region
      */
     @JsonProperty("region")
-    public void setRegion(String region) {
+    public void setRegion(final String region) {
         this.region = region;
     }
 
@@ -148,7 +156,7 @@ public class Address {
      *     The postalCode
      */
     @JsonProperty("postalCode")
-    public void setPostalCode(String postalCode) {
+    public void setPostalCode(final String postalCode) {
         this.postalCode = postalCode;
     }
 
@@ -170,7 +178,7 @@ public class Address {
      *     The countryName
      */
     @JsonProperty("countryName")
-    public void setCountryName(String countryName) {
+    public void setCountryName(final String countryName) {
         this.countryName = countryName;
     }
 
@@ -191,7 +199,7 @@ public class Address {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }

@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -28,7 +30,7 @@ import java.util.Set;
         "status",
         "documents"
 })
-public class Milestone {
+public class Milestone implements Identifiable {
 
     /**
      * A local identifier for this milestone, unique within this block. This field is used to keep track of
@@ -37,6 +39,7 @@ public class Milestone {
      *
      */
     @JsonProperty("id")
+    @Merge(MergeStrategy.overwrite)
     private String id;
 
     /**
@@ -44,6 +47,7 @@ public class Milestone {
      *
      */
     @JsonProperty("title")
+    @Merge(MergeStrategy.ocdsVersion)
     private String title;
 
     /**
@@ -51,6 +55,7 @@ public class Milestone {
      *
      */
     @JsonProperty("description")
+    @Merge(MergeStrategy.ocdsVersion)
     private String description;
 
     /**
@@ -58,6 +63,7 @@ public class Milestone {
      *
      */
     @JsonProperty("dueDate")
+    @Merge(MergeStrategy.ocdsVersion)
     private Date dueDate;
 
     /**
@@ -65,6 +71,7 @@ public class Milestone {
      *
      */
     @JsonProperty("dateModified")
+    @Merge(MergeStrategy.ocdsVersion)
     private Date dateModified;
 
     /**
@@ -74,6 +81,7 @@ public class Milestone {
      *
      */
     @JsonProperty("status")
+    @Merge(MergeStrategy.ocdsVersion)
     private Milestone.Status status;
 
     /**
@@ -82,6 +90,7 @@ public class Milestone {
      */
     @JsonProperty("documents")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @Merge(MergeStrategy.arrayMergeById)
     private Set<Document> documents = new LinkedHashSet<Document>();
 
     /**
@@ -106,7 +115,7 @@ public class Milestone {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -128,7 +137,7 @@ public class Milestone {
      *     The title
      */
     @JsonProperty("title")
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -150,7 +159,7 @@ public class Milestone {
      *     The description
      */
     @JsonProperty("description")
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -172,7 +181,7 @@ public class Milestone {
      *     The dueDate
      */
     @JsonProperty("dueDate")
-    public void setDueDate(Date dueDate) {
+    public void setDueDate(final Date dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -194,7 +203,7 @@ public class Milestone {
      *     The dateModified
      */
     @JsonProperty("dateModified")
-    public void setDateModified(Date dateModified) {
+    public void setDateModified(final Date dateModified) {
         this.dateModified = dateModified;
     }
 
@@ -220,7 +229,7 @@ public class Milestone {
      *     The status
      */
     @JsonProperty("status")
-    public void setStatus(Milestone.Status status) {
+    public void setStatus(final Milestone.Status status) {
         this.status = status;
     }
 
@@ -242,7 +251,7 @@ public class Milestone {
      *     The documents
      */
     @JsonProperty("documents")
-    public void setDocuments(Set<Document> documents) {
+    public void setDocuments(final Set<Document> documents) {
         this.documents = documents;
     }
 
@@ -265,7 +274,7 @@ public class Milestone {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }
@@ -301,7 +310,7 @@ public class Milestone {
             }
         }
 
-        Status(String value) {
+        Status(final String value) {
             this.value = value;
         }
 
@@ -312,7 +321,7 @@ public class Milestone {
         }
 
         @JsonCreator
-        public static Milestone.Status fromValue(String value) {
+        public static Milestone.Status fromValue(final String value) {
             Milestone.Status constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
