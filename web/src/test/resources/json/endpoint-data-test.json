@@ -576,7 +576,7 @@
                 "id": "ocds-endpoint-003-awards",
                 "title": "Award of contract to build...",
                 "status": "pending",
-                "date": "2016-05-10T09:30:00Z",
+                "date": "2016-02-10T09:30:00Z",
                 "value": {
                     "amount": 500000,
                     "currency": "GBP"
