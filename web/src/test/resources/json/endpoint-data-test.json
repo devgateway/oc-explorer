@@ -42,7 +42,7 @@
                 }
             ],
             "value": {
-                "amount": 1100000,
+                "amount": 9000.00,
                 "currency": "USD"
             },
             "procurementMethod": "open",
@@ -131,7 +131,7 @@
                 "status": "active",
                 "date": "2016-05-10T09:00:00Z",
                 "value": {
-                    "amount": 11000000,
+                    "amount": 40000,
                     "currency": "GBP"
                 },
                 "suppliers": [
@@ -188,7 +188,7 @@
                     "endDate": "2016-08-01T23:59:00Z"
                 },
                 "value": {
-                    "amount": 11000000,
+                    "amount": 70000,
                     "currency": "GBP"
                 },
                 "items": [
@@ -578,7 +578,7 @@
                 "status": "pending",
                 "date": "2016-05-10T09:30:00Z",
                 "value": {
-                    "amount": 11000000,
+                    "amount": 500000,
                     "currency": "GBP"
                 },
                 "suppliers": [
@@ -635,7 +635,7 @@
                     "endDate": "2016-08-01T23:59:00Z"
                 },
                 "value": {
-                    "amount": 11000000,
+                    "amount": 30000,
                     "currency": "GBP"
                 },
                 "items": [

@@ -14,6 +14,8 @@ import static org.junit.Assert.*;
 /**
  * @author idobre
  * @since 9/13/16
+ *
+ * @see {@link AbstractEndPointControllerTest}
  */
 public class AverageTenderAndAwardPeriodsControllerTest extends AbstractEndPointControllerTest {
     @Autowired
