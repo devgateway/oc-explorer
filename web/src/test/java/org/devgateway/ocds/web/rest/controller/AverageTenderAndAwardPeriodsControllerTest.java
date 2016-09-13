@@ -9,8 +9,6 @@ import org.springframework.data.mongodb.core.aggregation.Fields;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 /**
  * @author idobre
  * @since 9/13/16

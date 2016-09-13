@@ -12,6 +12,8 @@ import java.util.List;
 /**
  * @author idobre
  * @since 9/13/16
+ *
+ * @see {@link AbstractEndPointControllerTest}
  */
 public class CountPlansTendersAwardsControllerTest extends AbstractEndPointControllerTest {
     @Autowired
