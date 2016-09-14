@@ -503,13 +503,13 @@
                 "currency": "USD"
             },
             "procurementMethod": "open",
-            "submissionMethod": [ "electronicSubmission" ],
-            "submissionMethodDetails": "Submit through the online portal at http://example.com/submissions/ocds-endpoint-003/",
+            "submissionMethod": [ "inPerson" ],
+            "submissionMethodDetails": "Submit in person",
             "tenderPeriod": {
                 "startDate": "2015-06-01T09:00:00Z",
                 "endDate": "2015-08-01T09:00:00Z"
             },
-            "numberOfTenderers": 4,
+            "numberOfTenderers": 1,
             "procuringEntity": {
                 "identifier": {
                     "id": "E09000003",
