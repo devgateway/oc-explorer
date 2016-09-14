@@ -2,6 +2,7 @@ package org.devgateway.ocds.web.rest.controller;
 
 import com.mongodb.DBObject;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,6 +23,6 @@ public class TotalCancelledTendersByYearControllerTest extends AbstractEndPointC
         final List<DBObject> totalCancelledTendersByYear = totalCancelledTendersByYearController
                 .totalCancelledTendersByYear(new DefaultFilterPagingRequest());
 
-        logger.error(totalCancelledTendersByYear);
+        Assert.assertEquals(0, totalCancelledTendersByYear.size());
     }
 }
