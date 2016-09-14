@@ -2,6 +2,7 @@ package org.devgateway.ocds.web.rest.controller;
 
 import com.mongodb.DBObject;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,6 +23,17 @@ public class TenderPriceByTypeYearControllerTest extends AbstractEndPointControl
         final List<DBObject> tenderPriceByProcurementMethod = tenderPriceByTypeYearController
                 .tenderPriceByProcurementMethod(new YearFilterPagingRequest());
 
-        logger.error(tenderPriceByProcurementMethod);
+        final DBObject first = tenderPriceByProcurementMethod.get(0);
+        String procurementMethod = (String) first.get(TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD);
+        double totalTenderAmount = (double) first.get(TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
+        Assert.assertEquals("selective", procurementMethod);
+        Assert.assertEquals(600000.0, totalTenderAmount, 0);
+
+        final DBObject second = tenderPriceByProcurementMethod.get(1);
+        procurementMethod = (String) second.get(TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD);
+        totalTenderAmount = (double) second.get(TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
+        Assert.assertEquals("open", procurementMethod);
+        Assert.assertEquals(9000.0, totalTenderAmount, 0);
     }
 }
+

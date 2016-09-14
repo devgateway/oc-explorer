@@ -278,7 +278,7 @@
                 "amount": 600000,
                 "currency": "USD"
             },
-            "procurementMethod": "open",
+            "procurementMethod": "selective",
             "submissionMethod": [ "electronicSubmission" ],
             "submissionMethodDetails": "Submit through the online portal at http://example.com/submissions/ocds-endpoint-002/",
             "tenderPeriod": {
