@@ -20,7 +20,8 @@
                 "amount": {
                     "amount": 1000.00,
                     "currency": "USD"
-                }
+                },
+                "projectID": "SP001"
             },
             "rationale": "[ocds-endpoint-001] - planning rationale"
         },
