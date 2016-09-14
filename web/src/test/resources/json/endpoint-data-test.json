@@ -32,12 +32,12 @@
             "items": [
                 {
                     "id": "0001",
-                    "description": "[0001] - description 1",
+                    "description": "description 1",
                     "classification": {
                         "scheme": "CPV",
-                        "id": "45233130",
-                        "description": "Construction work for highways",
-                        "uri": "http://cpv.data.ac.uk/code-45233130"
+                        "id": "09100000",
+                        "description": "Fuels",
+                        "uri": "http://cpv.data.ac.uk/code-09100000"
                     },
                     "deliveryLocation" : {
                         "geometry" : {
@@ -173,9 +173,9 @@
                         "description": "desc",
                         "classification": {
                             "scheme": "CPV",
-                            "id": "45233130",
-                            "description": "Construction work for highways",
-                            "uri": "http://cpv.data.ac.uk/code-45233130"
+                            "id": "09100000",
+                            "description": "Fuels",
+                            "uri": "http://cpv.data.ac.uk/code-09100000"
                         }
                     }
                 ],
@@ -205,9 +205,9 @@
                         "description": "desc 2",
                         "classification": {
                             "scheme": "CPV",
-                            "id": "45233130",
-                            "description": "Construction work for highways",
-                            "uri": "http://cpv.data.ac.uk/code-45233130"
+                            "id": "09100000",
+                            "description": "Fuels",
+                            "uri": "http://cpv.data.ac.uk/code-09100000"
                         }
                     }
                 ],
