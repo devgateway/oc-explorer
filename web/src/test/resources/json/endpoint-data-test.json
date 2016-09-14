@@ -38,6 +38,14 @@
                         "id": "45233130",
                         "description": "Construction work for highways",
                         "uri": "http://cpv.data.ac.uk/code-45233130"
+                    },
+                    "deliveryLocation" : {
+                        "geometry" : {
+                            "coordinates" : [
+                                45.9432,
+                                24.9668
+                            ]
+                        }
                     }
                 }
             ],
