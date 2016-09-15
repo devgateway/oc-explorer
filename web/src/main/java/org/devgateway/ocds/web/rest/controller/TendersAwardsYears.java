@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.devgateway.ocds.web.rest.controller.excelchart;
+package org.devgateway.ocds.web.rest.controller;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
