@@ -55,12 +55,23 @@ public class ProcurementActivityByYearController extends GenericOCDSController {
                 Fields.UNDERSCORE_ID, CountPlansTendersAwardsController.Keys.COUNT);
         final List<Number> valueTenders = excelChartHelper.getValuesFromDBObject(countTendersByYear, categories,
                 Fields.UNDERSCORE_ID, CountPlansTendersAwardsController.Keys.COUNT);
-        values.add(valueAwards);
-        values.add(valueTenders);
+        if (!valueAwards.isEmpty()) {
+            values.add(valueAwards);
+        }
+        if (!valueTenders.isEmpty()) {
+            values.add(valueTenders);
+        }
 
-        final List<String> seriesTitle = Arrays.asList(
-                "Award",
-                "Tender");
+
+        // check if we have anything to display before setting the *seriesTitle*.
+        final List<String> seriesTitle;
+        if (!values.isEmpty()) {
+            seriesTitle = Arrays.asList(
+                    "Award",
+                    "Tender");
+        } else {
+            seriesTitle = new ArrayList<>();
+        }
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
