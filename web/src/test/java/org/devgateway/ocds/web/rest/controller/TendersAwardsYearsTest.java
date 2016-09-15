@@ -26,11 +26,11 @@ public class TendersAwardsYearsTest extends AbstractEndPointControllerTest {
         int year = (int) first.get(Fields.UNDERSCORE_ID);
         Assert.assertEquals(2014, year);
 
-        final DBObject second = response.get(0);
+        final DBObject second = response.get(1);
         year = (int) second.get(Fields.UNDERSCORE_ID);
         Assert.assertEquals(2015, year);
 
-        final DBObject third = response.get(0);
+        final DBObject third = response.get(2);
         year = (int) third.get(Fields.UNDERSCORE_ID);
         Assert.assertEquals(2016, year);
     }
