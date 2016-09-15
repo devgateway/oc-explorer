@@ -2,10 +2,10 @@ package org.devgateway.ocds.web.rest.controller.excelchart;
 
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
-import org.devgateway.toolkit.web.excelcharts.ChartType;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.ocds.web.rest.controller.TotalCancelledTendersByYearController;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
+import org.devgateway.toolkit.web.excelcharts.ChartType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -53,10 +53,18 @@ public class TotalCancelledTendersExcelController extends GenericOCDSController 
 
         final List<Number> cancelledAmount = excelChartHelper.getValuesFromDBObject(totalCancelledTenders, categories,
                 Fields.UNDERSCORE_ID, TotalCancelledTendersByYearController.Keys.TOTAL_CANCELLED_TENDERS_AMOUNT);
-        values.add(cancelledAmount);
+        if (!cancelledAmount.isEmpty()) {
+            values.add(cancelledAmount);
+        }
 
-        final List<String> seriesTitle = Arrays.asList(
-                "Amount");
+        // check if we have anything to display before setting the *seriesTitle*.
+        final List<String> seriesTitle;
+        if (!values.isEmpty()) {
+            seriesTitle = Arrays.asList(
+                    "Amount");
+        } else {
+            seriesTitle = new ArrayList<>();
+        }
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
