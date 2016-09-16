@@ -3,8 +3,12 @@ package org.devgateway.ocds.web.rest.controller.excelchart;
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
 import org.apache.log4j.Logger;
+import org.devgateway.toolkit.web.AbstractWebTest;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +17,19 @@ import java.util.List;
  * @author idobre
  * @since 9/14/16
  */
-public class ExcelChartHelperTest {
+public class ExcelChartHelperTest extends AbstractWebTest {
     private static Logger logger = Logger.getLogger(ExcelChartHelperTest.class);
+
+    @Autowired
+    private CacheManager cacheManager;
+
+    @Before
+    public final void setUp() throws Exception {
+        // clean the cache (we need this especially for endpoints cache)
+        if (cacheManager != null) {
+            cacheManager.getCacheNames().forEach(c -> cacheManager.getCache(c).clear());
+        }
+    }
 
     @Test
     public void getCategoriesValuesFromDBObject() throws Exception {
