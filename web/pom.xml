@@ -159,6 +159,7 @@
                     <include>**/*.sql</include>
                     <include>**/*.xml</include>
                     <include>**/*.html</include>
+                    <include>**/*.gif</include>
                 </includes>
 
             </resource>
