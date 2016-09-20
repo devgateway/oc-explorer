@@ -33,7 +33,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EntityScan(basePackageClasses = GenericPersistable.class)
 @PropertySource("classpath:/org/devgateway/toolkit/persistence/application.properties")
-@ComponentScan("org.devgatewray.toolkit")
+@ComponentScan("org.devgateway.toolkit")
 public class PersistenceApplication {
 	
 	public static void main(final String[] args) {
