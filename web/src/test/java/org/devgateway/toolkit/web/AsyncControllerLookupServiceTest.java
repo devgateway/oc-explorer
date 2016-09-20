@@ -45,8 +45,8 @@ public class AsyncControllerLookupServiceTest extends AbstractWebTest {
 
 		lookupService.waitTillDone(joe, wendy);
 
-		Assert.assertEquals("Joe", joe.get());
-		Assert.assertEquals("Wendy", wendy.get());
+		Assert.assertEquals("Hello, Joe!", joe.get().getContent());
+		Assert.assertEquals("Hello, Wendy!", wendy.get().getContent());
 	}
 
 }
