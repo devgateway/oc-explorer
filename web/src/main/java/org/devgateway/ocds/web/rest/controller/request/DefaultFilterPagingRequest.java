@@ -95,7 +95,7 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 		return tenderLoc;
 	}
 
-	public void setTenderLoc(List<String> tenderDeliveryLocationGazetteerIdentifier) {
+	public void setTenderLoc(final List<String> tenderDeliveryLocationGazetteerIdentifier) {
 		this.tenderLoc = tenderDeliveryLocationGazetteerIdentifier;
 	}
 
@@ -103,7 +103,7 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 		return minTenderValue;
 	}
 
-	public void setMinTenderValue(BigDecimal minTenderValueAmount) {
+	public void setMinTenderValue(final BigDecimal minTenderValueAmount) {
 		this.minTenderValue = minTenderValueAmount;
 	}
 
@@ -111,7 +111,7 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 		return maxTenderValue;
 	}
 
-	public void setMaxTenderValue(BigDecimal maxTenderValueAmount) {
+	public void setMaxTenderValue(final BigDecimal maxTenderValueAmount) {
 		this.maxTenderValue = maxTenderValueAmount;
 	}
 
@@ -119,7 +119,7 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 		return minAwardValue;
 	}
 
-	public void setMinAwardValue(BigDecimal minAwardValue) {
+	public void setMinAwardValue(final BigDecimal minAwardValue) {
 		this.minAwardValue = minAwardValue;
 	}
 
@@ -127,7 +127,7 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 		return maxAwardValue;
 	}
 
-	public void setMaxAwardValue(BigDecimal maxAwardValue) {
+	public void setMaxAwardValue(final BigDecimal maxAwardValue) {
 		this.maxAwardValue = maxAwardValue;
 	}
 
@@ -135,7 +135,7 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 		return supplierId;
 	}
 
-	public void setSupplierId(List<String> supplierId) {
+	public void setSupplierId(final List<String> supplierId) {
 		this.supplierId = supplierId;
 	}
 

@@ -2,10 +2,10 @@ package org.devgateway.ocds.web.rest.controller.excelchart;
 
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
-import org.devgateway.toolkit.web.excelcharts.ChartType;
 import org.devgateway.ocds.web.rest.controller.CostEffectivenessVisualsController;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
+import org.devgateway.toolkit.web.excelcharts.ChartType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -56,13 +56,23 @@ public class CostEffectivenessExcelController extends GenericOCDSController {
                 categories, Fields.UNDERSCORE_ID, CostEffectivenessVisualsController.Keys.TOTAL_TENDER_AMOUNT);
         final List<Number> diffPrice = excelChartHelper.getValuesFromDBObject(costEffectivenessTenderAwardAmount,
                 categories,  Fields.UNDERSCORE_ID, CostEffectivenessVisualsController.Keys.DIFF_TENDER_AWARD_AMOUNT);
-        values.add(tenderPrice);
-        values.add(diffPrice);
+        if (!tenderPrice.isEmpty()) {
+            values.add(tenderPrice);
+        }
+        if (!diffPrice.isEmpty()) {
+            values.add(diffPrice);
+        }
 
-        final List<String> seriesTitle = Arrays.asList(
-                "Bid price",
-                "Difference"
-        );
+        // check if we have anything to display before setting the *seriesTitle*.
+        final List<String> seriesTitle;
+        if (!values.isEmpty()) {
+            seriesTitle = Arrays.asList(
+                    "Bid price",
+                    "Difference"
+            );
+        } else {
+            seriesTitle = new ArrayList<>();
+        }
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");

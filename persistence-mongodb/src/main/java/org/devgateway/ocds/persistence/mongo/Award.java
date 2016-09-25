@@ -189,7 +189,7 @@ public class Award implements Identifiable {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -211,7 +211,7 @@ public class Award implements Identifiable {
      *     The title
      */
     @JsonProperty("title")
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -224,17 +224,6 @@ public class Award implements Identifiable {
     @JsonProperty("description")
     public String getDescription() {
         return description;
-    }
-
-    /**
-     * Award description
-     *
-     * @param description
-     *     The description
-     */
-    @JsonProperty("description")
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     /**
@@ -252,6 +241,17 @@ public class Award implements Identifiable {
     }
 
     /**
+     * Award description
+     *
+     * @param description
+     *     The description
+     */
+    @JsonProperty("description")
+    public void setDescription(final String description) {
+        this.description = description;
+    }
+
+    /**
      * Award Status
      * <p>
      * The current status of the award drawn from the
@@ -261,7 +261,7 @@ public class Award implements Identifiable {
      *     The status
      */
     @JsonProperty("status")
-    public void setStatus(Status status) {
+    public void setStatus(final Status status) {
         this.status = status;
     }
 
@@ -287,7 +287,7 @@ public class Award implements Identifiable {
      *     The date
      */
     @JsonProperty("date")
-    public void setDate(Date date) {
+    public void setDate(final Date date) {
         this.date = date;
     }
 
@@ -307,7 +307,7 @@ public class Award implements Identifiable {
      *     The value
      */
     @JsonProperty("value")
-    public void setValue(Amount value) {
+    public void setValue(final Amount value) {
         this.value = value;
     }
 
@@ -331,7 +331,7 @@ public class Award implements Identifiable {
      *     The suppliers
      */
     @JsonProperty("suppliers")
-    public void setSuppliers(Set<Organization> suppliers) {
+    public void setSuppliers(final Set<Organization> suppliers) {
         this.suppliers = suppliers;
     }
 
@@ -359,7 +359,7 @@ public class Award implements Identifiable {
      *     The items
      */
     @JsonProperty("items")
-    public void setItems(Set<Item> items) {
+    public void setItems(final Set<Item> items) {
         this.items = items;
     }
 
@@ -385,7 +385,7 @@ public class Award implements Identifiable {
      *     The contractPeriod
      */
     @JsonProperty("contractPeriod")
-    public void setContractPeriod(Period contractPeriod) {
+    public void setContractPeriod(final Period contractPeriod) {
         this.contractPeriod = contractPeriod;
     }
 
@@ -407,7 +407,7 @@ public class Award implements Identifiable {
      *     The documents
      */
     @JsonProperty("documents")
-    public void setDocuments(Set<Document> documents) {
+    public void setDocuments(final Set<Document> documents) {
         this.documents = documents;
     }
 
@@ -433,7 +433,7 @@ public class Award implements Identifiable {
      *     The amendment
      */
     @JsonProperty("amendment")
-    public void setAmendment(Amendment amendment) {
+    public void setAmendment(final Amendment amendment) {
         this.amendment = amendment;
     }
 
@@ -460,7 +460,7 @@ public class Award implements Identifiable {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }
@@ -502,7 +502,7 @@ public class Award implements Identifiable {
             }
         }
 
-        Status(String value) {
+        Status(final String value) {
             this.value = value;
         }
 
@@ -513,7 +513,7 @@ public class Award implements Identifiable {
         }
 
         @JsonCreator
-        public static Status fromValue(String value) {
+        public static Status fromValue(final String value) {
             Status constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
