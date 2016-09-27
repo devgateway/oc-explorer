@@ -10,6 +10,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,6 +23,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.grou
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
@@ -56,9 +58,11 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
                 match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)
                         .andOperator(getYearFilterCriteria("tender.tenderPeriod.startDate", filter))),
                 getMatchDefaultFilterOperation(filter),
-                new CustomProjectionOperation(project), group("year", "tender." + Keys.PROCUREMENT_METHOD)
+                new CustomProjectionOperation(project), group("tender." + Keys.PROCUREMENT_METHOD)
                         .sum("$tender.value.amount").as(Keys.TOTAL_TENDER_AMOUNT),
-                sort(Direction.DESC, Keys.TOTAL_TENDER_AMOUNT));
+				project().and(Fields.UNDERSCORE_ID).as(Keys.PROCUREMENT_METHOD).andInclude(Keys.TOTAL_TENDER_AMOUNT)
+						.andExclude(Fields.UNDERSCORE_ID),
+				sort(Direction.DESC, Keys.TOTAL_TENDER_AMOUNT));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
