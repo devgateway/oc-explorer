@@ -1,5 +1,6 @@
 package org.devgateway.ocds.persistence.mongo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -238,7 +239,6 @@ public class Release implements Identifiable {
      *     The id
      */
     @JsonProperty("id")
-    @Override
     public String getId() {
         return id;
     }
@@ -599,5 +599,10 @@ public class Release implements Identifiable {
             }
         }
     }
+
+	@Override
+	public Serializable getIdProperty() {
+		return id;
+	}
 
 }

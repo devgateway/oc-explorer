@@ -1,5 +1,6 @@
 package org.devgateway.ocds.persistence.mongo;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -523,4 +524,9 @@ public class Award implements Identifiable {
         }
 
     }
+
+	@Override
+	public Serializable getIdProperty() {
+		return id;
+	}
 }

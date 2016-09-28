@@ -2,6 +2,9 @@ package org.devgateway.ocds.persistence.mongo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import java.io.Serializable;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -45,7 +48,6 @@ public abstract class Location<T extends GeoJson<?>> implements Identifiable {
     @JsonProperty("uri")
     private String uri;
 
-    @Override
     public String getId() {
         return id;
     }
@@ -181,4 +183,9 @@ public abstract class Location<T extends GeoJson<?>> implements Identifiable {
                 append(uri, rhs.uri).
                 isEquals();
     }
+    
+	@Override
+	public Serializable getIdProperty() {
+		return id;
+	}
 }
