@@ -116,8 +116,9 @@ public abstract class AbstractReportPage extends BasePage {
 
     /**
      * A generic download link component
-     * @author mpostelnicu
-     * See http://blog.jdriven.com/2013/05/wicket-quick-tips-create-a-download-link/
+     * 
+     * @author mpostelnicu See
+     *         http://blog.jdriven.com/2013/05/wicket-quick-tips-create-a-download-link/
      */
     public class ReportDownloadLink extends Link<Void> {
         private static final long serialVersionUID = 2227561249211024004L;
@@ -152,10 +153,11 @@ public abstract class AbstractReportPage extends BasePage {
                 public void write(final OutputStream output) throws IOException {
                     try {
                         if (canRenderReport()) {
-                            // first try to fetch the report from cache, otherwise create the report and cache it
-                            byte []reportContent = markupCacheService.getReportFromCache(outputType.name(),
-                                    FilenameUtils.getName(AbstractReportPage.this.reportResourceName).
-                                            replace(".prpt", ""),
+                            // first try to fetch the report from cache,
+                            // otherwise create the report and cache it
+                            byte[] reportContent = markupCacheService.getReportFromCache(outputType.name(),
+                                    FilenameUtils.getName(AbstractReportPage.this.reportResourceName).replace(".prpt",
+                                            ""),
                                     getPageParameters().toString());
                             if (reportContent == null) {
                                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -163,10 +165,11 @@ public abstract class AbstractReportPage extends BasePage {
                                 reportContent = baos.toByteArray();
 
                                 if (caching) {
-                                    markupCacheService.addReportToCache(outputType.name(),
-                                            FilenameUtils.getName(AbstractReportPage.this.reportResourceName).
-                                                    replace(".prpt", ""),
-                                            getPageParameters().toString(), reportContent);
+                                    markupCacheService
+                                            .addReportToCache(outputType.name(),
+                                                    FilenameUtils.getName(AbstractReportPage.this.reportResourceName)
+                                                            .replace(".prpt", ""),
+                                                    getPageParameters().toString(), reportContent);
                                 }
                             }
 
@@ -179,8 +182,8 @@ public abstract class AbstractReportPage extends BasePage {
             };
 
             ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(rstream,
-                    FilenameUtils.getName(AbstractReportPage.this.reportResourceName).
-                            replace(".prpt", outputExtension.get(outputType)));
+                    FilenameUtils.getName(AbstractReportPage.this.reportResourceName).replace(".prpt",
+                            outputExtension.get(outputType)));
             getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
         }
     }
@@ -190,8 +193,9 @@ public abstract class AbstractReportPage extends BasePage {
      * {@link OutputStream}
      *
      * See http
-     *      ://wicketbypranav.blogspot.ro/2013/05/throw-outputstream-html-data
-     *      -in-wicket.html
+     * ://wicketbypranav.blogspot.ro/2013/05/throw-outputstream-html-data
+     * -in-wicket.html
+     * 
      * @author mpostelnicu
      *
      */
@@ -240,15 +244,16 @@ public abstract class AbstractReportPage extends BasePage {
         }
 
         /**
-         * Implementing getCacheKey() method of 'IMarkupCacheKeyProvider' interface.
+         * Implementing getCacheKey() method of 'IMarkupCacheKeyProvider'
+         * interface.
          */
         public String getCacheKey(final MarkupContainer container, final Class<?> containerClass) {
             // return a key based on page parameters and report class name,
             // also a common start name so that we can identify them
             // (if null is returned then the markup is not cached)
             if (caching) {
-                return START_NAME_REPORT_KEY + "-" + getPageParameters().toString()
-                        + "-" + this.parent.getClass().getSimpleName();
+                return START_NAME_REPORT_KEY + "-" + getPageParameters().toString() + "-"
+                        + this.parent.getClass().getSimpleName();
             }
 
             return null;
@@ -273,9 +278,9 @@ public abstract class AbstractReportPage extends BasePage {
 
         add(new AjaxLazyLoadPanel("htmlReportPanel") {
 
-			private static final long serialVersionUID = 5167275188250433603L;
+            private static final long serialVersionUID = 5167275188250433603L;
 
-			@Override
+            @Override
             public Component getLazyLoadComponent(final String id) {
                 htmlReportPanel = new ResourceStreamPanel(id, AbstractReportPage.this);
                 return htmlReportPanel;
@@ -345,8 +350,7 @@ public abstract class AbstractReportPage extends BasePage {
      */
 
     public void generateReport(final OutputType outputType, final OutputStream outputStream)
-            throws IllegalArgumentException,
-            ReportProcessingException {
+            throws IllegalArgumentException, ReportProcessingException {
         if (outputStream == null) {
             throw new IllegalArgumentException("The output stream was not specified");
         }
@@ -369,79 +373,77 @@ public abstract class AbstractReportPage extends BasePage {
         try {
             // Greate the report processor for the specified output type
             switch (outputType) {
-                case PDF: 
-                    final PdfOutputProcessor targetPdf = new PdfOutputProcessor(report.getConfiguration(),
-                            outputStream, report.getResourceManager());
-                    reportProcessor = new PageableReportProcessor(report, targetPdf);
-                    reportProcessor.processReport();
-                    break;
-              
+            case PDF:
+                final PdfOutputProcessor targetPdf =
+                        new PdfOutputProcessor(report.getConfiguration(), outputStream, report.getResourceManager());
+                reportProcessor = new PageableReportProcessor(report, targetPdf);
+                reportProcessor.processReport();
+                break;
 
-                case EXCEL: 
-                    final FlowExcelOutputProcessor targetExcel = new FlowExcelOutputProcessor(report.getConfiguration(),
-                            outputStream, report.getResourceManager());
-                    reportProcessor = new FlowReportProcessor(report, targetExcel);
-                    reportProcessor.processReport();
-                    break;
-                
+            case EXCEL:
+                final FlowExcelOutputProcessor targetExcel = new FlowExcelOutputProcessor(report.getConfiguration(),
+                        outputStream, report.getResourceManager());
+                reportProcessor = new FlowReportProcessor(report, targetExcel);
+                reportProcessor.processReport();
+                break;
 
-                case RTF: 
-                    final FlowRTFOutputProcessor targetRtf = new FlowRTFOutputProcessor(report.getConfiguration(),
-                            outputStream, report.getResourceManager());
-                    reportProcessor = new FlowReportProcessor(report, targetRtf);
-                    reportProcessor.processReport();
-                    break;
-                
+            case RTF:
+                final FlowRTFOutputProcessor targetRtf = new FlowRTFOutputProcessor(report.getConfiguration(),
+                        outputStream, report.getResourceManager());
+                reportProcessor = new FlowReportProcessor(report, targetRtf);
+                reportProcessor.processReport();
+                break;
 
-                case HTML:
-                    ContentLocation targetRoot = null;
-                    File tempDir = null;
-                    try {
+            case HTML:
+                ContentLocation targetRoot = null;
+                File tempDir = null;
+                try {
 
-                        //we manually make the folder to drop all exported html files into
-                        tempDir = ReportUtil.createTemporaryDirectory("tmpreport");
-                        targetRoot = new FileRepository(tempDir).getRoot();
-                    } catch (ContentIOException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    // we manually make the folder to drop all exported html
+                    // files into
+                    tempDir = ReportUtil.createTemporaryDirectory("tmpreport");
+                    targetRoot = new FileRepository(tempDir).getRoot();
+                } catch (ContentIOException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                    //we create a folder content resource for the entire tmpdir.
-                    // This dir will only hold the fields for this export
-                    FolderContentResource fcr = new FolderContentResource(tempDir);
+                // we create a folder content resource for the entire tmpdir.
+                // This dir will only hold the fields for this export
+                FolderContentResource fcr = new FolderContentResource(tempDir);
 
-                    //we always have an authenticated web app
-                    AuthenticatedWebApplication authApp = (AuthenticatedWebApplication) getApplication();
+                // we always have an authenticated web app
+                AuthenticatedWebApplication authApp = (AuthenticatedWebApplication) getApplication();
 
-                    //we add the folder resource as a shared resource
-                    authApp.getSharedResources().add(tempDir.getName(), fcr);
-                    SharedResourceReference folderResourceReference = new SharedResourceReference(tempDir.getName());
-                    authApp.mountResource(tempDir.getName(), folderResourceReference);
+                // we add the folder resource as a shared resource
+                authApp.getSharedResources().add(tempDir.getName(), fcr);
+                SharedResourceReference folderResourceReference = new SharedResourceReference(tempDir.getName());
+                authApp.mountResource(tempDir.getName(), folderResourceReference);
 
+                final HtmlOutputProcessor outputProcessor = new StreamHtmlOutputProcessor(report.getConfiguration());
+                final HtmlPrinter printer = new AllItemsHtmlPrinter(report.getResourceManager());
+                printer.setContentWriter(targetRoot, new DefaultNameGenerator(targetRoot, "index", "html"));
 
-                    final HtmlOutputProcessor outputProcessor =
-                            new StreamHtmlOutputProcessor(report.getConfiguration());
-                    final HtmlPrinter printer = new AllItemsHtmlPrinter(report.getResourceManager());
-                    printer.setContentWriter(targetRoot, new DefaultNameGenerator(targetRoot, "index", "html"));
+                printer.setDataWriter(targetRoot, new DefaultNameGenerator(targetRoot, "content")); //$NON-NLS-1$
 
-                    printer.setDataWriter(targetRoot, new DefaultNameGenerator(targetRoot, "content")); //$NON-NLS-1$
+                // we use a special URL Rewriter that knows how to speak Wicket
+                // :-)
+                printer.setUrlRewriter(new WicketResourceURLRewriter(folderResourceReference));
+                outputProcessor.setPrinter(printer);
+                reportProcessor = new StreamReportProcessor(report, outputProcessor);
+                reportProcessor.processReport();
 
-                    //we use a special URL Rewriter that knows how to speak Wicket :-)
-                    printer.setUrlRewriter(new WicketResourceURLRewriter(folderResourceReference));
-                    outputProcessor.setPrinter(printer);
-                    reportProcessor = new StreamReportProcessor(report, outputProcessor);
-                    reportProcessor.processReport();
+                // we plug the html file stream into the output stream
+                FileInputStream indexFileStream =
+                        new FileInputStream(tempDir.getAbsolutePath() + File.separator + "index.html");
+                IOUtils.copy(indexFileStream, outputStream);
+                indexFileStream.close();
 
-                    // we plug the html file stream into the output stream
-                    FileInputStream indexFileStream = new FileInputStream(tempDir.getAbsolutePath()
-                            + File.separator + "index.html");
-                    IOUtils.copy(indexFileStream, outputStream);
-                    indexFileStream.close();
+                break;
 
-                    break;                
-
-                default: throw new RuntimeException("Unknown output type provided!");
+            default:
+                throw new RuntimeException("Unknown output type provided!");
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -29,19 +29,19 @@ import org.springframework.context.annotation.Profile;
 @Profile("reports")
 public class ReportingConfiguration {
 
-	protected static Logger logger = Logger.getLogger(ReportingConfiguration.class);
+    protected static Logger logger = Logger.getLogger(ReportingConfiguration.class);
 
-	/**
-	 * Bean that starts the mondrian engine
-	 * 
-	 * @return the {@link ClassicEngineBoot} instance
-	 */
-	@Bean
-	@DependsOn(value = "dataSource")
-	public ClassicEngineBoot classicEngineBoot() {
-		ClassicEngineBoot instance = ClassicEngineBoot.getInstance();
-		instance.start();
-		return instance;
-	}
+    /**
+     * Bean that starts the mondrian engine
+     * 
+     * @return the {@link ClassicEngineBoot} instance
+     */
+    @Bean
+    @DependsOn(value = "dataSource")
+    public ClassicEngineBoot classicEngineBoot() {
+        ClassicEngineBoot instance = ClassicEngineBoot.getInstance();
+        instance.start();
+        return instance;
+    }
 
 }

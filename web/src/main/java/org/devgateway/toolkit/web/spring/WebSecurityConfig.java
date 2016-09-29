@@ -39,64 +39,67 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
 
 @Configuration
 @Order(2) // this loads the security config after the forms security (if you use
-			// them overlayed, it must pick that one first)
+          // them overlayed, it must pick that one first)
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	protected CustomJPAUserDetailsService customJPAUserDetailsService;
+    @Autowired
+    protected CustomJPAUserDetailsService customJPAUserDetailsService;
 
-	@Value("${roleHierarchy}")
-	private String roleHierarchyStringRepresentation;
+    @Value("${roleHierarchy}")
+    private String roleHierarchyStringRepresentation;
 
-	@Bean
-	public HttpSessionSecurityContextRepository httpSessionSecurityContextRepository() {
-		return new HttpSessionSecurityContextRepository();
-	}
+    @Bean
+    public HttpSessionSecurityContextRepository httpSessionSecurityContextRepository() {
+        return new HttpSessionSecurityContextRepository();
+    }
 
-	@Bean
-	public SecurityContextPersistenceFilter securityContextPersistenceFilter() {
+    @Bean
+    public SecurityContextPersistenceFilter securityContextPersistenceFilter() {
 
-		SecurityContextPersistenceFilter securityContextPersistenceFilter = new SecurityContextPersistenceFilter(
-				httpSessionSecurityContextRepository());
-		return securityContextPersistenceFilter;
-	}
+        SecurityContextPersistenceFilter securityContextPersistenceFilter =
+                new SecurityContextPersistenceFilter(httpSessionSecurityContextRepository());
+        return securityContextPersistenceFilter;
+    }
 
-	@Override
-	protected void configure(final HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-				.expressionHandler(webExpressionHandler()) // inject role hierarchy
-				.antMatchers("/", "/home").permitAll().antMatchers("/dummy").authenticated()
-				.anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll().and().logout()
-				.permitAll().and().sessionManagement().and().csrf().disable();
-		http.addFilter(securityContextPersistenceFilter());
-	}
+    @Override
+    protected void configure(final HttpSecurity http) throws Exception {
+        http.authorizeRequests().expressionHandler(webExpressionHandler()) // inject
+                                                                           // role
+                                                                           // hierarchy
+                .antMatchers("/", "/home").permitAll().antMatchers("/dummy").authenticated().anyRequest()
+                .authenticated().and().formLogin().loginPage("/login").permitAll().and().logout().permitAll().and()
+                .sessionManagement().and().csrf().disable();
+        http.addFilter(securityContextPersistenceFilter());
+    }
 
-	/**
-	 * Instantiates {@see DefaultWebSecurityExpressionHandler} and assigns to it role hierarchy.
-	 *
-	 * @return
-	 */
-	private SecurityExpressionHandler<FilterInvocation> webExpressionHandler() {
-		DefaultWebSecurityExpressionHandler handler = new DefaultWebSecurityExpressionHandler();
-		handler.setRoleHierarchy(roleHierarchy());
-		return handler;
-	}
+    /**
+     * Instantiates {@see DefaultWebSecurityExpressionHandler} and assigns to it
+     * role hierarchy.
+     *
+     * @return
+     */
+    private SecurityExpressionHandler<FilterInvocation> webExpressionHandler() {
+        DefaultWebSecurityExpressionHandler handler = new DefaultWebSecurityExpressionHandler();
+        handler.setRoleHierarchy(roleHierarchy());
+        return handler;
+    }
 
-	/**
-	 * Enable hierarchical roles. This bean can be used to extract all effective roles.
-	 */
-	@Bean
-	RoleHierarchy roleHierarchy() {
-		RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-		roleHierarchy.setHierarchy(roleHierarchyStringRepresentation);
-		return roleHierarchy;
-	}
+    /**
+     * Enable hierarchical roles. This bean can be used to extract all effective
+     * roles.
+     */
+    @Bean
+    RoleHierarchy roleHierarchy() {
+        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+        roleHierarchy.setHierarchy(roleHierarchyStringRepresentation);
+        return roleHierarchy;
+    }
 
-	@Autowired
-	public void configureGlobal(final AuthenticationManagerBuilder auth) throws Exception {
-		// we use standard password encoder for all passwords
-		StandardPasswordEncoder spe = new StandardPasswordEncoder();
-		auth.userDetailsService(customJPAUserDetailsService).passwordEncoder(spe);
-	}
+    @Autowired
+    public void configureGlobal(final AuthenticationManagerBuilder auth) throws Exception {
+        // we use standard password encoder for all passwords
+        StandardPasswordEncoder spe = new StandardPasswordEncoder();
+        auth.userDetailsService(customJPAUserDetailsService).passwordEncoder(spe);
+    }
 }

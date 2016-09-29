@@ -25,46 +25,46 @@ import org.springframework.stereotype.Component;
 @Profile("reports")
 public class ReportsCacheService {
 
-	// @Autowired
-	// private DataSource dataSource;
+    // @Autowired
+    // private DataSource dataSource;
 
-	/**
-	 * Flush mondrian and reports classic cache
-	 */
-	public void flushCache() {
-		flushReportsClassicCache();
+    /**
+     * Flush mondrian and reports classic cache
+     */
+    public void flushCache() {
+        flushReportsClassicCache();
 
-		// use this if you have Mondrian enabled
-		// flushMondrianCache();
-	}
+        // use this if you have Mondrian enabled
+        // flushMondrianCache();
+    }
 
-	public void flushReportsClassicCache() {
-		DataCacheFactory.getCache().getCacheManager().clearAll();
-	}
+    public void flushReportsClassicCache() {
+        DataCacheFactory.getCache().getCacheManager().clearAll();
+    }
 
-	public void flushMondrianCache() {
-		// Util.PropertyList propertyList = new Util.PropertyList();
-		// propertyList.put("Provider", "mondrian");
+    public void flushMondrianCache() {
+        // Util.PropertyList propertyList = new Util.PropertyList();
+        // propertyList.put("Provider", "mondrian");
 
-		// ClassLoader classloader = this.getClass().getClassLoader();
-		// URL mondrianCubeFileURL =
-		// classloader.getResource(MondrianConstants.CATALOG_FILE);
+        // ClassLoader classloader = this.getClass().getClassLoader();
+        // URL mondrianCubeFileURL =
+        // classloader.getResource(MondrianConstants.CATALOG_FILE);
 
-		// propertyList.put("Catalog", "res:" + MondrianConstants.CATALOG_FILE);
-		//
-		// Connection connection =
-		// mondrian.olap.DriverManager.getConnection(propertyList, null,
-		// dataSource);
-		//
-		// CacheControl cacheControl = connection.getCacheControl(null);
-		// for (Cube cube : connection.getSchema().getCubes()) {
-		// CellRegion createMeasuresRegion =
-		// cacheControl.createMeasuresRegion(cube);
-		// cacheControl.flush(createMeasuresRegion);
-		// }
-		// cacheControl.flushSchemaCache();
+        // propertyList.put("Catalog", "res:" + MondrianConstants.CATALOG_FILE);
+        //
+        // Connection connection =
+        // mondrian.olap.DriverManager.getConnection(propertyList, null,
+        // dataSource);
+        //
+        // CacheControl cacheControl = connection.getCacheControl(null);
+        // for (Cube cube : connection.getSchema().getCubes()) {
+        // CellRegion createMeasuresRegion =
+        // cacheControl.createMeasuresRegion(cube);
+        // cacheControl.flush(createMeasuresRegion);
+        // }
+        // cacheControl.flushSchemaCache();
 
-		// connection.close();
-	}
+        // connection.close();
+    }
 
 }

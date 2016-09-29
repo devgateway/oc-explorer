@@ -35,8 +35,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @PropertySource("classpath:/org/devgateway/toolkit/persistence/application.properties")
 @ComponentScan("org.devgateway.toolkit")
 public class PersistenceApplication {
-	
-	public static void main(final String[] args) {
-		SpringApplication.run(PersistenceApplication.class, args);
-	}
+
+    public static void main(final String[] args) {
+        SpringApplication.run(PersistenceApplication.class, args);
+    }
 }

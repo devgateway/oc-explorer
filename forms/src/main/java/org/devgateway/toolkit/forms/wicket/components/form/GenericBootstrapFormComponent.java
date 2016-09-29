@@ -41,202 +41,202 @@ import de.agilecoders.wicket.core.util.Attributes;
  */
 public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComponent<TYPE>> extends FieldPanel<TYPE> {
 
-	private static final long serialVersionUID = -7051128382707812456L;
+    private static final long serialVersionUID = -7051128382707812456L;
 
-	protected static Logger logger = Logger.getLogger(GenericBootstrapFormComponent.class);
+    protected static Logger logger = Logger.getLogger(GenericBootstrapFormComponent.class);
 
-	protected FormGroup border;
-	protected FIELD field;
+    protected FormGroup border;
+    protected FIELD field;
 
-	protected Label viewModeField;
+    protected Label viewModeField;
 
-	protected InputBehavior sizeBehavior;
+    protected InputBehavior sizeBehavior;
 
-	private TooltipConfig.OpenTrigger configWithTrigger = TooltipConfig.OpenTrigger.hover;
-	protected TooltipLabel tooltipLabel;
-	protected IModel<String> labelModel;
-	protected boolean nextYear = false;
-	protected boolean labelHidden;
+    private TooltipConfig.OpenTrigger configWithTrigger = TooltipConfig.OpenTrigger.hover;
+    protected TooltipLabel tooltipLabel;
+    protected IModel<String> labelModel;
+    protected boolean nextYear = false;
+    protected boolean labelHidden;
 
-	@Override
-	public void onEvent(final IEvent<?> event) {
-		ComponentUtil.enableDisableEvent(this, event);
-	}
+    @Override
+    public void onEvent(final IEvent<?> event) {
+        ComponentUtil.enableDisableEvent(this, event);
+    }
 
-	@SuppressWarnings("unchecked")
-	protected IModel<TYPE> initFieldModel() {
-		if (getDefaultModel() == null) {
-			return new SubComponentWrapModel<TYPE>(this);
-		}
-		return (IModel<TYPE>) getDefaultModel();
-	}
+    @SuppressWarnings("unchecked")
+    protected IModel<TYPE> initFieldModel() {
+        if (getDefaultModel() == null) {
+            return new SubComponentWrapModel<TYPE>(this);
+        }
+        return (IModel<TYPE>) getDefaultModel();
+    }
 
-	/**
-	 * use this behavior for choices/groups that are not one component in the
-	 * html but many.
-	 */
-	protected void getAjaxFormChoiceComponentUpdatingBehavior() {
-		updatingBehaviorComponent().add(new AjaxFormChoiceComponentUpdatingBehavior() {
-			private static final long serialVersionUID = 1L;
+    /**
+     * use this behavior for choices/groups that are not one component in the
+     * html but many.
+     */
+    protected void getAjaxFormChoiceComponentUpdatingBehavior() {
+        updatingBehaviorComponent().add(new AjaxFormChoiceComponentUpdatingBehavior() {
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			protected void onUpdate(final AjaxRequestTarget target) {
-				GenericBootstrapFormComponent.this.onUpdate(target);
-			}
-		});
-	}
+            @Override
+            protected void onUpdate(final AjaxRequestTarget target) {
+                GenericBootstrapFormComponent.this.onUpdate(target);
+            }
+        });
+    }
 
-	/**
-	 * This is the component that has to be updated with the
-	 * {@link #getAjaxFormChoiceComponentUpdatingBehavior()} or with
-	 * {@link #getAjaxFormComponentUpdatingBehavior()}. It usuall is the field,
-	 * but the field may be a wrapper, in which case you should override this
-	 * and provide the wrapped field.
-	 * 
-	 * @return
-	 */
-	protected FormComponent<TYPE> updatingBehaviorComponent() {
-		return field;
-	}
+    /**
+     * This is the component that has to be updated with the
+     * {@link #getAjaxFormChoiceComponentUpdatingBehavior()} or with
+     * {@link #getAjaxFormComponentUpdatingBehavior()}. It usuall is the field,
+     * but the field may be a wrapper, in which case you should override this
+     * and provide the wrapped field.
+     * 
+     * @return
+     */
+    protected FormComponent<TYPE> updatingBehaviorComponent() {
+        return field;
+    }
 
-	protected void getAjaxFormComponentUpdatingBehavior() {
-		updatingBehaviorComponent().add(new AjaxFormComponentUpdatingBehavior(getUpdateEvent()) {
+    protected void getAjaxFormComponentUpdatingBehavior() {
+        updatingBehaviorComponent().add(new AjaxFormComponentUpdatingBehavior(getUpdateEvent()) {
 
-			private static final long serialVersionUID = -2696538086634114609L;
+            private static final long serialVersionUID = -2696538086634114609L;
 
-			@Override
-			protected void onUpdate(final AjaxRequestTarget target) {
-				target.add(border);
-				GenericBootstrapFormComponent.this.onUpdate(target);
-			}
+            @Override
+            protected void onUpdate(final AjaxRequestTarget target) {
+                target.add(border);
+                GenericBootstrapFormComponent.this.onUpdate(target);
+            }
 
-			@Override
-			protected void onError(final AjaxRequestTarget target, final RuntimeException e) {
-				target.add(border);
-			}
-		});
-	}
+            @Override
+            protected void onError(final AjaxRequestTarget target, final RuntimeException e) {
+                target.add(border);
+            }
+        });
+    }
 
-	public String getUpdateEvent() {
-		return "blur";
-	}
+    public String getUpdateEvent() {
+        return "blur";
+    }
 
-	public GenericBootstrapFormComponent<TYPE, FIELD> type(final Class<?> clazz) {
-		field.setType(clazz);
-		return this;
-	}
+    public GenericBootstrapFormComponent<TYPE, FIELD> type(final Class<?> clazz) {
+        field.setType(clazz);
+        return this;
+    }
 
-	public GenericBootstrapFormComponent<TYPE, FIELD> size(final Size size) {
-		sizeBehavior.size(size);
-		return this;
-	}
+    public GenericBootstrapFormComponent<TYPE, FIELD> size(final Size size) {
+        sizeBehavior.size(size);
+        return this;
+    }
 
-	public GenericBootstrapFormComponent<TYPE, FIELD> nextYear() {
-		nextYear = true;
-		return this;
-	}
+    public GenericBootstrapFormComponent<TYPE, FIELD> nextYear() {
+        nextYear = true;
+        return this;
+    }
 
-	public GenericBootstrapFormComponent(final String id) {
-		this(id, null);
-	}
+    public GenericBootstrapFormComponent(final String id) {
+        this(id, null);
+    }
 
-	public String getLabelKey() {
-		return this.getId() + ".label";
-	}
+    public String getLabelKey() {
+        return this.getId() + ".label";
+    }
 
-	public GenericBootstrapFormComponent(final String id, final IModel<TYPE> model) {
-		this(id, new ResourceModel(id + ".label"), model);
-	}
+    public GenericBootstrapFormComponent(final String id, final IModel<TYPE> model) {
+        this(id, new ResourceModel(id + ".label"), model);
+    }
 
-	public GenericBootstrapFormComponent(final String id, final IModel<String> labelModel, final IModel<TYPE> model) {
-		super(id, model);
-		this.labelModel = labelModel;
-		setOutputMarkupId(true);
-		setOutputMarkupPlaceholderTag(true);
+    public GenericBootstrapFormComponent(final String id, final IModel<String> labelModel, final IModel<TYPE> model) {
+        super(id, model);
+        this.labelModel = labelModel;
+        setOutputMarkupId(true);
+        setOutputMarkupPlaceholderTag(true);
 
-		border = new FormGroup("enclosing-field-group");
-		border.setOutputMarkupId(true);
-		add(border);
+        border = new FormGroup("enclosing-field-group");
+        border.setOutputMarkupId(true);
+        add(border);
 
-		field = inputField("field", model);
-		field.setVisibilityAllowed(!ComponentUtil.isViewMode());
-		field.setOutputMarkupId(true);
-		sizeBehavior = new InputBehavior(InputBehavior.Size.Medium);
-		field.add(sizeBehavior);
-		border.add(field);
+        field = inputField("field", model);
+        field.setVisibilityAllowed(!ComponentUtil.isViewMode());
+        field.setOutputMarkupId(true);
+        sizeBehavior = new InputBehavior(InputBehavior.Size.Medium);
+        field.add(sizeBehavior);
+        border.add(field);
 
-		tooltipLabel = new TooltipLabel("tooltipLabel", id);
-		border.add(tooltipLabel);
-		
-		if (!labelHidden) {
-			field.setLabel(labelModel);
-		}
-	}
+        tooltipLabel = new TooltipLabel("tooltipLabel", id);
+        border.add(tooltipLabel);
 
-	@Override
-	protected void onComponentTag(final ComponentTag tag) {
-		super.onComponentTag(tag);
+        if (!labelHidden) {
+            field.setLabel(labelModel);
+        }
+    }
 
-		// add a new class for required fields
-		if (field.isRequired()) {
-			Attributes.addClass(tag, "required");
-		}
-	}
+    @Override
+    protected void onComponentTag(final ComponentTag tag) {
+        super.onComponentTag(tag);
 
-	public GenericBootstrapFormComponent<TYPE, FIELD> hideLabel() {
-		labelHidden = true;
-		return this;
-	}
+        // add a new class for required fields
+        if (field.isRequired()) {
+            Attributes.addClass(tag, "required");
+        }
+    }
 
-	protected abstract FIELD inputField(String id, IModel<TYPE> model);
+    public GenericBootstrapFormComponent<TYPE, FIELD> hideLabel() {
+        labelHidden = true;
+        return this;
+    }
 
-	public GenericBootstrapFormComponent<TYPE, FIELD> required() {
-		field.setRequired(true);
-		return this;
-	}
+    protected abstract FIELD inputField(String id, IModel<TYPE> model);
 
-	protected void onUpdate(final AjaxRequestTarget target) {
-	}
+    public GenericBootstrapFormComponent<TYPE, FIELD> required() {
+        field.setRequired(true);
+        return this;
+    }
 
-	public FIELD getField() {
-		return field;
-	}
+    protected void onUpdate(final AjaxRequestTarget target) {
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.wicket.Component#onConfigure()
-	 */
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
+    public FIELD getField() {
+        return field;
+    }
 
-		if ((field instanceof RadioGroup) || (field instanceof CheckGroup)) {
-			getAjaxFormChoiceComponentUpdatingBehavior();
-		} else {
-			getAjaxFormComponentUpdatingBehavior();
-		}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.wicket.Component#onConfigure()
+     */
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
 
-		viewModeField = new Label("viewModeField", new ViewModeConverterModel<TYPE>(getModel()));
-		viewModeField.setEscapeModelStrings(false);
-		viewModeField.setVisibilityAllowed(ComponentUtil.isViewMode());
-		border.add(viewModeField);
+        if ((field instanceof RadioGroup) || (field instanceof CheckGroup)) {
+            getAjaxFormChoiceComponentUpdatingBehavior();
+        } else {
+            getAjaxFormComponentUpdatingBehavior();
+        }
 
-		tooltipLabel.setConfigWithTrigger(configWithTrigger);
-	}
+        viewModeField = new Label("viewModeField", new ViewModeConverterModel<TYPE>(getModel()));
+        viewModeField.setEscapeModelStrings(false);
+        viewModeField.setVisibilityAllowed(ComponentUtil.isViewMode());
+        border.add(viewModeField);
 
-	/**
-	 * @return the border
-	 */
-	public FormGroup getBorder() {
-		return border;
-	}
+        tooltipLabel.setConfigWithTrigger(configWithTrigger);
+    }
 
-	public TooltipConfig.OpenTrigger getConfigWithTrigger() {
-		return configWithTrigger;
-	}
+    /**
+     * @return the border
+     */
+    public FormGroup getBorder() {
+        return border;
+    }
 
-	public void setConfigWithTrigger(final TooltipConfig.OpenTrigger configWithTrigger) {
-		this.configWithTrigger = configWithTrigger;
-	}
+    public TooltipConfig.OpenTrigger getConfigWithTrigger() {
+        return configWithTrigger;
+    }
+
+    public void setConfigWithTrigger(final TooltipConfig.OpenTrigger configWithTrigger) {
+        this.configWithTrigger = configWithTrigger;
+    }
 }
