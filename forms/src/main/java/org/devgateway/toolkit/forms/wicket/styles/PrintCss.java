@@ -18,14 +18,14 @@ import org.apache.wicket.request.resource.CssResourceReference;
  * @since 1/13/15
  */
 public class PrintCss extends CssResourceReference {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public static final PrintCss INSTANCE = new PrintCss();
+    public static final PrintCss INSTANCE = new PrintCss();
 
-	/**
-	 * Construct.
-	 */
-	public PrintCss() {
-		super(PrintCss.class, "print.css");
-	}
+    /**
+     * Construct.
+     */
+    public PrintCss() {
+        super(PrintCss.class, "print.css");
+    }
 }

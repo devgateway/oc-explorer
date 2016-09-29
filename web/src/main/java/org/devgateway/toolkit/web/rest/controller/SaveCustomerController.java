@@ -27,15 +27,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SaveCustomerController {
 
-	@Autowired
-	private CustomerRepository customerRepository;
+    @Autowired
+    private CustomerRepository customerRepository;
 
-	@RequestMapping("/createCustomer")
-	public List<Customer> createCustomer() {
-		customerRepository.save(new Customer("Alice", "Smith"));
-		customerRepository.save(new Customer("Bob", "Smith"));
+    @RequestMapping("/createCustomer")
+    public List<Customer> createCustomer() {
+        customerRepository.save(new Customer("Alice", "Smith"));
+        customerRepository.save(new Customer("Bob", "Smith"));
 
-		List<Customer> findAll = customerRepository.findAll();
-		return findAll;
-	}
+        List<Customer> findAll = customerRepository.findAll();
+        return findAll;
+    }
 }

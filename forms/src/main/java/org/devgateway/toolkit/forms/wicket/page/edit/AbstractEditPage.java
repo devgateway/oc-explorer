@@ -254,7 +254,8 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
             // attached
             entityManager.clear();
 
-            // we flush the mondrian/wicket/reports cache to ensure it gets rebuilt
+            // we flush the mondrian/wicket/reports cache to ensure it gets
+            // rebuilt
             flushReportingCaches();
 
             // only redirect if redirect is true
@@ -352,7 +353,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
             } catch (DataIntegrityViolationException e) {
                 error(new NotificationMessage(
                         new StringResourceModel("delete_error_message", AbstractEditPage.this, null))
-                        .hideAfter(Duration.NONE));
+                                .hideAfter(Duration.NONE));
                 target.add(feedbackPanel);
 
                 return;
@@ -506,13 +507,13 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
         return field;
     }
 
-	public <E extends GenericPersistable & Labelable> Select2ChoiceBootstrapFormComponent<E> addSelect2ChoiceField(
-			final String name, final TextSearchableRepository<E, Long> repository) {
-		GenericPersistableJpaRepositoryTextChoiceProvider<E> choiceProvider 
-		= new GenericPersistableJpaRepositoryTextChoiceProvider<>(repository);
-		Select2ChoiceBootstrapFormComponent<E> component = new Select2ChoiceBootstrapFormComponent<>(name,
-				choiceProvider);
-		editForm.add(component);
-		return component;
-	}
+    public <E extends GenericPersistable & Labelable> Select2ChoiceBootstrapFormComponent<E>
+            addSelect2ChoiceField(final String name, final TextSearchableRepository<E, Long> repository) {
+        GenericPersistableJpaRepositoryTextChoiceProvider<E> choiceProvider =
+                new GenericPersistableJpaRepositoryTextChoiceProvider<>(repository);
+        Select2ChoiceBootstrapFormComponent<E> component =
+                new Select2ChoiceBootstrapFormComponent<>(name, choiceProvider);
+        editForm.add(component);
+        return component;
+    }
 }

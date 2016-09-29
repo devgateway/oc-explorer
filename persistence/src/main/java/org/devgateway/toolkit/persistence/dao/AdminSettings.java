@@ -16,8 +16,8 @@ import java.io.Serializable;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AdminSettings extends AbstractAuditableEntity implements Serializable {
 
-	private static final long serialVersionUID = -1051140524022133178L;
-	private Boolean rebootServer = false;
+    private static final long serialVersionUID = -1051140524022133178L;
+    private Boolean rebootServer = false;
 
     @Override
     public AbstractAuditableEntity getParent() {

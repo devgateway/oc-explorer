@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Import({ DatabaseConfiguration.class })
 public class ReportingApplication {
 
-	public static void main(final String[] args) {
-		SpringApplication.run(ReportingApplication.class, args);
-	}
+    public static void main(final String[] args) {
+        SpringApplication.run(ReportingApplication.class, args);
+    }
 }
