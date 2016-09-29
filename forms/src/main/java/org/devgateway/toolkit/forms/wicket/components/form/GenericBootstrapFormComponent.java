@@ -11,6 +11,11 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.components.form;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
+import de.agilecoders.wicket.core.markup.html.bootstrap.form.FormGroup;
+import de.agilecoders.wicket.core.markup.html.bootstrap.form.InputBehavior;
+import de.agilecoders.wicket.core.markup.html.bootstrap.form.InputBehavior.Size;
+import de.agilecoders.wicket.core.util.Attributes;
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
@@ -29,23 +34,17 @@ import org.devgateway.toolkit.forms.wicket.components.ComponentUtil;
 import org.devgateway.toolkit.forms.wicket.components.FieldPanel;
 import org.devgateway.toolkit.forms.wicket.components.TooltipLabel;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
-import de.agilecoders.wicket.core.markup.html.bootstrap.form.FormGroup;
-import de.agilecoders.wicket.core.markup.html.bootstrap.form.InputBehavior;
-import de.agilecoders.wicket.core.markup.html.bootstrap.form.InputBehavior.Size;
-import de.agilecoders.wicket.core.util.Attributes;
-
 /**
  * @author mpostelnicu
  *
  */
 public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComponent<TYPE>> extends FieldPanel<TYPE> {
-
     private static final long serialVersionUID = -7051128382707812456L;
 
     protected static Logger logger = Logger.getLogger(GenericBootstrapFormComponent.class);
 
     protected FormGroup border;
+
     protected FIELD field;
 
     protected Label viewModeField;
@@ -53,9 +52,11 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
     protected InputBehavior sizeBehavior;
 
     private TooltipConfig.OpenTrigger configWithTrigger = TooltipConfig.OpenTrigger.hover;
+
     protected TooltipLabel tooltipLabel;
+
     protected IModel<String> labelModel;
-    protected boolean nextYear = false;
+
     protected boolean labelHidden;
 
     @Override
@@ -92,7 +93,7 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
      * {@link #getAjaxFormComponentUpdatingBehavior()}. It usuall is the field,
      * but the field may be a wrapper, in which case you should override this
      * and provide the wrapped field.
-     * 
+     *
      * @return
      */
     protected FormComponent<TYPE> updatingBehaviorComponent() {
@@ -128,11 +129,6 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 
     public GenericBootstrapFormComponent<TYPE, FIELD> size(final Size size) {
         sizeBehavior.size(size);
-        return this;
-    }
-
-    public GenericBootstrapFormComponent<TYPE, FIELD> nextYear() {
-        nextYear = true;
         return this;
     }
 
