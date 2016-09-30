@@ -276,12 +276,12 @@ public class Item implements Identifiable {
         return deliveryLocation;
     }
 
-    public void setDeliveryLocation(DefaultLocation deliveryLocation) {
+    public void setDeliveryLocation(final DefaultLocation deliveryLocation) {
         this.deliveryLocation = deliveryLocation;
     }
-    
-	@Override
-	public Serializable getIdProperty() {
-		return id;
-	}
+
+    @Override
+    public Serializable getIdProperty() {
+        return id;
+    }
 }

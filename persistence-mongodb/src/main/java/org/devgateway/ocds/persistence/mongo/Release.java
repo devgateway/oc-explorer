@@ -58,7 +58,7 @@ public class Release implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("id")
-    @Id   
+    @Id
     @Merge(MergeStrategy.ocdsOmit)
     private String id;
 
@@ -74,7 +74,7 @@ public class Release implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("ocid")
-	@Merge(MergeStrategy.ocdsOmit)
+    @Merge(MergeStrategy.ocdsOmit)
     private String ocid;
 
     /**
@@ -165,7 +165,7 @@ public class Release implements Identifiable {
     @ExcelExportSepareteSheet
     @JsonProperty("awards")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
-	@Merge(MergeStrategy.arrayMergeById)
+    @Merge(MergeStrategy.arrayMergeById)
     private Set<Award> awards = new LinkedHashSet<Award>();
 
     /**
@@ -190,7 +190,7 @@ public class Release implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("language")
-	@Merge(MergeStrategy.ocdsVersion)
+    @Merge(MergeStrategy.ocdsVersion)
     private String language = "en";
 
 
@@ -600,9 +600,9 @@ public class Release implements Identifiable {
         }
     }
 
-	@Override
-	public Serializable getIdProperty() {
-		return id;
-	}
+    @Override
+    public Serializable getIdProperty() {
+        return id;
+    }
 
 }

@@ -525,8 +525,8 @@ public class Award implements Identifiable {
 
     }
 
-	@Override
-	public Serializable getIdProperty() {
-		return id;
-	}
+    @Override
+    public Serializable getIdProperty() {
+        return id;
+    }
 }

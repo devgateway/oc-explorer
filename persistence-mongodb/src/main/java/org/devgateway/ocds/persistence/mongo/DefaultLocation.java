@@ -36,7 +36,7 @@ public class DefaultLocation extends Location<GeoJsonPoint> {
     }
 
     @Override
-    public void setGeometry(GeoJsonPoint geometry) {
+    public void setGeometry(final GeoJsonPoint geometry) {
         this.geometry = geometry;
     }
 
