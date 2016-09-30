@@ -56,12 +56,12 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
 
         Aggregation agg = newAggregation(
                 match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)
-                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),     
+                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 new CustomProjectionOperation(project), group("tender." + Keys.PROCUREMENT_METHOD)
                         .sum("$tender.value.amount").as(Keys.TOTAL_TENDER_AMOUNT),
-				project().and(Fields.UNDERSCORE_ID).as(Keys.PROCUREMENT_METHOD).andInclude(Keys.TOTAL_TENDER_AMOUNT)
-						.andExclude(Fields.UNDERSCORE_ID),
-				sort(Direction.DESC, Keys.TOTAL_TENDER_AMOUNT));
+                project().and(Fields.UNDERSCORE_ID).as(Keys.PROCUREMENT_METHOD).andInclude(Keys.TOTAL_TENDER_AMOUNT)
+                        .andExclude(Fields.UNDERSCORE_ID),
+                sort(Direction.DESC, Keys.TOTAL_TENDER_AMOUNT));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
