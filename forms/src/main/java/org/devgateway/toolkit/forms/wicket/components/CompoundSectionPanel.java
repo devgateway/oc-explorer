@@ -19,7 +19,7 @@ public class CompoundSectionPanel<T> extends GenericPanel<T> {
     /**
      * @param id
      */
-    public CompoundSectionPanel(String id) {
+    public CompoundSectionPanel(final String id) {
         this(id, null);
     }
 
@@ -27,7 +27,7 @@ public class CompoundSectionPanel<T> extends GenericPanel<T> {
      * @param id
      * @param model
      */
-    public CompoundSectionPanel(String id, IModel<T> model) {
+    public CompoundSectionPanel(final String id, final IModel<T> model) {
         this(id, model, new ResourceModel(id + ".label"));
     }
 
@@ -36,7 +36,7 @@ public class CompoundSectionPanel<T> extends GenericPanel<T> {
      * @param model
      * @param title
      */
-    public CompoundSectionPanel(String id, IModel<T> model, IModel<String> title) {
+    public CompoundSectionPanel(final String id, final IModel<T> model, final IModel<String> title) {
         super(id, model);
 
         // create a title in case we need it
