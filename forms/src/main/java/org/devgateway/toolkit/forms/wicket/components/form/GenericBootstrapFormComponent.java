@@ -57,8 +57,6 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 
     protected IModel<String> labelModel;
 
-    protected boolean labelHidden;
-
     @Override
     public void onEvent(final IEvent<?> event) {
         ComponentUtil.enableDisableEvent(this, event);
@@ -163,10 +161,6 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 
         tooltipLabel = new TooltipLabel("tooltipLabel", id);
         border.add(tooltipLabel);
-
-        if (!labelHidden) {
-            field.setLabel(labelModel);
-        }
     }
 
     @Override
@@ -180,7 +174,7 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
     }
 
     public GenericBootstrapFormComponent<TYPE, FIELD> hideLabel() {
-        labelHidden = true;
+        field.setLabel(null);
         return this;
     }
 
