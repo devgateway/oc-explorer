@@ -1,12 +1,13 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import com.mongodb.DBObject;
-import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
+import java.util.List;
+
+import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
+import com.mongodb.DBObject;
 
 /**
  * @author idobre
@@ -21,7 +22,7 @@ public class TenderPercentagesControllerTest extends AbstractEndPointControllerT
     @Test
     public void percentTendersCancelled() throws Exception {
         final List<DBObject> percentTendersCancelled = tenderPercentagesController
-                .percentTendersCancelled(new DefaultFilterPagingRequest());
+                .percentTendersCancelled(new YearFilterPagingRequest());
 
         final DBObject first = percentTendersCancelled.get(0);
         int year = (int) first.get(TenderPercentagesController.Keys.YEAR);
@@ -47,7 +48,7 @@ public class TenderPercentagesControllerTest extends AbstractEndPointControllerT
     @Test
     public void percentTendersWithTwoOrMoreTenderers() throws Exception {
         final List<DBObject> percentTendersWithTwoOrMoreTenderers = tenderPercentagesController
-                .percentTendersWithTwoOrMoreTenderers(new DefaultFilterPagingRequest());
+                .percentTendersWithTwoOrMoreTenderers(new YearFilterPagingRequest());
 
         final DBObject first = percentTendersWithTwoOrMoreTenderers.get(0);
         int year = (int) first.get(TenderPercentagesController.Keys.YEAR);
@@ -75,7 +76,7 @@ public class TenderPercentagesControllerTest extends AbstractEndPointControllerT
     @Test
     public void percentTendersAwarded() throws Exception {
         final List<DBObject> percentTendersAwarded = tenderPercentagesController
-                .percentTendersAwarded(new DefaultFilterPagingRequest());
+                .percentTendersAwarded(new YearFilterPagingRequest());
 
         final DBObject first = percentTendersAwarded.get(0);
         int year = (int) first.get(TenderPercentagesController.Keys.YEAR);
@@ -105,7 +106,7 @@ public class TenderPercentagesControllerTest extends AbstractEndPointControllerT
     @Test
     public void percentTendersUsingEBid() throws Exception {
         final List<DBObject> percentTendersUsingEBid = tenderPercentagesController
-                .percentTendersUsingEBid(new DefaultFilterPagingRequest());
+                .percentTendersUsingEBid(new YearFilterPagingRequest());
 
         final DBObject first = percentTendersUsingEBid.get(0);
         int year = (int) first.get(TenderPercentagesController.Keys.YEAR);
