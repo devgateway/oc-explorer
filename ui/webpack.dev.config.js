@@ -16,7 +16,8 @@ module.exports = {
         test: /\.(jsx|es6)$/,
         loaders: [
           'react-hot',
-          'babel-loader?babelrc=false,presets[]=react,presets[]=es2015,cacheDirectory'
+          'babel-loader?babelrc=false,presets[]=react,presets[]=es2015,cacheDirectory',
+          'eslint-loader'
         ],
         exclude: /node_modules/
       },
@@ -31,5 +32,8 @@ module.exports = {
   devtool: 'source-map',
   plugins: [
     new webpack.HotModuleReplacementPlugin()
-  ]
+  ],
+  eslint:{
+    configFile: "./.eslintrc"
+  }
 };
