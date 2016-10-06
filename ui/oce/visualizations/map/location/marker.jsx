@@ -17,8 +17,4 @@ export default class Location extends Marker{
       this.leafletElement.options.data = this.props.data;
     }
   }
-
-  render(){
-    return super.render();
-  }
 }
