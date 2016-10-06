@@ -32,7 +32,7 @@ public abstract class ListViewSectionPanel<T extends AbstractAuditableEntity, PA
 
     protected ListView<T> listView;
 
-    public ListViewSectionPanel(String id) {
+    public ListViewSectionPanel(final String id) {
         super(id);
     }
 
@@ -68,7 +68,7 @@ public abstract class ListViewSectionPanel<T extends AbstractAuditableEntity, PA
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
                 @SuppressWarnings("unchecked")
                 T newChild = createNewChild((IModel<PARENT>) ListViewSectionPanel.this.getParent().getDefaultModel());
                 ListViewSectionPanel.this.getModel().getObject().add(newChild);
@@ -100,7 +100,7 @@ public abstract class ListViewSectionPanel<T extends AbstractAuditableEntity, PA
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void populateItem(ListItem<T> item) {
+            protected void populateItem(final ListItem<T> item) {
                 // we wrap the item model on a compound model so we can use the field ids as property models
                 final CompoundPropertyModel<T> compoundPropertyModel = new CompoundPropertyModel<>(item.getModel());
 
