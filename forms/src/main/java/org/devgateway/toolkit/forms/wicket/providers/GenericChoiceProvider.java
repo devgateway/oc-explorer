@@ -56,7 +56,7 @@ public class GenericChoiceProvider<T> extends ChoiceProvider<T> {
     }
 
     @Override
-    public String getIdValue(T object) {
+    public String getIdValue(final T object) {
         return object.toString();
     }
 
