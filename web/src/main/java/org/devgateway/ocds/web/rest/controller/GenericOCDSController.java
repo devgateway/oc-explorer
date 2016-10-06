@@ -32,7 +32,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
  * @author mpostelnicu
  *
  */
-public class GenericOCDSController {
+public abstract class GenericOCDSController {
 
     private static final int LAST_DAY = 31;
 
@@ -174,8 +174,8 @@ public class GenericOCDSController {
     protected Criteria getProcuringEntityIdCriteria(final DefaultFilterPagingRequest filter) {
         return createFilterCriteria("tender.procuringEntity._id", filter.getProcuringEntityId(), filter);
     }
-    
-    
+
+
     /**
      * Appends the supplier entity id for this filter, this will fitler based
      * on tender.procuringEntity._id
@@ -191,16 +191,16 @@ public class GenericOCDSController {
     protected void init() {
         Map<String, Object> tmpMap = new HashMap<>();
         tmpMap.put("tender.procuringEntity._id", 1);
-		tmpMap.put("awards.suppliers._id", 1);
+        tmpMap.put("awards.suppliers._id", 1);
         tmpMap.put("tender.items.classification._id", 1);
         tmpMap.put("tender.items.deliveryLocation._id", 1);
         tmpMap.put("tender.value.amount", 1);
-        tmpMap.put("awards.value.amount", 1);        
-        
+        tmpMap.put("awards.value.amount", 1);
+
         filterProjectMap = Collections.unmodifiableMap(tmpMap);
     }
 
-    protected Criteria getYearFilterCriteria(final String dateProperty, final YearFilterPagingRequest filter) {
+    protected Criteria getYearFilterCriteria(final YearFilterPagingRequest filter, final String dateProperty) {
         Criteria[] yearCriteria = null;
         Criteria criteria = new Criteria();
 
@@ -221,18 +221,18 @@ public class GenericOCDSController {
 
     protected Criteria getDefaultFilterCriteria(final DefaultFilterPagingRequest filter) {
         return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
-        		getSupplierIdCriteria(filter),
+                getSupplierIdCriteria(filter),
                 getByTenderDeliveryLocationIdentifier(filter), getByTenderAmountIntervalCriteria(filter),
                 getByAwardAmountIntervalCriteria(filter));
     }
 
-	protected Criteria getYearDefaultFilterCriteria(final YearFilterPagingRequest filter, String dateProperty) {
-		return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
-				getSupplierIdCriteria(filter),
-				getByTenderDeliveryLocationIdentifier(filter), getByTenderAmountIntervalCriteria(filter),
-				getByAwardAmountIntervalCriteria(filter), getYearFilterCriteria(dateProperty, filter));
-	}
-    
+    protected Criteria getYearDefaultFilterCriteria(final YearFilterPagingRequest filter, final String dateProperty) {
+        return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
+                getSupplierIdCriteria(filter),
+                getByTenderDeliveryLocationIdentifier(filter), getByTenderAmountIntervalCriteria(filter),
+                getByAwardAmountIntervalCriteria(filter), getYearFilterCriteria(filter, dateProperty));
+    }
+
     protected MatchOperation getMatchDefaultFilterOperation(final DefaultFilterPagingRequest filter) {
         return match(getDefaultFilterCriteria(filter));
     }

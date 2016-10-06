@@ -1,5 +1,6 @@
 package org.devgateway.ocds.persistence.mongo;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -41,10 +42,10 @@ public class Organization implements Identifiable {
     @ExcelExport
     @Id
     private String id;
-    
+
     @JsonProperty("types")
-    @JsonDeserialize(as = java.util.LinkedHashSet.class)    
-	private Set<OrganizationType> types = new LinkedHashSet<OrganizationType>();
+    @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    private Set<OrganizationType> types = new LinkedHashSet<OrganizationType>();
 
     @ExcelExport
     @JsonProperty("identifier")
@@ -89,7 +90,6 @@ public class Organization implements Identifiable {
     @JsonProperty("contactPoint")
     private ContactPoint contactPoint;
 
-    @Override
     public String getId() {
         return id;
     }
@@ -253,8 +253,8 @@ public class Organization implements Identifiable {
                 append(contactPoint, rhs.contactPoint).
                 isEquals();
     }
-    
-    
+
+
     public enum OrganizationType {
         procuringEntity("procuringEntity"),
 
@@ -284,7 +284,7 @@ public class Organization implements Identifiable {
 
         @JsonCreator
         public static OrganizationType fromValue(final String value) {
-        	OrganizationType constant = CONSTANTS.get(value);
+            OrganizationType constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
             } else {
@@ -295,13 +295,18 @@ public class Organization implements Identifiable {
     }
 
 
-	public Set<OrganizationType> getTypes() {
-		return types;
-	}
+    public Set<OrganizationType> getTypes() {
+        return types;
+    }
 
-	public void setTypes(final Set<OrganizationType> types) {
-		this.types = types;
-	}
+    public void setTypes(final Set<OrganizationType> types) {
+        this.types = types;
+    }
+
+    @Override
+    public Serializable getIdProperty() {
+        return id;
+    }
 
 
 

@@ -11,11 +11,21 @@
  *******************************************************************************/
 package org.devgateway.ocds.web.rest.controller;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import io.swagger.annotations.ApiOperation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+
+import java.util.Arrays;
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.devgateway.ocds.persistence.mongo.Tender;
-import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomGroupingOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.cache.annotation.CacheConfig;
@@ -29,17 +39,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.List;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
-import static org.springframework.data.mongodb.core.query.Criteria.where;
+import io.swagger.annotations.ApiOperation;
 
 /**
  *
@@ -68,7 +71,7 @@ public class TenderPercentagesController extends GenericOCDSController {
             + " total number of tenders and total number of cancelled tenders for each year.")
     @RequestMapping(value = "/api/percentTendersCancelled",
             method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
-    public List<DBObject> percentTendersCancelled(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+    public List<DBObject> percentTendersCancelled(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
         project1.put(Keys.YEAR, new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
@@ -90,7 +93,7 @@ public class TenderPercentagesController extends GenericOCDSController {
 
         Aggregation agg = newAggregation(
                 match(where("tender.tenderPeriod.startDate").exists(true)
-                        .andOperator(getDefaultFilterCriteria(filter))),
+                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 new CustomProjectionOperation(project1), new CustomGroupingOperation(group),
                 new CustomProjectionOperation(project2),
                 sort(Direction.ASC, Keys.YEAR), skip(filter.getSkip()), limit(filter.getPageSize())
@@ -107,7 +110,7 @@ public class TenderPercentagesController extends GenericOCDSController {
     @RequestMapping(value = "/api/percentTendersWithTwoOrMoreTenderers",
             method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
     public List<DBObject> percentTendersWithTwoOrMoreTenderers(@ModelAttribute
-                                                               @Valid final DefaultFilterPagingRequest filter) {
+                                                               @Valid final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
         project1.put(Keys.YEAR, new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
@@ -130,7 +133,7 @@ public class TenderPercentagesController extends GenericOCDSController {
 
         Aggregation agg = newAggregation(
                 match(where("tender.tenderPeriod.startDate").exists(true)
-                        .andOperator(getDefaultFilterCriteria(filter))),
+                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 new CustomProjectionOperation(project1), new CustomGroupingOperation(group),
                 new CustomProjectionOperation(project2),
                 sort(Direction.ASC, Keys.YEAR), skip(filter.getSkip()), limit(filter.getPageSize())
@@ -146,7 +149,7 @@ public class TenderPercentagesController extends GenericOCDSController {
             + "This endpoint uses tender.tenderPeriod.startDate to calculate the tender year.")
     @RequestMapping(value = "/api/percentTendersAwardedWithTwoOrMoreTenderers",
             method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
-    public List<DBObject> percentTendersAwarded(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+    public List<DBObject> percentTendersAwarded(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
         project1.put(Keys.YEAR, new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
@@ -173,7 +176,7 @@ public class TenderPercentagesController extends GenericOCDSController {
 
         Aggregation agg = newAggregation(
                 match(where("tender.tenderPeriod.startDate").exists(true).and("tender.numberOfTenderers").gt(0)
-                        .andOperator(getDefaultFilterCriteria(filter))),
+                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 new CustomProjectionOperation(project1), new CustomGroupingOperation(group),
                 new CustomProjectionOperation(project2),
                 sort(Direction.ASC, Keys.YEAR), skip(filter.getSkip()), limit(filter.getPageSize())
@@ -192,7 +195,7 @@ public class TenderPercentagesController extends GenericOCDSController {
             + "tender.submissionMethod='electronicSubmission")
     @RequestMapping(value = "/api/percentTendersUsingEBid", method = { RequestMethod.POST, RequestMethod.GET },
             produces = "application/json")
-    public List<DBObject> percentTendersUsingEBid(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+    public List<DBObject> percentTendersUsingEBid(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
         project1.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
@@ -223,7 +226,7 @@ public class TenderPercentagesController extends GenericOCDSController {
         Aggregation agg = newAggregation(
                 match(where("tender.tenderPeriod.startDate").exists(true).and("tender.submissionMethod.0").exists(true).
                         and("awards.status").is("active")
-                        .andOperator(getDefaultFilterCriteria(filter))),
+                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 unwind("$tender.submissionMethod"),
                 new CustomProjectionOperation(project1), new CustomGroupingOperation(group1),
                 new CustomGroupingOperation(group2),

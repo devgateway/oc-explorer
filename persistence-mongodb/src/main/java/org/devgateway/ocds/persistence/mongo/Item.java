@@ -10,6 +10,7 @@ import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 import org.devgateway.ocds.persistence.mongo.merge.Merge;
 import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
+import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -275,7 +276,12 @@ public class Item implements Identifiable {
         return deliveryLocation;
     }
 
-    public void setDeliveryLocation(DefaultLocation deliveryLocation) {
+    public void setDeliveryLocation(final DefaultLocation deliveryLocation) {
         this.deliveryLocation = deliveryLocation;
+    }
+
+    @Override
+    public Serializable getIdProperty() {
+        return id;
     }
 }
