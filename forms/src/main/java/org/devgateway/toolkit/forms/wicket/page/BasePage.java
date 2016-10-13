@@ -47,6 +47,7 @@ import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.resource.JQueryResourceReference;
 import org.apache.wicket.util.string.StringValue;
+import org.devgateway.ocds.forms.wicket.page.list.ListAllDashboardPage;
 import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.security.SecurityUtil;
@@ -311,6 +312,10 @@ public abstract class BasePage extends GenericWebPage<Void> {
                 list.add(new MenuBookmarkablePageLink<Void>(EditAdminSettingsPage.class,
                         new StringResourceModel("navbar.adminSettings", BasePage.this, null))
                         .setIconType(FontAwesomeIconType.briefcase));
+                
+                list.add(new MenuBookmarkablePageLink<Void>(ListAllDashboardPage.class,
+                        new StringResourceModel("navbar.allDashboard", BasePage.this, null))
+                        .setIconType(FontAwesomeIconType.filter));
 
                 list.add(uiBrowserLink);
 
