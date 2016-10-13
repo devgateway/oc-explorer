@@ -9,25 +9,17 @@
  * Contributors:
  * Development Gateway - initial API and implementation
  *******************************************************************************/
-/**
- * 
- */
-package org.devgateway.toolkit.forms.security;
+package org.devgateway.toolkit.persistence.repository;
+
+import org.devgateway.ocds.persistence.dao.UserDashboard;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
+ * 
  * @author mpostelnicu
  *
  */
-public final class SecurityConstants {
+@Transactional
+public interface UserDashboardRepository extends BaseJpaRepository<UserDashboard, Long> {
 
-    public final class Roles {
-
-        private Roles() {
-
-        }
-
-        public static final String ROLE_ADMIN = "ROLE_ADMIN";
-        public static final String ROLE_USER = "ROLE_USER";
-        public static final String ROLE_PROCURING_ENTITY = "ROLE_PROCURING_ENTITY";
-    }
 }
