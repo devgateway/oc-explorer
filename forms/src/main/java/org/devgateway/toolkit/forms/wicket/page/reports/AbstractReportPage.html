@@ -6,21 +6,25 @@
         <div class="col-md-8 col-md-offset-2">
             <wicket:child/>
 
-            <div wicket:id="htmlReportPanel"></div>
+            <div wicket:id="htmlReportPanel" class="row"></div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <a class="btn btn-info col-md-2 col-md-offset-1" wicket:id="pdfDownload">
+    <div class="row download-buttons">
+        <div class="col-md-2 col-md-offset-3">
+            <a class="btn btn-info" wicket:id="pdfDownload">
                 <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
                 PDF Download
             </a>
-            <a class="btn btn-info col-md-2 col-md-offset-1" wicket:id="xlsDownload">
+        </div>
+        <div class="col-md-2">
+            <a class="btn btn-info" wicket:id="xlsDownload">
                 <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
                 Excel Download
             </a>
-            <a class="btn btn-info col-md-2 col-md-offset-1" wicket:id="rtfDownload">
+        </div>
+        <div class="col-md-2">
+            <a class="btn btn-info" wicket:id="rtfDownload">
                 <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
                 Word Download
             </a>
@@ -29,5 +33,3 @@
 </wicket:extend>
 </body>
 </html>
-
-   
