@@ -18,30 +18,44 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.devgateway.ocds.forms.wicket.page.edit.EditUserDashboardPage;
+import org.devgateway.ocds.forms.wicket.providers.PersonDashboardJpaRepositoryProvider;
 import org.devgateway.ocds.persistence.dao.UserDashboard;
+import org.devgateway.ocds.persistence.repository.UserDashboardRepository;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.page.lists.AbstractListPage;
-import org.devgateway.toolkit.persistence.repository.UserDashboardRepository;
+import org.devgateway.toolkit.forms.wicket.providers.SortableJpaRepositoryDataProvider;
 import org.wicketstuff.annotation.mount.MountPath;
 
-@AuthorizeInstantiation(SecurityConstants.Roles.ROLE_ADMIN)
-@MountPath(value = "/listUserDashboards")
-public class ListUserDashboardPage extends AbstractListPage<UserDashboard> {
+@AuthorizeInstantiation(SecurityConstants.Roles.ROLE_PROCURING_ENTITY)
+@MountPath(value = "/listMyDashboards")
+public class ListMyDashboardsPage extends AbstractListPage<UserDashboard> {
 
     /**
      * 
      */
-    private static final long serialVersionUID = -324298525712620234L;
+    private static final long serialVersionUID = 8105049572554654046L;
+
     @SpringBean
     private UserDashboardRepository userDashboardRepository;
 
-    public ListUserDashboardPage(final PageParameters pageParameters) {
+    @Override
+    public SortableJpaRepositoryDataProvider<UserDashboard> getProvider() {
+        return new PersonDashboardJpaRepositoryProvider(userDashboardRepository);
+    }
+
+    public ListMyDashboardsPage(final PageParameters pageParameters) {
         super(pageParameters);
         this.jpaRepository = userDashboardRepository;
         this.editPageClass = EditUserDashboardPage.class;
         columns.add(new PropertyColumn<UserDashboard, String>(
-                new Model<String>((new StringResourceModel("name", ListUserDashboardPage.this, null)).getString()),
+                new Model<String>((new StringResourceModel("name", ListMyDashboardsPage.this, null)).getString()),
                 "name", "name"));
+    }
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        editPageLink.setVisibilityAllowed(false);
     }
 
 }
