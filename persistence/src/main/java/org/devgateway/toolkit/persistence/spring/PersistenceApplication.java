@@ -12,6 +12,7 @@
 package org.devgateway.toolkit.persistence.spring;
 
 import org.devgateway.ocds.persistence.dao.UserDashboard;
+import org.devgateway.ocds.persistence.repository.UserDashboardRepository;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.devgateway.toolkit.persistence.repository.RoleRepository;
 import org.springframework.boot.SpringApplication;
@@ -30,7 +31,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  *
  */
 @SpringBootApplication
-@EnableJpaRepositories(basePackageClasses = RoleRepository.class)
+@EnableJpaRepositories(basePackageClasses = { RoleRepository.class, UserDashboardRepository.class })
 @EnableTransactionManagement
 @EntityScan(basePackageClasses = { GenericPersistable.class, UserDashboard.class })
 @PropertySource("classpath:/org/devgateway/toolkit/persistence/application.properties")
