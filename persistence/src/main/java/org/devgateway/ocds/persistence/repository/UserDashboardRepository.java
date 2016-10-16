@@ -11,10 +11,9 @@
  *******************************************************************************/
 package org.devgateway.ocds.persistence.repository;
 
-import java.util.Optional;
+import java.util.List;
 
 import org.devgateway.ocds.persistence.dao.UserDashboard;
-import org.devgateway.toolkit.persistence.dao.Person;
 import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,22 +31,37 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 @RepositoryRestResource
-@PreAuthorize("hasRole('ROLE_USER')")
+@PreAuthorize("hasRole('ROLE_PROCURING_ENTITY')")
 public interface UserDashboardRepository extends TextSearchableRepository<UserDashboard, Long> {
 
-    @Query("select p.defaultDashboard from Person p where p.username = ?1")
-    @RestResource
-    Optional<UserDashboard> findDefaultByUsername(String username);
-    
-    @Query("select p.dashboards from Person p where p.id = ?1")
-    Page<UserDashboard> findDashboardsForPersonId(long userId, 
-            Pageable pageable);
+    @Query("select d from Person p JOIN p.dashboards d where p.id = ?1")
+    Page<UserDashboard> findDashboardsForPersonId(long userId, Pageable pageable);
 
-    @Query("select count(d) from UserDashboard d where d.user.id = ?1")
-    long countDashboardsForPersonId(long userId);
-    
+    @Query("select p.defaultDashboard from Person p where p.id = ?1")
+    UserDashboard getDefaultDashboardForPersonId(long userId);
+
     @Override
     @Query("select e from  #{#entityName} e where lower(e.name) like %:code%")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     Page<UserDashboard> searchText(@Param("code") String code, Pageable page);
+
+    @Override
+    @RestResource(exported = false)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    List<UserDashboard> findAll();
+
+    @Override
+    @RestResource(exported = false)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    Page<UserDashboard> findAll(Pageable pageable);
+
+    @Override
+    @RestResource(exported = false)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    void delete(Long id);
+
+    @RestResource(exported = true)
+    @Override
+    UserDashboard getOne(Long id);
 
 }

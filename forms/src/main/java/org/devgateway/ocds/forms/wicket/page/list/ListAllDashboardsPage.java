@@ -47,8 +47,8 @@ public class ListAllDashboardsPage extends AbstractListPage<UserDashboard> {
                 "defaultDashboardUsers", "defaultDashboardUsers"));
 
         columns.add(new PropertyColumn<UserDashboard, String>(new Model<String>(
-                (new StringResourceModel("user", ListAllDashboardsPage.this, null)).getString()),
-                "user", "user"));
+                (new StringResourceModel("users", ListAllDashboardsPage.this, null)).getString()),
+                "users", "users"));
 
     }
 

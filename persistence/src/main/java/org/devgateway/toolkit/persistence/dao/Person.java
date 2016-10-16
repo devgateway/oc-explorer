@@ -22,7 +22,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import org.devgateway.ocds.persistence.dao.UserDashboard;
@@ -73,7 +72,7 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
     private UserDashboard defaultDashboard;
     
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "user")
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,  mappedBy = "users")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<UserDashboard> dashboards = new HashSet<>();
 

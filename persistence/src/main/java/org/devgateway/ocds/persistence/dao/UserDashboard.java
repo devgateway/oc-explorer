@@ -10,8 +10,9 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 import org.devgateway.toolkit.persistence.dao.AbstractAuditableEntity;
 import org.devgateway.toolkit.persistence.dao.Labelable;
@@ -19,6 +20,9 @@ import org.devgateway.toolkit.persistence.dao.Person;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.envers.Audited;
+import org.springframework.data.rest.core.annotation.RestResource;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * @author mpost
@@ -30,7 +34,10 @@ import org.hibernate.envers.Audited;
 public class UserDashboard extends AbstractAuditableEntity implements Serializable, Labelable {
 
     private static final long serialVersionUID = 5758275706289173304L;
+
+    @NotNull(message = "Cannot be Null")
     private String name;
+    @NotNull(message = "Cannot be Null")
     private String formUrlEncodedBody;
 
     public String getFormUrlEncodedBody() {
@@ -43,15 +50,16 @@ public class UserDashboard extends AbstractAuditableEntity implements Serializab
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "defaultDashboard")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @RestResource(exported = false)
+    @JsonIgnore
     private Set<Person> defaultDashboardUsers = new HashSet<>();
 
-    
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @ManyToOne(fetch = FetchType.LAZY)
-    private UserDashboard user;
-    
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @RestResource(exported = false)
+    @JsonIgnore
+    private Set<Person> users = new HashSet<>();
 
-    
     @Override
     public AbstractAuditableEntity getParent() {
         // TODO Auto-generated method stub
@@ -85,25 +93,25 @@ public class UserDashboard extends AbstractAuditableEntity implements Serializab
     @Override
     public void setLabel(String label) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public String getLabel() {
         return name;
     }
-    
+
     @Override
     public String toString() {
         return name;
     }
 
-    public UserDashboard getUser() {
-        return user;
+    public Set<Person> getUsers() {
+        return users;
     }
 
-    public void setUser(UserDashboard user) {
-        this.user = user;
+    public void setUsers(Set<Person> users) {
+        this.users = users;
     }
 
 }

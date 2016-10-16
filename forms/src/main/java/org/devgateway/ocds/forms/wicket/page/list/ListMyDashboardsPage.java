@@ -24,6 +24,7 @@ import org.devgateway.ocds.persistence.repository.UserDashboardRepository;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.page.lists.AbstractListPage;
 import org.devgateway.toolkit.forms.wicket.providers.SortableJpaRepositoryDataProvider;
+import org.devgateway.toolkit.persistence.repository.PersonRepository;
 import org.wicketstuff.annotation.mount.MountPath;
 
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_PROCURING_ENTITY)
@@ -38,9 +39,13 @@ public class ListMyDashboardsPage extends AbstractListPage<UserDashboard> {
     @SpringBean
     private UserDashboardRepository userDashboardRepository;
 
+    @SpringBean
+    private PersonRepository personRepository;
+
+    
     @Override
     public SortableJpaRepositoryDataProvider<UserDashboard> getProvider() {
-        return new PersonDashboardJpaRepositoryProvider(userDashboardRepository);
+        return new PersonDashboardJpaRepositoryProvider(userDashboardRepository, personRepository);
     }
 
     public ListMyDashboardsPage(final PageParameters pageParameters) {
