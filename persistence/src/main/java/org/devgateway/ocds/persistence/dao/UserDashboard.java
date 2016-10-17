@@ -49,13 +49,13 @@ public class UserDashboard extends AbstractAuditableEntity implements Serializab
     }
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "defaultDashboard")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @RestResource(exported = false)
     @JsonIgnore
     private Set<Person> defaultDashboardUsers = new HashSet<>();
 
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH },
+            fetch = FetchType.LAZY)
     @RestResource(exported = false)
     @JsonIgnore
     private Set<Person> users = new HashSet<>();
