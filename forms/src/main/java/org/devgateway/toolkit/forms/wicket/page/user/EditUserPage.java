@@ -310,6 +310,13 @@ public class EditUserPage extends AbstractEditPage<Person> {
         return false;
     }
 
+    private void ensureDefaultDashboardIsAlsoAssignedDashboard(Person person) {
+        if (person.getDefaultDashboard() != null && !person.getDashboards().contains(person.getDefaultDashboard())) {
+            person.getDefaultDashboard().getUsers().add(person);
+            person.getDashboards().add(person.getDefaultDashboard());
+        }
+    }
+    
     @Override
     public SaveEditPageButton getSaveEditPageButton() {
         return new SaveEditPageButton("save", new StringResourceModel("save", EditUserPage.this, null)) {
@@ -337,6 +344,9 @@ public class EditUserPage extends AbstractEditPage<Person> {
                     saveable.setChangePassword(false);
                 }
 
+                
+                ensureDefaultDashboardIsAlsoAssignedDashboard(saveable);
+                
                 jpaRepository.save(saveable);
                 if (!SecurityUtil.isCurrentUserAdmin()) {
                     setResponsePage(Homepage.class);
