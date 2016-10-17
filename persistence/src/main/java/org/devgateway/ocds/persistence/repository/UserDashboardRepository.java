@@ -51,7 +51,6 @@ public interface UserDashboardRepository extends TextSearchableRepository<UserDa
     List<UserDashboard> findAll();
 
     @Override
-    @RestResource(exported = false)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     Page<UserDashboard> findAll(Pageable pageable);
 
