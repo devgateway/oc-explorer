@@ -59,6 +59,11 @@ public interface UserDashboardRepository extends TextSearchableRepository<UserDa
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     void delete(Long id);
 
+    @Override
+    @RestResource(exported = false)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    void deleteAll();
+    
     @RestResource(exported = true)
     @Override
     UserDashboard getOne(Long id);
