@@ -7,9 +7,13 @@ import org.devgateway.ocds.persistence.repository.UserDashboardRepository;
 import org.devgateway.toolkit.persistence.dao.Person;
 import org.devgateway.toolkit.persistence.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.ResourceAssembler;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -26,8 +30,10 @@ public class UserDashboardRestController {
 
     @Autowired
     private PersonRepository personRepository;
-   
-    
+
+    @Autowired
+    private PagedResourcesAssembler<UserDashboard> resourcesAssembler;
+
     @Autowired
     public UserDashboardRestController(UserDashboardRepository repo) {
         repository = repo;
@@ -41,6 +47,17 @@ public class UserDashboardRestController {
         UserDashboard dashboard = repository.getDefaultDashboardForPersonId(getCurrentAuthenticatedPerson().getId());
         Resource<Object> resource = persistentEntityResourceAssembler.toResource(dashboard);
         return ResponseEntity.ok(resource);
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @RequestMapping(method = { RequestMethod.POST, RequestMethod.GET },
+            value = "/userDashboards/search/getDashboardsForCurrentUser")
+    @PreAuthorize("hasRole('ROLE_PROCURING_ENTITY')")
+    public @ResponseBody PagedResources<Resource<UserDashboard>> getDashboardsForCurrentUser(Pageable page,
+            PersistentEntityResourceAssembler persistentEntityResourceAssembler) {
+        return resourcesAssembler.toResource(
+                repository.findDashboardsForPersonId(getCurrentAuthenticatedPerson().getId(), page),
+                (ResourceAssembler) persistentEntityResourceAssembler);
     }
 
     @RequestMapping(method = { RequestMethod.POST, RequestMethod.GET },
