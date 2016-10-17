@@ -33,7 +33,7 @@ public class ListAllDashboardsPage extends AbstractListPage<UserDashboard> {
      */
     private static final long serialVersionUID = -324298525712620234L;
     @SpringBean
-    private UserDashboardRepository userDashboardRepository;
+    protected UserDashboardRepository userDashboardRepository;
 
     public ListAllDashboardsPage(final PageParameters pageParameters) {
         super(pageParameters);
