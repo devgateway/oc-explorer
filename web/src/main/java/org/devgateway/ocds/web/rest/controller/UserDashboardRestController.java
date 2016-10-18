@@ -42,7 +42,8 @@ public class UserDashboardRestController {
     @RequestMapping(method = { RequestMethod.POST, RequestMethod.GET },
             value = "/userDashboards/search/getDefaultDashboardForCurrentUser")
     @PreAuthorize("hasRole('ROLE_PROCURING_ENTITY')")
-    public @ResponseBody ResponseEntity<?>
+    @ResponseBody 
+    public ResponseEntity<?>
             getDefaultDashboardForCurrentUser(PersistentEntityResourceAssembler persistentEntityResourceAssembler) {
         UserDashboard dashboard = repository.getDefaultDashboardForPersonId(getCurrentAuthenticatedPerson().getId());
         Resource<Object> resource = persistentEntityResourceAssembler.toResource(dashboard);
@@ -53,7 +54,8 @@ public class UserDashboardRestController {
     @RequestMapping(method = { RequestMethod.POST, RequestMethod.GET },
             value = "/userDashboards/search/getDashboardsForCurrentUser")
     @PreAuthorize("hasRole('ROLE_PROCURING_ENTITY')")
-    public @ResponseBody PagedResources<Resource<UserDashboard>> getDashboardsForCurrentUser(Pageable page,
+    @ResponseBody
+    public  PagedResources<Resource<UserDashboard>> getDashboardsForCurrentUser(Pageable page,
             PersistentEntityResourceAssembler persistentEntityResourceAssembler) {
         return resourcesAssembler.toResource(
                 repository.findDashboardsForPersonId(getCurrentAuthenticatedPerson().getId(), page),
