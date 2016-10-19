@@ -74,14 +74,6 @@ public class UserDashboard extends AbstractAuditableEntity implements Serializab
         this.name = name;
     }
 
-    public String getFormUrlEncoded() {
-        return formUrlEncodedBody;
-    }
-
-    public void setFormUrlEncoded(String formUrlEncoded) {
-        this.formUrlEncodedBody = formUrlEncoded;
-    }
-
     public Set<Person> getDefaultDashboardUsers() {
         return defaultDashboardUsers;
     }
