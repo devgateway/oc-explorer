@@ -1,7 +1,7 @@
 package org.devgateway.ocds.web.rest.controller;
 
 import org.devgateway.ocds.persistence.dao.UserDashboard;
-import org.devgateway.toolkit.web.SpringDataRestControllerTest;
+import org.devgateway.toolkit.web.AbstractSpringDataRestControllerTest;
 import org.devgateway.toolkit.web.TestUserDetailsConfiguration;
 import org.devgateway.toolkit.web.spring.CustomRestMvcConfiguration;
 import org.junit.Assert;
@@ -15,7 +15,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 
 @ContextConfiguration(classes = { CustomRestMvcConfiguration.class, TestUserDetailsConfiguration.class })
-public class UserDashboardRestControllerTest extends SpringDataRestControllerTest {
+public class UserDashboardRestControllerTest extends AbstractSpringDataRestControllerTest {
 
     @Autowired
     private UserDashboardRestController userDashboardRestController;
