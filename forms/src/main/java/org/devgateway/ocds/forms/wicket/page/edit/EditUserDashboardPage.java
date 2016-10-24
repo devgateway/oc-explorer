@@ -66,14 +66,14 @@ public class EditUserDashboardPage extends AbstractEditPage<UserDashboard> {
         editForm.add(formUrlEncodedBody);
 
         Select2MultiChoiceBootstrapFormComponent<Person> defaultDashboardUsers =
-                new Select2MultiChoiceBootstrapFormComponent<Person>("defaultDashboardUsers",
-                        new LabelPersistableJpaRepositoryTextChoiceProvider<Person>(personRepository));
+                new Select2MultiChoiceBootstrapFormComponent<>("defaultDashboardUsers",
+                        new LabelPersistableJpaRepositoryTextChoiceProvider<>(personRepository));
         defaultDashboardUsers.setEnabled(false);
         editForm.add(defaultDashboardUsers);
 
         Select2MultiChoiceBootstrapFormComponent<Person> users =
-                new Select2MultiChoiceBootstrapFormComponent<Person>("users",
-                        new LabelPersistableJpaRepositoryTextChoiceProvider<Person>(personRepository));
+                new Select2MultiChoiceBootstrapFormComponent<>("users",
+                        new LabelPersistableJpaRepositoryTextChoiceProvider<>(personRepository));
         editForm.add(users);
 
         
