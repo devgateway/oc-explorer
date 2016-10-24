@@ -20,7 +20,17 @@ public class YearFilterPagingRequest extends DefaultFilterPagingRequest {
             + "To check which fields are used to read start/endDate from, have a look at each endpoint definition.")
     @EachRange(min = MIN_REQ_YEAR, max = MAX_REQ_YEAR)
     protected List<Integer> year;
+        
+    private Boolean monthly = false;
 
+    public Boolean getMonthly() {
+        return monthly;
+    }
+
+    public void setMonthly(Boolean monthly) {
+        this.monthly = monthly;
+    }
+    
     /**
      *
      */

@@ -92,6 +92,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 
         DBObject project = new BasicDBObject();
         project.put("year", new BasicDBObject("$year", "$awards.date"));
+        project.put(("month"), new BasicDBObject("$month", "$awards.date"));
         project.put("awards.value.amount", 1);
         project.put("totalAwardsWithTender", new BasicDBObject("$cond",
                 Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$tender.tenderPeriod.startDate", null)), 1, 0)));
@@ -115,11 +116,12 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                 match(where("awards.status").is(Award.Status.active.toString()).and("awards.value").exists(true).
                         andOperator(getYearDefaultFilterCriteria(filter, "awards.date"))),
                 new CustomProjectionOperation(project),
-                group("$year").sum("awardsWithTenderValue").as(Keys.TOTAL_AWARD_AMOUNT).count().as(Keys.TOTAL_AWARDS)
+                group("$year", "$month")
+                        .sum("awardsWithTenderValue").as(Keys.TOTAL_AWARD_AMOUNT).count().as(Keys.TOTAL_AWARDS)
                         .sum("totalAwardsWithTender").as(Keys.TOTAL_AWARDS_WITH_TENDER),
                 new CustomProjectionOperation(project1), sort(Direction.ASC, Fields.UNDERSCORE_ID),
                 skip(filter.getSkip()), limit(filter.getPageSize()));
-
+        
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
         return tagCount;
@@ -136,6 +138,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 
         DBObject project = new BasicDBObject();
         project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+        project.put("month", new BasicDBObject("$month", "$tender.tenderPeriod.startDate"));
         project.put("tender.value.amount", 1);
         project.put(Fields.UNDERSCORE_ID, "$tender._id");
         project.put("tenderWithAwards",
@@ -150,6 +153,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
         DBObject group1 = new BasicDBObject();
         group1.put(Fields.UNDERSCORE_ID, Fields.UNDERSCORE_ID_REF);
         group1.put("year", new BasicDBObject("$first", "$year"));
+        group1.put("month", new BasicDBObject("$first", "$month"));        
         group1.put("tenderWithAwards", new BasicDBObject("$max", "$tenderWithAwards"));
         group1.put("tenderWithAwardsValue", new BasicDBObject("$max", "$tenderWithAwardsValue"));
         group1.put("tenderAmount", new BasicDBObject("$first", "$tender.value.amount"));
