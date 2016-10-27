@@ -2,10 +2,8 @@ import FrontendYearFilterableChart from "./frontend-filterable";
 import {pluckImm} from "../../tools";
 
 class NrCancelled extends FrontendYearFilterableChart{
-  static getName(__){
-    return __('Number of cancelled bids');
-  }
-    
+  static getName(t){return t('charts:nrCancelled:title')};
+
   getData(){
     let data = super.getData();
     if(!data) return [];
@@ -23,11 +21,11 @@ class NrCancelled extends FrontendYearFilterableChart{
   getLayout(){
     return {
       xaxis: {
-        title: this.__("Year"),
+        title: this.t('charts:nrCancelled:xAxisTitle'),
         type: 'category'
       },
       yaxis: {
-        title: this.__("Count"),
+        title: this.t('charts:nrCancelled:yAxisTitle'),
         hoverformat: '.2f'
       }
     }
@@ -35,6 +33,7 @@ class NrCancelled extends FrontendYearFilterableChart{
 }
 
 NrCancelled.endpoint = 'percentTendersCancelled';
+NrCancelled.excelEP = 'numberCancelledFundingExcelChart';
 NrCancelled.getMaxField = imm => imm.get('totalCancelled');
 
 export default NrCancelled;
