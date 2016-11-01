@@ -19,6 +19,13 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2).groupName("1ocDashboardsApi").apiInfo(ocDashboardsApiInfo())
                 .select().apis(RequestHandlerSelectors.any()).paths(regex("/api/.*")).build();
     }
+    
+	@Bean
+	public Docket restApi() {
+		return new Docket(DocumentationType.SWAGGER_2).groupName("3restApi").apiInfo(ocDashboardsApiInfo()).select()
+				.apis(RequestHandlerSelectors.any()).paths(regex("/rest/.*")).build();
+	}
+
 
     @Bean
     public Docket manageApi() {
