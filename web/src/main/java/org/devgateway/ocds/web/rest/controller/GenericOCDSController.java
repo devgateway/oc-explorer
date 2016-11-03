@@ -3,18 +3,11 @@
  */
 package org.devgateway.ocds.web.rest.controller;
 
-import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
-import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
-import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.GroupOperation;
-import org.springframework.data.mongodb.core.aggregation.MatchOperation;
-import org.springframework.data.mongodb.core.query.Criteria;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -24,9 +17,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
-import static org.springframework.data.mongodb.core.query.Criteria.where;
+import javax.annotation.PostConstruct;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
+import org.devgateway.toolkit.persistence.mongo.aggregate.CustomSortingOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Fields;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
+import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
+import org.springframework.data.mongodb.core.query.Criteria;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
 /**
  * @author mpostelnicu
@@ -83,6 +92,78 @@ public abstract class GenericOCDSController {
      */
     protected Criteria getBidTypeIdFilterCriteria(final DefaultFilterPagingRequest filter) {
         return createFilterCriteria("tender.items.classification._id", filter.getBidTypeId(), filter);
+    }
+    
+    /**
+     * Adds monthly projection operation, when needed, if the
+     * {@link YearFilterPagingRequest#getMonthly()}
+     * 
+     * @param filter
+     * @param project
+     * @param field
+     */
+    protected void addYearlyMonthlyProjection(YearFilterPagingRequest filter, DBObject project, String field) {
+        project.put("year", new BasicDBObject("$year", field));
+        if (filter.getMonthly()) {
+            project.put(("month"), new BasicDBObject("$month", field));
+        }
+    }
+    
+    protected CustomSortingOperation getSortByYear() {
+        return new CustomSortingOperation(new BasicDBObject("year", 1));
+    }
+    
+    protected void addYearlyMonthlyReferenceToGroup(YearFilterPagingRequest filter, DBObject group) {
+        if (filter.getMonthly()) {
+            group.put(Fields.UNDERSCORE_ID, new BasicDBObject("year", "$year").append("month", "$month"));            
+        } else {
+            group.put(Fields.UNDERSCORE_ID, "$year");
+        }
+    }
+
+    /**
+     * Returns the grouping fields based on the {@link YearFilterPagingRequest#getMonthly()} setting
+     * 
+     * @param filter
+     * @return
+     */
+    protected String[] getYearlyMonthlyGroupingFields(YearFilterPagingRequest filter) {
+        if (filter.getMonthly()) {
+            return new String[] { "$year", "$month" };
+        } else {
+            return new String[] { "$year" };
+        }
+    }
+    
+    /**
+     * @see #getYearlyMonthlyGroupingFields(YearFilterPagingRequest)
+     * 
+     * @param filter
+     * @param extraGroups adds extra groups
+     * @return
+     */
+    protected String[] getYearlyMonthlyGroupingFields(YearFilterPagingRequest filter, String... extraGroups) {
+        return ArrayUtils.addAll(getYearlyMonthlyGroupingFields(filter), extraGroups);
+    }
+    
+    protected GroupOperation getYearlyMonthlyGroupingOperation(YearFilterPagingRequest filter) {
+        return group(getYearlyMonthlyGroupingFields(filter));
+    }
+    
+    protected ProjectionOperation transformYearlyGrouping(YearFilterPagingRequest filter) {
+        if (filter.getMonthly()) {
+            return project();
+        } else {
+            return project(Fields.from(Fields.field("year", Fields.UNDERSCORE_ID_REF)))
+                    .andExclude(Fields.UNDERSCORE_ID);
+        }
+    }
+    
+    protected void addYearlyMonthlyGroupingOperationFirst(YearFilterPagingRequest filter, DBObject group) {
+        group.put("year", new BasicDBObject("$first", "$year"));
+        if (filter.getMonthly()) {
+            group.put("month", new BasicDBObject("$first", "$month"));
+        }
     }
 
 
