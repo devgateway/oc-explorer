@@ -14,7 +14,6 @@ package org.devgateway.ocds.web.rest.controller;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -27,7 +26,6 @@ import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
@@ -73,20 +71,22 @@ public class FundingByLocationController extends GenericOCDSController {
 
         DBObject project = new BasicDBObject();
         project.put("tender.items.deliveryLocation", 1);
-        project.put("tender.value.amount", 1);
-        project.put(Keys.YEAR, new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+        project.put("tender.value.amount", 1);        
+        addYearlyMonthlyProjection(filter, project, "$tender.tenderPeriod.startDate");
 
         Aggregation agg = newAggregation(
                 match(where("tender").exists(true).and("tender.tenderPeriod.startDate").exists(true)
-                .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 new CustomProjectionOperation(project), unwind("$tender.items"),
-                unwind("$tender.items.deliveryLocation"), match(
-                        where("tender.items.deliveryLocation.geometry.coordinates.0").exists(true)),
-                group(Keys.YEAR, "tender." + Keys.ITEMS_DELIVERY_LOCATION).sum("$tender.value.amount")
-                        .as(Keys.TOTAL_TENDERS_AMOUNT).count().as(Keys.TENDERS_COUNT),
-                sort(Direction.ASC, Keys.YEAR)
-                //,skip(filter.getSkip()), limit(filter.getPageSize())
-                );
+                unwind("$tender.items.deliveryLocation"),
+                match(where("tender.items.deliveryLocation.geometry.coordinates.0").exists(true)),
+                group(getYearlyMonthlyGroupingFields(filter, "tender." + Keys.ITEMS_DELIVERY_LOCATION))
+                        .sum("$tender.value.amount").as(Keys.TOTAL_TENDERS_AMOUNT).count().as(Keys.TENDERS_COUNT),
+                getSortByYear()
+        // ,skip(filter.getSkip()), limit(filter.getPageSize())
+        );
+
+        System.out.println(agg);
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();

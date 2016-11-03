@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.devgateway.ocds.web.rest.controller;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
@@ -90,9 +89,8 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
     public List<DBObject> costEffectivenessAwardAmount(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
-        DBObject project = new BasicDBObject();
-        project.put("year", new BasicDBObject("$year", "$awards.date"));
-        project.put(("month"), new BasicDBObject("$month", "$awards.date"));
+        DBObject project = new BasicDBObject();        
+        addYearlyMonthlyProjection(filter, project, "$awards.date");
         project.put("awards.value.amount", 1);
         project.put("totalAwardsWithTender", new BasicDBObject("$cond",
                 Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$tender.tenderPeriod.startDate", null)), 1, 0)));
@@ -116,7 +114,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                 match(where("awards.status").is(Award.Status.active.toString()).and("awards.value").exists(true).
                         andOperator(getYearDefaultFilterCriteria(filter, "awards.date"))),
                 new CustomProjectionOperation(project),
-                group("$year", "$month")
+                getYearlyMonthlyGroupingOperation(filter)
                         .sum("awardsWithTenderValue").as(Keys.TOTAL_AWARD_AMOUNT).count().as(Keys.TOTAL_AWARDS)
                         .sum("totalAwardsWithTender").as(Keys.TOTAL_AWARDS_WITH_TENDER),
                 new CustomProjectionOperation(project1), sort(Direction.ASC, Fields.UNDERSCORE_ID),
@@ -138,7 +136,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 
         DBObject project = new BasicDBObject();
         project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
-        project.put("month", new BasicDBObject("$month", "$tender.tenderPeriod.startDate"));
+        addYearlyMonthlyProjection(filter, project, "$tender.tenderPeriod.startDate");        
         project.put("tender.value.amount", 1);
         project.put(Fields.UNDERSCORE_ID, "$tender._id");
         project.put("tenderWithAwards",
@@ -152,8 +150,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 
         DBObject group1 = new BasicDBObject();
         group1.put(Fields.UNDERSCORE_ID, Fields.UNDERSCORE_ID_REF);
-        group1.put("year", new BasicDBObject("$first", "$year"));
-        group1.put("month", new BasicDBObject("$first", "$month"));        
+        addYearlyMonthlyGroupingOperationFirst(filter, group1); 
         group1.put("tenderWithAwards", new BasicDBObject("$max", "$tenderWithAwards"));
         group1.put("tenderWithAwardsValue", new BasicDBObject("$max", "$tenderWithAwardsValue"));
         group1.put("tenderAmount", new BasicDBObject("$first", "$tender.value.amount"));
@@ -172,9 +169,9 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                     .exists(true).andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 getMatchDefaultFilterOperation(filter), unwind("$awards"), new CustomProjectionOperation(project),
                 new CustomGroupingOperation(group1),
-                getTopXFilterOperation(filter, "$year").sum("tenderWithAwardsValue").as(Keys.TOTAL_TENDER_AMOUNT)
-                        .count()
-                        .as(Keys.TOTAL_TENDERS).sum("tenderWithAwards").as(Keys.TOTAL_TENDER_WITH_AWARDS),
+                getTopXFilterOperation(filter, getYearlyMonthlyGroupingFields(filter)).sum("tenderWithAwardsValue")
+                        .as(Keys.TOTAL_TENDER_AMOUNT).count().as(Keys.TOTAL_TENDERS).sum("tenderWithAwards").as(
+                                Keys.TOTAL_TENDER_WITH_AWARDS),
                 new CustomProjectionOperation(project2), sort(Direction.ASC, Fields.UNDERSCORE_ID),
                 skip(filter.getSkip()), limit(filter.getPageSize()));
 
