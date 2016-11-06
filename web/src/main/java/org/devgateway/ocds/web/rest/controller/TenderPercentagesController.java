@@ -93,7 +93,7 @@ public class TenderPercentagesController extends GenericOCDSController {
                 new CustomProjectionOperation(project1), new CustomGroupingOperation(group),
                 new CustomProjectionOperation(project2),
                 transformYearlyGrouping(filter).andInclude(Keys.TOTAL_TENDERS,
-                        Keys.TOTAL_CANCELLED, Keys.PERCENT_TENDERS),
+                        Keys.TOTAL_CANCELLED, Keys.PERCENT_TENDERS, Keys.PERCENT_CANCELLED),
                 getSortByYear(), 
                 skip(filter.getSkip()), limit(filter.getPageSize())
         );
