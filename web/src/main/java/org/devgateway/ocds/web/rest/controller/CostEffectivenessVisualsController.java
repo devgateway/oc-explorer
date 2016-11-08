@@ -71,6 +71,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 
     public static final class Keys {
         public static final String TOTAL_AWARD_AMOUNT = "totalAwardAmount";
+        public static final String YEAR = "year";
         public static final String TOTAL_AWARDS = "totalAwards";
         public static final String TOTAL_AWARDS_WITH_TENDER = "totalAwardsWithTender";
         public static final String PERCENTAGE_AWARDS_WITH_TENDER = "percentageAwardsWithTender";
@@ -117,8 +118,13 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                 getYearlyMonthlyGroupingOperation(filter)
                         .sum("awardsWithTenderValue").as(Keys.TOTAL_AWARD_AMOUNT).count().as(Keys.TOTAL_AWARDS)
                         .sum("totalAwardsWithTender").as(Keys.TOTAL_AWARDS_WITH_TENDER),
-                new CustomProjectionOperation(project1), sort(Direction.ASC, Fields.UNDERSCORE_ID),
+                new CustomProjectionOperation(project1),
+                transformYearlyGrouping(filter).andInclude(Keys.TOTAL_AWARD_AMOUNT, Keys.TOTAL_AWARDS,
+                        Keys.TOTAL_AWARDS_WITH_TENDER, Keys.PERCENTAGE_AWARDS_WITH_TENDER),
+                getSortByYear(),
                 skip(filter.getSkip()), limit(filter.getPageSize()));
+        
+        System.out.println(agg);
         
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
