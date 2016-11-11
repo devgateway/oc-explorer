@@ -72,8 +72,8 @@ public class AverageNumberOfTenderersController extends GenericOCDSController {
                 group(getYearlyMonthlyGroupingFields(filter)).avg("tender.numberOfTenderers")
                         .as(Keys.AVERAGE_NO_OF_TENDERERS),
                 transformYearlyGrouping(filter).andInclude(Keys.AVERAGE_NO_OF_TENDERERS),
-                getSortByYear(), skip(filter.getSkip()),
-                limit(filter.getPageSize()));
+                getSortByYearMonth(filter), skip(filter.getSkip()),
+                limit(filter.getPageSize()));               
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> list = results.getMappedResults();

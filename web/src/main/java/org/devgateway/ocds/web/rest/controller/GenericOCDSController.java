@@ -109,8 +109,15 @@ public abstract class GenericOCDSController {
         }
     }
     
-    protected CustomSortingOperation getSortByYear() {
-        return new CustomSortingOperation(new BasicDBObject("year", 1));
+    protected CustomSortingOperation getSortByYearMonth(YearFilterPagingRequest filter) {
+        DBObject sort = new BasicDBObject();
+        if (filter.getMonthly()) {
+            sort.put("_id.year", 1);
+            sort.put("_id.month", 1);
+        } else {
+            sort.put("year", 1);
+        }
+        return new CustomSortingOperation(sort);
     }
     
     protected void addYearlyMonthlyReferenceToGroup(YearFilterPagingRequest filter, DBObject group) {

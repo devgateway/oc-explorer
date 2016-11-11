@@ -92,7 +92,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                 new CustomProjectionOperation(project),
                 getYearlyMonthlyGroupingOperation(filter).avg("$tenderLengthDays").as(Keys.AVERAGE_TENDER_DAYS),
                 transformYearlyGrouping(filter).andInclude(Keys.AVERAGE_TENDER_DAYS),
-                getSortByYear(), skip(filter.getSkip()), limit(filter.getPageSize()));
+                getSortByYearMonth(filter), skip(filter.getSkip()), limit(filter.getPageSize()));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> list = results.getMappedResults();
@@ -166,7 +166,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                 new CustomOperation(new BasicDBObject("$project", project)),
                 group(getYearlyMonthlyGroupingFields(filter)).avg("$awardLengthDays").as(Keys.AVERAGE_AWARD_DAYS),
                 transformYearlyGrouping(filter).andInclude(Keys.AVERAGE_AWARD_DAYS),
-                getSortByYear(), skip(filter.getSkip()),
+                getSortByYearMonth(filter), skip(filter.getSkip()),
                 limit(filter.getPageSize()));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);

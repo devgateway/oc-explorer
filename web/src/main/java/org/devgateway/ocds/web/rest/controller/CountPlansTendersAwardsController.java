@@ -75,7 +75,7 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
                 new CustomOperation(new BasicDBObject("$project", project)),
                 group(getYearlyMonthlyGroupingFields(filter)).count().as(Keys.COUNT),
                 transformYearlyGrouping(filter).andInclude(Keys.COUNT),
-                getSortByYear(),
+                getSortByYearMonth(filter),
                 skip(filter.getSkip()), limit(filter.getPageSize()));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
@@ -111,7 +111,7 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
                 new CustomOperation(new BasicDBObject("$project", project)),
                 group(getYearlyMonthlyGroupingFields(filter)).count().as(Keys.COUNT),
                 transformYearlyGrouping(filter).andInclude(Keys.COUNT),
-                getSortByYear(),
+                getSortByYearMonth(filter),
                 skip(filter.getSkip()),
                 limit(filter.getPageSize()));
 

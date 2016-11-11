@@ -8,7 +8,6 @@ import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.aggregation.Fields;
 
 import com.mongodb.DBObject;
 
@@ -28,7 +27,7 @@ public class CostEffectivenessVisualsControllerTest extends AbstractEndPointCont
                 .costEffectivenessAwardAmount(new YearFilterPagingRequest());
 
         final DBObject first = costEffectivenessAwardAmount.get(0);
-        int year = (int) first.get(Fields.UNDERSCORE_ID);
+        int year = (int) first.get(CostEffectivenessVisualsController.Keys.YEAR);
         double totalAwardAmount = (double) first.get(CostEffectivenessVisualsController.Keys.TOTAL_AWARD_AMOUNT);
         int totalAwards = (int) first.get(CostEffectivenessVisualsController.Keys.TOTAL_AWARDS);
         int totalAwardsWithTender = (int) first.get(CostEffectivenessVisualsController.Keys.TOTAL_AWARDS_WITH_TENDER);
@@ -41,7 +40,7 @@ public class CostEffectivenessVisualsControllerTest extends AbstractEndPointCont
         Assert.assertEquals(100.0, percentageAwardsWithTender, 0);
 
         final DBObject second = costEffectivenessAwardAmount.get(1);
-        year = (int) second.get(Fields.UNDERSCORE_ID);
+        year = (int) second.get(CostEffectivenessVisualsController.Keys.YEAR);
         totalAwardAmount = (double) second.get(CostEffectivenessVisualsController.Keys.TOTAL_AWARD_AMOUNT);
         totalAwards = (int) second.get(CostEffectivenessVisualsController.Keys.TOTAL_AWARDS);
         totalAwardsWithTender = (int) second.get(CostEffectivenessVisualsController.Keys.TOTAL_AWARDS_WITH_TENDER);
@@ -60,7 +59,7 @@ public class CostEffectivenessVisualsControllerTest extends AbstractEndPointCont
                 .costEffectivenessTenderAmount(new GroupingFilterPagingRequest());
 
         final DBObject first = costEffectivenessTenderAmount.get(0);
-        int year = (int) first.get(Fields.UNDERSCORE_ID);
+        int year = (int) first.get(CostEffectivenessVisualsController.Keys.YEAR);
         double totalTenderAmount = (double) first.get(CostEffectivenessVisualsController.Keys.TOTAL_TENDER_AMOUNT);
         int totalTenders = (int) first.get(CostEffectivenessVisualsController.Keys.TOTAL_TENDERS);
         int totalTenderWithAwards = (int) first.get(CostEffectivenessVisualsController.Keys.TOTAL_TENDER_WITH_AWARDS);
@@ -73,7 +72,7 @@ public class CostEffectivenessVisualsControllerTest extends AbstractEndPointCont
         Assert.assertEquals(100.0, percentageTendersWithAwards, 0);
 
         final DBObject second = costEffectivenessTenderAmount.get(1);
-        year = (int) second.get(Fields.UNDERSCORE_ID);
+        year = (int) second.get(CostEffectivenessVisualsController.Keys.YEAR);
         totalTenderAmount = (double) second.get(CostEffectivenessVisualsController.Keys.TOTAL_TENDER_AMOUNT);
         totalTenders = (int) second.get(CostEffectivenessVisualsController.Keys.TOTAL_TENDERS);
         totalTenderWithAwards = (int) second.get(CostEffectivenessVisualsController.Keys.TOTAL_TENDER_WITH_AWARDS);
@@ -92,21 +91,21 @@ public class CostEffectivenessVisualsControllerTest extends AbstractEndPointCont
                 .costEffectivenessTenderAwardAmount(new GroupingFilterPagingRequest());
 
         final DBObject first = costEffectivenessTenderAwardAmount.get(0);
-        int year = (int) first.get(Fields.UNDERSCORE_ID);
+        int year = (int) first.get(CostEffectivenessVisualsController.Keys.YEAR);
         BigDecimal diffTenderAwardAmount = (BigDecimal) first
                 .get(CostEffectivenessVisualsController.Keys.DIFF_TENDER_AWARD_AMOUNT);
         Assert.assertEquals(-5991000, diffTenderAwardAmount.doubleValue(), 0);
         Assert.assertEquals(2015, year);
 
         final DBObject second = costEffectivenessTenderAwardAmount.get(1);
-        year = (int) second.get(Fields.UNDERSCORE_ID);
+        year = (int) second.get(CostEffectivenessVisualsController.Keys.YEAR);
         diffTenderAwardAmount = (BigDecimal) second
                 .get(CostEffectivenessVisualsController.Keys.DIFF_TENDER_AWARD_AMOUNT);
         Assert.assertEquals(2016, year);
         Assert.assertEquals(-40000, diffTenderAwardAmount.doubleValue(), 0);
 
         final DBObject third = costEffectivenessTenderAwardAmount.get(2);
-        year = (int) third.get(Fields.UNDERSCORE_ID);
+        year = (int) third.get(CostEffectivenessVisualsController.Keys.YEAR);
         diffTenderAwardAmount = (BigDecimal) third
                 .get(CostEffectivenessVisualsController.Keys.DIFF_TENDER_AWARD_AMOUNT);
         Assert.assertEquals(2014, year);

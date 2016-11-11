@@ -13,8 +13,8 @@ package org.devgateway.ocds.web.rest.controller;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -41,7 +41,6 @@ import org.devgateway.toolkit.web.spring.util.AsyncBeanParamControllerMethodCall
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
@@ -75,11 +74,15 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
         public static final String TOTAL_AWARDS = "totalAwards";
         public static final String TOTAL_AWARDS_WITH_TENDER = "totalAwardsWithTender";
         public static final String PERCENTAGE_AWARDS_WITH_TENDER = "percentageAwardsWithTender";
+        private static final String FRACTION_AWARDS_WITH_TENDER = "fractionAwardsWithTender";
         public static final String TOTAL_TENDER_AMOUNT = "totalTenderAmount";
         public static final String TOTAL_TENDERS = "totalTenders";
         public static final String TOTAL_TENDER_WITH_AWARDS = "totalTenderWithAwards";
         public static final String PERCENTAGE_TENDERS_WITH_AWARDS = "percentageTendersWithAwards";
+        private static final String FRACTION_TENDERS_WITH_AWARDS = "fractionTendersWithAwards";
         public static final String DIFF_TENDER_AWARD_AMOUNT = "diffTenderAwardAmount";
+        private static final String YEAR_MONTH = "year-month"; //this is for internal use
+        public static final String MONTH = "month";
     }
 
 
@@ -99,15 +102,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                 new BasicDBObject("$cond",
                         Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$tender.tenderPeriod.startDate", null)),
                                 "$awards.value.amount", 0)));
-
-        DBObject project1 = new BasicDBObject();
-        project1.put(Fields.UNDERSCORE_ID, 1);
-        project1.put(Keys.TOTAL_AWARD_AMOUNT, 1);
-        project1.put(Keys.TOTAL_AWARDS, 1);
-        project1.put(Keys.TOTAL_AWARDS_WITH_TENDER, 1);
-        project1.put(Keys.PERCENTAGE_AWARDS_WITH_TENDER, new BasicDBObject("$multiply", Arrays
-                .asList(new BasicDBObject("$divide", Arrays.asList("$totalAwardsWithTender", "$totalAwards")), 100)));
-
+        
         Aggregation agg = Aggregation.newAggregation(
                 match(where("awards").elemMatch(where("status").is(Award.Status.active.toString())).and("awards.date")
                         .exists(true)),
@@ -118,13 +113,17 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                 getYearlyMonthlyGroupingOperation(filter)
                         .sum("awardsWithTenderValue").as(Keys.TOTAL_AWARD_AMOUNT).count().as(Keys.TOTAL_AWARDS)
                         .sum("totalAwardsWithTender").as(Keys.TOTAL_AWARDS_WITH_TENDER),
-                new CustomProjectionOperation(project1),
+                project(Fields.UNDERSCORE_ID, Keys.TOTAL_AWARD_AMOUNT, Keys.TOTAL_AWARDS, Keys.TOTAL_AWARDS_WITH_TENDER)
+                        .and(Keys.TOTAL_AWARDS_WITH_TENDER).divide(Keys.TOTAL_AWARDS)
+                        .as(Keys.FRACTION_AWARDS_WITH_TENDER),
+                project(Fields.UNDERSCORE_ID, Keys.TOTAL_AWARD_AMOUNT, Keys.TOTAL_AWARDS, Keys.TOTAL_AWARDS_WITH_TENDER,
+                        Keys.FRACTION_AWARDS_WITH_TENDER).and(Keys.FRACTION_AWARDS_WITH_TENDER).multiply(100)
+                                .as(Keys.PERCENTAGE_AWARDS_WITH_TENDER),
                 transformYearlyGrouping(filter).andInclude(Keys.TOTAL_AWARD_AMOUNT, Keys.TOTAL_AWARDS,
-                        Keys.TOTAL_AWARDS_WITH_TENDER, Keys.PERCENTAGE_AWARDS_WITH_TENDER),
-                getSortByYear(),
-                skip(filter.getSkip()), limit(filter.getPageSize()));
-        
-        System.out.println(agg);
+                        Keys.TOTAL_AWARDS_WITH_TENDER, Keys.PERCENTAGE_AWARDS_WITH_TENDER
+                ), getSortByYearMonth(filter),
+                skip(filter.getSkip()), limit(filter.getPageSize()));  
+                
         
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
@@ -161,33 +160,39 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
         group1.put("tenderWithAwardsValue", new BasicDBObject("$max", "$tenderWithAwardsValue"));
         group1.put("tenderAmount", new BasicDBObject("$first", "$tender.value.amount"));
         filterProjectMap.forEach((k, v) -> group1.put(k.replace(".", ""), new BasicDBObject("$first", "$" + k)));
-
-        DBObject project2 = new BasicDBObject();
-        project2.put(Fields.UNDERSCORE_ID, Fields.UNDERSCORE_ID_REF);
-        project2.put(Keys.TOTAL_TENDER_AMOUNT, 1);
-        project2.put(Keys.TOTAL_TENDERS, 1);
-        project2.put(Keys.TOTAL_TENDER_WITH_AWARDS, 1);
-        project2.put(Keys.PERCENTAGE_TENDERS_WITH_AWARDS, new BasicDBObject("$multiply", Arrays
-                .asList(new BasicDBObject("$divide", Arrays.asList("$totalTenderWithAwards", "$totalTenders")), 100)));
-
+       
         Aggregation agg = Aggregation.newAggregation(
                 match(where("tender.status").is(Tender.Status.active.toString()).and("tender.tenderPeriod.startDate")
-                    .exists(true).andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                        .exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 getMatchDefaultFilterOperation(filter), unwind("$awards"), new CustomProjectionOperation(project),
                 new CustomGroupingOperation(group1),
                 getTopXFilterOperation(filter, getYearlyMonthlyGroupingFields(filter)).sum("tenderWithAwardsValue")
-                        .as(Keys.TOTAL_TENDER_AMOUNT).count().as(Keys.TOTAL_TENDERS).sum("tenderWithAwards").as(
-                                Keys.TOTAL_TENDER_WITH_AWARDS),
-                new CustomProjectionOperation(project2), sort(Direction.ASC, Fields.UNDERSCORE_ID),
-                skip(filter.getSkip()), limit(filter.getPageSize()));
+                        .as(Keys.TOTAL_TENDER_AMOUNT).count().as(Keys.TOTAL_TENDERS).sum("tenderWithAwards")
+                        .as(Keys.TOTAL_TENDER_WITH_AWARDS),
+                project(Keys.TOTAL_TENDER_AMOUNT, Keys.TOTAL_TENDERS, Keys.TOTAL_TENDER_WITH_AWARDS)
+                        .andInclude(Fields.from(Fields.field(Fields.UNDERSCORE_ID, Fields.UNDERSCORE_ID_REF)))
+                        .and(Keys.TOTAL_TENDER_WITH_AWARDS).divide(Keys.TOTAL_TENDERS)
+                        .as(Keys.FRACTION_TENDERS_WITH_AWARDS),
+                project(Keys.TOTAL_TENDER_AMOUNT, Keys.TOTAL_TENDERS, Keys.TOTAL_TENDER_WITH_AWARDS,
+                        Fields.UNDERSCORE_ID).and(Keys.FRACTION_TENDERS_WITH_AWARDS).multiply(100)
+                                .as(Keys.PERCENTAGE_TENDERS_WITH_AWARDS),
+                transformYearlyGrouping(filter).andInclude(Keys.TOTAL_TENDER_AMOUNT, Keys.TOTAL_TENDERS,
+                        Keys.TOTAL_TENDER_WITH_AWARDS, Keys.PERCENTAGE_TENDERS_WITH_AWARDS),
+                getSortByYearMonth(filter), skip(filter.getSkip()), limit(filter.getPageSize()));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
+        
 
         return tagCount;
 
     }
 
+    
+    private String getYearMonthlyKey(GroupingFilterPagingRequest filter, DBObject db) {
+        return filter.getMonthly() ? db.get(Keys.YEAR) + "-" + db.get(Keys.MONTH) : db.get(Keys.YEAR).toString();
+    }
 
     @ApiOperation(value = "Aggregated version of /api/costEffectivenessTenderAmount and "
             + "/api/costEffectivenessAwardAmount."
@@ -220,19 +225,22 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
         //controllerLookupService.waitTillDone(costEffectivenessAwardAmountFuture, costEffectivenessTenderAmountFuture);
 
 
-        LinkedHashMap<Integer, DBObject> response = new LinkedHashMap<>();
+        LinkedHashMap<Object, DBObject> response = new LinkedHashMap<>();
 
         try {
 
             costEffectivenessAwardAmountFuture.get()
-                    .forEach(dbobj -> response.put((Integer) dbobj.get(Fields.UNDERSCORE_ID), dbobj));
+                    .forEach(dbobj -> response.put(getYearMonthlyKey(filter, dbobj), dbobj));
             costEffectivenessTenderAmountFuture.get().forEach(dbobj -> {
-                if (response.containsKey(dbobj.get(Fields.UNDERSCORE_ID))) {
+                if (response.containsKey(getYearMonthlyKey(filter, dbobj))) {
                     Map<?, ?> map = dbobj.toMap();
-                    map.remove(Fields.UNDERSCORE_ID);
-                    response.get(dbobj.get(Fields.UNDERSCORE_ID)).putAll(map);
+                    map.remove(Keys.YEAR);
+                    if (filter.getMonthly()) {
+                        map.remove(Keys.MONTH);
+                    }
+                    response.get(getYearMonthlyKey(filter, dbobj)).putAll(map);
                 } else {
-                    response.put((Integer) dbobj.get(Fields.UNDERSCORE_ID), dbobj);
+                    response.put(getYearMonthlyKey(filter, dbobj), dbobj);
                 }
             });
 

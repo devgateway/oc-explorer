@@ -94,7 +94,7 @@ public class TenderPercentagesController extends GenericOCDSController {
                 new CustomProjectionOperation(project2),
                 transformYearlyGrouping(filter).andInclude(Keys.TOTAL_TENDERS,
                         Keys.TOTAL_CANCELLED, Keys.PERCENT_TENDERS, Keys.PERCENT_CANCELLED),
-                getSortByYear(), 
+                getSortByYearMonth(filter), 
                 skip(filter.getSkip()), limit(filter.getPageSize())
         );
 
@@ -135,7 +135,7 @@ public class TenderPercentagesController extends GenericOCDSController {
                 new CustomProjectionOperation(project2),
                 transformYearlyGrouping(filter).andInclude(Keys.TOTAL_TENDERS,
                         Keys.TOTAL_TENDERS_WITH_TWO_OR_MORE_TENDERERS, Keys.PERCENT_TENDERS),
-                getSortByYear(), 
+                getSortByYearMonth(filter), 
                 skip(filter.getSkip()), limit(filter.getPageSize())
         );
                
@@ -179,7 +179,7 @@ public class TenderPercentagesController extends GenericOCDSController {
                 new CustomProjectionOperation(project2),
                 transformYearlyGrouping(filter).andInclude(Keys.TOTAL_TENDERS_WITH_ONE_OR_MORE_TENDERERS,
                         Keys.TOTAL_TENDERS_WITH_TWO_OR_MORE_TENDERERS, Keys.PERCENT_TENDERS),
-                getSortByYear(), skip(filter.getSkip()), limit(filter.getPageSize())
+                getSortByYearMonth(filter), skip(filter.getSkip()), limit(filter.getPageSize())
         );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
@@ -231,7 +231,7 @@ public class TenderPercentagesController extends GenericOCDSController {
                 new CustomProjectionOperation(project2),
                 transformYearlyGrouping(filter).andInclude(Keys.TOTAL_TENDERS,
                         Keys.TOTAL_TENDERS_USING_EBID, Keys.PERCENTAGE_TENDERS_USING_EBID),
-                getSortByYear(), skip(filter.getSkip()), limit(filter.getPageSize())
+                getSortByYearMonth(filter), skip(filter.getSkip()), limit(filter.getPageSize())
         );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);

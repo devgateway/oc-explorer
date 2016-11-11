@@ -68,7 +68,7 @@ public class TotalCancelledTendersByYearController extends GenericOCDSController
                 getYearlyMonthlyGroupingOperation(filter).
                 sum("$tender.value.amount").as(Keys.TOTAL_CANCELLED_TENDERS_AMOUNT),
                 transformYearlyGrouping(filter).andInclude(Keys.TOTAL_CANCELLED_TENDERS_AMOUNT),
-                getSortByYear());
+                getSortByYearMonth(filter));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> list = results.getMappedResults();
