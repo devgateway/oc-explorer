@@ -15,6 +15,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.limi
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -41,6 +42,7 @@ import org.devgateway.toolkit.web.spring.util.AsyncBeanParamControllerMethodCall
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
@@ -179,8 +181,10 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                                 .as(Keys.PERCENTAGE_TENDERS_WITH_AWARDS),
                 transformYearlyGrouping(filter).andInclude(Keys.TOTAL_TENDER_AMOUNT, Keys.TOTAL_TENDERS,
                         Keys.TOTAL_TENDER_WITH_AWARDS, Keys.PERCENTAGE_TENDERS_WITH_AWARDS),
-                getSortByYearMonth(filter), skip(filter.getSkip()), limit(filter.getPageSize()));
-
+                filter.getGroupByCategory() != null ? sort(Direction.DESC, Keys.TOTAL_TENDER_AMOUNT)
+                        : getSortByYearMonth(filter),
+                skip(filter.getSkip()), limit(filter.getPageSize()));
+        
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
         

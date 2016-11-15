@@ -75,10 +75,11 @@ class OCApp extends React.Component{
 
   fetchUserInfo(){
     fetchJson('/rest/userDashboards/getCurrentAuthenticatedUserDetails').then(
-        ({username}) => this.setState({
+        ({username, id}) => this.setState({
           user: {
             loggedIn: true,
-            isAdmin: 'admin' == username
+            isAdmin: 'admin' == username,
+            id
           }
         })
     ).catch(
@@ -113,12 +114,13 @@ class OCApp extends React.Component{
   }
 
   filters(){
-    let {menuBox, bidTypes, locale} = this.state;
+    let {menuBox, bidTypes, locale, user} = this.state;
     return <this.constructor.Filters
         onClick={e => this.setMenuBox(e, MENU_BOX_FILTERS)}
         onUpdate={filters => this.setState({filters, menuBox: ""})}
         open={menuBox == MENU_BOX_FILTERS}
         bidTypes={bidTypes}
+        user={user}
         translations={this.constructor.TRANSLATIONS[locale]}
     />
   }
@@ -219,11 +221,11 @@ class OCApp extends React.Component{
 
   loginBox(){
     if(this.state.user.loggedIn){
-      return <a href="/preLogout">
+      return <a href="/preLogout?referrer=/ui/index.html">
         <i className="glyphicon glyphicon-user"/> {this.t("general:logout")}
       </a>
     }
-    return <a href="/login">
+    return <a href="/login?referrer=/ui/index.html">
       <i className="glyphicon glyphicon-user"/> {this.t("general:login")}
     </a>
   }
