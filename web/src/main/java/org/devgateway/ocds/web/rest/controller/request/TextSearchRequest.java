@@ -6,7 +6,7 @@ package org.devgateway.ocds.web.rest.controller.request;
 import javax.validation.constraints.Size;
 
 /**
- * @author mihai
+ * @author mpostelnicu
  *
  */
 public class TextSearchRequest extends GenericPagingRequest {

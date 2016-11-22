@@ -10,7 +10,7 @@ import cz.jirutka.validator.collection.constraints.EachPattern;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * @author mihai Filtering bean applied to all endpoints
+ * @author mpostelnicu Filtering bean applied to all endpoints
  */
 public class DefaultFilterPagingRequest extends GenericPagingRequest {
 

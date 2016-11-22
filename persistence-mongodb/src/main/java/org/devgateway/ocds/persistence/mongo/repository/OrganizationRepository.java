@@ -8,7 +8,7 @@ import org.devgateway.ocds.persistence.mongo.Organization.OrganizationType;
 import org.springframework.data.mongodb.repository.Query;
 
 /**
- * @author mihai
+ * @author mpostelnicu
  *
  */
 public interface OrganizationRepository extends GenericOrganizationRepository<Organization> {

@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Generic superclass for importing rows from excel data sources
  *
- * @author mihai
+ * @author mpostelnicu
  *
  * @param <T>
  *            - the type of OCDS/dervied entity to be imported
