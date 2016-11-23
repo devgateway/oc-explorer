@@ -74,9 +74,8 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
                 on("tender.items.deliveryLocation.geometry.coordinates", Direction.ASC));
 
-        mongoTemplate.indexOps(Organization.class)
-                .ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());
-
+        mongoTemplate.indexOps(Organization.class).ensureIndex(new TextIndexDefinitionBuilder().onField("name")
+                .onField("id").onField("additionalIdentifiers._id").build());
 
         logger.info("Added extra Mongo indexes");
 
