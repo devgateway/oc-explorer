@@ -51,6 +51,7 @@ public abstract class AbstractFlagProcessor<T extends Flaggable> {
         } else {
             logger.debug("Flaggable " + flaggable.getIdProperty()
                     + " does NOT meet all preconditions. Dumping failed predicates.");
+            rationale.append("Preconditions that are not met: ");
             failedPreconditionsPredicates.forEach(p -> rationale.append(p.toString()));
         }
 
