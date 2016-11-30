@@ -36,8 +36,8 @@ public class MongoTemplateConfiguration {
         //mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.budget.projectID", Direction.ASC));
         //mongoTemplate.indexOps(Location.class).ensureIndex(new Index().on("description", Direction.ASC));
         mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("identifier._id", Direction.ASC));
-        mongoTemplate.indexOps(Organization.class).ensureIndex(new CompoundIndexDefinition(
-                new BasicDBObject("identifier._id", 1).append("additionalIdentifiers._id", 1)).unique());
+        mongoTemplate.indexOps(Organization.class)
+                .ensureIndex(new Index().on("additionalIdentifiers._id", Direction.ASC));
         mongoTemplate.indexOps(Organization.class).ensureIndex(
                 new Index().on("types", Direction.ASC));
         mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("name", Direction.ASC).unique());
