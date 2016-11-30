@@ -77,7 +77,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http.authorizeRequests().expressionHandler(webExpressionHandler()) // inject role hierarchy
                 .antMatchers("/", "/home").permitAll().antMatchers("/dummy").authenticated().anyRequest()
-                .authenticated().and().formLogin().loginPage("/login").permitAll().and().logout().permitAll().and()
+                .authenticated().and().formLogin().loginPage("/login").permitAll().and().
+                requestCache().and().logout().permitAll().and()
                 .sessionManagement().and().csrf().disable();
         http.addFilter(securityContextPersistenceFilter());
     }
