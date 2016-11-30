@@ -20,6 +20,7 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.markup.IMarkupCacheKeyProvider;
 import org.apache.wicket.markup.IMarkupResourceStreamProvider;
+import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.link.Link;
@@ -36,6 +37,7 @@ import org.devgateway.toolkit.forms.util.FolderContentResource;
 import org.devgateway.toolkit.forms.util.MarkupCacheService;
 import org.devgateway.toolkit.forms.wicket.page.BasePage;
 import org.devgateway.toolkit.forms.wicket.styles.BlockUiReportsJavaScript;
+import org.devgateway.toolkit.forms.wicket.styles.ReportsStyles;
 import org.devgateway.toolkit.reporting.ReportUtil;
 import org.pentaho.reporting.engine.classic.core.MasterReport;
 import org.pentaho.reporting.engine.classic.core.ReportProcessingException;
@@ -116,7 +118,7 @@ public abstract class AbstractReportPage extends BasePage {
 
     /**
      * A generic download link component
-     * 
+     *
      * @author mpostelnicu See
      *         http://blog.jdriven.com/2013/05/wicket-quick-tips-create-a-download-link/
      */
@@ -195,7 +197,7 @@ public abstract class AbstractReportPage extends BasePage {
      * See http
      * ://wicketbypranav.blogspot.ro/2013/05/throw-outputstream-html-data
      * -in-wicket.html
-     * 
+     *
      * @author mpostelnicu
      *
      */
@@ -373,77 +375,78 @@ public abstract class AbstractReportPage extends BasePage {
         try {
             // Greate the report processor for the specified output type
             switch (outputType) {
-            case PDF:
-                final PdfOutputProcessor targetPdf =
-                        new PdfOutputProcessor(report.getConfiguration(), outputStream, report.getResourceManager());
-                reportProcessor = new PageableReportProcessor(report, targetPdf);
-                reportProcessor.processReport();
-                break;
+                case PDF:
+                    final PdfOutputProcessor targetPdf = new PdfOutputProcessor(report.getConfiguration(),
+                            outputStream, report.getResourceManager());
+                    reportProcessor = new PageableReportProcessor(report, targetPdf);
+                    reportProcessor.processReport();
+                    break;
 
-            case EXCEL:
-                final FlowExcelOutputProcessor targetExcel = new FlowExcelOutputProcessor(report.getConfiguration(),
-                        outputStream, report.getResourceManager());
-                reportProcessor = new FlowReportProcessor(report, targetExcel);
-                reportProcessor.processReport();
-                break;
+                case EXCEL:
+                    final FlowExcelOutputProcessor targetExcel = new FlowExcelOutputProcessor(report.getConfiguration(),
+                            outputStream, report.getResourceManager());
+                    reportProcessor = new FlowReportProcessor(report, targetExcel);
+                    reportProcessor.processReport();
+                    break;
 
-            case RTF:
-                final FlowRTFOutputProcessor targetRtf = new FlowRTFOutputProcessor(report.getConfiguration(),
-                        outputStream, report.getResourceManager());
-                reportProcessor = new FlowReportProcessor(report, targetRtf);
-                reportProcessor.processReport();
-                break;
+                case RTF:
+                    final FlowRTFOutputProcessor targetRtf = new FlowRTFOutputProcessor(report.getConfiguration(),
+                            outputStream, report.getResourceManager());
+                    reportProcessor = new FlowReportProcessor(report, targetRtf);
+                    reportProcessor.processReport();
+                    break;
 
-            case HTML:
-                ContentLocation targetRoot = null;
-                File tempDir = null;
-                try {
+                case HTML:
+                    ContentLocation targetRoot = null;
+                    File tempDir = null;
+                    try {
 
-                    // we manually make the folder to drop all exported html
-                    // files into
-                    tempDir = ReportUtil.createTemporaryDirectory("tmpreport");
-                    targetRoot = new FileRepository(tempDir).getRoot();
-                } catch (ContentIOException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                        // we manually make the folder to drop all exported html
+                        // files into
+                        tempDir = ReportUtil.createTemporaryDirectory("tmpreport");
+                        targetRoot = new FileRepository(tempDir).getRoot();
+                    } catch (ContentIOException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                // we create a folder content resource for the entire tmpdir.
-                // This dir will only hold the fields for this export
-                FolderContentResource fcr = new FolderContentResource(tempDir);
+                    // we create a folder content resource for the entire tmpdir.
+                    // This dir will only hold the fields for this export
+                    FolderContentResource fcr = new FolderContentResource(tempDir);
 
-                // we always have an authenticated web app
-                AuthenticatedWebApplication authApp = (AuthenticatedWebApplication) getApplication();
+                    // we always have an authenticated web app
+                    AuthenticatedWebApplication authApp = (AuthenticatedWebApplication) getApplication();
 
-                // we add the folder resource as a shared resource
-                authApp.getSharedResources().add(tempDir.getName(), fcr);
-                SharedResourceReference folderResourceReference = new SharedResourceReference(tempDir.getName());
-                authApp.mountResource(tempDir.getName(), folderResourceReference);
+                    // we add the folder resource as a shared resource
+                    authApp.getSharedResources().add(tempDir.getName(), fcr);
+                    SharedResourceReference folderResourceReference = new SharedResourceReference(tempDir.getName());
+                    authApp.mountResource(tempDir.getName(), folderResourceReference);
 
-                final HtmlOutputProcessor outputProcessor = new StreamHtmlOutputProcessor(report.getConfiguration());
-                final HtmlPrinter printer = new AllItemsHtmlPrinter(report.getResourceManager());
-                printer.setContentWriter(targetRoot, new DefaultNameGenerator(targetRoot, "index", "html"));
+                    final HtmlOutputProcessor outputProcessor =
+                            new StreamHtmlOutputProcessor(report.getConfiguration());
+                    final HtmlPrinter printer = new AllItemsHtmlPrinter(report.getResourceManager());
+                    printer.setContentWriter(targetRoot, new DefaultNameGenerator(targetRoot, "index", "html"));
 
-                printer.setDataWriter(targetRoot, new DefaultNameGenerator(targetRoot, "content")); //$NON-NLS-1$
+                    printer.setDataWriter(targetRoot, new DefaultNameGenerator(targetRoot, "content")); //$NON-NLS-1$
 
-                // we use a special URL Rewriter that knows how to speak Wicket
-                // :-)
-                printer.setUrlRewriter(new WicketResourceURLRewriter(folderResourceReference));
-                outputProcessor.setPrinter(printer);
-                reportProcessor = new StreamReportProcessor(report, outputProcessor);
-                reportProcessor.processReport();
+                    // we use a special URL Rewriter that knows how to speak Wicket
+                    // :-)
+                    printer.setUrlRewriter(new WicketResourceURLRewriter(folderResourceReference));
+                    outputProcessor.setPrinter(printer);
+                    reportProcessor = new StreamReportProcessor(report, outputProcessor);
+                    reportProcessor.processReport();
 
-                // we plug the html file stream into the output stream
-                FileInputStream indexFileStream =
-                        new FileInputStream(tempDir.getAbsolutePath() + File.separator + "index.html");
-                IOUtils.copy(indexFileStream, outputStream);
-                indexFileStream.close();
+                    // we plug the html file stream into the output stream
+                    FileInputStream indexFileStream =
+                            new FileInputStream(tempDir.getAbsolutePath() + File.separator + "index.html");
+                    IOUtils.copy(indexFileStream, outputStream);
+                    indexFileStream.close();
 
-                break;
+                    break;
 
-            default:
-                throw new RuntimeException("Unknown output type provided!");
+                default:
+                    throw new RuntimeException("Unknown output type provided!");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -460,5 +463,8 @@ public abstract class AbstractReportPage extends BasePage {
 
         // block UI for reports page
         response.render(JavaScriptHeaderItem.forReference(BlockUiReportsJavaScript.INSTANCE));
+
+        // Load Reports Styles.
+        response.render(CssHeaderItem.forReference(ReportsStyles.INSTANCE));
     }
 }

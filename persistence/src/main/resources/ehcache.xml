@@ -11,17 +11,34 @@
     <!-- EhCache Config for Pentaho Reports -->
     <!-- Defines the caches used by libloader. This cache holds the raw binary data loaded via libloader. -->
     <cache name="libloader-data" eternal="true" overflowToDisk="false" diskPersistent="false"
-        diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="100000" />
+           diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="100000" />
 
     <!-- Defines the caches used by libloader. This cache holds the raw binary bundle-file data loaded via libloader. -->
     <cache name="libloader-bundles" eternal="true" overflowToDisk="false" diskPersistent="false"
-        diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="100000" />
+           diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="100000" />
 
     <!-- Defines a cache used by libloader. This cache holds the parsed object loaded via libloader. -->
     <cache name="libloader-factory" eternal="true" overflowToDisk="false" diskPersistent="false"
-        diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="100000" />
+           diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="100000" />
 
     <!-- Defines a cache used by libloader. This cache holds the parsed object loaded via libloader. -->
     <cache name="report-dataset-cache" eternal="true" overflowToDisk="false" diskPersistent="false"
-        diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="100000" />
+           diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="100000" />
+
+    <cache name="reportsCache"
+           eternal="true"
+           diskPersistent="false"
+           memoryStoreEvictionPolicy="LRU"
+           maxEntriesLocalHeap="100000"
+           statistics="true">
+    </cache>
+
+    <cache name="reportsApiCache"
+           eternal="true"
+           diskPersistent="false"
+           diskExpiryThreadIntervalSeconds="120"
+           memoryStoreEvictionPolicy="LRU"
+           maxEntriesLocalHeap="100000"
+           statistics="true">
+    </cache>
 </ehcache>

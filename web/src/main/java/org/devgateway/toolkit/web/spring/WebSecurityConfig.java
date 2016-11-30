@@ -16,12 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.access.expression.SecurityExpressionHandler;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
@@ -31,7 +33,7 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
 /**
- * 
+ *
  * @author mpostelnicu This configures the spring security for the Web project.
  *         An
  *
@@ -39,12 +41,16 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
 
 @Configuration
 @Order(2) // this loads the security config after the forms security (if you use
-          // them overlayed, it must pick that one first)
+// them overlayed, it must pick that one first)
+@PropertySource("classpath:allowedApiEndpoints.properties")
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     protected CustomJPAUserDetailsService customJPAUserDetailsService;
+
+    @Value("${allowedApiEndpoints}")
+    private String[] allowedApiEndpoints;
 
     @Value("${roleHierarchy}")
     private String roleHierarchyStringRepresentation;
@@ -63,10 +69,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    public void configure(final WebSecurity web) throws Exception {
+        web.ignoring().antMatchers(allowedApiEndpoints);
+    }
+
+    @Override
     protected void configure(final HttpSecurity http) throws Exception {
-        http.authorizeRequests().expressionHandler(webExpressionHandler()) // inject
-                                                                           // role
-                                                                           // hierarchy
+        http.authorizeRequests().expressionHandler(webExpressionHandler()) // inject role hierarchy
                 .antMatchers("/", "/home").permitAll().antMatchers("/dummy").authenticated().anyRequest()
                 .authenticated().and().formLogin().loginPage("/login").permitAll().and().logout().permitAll().and()
                 .sessionManagement().and().csrf().disable();
