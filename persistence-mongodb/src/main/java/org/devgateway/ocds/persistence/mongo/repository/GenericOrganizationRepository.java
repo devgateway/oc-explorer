@@ -12,7 +12,7 @@ public interface GenericOrganizationRepository<T extends Organization> extends M
 
     T findByIdOrNameAllIgnoreCase(String id, String name);
     
-    @Query(value = "{ $or: [ {'_id' : ?0 }, " + "{'additionalIdentifiers._id': ?0} ] }")
+    @Query(value = "{'additionalIdentifiers._id': ?0}")
     T findByAllIds(String id);
 
 }
