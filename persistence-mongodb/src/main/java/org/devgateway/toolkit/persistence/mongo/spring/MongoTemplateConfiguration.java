@@ -16,13 +16,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.ScriptOperations;
-import org.springframework.data.mongodb.core.index.CompoundIndexDefinition;
 import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.index.TextIndexDefinition.TextIndexDefinitionBuilder;
 import org.springframework.data.mongodb.core.script.ExecutableMongoScript;
 import org.springframework.data.mongodb.core.script.NamedMongoScript;
-
-import com.mongodb.BasicDBObject;
 
 @Configuration
 public class MongoTemplateConfiguration {
@@ -44,6 +41,10 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(DefaultLocation.class).ensureIndex(new Index().on("description", Direction.ASC));
         logger.info("Added mandatory Mongo indexes");
     }
+    
+    public void createCorruptionFlagsIndexes() {
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("flags.i038.value", Direction.ASC));
+    }
 
     @PostConstruct
     public void mongoPostInit() {
@@ -52,6 +53,8 @@ public class MongoTemplateConfiguration {
     }
 
     public void createPostImportStructures() {
+        
+        createCorruptionFlagsIndexes();
 
         // initialize some extra indexes
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("ocid", Direction.ASC));
