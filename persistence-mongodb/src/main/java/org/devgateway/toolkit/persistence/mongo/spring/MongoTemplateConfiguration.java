@@ -9,6 +9,7 @@ import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.DefaultLocation;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Release;
+import org.devgateway.ocds.persistence.mongo.flags.FlagsConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class MongoTemplateConfiguration {
     }
     
     public void createCorruptionFlagsIndexes() {
-        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("flags.i038.value", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I038_VALUE, Direction.ASC));
     }
 
     @PostConstruct
