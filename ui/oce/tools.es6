@@ -29,6 +29,11 @@ export let response2obj = (field, arr) => arr.reduce((obj, elem) => {
   return obj;
 }, {});
 
+export const legacyResponse2obj = (field, arr) => arr.reduce((obj, elem) => {
+  obj[elem._id] = elem[field];
+  return obj;
+}, {});
+
 var shallowCompArr = (a, b) => a.every((el, index) => el == b[index]);
 
 export var cacheFn = fn => {
