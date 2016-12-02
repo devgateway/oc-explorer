@@ -176,7 +176,7 @@ public class Tender implements Identifiable {
     @ExcelExport
     @JsonProperty("submissionMethod")
     @Merge(MergeStrategy.ocdsVersion)
-    private Set<String> submissionMethod = new TreeSet<String>();
+    private Set<SubmissionMethod> submissionMethod = new TreeSet<SubmissionMethod>();
 
     /**
      * Any detailed or further information on the submission method. This may include the address,
@@ -560,7 +560,7 @@ public class Tender implements Identifiable {
      *     The submissionMethod
      */
     @JsonProperty("submissionMethod")
-    public Set<String> getSubmissionMethod() {
+    public Set<SubmissionMethod> getSubmissionMethod() {
         return submissionMethod;
     }
 
@@ -574,7 +574,7 @@ public class Tender implements Identifiable {
      *     The submissionMethod
      */
     @JsonProperty("submissionMethod")
-    public void setSubmissionMethod(final Set<String> submissionMethod) {
+    public void setSubmissionMethod(final Set<SubmissionMethod> submissionMethod) {
         this.submissionMethod = submissionMethod;
     }
 
