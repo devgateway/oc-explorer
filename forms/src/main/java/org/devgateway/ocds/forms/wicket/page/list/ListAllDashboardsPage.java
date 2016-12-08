@@ -11,8 +11,12 @@
  *******************************************************************************/
 package org.devgateway.ocds.forms.wicket.page.list;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapExternalLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeIconType;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -29,11 +33,32 @@ import org.wicketstuff.annotation.mount.MountPath;
 public class ListAllDashboardsPage extends AbstractListPage<UserDashboard> {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -324298525712620234L;
     @SpringBean
     protected UserDashboardRepository userDashboardRepository;
+
+    public class DashboardsActionPanel extends ActionPanel {
+
+        /**
+         * @param id
+         * @param model
+         */
+        public DashboardsActionPanel(String id, IModel<UserDashboard> model) {
+            super(id, model);
+
+            UserDashboard entity = (UserDashboard) this.getDefaultModelObject();
+
+            BootstrapExternalLink viewLink = new BootstrapExternalLink("view", Model.of("ui/index.html?dashboardId="
+                    + entity.getId()), Buttons.Type.Danger) {
+            };
+            viewLink.setLabel(new StringResourceModel("view", ListAllDashboardsPage.this, null));
+            viewLink.setIconType(FontAwesomeIconType.eye).setSize(Buttons.Size.Small);
+            add(viewLink);
+
+        }
+    }
 
     public ListAllDashboardsPage(final PageParameters pageParameters) {
         super(pageParameters);
@@ -55,8 +80,12 @@ public class ListAllDashboardsPage extends AbstractListPage<UserDashboard> {
     @Override
     protected void onInitialize() {
         super.onInitialize();
-     
+
         editPageLink.setVisibilityAllowed(false);
     }
 
+    @Override
+    public ActionPanel getActionPanel(String id, IModel<UserDashboard> model) {
+        return new DashboardsActionPanel(id, model);
+    }
 }
