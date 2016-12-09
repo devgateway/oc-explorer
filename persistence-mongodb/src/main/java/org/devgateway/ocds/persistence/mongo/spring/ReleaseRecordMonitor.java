@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * @author mihai
+ * @author mpostelnicu
  *
  *         AOP Monitor that saves new {@link Release}S in {@link Record}S for
  *         archiving purposes.

@@ -9,14 +9,6 @@ import {fetchJson} from "./oce/tools";
 import {Map} from "immutable";
 import styles from "./style.less";
 
-function getBidTypeDescription(__, {id, description}){
-  switch(+id){
-    case 12: return __("Unspecified") + " #1";
-    case 15: return __("Unspecified") + " #2";
-    default: return description;
-  }
-}
-
 class OCEChild extends OCApp{
   constructor(props) {
     super(props);
@@ -31,7 +23,7 @@ class OCEChild extends OCApp{
     fetchJson('/api/ocds/bidType/all').then(data =>
         this.setState({
           bidTypes: data.reduce((map, datum) =>
-              map.set(datum.id, getBidTypeDescription(this.__.bind(this), datum)), Map())
+              map.set(datum.id, datum.description), Map())
         })
     );
   }
@@ -41,8 +33,8 @@ class OCEChild extends OCApp{
       <header className="branding row">
         <div className="col-sm-offset-1 col-sm-4">
           <h1>
-            {this.__('e-Procurement')}
-            <small>{this.__('Toolkit')}</small>
+            {this.t('general:title')}
+            <small>{this.t('general:subtitle')}</small>
           </h1>
         </div>
         <div className="col-sm-6 menu">
@@ -50,7 +42,10 @@ class OCEChild extends OCApp{
           {this.comparison()}
           {this.exportBtn()}
         </div>
-        <div className="col-sm-2 language-switcher">
+        <div className="col-sm-2 header-icons user-tools">
+          {this.loginBox()}
+        </div>
+        <div className="col-sm-1 header-icons language-switcher">
           {this.languageSwitcher()}
         </div>
       </header>
@@ -60,10 +55,10 @@ class OCEChild extends OCApp{
             {this.navigation()}
           </div>
           <section className="col-sm-12 description">
-            <h3><strong>{this.__("Toolkit description")}</strong></h3>
+            <h3><strong>{this.t('general:description:title')}</strong></h3>
             <p>
               <small>
-                {this.__("The Procurement M&E Prototype is an interactive platform for analyzing, monitoring, and evaluating information on procurement in Vietnam. All data in the dashboard are collected from the Vietnam Government eProcurement system (eGP).")}
+                {this.t('general:description:content')}
               </small>
             </p>
           </section>
@@ -81,6 +76,10 @@ class OCEChild extends OCApp{
     </div>;
   }
 }
+
+OCEChild.TRANSLATIONS = {
+  en_US: require('./languages/en_US.json'),
+};
 
 ReactDOM.render(<OCEChild/>, document.getElementById('dg-container'));
 

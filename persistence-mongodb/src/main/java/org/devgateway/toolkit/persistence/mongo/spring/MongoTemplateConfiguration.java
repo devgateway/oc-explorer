@@ -9,6 +9,7 @@ import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.DefaultLocation;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Release;
+import org.devgateway.ocds.persistence.mongo.flags.FlagsConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +36,15 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("identifier._id", Direction.ASC));
         mongoTemplate.indexOps(Organization.class)
                 .ensureIndex(new Index().on("additionalIdentifiers._id", Direction.ASC));
-        mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("types", Direction.ASC));
+        mongoTemplate.indexOps(Organization.class).ensureIndex(
+                new Index().on("types", Direction.ASC));
         mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("name", Direction.ASC).unique());
         mongoTemplate.indexOps(DefaultLocation.class).ensureIndex(new Index().on("description", Direction.ASC));
         logger.info("Added mandatory Mongo indexes");
+    }
+    
+    public void createCorruptionFlagsIndexes() {
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I038_VALUE, Direction.ASC));
     }
 
     @PostConstruct
@@ -48,6 +54,8 @@ public class MongoTemplateConfiguration {
     }
 
     public void createPostImportStructures() {
+        
+        createCorruptionFlagsIndexes();
 
         // initialize some extra indexes
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("ocid", Direction.ASC));
@@ -74,9 +82,8 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
                 on("tender.items.deliveryLocation.geometry.coordinates", Direction.ASC));
 
-        mongoTemplate.indexOps(Organization.class)
-                .ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());
-
+        mongoTemplate.indexOps(Organization.class).ensureIndex(new TextIndexDefinitionBuilder().onField("name")
+                .onField("id").onField("additionalIdentifiers._id").build());
 
         logger.info("Added extra Mongo indexes");
 

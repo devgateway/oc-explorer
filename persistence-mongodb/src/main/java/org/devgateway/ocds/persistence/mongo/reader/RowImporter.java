@@ -1,5 +1,6 @@
 package org.devgateway.ocds.persistence.mongo.reader;
 
+import java.io.Serializable;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.slf4j.Logger;
@@ -15,14 +16,15 @@ import java.util.List;
 /**
  * Generic superclass for importing rows from excel data sources
  *
- * @author mihai
+ * @author mpostelnicu
  *
  * @param <T>
  *            - the type of OCDS/dervied entity to be imported
+ * @param <ID> the id type
  * @param <R>
  *            - the main repository that is able to save <T>
  */
-public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
+public abstract class RowImporter<T, ID extends Serializable, R extends MongoRepository<T, ID>> {
 
     private final Logger logger = LoggerFactory.getLogger(RowImporter.class);
 
