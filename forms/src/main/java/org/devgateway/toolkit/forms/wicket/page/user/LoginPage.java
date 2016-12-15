@@ -14,16 +14,19 @@
  */
 package org.devgateway.toolkit.forms.wicket.page.user;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
-import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapForm;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.time.Duration;
 import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.forms.security.SecurityUtil;
@@ -34,7 +37,11 @@ import org.devgateway.toolkit.forms.wicket.page.BasePage;
 import org.devgateway.toolkit.forms.wicket.page.Homepage;
 import org.devgateway.toolkit.persistence.dao.Person;
 import org.devgateway.toolkit.persistence.repository.PersonRepository;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.wicketstuff.annotation.mount.MountPath;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapForm;
 
 /**
  * @author mpostelnicu
@@ -55,6 +62,24 @@ public class LoginPage extends BasePage {
         private String username;
 
         private String password;
+        
+        private String referrer;
+        
+        protected void retrieveReferrerFromSavedRequestIfPresent() {
+            StringValue referrerParam = RequestCycle.get().getRequest().getRequestParameters()
+                    .getParameterValue("referrer");
+            if (!referrerParam.isEmpty()) {
+                referrer = referrerParam.toString();
+            } else {
+
+                HttpServletRequest request = ((HttpServletRequest) getRequest().getContainerRequest());
+                SavedRequest savedRequest = (SavedRequest) request.getSession()
+                        .getAttribute("SPRING_SECURITY_SAVED_REQUEST");
+                if (savedRequest != null) {
+                    referrer = savedRequest.getRedirectUrl();
+                }
+            }
+        }
 
         LoginForm(final String id) {
             super(id);
@@ -65,6 +90,8 @@ public class LoginPage extends BasePage {
         @Override
         protected void onInitialize() {
             super.onInitialize();
+            
+            retrieveReferrerFromSavedRequestIfPresent();
 
             final NotificationPanel notificationPanel = new NotificationPanel("loginFeedback");
             notificationPanel.hideAfter(Duration.seconds(HIDE_NOTIFICATION_SECONDS));
@@ -76,41 +103,45 @@ public class LoginPage extends BasePage {
             username.required();
             add(username);
 
-            final PasswordFieldBootstrapFormComponent password = new PasswordFieldBootstrapFormComponent("password",
-                    new PropertyModel<>(this, "password"));
+            final PasswordFieldBootstrapFormComponent password =
+                    new PasswordFieldBootstrapFormComponent("password", new PropertyModel<>(this, "password"));
             password.getField().setResetPassword(false);
             add(password);
 
-            final IndicatingAjaxButton submit = new IndicatingAjaxButton("submit",
-                    new StringResourceModel("submit.label", LoginPage.this, null)) {
-                private static final long serialVersionUID = 1L;
+            final IndicatingAjaxButton submit =
+                    new IndicatingAjaxButton("submit", new StringResourceModel("submit.label", LoginPage.this, null)) {
+                        private static final long serialVersionUID = 1L;
 
-                @Override
-                protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
-                    SSAuthenticatedWebSession session = SSAuthenticatedWebSession.getSSAuthenticatedWebSession();
-                    if (session.signIn(LoginForm.this.username, LoginForm.this.password)) {
-                        Person user = SecurityUtil.getCurrentAuthenticatedPerson();
-                        if (user.getChangePassword()) {
-                            PageParameters pageParam = new PageParameters();
-                            pageParam.add(WebConstants.PARAM_ID, user.getId());
-                            setResponsePage(ChangePasswordPage.class, pageParam);
-                        } else {
-                            setResponsePage(getApplication().getHomePage());
+                        @Override
+                        protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+                            SSAuthenticatedWebSession session =
+                                    SSAuthenticatedWebSession.getSSAuthenticatedWebSession();
+                            if (session.signIn(LoginForm.this.username, LoginForm.this.password)) {
+                                Person user = SecurityUtil.getCurrentAuthenticatedPerson();
+                                if (user.getChangePassword()) {
+                                    PageParameters pageParam = new PageParameters();
+                                    pageParam.add(WebConstants.PARAM_ID, user.getId());
+                                    setResponsePage(ChangePasswordPage.class, pageParam);
+                                } else {
+                                    if (referrer != null) {
+                                        throw new RedirectToUrlException(referrer);
+                                    }
+                                    setResponsePage(getApplication().getHomePage());
+                                }
+                            } else if (session.getAe().getMessage().equalsIgnoreCase("User is disabled")) {
+                                notificationPanel.error(session.getAe().getMessage());
+                                target.add(notificationPanel);
+                            } else {
+                                notificationPanel.error(getString("bad_credentials"));
+                                target.add(notificationPanel);
+                            }
                         }
-                    } else if (session.getAe().getMessage().equalsIgnoreCase("User is disabled")) {
-                        notificationPanel.error(session.getAe().getMessage());
-                        target.add(notificationPanel);
-                    } else {
-                        notificationPanel.error(getString("bad_credentials"));
-                        target.add(notificationPanel);
-                    }
-                }
 
-                @Override
-                protected void onError(final AjaxRequestTarget target, final Form<?> form) {
-                    target.add(notificationPanel);
-                }
-            };
+                        @Override
+                        protected void onError(final AjaxRequestTarget target, final Form<?> form) {
+                            target.add(notificationPanel);
+                        }
+                    };
             add(submit);
 
             final IndicatingAjaxButton forgotPassword = new IndicatingAjaxButton("forgotPassword",
@@ -133,12 +164,14 @@ public class LoginPage extends BasePage {
     }
 
     /**
-     * @param parameters  The page parameters.
+     * @param parameters
+     *            The page parameters.
      */
     public LoginPage(final PageParameters parameters) {
         super(parameters);
 
-        // redirect to homepage if user reaches the /login page while authenticated
+        // redirect to homepage if user reaches the /login page while
+        // authenticated
         if (AbstractAuthenticatedWebSession.get().isSignedIn()) {
             setResponsePage(Homepage.class);
         }

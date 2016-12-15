@@ -25,8 +25,8 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:/org/devgateway/toolkit/web/application.properties")
 @ComponentScan("org.devgateway.toolkit")
 public class WebApplication {
-	
-	public static void main(final String[] args) {
-		SpringApplication.run(WebApplication.class, args);
-	}
+
+    public static void main(final String[] args) {
+        SpringApplication.run(WebApplication.class, args);
+    }
 }

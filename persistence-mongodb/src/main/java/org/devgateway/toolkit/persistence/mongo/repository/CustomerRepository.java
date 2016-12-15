@@ -8,8 +8,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface CustomerRepository extends MongoRepository<Customer, String> {
 
-	List<Customer> findByFirstName(@Param("firstName") String firstName);
+    List<Customer> findByFirstName(@Param("firstName") String firstName);
 
-	List<Customer> findByLastName(@Param("lastName") String lastName);
+    List<Customer> findByLastName(@Param("lastName") String lastName);
 
 }

@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.page.edit;
 
-import java.io.Serializable;
-
-import javax.persistence.EntityManager;
-
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationMessage;
+import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapForm;
+import de.agilecoders.wicket.core.util.Attributes;
+import nl.dries.wicket.hibernate.dozer.DozerModel;
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.ComponentTag;
@@ -58,10 +58,8 @@ import org.devgateway.toolkit.reporting.spring.util.ReportsCacheService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationMessage;
-import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapForm;
-import de.agilecoders.wicket.core.util.Attributes;
-import nl.dries.wicket.hibernate.dozer.DozerModel;
+import javax.persistence.EntityManager;
+import java.io.Serializable;
 
 /**
  * @author mpostelnicu Page used to make editing easy, extend to get easy access
@@ -132,6 +130,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
             reportsCacheService.flushCache();
             markupCacheService.flushMarkupCache();
             markupCacheService.clearReportsCache();
+            markupCacheService.clearReportsApiCache();
         }
     }
 
@@ -254,7 +253,8 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
             // attached
             entityManager.clear();
 
-            // we flush the mondrian/wicket/reports cache to ensure it gets rebuilt
+            // we flush the mondrian/wicket/reports cache to ensure it gets
+            // rebuilt
             flushReportingCaches();
 
             // only redirect if redirect is true
@@ -506,13 +506,13 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
         return field;
     }
 
-	public <E extends GenericPersistable & Labelable> Select2ChoiceBootstrapFormComponent<E> addSelect2ChoiceField(
-			final String name, final TextSearchableRepository<E, Long> repository) {
-		GenericPersistableJpaRepositoryTextChoiceProvider<E> choiceProvider 
-		= new GenericPersistableJpaRepositoryTextChoiceProvider<>(repository);
-		Select2ChoiceBootstrapFormComponent<E> component = new Select2ChoiceBootstrapFormComponent<>(name,
-				choiceProvider);
-		editForm.add(component);
-		return component;
-	}
+    public <E extends GenericPersistable & Labelable> Select2ChoiceBootstrapFormComponent<E>
+    addSelect2ChoiceField(final String name, final TextSearchableRepository<E, Long> repository) {
+        GenericPersistableJpaRepositoryTextChoiceProvider<E> choiceProvider =
+                new GenericPersistableJpaRepositoryTextChoiceProvider<>(repository);
+        Select2ChoiceBootstrapFormComponent<E> component =
+                new Select2ChoiceBootstrapFormComponent<>(name, choiceProvider);
+        editForm.add(component);
+        return component;
+    }
 }

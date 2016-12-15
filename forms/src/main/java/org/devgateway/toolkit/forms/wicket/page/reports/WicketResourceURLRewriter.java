@@ -29,26 +29,26 @@ import org.pentaho.reporting.libraries.repository.ContentEntity;
  */
 public class WicketResourceURLRewriter implements URLRewriter {
 
-	private SharedResourceReference folderResourceReference;
+    private SharedResourceReference folderResourceReference;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.pentaho.reporting.engine.classic.core.modules.output.table.html.
-	 * URLRewriter
-	 * #rewrite(org.pentaho.reporting.libraries.repository.ContentEntity,
-	 * org.pentaho.reporting.libraries.repository.ContentEntity)
-	 */
-	public WicketResourceURLRewriter(final SharedResourceReference folderResourceReference) {
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.pentaho.reporting.engine.classic.core.modules.output.table.html.
+     * URLRewriter
+     * #rewrite(org.pentaho.reporting.libraries.repository.ContentEntity,
+     * org.pentaho.reporting.libraries.repository.ContentEntity)
+     */
+    public WicketResourceURLRewriter(final SharedResourceReference folderResourceReference) {
 
-		this.folderResourceReference = folderResourceReference;
-	}
+        this.folderResourceReference = folderResourceReference;
+    }
 
-	@Override
-	public String rewrite(final ContentEntity sourceDocument, final ContentEntity dataEntity)
-			throws URLRewriteException {
-		PageParameters parameters = new PageParameters();
-		parameters.add(FolderContentResource.PARAM_FILE_NAME, dataEntity.getName());
-		return RequestCycle.get().urlFor(folderResourceReference, parameters).toString();
-	}
+    @Override
+    public String rewrite(final ContentEntity sourceDocument, final ContentEntity dataEntity)
+            throws URLRewriteException {
+        PageParameters parameters = new PageParameters();
+        parameters.add(FolderContentResource.PARAM_FILE_NAME, dataEntity.getName());
+        return RequestCycle.get().urlFor(folderResourceReference, parameters).toString();
+    }
 }

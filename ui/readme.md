@@ -198,6 +198,16 @@ this.__("Hello")//returns "Salut"
 #### Example
 You can look at the example <App/> component, it was made translatable using this method
 
+### Code convention
+DG Toolkit UI uses [AirBnB JS code style](https://github.com/devgateway/dg-toolkit.git)
+
+A linting tool is included, you can run it by invoking
+
+    npm run lint
+    
+If you absolutely need to do it, you can extend/overwrite the code standard in _ui/.eslintrc_,
+see [http://eslint.org/docs/rules/](http://eslint.org/docs/rules/) for a list of available rules.
+
 ##Troubleshooting
 If running
 

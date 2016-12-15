@@ -26,52 +26,52 @@ import org.pentaho.reporting.libraries.base.config.Configuration;
  *
  */
 public final class ReportUtil {
-	
-	private static final int TIMES_PRD_TRIES_AN_UNUSED_KEY = 200;
 
-	private ReportUtil() {
+    private static final int TIMES_PRD_TRIES_AN_UNUSED_KEY = 200;
 
-	}
+    private ReportUtil() {
 
-	/**
-	 * @param directoryName
-	 * @return
-	 * @throws IOException
-	 * @see https://github.com/pentaho/pentaho-reporting/blob/master/designer/
-	 *      report-designer/src/org/pentaho/reporting/designer/core/actions/
-	 *      report/preview/PreviewHtmlAction.java
-	 */
-	public static File createTemporaryDirectory(final String directoryName) throws IOException {
-		final Configuration configuration = ClassicEngineBoot.getInstance().getGlobalConfig();
-		final String s = configuration.getConfigProperty("java.io.tmpdir"); // NON-NLS
-		final File tempDir = new File(s);
-		if (!tempDir.exists()) {
-			tempDir.mkdirs();
-		}
-		if (!tempDir.exists() || !tempDir.isDirectory()) {
-			throw new IOException("Unable to access or create the temp-directory");
-		}
-		if (!tempDir.canWrite()) {
-			throw new IOException("Unable to write to temp-directory.");
-		}
+    }
 
-		final Random randomGenerator = new Random(System.currentTimeMillis());
-		for (int i = 1; i < TIMES_PRD_TRIES_AN_UNUSED_KEY; i++) {
-			final int random = (randomGenerator.nextInt());
-			final File reportDirectory = new File(s, directoryName + random);
+    /**
+     * @param directoryName
+     * @return
+     * @throws IOException
+     * @see https://github.com/pentaho/pentaho-reporting/blob/master/designer/
+     *      report-designer/src/org/pentaho/reporting/designer/core/actions/
+     *      report/preview/PreviewHtmlAction.java
+     */
+    public static File createTemporaryDirectory(final String directoryName) throws IOException {
+        final Configuration configuration = ClassicEngineBoot.getInstance().getGlobalConfig();
+        final String s = configuration.getConfigProperty("java.io.tmpdir"); // NON-NLS
+        final File tempDir = new File(s);
+        if (!tempDir.exists()) {
+            tempDir.mkdirs();
+        }
+        if (!tempDir.exists() || !tempDir.isDirectory()) {
+            throw new IOException("Unable to access or create the temp-directory");
+        }
+        if (!tempDir.canWrite()) {
+            throw new IOException("Unable to write to temp-directory.");
+        }
 
-			if (reportDirectory.exists() && !reportDirectory.isDirectory()) {
-				continue;
-			}
-			if (!reportDirectory.exists() && !reportDirectory.mkdirs()) {
-				continue;
-			}
+        final Random randomGenerator = new Random(System.currentTimeMillis());
+        for (int i = 1; i < TIMES_PRD_TRIES_AN_UNUSED_KEY; i++) {
+            final int random = (randomGenerator.nextInt());
+            final File reportDirectory = new File(s, directoryName + random);
 
-			reportDirectory.deleteOnExit();
-			return reportDirectory;
-		}
+            if (reportDirectory.exists() && !reportDirectory.isDirectory()) {
+                continue;
+            }
+            if (!reportDirectory.exists() && !reportDirectory.mkdirs()) {
+                continue;
+            }
 
-		throw new IOException("Unable to generate the target directory.");
-	}
+            reportDirectory.deleteOnExit();
+            return reportDirectory;
+        }
+
+        throw new IOException("Unable to generate the target directory.");
+    }
 
 }
