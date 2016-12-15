@@ -26,6 +26,8 @@
         <derby.version>10.13.1.1</derby.version>
         <poi.version>3.14</poi.version>
         <pentaho.poi.version>3.12</pentaho.poi.version>
+        <docker.image.prefix>devgateway/toolkit</docker.image.prefix>
+        <docker-maven-plugin.version>0.4.11</docker-maven-plugin.version>
     </properties>
 
     <modules>
