@@ -11,17 +11,9 @@
  *******************************************************************************/
 package org.devgateway.ocds.web.rest.controller;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
-import static org.springframework.data.mongodb.core.query.Criteria.where;
-
-import java.util.Arrays;
-import java.util.List;
-
-import javax.validation.Valid;
-
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import io.swagger.annotations.ApiOperation;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.cache.annotation.CacheConfig;
@@ -34,10 +26,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.List;
 
-import io.swagger.annotations.ApiOperation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
  *
@@ -85,8 +82,6 @@ public class FundingByLocationController extends GenericOCDSController {
                 getSortByYearMonth(filter)
         // ,skip(filter.getSkip()), limit(filter.getPageSize())
         );
-
-        System.out.println(agg);
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
