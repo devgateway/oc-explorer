@@ -2,8 +2,7 @@ import FrontendYearFilterableChart from "./frontend-filterable";
 import {legacyResponse2obj, response2obj, pluckImm} from "../../tools";
 
 class OverviewChart extends FrontendYearFilterableChart{
-  transform([bidplansResponse, tendersResponse, awardsResponse]){
-    let bidplans = legacyResponse2obj('count', bidplansResponse);
+  transform([tendersResponse, awardsResponse]){
     let tenders = response2obj('count', tendersResponse);
     let awards = response2obj('count', awardsResponse);
     return Object.keys(tenders).map(year => ({
