@@ -10,6 +10,7 @@ const MIN_YEAR = 2010;
 const MAX_YEAR = 2020;
 const MENU_BOX_COMPARISON = "menu-box";
 const MENU_BOX_FILTERS = 'filters';
+const ROLE_ADMIN = 'ROLE_ADMIN';
 
 class OCApp extends React.Component{
   constructor(props){
@@ -24,6 +25,7 @@ class OCApp extends React.Component{
       compareBy: "",
       comparisonCriteriaValues: [],
       selectedYears: Set(range(MIN_YEAR, MAX_YEAR)),
+      selectedMonths: Set(range(1, 12)),
       filters: fromJS({}),
       data: fromJS({}),
       comparisonData: fromJS({}),
@@ -74,11 +76,12 @@ class OCApp extends React.Component{
   }
 
   fetchUserInfo(){
-    fetchJson('/rest/userDashboards/getCurrentAuthenticatedUserDetails').then(
-        ({username, id}) => this.setState({
+    const noCacheUrl = new URI('/rest/userDashboards/getCurrentAuthenticatedUserDetails').addSearch('time', new Date());
+    fetchJson(noCacheUrl).then(
+        ({username, id, roles}) => this.setState({
           user: {
             loggedIn: true,
-            isAdmin: 'admin' == username,
+            isAdmin: roles.some(({authority}) => authority == ROLE_ADMIN),
             id
           }
         })
@@ -197,8 +200,8 @@ class OCApp extends React.Component{
   }
 
   yearsBar(){
-    let {years, selectedYears} = this.state;
-    return this.state.years.sort().map(year =>
+    const {years, selectedYears} = this.state;
+    return years.sort().map(year =>
         <a
             key={year}
             href="javascript:void(0);"
@@ -212,6 +215,27 @@ class OCApp extends React.Component{
           <i className="glyphicon glyphicon-ok-circle"></i> {year}
         </a>
     ).toArray();
+  }
+
+  showMonths(){
+    const {years, selectedYears} = this.state;
+    return selectedYears.intersect(years).count() == 1;
+  }
+
+  monthsBar(){
+    const {selectedMonths} = this.state;
+    return range(1, 12).map(month => <a
+        key={month}
+        href="javascript:void(0);"
+        className={cn({active: selectedMonths.has(+month)})}
+        onClick={_ => this.setState({
+          selectedMonths: selectedMonths.has(+month) ?
+              selectedMonths.delete(+month) :
+              selectedMonths.add(+month)
+        })}
+    >
+      <i className="glyphicon glyphicon-ok-circle"></i> {this.t(`general:months:${month}`)}
+    </a>)
   }
 
   setLocale(locale){

@@ -2,6 +2,7 @@ import PureRenderCompoent from "./pure-render-component";
 import translatable from "./translatable";
 import {max, cacheFn, download} from "./tools";
 import {List, Set, Map} from "immutable";
+import orgNamesFetching from "./orgnames-fetching";
 
 let computeUniformYears = cacheFn((Component, comparisonData, years) =>
     comparisonData.reduce((res, data) =>
@@ -9,7 +10,7 @@ let computeUniformYears = cacheFn((Component, comparisonData, years) =>
         , Set()).intersect(years).sort()
 );
 
-class Comparison extends translatable(PureRenderCompoent){
+class Comparison extends orgNamesFetching(translatable(PureRenderCompoent)){
   getComponent(){
     return this.props.Component;
   }
@@ -23,10 +24,20 @@ class Comparison extends translatable(PureRenderCompoent){
     </div>
   }
 
+  getOrgsWithoutNamesIds(){
+    const {comparisonCriteriaValues, compareBy} = this.props;
+    return "procuringEntityId" == compareBy ?
+        comparisonCriteriaValues.filter(id => !this.state.orgNames[id]) :
+        [];
+  }
+
   getTitle(index){
     let {compareBy, bidTypes, comparisonCriteriaValues} = this.props;
     if("bidTypeId" == compareBy){
       return bidTypes.get(comparisonCriteriaValues[index], this.t('general:comparison:other'))
+    } else if("procuringEntityId" == compareBy){
+      const orgId = comparisonCriteriaValues[index];
+      return this.state.orgNames[orgId] || orgId;
     }
     return comparisonCriteriaValues[index] || this.t('general:comparison:other');
   }
@@ -89,10 +100,18 @@ class Comparison extends translatable(PureRenderCompoent){
   }
 }
 
+function getInverseFilter(filter){
+  switch(filter){
+    case 'bidTypeId': return 'notBidTypeId';
+    case 'bidSelectionMethod': return 'notBidSelectionMethod';
+    case 'procuringEntityId': return 'notProcuringEntityId';
+  }
+}
+
 Comparison.decorateFilters = cacheFn((filters, compareBy, comparisonCriteriaValues) =>
     List(comparisonCriteriaValues)
         .map(criteriaValue => filters.set(compareBy, criteriaValue))
-        .push(filters.set(compareBy, comparisonCriteriaValues).set('invert', 'true')));
+        .push(filters.set(getInverseFilter(compareBy), comparisonCriteriaValues)));
 
 Comparison.computeUniformData = cacheFn((Component, comparisonData, years) =>
     comparisonData.map(uniformDatum =>

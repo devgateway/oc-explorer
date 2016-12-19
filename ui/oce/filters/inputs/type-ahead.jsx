@@ -1,35 +1,34 @@
 import translatable from "../../translatable";
 import Component from "../../pure-render-component";
-import {fetchJson} from "../../tools";
+import {fetchJson, shallowCopy} from "../../tools";
 import URI from "urijs";
 import {fromJS} from "immutable";
+import orgNamesFetching from "../../orgnames-fetching";
 
-let NAMES = {};
-
-class TypeAhead extends translatable(Component){
+class TypeAhead extends orgNamesFetching(translatable(Component)){
   constructor(props){
     super(props);
-    this.state = {
-      query: "",
-      options: fromJS([])
-    };
+    this.state.query = "";
+    this.state.options = fromJS([]);
   }
 
-	updateQuery(query){
+  updateQuery(query){
     this.setState({query});
     if(query.length >= this.constructor.MIN_QUERY_LENGTH) {
       fetchJson(new URI(this.constructor.endpoint).addSearch('text', query).toString())
-        .then(data => this.setState({options: fromJS(data)}));
+          .then(data => this.setState({options: fromJS(data)}));
     } else {
       this.setState({options: fromJS([])})
     }
-  }    
+  }
 
   /* Marks an option as selected */
   select(option){
     let id = option.get('id');
     let name = option.get('name');
-    NAMES[id] = name;
+    let orgNames = shallowCopy(this.state.orgNames);
+    orgNames[id] = name;
+    this.setState({orgNames});
     this.props.onToggle(id);
   }
 
@@ -45,8 +44,12 @@ class TypeAhead extends translatable(Component){
     </div>
   }
 
+  getOrgsWithoutNamesIds(){
+    return this.props.selected.filter(id => !this.state.orgNames[id]).toJS()
+  }
+
   render(){
-    let {query, options} = this.state;
+    let {query, options, orgNames} = this.state;
     let {selected, onToggle} = this.props;
     let haveQuery = query.length >= this.constructor.MIN_QUERY_LENGTH;
     return (
@@ -55,7 +58,7 @@ class TypeAhead extends translatable(Component){
           <section className="options">
             {selected.map(id => this.renderOption({
               id,
-              name: NAMES[id],
+              name: orgNames[id],
               checked: true,
               cb: () => onToggle(id)
             }))}

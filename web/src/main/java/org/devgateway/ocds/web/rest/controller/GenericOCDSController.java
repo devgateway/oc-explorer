@@ -83,6 +83,11 @@ public abstract class GenericOCDSController {
         return end;
     }
 
+    protected String ref(String field) {
+        return "$" + field;
+    }
+
+
     /**
      * Appends the procuring bid type id for this filter, this will fitler based
      * on tender.items.classification._id
@@ -173,6 +178,10 @@ public abstract class GenericOCDSController {
         }
     }
 
+    protected Criteria getNotBidTypeIdFilterCriteria(final DefaultFilterPagingRequest filter) {
+        return createNotFilterCriteria("tender.items.classification._id", filter.getNotBidTypeId(), filter);
+    }
+    
 
     /**
      * Appends the tender.items.deliveryLocation._id
@@ -200,15 +209,9 @@ public abstract class GenericOCDSController {
         }
         Criteria criteria = where("tender.value.amount");
         if (filter.getMinTenderValue() != null) {
-            if (filter.getInvert()) {
-                criteria = criteria.not();
-            }
             criteria = criteria.gte(filter.getMinTenderValue().doubleValue());
         }
         if (filter.getMaxTenderValue() != null) {
-            if (filter.getInvert()) {
-                criteria = criteria.not();
-            }
             criteria = criteria.lte(filter.getMaxTenderValue().doubleValue());
         }
         return criteria;
@@ -229,15 +232,9 @@ public abstract class GenericOCDSController {
         }
         Criteria criteria = where("awards.value.amount");
         if (filter.getMinAwardValue() != null) {
-            if (filter.getInvert()) {
-                criteria = criteria.not();
-            }
             criteria = criteria.gte(filter.getMinAwardValue().doubleValue());
         }
         if (filter.getMaxAwardValue() != null) {
-            if (filter.getInvert()) {
-                criteria = criteria.not();
-            }
             criteria = criteria.lte(filter.getMaxAwardValue().doubleValue());
         }
         return criteria;
@@ -248,8 +245,15 @@ public abstract class GenericOCDSController {
         if (filterValues == null) {
             return new Criteria();
         }
-        return filter.getInvert() ? where(filterName).not().in(filterValues.toArray())
-                : where(filterName).in(filterValues.toArray());
+        return where(filterName).in(filterValues.toArray());
+    }
+
+    private <S> Criteria createNotFilterCriteria(final String filterName, final List<S> filterValues,
+            final DefaultFilterPagingRequest filter) {
+        if (filterValues == null) {
+            return new Criteria();
+        }
+        return where(filterName).not().in(filterValues.toArray());
     }
 
     /**
@@ -263,6 +267,11 @@ public abstract class GenericOCDSController {
         return createFilterCriteria("tender.procuringEntity._id", filter.getProcuringEntityId(), filter);
     }
 
+    protected Criteria getNotProcuringEntityIdCriteria(final DefaultFilterPagingRequest filter) {
+        return createNotFilterCriteria("tender.procuringEntity._id", filter.getNotProcuringEntityId(), filter);
+    }
+
+    
 
     /**
      * Appends the supplier entity id for this filter, this will fitler based
@@ -303,22 +312,33 @@ public abstract class GenericOCDSController {
             }
         }
 
-        return filter.getInvert() ? criteria.norOperator(yearCriteria) : criteria.orOperator(yearCriteria);
+        return criteria.orOperator(yearCriteria);
     }
 
 
     protected Criteria getDefaultFilterCriteria(final DefaultFilterPagingRequest filter) {
-        return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
+        return new Criteria().andOperator(
+                getBidTypeIdFilterCriteria(filter), 
+                getNotBidTypeIdFilterCriteria(filter),
+                getProcuringEntityIdCriteria(filter),
+                getNotProcuringEntityIdCriteria(filter),
                 getSupplierIdCriteria(filter),
-                getByTenderDeliveryLocationIdentifier(filter), getByTenderAmountIntervalCriteria(filter),
+                getByTenderDeliveryLocationIdentifier(filter), 
+                getByTenderAmountIntervalCriteria(filter),
                 getByAwardAmountIntervalCriteria(filter));
     }
 
     protected Criteria getYearDefaultFilterCriteria(final YearFilterPagingRequest filter, final String dateProperty) {
-        return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
+        return new Criteria().andOperator(
+                getBidTypeIdFilterCriteria(filter), 
+                getNotBidTypeIdFilterCriteria(filter),
+                getProcuringEntityIdCriteria(filter),
+                getNotProcuringEntityIdCriteria(filter),
                 getSupplierIdCriteria(filter),
-                getByTenderDeliveryLocationIdentifier(filter), getByTenderAmountIntervalCriteria(filter),
-                getByAwardAmountIntervalCriteria(filter), getYearFilterCriteria(filter, dateProperty));
+                getByTenderDeliveryLocationIdentifier(filter), 
+                getByTenderAmountIntervalCriteria(filter),
+                getByAwardAmountIntervalCriteria(filter),
+                getYearFilterCriteria(filter, dateProperty));
     }
 
     protected MatchOperation getMatchDefaultFilterOperation(final DefaultFilterPagingRequest filter) {

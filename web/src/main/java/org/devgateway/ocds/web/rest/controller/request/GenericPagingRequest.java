@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.Range;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * @author mihai
+ * @author mpostelnicu
  *
  */
 public class GenericPagingRequest {

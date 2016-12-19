@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.devgateway.ocds.web.rest.controller;
 
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
@@ -51,10 +51,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import javax.validation.Valid;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
-import io.swagger.annotations.ApiOperation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
  *
@@ -89,14 +103,15 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 
 
     @ApiOperation(value = "Cost effectiveness of Awards: Displays the total amount of active awards grouped by year."
-            + "The tender entity, for each award, has to have amount value. The year is calculated from awards.date")
+            + "The tender entity, for each award, has to have amount value. The year is calculated from "
+            + "tender.tenderPeriod.startDate")
     @RequestMapping(value = "/api/costEffectivenessAwardAmount",
             method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
     public List<DBObject> costEffectivenessAwardAmount(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
-        DBObject project = new BasicDBObject();        
-        addYearlyMonthlyProjection(filter, project, "$awards.date");
+        DBObject project = new BasicDBObject();
+        addYearlyMonthlyProjection(filter, project, "$tender.tenderPeriod.startDate");
         project.put("awards.value.amount", 1);
         project.put("totalAwardsWithTender", new BasicDBObject("$cond",
                 Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$tender.tenderPeriod.startDate", null)), 1, 0)));
@@ -104,13 +119,13 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                 new BasicDBObject("$cond",
                         Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$tender.tenderPeriod.startDate", null)),
                                 "$awards.value.amount", 0)));
-        
+
         Aggregation agg = Aggregation.newAggregation(
                 match(where("awards").elemMatch(where("status").is(Award.Status.active.toString())).and("awards.date")
-                        .exists(true)),
+                        .exists(true).and("tender.tenderPeriod.startDate").exists(true)),
                 getMatchDefaultFilterOperation(filter), unwind("$awards"),
                 match(where("awards.status").is(Award.Status.active.toString()).and("awards.value").exists(true).
-                        andOperator(getYearDefaultFilterCriteria(filter, "awards.date"))),
+                        andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 new CustomProjectionOperation(project),
                 getYearlyMonthlyGroupingOperation(filter)
                         .sum("awardsWithTenderValue").as(Keys.TOTAL_AWARD_AMOUNT).count().as(Keys.TOTAL_AWARDS)
@@ -124,9 +139,9 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                 transformYearlyGrouping(filter).andInclude(Keys.TOTAL_AWARD_AMOUNT, Keys.TOTAL_AWARDS,
                         Keys.TOTAL_AWARDS_WITH_TENDER, Keys.PERCENTAGE_AWARDS_WITH_TENDER
                 ), getSortByYearMonth(filter),
-                skip(filter.getSkip()), limit(filter.getPageSize()));  
-                
-        
+                skip(filter.getSkip()), limit(filter.getPageSize()));
+
+
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
         return tagCount;
@@ -143,7 +158,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 
         DBObject project = new BasicDBObject();
         project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
-        addYearlyMonthlyProjection(filter, project, "$tender.tenderPeriod.startDate");        
+        addYearlyMonthlyProjection(filter, project, "$tender.tenderPeriod.startDate");
         project.put("tender.value.amount", 1);
         project.put(Fields.UNDERSCORE_ID, "$tender._id");
         project.put("tenderWithAwards",
@@ -157,12 +172,12 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 
         DBObject group1 = new BasicDBObject();
         group1.put(Fields.UNDERSCORE_ID, Fields.UNDERSCORE_ID_REF);
-        addYearlyMonthlyGroupingOperationFirst(filter, group1); 
+        addYearlyMonthlyGroupingOperationFirst(filter, group1);
         group1.put("tenderWithAwards", new BasicDBObject("$max", "$tenderWithAwards"));
         group1.put("tenderWithAwardsValue", new BasicDBObject("$max", "$tenderWithAwardsValue"));
         group1.put("tenderAmount", new BasicDBObject("$first", "$tender.value.amount"));
         filterProjectMap.forEach((k, v) -> group1.put(k.replace(".", ""), new BasicDBObject("$first", "$" + k)));
-       
+
         Aggregation agg = Aggregation.newAggregation(
                 match(where("tender.status").is(Tender.Status.active.toString()).and("tender.tenderPeriod.startDate")
                         .exists(true)
@@ -184,16 +199,16 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                 filter.getGroupByCategory() != null ? sort(Direction.DESC, Keys.TOTAL_TENDER_AMOUNT)
                         : getSortByYearMonth(filter),
                 skip(filter.getSkip()), limit(filter.getPageSize()));
-        
+
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
-        
+
 
         return tagCount;
 
     }
 
-    
+
     private String getYearMonthlyKey(GroupingFilterPagingRequest filter, DBObject db) {
         return filter.getMonthly() ? db.get(Keys.YEAR) + "-" + db.get(Keys.MONTH) : db.get(Keys.YEAR).toString();
     }
