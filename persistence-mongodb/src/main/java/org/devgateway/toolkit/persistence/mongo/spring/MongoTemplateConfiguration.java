@@ -1,10 +1,5 @@
 package org.devgateway.toolkit.persistence.mongo.spring;
 
-import java.io.IOException;
-import java.net.URL;
-
-import javax.annotation.PostConstruct;
-
 import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.DefaultLocation;
 import org.devgateway.ocds.persistence.mongo.Organization;
@@ -21,6 +16,10 @@ import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.index.TextIndexDefinition.TextIndexDefinitionBuilder;
 import org.springframework.data.mongodb.core.script.ExecutableMongoScript;
 import org.springframework.data.mongodb.core.script.NamedMongoScript;
+
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.net.URL;
 
 @Configuration
 public class MongoTemplateConfiguration {
@@ -45,6 +44,7 @@ public class MongoTemplateConfiguration {
     
     public void createCorruptionFlagsIndexes() {
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I038_VALUE, Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I007_VALUE, Direction.ASC));
     }
 
     @PostConstruct
