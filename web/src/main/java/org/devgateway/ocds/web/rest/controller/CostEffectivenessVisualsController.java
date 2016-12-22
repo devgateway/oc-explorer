@@ -164,7 +164,8 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                 match(where("tender.status").is(Tender.Status.active.toString()).and("tender.tenderPeriod.startDate")
                         .exists(true)
                         .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
-                getMatchDefaultFilterOperation(filter), new CustomUnwindOperation("$awards",true ),
+                getMatchDefaultFilterOperation(filter),
+                new CustomUnwindOperation("$awards", true),
                 new CustomProjectionOperation(project),
                 new CustomGroupingOperation(group1),
                 getTopXFilterOperation(filter, getYearlyMonthlyGroupingFields(filter)).sum("tenderWithAwardsValue")
