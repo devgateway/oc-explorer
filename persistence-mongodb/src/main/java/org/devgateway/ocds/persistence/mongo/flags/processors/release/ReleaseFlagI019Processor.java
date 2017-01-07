@@ -39,14 +39,16 @@ public class ReleaseFlagI019Processor extends AbstractFlaggedReleaseFlagProcesso
 
     @Override
     protected Boolean calculateFlag(FlaggedRelease flaggable, StringBuffer rationale) {
-        Optional<Award> award = flaggable.getAwards().stream().filter(a -> a.getDate() != null &&
-                Award.Status.active.equals(a.getStatus())).findFirst();
-        if(award.get()==null) return false;
+        Optional<Award> award = flaggable.getAwards().stream().filter(a -> a.getDate() != null
+                && Award.Status.active.equals(a.getStatus())).findFirst();
+        if (award.get() == null) {
+            return false;
+        }
 
         Days daysBetween = Days.daysBetween(new DateTime(flaggable.getTender().getTenderPeriod().getEndDate()),
-                    new DateTime(award.get().getDate()));
-            rationale.append("Days between: ").append(daysBetween.getDays()).append("; Max allowed days: ")
-                    .append(MAX_ALLOWED_DAYS_TENDER_END_DATE_AWARD_DATE).append(";");
-            return daysBetween.getDays() > MAX_ALLOWED_DAYS_TENDER_END_DATE_AWARD_DATE;
-        }
+                new DateTime(award.get().getDate()));
+        rationale.append("Days between: ").append(daysBetween.getDays()).append("; Max allowed days: ")
+                .append(MAX_ALLOWED_DAYS_TENDER_END_DATE_AWARD_DATE).append(";");
+        return daysBetween.getDays() > MAX_ALLOWED_DAYS_TENDER_END_DATE_AWARD_DATE;
     }
+}
