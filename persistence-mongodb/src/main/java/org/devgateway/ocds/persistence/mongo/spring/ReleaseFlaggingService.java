@@ -5,6 +5,7 @@ package org.devgateway.ocds.persistence.mongo.spring;
 
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
+import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI019Processor;
 import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI038Processor;
 import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI007Processor;
 import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
@@ -33,7 +34,8 @@ public class ReleaseFlaggingService {
     private final Collection<AbstractFlaggedReleaseFlagProcessor> releaseFlagProcessors =
             Collections.unmodifiableList(Arrays.asList(
                     ReleaseFlagI038Processor.INSTANCE,
-                    ReleaseFlagI007Processor.INSTANCE
+                    ReleaseFlagI007Processor.INSTANCE,
+                    ReleaseFlagI019Processor.INSTANCE
             ));
 
     private void processAndSaveFlagsForRelease(FlaggedRelease release) {
