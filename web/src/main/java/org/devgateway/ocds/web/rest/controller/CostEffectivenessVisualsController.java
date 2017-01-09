@@ -26,6 +26,7 @@ import org.devgateway.toolkit.web.spring.util.AsyncBeanParamControllerMethodCall
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
@@ -45,11 +46,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
@@ -178,11 +175,15 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                 project(Keys.TOTAL_TENDER_AMOUNT, Keys.TOTAL_TENDERS, Keys.TOTAL_TENDER_WITH_AWARDS,
                         Fields.UNDERSCORE_ID).and(Keys.FRACTION_TENDERS_WITH_AWARDS).multiply(100)
                                 .as(Keys.PERCENTAGE_TENDERS_WITH_AWARDS),
-                transformYearlyGrouping(filter).andInclude(Keys.TOTAL_TENDER_AMOUNT, Keys.TOTAL_TENDERS,
-                        Keys.TOTAL_TENDER_WITH_AWARDS, Keys.PERCENTAGE_TENDERS_WITH_AWARDS),
-                getSortByYearMonth(filter),
+//                filter.getGroupByCategory()==null?
+//                transformYearlyGrouping(filter):project().andInclude(Keys.TOTAL_TENDER_AMOUNT, Keys.TOTAL_TENDERS,
+//                        Keys.TOTAL_TENDER_WITH_AWARDS, Keys.PERCENTAGE_TENDERS_WITH_AWARDS),
+//                filter.getGroupByCategory()==null ?
+//                        getSortByYearMonth(filter) : sort(Sort.Direction.ASC, Keys.TOTAL_TENDER_AMOUNT),
                 skip(filter.getSkip()), limit(filter.getPageSize()))
                 .withOptions(Aggregation.newAggregationOptions().allowDiskUse(true).build());
+
+        System.out.println(agg);
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
