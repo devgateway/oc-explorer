@@ -46,7 +46,12 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
@@ -157,11 +162,11 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
         group1.put("tenderAmount", new BasicDBObject("$first", "$tender.value.amount"));
         filterProjectMap.forEach((k, v) ->
                 group1.put(k.replace(".", ""),
-                        k.equals("tender.items.classification._id")?
-                                new BasicDBObject("$first", new BasicDBObject("$arrayElemAt",
-                                        Arrays.asList("$"+k,0)))
-                    :
-                        new BasicDBObject("$first", "$" + k)));
+                        k.equals("tender.items.classification._id")
+                                ? new BasicDBObject("$first", new BasicDBObject("$arrayElemAt",
+                                        Arrays.asList("$" + k, 0)))
+                                :
+                                new BasicDBObject("$first", "$" + k)));
 
         Aggregation agg = Aggregation.newAggregation(
                 match(where("tender.status").is(Tender.Status.active.toString()).and("tender.tenderPeriod.startDate")
@@ -181,11 +186,12 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                 project(Keys.TOTAL_TENDER_AMOUNT, Keys.TOTAL_TENDERS, Keys.TOTAL_TENDER_WITH_AWARDS,
                         Fields.UNDERSCORE_ID).and(Keys.FRACTION_TENDERS_WITH_AWARDS).multiply(100)
                                 .as(Keys.PERCENTAGE_TENDERS_WITH_AWARDS),
-                (filter.getGroupByCategory()==null?
-                transformYearlyGrouping(filter):project()).andInclude(Keys.TOTAL_TENDER_AMOUNT, Keys.TOTAL_TENDERS,
+                (filter.getGroupByCategory() == null
+                        ? transformYearlyGrouping(filter) : project()).andInclude(Keys.TOTAL_TENDER_AMOUNT,
+                        Keys.TOTAL_TENDERS,
                         Keys.TOTAL_TENDER_WITH_AWARDS, Keys.PERCENTAGE_TENDERS_WITH_AWARDS),
-                filter.getGroupByCategory()==null ?
-                        getSortByYearMonth(filter) : sort(Sort.Direction.DESC, Keys.TOTAL_TENDER_AMOUNT),
+                filter.getGroupByCategory() == null
+                        ? getSortByYearMonth(filter) : sort(Sort.Direction.DESC, Keys.TOTAL_TENDER_AMOUNT),
                 skip(filter.getSkip()), limit(filter.getPageSize()))
                 .withOptions(Aggregation.newAggregationOptions().allowDiskUse(true).build());
 
