@@ -62,6 +62,8 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @Cacheable
 public class CostEffectivenessVisualsController extends GenericOCDSController {
 
+    public static final BigDecimal ONE_HUNDRED = new BigDecimal(100);
+
     @Autowired
     private AsyncControllerLookupService controllerLookupService;
 
@@ -78,6 +80,8 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
         public static final String TOTAL_TENDER_WITH_AWARDS = "totalTenderWithAwards";
         public static final String PERCENTAGE_TENDERS_WITH_AWARDS = "percentageTendersWithAwards";
         private static final String FRACTION_TENDERS_WITH_AWARDS = "fractionTendersWithAwards";
+        public static final String PERCENTAGE_AWARD_TENDER_AMOUNT = "percentageAwardTenderAmount";
+        public static final String PERCENTAGE_DIFF_TENDER_AMOUNT = "percentageDiffTenderAmount";
         public static final String DIFF_TENDER_AWARD_AMOUNT = "diffTenderAwardAmount";
         private static final String YEAR_MONTH = "year-month"; //this is for internal use
         public static final String MONTH = "month";
@@ -252,6 +256,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
         }
 
         Collection<DBObject> respCollection = response.values();
+
         respCollection.forEach(dbobj -> {
             dbobj.put(Keys.DIFF_TENDER_AWARD_AMOUNT,
                     BigDecimal
@@ -259,6 +264,16 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                                     : ((Number) dbobj.get(Keys.TOTAL_TENDER_AMOUNT)).doubleValue())
                             .subtract(BigDecimal.valueOf(dbobj.get(Keys.TOTAL_AWARD_AMOUNT) == null ? 0d
                                     : ((Number) dbobj.get(Keys.TOTAL_AWARD_AMOUNT)).doubleValue())));
+
+            dbobj.put(Keys.PERCENTAGE_AWARD_TENDER_AMOUNT,
+                    dbobj.get(Keys.TOTAL_TENDER_AMOUNT)!=null
+                            && !dbobj.get(Keys.TOTAL_TENDER_AMOUNT).equals(BigDecimal.ZERO)?
+                    BigDecimal
+                            .valueOf(dbobj.get(Keys.TOTAL_AWARD_AMOUNT) == null ? 0d
+                                    : ((Number) dbobj.get(Keys.TOTAL_AWARD_AMOUNT)).doubleValue())
+                            .divide(BigDecimal.valueOf(dbobj.get(Keys.TOTAL_TENDER_AMOUNT) == null ? 0d
+                                    : ((Number) dbobj.get(Keys.TOTAL_TENDER_AMOUNT)).doubleValue()),BigDecimal.ROUND_HALF_UP)
+                            .multiply(ONE_HUNDRED):BigDecimal.ZERO);
         });
 
         return new ArrayList<>(respCollection);
