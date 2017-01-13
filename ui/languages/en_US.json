@@ -123,5 +123,7 @@
   "tables:frequentTenderers:supplier": "Supplier",
   "tables:frequentTenderers:nrITB": "Number of ITBs in Common",
   "tables:frequentTenderers:title": "Frequent Supplier Bidding Combinations",
-  "tables:showAll": "Show all"
+  "tables:showAll": "Show all",
+  "tables:frequentTenderers:supplier1wins": "Supplier #1 wins",
+  "tables:frequentTenderers:supplier2wins": "Supplier #2 wins"
 }
