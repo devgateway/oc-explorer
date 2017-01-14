@@ -147,7 +147,7 @@ public class TopTenController extends GenericOCDSController {
             + "Returns supplier id, total awarded amount of all awarded contracts, count of awarded contracts,"
             + "Ids of the procuring entities from which they have received an award, and their count. "
             + "All filters ally here, the year filter uses the awards.date field.")
-    @RequestMapping(value = "/api/topTenLargestSuppliers", method = {RequestMethod.POST,
+    @RequestMapping(value = "/api/topTenSuppliers", method = {RequestMethod.POST,
             RequestMethod.GET},
             produces = "application/json")
     public List<DBObject> topTenLargestSuppliers(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
