@@ -15,7 +15,10 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
+import org.devgateway.toolkit.persistence.mongo.aggregate.CustomGroupingOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
+import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
+import org.hibernate.jpamodelgen.xml.jaxb.Basic;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort.Direction;
@@ -34,7 +37,9 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.limi
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
@@ -125,6 +130,54 @@ public class TopTenController extends GenericOCDSController {
                         .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 new CustomOperation(new BasicDBObject("$project", project)),
                 sort(Direction.DESC, "tender.value.amount"), limit(10));
+
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+        List<DBObject> tagCount = results.getMappedResults();
+        return tagCount;
+
+    }
+
+
+    @ApiOperation(value = "This endpoint should return the following data for the Top 10 suppliers (by award value)."
+            + "Returns supplier id, total awarded amount of all awarded contracts, count of awarded contracts,"
+            + "Ids of the procuring entities from which they have received an award, and their count. "
+            + "All filters ally here, the year filter uses the awards.date field.")
+    @RequestMapping(value = "/api/topTenLargestSuppliers", method = {RequestMethod.POST,
+            RequestMethod.GET},
+            produces = "application/json")
+    public List<DBObject> topTenLargestSuppliers(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+
+        BasicDBObject project = new BasicDBObject();
+        project.put(Fields.UNDERSCORE_ID, 0);
+        project.put("awards.suppliers._id", 1);
+        project.put("awards.value.amount", 1);
+        project.put("tender.procuringEntity._id", 1);
+
+        BasicDBObject group = new BasicDBObject();
+        group.put(Fields.UNDERSCORE_ID, "$awards.suppliers._id");
+        group.put("totalAwardAmount", new BasicDBObject("$sum", "$awards.value.amount"));
+        group.put("totalContracts", new BasicDBObject("$sum", 1));
+        group.put("procuringEntityIds", new BasicDBObject("$addToSet", "$tender.procuringEntity._id"));
+
+
+        Aggregation agg = newAggregation(
+                match(where("awards.value.amount").exists(true).and("awards.status").is("active")
+                        .andOperator(getDefaultFilterCriteria(filter))),
+                unwind("$awards"),
+                match(where("awards.status").is("active")),
+                unwind("$awards.suppliers"),
+                match(getYearFilterCriteria(filter, "awards.date")),
+                new CustomProjectionOperation(project),
+                new CustomGroupingOperation(group),
+                sort(Direction.DESC, "totalAwardAmount"),
+                limit(10),
+                project().and(Fields.UNDERSCORE_ID).
+                        as("supplierId").
+                        andInclude("totalAwardAmount", "totalContracts", "procuringEntityIds")
+                        .andExclude(Fields.UNDERSCORE_ID)
+                        .and("procuringEntityIds").size().as("procuringEntityIdsCount")
+        );
+
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
