@@ -61,6 +61,11 @@ public class TopTenController extends GenericOCDSController {
         public static final String TENDER = "tender";
         public static final String TENDER_PERIOD = "tenderPeriod";
         public static final String PROCURING_ENTITY = "procuringEntity";
+        public static final String TOTAL_AWARD_AMOUNT = "totalAwardAmount";
+        public static final String TOTAL_CONTRACTS = "totalContracts";
+        public static final String PROCURING_ENTITY_IDS = "procuringEntityIds";
+        public static final String PROCURING_ENTITY_IDS_COUNT = "procuringEntityIdsCount";
+        public static final String SUPPLIER_ID = "supplierId";
     }
 
     /**
@@ -155,9 +160,9 @@ public class TopTenController extends GenericOCDSController {
 
         BasicDBObject group = new BasicDBObject();
         group.put(Fields.UNDERSCORE_ID, "$awards.suppliers._id");
-        group.put("totalAwardAmount", new BasicDBObject("$sum", "$awards.value.amount"));
-        group.put("totalContracts", new BasicDBObject("$sum", 1));
-        group.put("procuringEntityIds", new BasicDBObject("$addToSet", "$tender.procuringEntity._id"));
+        group.put(Keys.TOTAL_AWARD_AMOUNT, new BasicDBObject("$sum", "$awards.value.amount"));
+        group.put(Keys.TOTAL_CONTRACTS, new BasicDBObject("$sum", 1));
+        group.put(Keys.PROCURING_ENTITY_IDS, new BasicDBObject("$addToSet", "$tender.procuringEntity._id"));
 
 
         Aggregation agg = newAggregation(
@@ -169,13 +174,13 @@ public class TopTenController extends GenericOCDSController {
                 match(getYearFilterCriteria(filter, "awards.date")),
                 new CustomProjectionOperation(project),
                 new CustomGroupingOperation(group),
-                sort(Direction.DESC, "totalAwardAmount"),
+                sort(Direction.DESC, Keys.TOTAL_AWARD_AMOUNT),
                 limit(10),
                 project().and(Fields.UNDERSCORE_ID).
-                        as("supplierId").
-                        andInclude("totalAwardAmount", "totalContracts", "procuringEntityIds")
+                        as(Keys.SUPPLIER_ID).
+                        andInclude(Keys.TOTAL_AWARD_AMOUNT, Keys.TOTAL_CONTRACTS, Keys.PROCURING_ENTITY_IDS)
                         .andExclude(Fields.UNDERSCORE_ID)
-                        .and("procuringEntityIds").size().as("procuringEntityIdsCount")
+                        .and(Keys.PROCURING_ENTITY_IDS).size().as(Keys.PROCURING_ENTITY_IDS_COUNT)
         );
 
 
