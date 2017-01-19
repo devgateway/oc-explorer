@@ -3,25 +3,33 @@ package org.devgateway.ocds.web.flags.release;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.PostConstruct;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.Flag;
 import org.devgateway.ocds.persistence.mongo.flags.preconditions.FlaggedReleasePredicates;
+import org.devgateway.ocds.web.rest.controller.FrequentSuppliersTimeIntervalController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
  * @author mpostelnicu
- * 
- * i077 High number of contract awards to one supplier within a given time period by a single procurement entity
+ *         <p>
+ *         i077 High number of contract awards to one supplier within a given time period by a single procurement entity
  */
 @Component
 public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcessor {
 
-//    @Autowired
-  //  FrequentSuppliersTimeIntervalController frequentSuppliersTimeIntervalController;
+    public static final Integer INTERVAL_DAYS = 365;
+    public static final Integer MAX_AWARDS = 3;
 
+    private ConcurrentHashMap<String, FrequentSuppliersTimeIntervalController.FrequentSuppliersTuple>
+            awardsMap;
 
+    @Autowired
+    private FrequentSuppliersTimeIntervalController frequentSuppliersTimeIntervalController;
 
     @Override
     protected void setFlag(Flag flag, FlaggedRelease flaggable) {
@@ -30,7 +38,9 @@ public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcesso
 
     @Override
     protected Boolean calculateFlag(FlaggedRelease flaggable, StringBuffer rationale) {
-        return false;
+        return flaggable.getAwards().stream().filter(award ->
+                awardsMap.get(award.getId()) != null).map(award -> rationale
+                .append("Award " + award.getId() + " flagged by tuple " + awardsMap.get(award.getId()))).count() > 0;
     }
 
     @PostConstruct
@@ -39,6 +49,14 @@ public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcesso
         preconditionsPredicates = Collections.synchronizedList(
                 Arrays.asList(FlaggedReleasePredicates.ACTIVE_AWARD_WITH_DATE,
                         FlaggedReleasePredicates.TENDER_PROCURING_ENTITY));
+
+        List<FrequentSuppliersTimeIntervalController.FrequentSuppliersTuple> frequentSuppliersTimeInterval
+                = frequentSuppliersTimeIntervalController.frequentSuppliersTimeInterval(INTERVAL_DAYS, MAX_AWARDS);
+
+        awardsMap = new ConcurrentHashMap<>();
+
+        frequentSuppliersTimeInterval.
+                forEach(tuple -> tuple.getAwardIds().forEach(awardId -> awardsMap.put(awardId, tuple)));
     }
 
 }

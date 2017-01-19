@@ -14,6 +14,10 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -24,15 +28,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -74,9 +74,15 @@ public class FrequentSuppliersTimeIntervalController extends GenericOCDSControll
         public void setTimeInterval(Integer timeInterval) {
             this.timeInterval = timeInterval;
         }
+
+        @Override
+        public String toString() {
+            return "procuringEntityId=" + procuringEntityId + "; supplierId=" + supplierId
+                    + "; timeInterval=" + timeInterval;
+        }
     }
 
-    public static class FrequentSuppliersTupple {
+    public static class FrequentSuppliersTuple {
         private FrequentSuppliersId identifier;
         private Integer count;
         private Set<String> awardIds;
@@ -104,6 +110,11 @@ public class FrequentSuppliersTimeIntervalController extends GenericOCDSControll
         public void setAwardIds(Set<String> awardIds) {
             this.awardIds = awardIds;
         }
+
+        @Override
+        public String toString() {
+            return identifier.toString() + " count= " + count;
+        }
     }
 
 
@@ -116,7 +127,7 @@ public class FrequentSuppliersTimeIntervalController extends GenericOCDSControll
             + " default value for intervalDays is 365.")
     @RequestMapping(value = "/api/frequentSuppliersTimeInterval", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<FrequentSuppliersTupple> frequentSuppliersTimeInterval(
+    public List<FrequentSuppliersTuple> frequentSuppliersTimeInterval(
             @RequestParam(defaultValue = "365", required = false) Integer intervalDays,
             @RequestParam(defaultValue = "3", required = false) Integer maxAwards) {
 
@@ -147,9 +158,9 @@ public class FrequentSuppliersTimeIntervalController extends GenericOCDSControll
                 sort(Sort.Direction.DESC, "count")
         );
 
-        AggregationResults<FrequentSuppliersTupple> results = mongoTemplate.aggregate(agg, "release",
-                FrequentSuppliersTupple.class);
-        List<FrequentSuppliersTupple> list = results.getMappedResults();
+        AggregationResults<FrequentSuppliersTuple> results = mongoTemplate.aggregate(agg, "release",
+                FrequentSuppliersTuple.class);
+        List<FrequentSuppliersTuple> list = results.getMappedResults();
         return list;
     }
 
