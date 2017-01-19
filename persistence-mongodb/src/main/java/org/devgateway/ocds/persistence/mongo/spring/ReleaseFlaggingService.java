@@ -29,13 +29,23 @@ public class ReleaseFlaggingService {
     @Autowired
     private FlaggedReleaseRepository releaseRepository;
 
+    @Autowired
+    private ReleaseFlagI038Processor releaseFlagI038Processor;
+
+    @Autowired
+    private ReleaseFlagI007Processor releaseFlagI007Processor;
+
+    @Autowired
+    private ReleaseFlagI019Processor releaseFlagI019Processor;
+
+
     public static final int FLAGGING_BATCH_SIZE = 5000;
 
     private final Collection<AbstractFlaggedReleaseFlagProcessor> releaseFlagProcessors =
             Collections.unmodifiableList(Arrays.asList(
-                    ReleaseFlagI038Processor.INSTANCE,
-                    ReleaseFlagI007Processor.INSTANCE,
-                    ReleaseFlagI019Processor.INSTANCE
+                    releaseFlagI038Processor,
+                    releaseFlagI007Processor,
+                    releaseFlagI019Processor
             ));
 
     private void processAndSaveFlagsForRelease(FlaggedRelease release) {
