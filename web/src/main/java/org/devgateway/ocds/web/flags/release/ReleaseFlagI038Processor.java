@@ -1,7 +1,7 @@
 /**
  *
  */
-package org.devgateway.ocds.persistence.mongo.flags.processors.release;
+package org.devgateway.ocds.web.flags.release;
 
 
 import java.util.Arrays;

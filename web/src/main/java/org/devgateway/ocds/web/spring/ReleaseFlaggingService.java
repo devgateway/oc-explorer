@@ -1,27 +1,26 @@
 /**
- * 
+ *
  */
-package org.devgateway.ocds.persistence.mongo.spring;
-
-import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
-import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
-import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI019Processor;
-import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI038Processor;
-import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI007Processor;
-import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
+package org.devgateway.ocds.web.spring;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.function.Consumer;
+import javax.annotation.PostConstruct;
+import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
+import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
+import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
+import org.devgateway.ocds.web.flags.release.ReleaseFlagI007Processor;
+import org.devgateway.ocds.web.flags.release.ReleaseFlagI019Processor;
+import org.devgateway.ocds.web.flags.release.ReleaseFlagI038Processor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 
 /**
  * @author mpostelnicu
- *
  */
 @Service
 public class ReleaseFlaggingService {
@@ -41,12 +40,8 @@ public class ReleaseFlaggingService {
 
     public static final int FLAGGING_BATCH_SIZE = 5000;
 
-    private final Collection<AbstractFlaggedReleaseFlagProcessor> releaseFlagProcessors =
-            Collections.unmodifiableList(Arrays.asList(
-                    releaseFlagI038Processor,
-                    releaseFlagI007Processor,
-                    releaseFlagI019Processor
-            ));
+    private Collection<AbstractFlaggedReleaseFlagProcessor> releaseFlagProcessors;
+
 
     private void processAndSaveFlagsForRelease(FlaggedRelease release) {
         releaseFlagProcessors.forEach(processor -> processor.process(release));
@@ -69,5 +64,14 @@ public class ReleaseFlaggingService {
         } while (!page.isLast());
 
         logMessage.accept("<b>CORRUPTION FLAGGING COMPLETE.</b>");
+    }
+
+    @PostConstruct
+    protected void setProcessors() {
+        releaseFlagProcessors = Collections.unmodifiableList(Arrays.asList(
+                releaseFlagI038Processor,
+                releaseFlagI007Processor,
+                releaseFlagI019Processor
+        ));
     }
 }
