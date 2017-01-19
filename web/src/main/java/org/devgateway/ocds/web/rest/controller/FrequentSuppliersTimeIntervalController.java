@@ -27,12 +27,15 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
+
 
 /**
  *
@@ -42,33 +45,78 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @RestController
 public class FrequentSuppliersTimeIntervalController extends GenericOCDSController {
 
-    public static class TendererPair {
-        private String tendererId1;
-        private String tendererId2;
+    public static class FrequentSuppliersId {
 
-        public String getTendererId1() {
-            return tendererId1;
+        private String procuringEntityId;
+        private String supplierId;
+        private Integer timeInterval;
+
+        public String getProcuringEntityId() {
+            return procuringEntityId;
         }
 
-        public void setTendererId1(String tenderer1) {
-            this.tendererId1 = tenderer1;
+        public void setProcuringEntityId(String procuringEntityId) {
+            this.procuringEntityId = procuringEntityId;
         }
 
-        public String getTendererId2() {
-            return tendererId2;
+        public String getSupplierId() {
+            return supplierId;
         }
 
-        public void setTendererId2(String tenderer2) {
-            this.tendererId2 = tenderer2;
+        public void setSupplierId(String supplierId) {
+            this.supplierId = supplierId;
         }
 
+        public Integer getTimeInterval() {
+            return timeInterval;
+        }
+
+        public void setTimeInterval(Integer timeInterval) {
+            this.timeInterval = timeInterval;
+        }
+    }
+
+    public static class FrequentSuppliersTupple {
+        private FrequentSuppliersId identifier;
+        private Integer count;
+        private Set<String> awardIds;
+
+        public FrequentSuppliersId getIdentifier() {
+            return identifier;
+        }
+
+        public void setIdentifier(FrequentSuppliersId identifier) {
+            this.identifier = identifier;
+        }
+
+        public Integer getCount() {
+            return count;
+        }
+
+        public void setCount(Integer count) {
+            this.count = count;
+        }
+
+        public Set<String> getAwardIds() {
+            return awardIds;
+        }
+
+        public void setAwardIds(Set<String> awardIds) {
+            this.awardIds = awardIds;
+        }
     }
 
 
-    @ApiOperation(value = ".")
+    @ApiOperation(value = "Returns the frequent suppliers of a procuringEntity split by a time interval. "
+            + "The time interval is "
+            + "a parameter and represents the number of days to take as interval, starting with today and going back "
+            + "till the last award date. The awards are grouped by procuringEntity, supplier and the time interval. "
+            + "maxAwards parameter is used to designate what is the maximum number of awards granted to one supplier "
+            + "by the same procuringEntity inside one timeInterval. The default value for maxAwards is 3 (days) and the"
+            + " default value for intervalDays is 365.")
     @RequestMapping(value = "/api/frequentSuppliersTimeInterval", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> frequentSuppliersTimeInterval(
+    public List<FrequentSuppliersTupple> frequentSuppliersTimeInterval(
             @RequestParam(defaultValue = "365", required = false) Integer intervalDays,
             @RequestParam(defaultValue = "3", required = false) Integer maxAwards) {
 
@@ -86,17 +134,22 @@ public class FrequentSuppliersTimeIntervalController extends GenericOCDSControll
         Aggregation agg = Aggregation.newAggregation(
                 match(where("tender.procuringEntity").exists(true).and("awards.suppliers.0").exists(true)
                         .and("awards.date").exists(true)),
-                unwind("$awards"),
-                unwind("$awards.suppliers"),
+                unwind("awards"),
+                unwind("awards.suppliers"),
                 new CustomProjectionOperation(project),
-                group("$tender.procuringEntity._id", "$awards.suppliers._id", "$timeInterval").
-                        count().as("count").addToSet("$awards._id").as("awardIds"),
+                group(Fields.from(Fields.field("procuringEntityId", "tender.procuringEntity._id"),
+                        Fields.field("supplierId", "awards.suppliers._id"),
+                        Fields.field("timeInterval", "timeInterval")
+                )).
+                        count().as("count").addToSet("awards._id").as("awardIds"),
+                project("count", "awardIds").and("identifier").previousOperation(),
                 match(where("count").gt(maxAwards)),
                 sort(Sort.Direction.DESC, "count")
         );
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> list = results.getMappedResults();
+        AggregationResults<FrequentSuppliersTupple> results = mongoTemplate.aggregate(agg, "release",
+                FrequentSuppliersTupple.class);
+        List<FrequentSuppliersTupple> list = results.getMappedResults();
         return list;
     }
 
