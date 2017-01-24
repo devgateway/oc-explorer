@@ -125,5 +125,10 @@
   "tables:frequentTenderers:title": "Frequent Supplier Bidding Combinations",
   "tables:showAll": "Show all",
   "tables:frequentTenderers:supplier1wins": "Supplier #1 wins",
-  "tables:frequentTenderers:supplier2wins": "Supplier #2 wins"
+  "tables:frequentTenderers:supplier2wins": "Supplier #2 wins",
+  "tables:top10suppliers:supplierName": "Supplier name",
+  "tables:top10suppliers:nrAwardsWon": "Number of awards won",
+  "tables:top10suppliers:nrPE": "Number of PEs from which an award has been received",
+  "tables:top10suppliers:totalAwardedValue": "Total awarded value (in VND)",
+  "tables:top10suppliers:title": "Top 10 suppliers"
 }
