@@ -57,6 +57,11 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
             + "Use /api/awardValueInterval to get the maximum allowed.")
     private BigDecimal maxAwardValue;
 
+
+    @ApiModelProperty(value = "Filters after tender.submissionMethod='electronicSubmission', also known as"
+            + " eBids")
+    private Boolean electronicSubmission;
+
     public DefaultFilterPagingRequest() {
         super();
     }
@@ -141,4 +146,11 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
         this.notProcuringEntityId = notProcuringEntityId;
     }
 
+    public Boolean getElectronicSubmission() {
+        return electronicSubmission;
+    }
+
+    public void setElectronicSubmission(Boolean electronicSubmission) {
+        this.electronicSubmission = electronicSubmission;
+    }
 }
