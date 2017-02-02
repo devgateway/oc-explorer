@@ -12,7 +12,6 @@
 package org.devgateway.ocds.persistence.repository;
 
 import java.util.List;
-
 import org.devgateway.ocds.persistence.dao.UserDashboard;
 import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepository;
 import org.springframework.data.domain.Page;
@@ -31,13 +30,14 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 @RepositoryRestResource
-@PreAuthorize("hasRole('ROLE_PROCURING_ENTITY')")
 public interface UserDashboardRepository extends TextSearchableRepository<UserDashboard, Long> {
 
     @Query("select d from Person p JOIN p.dashboards d where p.id = ?1")
+    @PreAuthorize("hasRole('ROLE_PROCURING_ENTITY')")
     Page<UserDashboard> findDashboardsForPersonId(long userId, Pageable pageable);
 
     @Query("select p.defaultDashboard from Person p where p.id = ?1")
+    @PreAuthorize("hasRole('ROLE_PROCURING_ENTITY')")
     UserDashboard getDefaultDashboardForPersonId(long userId);
 
     @Override
@@ -49,6 +49,8 @@ public interface UserDashboardRepository extends TextSearchableRepository<UserDa
     @RestResource(exported = false)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     List<UserDashboard> findAll();
+
+    UserDashboard findByName(@Param("name") String name);
 
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -66,6 +68,7 @@ public interface UserDashboardRepository extends TextSearchableRepository<UserDa
     
     @RestResource(exported = true)
     @Override
+    @PreAuthorize("hasRole('ROLE_PROCURING_ENTITY')")
     UserDashboard getOne(Long id);
 
 }

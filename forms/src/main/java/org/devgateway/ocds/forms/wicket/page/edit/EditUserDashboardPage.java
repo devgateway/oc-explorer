@@ -14,10 +14,15 @@ package org.devgateway.ocds.forms.wicket.page.edit;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.IValidator;
+import org.apache.wicket.validation.ValidationError;
 import org.devgateway.ocds.forms.wicket.page.list.ListAllDashboardsPage;
 import org.devgateway.ocds.forms.wicket.providers.LabelPersistableJpaRepositoryTextChoiceProvider;
 import org.devgateway.ocds.persistence.dao.UserDashboard;
 import org.devgateway.ocds.persistence.repository.UserDashboardRepository;
+import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.components.form.Select2MultiChoiceBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.TextAreaFieldBootstrapFormComponent;
@@ -48,7 +53,34 @@ public class EditUserDashboardPage extends AbstractEditPage<UserDashboard> {
         super(parameters);
         this.jpaRepository = userDashboardRepository;
         this.listPageClass = ListAllDashboardsPage.class;
+    }
 
+    protected class DashboardNameValidator implements IValidator<String> {
+        private Long id;
+
+        public DashboardNameValidator() {
+            this.id = -1L;
+        }
+
+        public DashboardNameValidator(final Long id) {
+            this.id = id;
+        }
+
+        @Override
+        public void validate(final IValidatable<String> validatable) {
+            String name = validatable.getValue();
+
+            if (name != null && !name.matches(UserDashboard.NAME_REGEXP)) {
+                ValidationError error = new ValidationError(UserDashboard.NAME_REGEXP_MESSAGE);
+                validatable.error(error);
+            }
+
+            UserDashboard dashboard = userDashboardRepository.findByName(name);
+            if (dashboard != null && !dashboard.getId().equals(id)) {
+                ValidationError error = new ValidationError(getString("uniqueName"));
+                validatable.error(error);
+            }
+        }
     }
 
     @Override
@@ -57,6 +89,15 @@ public class EditUserDashboardPage extends AbstractEditPage<UserDashboard> {
 
         TextFieldBootstrapFormComponent<String> name = new TextFieldBootstrapFormComponent<>("name");
         name.required();
+
+        StringValue id = getPageParameters().get(WebConstants.PARAM_ID);
+
+        if (!id.isNull()) {
+            name.getField().add(new DashboardNameValidator(id.toLong()));
+        } else {
+            name.getField().add(new DashboardNameValidator());
+        }
+
         editForm.add(name);
 
         TextAreaFieldBootstrapFormComponent<String> formUrlEncodedBody =
