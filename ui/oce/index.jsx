@@ -6,8 +6,6 @@ import Filters from "./filters";
 import OCEStyle from "./style.less";
 
 let range = (from, to) => from > to ? [] : [from].concat(range(from + 1, to));
-const MIN_YEAR = 2010;
-const MAX_YEAR = 2020;
 const MENU_BOX_COMPARISON = "menu-box";
 const MENU_BOX_FILTERS = 'filters';
 const ROLE_ADMIN = 'ROLE_ADMIN';
