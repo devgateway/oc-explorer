@@ -122,7 +122,7 @@ aside {
   position: fixed;
   bottom: @yearsBarBottom;
   border-bottom: 2px solid #c5c5c5;
-  z-index: 1;
+  z-index: 10000;
   padding-left: 0;
   padding-right: 0;
   display: table;
@@ -150,6 +150,17 @@ aside {
         visibility: visible;
       }
     }
+  }
+
+  .ctrl-click-hint{
+    display: none;
+    position: absolute;
+    top: @yearsBarHeight + 10;
+    color: #fff;
+  }
+
+  a:hover .ctrl-click-hint{
+    display: block;
   }
 }
 

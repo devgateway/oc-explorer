@@ -6,6 +6,7 @@ import Filters from "./filters";
 import OCEStyle from "./style.less";
 
 let range = (from, to) => from > to ? [] : [from].concat(range(from + 1, to));
+
 const MENU_BOX_COMPARISON = "menu-box";
 const MENU_BOX_FILTERS = 'filters';
 const ROLE_ADMIN = 'ROLE_ADMIN';
@@ -227,6 +228,9 @@ class OCApp extends React.Component{
             onClick={e => e.ctrlKey ? toggleOthersYears(year) : toggleYear(year)}
         >
           <i className="glyphicon glyphicon-ok-circle"></i> {year}
+          <span className="ctrl-click-hint">
+            {this.t('yearsBar:ctrlClickHint')}
+          </span>
         </a>
     ).toArray();
   }
