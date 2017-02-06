@@ -210,16 +210,23 @@ class OCApp extends React.Component{
 
   yearsBar(){
     const {years, selectedYears} = this.state;
+    const toggleYear = year => this.setState({
+      selectedYears: selectedYears.has(+year) ?
+          selectedYears.delete(+year) :
+          selectedYears.add(+year)
+    });
+    const toggleOthersYears = year => this.setState({
+      selectedYears: 1 == selectedYears.count() && selectedYears.has(year) ?
+          Set(years) :
+          Set([year])
+    });
     return years.sort().map(year =>
         <a
             key={year}
             href="javascript:void(0);"
             className={cn({active: selectedYears.has(+year)})}
-            onClick={_ => this.setState({
-              selectedYears: selectedYears.has(+year) ?
-                  selectedYears.delete(+year) :
-                  selectedYears.add(+year)
-            })}
+            onDoubleClick={e => toggleOthersYears(year)}
+            onClick={e => e.ctrlKey ? toggleOthersYears(year) : toggleYear(year)}
         >
           <i className="glyphicon glyphicon-ok-circle"></i> {year}
         </a>
