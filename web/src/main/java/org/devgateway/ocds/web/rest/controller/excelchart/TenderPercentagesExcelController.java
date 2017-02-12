@@ -46,12 +46,12 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
         // fetch the data that will be displayed in the chart
         final List<DBObject> totalCancelledTenders = tenderPercentagesController.percentTendersCancelled(filter);
 
-        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(TenderPercentagesController.Keys.YEAR,
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),
                 totalCancelledTenders);
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> percentCancelled = excelChartHelper.getValuesFromDBObject(totalCancelledTenders, categories,
-                TenderPercentagesController.Keys.YEAR, TenderPercentagesController.Keys.PERCENT_CANCELLED);
+                getExportYearMonthXAxis(filter), TenderPercentagesController.Keys.PERCENT_CANCELLED);
         if (!percentCancelled.isEmpty()) {
             values.add(percentCancelled);
         }
@@ -85,12 +85,12 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
         // fetch the data that will be displayed in the chart
         final List<DBObject> totalCancelledTenders = tenderPercentagesController.percentTendersUsingEBid(filter);
 
-        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(TenderPercentagesController.Keys.YEAR,
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),
                 totalCancelledTenders);
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> percentUsingEBid = excelChartHelper.getValuesFromDBObject(totalCancelledTenders, categories,
-                TenderPercentagesController.Keys.YEAR, TenderPercentagesController.Keys.PERCENTAGE_TENDERS_USING_EBID);
+                getExportYearMonthXAxis(filter), TenderPercentagesController.Keys.PERCENTAGE_TENDERS_USING_EBID);
         if (!percentUsingEBid.isEmpty()) {
             values.add(percentUsingEBid);
         }
