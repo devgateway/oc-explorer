@@ -81,7 +81,7 @@ class OCEChild extends OCApp{
 }
 
 OCEChild.TRANSLATIONS = {
-  en_US: require('./languages/en_US.json'),
+  en_US: require('../web/public/languages/en_US.json')
 };
 
 ReactDOM.render(<OCEChild/>, document.getElementById('dg-container'));
