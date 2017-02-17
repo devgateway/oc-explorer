@@ -4,9 +4,8 @@ import org.devgateway.ocds.web.annotate.LanguageValidation;
 
 /**
  * Created by mpostelnicu on 2/17/17.
- * A paging request that also holds the language param
  */
-public class LangYearFilterPagingRequest extends YearFilterPagingRequest {
+public class LangGroupingFilterPagingRequest extends GroupingFilterPagingRequest {
 
     @LanguageValidation
     protected String language;
