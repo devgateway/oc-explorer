@@ -154,16 +154,6 @@ public abstract class GenericOCDSController {
         }
         return new CustomSortingOperation(sort);
     }
-
-    /**
-     * This is used to define the X axis based on yearly or monthly value is present.
-     *
-     * @param filter
-     * @return
-     */
-    protected String getExportYearMonthXAxis(YearFilterPagingRequest filter) {
-        return filter.getMonthly() ? "month" : "year";
-    }
     
     protected void addYearlyMonthlyReferenceToGroup(YearFilterPagingRequest filter, DBObject group) {
         if (filter.getMonthly()) {

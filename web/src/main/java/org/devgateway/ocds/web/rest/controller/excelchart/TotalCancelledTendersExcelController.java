@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.ocds.web.rest.controller.TotalCancelledTendersByYearController;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.web.excelcharts.ChartType;
@@ -25,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Exports an excel chart based on *Cancelled funding* dashboard
  */
 @RestController
-public class TotalCancelledTendersExcelController extends GenericOCDSController {
+public class TotalCancelledTendersExcelController extends ExcelChartOCDSController {
     @Autowired
     private ExcelChartGenerator excelChartGenerator;
 
