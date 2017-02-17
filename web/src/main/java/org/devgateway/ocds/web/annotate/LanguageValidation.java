@@ -14,6 +14,6 @@ import javax.validation.constraints.Pattern;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 @NotNull(message = "language must not be null")
-@Pattern(regexp = "^[a-z]{2}_[A-Z]{2}$", message = "Invalid email address!")
+@Pattern(regexp = "^[a-z]{2}_[A-Z]{2}$", message = "Invalid language!")
 public @interface LanguageValidation {
 }
