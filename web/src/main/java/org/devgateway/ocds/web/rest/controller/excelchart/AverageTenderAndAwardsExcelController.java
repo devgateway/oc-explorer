@@ -9,8 +9,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.devgateway.ocds.web.rest.controller.AverageTenderAndAwardPeriodsController;
-import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
-import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.LangYearFilterPagingRequest;
 import org.devgateway.toolkit.web.excelcharts.ChartType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Exports an excel chart based on *Bid Timeline* dashboard
  */
 @RestController
-public class AverageTenderAndAwardsExcelController extends GenericOCDSController {
+public class AverageTenderAndAwardsExcelController extends ExcelChartOCDSController {
     @Autowired
     private ExcelChartGenerator excelChartGenerator;
 
@@ -37,9 +36,9 @@ public class AverageTenderAndAwardsExcelController extends GenericOCDSController
 
     @ApiOperation(value = "Exports *Bid Timeline* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/bidTimelineExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
-    public void bidTimelineExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+    public void bidTimelineExcelChart(@ModelAttribute @Valid final LangYearFilterPagingRequest filter,
                                       final HttpServletResponse response) throws IOException {
-        final String chartTitle = "Bid timeline";
+        final String chartTitle = translationService.getValue(filter.getLanguage(), "charts:bidPeriod:title");
 
         // fetch the data that will be displayed in the chart (we have multiple sources for this dashboard)
         final List<DBObject> averageAwardPeriod = averageTenderAndAwardPeriodsController.averageAwardPeriod(filter);
@@ -64,8 +63,8 @@ public class AverageTenderAndAwardsExcelController extends GenericOCDSController
         final List<String> seriesTitle;
         if (!values.isEmpty()) {
             seriesTitle = Arrays.asList(
-                    "Tender",
-                    "Award");
+                    translationService.getValue(filter.getLanguage(), "charts:bidPeriod:traces:tender"),
+                    translationService.getValue(filter.getLanguage(), "charts:bidPeriod:traces:award"));
         } else {
             seriesTitle = new ArrayList<>();
         }
