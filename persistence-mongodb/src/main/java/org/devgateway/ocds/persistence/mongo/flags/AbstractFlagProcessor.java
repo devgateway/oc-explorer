@@ -15,16 +15,16 @@ public abstract class AbstractFlagProcessor<T extends Flaggable> {
     /**
      * Calculates the given flag and returns the flag value. Does not set any
      * flag to the given {@link Flaggable}
-     * 
-     * @param flaggable
-     *            a {@link Flaggable}
+     *
+     * @param flaggable a {@link Flaggable}
      * @return the value of the flag. This can be null (not applicable), false ,
-     *         or true
+     * or true
      */
     protected abstract Boolean calculateFlag(T flaggable, StringBuffer rationale);
 
     /**
      * Performs required initializations for flags, if needed
+     *
      * @param flaggable
      */
     protected abstract void initializeFlags(T flaggable);
@@ -38,6 +38,7 @@ public abstract class AbstractFlagProcessor<T extends Flaggable> {
 
     /**
      * Processes the flag on the flaggable only if the preconditions are met
+     *
      * @param flaggable
      */
     public final void process(T flaggable) {
@@ -61,23 +62,39 @@ public abstract class AbstractFlagProcessor<T extends Flaggable> {
         }
 
         initializeFlags(flaggable);
-        setFlag(new Flag(flagValue, rationale.toString(), flagTypes()), flaggable);
+        Flag flag = new Flag(flagValue, rationale.toString(), flagTypes());
+        setFlag(flag, flaggable);
+        collectStats(flag, flaggable);
     }
 
     /**
      * These are the flag types related to the current flag. They are defined in {@link FlagType}
+     *
      * @return
      */
     protected abstract Set<FlagType> flagTypes();
 
     /**
      * Sets the flag to the {@link Flaggable}
-     * 
-     * @param flag
-     *            the new flag
-     * @param flaggable
-     *            the flaggable to set the flag to
+     *
+     * @param flag      the new flag
+     * @param flaggable the flaggable to set the flag to
      */
     protected abstract void setFlag(Flag flag, T flaggable);
+
+
+    protected void collectStats(Flag flag, T flaggable) {
+        if (flag.getValue() != null) {
+            flag.getTypes().forEach(f -> flaggable.getFlags().getEligibleTypes().put(f,
+                    flaggable.getFlags().getEligibleTypes().containsKey(f)
+                            ? flaggable.getFlags().getEligibleTypes().get(f) + 1 : 1));
+        }
+
+        if (flag.getValue() != null && flag.getValue()) {
+            flag.getTypes().forEach(f -> flaggable.getFlags().getFlaggedTypes().put(f,
+                    flaggable.getFlags().getFlaggedTypes().containsKey(f)
+                            ? flaggable.getFlags().getFlaggedTypes().get(f) + 1 : 1));
+        }
+    }
 
 }
