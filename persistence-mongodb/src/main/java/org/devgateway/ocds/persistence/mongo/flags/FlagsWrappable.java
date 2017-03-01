@@ -3,7 +3,7 @@
  */
 package org.devgateway.ocds.persistence.mongo.flags;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * @author mpostelnicu
@@ -11,8 +11,8 @@ import java.util.List;
  */
 public interface FlagsWrappable {
 
-    List<FlagTypeCount> getFlaggedTypeCounts();
+    Map<FlagType, FlagTypeCount> getFlaggedStatsMap();
 
-    List<FlagTypeCount> getEligibleTypeCounts();
+    Map<FlagType, FlagTypeCount> getEligibleStatsMap();
 
 }
