@@ -6,8 +6,8 @@ package org.devgateway.ocds.persistence.mongo.flags;
  */
 public class FlagTypeCount {
 
-    private FlagType flagType;
-    private Integer flagCount;
+    private FlagType type;
+    private Integer count;
 
     /**
      * creates a new instance of {@link FlagTypeCount} and sets the count to 1
@@ -17,8 +17,8 @@ public class FlagTypeCount {
      */
     public static FlagTypeCount newInstance(FlagType flagType) {
         FlagTypeCount ftc = new FlagTypeCount();
-        ftc.setFlagCount(1);
-        ftc.setFlagType(flagType);
+        ftc.setCount(1);
+        ftc.setType(flagType);
         return ftc;
     }
 
@@ -27,23 +27,23 @@ public class FlagTypeCount {
      * returns self
      */
     public FlagTypeCount inc() {
-        flagCount++;
+        count++;
         return this;
     }
 
-    public FlagType getFlagType() {
-        return flagType;
+    public FlagType getType() {
+        return type;
     }
 
-    public void setFlagType(FlagType flagType) {
-        this.flagType = flagType;
+    public void setType(FlagType type) {
+        this.type = type;
     }
 
-    public Integer getFlagCount() {
-        return flagCount;
+    public Integer getCount() {
+        return count;
     }
 
-    public void setFlagCount(Integer flagCount) {
-        this.flagCount = flagCount;
+    public void setCount(Integer count) {
+        this.count = count;
     }
 }
