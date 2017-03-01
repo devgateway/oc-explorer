@@ -1,18 +1,18 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocds.persistence.mongo.flags;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * @author mpostelnicu
- * Interface designating the wrapper entity holding the flags
+ *         Interface designating the wrapper entity holding the flags
  */
 public interface FlagsWrappable {
 
-    Map<FlagType, Integer> getFlaggedTypes();
+    List<FlagTypeCount> getFlaggedTypeCounts();
 
-    Map<FlagType, Integer> getEligibleTypes();
+    List<FlagTypeCount> getEligibleTypeCounts();
 
 }

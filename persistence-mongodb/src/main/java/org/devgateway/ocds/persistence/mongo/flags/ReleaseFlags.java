@@ -3,8 +3,8 @@
  */
 package org.devgateway.ocds.persistence.mongo.flags;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author mpostelnicu Represents the list of red flags at the Release level
@@ -30,26 +30,26 @@ public class ReleaseFlags implements FlagsWrappable {
     // during a defined time period
     private Flag i180;
 
-    private Map<FlagType, Integer> flaggedTypes = new HashMap<>();
+    private List<FlagTypeCount> flaggedTypeCounts = new ArrayList<>();
 
-    private Map<FlagType, Integer> eligibleTypes = new HashMap<>();
-
-    @Override
-    public Map<FlagType, Integer> getFlaggedTypes() {
-        return flaggedTypes;
-    }
-
-    public void setFlaggedTypes(Map<FlagType, Integer> flaggedTypes) {
-        this.flaggedTypes = flaggedTypes;
-    }
+    private List<FlagTypeCount> eligibleTypeCounts = new ArrayList<>();
 
     @Override
-    public Map<FlagType, Integer> getEligibleTypes() {
-        return eligibleTypes;
+    public List<FlagTypeCount> getFlaggedTypeCounts() {
+        return flaggedTypeCounts;
     }
 
-    public void setEligibleTypes(Map<FlagType, Integer> eligibleTypes) {
-        this.eligibleTypes = eligibleTypes;
+    public void setFlaggedTypeCounts(List<FlagTypeCount> flaggedTypeCounts) {
+        this.flaggedTypeCounts = flaggedTypeCounts;
+    }
+
+    @Override
+    public List<FlagTypeCount> getEligibleTypeCounts() {
+        return eligibleTypeCounts;
+    }
+
+    public void setEligibleTypeCounts(List<FlagTypeCount> eligibleTypeCounts) {
+        this.eligibleTypeCounts = eligibleTypeCounts;
     }
 
     public Flag getI019() {

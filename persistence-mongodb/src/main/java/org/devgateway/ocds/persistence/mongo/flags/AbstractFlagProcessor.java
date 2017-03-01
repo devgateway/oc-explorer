@@ -1,5 +1,6 @@
 package org.devgateway.ocds.persistence.mongo.flags;
 
+import java.util.HashMap;
 import org.devgateway.ocds.persistence.mongo.flags.preconditions.NamedPredicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,17 +85,23 @@ public abstract class AbstractFlagProcessor<T extends Flaggable> {
 
 
     protected void collectStats(Flag flag, T flaggable) {
+
+        HashMap<FlagType, FlagTypeCount> flagged = new HashMap<>();
+        HashMap<FlagType, FlagTypeCount> eligible = new HashMap<>();
+
         if (flag.getValue() != null) {
-            flag.getTypes().forEach(f -> flaggable.getFlags().getEligibleTypes().put(f,
-                    flaggable.getFlags().getEligibleTypes().containsKey(f)
-                            ? flaggable.getFlags().getEligibleTypes().get(f) + 1 : 1));
+            flag.getTypes().forEach(f -> eligible.put(f, eligible.containsKey(f)
+                    ? eligible.get(f).inc() : FlagTypeCount.newInstance(f)));
         }
 
         if (flag.getValue() != null && flag.getValue()) {
-            flag.getTypes().forEach(f -> flaggable.getFlags().getFlaggedTypes().put(f,
-                    flaggable.getFlags().getFlaggedTypes().containsKey(f)
-                            ? flaggable.getFlags().getFlaggedTypes().get(f) + 1 : 1));
+            flag.getTypes().forEach(f -> flagged.put(f, flagged.containsKey(f)
+                    ? flagged.get(f).inc() : FlagTypeCount.newInstance(f)));
         }
+
+        flaggable.getFlags().getEligibleTypeCounts().addAll(eligible.values());
+        flaggable.getFlags().getFlaggedTypeCounts().addAll(flagged.values());
+
     }
 
 }
