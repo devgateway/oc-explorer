@@ -1,5 +1,6 @@
 package org.devgateway.ocds.web.rest.controller;
 
+import com.mongodb.DBObject;
 import java.util.List;
 import org.devgateway.ocds.persistence.mongo.flags.FlagType;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
@@ -35,20 +36,19 @@ public class TotalFlagsControllerTest extends AbstractEndPointControllerTest {
 
     @Test
     public void totalFlagsByIndicatorTypeTest() throws Exception {
-        final List<TotalFlagsController.TypeValue> result = totalFlagsController
-                .totalFlagsByIndicatorType(new YearFilterPagingRequest());
+        final List<DBObject> result = totalFlagsController
+                .totalFlaggedIndicatorsByIndicatorType(new YearFilterPagingRequest());
         Assert.assertEquals(1, result.size());
-        Assert.assertEquals(FlagType.RIGGING.toString(), result.get(0).getId());
-        Assert.assertEquals(2, result.get(0).getValue(),0);
+        Assert.assertEquals(FlagType.RIGGING.toString(), result.get(0).get(TotalFlagsController.Keys.TYPE));
+        Assert.assertEquals(2, result.get(0).get(TotalFlagsController.Keys.COUNT));
     }
 
     @Test
     public void totalFlagsTest() throws Exception {
-        final List<TotalFlagsController.TypeValue> result = totalFlagsController
-                .totalFlags(new YearFilterPagingRequest());
+        final List<DBObject> result = totalFlagsController
+                .totalFlaggedIndicators(new YearFilterPagingRequest());
         Assert.assertEquals(1, result.size());
-        Assert.assertEquals(TotalFlagsController.Keys.ALL, result.get(0).getId());
-        Assert.assertEquals(2, result.get(0).getValue(),0);
+        Assert.assertEquals(2, result.get(0).get(TotalFlagsController.Keys.COUNT));
     }
 
 }
