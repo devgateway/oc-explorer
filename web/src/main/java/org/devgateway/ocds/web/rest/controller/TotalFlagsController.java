@@ -14,9 +14,6 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
-import java.util.Arrays;
-import java.util.List;
-import javax.validation.Valid;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.cache.annotation.CacheConfig;
@@ -29,9 +26,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import java.util.List;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
@@ -50,6 +48,8 @@ public class TotalFlagsController extends GenericOCDSController {
         public static final String TYPE = "type";
         public static final String COUNT = "count";
         public static final String FLAGGED_COUNT = "flaggedCount";
+        public static final String FLAGS_COUNT = "flagsCount";
+
         public static final String ELIGIBLE_COUNT = "eligibleCount";
     }
 
@@ -67,8 +67,8 @@ public class TotalFlagsController extends GenericOCDSController {
                         .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 unwind("flags.flaggedStats"),
                 project("flags.flaggedStats"),
-                group("flaggedStats.type").sum("flaggedStats.count").as(Keys.COUNT),
-                project(Keys.COUNT).and(Fields.UNDERSCORE_ID).as(Keys.TYPE).andExclude(Fields.UNDERSCORE_ID)
+                group("flaggedStats.type").sum("flaggedStats.count").as(Keys.FLAGS_COUNT),
+                project(Keys.FLAGS_COUNT).and(Fields.UNDERSCORE_ID).as(Keys.TYPE).andExclude(Fields.UNDERSCORE_ID)
         );
 
 
@@ -104,32 +104,25 @@ public class TotalFlagsController extends GenericOCDSController {
 
 
     @ApiOperation(value = "Counts the projects with at least one indicator flagged as true, grouped by indicator type")
-    @RequestMapping(value = "/api/totalProjectsByIndicatorType", method = {RequestMethod.POST, RequestMethod.GET},
+    @RequestMapping(value = "/api/totalFlaggedProjectsByIndicatorType", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> totalProjectsByIndicatorType(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<DBObject> totalFlaggedProjectsByIndicatorType(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
-
-        DBObject project = new BasicDBObject();
-        project.put(Fields.UNDERSCORE_ID, 0);
-        project.put("flagged", new BasicDBObject("$cond",
-                Arrays.asList(new BasicDBObject("$gt",
-                        Arrays.asList(new BasicDBObject("$size", "$flags.flaggedStats"), 0)), 1, 0)));
-        project.put("eligible", new BasicDBObject("$cond",
-                Arrays.asList(new BasicDBObject("$gt",
-                        Arrays.asList(new BasicDBObject("$size", "$flags.eligibleStats"), 0)), 1, 0)));
-        project.put("indicatorsFlagged", new BasicDBObject("$size", "$flags.flaggedStats"));
-        project.put("indicatorsEligible", new BasicDBObject("$size", "$flags.eligibleStats"));
-
+        DBObject project1 = new BasicDBObject();
+        addYearlyMonthlyProjection(filter, project1, "$tender.tenderPeriod.startDate");
+        project1.put("flaggedStats", "$flags.flaggedStats");
+        project1.put(Fields.UNDERSCORE_ID,0);
 
         Aggregation agg = newAggregation(
                 match(where("tender.tenderPeriod.startDate").exists(true)
+                        .and("flags.flaggedStats.0").exists(true)
                         .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
-                new CustomProjectionOperation(project),
-                //group("flaggedStats.type").sum("flaggedStats.count").as(Keys.FLAGGED_COUNT)
-//                .sum("flags.eligibleStats").as(Keys.ELIGIBLE_COUNT)
-                limit(filter.getPageSize())
+                unwind("flags.flaggedStats"),
+                new CustomProjectionOperation(project1),
+                group(getYearlyMonthlyGroupingFields(filter, "flaggedStats.type")).
+                        sum("flaggedStats.count").as(Keys.FLAGS_COUNT).count().as(Keys.FLAGGED_COUNT),
+                transformYearlyGrouping(filter).andInclude(Keys.FLAGGED_COUNT, Keys.FLAGS_COUNT)
         );
-
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release",
                 DBObject.class);
