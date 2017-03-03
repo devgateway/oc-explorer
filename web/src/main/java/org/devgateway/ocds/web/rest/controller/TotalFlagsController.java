@@ -51,6 +51,9 @@ public class TotalFlagsController extends GenericOCDSController {
         public static final String PROJECT_COUNT = "projectCount";
     }
 
+    private static final String ELIGIBLE_STATS = "eligibleStats";
+    private static final String FLAGGED_STATS = "flaggedStats";
+
 
     @ApiOperation(value = "Counts the indicators flagged, and groups them by indicator type. "
             + "An indicator that has two types it will be counted twice, once in each group.")
@@ -60,7 +63,7 @@ public class TotalFlagsController extends GenericOCDSController {
     public List<DBObject> totalFlaggedIndicatorsByIndicatorType(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
-        return totalIndicatorsByIndicatorType("flaggedStats", filter);
+        return totalIndicatorsByIndicatorType(FLAGGED_STATS, filter);
     }
 
     @ApiOperation(value = "Counts the indicators eligible, and groups them by indicator type. "
@@ -71,7 +74,7 @@ public class TotalFlagsController extends GenericOCDSController {
     public List<DBObject> totalEligibleIndicatorsByIndicatorType(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
-        return totalIndicatorsByIndicatorType("eligibleStats", filter);
+        return totalIndicatorsByIndicatorType(ELIGIBLE_STATS, filter);
     }
 
 
@@ -103,7 +106,7 @@ public class TotalFlagsController extends GenericOCDSController {
     public List<DBObject> totalIndicatorsByIndicatorTypeYearly(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
-        return totalIndicatorsByIndicatorTypeYearly("flaggedStats", filter);
+        return totalIndicatorsByIndicatorTypeYearly(FLAGGED_STATS, filter);
     }
 
     @ApiOperation(value = "Counts the indicators eligible, and groups them by indicator type and by year/month. "
@@ -114,7 +117,7 @@ public class TotalFlagsController extends GenericOCDSController {
     public List<DBObject> totalEligibleIndicatorsByIndicatorTypeYearly(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
-        return totalIndicatorsByIndicatorTypeYearly("eligibleStats", filter);
+        return totalIndicatorsByIndicatorTypeYearly(ELIGIBLE_STATS, filter);
     }
 
 
@@ -143,20 +146,24 @@ public class TotalFlagsController extends GenericOCDSController {
         return list;
     }
 
-    @ApiOperation(value = "Counts the projects and the indicators flagged, grouped by indicator type")
+    @ApiOperation(value = "Counts the projects and the indicators flagged, grouped by indicator type. "
+            + "The 'count' represents the number of indicators flagged, the 'projectCount' represents the number"
+            + " of projects flagged.")
     @RequestMapping(value = "/api/totalFlaggedProjectsByIndicatorType",
             method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
     public List<DBObject> totalFlaggedProjectsByIndicatorType(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
-        return totalProjectsByIndicatorType("flaggedStats", filter);
+        return totalProjectsByIndicatorType(FLAGGED_STATS, filter);
     }
 
-    @ApiOperation(value = "Counts the projects with at least one indicator eligible, grouped by indicator type")
+    @ApiOperation(value = "Counts the projects and the indicators eligible, grouped by indicator type. "
+            + "The 'count' represents the number of indicators eligible, the 'projectCount' represents the number"
+            + " of projects eligible.")
     @RequestMapping(value = "/api/totalEligibleProjectsByIndicatorType",
             method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
     public List<DBObject> totalEligibleProjectsByIndicatorType(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
-        return totalProjectsByIndicatorType("eligibleStats", filter);
+        return totalProjectsByIndicatorType(ELIGIBLE_STATS, filter);
     }
 
 
