@@ -99,10 +99,10 @@ public class TotalFlagsController extends GenericOCDSController {
 
     @ApiOperation(value = "Counts the indicators flagged, and groups them by indicator type and by year/month. "
             + "An indicator that has two types it will be counted twice, once in each group.")
-    @RequestMapping(value = "/api/totalIndicatorsByIndicatorTypeYearly",
+    @RequestMapping(value = "/api/totalFlaggedIndicatorsByIndicatorTypeYearly",
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> totalIndicatorsByIndicatorTypeYearly(
+    public List<DBObject> totalFlaggedIndicatorsByIndicatorTypeYearly(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         return totalIndicatorsByIndicatorTypeYearly(FLAGGED_STATS, filter);
