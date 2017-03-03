@@ -82,8 +82,7 @@ public class TotalFlagsController extends GenericOCDSController {
                                                           final YearFilterPagingRequest filter) {
 
         Aggregation agg = newAggregation(
-                match(where("tender.tenderPeriod.startDate").exists(true)
-                        .and("flags." + statsProperty + ".0").exists(true)
+                match(where("flags." + statsProperty + ".0").exists(true)
                         .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 unwind("flags." + statsProperty),
                 project("flags." + statsProperty),
@@ -182,6 +181,31 @@ public class TotalFlagsController extends GenericOCDSController {
                 new CustomProjectionOperation(project1),
                 group(getYearlyMonthlyGroupingFields(filter, "stats.type")).
                         sum("stats.count").as(Keys.COUNT).count().as(Keys.PROJECT_COUNT)
+        );
+
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release",
+                DBObject.class);
+        List<DBObject> list = results.getMappedResults();
+        return list;
+    }
+
+
+    @ApiOperation(value = "Count total projects by year/month.")
+    @RequestMapping(value = "/api/totalProjectsByYear",
+            method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
+    public List<DBObject> totalProjectsByYear(final YearFilterPagingRequest filter) {
+
+        DBObject project1 = new BasicDBObject();
+        addYearlyMonthlyProjection(filter, project1, "$tender.tenderPeriod.startDate");
+        project1.put(Fields.UNDERSCORE_ID, 0);
+
+        Aggregation agg = newAggregation(
+                match(where("tender.tenderPeriod.startDate").exists(true).
+                        andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                new CustomProjectionOperation(project1),
+                group(getYearlyMonthlyGroupingFields(filter)).
+                        count().as(Keys.PROJECT_COUNT),
+                transformYearlyGrouping(filter).andInclude(Keys.PROJECT_COUNT)
         );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release",
