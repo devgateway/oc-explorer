@@ -113,7 +113,7 @@ public class TotalFlagsController extends GenericOCDSController {
     @RequestMapping(value = "/api/totalEligibleIndicatorsByIndicatorTypeYearly",
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> totalEligibleIndicatorsByIndicatorTypeYearly(
+    public List<DBObject> totalEligibtleIndicatorsByIndicatorTypeYearly(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         return totalIndicatorsByIndicatorTypeYearly(ELIGIBLE_STATS, filter);
