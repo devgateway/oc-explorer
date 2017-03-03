@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.List;
 
+
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
@@ -47,14 +48,11 @@ public class TotalFlagsController extends GenericOCDSController {
     public static final class Keys {
         public static final String TYPE = "type";
         public static final String COUNT = "count";
-        public static final String FLAGGED_COUNT = "flaggedCount";
-        public static final String FLAGS_COUNT = "flagsCount";
-
-        public static final String ELIGIBLE_COUNT = "eligibleCount";
+        public static final String PROJECT_COUNT = "projectCount";
     }
 
 
-    @ApiOperation(value = "Counts the indicators flagged as true, and groups them by indicator type. "
+    @ApiOperation(value = "Counts the indicators flagged, and groups them by indicator type. "
             + "An indicator that has two types it will be counted twice, once in each group.")
     @RequestMapping(value = "/api/totalFlaggedIndicatorsByIndicatorType",
             method = {RequestMethod.POST, RequestMethod.GET},
@@ -62,13 +60,32 @@ public class TotalFlagsController extends GenericOCDSController {
     public List<DBObject> totalFlaggedIndicatorsByIndicatorType(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
+        return totalIndicatorsByIndicatorType("flaggedStats", filter);
+    }
+
+    @ApiOperation(value = "Counts the indicators eligible, and groups them by indicator type. "
+            + "An indicator that has two types it will be counted twice, once in each group.")
+    @RequestMapping(value = "/api/totalEligibleIndicatorsByIndicatorType",
+            method = {RequestMethod.POST, RequestMethod.GET},
+            produces = "application/json")
+    public List<DBObject> totalEligibleIndicatorsByIndicatorType(
+            @ModelAttribute @Valid final YearFilterPagingRequest filter) {
+
+        return totalIndicatorsByIndicatorType("eligibleStats", filter);
+    }
+
+
+    private List<DBObject> totalIndicatorsByIndicatorType(String statsProperty,
+                                                          final YearFilterPagingRequest filter) {
+
         Aggregation agg = newAggregation(
                 match(where("tender.tenderPeriod.startDate").exists(true)
+                        .and("flags." + statsProperty + ".0").exists(true)
                         .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
-                unwind("flags.flaggedStats"),
-                project("flags.flaggedStats"),
-                group("flaggedStats.type").sum("flaggedStats.count").as(Keys.FLAGS_COUNT),
-                project(Keys.FLAGS_COUNT).and(Fields.UNDERSCORE_ID).as(Keys.TYPE).andExclude(Fields.UNDERSCORE_ID)
+                unwind("flags." + statsProperty),
+                project("flags." + statsProperty),
+                group(statsProperty + ".type").sum(statsProperty + ".count").as(Keys.COUNT),
+                project(Keys.COUNT).and(Fields.UNDERSCORE_ID).as(Keys.TYPE).andExclude(Fields.UNDERSCORE_ID)
         );
 
 
@@ -78,50 +95,86 @@ public class TotalFlagsController extends GenericOCDSController {
         return list;
     }
 
-
-    @ApiOperation(value = "Counts the indicators flagged as true. An indicator that has two types will be counted"
-            + "only once.")
-    @RequestMapping(value = "/api/totalFlaggedIndicators", method = {RequestMethod.POST, RequestMethod.GET},
+    @ApiOperation(value = "Counts the indicators flagged, and groups them by indicator type and by year/month. "
+            + "An indicator that has two types it will be counted twice, once in each group.")
+    @RequestMapping(value = "/api/totalIndicatorsByIndicatorTypeYearly",
+            method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> totalFlaggedIndicators(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<DBObject> totalIndicatorsByIndicatorTypeYearly(
+            @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
-        Aggregation agg = newAggregation(
-                match(where("tender.tenderPeriod.startDate").exists(true)
-                        .and("flags.flaggedStats.0").exists(true)
-                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
-                unwind("flags.flaggedStats"),
-                project("flags.flaggedStats"),
-                group().sum("flaggedStats.count").as(Keys.COUNT),
-                project(Keys.COUNT).andExclude(Fields.UNDERSCORE_ID)
-        );
+        return totalIndicatorsByIndicatorTypeYearly("flaggedStats", filter);
+    }
 
+    @ApiOperation(value = "Counts the indicators eligible, and groups them by indicator type and by year/month. "
+            + "An indicator that has two types it will be counted twice, once in each group.")
+    @RequestMapping(value = "/api/totalEligibleIndicatorsByIndicatorTypeYearly",
+            method = {RequestMethod.POST, RequestMethod.GET},
+            produces = "application/json")
+    public List<DBObject> totalEligibleIndicatorsByIndicatorTypeYearly(
+            @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release",
-                DBObject.class);
-        List<DBObject> list = results.getMappedResults();
-        return list;
+        return totalIndicatorsByIndicatorTypeYearly("eligibleStats", filter);
     }
 
 
-    @ApiOperation(value = "Counts the projects with at least one indicator flagged as true, grouped by indicator type")
-    @RequestMapping(value = "/api/totalFlaggedProjectsByIndicatorType", method = {RequestMethod.POST, RequestMethod.GET},
-            produces = "application/json")
-    public List<DBObject> totalFlaggedProjectsByIndicatorType(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    private List<DBObject> totalIndicatorsByIndicatorTypeYearly(String statsProperty,
+                                                                final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
         addYearlyMonthlyProjection(filter, project1, "$tender.tenderPeriod.startDate");
-        project1.put("flaggedStats", "$flags.flaggedStats");
-        project1.put(Fields.UNDERSCORE_ID,0);
+        project1.put("stats", "$flags." + statsProperty);
+        project1.put(Fields.UNDERSCORE_ID, 0);
 
         Aggregation agg = newAggregation(
                 match(where("tender.tenderPeriod.startDate").exists(true)
-                        .and("flags.flaggedStats.0").exists(true)
+                        .and("flags." + statsProperty + ".0").exists(true)
                         .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
-                unwind("flags.flaggedStats"),
+                unwind("flags." + statsProperty),
                 new CustomProjectionOperation(project1),
-                group(getYearlyMonthlyGroupingFields(filter, "flaggedStats.type")).
-                        sum("flaggedStats.count").as(Keys.FLAGS_COUNT).count().as(Keys.FLAGGED_COUNT),
-                transformYearlyGrouping(filter).andInclude(Keys.FLAGGED_COUNT, Keys.FLAGS_COUNT)
+                group(getYearlyMonthlyGroupingFields(filter, "stats.type")).
+                        sum("stats.count").as(Keys.COUNT)
+        );
+
+
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release",
+                DBObject.class);
+        List<DBObject> list = results.getMappedResults();
+        return list;
+    }
+
+    @ApiOperation(value = "Counts the projects and the indicators flagged, grouped by indicator type")
+    @RequestMapping(value = "/api/totalFlaggedProjectsByIndicatorType",
+            method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
+    public List<DBObject> totalFlaggedProjectsByIndicatorType(
+            @ModelAttribute @Valid final YearFilterPagingRequest filter) {
+        return totalProjectsByIndicatorType("flaggedStats", filter);
+    }
+
+    @ApiOperation(value = "Counts the projects with at least one indicator eligible, grouped by indicator type")
+    @RequestMapping(value = "/api/totalEligibleProjectsByIndicatorType",
+            method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
+    public List<DBObject> totalEligibleProjectsByIndicatorType(
+            @ModelAttribute @Valid final YearFilterPagingRequest filter) {
+        return totalProjectsByIndicatorType("eligibleStats", filter);
+    }
+
+
+    private List<DBObject> totalProjectsByIndicatorType(String statsProperty, final YearFilterPagingRequest filter) {
+
+        DBObject project1 = new BasicDBObject();
+        addYearlyMonthlyProjection(filter, project1, "$tender.tenderPeriod.startDate");
+        project1.put("stats", "$flags." + statsProperty);
+        project1.put(Fields.UNDERSCORE_ID, 0);
+
+        Aggregation agg = newAggregation(
+                match(where("tender.tenderPeriod.startDate").exists(true)
+                        .and("flags." + statsProperty + ".0").exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                unwind("flags." + statsProperty),
+                new CustomProjectionOperation(project1),
+                group(getYearlyMonthlyGroupingFields(filter, "stats.type")).
+                        sum("stats.count").as(Keys.COUNT).count().as(Keys.PROJECT_COUNT)
         );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release",
