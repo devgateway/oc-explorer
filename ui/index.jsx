@@ -8,6 +8,8 @@ import EProcurementTab from './oce/tabs/e-procurement';
 import {fetchJson} from "./oce/tools";
 import {Map} from "immutable";
 import styles from "./style.less";
+import ViewSwitcher from "./oce/switcher.jsx";
+import CorruptionRickDashboard from "./oce/corruption-risk";
 
 class OCEChild extends OCApp{
   constructor(props) {
@@ -84,7 +86,12 @@ OCEChild.TRANSLATIONS = {
   en_US: require('../web/public/languages/en_US.json')
 };
 
-ReactDOM.render(<OCEChild/>, document.getElementById('dg-container'));
+class OceSwitcher extends ViewSwitcher{}
+
+OceSwitcher.views.default = OCEChild;
+OceSwitcher.views.corruptionRiskDashboard = CorruptionRickDashboard;
+
+ReactDOM.render(<OceSwitcher/>, document.getElementById('dg-container'));
 
 if("ocvn.developmentgateway.org" == location.hostname){
   (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
