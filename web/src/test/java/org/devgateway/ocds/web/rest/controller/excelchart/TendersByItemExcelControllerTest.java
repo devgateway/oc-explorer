@@ -1,20 +1,19 @@
 package org.devgateway.ocds.web.rest.controller.excelchart;
 
+import java.io.ByteArrayInputStream;
+import java.util.List;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFChart;
 import org.apache.poi.xssf.usermodel.XSSFDrawing;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xssf.usermodel.charts.XSSFChartAxis;
-import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.LangYearFilterPagingRequest;
 import org.devgateway.toolkit.web.excelcharts.ChartType;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTChart;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.io.ByteArrayInputStream;
-import java.util.List;
 
 /**
  * @author idobre
@@ -22,14 +21,15 @@ import java.util.List;
  *
  * @see {@link AbstractExcelControllerTest}
  */
-public class NumberOfTendersByItemExcelControllerTest extends AbstractExcelControllerTest {
+public class TendersByItemExcelControllerTest extends AbstractExcelControllerTest {
     @Autowired
-    private NumberOfTendersByItemExcelController numberOfTendersByItemExcelController;
+    private TendersByItemExcelController tendersByItemExcelController;
 
     @Test
     public void numberOfTendersByItemExcelChart() throws Exception {
-        numberOfTendersByItemExcelController.numberOfTendersByItemExcelChart(
-                new YearFilterPagingRequest(),
+        LangYearFilterPagingRequest filter = getLangYearFilterMockRequest();
+        tendersByItemExcelController.numberOfTendersByItemExcelChart(
+                filter,
                 mockHttpServletResponse);
 
         final byte[] responseOutput = mockHttpServletResponse.getContentAsByteArray();
@@ -44,7 +44,9 @@ public class NumberOfTendersByItemExcelControllerTest extends AbstractExcelContr
         Assert.assertEquals("number of charts", 1, charts.size());
 
         final XSSFChart chart = charts.get(0);
-        Assert.assertEquals("chart title", "Number of bids by item", chart.getTitle().getString());
+        Assert.assertEquals("chart title",
+              translationService.getValue(filter.getLanguage(), "charts:bidsByItem:title"),
+                chart.getTitle().getString());
 
         final List<? extends XSSFChartAxis> axis = chart.getAxis();
         Assert.assertEquals("number of axis", 2, axis.size());

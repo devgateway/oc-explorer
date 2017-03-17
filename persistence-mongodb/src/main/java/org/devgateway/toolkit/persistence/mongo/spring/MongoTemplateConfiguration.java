@@ -1,10 +1,5 @@
 package org.devgateway.toolkit.persistence.mongo.spring;
 
-import java.io.IOException;
-import java.net.URL;
-
-import javax.annotation.PostConstruct;
-
 import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.DefaultLocation;
 import org.devgateway.ocds.persistence.mongo.Organization;
@@ -22,6 +17,10 @@ import org.springframework.data.mongodb.core.index.TextIndexDefinition.TextIndex
 import org.springframework.data.mongodb.core.script.ExecutableMongoScript;
 import org.springframework.data.mongodb.core.script.NamedMongoScript;
 
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.net.URL;
+
 @Configuration
 public class MongoTemplateConfiguration {
 
@@ -37,14 +36,20 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(Organization.class)
                 .ensureIndex(new Index().on("additionalIdentifiers._id", Direction.ASC));
         mongoTemplate.indexOps(Organization.class).ensureIndex(
-                new Index().on("types", Direction.ASC));
+                new Index().on("roles", Direction.ASC));
         mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("name", Direction.ASC).unique());
         mongoTemplate.indexOps(DefaultLocation.class).ensureIndex(new Index().on("description", Direction.ASC));
         logger.info("Added mandatory Mongo indexes");
     }
     
     public void createCorruptionFlagsIndexes() {
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("flags.flaggedStats", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("flags.eligibleStats", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I038_VALUE, Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I007_VALUE, Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I004_VALUE, Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I077_VALUE, Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I019_VALUE, Direction.ASC));
     }
 
     @PostConstruct
