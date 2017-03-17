@@ -68,6 +68,52 @@ class Filters extends React.Component{
   }
 }
 
+import Chart from "../visualizations/charts/index.jsx";
+import Plotly from "plotly.js/lib/core";
+Plotly.register([
+  require('plotly.js/lib/pie')
+]);
+
+class TotalFlags extends Chart{
+  constructor(...args){
+    super(...args);
+    this.state = {
+      
+    }
+  }
+
+  getData(){
+    return [{
+      values: [22565, 5450, 5850],
+      labels: ["Fraud", "Process rigging", "Collusion"],
+      textinfo: 'value',
+      hole: .85,
+      type: 'pie'
+    }];
+  }
+
+  hasNoData(){
+    return false;
+  }
+
+  getLayout(){
+    const {width} = this.props;
+    console.log(this.props);
+    return {
+      legend: {
+        orientation: 'h',
+        width,
+        height: 50,
+        x: '0',
+        y: '0'
+      },
+      paper_bgcolor: 'rgba(0,0,0,0)'
+    }
+  }
+}
+
+import {Map} from "immutable";
+
 
 class CorruptionRiskDashboard extends React.Component{
   constructor(...args){
@@ -125,8 +171,18 @@ class CorruptionRiskDashboard extends React.Component{
   render(){
     const {dashboardSwitcherOpen, filterBox} = this.state;
     const {onSwitch} = this.props;
+    const tabs = [{
+	    slug: "fraud",
+	    name: "Fraud"
+    }, {
+	    slug: "process_rigging",
+	    name: "Process rigging"
+    }, {
+	    slug: "collusion",
+	    name: "Collusion"
+    }];
     return (
-      <div className="container-fluid corruption-risk-dashboard"
+      <div className="container-fluid dashboard-corruption-risk"
            onClick={e => this.setState({dashboardSwitcherOpen: false, filterBox: ""})}
       >
         <header className="branding row">
@@ -155,6 +211,44 @@ class CorruptionRiskDashboard extends React.Component{
           </div>
         </header>
         <Filters box={filterBox} requestNewFilterBox={filterBox => this.setState({filterBox})}/>
+        <aside className="col-xs-4 col-md-3 col-lg-2">
+          <h4>
+            Corruption Risk Overview
+            <i className="glyphicon glyphicon-info-sign"></i>
+          </h4>
+          <p>
+            <small>
+              The Corruption Risk Dashboard employs a
+              red flagging approach to help users understand
+              the potential presence of fraud, collusion or
+              rigging in public contracting. White flags may
+              indicate the presence of corruption, they may
+              also be attributable to data quality issues or
+              approved practices.
+            </small>
+          </p>
+          <section role="navigation" className="row">
+            {tabs.map(({name, slug}, index) =>
+              <a
+                  href="javascript:void(0);"
+                  onClick={e => null} className={cn({active: "fraud" == slug})}
+                  key={index}
+              >
+                <img src={`assets/icons/${slug}.png`}/>
+                {name} <span className="count">(0)</span>
+              </a>
+						 )}
+          </section>
+          <TotalFlags
+              filters={Map()}
+              requestNewData={e => null}
+              translations={{}}
+              data={Map({a: 1})}
+              width={250}
+              height={300}
+              margin={{l:40, r:40, t:40, b: 40, pad:40}}
+          />
+        </aside>
       </div>
     )
   }
