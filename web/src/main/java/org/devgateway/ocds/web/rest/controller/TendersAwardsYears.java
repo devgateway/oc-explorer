@@ -6,6 +6,7 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomGroupingOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomSortingOperation;
@@ -46,8 +47,10 @@ public class TendersAwardsYears extends GenericOCDSController {
 
         project1.put("tenderYear",
                 new BasicDBObject("$cond",
-                        Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$tender.tenderPeriod.startDate", null)),
-                                new BasicDBObject("$year", "$tender.tenderPeriod.startDate"), null)));
+                        Arrays.asList(new BasicDBObject("$gt",
+                                        Arrays.asList(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF, null)),
+                                new BasicDBObject("$year", MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF),
+                                null)));
 
         project1.put("awardYear",
                 new BasicDBObject("$cond", Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$awards.date", null)),
@@ -58,9 +61,10 @@ public class TendersAwardsYears extends GenericOCDSController {
         project2.put("year", Arrays.asList("$tenderYear", "$awardYear"));
 
         Aggregation agg = Aggregation.newAggregation(
-                project().and("tender.tenderPeriod.startDate").as("tender.tenderPeriod.startDate").and("awards.date")
+                project().and(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE)
+                        .as(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).and("awards.date")
                         .as("awards.date"),
-                match(new Criteria().orOperator(where("tender.tenderPeriod.startDate").exists(true),
+                match(new Criteria().orOperator(where(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true),
                         where("awards.date").exists(true))),
                 new CustomUnwindOperation("$awards", true), new CustomProjectionOperation(project1),
                 new CustomProjectionOperation(project2), new CustomUnwindOperation("$year"),
