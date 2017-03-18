@@ -44,7 +44,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @RestController
 @CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
 @Cacheable
-public class TotalFlagsController extends GenericOCDSController {
+public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCDSController {
 
     public static final class Keys {
         public static final String TYPE = "type";
