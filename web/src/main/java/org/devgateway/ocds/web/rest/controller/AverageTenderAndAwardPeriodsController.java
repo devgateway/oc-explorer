@@ -76,7 +76,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
         DBObject tenderLengthDays = new BasicDBObject("$divide",
                 Arrays.asList(
                         new BasicDBObject("$subtract",
-                                Arrays.asList("$tender.tenderPeriod.endDate",
+                                Arrays.asList(MongoConstants.FieldNames.TENDER_PERIOD_END_DATE_REF,
                                         MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF)),
                         DAY_MS));
 
@@ -87,7 +87,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 
         Aggregation agg = newAggregation(
                 match(where(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE)
-                        .exists(true).and("tender.tenderPeriod.endDate")
+                        .exists(true).and(MongoConstants.FieldNames.TENDER_PERIOD_END_DATE)
                 .exists(true).andOperator(getYearDefaultFilterCriteria(filter,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 new CustomProjectionOperation(project),
@@ -117,7 +117,9 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                                         new BasicDBObject("$gt",
                                                 Arrays.asList(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF,
                                                         null)),
-                                        new BasicDBObject("$gt", Arrays.asList("$tender.tenderPeriod.endDate", null)))),
+                                        new BasicDBObject("$gt",
+                                                Arrays.asList(MongoConstants.FieldNames.TENDER_PERIOD_END_DATE_REF,
+                                                        null)))),
                                 1, 0)));
 
         DBObject project1 = new BasicDBObject();
@@ -147,7 +149,8 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
     public List<DBObject> averageAwardPeriod(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject awardLengthDays = new BasicDBObject("$divide", Arrays.asList(
-                new BasicDBObject("$subtract", Arrays.asList("$awards.date", "$tender.tenderPeriod.endDate")), DAY_MS));
+                new BasicDBObject("$subtract", Arrays.asList("$awards.date",
+                        MongoConstants.FieldNames.TENDER_PERIOD_END_DATE_REF)), DAY_MS));
 
         DBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
@@ -155,12 +158,13 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
         project.put("awardLengthDays", awardLengthDays);
         project.put("awards.date", 1);
         project.put("awards.status", 1);
-        project.put("tender.tenderPeriod.endDate", 1);
+        project.put(MongoConstants.FieldNames.TENDER_PERIOD_END_DATE, 1);
 
         Aggregation agg = newAggregation(
                 // this is repeated so we gain speed by filtering items before
                 // unwind
-                match(where("tender.tenderPeriod.endDate").exists(true).and("awards.date").exists(true)
+                match(where(MongoConstants.FieldNames.TENDER_PERIOD_END_DATE)
+                        .exists(true).and("awards.date").exists(true)
                         .and("awards.status").is("active")),
                 unwind("$awards"),
                 // we need to filter the awards again after unwind
@@ -191,7 +195,9 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                         Arrays.asList(
                                 new BasicDBObject("$and", Arrays.asList(
                                         new BasicDBObject("$gt", Arrays.asList("$awards.date", null)),
-                                        new BasicDBObject("$gt", Arrays.asList("$tender.tenderPeriod.endDate", null)))),
+                                        new BasicDBObject("$gt",
+                                                Arrays.asList(MongoConstants.FieldNames.TENDER_PERIOD_END_DATE_REF,
+                                                        null)))),
                                 1, 0)));
 
         DBObject project1 = new BasicDBObject();

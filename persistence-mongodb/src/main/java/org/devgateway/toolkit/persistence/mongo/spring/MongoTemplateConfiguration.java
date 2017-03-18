@@ -79,7 +79,8 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.submissionMethod", Direction.ASC));
         mongoTemplate.indexOps(Release.class)
                 .ensureIndex(new Index().on(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE, Direction.ASC));
-        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.tenderPeriod.endDate", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index()
+                .on(MongoConstants.FieldNames.TENDER_PERIOD_END_DATE, Direction.ASC));
         mongoTemplate.indexOps(Release.class)
                 .ensureIndex(new Index().on("tender.items.classification._id", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
