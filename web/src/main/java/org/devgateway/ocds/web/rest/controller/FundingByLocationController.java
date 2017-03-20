@@ -14,6 +14,7 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.cache.annotation.CacheConfig;
@@ -69,11 +70,12 @@ public class FundingByLocationController extends GenericOCDSController {
         DBObject project = new BasicDBObject();
         project.put("tender.items.deliveryLocation", 1);
         project.put("tender.value.amount", 1);        
-        addYearlyMonthlyProjection(filter, project, "$tender.tenderPeriod.startDate");
+        addYearlyMonthlyProjection(filter, project, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
 
         Aggregation agg = newAggregation(
-                match(where("tender").exists(true).and("tender.tenderPeriod.startDate").exists(true)
-                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                match(where("tender").exists(true).and(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 new CustomProjectionOperation(project), unwind("$tender.items"),
                 unwind("$tender.items.deliveryLocation"),
                 match(where("tender.items.deliveryLocation.geometry.coordinates.0").exists(true)),
@@ -117,8 +119,9 @@ public class FundingByLocationController extends GenericOCDSController {
                                 100)));
 
         Aggregation agg = newAggregation(
-                match(where("tender.tenderPeriod.startDate").exists(true)
-                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                match(where(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 unwind("$tender.items"), new CustomProjectionOperation(project),
                 group(Fields.UNDERSCORE_ID_REF).max("tenderItemsDeliveryLocation").as("hasTenderItemsDeliverLocation"),
                 group().count().as("totalTendersWithStartDate").sum("hasTenderItemsDeliverLocation")
