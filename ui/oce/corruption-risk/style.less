@@ -43,8 +43,12 @@
 
   &>.filters-bar{
     background: #c3e6fc;
-    margin-top: @headerHeight;
+    top: @headerHeight;
     height: @headerHeight;
+    left: 0;
+    right: 0;
+    position: fixed;
+    z-index: 2;
     .title{
       text-transform: uppercase;
       font-size: 14px;
@@ -131,5 +135,9 @@
               }
           }
       }
+  }
+
+  .content{
+    margin-top: @headerHeight * 2;
   }
 }
