@@ -11,15 +11,15 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket;
 
+import org.apache.wicket.protocol.http.WicketFilter;
+import org.apache.wicket.spring.SpringWebApplicationFactory;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
+
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-
-import org.apache.wicket.protocol.http.WicketFilter;
-import org.apache.wicket.spring.SpringWebApplicationFactory;
-import org.springframework.boot.context.embedded.ServletContextInitializer;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 /**
  * This class is the replacement of the web.xml. It registers the wicket filter

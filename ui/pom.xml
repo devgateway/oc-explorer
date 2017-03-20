@@ -94,8 +94,8 @@
                         </goals>
                         <phase>generate-resources</phase>
                         <configuration>
-                            <nodeVersion>v6.9.1</nodeVersion>
-                            <npmVersion>3.10.8</npmVersion>
+                            <nodeVersion>v6.10.0</nodeVersion>
+                            <npmVersion>3.10.10</npmVersion>
                         </configuration>
                     </execution>
 

@@ -87,3 +87,34 @@ Yes, it would be cool if we could develop the new contribution as part of your c
 One simple solution to this is to commit the changes you are willing to merge back to DG-Toolkit as atomic changes. That means that when you commit your files, you commit only those files that are related to that new feature and nothing else. For example let's suppose you want to develop a new search module that will use Lucene for indexing and you will like to merge this new module to DG-Toolkit. You should commit all the code that has to do with the search module in separate commits that do not contain other code, for example if the search module is also used in a dashboard page in your project, you will commit that linking in a separate commit , so keep the commits that target the module functionality separate. 
 
 Then, you can cherry-pick your project's branch over the dg-tookit remote branch. By doing so, you can pick what commits to apply and what to leave out and you will choose only the commits that implement the generic new module functionality and you will leave out the client-specific customizations that are not meant to be posted to DG-Toolkit
+
+### Use DG-Toolkit as a Docker image
+
+We use the recommended layout and configuration as described in the official documentation [by spring boot](https://spring.io/guides/gs/spring-boot-docker/)
+
+To create the image:
+
+```
+mvn install
+cd forms
+mvn docker:build
+```
+
+This will build the image and automatically add to your local docker daemon.
+After this, by running `docker images` you should be able to see the new image added.
+
+```
+$ docker images
+REPOSITORY                   TAG                 IMAGE ID            CREATED              SIZE
+devgateway/toolkit/forms     latest              86129946e668        About a minute ago   435.9 MB
+frolvlad/alpine-oraclejdk8   slim                00d8610f052e        2 weeks ago          166.6 MB
+```
+
+The image can be started with
+
+```
+$docker run -p 8090:8090 -t devgateway/toolkit/forms
+```
+
+That's it, congrats!
+
