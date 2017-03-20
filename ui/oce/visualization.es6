@@ -10,6 +10,7 @@ let fetchEP = url => fetch(url.clone().query(""), {
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   },
+  credentials: 'same-origin',
   body: url.query()
 }).then(callFunc('json'));
 
