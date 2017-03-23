@@ -45,17 +45,19 @@ class TopFlaggedContracts extends Table{
     const tenderPeriod = entry.get('tenderPeriod');
     const startDate = new Date(tenderPeriod.get('startDate'));
     const endDate = new Date(tenderPeriod.get('endDate'));
+    const flaggedStats = entry.get('flaggedStats');
     return (
-        <tr key={index}>
-          <th></th>
-          <th>{entry.get('ocid')}</th>
-          <th>{entry.get('title')}</th>
-          <th>{entry.getIn(['procuringEntity', 'name'])}</th>
-          <th>{tenderValue.get('amount')} {tenderValue.get('currency')}</th>
-          <th>{awardValue.get('amount')} {awardValue.get('currency')}</th>
-          <th>{startDate.toLocaleDateString()}&mdash;{endDate.toLocaleDateString()}</th>
-          <th>{entry.getIn(['flaggedStats', 'type'])}</th>
-        </tr>
+      <tr key={index}>
+        <td></td>
+        <td>{entry.get('ocid')}</td>
+        <td>{entry.get('title')}</td>
+        <td>{entry.getIn(['procuringEntity', 'name'])}</td>
+        <td>{tenderValue.get('amount')} {tenderValue.get('currency')}</td>
+        <td>{awardValue.get('amount')} {awardValue.get('currency')}</td>
+        <td>{startDate.toLocaleDateString()}&mdash;{endDate.toLocaleDateString()}</td>
+        <td>{flaggedStats.get('type')}</td>
+        <td>{flaggedStats.get('count')}</td>
+      </tr>
     )
   }
 
@@ -73,6 +75,7 @@ class TopFlaggedContracts extends Table{
             <th>Awards Amount</th>
             <th>Tender Date</th>
             <th className="flag-type">Flag Type</th>
+            <th>Number of risk type flags</th>
           </tr>
           </thead>
           <tbody>
@@ -108,6 +111,7 @@ class OverviewPage extends React.Component{
           />
         </section>
         <section>
+          <h4>The Projects with the Most Fraud, Collusion and Process Rigging Flags</h4>
           <TopFlaggedContracts
               filters={Map()}
               data={topFlaggedContracts}
