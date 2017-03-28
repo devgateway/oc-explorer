@@ -87,7 +87,7 @@ OCEChild.TRANSLATIONS = {
 
 class OceSwitcher extends ViewSwitcher{}
 
-OceSwitcher.views.default = OCEChild;
+//OceSwitcher.views.default = OCEChild;
 OceSwitcher.views.corruptionRiskDashboard = CorruptionRickDashboard;
 
 ReactDOM.render(<OceSwitcher/>, document.getElementById('dg-container'));
