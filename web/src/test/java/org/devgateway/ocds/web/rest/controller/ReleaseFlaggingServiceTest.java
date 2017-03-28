@@ -5,6 +5,7 @@ package org.devgateway.ocds.web.rest.controller;
 
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.FlagType;
+import org.devgateway.ocds.persistence.mongo.flags.ReleaseFlags;
 import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
 import org.devgateway.ocds.web.spring.ReleaseFlaggingService;
 import org.junit.Assert;
@@ -128,4 +129,10 @@ public class ReleaseFlaggingServiceTest extends AbstractEndPointControllerTest {
                 stream().filter(f -> f.getType().equals(FlagType.RIGGING)).findFirst().get().getCount(), 0);
     }
 
+
+    @Test
+    public void testCreateStubFlagTypes() {
+        ReleaseFlags stubFlagTypes = releaseFlaggingService.createStubFlagTypes();
+        Assert.assertTrue(stubFlagTypes.getI038().getTypes().contains(FlagType.RIGGING));
+    }
 }
