@@ -3,13 +3,9 @@
  */
 package org.devgateway.ocds.web.spring;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.function.Consumer;
-import javax.annotation.PostConstruct;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
+import org.devgateway.ocds.persistence.mongo.flags.ReleaseFlags;
 import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI007Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI019Processor;
@@ -20,6 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.function.Consumer;
 
 /**
  * @author mpostelnicu
@@ -92,6 +94,16 @@ public class ReleaseFlaggingService {
         } while (!page.isLast());
 
         logMessage.accept("<b>CORRUPTION FLAGGING COMPLETE.</b>");
+    }
+
+    /**
+     * Sets flags on top of a stub empty release. This is just to populate the flags property.
+     * @return the flags property of {@link FlaggedRelease}
+     */
+    public ReleaseFlags createStubFlagTypes() {
+        FlaggedRelease fr = new FlaggedRelease();
+        releaseFlagProcessors.forEach(processor -> processor.process(fr));
+        return fr.getFlags();
     }
 
     @PostConstruct
