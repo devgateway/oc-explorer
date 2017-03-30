@@ -42,10 +42,14 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(DefaultLocation.class).ensureIndex(new Index().on("description", Direction.ASC));
         logger.info("Added mandatory Mongo indexes");
     }
-    
+
     public void createCorruptionFlagsIndexes() {
-        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("flags.flaggedStats", Direction.ASC));
-        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("flags.eligibleStats", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("flags.flaggedStats.type", Direction.ASC)
+                .on("flags.flaggedStats.count", Direction.ASC)
+        );
+
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("flags.eligibleStats.type", Direction.ASC)
+                .on("flags.eligibleStats.count", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I038_VALUE, Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I007_VALUE, Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I004_VALUE, Direction.ASC));
@@ -60,7 +64,7 @@ public class MongoTemplateConfiguration {
     }
 
     public void createPostImportStructures() {
-        
+
         createCorruptionFlagsIndexes();
 
         // initialize some extra indexes
