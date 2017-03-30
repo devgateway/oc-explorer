@@ -2,6 +2,7 @@ import style from "./style.less";
 import cn from "classnames";
 import URI from "urijs";
 import {fetchJson} from "../tools";
+import OverviewPage from "./overview-page";
 
 const ROLE_ADMIN = 'ROLE_ADMIN';
 
@@ -25,7 +26,7 @@ class Filters extends React.Component{
     const setBox = box => e => {
       e.stopPropagation();
       requestNewFilterBox(box);
-    }
+    };
 
     const filters = [{
       title: "Organizations",
@@ -92,13 +93,8 @@ class TotalFlags extends Chart{
     }];
   }
 
-  hasNoData(){
-    return false;
-  }
-
   getLayout(){
     const {width} = this.props;
-    console.log(this.props);
     return {
       legend: {
         orientation: 'h',
@@ -113,7 +109,6 @@ class TotalFlags extends Chart{
 }
 
 import {Map} from "immutable";
-
 
 class CorruptionRiskDashboard extends React.Component{
   constructor(...args){
@@ -249,6 +244,9 @@ class CorruptionRiskDashboard extends React.Component{
               margin={{l:40, r:40, t:40, b: 40, pad:40}}
           />
         </aside>
+        <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 content">
+          <OverviewPage/>
+        </div>
       </div>
     )
   }
