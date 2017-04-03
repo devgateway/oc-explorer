@@ -1,8 +1,9 @@
-package org.devgateway.ocds.web.rest.controller.flags;
+package org.devgateway.ocds.web.rest.controller.flags.crosstab;
 
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
 import org.devgateway.ocds.persistence.mongo.flags.FlagsConstants;
+import org.devgateway.ocds.web.rest.controller.flags.AbstractFlagCrosstabController;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -15,22 +16,23 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * Created by mpostelnicu on 01/23/2016.
+ * Created by mpostelnicu on 28-Mar-17.
  */
 @RestController
 @CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
 @Cacheable
-public class FlagI180ReleaseSearchController extends AbstractFlagReleaseSearchController {
+public class FlagI007CrosstabController extends AbstractFlagCrosstabController {
+
     @Override
     protected String getFlagProperty() {
-        return FlagsConstants.I180_VALUE;
+        return FlagsConstants.I007_VALUE;
     }
 
     @Override
-    @ApiOperation(value = "Search releases by flag i180")
-    @RequestMapping(value = "/api/flags/i180/releases",
+    @ApiOperation(value = "Crosstab for flag i007")
+    @RequestMapping(value = "/api/flags/i007/crosstab",
             method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
-    protected List<DBObject> releaseFlagSearch(@ModelAttribute @Valid YearFilterPagingRequest filter) {
-        return super.releaseFlagSearch(filter);
+    public List<DBObject> flagStats(@ModelAttribute @Valid YearFilterPagingRequest filter) {
+        return super.flagStats(filter);
     }
 }
