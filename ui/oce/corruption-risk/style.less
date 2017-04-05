@@ -141,47 +141,47 @@
     }
 
     .content{
+        .crd-popup{
+            @popupColor: #222c3c;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 300px;
+            height: 150px;
+            z-index: 1;
+            background: @popupColor;
+            padding: 15px 5px;
+            border-radius: 5px;
+            .title{
+                color: #70819b;
+                font-weight: bold;
+                padding-right: 0;
+            }
+            .info{
+                color: white;
+            }
+            hr{
+                width: 50%;
+                opacity: .1;
+                margin: 5px auto;
+            }
+            .arrow{
+                @arrowSize: 8px;
+                background: @popupColor;
+                position: absolute;
+                left: 50%;
+                bottom: -@arrowSize/2;
+                width: @arrowSize;
+                height: @arrowSize;
+                margin-left: -@arrowSize/2;
+                transform: rotate(45deg);
+            }
+        }
         margin-top: @headerHeight * 2;
         .chart-corruption-types{
             position: relative;
             .hovertext{
                 opacity: 0;
-            }
-            .crd-popup{
-                @popupColor: #222c3c;
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 300px;
-                height: 150px;
-                z-index: 1;
-                background: @popupColor;
-                padding: 15px 5px;
-                border-radius: 5px;
-                .title{
-                    color: #70819b;
-                    font-weight: bold;
-                    padding-right: 0;
-                }
-                .info{
-                    color: white;
-                }
-                hr{
-                    width: 50%;
-                    opacity: .1;
-                    margin: 5px auto;
-                }
-                .arrow{
-                    @arrowSize: 8px;
-                    background: @popupColor;
-                    position: absolute;
-                    left: 50%;
-                    bottom: -@arrowSize/2;
-                    width: @arrowSize;
-                    height: @arrowSize;
-                    margin-left: -@arrowSize/2;
-                    transform: rotate(45deg);
-                }
             }
         }
         .table-top-flagged-contracts{

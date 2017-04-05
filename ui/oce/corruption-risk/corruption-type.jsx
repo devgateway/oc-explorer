@@ -1,9 +1,9 @@
-import Chart from "../visualizations/charts/index";
 import URI from "urijs";
 import {Map} from "immutable";
 import {pluckImm} from "../tools";
+import CustomPopupChart from "./custom-popup-chart";
 
-class IndicatorTile extends Chart{
+class IndicatorTile extends CustomPopupChart{
   getCustomEP(){
     const {indicator} = this.props;
     return `flags/${indicator}/stats`;
@@ -25,6 +25,32 @@ class IndicatorTile extends Chart{
         type: 'category'
       }
     }
+  }
+
+  getPopup(){
+    const {popup} = this.state;
+    const {year} = popup;
+    return (
+      <div className="crd-popup" style={{top: popup.top, left: popup.left}}>
+        <div className="row">
+          <div className="col-sm-12 info text-center">
+            2016
+          </div>
+          <div className="col-sm-12">
+            <hr/>
+          </div>
+          <div className="col-sm-7 text-right title">Indicators</div>
+          <div className="col-sm-5 text-left info"></div>
+          <div className="col-sm-7 text-right title">Flags</div>
+          <div className="col-sm-5 text-left info"></div>
+          <div className="col-sm-7 text-right title">Projects</div>
+          <div className="col-sm-5 text-left info"></div>
+          <div className="col-sm-7 text-right title">% of Projects Flagged</div>
+          <div className="col-sm-5 text-left info">%</div>
+        </div>
+        <div className="arrow"/>
+      </div>
+    )
   }
 }
 
