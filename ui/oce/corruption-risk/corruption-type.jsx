@@ -12,9 +12,10 @@ class IndicatorTile extends CustomPopupChart{
   getData(){
     const data = super.getData();
     if(!data) return [];
+    const sortedData = data.sort((a, b) => a.get('year') - b.get('year'));
     return [{
-      x: data.map(pluckImm('year')).toJS(),
-      y: data.map(pluckImm('totalTrue')).toJS(),
+      x: sortedData.map(pluckImm('year')).toJS(),
+      y: sortedData.map(pluckImm('totalTrue')).toJS(),
       type: 'scatter'
     }];
   }
@@ -34,7 +35,7 @@ class IndicatorTile extends CustomPopupChart{
       <div className="crd-popup" style={{top: popup.top, left: popup.left}}>
         <div className="row">
           <div className="col-sm-12 info text-center">
-            2016
+            {year}
           </div>
           <div className="col-sm-12">
             <hr/>
