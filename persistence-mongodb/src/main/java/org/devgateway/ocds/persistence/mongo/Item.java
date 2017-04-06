@@ -82,7 +82,7 @@ public class Item implements Identifiable {
     @ExcelExport
     @JsonProperty("quantity")
     @Merge(MergeStrategy.ocdsVersion)
-    private Integer quantity;
+    private Double quantity;
 
     /**
      * Description of the unit which the good comes in e.g. hours, kilograms.
@@ -195,7 +195,7 @@ public class Item implements Identifiable {
      *     The quantity
      */
     @JsonProperty("quantity")
-    public Integer getQuantity() {
+    public Double getQuantity() {
         return quantity;
     }
 
@@ -206,7 +206,7 @@ public class Item implements Identifiable {
      *     The quantity
      */
     @JsonProperty("quantity")
-    public void setQuantity(final Integer quantity) {
+    public void setQuantity(final Double quantity) {
         this.quantity = quantity;
     }
 
