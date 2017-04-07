@@ -32,7 +32,14 @@ class Visualization extends translatable(Component){
     let promise = false;
     if(endpoint) promise = fetchEP(this.buildUrl(endpoint));
     if(endpoints) promise = Promise.all(endpoints.map(this.buildUrl.bind(this)).map(fetchEP));
-    if("function" == typeof this.getCustomEP) promise = fetchEP(this.buildUrl(this.getCustomEP()));
+    if("function" == typeof this.getCustomEP){
+      const customEP = this.getCustomEP();
+      if(Array.isArray(customEP)){
+        promise = Promise.all(customEP.map(this.buildUrl.bind(this)).map(fetchEP));
+      } else {
+        promise = fetchEP(this.buildUrl(customEP));
+      }
+    }
     if(!promise) return;
     this.setState({loading: true});
     promise
