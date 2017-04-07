@@ -31,6 +31,8 @@ class IndicatorTile extends CustomPopupChart{
   getPopup(){
     const {popup} = this.state;
     const {year} = popup;
+    const data = super.getData();
+    const datum = data.find(datum => datum.get('year') == year);
     return (
       <div className="crd-popup" style={{top: popup.top, left: popup.left}}>
         <div className="row">
@@ -40,14 +42,14 @@ class IndicatorTile extends CustomPopupChart{
           <div className="col-sm-12">
             <hr/>
           </div>
-          <div className="col-sm-7 text-right title">Indicators</div>
-          <div className="col-sm-5 text-left info"></div>
-          <div className="col-sm-7 text-right title">Flags</div>
-          <div className="col-sm-5 text-left info"></div>
-          <div className="col-sm-7 text-right title">Projects</div>
-          <div className="col-sm-5 text-left info"></div>
-          <div className="col-sm-7 text-right title">% of Projects Flagged</div>
-          <div className="col-sm-5 text-left info">%</div>
+          <div className="col-sm-7 text-right title">Projects Flagged</div>
+          <div className="col-sm-5 text-left info">{datum.get('totalTrue')}</div>
+          <div className="col-sm-7 text-right title">Eligible Projects</div>
+          <div className="col-sm-5 text-left info">{datum.get('totalPrecondMet')}</div>
+          <div className="col-sm-7 text-right title">Eligible Projects %</div>
+          <div className="col-sm-5 text-left info">{datum.get('percentPrecondMet').toFixed(2)} %</div>
+          <div className="col-sm-7 text-right title">Total Eligible %</div>
+          <div className="col-sm-5 text-left info">{datum.get('percentTruePrecondMet').toFixed(2)} %</div>
         </div>
         <div className="arrow"/>
       </div>
