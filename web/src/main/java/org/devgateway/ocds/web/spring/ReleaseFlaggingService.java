@@ -8,6 +8,7 @@ import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.ReleaseFlags;
 import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
+import org.devgateway.ocds.web.flags.release.ReleaseFlagI002Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI007Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI019Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI038Processor;
@@ -39,7 +40,7 @@ public class ReleaseFlaggingService {
     public static final int FLAGGING_BATCH_SIZE = 5000;
     protected static Logger logger = Logger.getLogger(ReleaseFlaggingService.class);
     @Autowired
-    MongoTemplate mongoTemplate;
+    private MongoTemplate mongoTemplate;
     @Autowired
     private FlaggedReleaseRepository releaseRepository;
     @Autowired
@@ -52,6 +53,10 @@ public class ReleaseFlaggingService {
     private ReleaseFlagI077Processor releaseFlagI077Processor;
     @Autowired
     private ReleaseFlagI180Processor releaseFlagI180Processor;
+
+    @Autowired
+    private ReleaseFlagI002Processor releaseFlagI002Processor;
+
     private Collection<AbstractFlaggedReleaseFlagProcessor> releaseFlagProcessors;
 
     public void logMessage(String message) {
@@ -123,9 +128,10 @@ public class ReleaseFlaggingService {
                 releaseFlagI007Processor,
                 releaseFlagI019Processor,
                 releaseFlagI077Processor,
-                releaseFlagI180Processor
+                releaseFlagI180Processor,
+                releaseFlagI002Processor
         ));
 
-  //        processAndSaveFlagsForAllReleases(this::logMessage);
+        processAndSaveFlagsForAllReleases(this::logMessage);
     }
 }
