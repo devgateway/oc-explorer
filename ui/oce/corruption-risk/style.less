@@ -141,6 +141,8 @@
     }
 
     .content{
+        margin-top: @headerHeight * 2;
+
         .crd-popup{
             @popupColor: #222c3c;
             position: absolute;
@@ -178,19 +180,66 @@
                 transform: rotate(45deg);
             }
         }
-        margin-top: @headerHeight * 2;
+
         .chart-corruption-types{
             position: relative;
             .hovertext{
                 opacity: 0;
             }
         }
+
         .table-top-flagged-contracts{
             th{
                 color: #7f8fa4;
             }
             th, td{
                 width: 11.11%;
+            }
+        }
+
+        .table-crosstab{
+            .nr-flags{
+                color: #004f99;
+            }
+
+            td, th{
+                text-align: center;
+            }
+
+            td:first-child{
+                text-align: right;
+            }
+
+            .not-applicable{
+                color: #b6cddc;
+                background: #f1faff;
+            }
+
+            td.hoverable{
+                position: relative;
+                .crd-popup{
+                    display: none;
+                    padding: 15px;
+                    height: auto;
+                    .and{
+                        text-transform: uppercase;
+                        color: #387ab2;
+                    }
+                    hr{
+                        width: auto;
+                    }
+                }
+
+                &:hover {
+                    box-shadow: inset 0px 0px 0px 5px #ffd307;
+                    .crd-popup{
+                        display: block;
+                        top: auto;
+                        bottom: 100%;
+                        left: 50%;
+                        margin-left: -150px;
+                    }
+                }
             }
         }
     }
