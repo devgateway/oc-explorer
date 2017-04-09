@@ -121,10 +121,8 @@ class CorruptionRiskDashboard extends React.Component{
         loggedIn: false,
         isAdmin: false
       },
-      /* page: 'overview',*/
-      indicatorTypesMapping: {},
-      page: 'corruption-type',
-      corruptionType: 'process_rigging'
+      page: 'overview',
+      indicatorTypesMapping: {}
     }
   }
 
@@ -140,9 +138,8 @@ class CorruptionRiskDashboard extends React.Component{
       })
     ).catch(
       err => {
-        console.log(err);
-        /* alert('You must be logged in to access Corruption Risk Dashboard');
-         * location.href = '/login?referrer=/ui/index.html'*/
+        alert('You must be logged in to access Corruption Risk Dashboard');
+        location.href = '/login?referrer=/ui/index.html'
       }
     )
   }
