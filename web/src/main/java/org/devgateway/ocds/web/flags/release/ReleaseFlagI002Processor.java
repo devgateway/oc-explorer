@@ -47,7 +47,7 @@ public class ReleaseFlagI002Processor extends AbstractFlaggedReleaseFlagProcesso
 
     @Override
     protected Set<FlagType> flagTypes() {
-        return new HashSet<FlagType>(Arrays.asList(FlagType.RIGGING));
+        return new HashSet<FlagType>(Arrays.asList(FlagType.RIGGING, FlagType.FRAUD));
     }
 
     @Override
