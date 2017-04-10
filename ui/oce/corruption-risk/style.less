@@ -142,6 +142,8 @@
 
     .content{
         margin-top: @headerHeight * 2;
+        margin-bottom: auto;
+        padding: 20px 40px 0 40px;
 
         .crd-popup{
             @popupColor: #222c3c;
@@ -194,6 +196,24 @@
             }
             th, td{
                 width: 11.11%;
+            }
+        }
+
+        .indicator-tile-container{
+            padding: 10px;
+            .border{
+                border: 1px solid #e6eaee;
+                border-radius: 5px;
+                padding: 20px;
+                cursor: pointer;
+                h4, p{
+                    font-weight: bold;
+                }
+                p{
+                    margin-bottom: 10px;
+                    color: #156d03;
+                    height: 3em;
+                }
             }
         }
 

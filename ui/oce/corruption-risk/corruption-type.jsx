@@ -64,19 +64,29 @@ class IndicatorTile extends CustomPopupChart{
     return [{
       x: sortedData.map(pluckImm('year')).toJS(),
       y: sortedData.map(pluckImm('totalTrue')).toJS(),
-      type: 'scatter'
+      type: 'scatter',
+      fill: 'tozerox'
     }];
   }
 
   getLayout(){
     return {
       xaxis: {
-        type: 'category'
+        type: 'category',
+        showgrid: false,
+        showline: false
+      },
+      yaxis: {
+        zeroline: false,
+        showline: false,
+        showticklabels: false,
+        showgrid: false
       }
     }
   }
 
   getPopup(){
+    const {indicator} = this.props;
     const {popup} = this.state;
     const {year} = popup;
     const data = super.getData();
@@ -216,21 +226,31 @@ class CorruptionType extends React.Component{
 
   render(){
     const {indicators} = this.props;
+    if(!indicators || !indicators.length) return null;
     const {crosstab, indicatorTiles} = this.state;
     return (
       <div className="page-corruption-type">
         <div className="row">
-	        {indicators.map((indicator, index) => (
-             <div className="col-sm-4" key={index}>
-               <IndicatorTile
-		               indicator={indicator}
-    		           translations={{}}
-			             filters={Map()}
-		               requestNewData={(_, data) => this.updateIndicatorTile(indicator, data)}
-                   data={indicatorTiles[indicator]}
-    	         />
-             </div>
-	         ))}
+	        {indicators.map((indicator, index) => {
+             const {name: indicatorName, description: indicatorDescription} = INDICATOR_NAMES[indicator];
+             return (
+               <div className="col-sm-4 indicator-tile-container" key={index}>
+                 <div className="border">
+                   <h4>{indicatorName}</h4>
+                   <p>{indicatorDescription}</p>
+                   <IndicatorTile
+		                   indicator={indicator}
+    		               translations={{}}
+			                 filters={Map()}
+		                   requestNewData={(_, data) => this.updateIndicatorTile(indicator, data)}
+                       data={indicatorTiles[indicator]}
+                       margin={{t: 0, r: 0, b: 40, l: 0, pad: 0}}
+                       height={300}
+    	             />
+                 </div>
+               </div>
+             )
+	         })}
         </div>
         <h4>Fraud Crosstab</h4>
         <p>This tool helps users understand the overlap between any two fraud indicators</p>
