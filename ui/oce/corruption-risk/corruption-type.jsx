@@ -239,10 +239,10 @@ class CorruptionType extends React.Component{
                    <h4>{indicatorName}</h4>
                    <p>{indicatorDescription}</p>
                    <IndicatorTile
-		                   indicator={indicator}
-    		               translations={{}}
-			                 filters={Map()}
-		                   requestNewData={(_, data) => this.updateIndicatorTile(indicator, data)}
+                       indicator={indicator}
+                       translations={{}}
+                       filters={Map()}
+                       requestNewData={(_, data) => this.updateIndicatorTile(indicator, data)}
                        data={indicatorTiles[indicator]}
                        margin={{t: 0, r: 0, b: 40, l: 0, pad: 0}}
                        height={300}
