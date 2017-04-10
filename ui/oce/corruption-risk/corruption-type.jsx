@@ -225,7 +225,7 @@ class CorruptionType extends React.Component{
   }
 
   render(){
-    const {indicators} = this.props;
+    const {indicators, onGotoIndicator} = this.props;
     if(!indicators || !indicators.length) return null;
     const {crosstab, indicatorTiles} = this.state;
     return (
@@ -234,7 +234,7 @@ class CorruptionType extends React.Component{
 	        {indicators.map((indicator, index) => {
              const {name: indicatorName, description: indicatorDescription} = INDICATOR_NAMES[indicator];
              return (
-               <div className="col-sm-4 indicator-tile-container" key={index}>
+               <div className="col-sm-4 indicator-tile-container" key={index} onClick={e => onGotoIndicator(indicator)}>
                  <div className="border">
                    <h4>{indicatorName}</h4>
                    <p>{indicatorDescription}</p>

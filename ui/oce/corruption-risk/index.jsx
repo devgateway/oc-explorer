@@ -4,6 +4,8 @@ import URI from "urijs";
 import {fetchJson} from "../tools";
 import OverviewPage from "./overview-page";
 import CorruptionTypePage from "./corruption-type";
+import {Map} from "immutable";
+import IndividualIndicatorPage from "./individual-indicator";
 
 const ROLE_ADMIN = 'ROLE_ADMIN';
 
@@ -109,8 +111,6 @@ class TotalFlags extends Chart{
   }
 }
 
-import {Map} from "immutable";
-
 class CorruptionRiskDashboard extends React.Component{
   constructor(...args){
     super(...args);
@@ -185,7 +185,13 @@ class CorruptionRiskDashboard extends React.Component{
 
       return <CorruptionTypePage
                  indicators={indicators}
+                 onGotoIndicator={individualIndicator => this.setState({page: 'individual-indicator', individualIndicator})}
              />;
+    } else if(page == 'individual-indicator'){
+      const {individualIndicator} = this.state;
+      return <IndividualIndicatorPage
+                 indicator={individualIndicator}
+             />
     }
   }
 
