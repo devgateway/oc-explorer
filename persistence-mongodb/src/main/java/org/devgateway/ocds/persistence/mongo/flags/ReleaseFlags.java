@@ -3,9 +3,10 @@
  */
 package org.devgateway.ocds.persistence.mongo.flags;
 
+import org.springframework.data.annotation.Transient;
+
 import java.util.Collection;
 import java.util.HashMap;
-import org.springframework.data.annotation.Transient;
 
 /**
  * @author mpostelnicu Represents the list of red flags at the Release level
@@ -30,6 +31,12 @@ public class ReleaseFlags implements FlagsWrappable {
     //i180: Contractor receives multiple single-source/non-competitive contracts from a single procuring entity
     // during a defined time period
     private Flag i180;
+
+    //i002: Winning supplier provides a substantially lower bid price than competitors
+    private Flag i002;
+
+    //i085: Bids are an exact percentage apart
+    private Flag i085;
 
     private Collection<FlagTypeCount> flaggedStats;
 
@@ -122,6 +129,22 @@ public class ReleaseFlags implements FlagsWrappable {
 
     public void setI180(Flag i180) {
         this.i180 = i180;
+    }
+
+    public Flag getI002() {
+        return i002;
+    }
+
+    public void setI002(Flag i002) {
+        this.i002 = i002;
+    }
+
+    public Flag getI085() {
+        return i085;
+    }
+
+    public void setI085(Flag i085) {
+        this.i085 = i085;
     }
 }
 
