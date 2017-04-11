@@ -140,7 +140,7 @@ class OverviewPage extends React.Component{
     return (
       <div className="page-overview">
         <section className="chart-corruption-types">
-          <h4>Corruption Types</h4>
+          <h4>Risk of Fraud, Collusion and Process Rigging Over Time</h4>
           <CorruptionType
               filters={filters}
               requestNewData={(_, corruptionType) => this.setState({corruptionType})}

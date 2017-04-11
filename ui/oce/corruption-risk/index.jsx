@@ -130,6 +130,7 @@ class CorruptionRiskDashboard extends React.Component{
                  indicators={indicators}
                  onGotoIndicator={individualIndicator => this.setState({page: 'individual-indicator', individualIndicator})}
                  filters={filters}
+                 corruptionType={corruptionType}
              />;
     } else if(page == 'individual-indicator'){
       const {individualIndicator} = this.state;
