@@ -246,6 +246,10 @@ public class Statistic {
         this.additionalProperties.put(name, value);
     }
 
+    public void setAdditionalProperties(Map<String, Object> additionalProperties) {
+        this.additionalProperties = additionalProperties;
+    }
+
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(id).append(measure).append(date).append(value).append(notes).
