@@ -3,53 +3,7 @@ import {Map} from "immutable";
 import {pluckImm} from "../tools";
 import CustomPopupChart from "./custom-popup-chart";
 import Table from "../visualizations/tables/index";
-
-const INDICATOR_NAMES = {
-  i002: {
-	  name: "Low Bid Price",
-    description: "Winning supplier provides a substantially lower bid price than competitors"
-  },
-  i003: {
-	  name: "Only Winner Eligible",
-    description: "Only the winning bidder was eligible to have received the contract for a tender when 2+ bidders apply"
-  },
-  i004: {
-	  name: "Ineligible Direct Award",
-    description: "Sole source award is awarded above the competitive threshold despite legal requirements"
-  },
-  i007: {
-	  name: "Single Bidder Only",
-    description: "This awarded competitive tender only featured a single bid "
-  },
-  i019: {
-	  name: "Contract Negotiation Delay",
-    description: "Long delays in contract negotiations or award (as bribe demands are possibly negotiated)"
-  },
-  i038: {
-	  name: "Short Bid Period",
-    description: "Bid period is shorter than 7 number of days "
-  },
-  i077: {
-	  name: "Multiple Contract Winner",
-    description: "High number of contract awards to one supplier within a given time period by a single procurement entity"
-  },
-  i083: {
-	  name: "Winner-Loser Pattern",
-    description: "When X supplier wins, same tenderers always lose (this could be linked to a certain PE)"
-  },
-  i085: {
-	  name: "Whole % Bid Prices",
-    description: "Difference between bid prices is an exact percentage (whole number)"
-  },
-  i171: {
-	  name: "Bid Near Estimate",
-    description: "Winning bid is within 1% of estimated price"
-  },
-  i180: {
-	  name: "Multiple Direct Awards",
-    description: "Supplier receives multiple single-source/non-competitive contracts from a single procuring entity during a defined time period"
-  }
-};
+import INDICATOR_NAMES from "./indicator-names";
 
 class IndicatorTile extends CustomPopupChart{
   getCustomEP(){
@@ -137,9 +91,16 @@ class Crosstab extends Table{
       const datum = data[x][0];
       for(y = 0; y<indicators.length; y++){
         const yIndicatorID = indicators[y];
-        matrix[xIndicatorID][yIndicatorID] = {
-          count: datum[yIndicatorID],
-          percent: datum.percent[yIndicatorID]
+        if(datum){
+          matrix[xIndicatorID][yIndicatorID] = {
+            count: datum[yIndicatorID],
+            percent: datum.percent[yIndicatorID]
+          }
+        } else {
+          matrix[xIndicatorID][yIndicatorID] = {
+            count: 0,
+            percent: 0
+          }
         }
       }
     }
