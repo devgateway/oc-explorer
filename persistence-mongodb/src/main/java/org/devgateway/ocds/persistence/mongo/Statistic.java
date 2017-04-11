@@ -19,7 +19,8 @@ import java.util.Map;
 /**
  * Bid Statistic
  * <p>
- * For reporting aggregate statistics about the bids related to a tender. Where lots are in use, statistics may optionally be broken down by lot.
+ * For reporting aggregate statistics about the bids related to a tender.
+ * Where lots are in use, statistics may optionally be broken down by lot.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -53,19 +54,26 @@ public class Statistic {
     /**
      * Date
      * <p>
-     * The date when this statistic was last updated. This is often the closing date of the tender process. This field can be left blank unless either (a) the same statistic is provided from multiple points in time, or (b) there is a specific local requirement for the data when statistics were calculated to be provided.
+     * The date when this statistic was last updated. This is often the closing date of the tender process.
+     * This field can be left blank unless either (a) the same statistic is provided from multiple points in time,
+     * or (b) there is a specific local requirement for the data when statistics were calculated to be provided.
      */
     @JsonProperty("date")
-    @JsonPropertyDescription("The date when this statistic was last updated. This is often the closing date of the tender process. This field can be left blank unless either (a) the same statistic is provided from multiple points in time, or (b) there is a specific local requirement for the data when statistics were calculated to be provided.")
+    @JsonPropertyDescription("The date when this statistic was last updated. This is often the closing date of the "
+            + "tender process. This field can be left blank unless either (a) the same statistic is provided from "
+            + "multiple points in time, or (b) there is a specific local requirement for the data when statistics "
+            + "were calculated to be provided.")
     private Date date;
     /**
      * Value
      * <p>
-     * The value for the measure in question. Total counts should be provided as an integer. Percentages should be presented as a proportion of 1 (e.g. 10% = 0.1)
+     * The value for the measure in question. Total counts should be provided as an integer. Percentages should be
+     * presented as a proportion of 1 (e.g. 10% = 0.1)
      * (Required)
      */
     @JsonProperty("value")
-    @JsonPropertyDescription("The value for the measure in question. Total counts should be provided as an integer. Percentages should be presented as a proportion of 1 (e.g. 10% = 0.1)")
+    @JsonPropertyDescription("The value for the measure in question. Total counts should be provided as an integer."
+            + " Percentages should be presented as a proportion of 1 (e.g. 10% = 0.1)")
     private Double value;
     /**
      * Notes
@@ -78,10 +86,13 @@ public class Statistic {
     /**
      * Related Lot
      * <p>
-     * Where lots are in use, if this statistic relates to bids on a particular lot, provide the lot identifier here. If left blank, the statistic will be interpreted as applying to the whole tender.
+     * Where lots are in use, if this statistic relates to bids on a particular lot, provide the lot identifier here.
+     * If left blank, the statistic will be interpreted as applying to the whole tender.
      */
     @JsonProperty("relatedLot")
-    @JsonPropertyDescription("Where lots are in use, if this statistic relates to bids on a particular lot, provide the lot identifier here. If left blank, the statistic will be interpreted as applying to the whole tender.")
+    @JsonPropertyDescription("Where lots are in use, if this statistic relates to bids on a particular lot, provide"
+            + " the lot identifier here. If left blank, the statistic will be interpreted as applying"
+            + " to the whole tender.")
     private String relatedLot;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
@@ -133,7 +144,9 @@ public class Statistic {
     /**
      * Date
      * <p>
-     * The date when this statistic was last updated. This is often the closing date of the tender process. This field can be left blank unless either (a) the same statistic is provided from multiple points in time, or (b) there is a specific local requirement for the data when statistics were calculated to be provided.
+     * The date when this statistic was last updated. This is often the closing date of the tender process.
+     * This field can be left blank unless either (a) the same statistic is provided from multiple points in time,
+     * or (b) there is a specific local requirement for the data when statistics were calculated to be provided.
      */
     @JsonProperty("date")
     public Date getDate() {
@@ -143,7 +156,9 @@ public class Statistic {
     /**
      * Date
      * <p>
-     * The date when this statistic was last updated. This is often the closing date of the tender process. This field can be left blank unless either (a) the same statistic is provided from multiple points in time, or (b) there is a specific local requirement for the data when statistics were calculated to be provided.
+     * The date when this statistic was last updated. This is often the closing date of the tender process.
+     * This field can be left blank unless either (a) the same statistic is provided from multiple points in time,
+     * or (b) there is a specific local requirement for the data when statistics were calculated to be provided.
      */
     @JsonProperty("date")
     public void setDate(Date date) {
@@ -153,7 +168,8 @@ public class Statistic {
     /**
      * Value
      * <p>
-     * The value for the measure in question. Total counts should be provided as an integer. Percentages should be presented as a proportion of 1 (e.g. 10% = 0.1)
+     * The value for the measure in question. Total counts should be provided as an integer. Percentages should be
+     * presented as a proportion of 1 (e.g. 10% = 0.1)
      * (Required)
      */
     @JsonProperty("value")
@@ -164,7 +180,8 @@ public class Statistic {
     /**
      * Value
      * <p>
-     * The value for the measure in question. Total counts should be provided as an integer. Percentages should be presented as a proportion of 1 (e.g. 10% = 0.1)
+     * The value for the measure in question. Total counts should be provided as an integer. Percentages should be
+     * presented as a proportion of 1 (e.g. 10% = 0.1)
      * (Required)
      */
     @JsonProperty("value")
@@ -195,7 +212,8 @@ public class Statistic {
     /**
      * Related Lot
      * <p>
-     * Where lots are in use, if this statistic relates to bids on a particular lot, provide the lot identifier here. If left blank, the statistic will be interpreted as applying to the whole tender.
+     * Where lots are in use, if this statistic relates to bids on a particular lot, provide the lot identifier here.
+     * If left blank, the statistic will be interpreted as applying to the whole tender.
      */
     @JsonProperty("relatedLot")
     public String getRelatedLot() {
@@ -205,7 +223,8 @@ public class Statistic {
     /**
      * Related Lot
      * <p>
-     * Where lots are in use, if this statistic relates to bids on a particular lot, provide the lot identifier here. If left blank, the statistic will be interpreted as applying to the whole tender.
+     * Where lots are in use, if this statistic relates to bids on a particular lot, provide the lot identifier here.
+     * If left blank, the statistic will be interpreted as applying to the whole tender.
      */
     @JsonProperty("relatedLot")
     public void setRelatedLot(String relatedLot) {
@@ -229,7 +248,8 @@ public class Statistic {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(id).append(measure).append(date).append(value).append(notes).append(relatedLot).append(additionalProperties).toHashCode();
+        return new HashCodeBuilder().append(id).append(measure).append(date).append(value).append(notes).
+                append(relatedLot).append(additionalProperties).toHashCode();
     }
 
     @Override
@@ -237,11 +257,13 @@ public class Statistic {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Statistic) == false) {
+        if (!(other instanceof Statistic)) {
             return false;
         }
         Statistic rhs = ((Statistic) other);
-        return new EqualsBuilder().append(id, rhs.id).append(measure, rhs.measure).append(date, rhs.date).append(value, rhs.value).append(notes, rhs.notes).append(relatedLot, rhs.relatedLot).append(additionalProperties, rhs.additionalProperties).isEquals();
+        return new EqualsBuilder().append(id, rhs.id).append(measure, rhs.measure).append(date, rhs.date).
+                append(value, rhs.value).append(notes, rhs.notes).append(relatedLot, rhs.relatedLot).
+                append(additionalProperties, rhs.additionalProperties).isEquals();
     }
 
 }
