@@ -47,7 +47,7 @@ public class ReleaseFlagI002Processor extends AbstractFlaggedReleaseFlagProcesso
 
     @Override
     protected Set<FlagType> flagTypes() {
-        return new HashSet<FlagType>(Arrays.asList(FlagType.RIGGING));
+        return new HashSet<FlagType>(Arrays.asList(FlagType.RIGGING, FlagType.FRAUD));
     }
 
     @Override
@@ -62,13 +62,10 @@ public class ReleaseFlagI002Processor extends AbstractFlaggedReleaseFlagProcesso
                 Award.Status.active.equals(a.getStatus())).findFirst();
 
         boolean result = smallestBid.isPresent() && award.isPresent()
-                && (award.get().getValue().getAmount().
-                subtract(smallestBid.get().getValue().getAmount()).
-                divide(award.get().getValue().getAmount(), BigDecimal.ROUND_HALF_UP).
-                compareTo(MAX_ALLOWED_PERCENT_BID_AWARD_AMOUNT)
-                > 0 || smallestBid.get().getValue().getAmount().subtract(award.get().getValue().getAmount())
-                .divide(smallestBid.get().getValue().getAmount(), BigDecimal.ROUND_HALF_UP).
-                        compareTo(MAX_ALLOWED_PERCENT_BID_AWARD_AMOUNT) > 0);
+                && (relativeDistanceLeft(award.get().getValue().getAmount(),
+                smallestBid.get().getValue().getAmount()).compareTo(MAX_ALLOWED_PERCENT_BID_AWARD_AMOUNT)
+                > 0 || relativeDistanceRight(award.get().getValue().getAmount(),
+                smallestBid.get().getValue().getAmount()).compareTo(MAX_ALLOWED_PERCENT_BID_AWARD_AMOUNT) > 0);
 
 
         rationale.append("Award ").append(award.isPresent() ? award.get().getValue().getAmount() : "not present"
