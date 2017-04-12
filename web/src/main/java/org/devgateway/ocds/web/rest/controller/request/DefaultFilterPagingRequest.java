@@ -3,11 +3,11 @@
  */
 package org.devgateway.ocds.web.rest.controller.request;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import cz.jirutka.validator.collection.constraints.EachPattern;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author mpostelnicu Filtering bean applied to all endpoints
@@ -40,6 +40,9 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
     @ApiModelProperty(value = "This will filter after tender.items.deliveryLocation._id")
     private List<String> tenderLoc;
+
+    @ApiModelProperty(value = "This will filter after tender.procurementMethod")
+    private List<String> procurementMethod;
 
     @ApiModelProperty(value = "This will filter after tender.value.amount and will specify a minimum"
             + "Use /api/tenderValueInterval to get the minimum allowed.")
@@ -152,5 +155,13 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
     public void setElectronicSubmission(Boolean electronicSubmission) {
         this.electronicSubmission = electronicSubmission;
+    }
+
+    public List<String> getProcurementMethod() {
+        return procurementMethod;
+    }
+
+    public void setProcurementMethod(List<String> procurementMethod) {
+        this.procurementMethod = procurementMethod;
     }
 }
