@@ -330,10 +330,23 @@ public abstract class GenericOCDSController {
         return createFilterCriteria("awards.suppliers._id", filter.getSupplierId(), filter);
     }
 
+    /**
+     * Appends the procurement method for this filter, this will fitler based
+     * on tender.procurementMethod
+     *
+     * @param filter
+     * @return the {@link Criteria} for this filter
+     */
+    protected Criteria getProcurementMethodCriteria(final DefaultFilterPagingRequest filter) {
+        return createFilterCriteria("tender.procurementMethod", filter.getProcurementMethod(), filter);
+    }
+
     @PostConstruct
     protected void init() {
         Map<String, Object> tmpMap = new HashMap<>();
         tmpMap.put("tender.procuringEntity._id", 1);
+        tmpMap.put("tender.procurementMethod", 1);
+        tmpMap.put("tender.submissionMethod", 1);
         tmpMap.put("awards.suppliers._id", 1);
         tmpMap.put("tender.items.classification._id", 1);
         tmpMap.put("tender.items.deliveryLocation._id", 1);
@@ -382,6 +395,7 @@ public abstract class GenericOCDSController {
                 getProcuringEntityIdCriteria(filter),
                 getNotProcuringEntityIdCriteria(filter),
                 getSupplierIdCriteria(filter),
+                getProcurementMethodCriteria(filter),
                 getByTenderDeliveryLocationIdentifier(filter),
                 getByTenderAmountIntervalCriteria(filter),
                 getByAwardAmountIntervalCriteria(filter),
@@ -395,6 +409,7 @@ public abstract class GenericOCDSController {
                 getProcuringEntityIdCriteria(filter),
                 getNotProcuringEntityIdCriteria(filter),
                 getSupplierIdCriteria(filter),
+                getProcurementMethodCriteria(filter),
                 getByTenderDeliveryLocationIdentifier(filter),
                 getByTenderAmountIntervalCriteria(filter),
                 getByAwardAmountIntervalCriteria(filter),
