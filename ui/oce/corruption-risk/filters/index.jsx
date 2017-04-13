@@ -2,6 +2,7 @@ import cn from "classnames";
 import {Set, Map} from "immutable";
 import Organizations from "./organizations";
 import ProcurementMethodBox from "./procurement-method";
+import ValueAmount from "./value-amount";
 
 class Filters extends React.Component{
   constructor(...args){
@@ -46,7 +47,8 @@ class Filters extends React.Component{
 
 Filters.BOXES = [
   Organizations,
-  ProcurementMethodBox
+  ProcurementMethodBox,
+  ValueAmount
 ];
 
 class OldFilters extends React.Component{
