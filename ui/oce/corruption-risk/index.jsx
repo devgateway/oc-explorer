@@ -54,7 +54,6 @@ class CorruptionRiskDashboard extends React.Component{
     super(...args);
     this.state={
       dashboardSwitcherOpen: false,
-      filterBox: "",
       user: {
         loggedIn: false,
         isAdmin: false
@@ -142,8 +141,8 @@ class CorruptionRiskDashboard extends React.Component{
   }
 
   render(){
-    const {dashboardSwitcherOpen, filterBox, corruptionType, page, filters} = this.state;
-    const {onSwitch} = this.props;
+    const {dashboardSwitcherOpen, corruptionType, page, filters} = this.state;
+    const {onSwitch, translations} = this.props;
     const tabs = [{
 	    slug: "fraud",
 	    name: "Fraud"
@@ -184,10 +183,9 @@ class CorruptionRiskDashboard extends React.Component{
           </div>
         </header>
         <Filters
-            box={filterBox}
-            requestNewFilterBox={filterBox => this.setState({filterBox})}
             onUpdate={filters => this.setState({filters})}
             state={filters}
+            translations={translations}
         />
         <aside className="col-xs-4 col-md-3 col-lg-2">
           <div className="crd-overview-link" onClick={e => this.setState({page: 'overview'})}>
