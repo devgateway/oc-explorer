@@ -67,9 +67,13 @@
             margin-left: 3%;
             color: #899cb1;
             cursor: pointer;
+            &.active{
+                border-bottom: 3px solid @boxFilterColor;
+            }
+
             &.open{
                 position: relative;
-                border-bottom: 3px solid @boxFilterColor;
+                font-weight: bold;
                 .dropdown{
                     display: block;
                     position: absolute;

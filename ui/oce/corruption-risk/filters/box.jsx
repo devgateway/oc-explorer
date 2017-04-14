@@ -7,10 +7,10 @@ class FilterBox extends FilterTab{
     return(
       <div onClick={onClick} className={cn('filter', {open})}>
         {this.getTitle()}
-      <i className="glyphicon glyphicon-menu-down"></i>
-      {open && <div className="dropdown" onClick={e => e.stopPropagation()}>
+        <i className="glyphicon glyphicon-menu-down"></i>
+        {open && <div className="dropdown" onClick={e => e.stopPropagation()}>
         {this.getBox()}
-      </div>}
+        </div>}
       </div>
     )
   }
