@@ -6,10 +6,15 @@ class FilterBox extends FilterTab{
     const {open, onClick} = this.props;
     return(
       <div onClick={onClick} className={cn('filter', {open})}>
-        {this.getTitle()}
+        <span className="box-title">
+          {this.getTitle()}
+        </span>
         <i className="glyphicon glyphicon-menu-down"></i>
         {open && <div className="dropdown" onClick={e => e.stopPropagation()}>
         {this.getBox()}
+          <div className="controls">
+            <button className="btn btn-success">Apply</button>
+          </div>
         </div>}
       </div>
     )

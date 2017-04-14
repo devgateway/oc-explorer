@@ -9,7 +9,7 @@ class Organizations extends FilterBox{
 
   getBox(){
     return (
-      <div>
+      <div className="box-content">
         {this.renderChild(ProcuringEntity, 'procuringEntityId')}
         {this.renderChild(Supplier, 'supplierId')}
       </div>

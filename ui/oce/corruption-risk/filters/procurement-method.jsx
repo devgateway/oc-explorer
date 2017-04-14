@@ -29,7 +29,7 @@ class ProcurementMethodBox extends FilterBox{
 
   getBox(){
     return (
-      <div>
+      <div className="box-content">
         {this.renderChild(ProcurementMethod, 'procurementMethod')}
       </div>
     )

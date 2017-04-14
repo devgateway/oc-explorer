@@ -19,12 +19,12 @@ class ValueAmount extends FilterBox{
                    minValue != min && onUpdate("min"+slug, min);
                    maxValue != max && onUpdate("max"+slug, max);
                  }}
-           />
+    />
   }
 
   getBox(){
     return (
-      <div>
+      <div className="box-content">
         {this.renderChild("TenderValue", TenderPrice)}
         {this.renderChild("AwardValue", AwardValue)}
       </div>
