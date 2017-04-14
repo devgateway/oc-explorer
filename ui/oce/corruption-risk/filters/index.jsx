@@ -5,8 +5,16 @@ import ProcurementMethodBox from "./procurement-method";
 import ValueAmount from "./value-amount";
 
 class Filters extends React.Component{
+  constructor(...args){
+    super(...args);
+    this.state = {
+      state: Map()
+    }
+  }
+
   render(){
-    const {state, onUpdate, translations, currentBoxIndex, requestNewBox} = this.props;
+    const {onUpdate, translations, currentBoxIndex, requestNewBox} = this.props;
+    const {state} = this.state;
     const {BOXES} = this.constructor;
     return (
       <div className="row filters-bar" onClick={e => e.stopPropagation()}>
@@ -21,8 +29,9 @@ class Filters extends React.Component{
                    open={currentBoxIndex === index}
                    onClick={e => requestNewBox(currentBoxIndex === index ? null : index)}
                    state={state}
-                   onUpdate={(slug, newState) => onUpdate(state.set(slug, newState))}
+                   onUpdate={(slug, newState) => this.setState({state: state.set(slug, newState)})}
                    translations={translations}
+                   onApply={e => {requestNewBox(null); onUpdate(state)}}
                />
              )
            })}

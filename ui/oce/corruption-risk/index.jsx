@@ -185,7 +185,6 @@ class CorruptionRiskDashboard extends React.Component{
         </header>
         <Filters
             onUpdate={filters => this.setState({filters})}
-            state={filters}
             translations={translations}
             currentBoxIndex={filterBoxIndex}
             requestNewBox={index => this.setState({filterBoxIndex: index})}

@@ -3,7 +3,7 @@ import cn from "classnames";
 
 class FilterBox extends FilterTab{
   render(){
-    const {open, onClick} = this.props;
+    const {open, onClick, onApply} = this.props;
     return(
       <div onClick={onClick} className={cn('filter', {open})}>
         <span className="box-title">
@@ -13,7 +13,7 @@ class FilterBox extends FilterTab{
         {open && <div className="dropdown" onClick={e => e.stopPropagation()}>
         {this.getBox()}
           <div className="controls">
-            <button className="btn btn-primary">Apply</button>
+            <button className="btn btn-primary" onClick={onApply}>Apply</button>
           </div>
         </div>}
       </div>
