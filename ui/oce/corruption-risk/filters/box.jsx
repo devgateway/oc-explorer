@@ -13,7 +13,7 @@ class FilterBox extends FilterTab{
         {open && <div className="dropdown" onClick={e => e.stopPropagation()}>
         {this.getBox()}
           <div className="controls">
-            <button className="btn btn-success">Apply</button>
+            <button className="btn btn-primary">Apply</button>
           </div>
         </div>}
       </div>

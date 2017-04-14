@@ -60,7 +60,8 @@ class CorruptionRiskDashboard extends React.Component{
       },
       page: 'overview',
       indicatorTypesMapping: {},
-      filters: Map()
+      filters: Map(),
+      filterBoxIndex: null
     }
   }
 
@@ -141,7 +142,7 @@ class CorruptionRiskDashboard extends React.Component{
   }
 
   render(){
-    const {dashboardSwitcherOpen, corruptionType, page, filters} = this.state;
+    const {dashboardSwitcherOpen, corruptionType, page, filters, filterBoxIndex} = this.state;
     const {onSwitch, translations} = this.props;
     const tabs = [{
 	    slug: "fraud",
@@ -155,7 +156,7 @@ class CorruptionRiskDashboard extends React.Component{
     }];
     return (
       <div className="container-fluid dashboard-corruption-risk"
-           onClick={e => this.setState({dashboardSwitcherOpen: false, filterBox: ""})}
+           onClick={e => this.setState({dashboardSwitcherOpen: false, filterBoxIndex: null})}
       >
         <header className="branding row">
           <div className="col-sm-1 logo-wrapper">
@@ -186,6 +187,8 @@ class CorruptionRiskDashboard extends React.Component{
             onUpdate={filters => this.setState({filters})}
             state={filters}
             translations={translations}
+            currentBoxIndex={filterBoxIndex}
+            requestNewBox={index => this.setState({filterBoxIndex: index})}
         />
         <aside className="col-xs-4 col-md-3 col-lg-2">
           <div className="crd-overview-link" onClick={e => this.setState({page: 'overview'})}>
