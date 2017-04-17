@@ -29,10 +29,16 @@ class IndicatorTile extends CustomPopupChart{
   getData(){
     const data = super.getData();
     if(!data) return [];
-    const sortedData = data.sort((a, b) => a.get('year') - b.get('year'));
+		const {monthly} = this.props;
+		const dates = monthly ?
+									data.map(datum => {
+										const month = datum.get('month');
+										return this.t(`general:months:${month}`);
+									}).toJS() :
+									data.map(pluckImm('year')).toJS();
     return [{
-      x: sortedData.map(pluckImm('year')).toJS(),
-      y: sortedData.map(pluckImm('totalTrue')).toJS(),
+      x: dates,
+      y: data.map(pluckImm('totalTrue')).toJS(),
       type: 'scatter',
       fill: 'tozerox'
     }];
@@ -55,32 +61,40 @@ class IndicatorTile extends CustomPopupChart{
   }
 
   getPopup(){
-    const {indicator} = this.props;
+    const {indicator, monthly} = this.props;
     const {popup} = this.state;
     const {year} = popup;
     const data = super.getData();
-    const datum = data.find(datum => datum.get('year') == year);
-    return (
-      <div className="crd-popup" style={{top: popup.top, left: popup.left}}>
-        <div className="row">
-          <div className="col-sm-12 info text-center">
-            {year}
-          </div>
-          <div className="col-sm-12">
-            <hr/>
-          </div>
-          <div className="col-sm-7 text-right title">Projects Flagged</div>
-          <div className="col-sm-5 text-left info">{datum.get('totalTrue')}</div>
-          <div className="col-sm-7 text-right title">Eligible Projects</div>
-          <div className="col-sm-5 text-left info">{datum.get('totalPrecondMet')}</div>
-          <div className="col-sm-7 text-right title">Eligible Projects %</div>
-          <div className="col-sm-5 text-left info">{datum.get('percentPrecondMet').toFixed(2)} %</div>
-          <div className="col-sm-7 text-right title">Total Eligible %</div>
-          <div className="col-sm-5 text-left info">{datum.get('percentTruePrecondMet').toFixed(2)} %</div>
-        </div>
-        <div className="arrow"/>
-      </div>
-    )
+		let datum;
+		if(monthly){
+			datum = data.find(datum => {
+				const month = datum.get('month');
+				return year == this.t(`general:months:${month}`);
+			})
+		} else {
+			datum = data.find(datum => datum.get('year') == year);
+		}
+			return (
+				<div className="crd-popup" style={{top: popup.top, left: popup.left}}>
+					<div className="row">
+						<div className="col-sm-12 info text-center">
+							{year}
+						</div>
+						<div className="col-sm-12">
+							<hr/>
+						</div>
+						<div className="col-sm-7 text-right title">Projects Flagged</div>
+						<div className="col-sm-5 text-left info">{datum.get('totalTrue')}</div>
+						<div className="col-sm-7 text-right title">Eligible Projects</div>
+						<div className="col-sm-5 text-left info">{datum.get('totalPrecondMet')}</div>
+						<div className="col-sm-7 text-right title">Eligible Projects %</div>
+						<div className="col-sm-5 text-left info">{datum.get('percentPrecondMet').toFixed(2)} %</div>
+						<div className="col-sm-7 text-right title">Total Eligible %</div>
+						<div className="col-sm-5 text-left info">{datum.get('percentTruePrecondMet').toFixed(2)} %</div>
+					</div>
+					<div className="arrow"/>
+				</div>
+			)
   }
 }
 
@@ -201,7 +215,8 @@ class CorruptionType extends React.Component{
   }
 
   render(){
-    const {indicators, onGotoIndicator, corruptionType} = this.props;
+    const {indicators, onGotoIndicator, corruptionType, filters, years, monthly, months,
+					 translations} = this.props;
     const {crosstab, indicatorTiles} = this.state;
     if(!indicators || !indicators.length) return null;
     return (
@@ -217,12 +232,15 @@ class CorruptionType extends React.Component{
                    <p>{indicatorDescription}</p>
                    <IndicatorTile
                        indicator={indicator}
-                       translations={{}}
-                       filters={Map()}
+                       translations={translations}
+                       filters={filters}
                        requestNewData={(_, data) => this.updateIndicatorTile(indicator, data)}
                        data={indicatorTiles[indicator]}
                        margin={{t: 0, r: 0, b: 40, l: 0, pad: 0}}
                        height={300}
+											 years={years}
+											 monthly={monthly}
+											 months={months}
     	             />
                  </div>
                </div>
@@ -231,8 +249,10 @@ class CorruptionType extends React.Component{
         </div>
         <blockquote>{CORRUPTION_TYPE_DESCRIPTION[corruptionType].crosstab}</blockquote>
         <Crosstab
-            filters={Map()}
-            years={Map()}
+            filters={filters}
+            years={years}
+						monthly={monthly}
+						months={months}
             indicators={indicators}
             data={crosstab}
             requestNewData={(_, data) => this.setState({crosstab: data})}
