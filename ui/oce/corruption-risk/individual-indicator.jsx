@@ -13,11 +13,16 @@ class IndividualIndicatorChart extends CustomPopupChart{
   getData(){
     const data = super.getData();
     if(!data) return [];
-    const sortedData = data.sort((a, b) => a.get('year') - b.get('year'));
-    const years = sortedData.map(pluckImm('year')).toJS();
+		const {monthly} = this.props;
+		const dates = monthly ?
+									data.map(datum => {
+										const month = datum.get('month');
+										return this.t(`general:months:${month}`);
+									}).toJS() :
+									data.map(pluckImm('year')).toJS();
     return [{
-      x: years,
-      y: sortedData.map(pluckImm('totalTrue')).toJS(),
+      x: dates,
+      y: data.map(pluckImm('totalTrue')).toJS(),
       type: 'scatter',
       fill: 'tozerox',
       name: 'Flagged',
@@ -27,8 +32,8 @@ class IndividualIndicatorChart extends CustomPopupChart{
         color: '#85cbfe'
       }
     }, {
-      x: years,
-      y: sortedData.map(pluckImm('totalPrecondMet')).toJS(),
+      x: dates,
+      y: data.map(pluckImm('totalPrecondMet')).toJS(),
       type: 'scatter',
       fill: 'tonexty',
       name: 'Eligible to be flagged',
@@ -52,11 +57,19 @@ class IndividualIndicatorChart extends CustomPopupChart{
   }
 
   getPopup(){
-    const {indicator} = this.props;
+    const {indicator, monthly} = this.props;
     const {popup} = this.state;
     const {year} = popup;
     const data = super.getData();
-    const datum = data.find(datum => datum.get('year') == year);
+		let datum;
+		if(monthly){
+			datum = data.find(datum => {
+				const month = datum.get('month');
+				return year == this.t(`general:months:${month}`);
+			})
+		} else {
+			datum = data.find(datum => datum.get('year') == year);
+		}
     return (
       <div className="crd-popup" style={{top: popup.top, left: popup.left}}>
         <div className="row">
@@ -142,15 +155,18 @@ class IndividualIndicatorPage extends React.Component{
 
   render(){
     const {chart, table} = this.state;
-    const {indicator} = this.props;
+    const {indicator, translations, filters, years, monthly, months} = this.props;
     return (
       <div className="page-corruption-type">
         <h4>{INDICATOR_NAMES[indicator].name}</h4>
         <pre>{INDICATOR_NAMES[indicator].long_desc}</pre>
         <IndividualIndicatorChart
             indicator={indicator}
-            translations={{}}
-            filters={Map()}
+            translations={translations}
+						filters={filters}
+						years={years}
+						monthly={monthly}
+						months={months}
             requestNewData={(_, data) => this.setState({chart: data})}
             data={chart}
         />
@@ -158,8 +174,11 @@ class IndividualIndicatorPage extends React.Component{
             indicator={indicator}
             requestNewData={(_, data) => this.setState({table: data})}
             data={table}
-            filters={Map()}
-            years={Map()}
+						translations={translations}
+            filters={filters}
+            years={years}
+						monthly={monthly}
+						months={months}
         />
       </div>
     )
