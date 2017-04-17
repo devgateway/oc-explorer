@@ -1,17 +1,14 @@
 import FilterBox from "./box";
-import {fetchJson, pluck} from "../../tools";
+import {fetchJson, pluck, range} from "../../tools";
 import {Set} from "immutable";
 import cn from "classnames";
-
-const range = (from, to) => from > to ?
-													[] :
-													[from].concat(range(from+1, to));
 
 class DateBox extends FilterBox{
 	constructor(...args){
 		super(...args);
 		this.state = {
-			years: []
+			years: [],
+			months: range(1, 12)
 		}
 	}
 
@@ -28,8 +25,9 @@ class DateBox extends FilterBox{
 
 	getBox(){
 		const {onUpdate, translations, state} = this.props;
-		const {years} = this.state;
+		const {years, months} = this.state;
 		const selectedYears = state.get('years', Set());
+		const selectedMonths = state.get('months', Set());
 		return (
 			<div className="box-content box-date">
 			{years.map(year => {
@@ -65,7 +63,33 @@ class DateBox extends FilterBox{
 					</span>
 				)
 			})}
-			<p>To select a single year and be able to select months, hold 'control' while clicking on a year.</p>
+			<p>
+				To select a single year and be able to select months,
+				hold 'control' while clicking on a year.
+			</p>
+			<div className="toggleable-wrapper">
+				{selectedYears.count() == 1 && months.map(month => {
+					 const selected = selectedMonths.has(month) || selectedMonths.count() == 0;
+					 const toggleMonth = () => {
+						 if(selectedMonths.count() == 0){
+							 onUpdate('months', Set(months).delete(month));
+						 } else if(selectedMonths.has(month)){
+							 onUpdate('months', selectedMonths.delete(month));
+						 } else {
+							 onUpdate('months', selectedMonths.add(month));
+						 }
+					 }
+					 return (
+						 <span
+								 key={month}
+								 className={cn('toggleable-item', {selected})}
+								 onClick={toggleMonth}
+						 >
+							 {this.t(`general:months:${month}`)}
+						 </span>
+					 )
+				 })}
+			</div>
 			</div>
 		)
 	}
