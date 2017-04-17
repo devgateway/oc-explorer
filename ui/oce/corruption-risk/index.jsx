@@ -4,7 +4,7 @@ import URI from "urijs";
 import {fetchJson} from "../tools";
 import OverviewPage from "./overview-page";
 import CorruptionTypePage from "./corruption-type";
-import {Map} from "immutable";
+import {Map, Set} from "immutable";
 import IndividualIndicatorPage from "./individual-indicator";
 import Chart from "../visualizations/charts/index.jsx";
 import Plotly from "plotly.js/lib/core";
@@ -61,6 +61,8 @@ class CorruptionRiskDashboard extends React.Component{
       page: 'overview',
       indicatorTypesMapping: {},
       filters: Map(),
+			years: Set(),
+			months: Set(),
       filterBoxIndex: null
     }
   }
@@ -110,10 +112,16 @@ class CorruptionRiskDashboard extends React.Component{
   }
 
   getPage(){
-    const {page, filters} = this.state;
+		const {translations} = this.props;
+    const {page, filters, years, months} = this.state;
+		const monthly = years.count() == 1;
     if(page == 'overview'){
       return <OverviewPage
                  filters={filters}
+								 translations={translations}
+								 years={years}
+								 monthly={monthly}
+								 months={months}
              />;
     } else if(page == 'corruption-type') {
       const {corruptionType, indicatorTypesMapping} = this.state;
@@ -130,19 +138,29 @@ class CorruptionRiskDashboard extends React.Component{
                  indicators={indicators}
                  onGotoIndicator={individualIndicator => this.setState({page: 'individual-indicator', individualIndicator})}
                  filters={filters}
+								 translations={translations}
                  corruptionType={corruptionType}
+								 years={years}
+								 monthly={monthly}
+								 months={months}
              />;
     } else if(page == 'individual-indicator'){
       const {individualIndicator} = this.state;
-      return <IndividualIndicatorPage
-                 indicator={individualIndicator}
-                 filters={filters}
-             />
+      return (
+				<IndividualIndicatorPage
+						indicator={individualIndicator}
+						filters={filters}
+						translations={translations}
+						years={years}
+						monthly={monthly}
+						months={months}
+				/>
+			)
     }
   }
 
   render(){
-    const {dashboardSwitcherOpen, corruptionType, page, filters, filterBoxIndex} = this.state;
+    const {dashboardSwitcherOpen, corruptionType, page, filters, years, months, filterBoxIndex} = this.state;
     const {onSwitch, translations} = this.props;
     const tabs = [{
 	    slug: "fraud",
@@ -184,7 +202,11 @@ class CorruptionRiskDashboard extends React.Component{
           </div>
         </header>
         <Filters
-            onUpdate={filters => this.setState({filters})}
+            onUpdate={filters => this.setState({
+								filters: filters.delete('years').delete('months'),
+								years: filters.get('years'),
+								months: filters.get('months')
+							})}
             translations={translations}
             currentBoxIndex={filterBoxIndex}
             requestNewBox={index => this.setState({filterBoxIndex: index})}

@@ -8,13 +8,21 @@ const pluckObj = (field, obj) => Object.keys(obj).map(key => obj[key][field]);
 
 class CorruptionType extends CustomPopupChart{
   groupData(data){
+		const {monthly} = this.props;
     let grouped = {};
 
     data.forEach(datum => {
       const type = datum.get('type');
-      const year = datum.get('year');
+			let date;
+			const {monthly} = this.props;
+			if(monthly){
+				const month = datum.get('month');
+				date = this.t(`general:months:${month}`);
+			} else {
+				date = datum.get('year');
+			}
       grouped[type] = grouped[type] || {};
-      grouped[type][year] = datum.toJS();
+      grouped[type][date] = datum.toJS();
     });
 
     return grouped;
@@ -23,11 +31,12 @@ class CorruptionType extends CustomPopupChart{
   getData(){
     const data = super.getData();
     if(!data) return [];
+		const {monthly} = this.props;
     const grouped = this.groupData(data);
     return Object.keys(grouped).map(type => {
       const dataForType = grouped[type];
       return {
-        x: pluckObj('year', dataForType),
+        x:Object.keys(dataForType),
         y: pluckObj('indicatorCount', dataForType),
         type: 'scatter',
         name: type
@@ -101,8 +110,8 @@ class TopFlaggedContracts extends Table{
   render(){
     const {data} = this.props;
     return (
-        <table className="table table-striped table-hover table-top-flagged-contracts">
-          <thead>
+      <table className="table table-striped table-hover table-top-flagged-contracts">
+        <thead>
           <tr>
             <th>Status</th>
             <th>Contract ID</th>
@@ -114,11 +123,11 @@ class TopFlaggedContracts extends Table{
             <th className="flag-type">Flag Type</th>
             <th>Number of<br/>risk type flags</th>
           </tr>
-          </thead>
-          <tbody>
+        </thead>
+        <tbody>
           {data && data.map(this.row.bind(this))}
-          </tbody>
-        </table>
+        </tbody>
+      </table>
     )
   }
 }
@@ -136,7 +145,7 @@ class OverviewPage extends React.Component{
 
   render(){
     const {corruptionType, topFlaggedContracts} = this.state;
-    const {filters} = this.props;
+    const {filters, translations, years, monthly, months} = this.props;
     return (
       <div className="page-overview">
         <section className="chart-corruption-types">
@@ -144,8 +153,11 @@ class OverviewPage extends React.Component{
           <CorruptionType
               filters={filters}
               requestNewData={(_, corruptionType) => this.setState({corruptionType})}
-              translations={{}}
+              translations={translations}
               data={corruptionType}
+              years={years}
+							monthly={monthly}
+							months={months}
           />
         </section>
         <section>
@@ -153,8 +165,10 @@ class OverviewPage extends React.Component{
           <TopFlaggedContracts
               filters={filters}
               data={topFlaggedContracts}
-              translations={{}}
-              years={Map()}
+              translations={translations}
+							years={years}
+							monthly={monthly}
+							months={months}
               requestNewData={(_, topFlaggedContracts) => this.setState({topFlaggedContracts})}
           />
         </section>
