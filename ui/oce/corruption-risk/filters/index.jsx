@@ -14,7 +14,7 @@ class Filters extends React.Component{
 			allMonths: months,
 			allYears: [],
       state: Map({
-				months,
+				months: Set(months),
 				years: Set()
 			})
     }
