@@ -29,7 +29,7 @@ class IndividualIndicatorChart extends CustomPopupChart{
       hoverinfo: 'name',
       fillcolor: '#85cbfe',
       line: {
-        color: '#85cbfe'
+        color: '#63a0cd'
       }
     }, {
       x: dates,
@@ -40,7 +40,7 @@ class IndividualIndicatorChart extends CustomPopupChart{
       hoverinfo: 'name',
       fillcolor: '#336ba6',
       line: {
-        color: '#336ba6'
+        color: '#224a74'
       }
     }];
   }
