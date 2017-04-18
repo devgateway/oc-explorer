@@ -8,13 +8,16 @@ const pluckObj = (field, obj) => Object.keys(obj).map(key => obj[key][field]);
 
 class CorruptionType extends CustomPopupChart{
   groupData(data){
-		const {monthly} = this.props;
-    let grouped = {};
+    let grouped = {
+			COLLUSION: {},
+			FRAUD: {},
+			RIGGING: {}
+		};
+    const {monthly} = this.props;
 
     data.forEach(datum => {
       const type = datum.get('type');
 			let date;
-			const {monthly} = this.props;
 			if(monthly){
 				const month = datum.get('month');
 				date = this.t(`general:months:${month}`);
