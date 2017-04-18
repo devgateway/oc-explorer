@@ -30,6 +30,7 @@ class CorruptionType extends CustomPopupChart{
         x: pluckObj('year', dataForType),
         y: pluckObj('indicatorCount', dataForType),
         type: 'scatter',
+        fill: 'tonexty',
         name: type
       }
     });

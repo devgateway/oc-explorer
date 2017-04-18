@@ -1,4 +1,5 @@
 @headerHeight: 64px;
+
 .dashboard-corruption-risk{
     &>header{
         background: #144361;
@@ -14,10 +15,15 @@
             h1{
                 cursor: pointer;
                 padding: 5px;
+                &.corruption-dash-title{
+                  color: #9fa9ba;
+                  font-size: 20px;
+                  margin-top: 16px;
+                }
                 .glyphicon{
                     font-size: .33em;
                     margin-left: 20px;
-                    top: -5px;
+                    top: 3px;
                 }
             }
             .dashboard-switcher{
@@ -32,7 +38,7 @@
         }
 
         .login-wrapper{
-            padding: 15px;
+            padding: 14px 0 15px 15px;
             text-align: right;
             button{
                 width: 150px;
@@ -53,7 +59,7 @@
             text-transform: uppercase;
             font-size: 14px;
             font-weight: bold;
-            padding: 20px 0;
+            padding: 20px 30px 20px 0;
             @media (max-width: 969px) {
                 padding: 0 5px;
             }
@@ -62,12 +68,13 @@
             float: left;
             height: 100%;
             padding: 20px 0;
-            margin-left: 3%;
+            margin-right: 16px;
             color: #899cb1;
             cursor: pointer;
             .glyphicon-menu-down{
-                font-size: .75em;
-                margin-left: 20px;
+                font-size: .55em;
+                margin-left: 4px;
+                margin-top: 3px;
             }
             .dropdown{
                 display: none;
@@ -94,6 +101,7 @@
         }
         .download{
             padding: 10px 0;
+            text-align: right;
             button{
                 padding: 10px 25px;
             };
@@ -102,30 +110,55 @@
 
     aside{
         @leftPadding: 30px;
-        top: @headerHeight * 2;
+        bottom:0;
+        background: #fafafa;
+        border-right: 1px solid #e6eaee;
+        height: 100%;
         padding-left: @leftPadding;
         padding-top: 20px;
-        background: #fafafa;
-        border-right-width: 1px;
+        top: @headerHeight * 2;
+        overflow-y: auto;
+
+
         i{
             color: #34ac45;
             float: right;
         }
+        .chart-container {
+          background: #eff9ff;
+          margin-left: -30px;
+          padding-bottom: 150px;
+          padding-left: 13%;
+          position: absolute;
+          width: 100%;
+        }
         .crd-overview-link{
             cursor: pointer;
+            &:hover {
+              color: #35ae46;
+            }
         }
         [role=navigation]{
-            margin-top: 20px;
-            margin-left: -@leftPadding;
+          margin-left: -@leftPadding;
+          margin-top: 20px;
             a{
-                border-bottom: 1px solid #c5c5c5;
-                padding-left: @leftPadding;
+                border-bottom: 1px solid #e6eaee;
+                color: #000000;
+                cursor: pointer;
+                display: block;
+                font-size: 1em;
+                line-height: 190%;
+                padding: 15px 0 15px 25px;
+                text-decoration: none;
+                text-transform: uppercase;
+                white-space: nowrap;
+
                 &:first-child{
-                    border-top: 1px solid #c5c5c5;
+                    border-top: 1px solid #e6eaee;
                 }
                 &.active, &:hover{
-                    background: white;
-                    color: black;
+                    background: #ffffff;
+                    color: #2b9ff6;
                 }
                 .count{
                     color: #a9b2c0;
@@ -140,10 +173,16 @@
         }
     }
 
+    .table-striped > tbody > tr:nth-of-type(odd) {
+      background-color:  #ffffff;
+    }
+    .table-striped>tbody>tr:nth-of-type(even){
+      background: #f5f8fa;
+    }
     .content{
         margin-top: @headerHeight * 2;
         margin-bottom: auto;
-        padding: 20px 40px 0 40px;
+        padding: 20px 40px 0 30px;
 
         .crd-popup{
             @popupColor: #222c3c;
@@ -191,12 +230,23 @@
         }
 
         .table-top-flagged-contracts{
-            th{
-                color: #7f8fa4;
-            }
+          margin-top: 20px;
             th, td{
-                width: 11.11%;
+              font-weight: normal;
+              line-height: 110%;
+              padding: 8px 0 8px 5px;
+              width: 10%;
+
             }
+            th{
+              border-bottom: none;
+              color: #7f8fa4;
+            }
+            td{
+              border-bottom: 1px solid #e7e9ed;
+              border-top: none;
+            }
+
         }
 
         .indicator-tile-container{
@@ -204,35 +254,39 @@
             .border{
                 border: 1px solid #e6eaee;
                 border-radius: 5px;
-                padding: 20px;
                 cursor: pointer;
+                padding: 20px;
                 h4, p{
-                    font-weight: bold;
+                  font-weight: bold;
                 }
                 p{
-                    margin-bottom: 10px;
-                    color: #156d03;
-                    height: 3em;
+                  color: #156d03;
+                  height: 5.3em;
+                  margin-bottom: 10px;
                 }
             }
         }
 
         .table-crosstab{
+            border-top: none;
             .nr-flags{
                 color: #004f99;
             }
-
+            thead thead tr th {
+              border-bottom-width: 1px;
+            }
             td, th{
                 text-align: center;
             }
-
-            td:first-child{
-                text-align: right;
+            th:first-child{
+              border-left: 1px solid transparent;
             }
-
+            td:first-child{
+              text-align: right;
+            }
             .not-applicable{
-                color: #b6cddc;
-                background: #f1faff;
+              color: #b6cddc;
+              background: #f1faff;
             }
 
             td.hoverable{
