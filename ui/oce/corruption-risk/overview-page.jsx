@@ -156,7 +156,7 @@ class OverviewPage extends React.Component{
 
   render(){
     const {corruptionType, topFlaggedContracts} = this.state;
-    const {filters, translations, years, monthly, months, styling} = this.props;
+    const {filters, translations, years, monthly, months, styling, width} = this.props;
     return (
       <div className="page-overview">
         <section className="chart-corruption-types">
@@ -170,6 +170,7 @@ class OverviewPage extends React.Component{
 							monthly={monthly}
 							months={months}
               styling={styling}
+							width={width}
           />
         </section>
         <section>
