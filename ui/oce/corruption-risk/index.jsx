@@ -4,80 +4,14 @@ import URI from "urijs";
 import {fetchJson} from "../tools";
 import OverviewPage from "./overview-page";
 import CorruptionTypePage from "./corruption-type";
-import {Map} from "immutable";
+import {Map, Set} from "immutable";
 import IndividualIndicatorPage from "./individual-indicator";
+import Chart from "../visualizations/charts/index.jsx";
+import Plotly from "plotly.js/lib/core";
+import Filters from "./filters";
 
 const ROLE_ADMIN = 'ROLE_ADMIN';
 
-class Filter extends React.Component{
-  render(){
-    const {title, open, onClick} = this.props;
-    return(
-      <div onClick={onClick} className={cn('filter', {open})}>
-        {title}
-        <i className="glyphicon glyphicon-menu-down"></i>
-        {open && <div className="dropdown">
-        </div>}
-      </div>
-    )
-  }
-}
-
-class Filters extends React.Component{
-  render(){
-    const {box, requestNewFilterBox} = this.props;
-    const setBox = box => e => {
-      e.stopPropagation();
-      requestNewFilterBox(box);
-    };
-
-    const filters = [{
-      title: "Organizations",
-      slug:  "organizations"
-    },{
-      title: "Procurement method",
-      slug:  "procurementMethod"
-    },{
-      title: "Value Amount",
-      slug:  "valueAmount"
-    },{
-      title: "Date",
-      slug:  "date"
-    },{
-      title: "Location",
-      slug:  "location"
-    }];
-    return (
-      <div className="row filters-bar">
-        <div className="col-lg-1 col-md-1 col-sm-1">
-        </div>
-        <div className="col-lg-8 col-md-9 col-sm-9">
-        <div className="title">
-          Filter your data
-        </div>
-	      {filters.map(({title, slug}, index) => (
-  	      <Filter
-    	    	title={title}
-	        	open={box == slug}
-		        onClick={setBox(slug)}
-  	        key={index}
-    	    />
-        ))}
-        </div>
-        <div className="col-lg-2 col-md-1 col-sm-1 download">
-          <button className="btn btn-success">
-            <i className="glyphicon glyphicon-download-alt"></i>
-          </button>
-        </div>
-        <div class="col-lg-1 col-md-1">
-        </div>
-      </div>
-    )
-  }
-}
-
-import Chart from "../visualizations/charts/index.jsx";
-import Plotly from "plotly.js/lib/core";
 Plotly.register([
   require('plotly.js/lib/pie')
 ]);
@@ -105,6 +39,7 @@ class TotalFlags extends Chart{
     return {
       legend: {
         orientation: 'h',
+        width,
         height: 50,
         x: '0',
         y: '0'
@@ -119,13 +54,16 @@ class CorruptionRiskDashboard extends React.Component{
     super(...args);
     this.state={
       dashboardSwitcherOpen: false,
-      filterBox: "",
       user: {
         loggedIn: false,
         isAdmin: false
       },
       page: 'overview',
-      indicatorTypesMapping: {}
+      indicatorTypesMapping: {},
+      filters: Map(),
+			years: Set(),
+			months: Set(),
+      filterBoxIndex: null
     }
   }
 
@@ -142,7 +80,7 @@ class CorruptionRiskDashboard extends React.Component{
     ).catch(
       err => {
         alert('You must be logged in to access Corruption Risk Dashboard');
-        location.href = '/login?referrer=/ui/index.html'
+        location.href = '/login?referrer=/ui/index.html?corruption-risk-dashboard'
       }
     )
   }
@@ -164,23 +102,35 @@ class CorruptionRiskDashboard extends React.Component{
 
   loginBox(){
     if(this.state.user.loggedIn){
-      return <a href="/preLogout?referrer=/ui/index.html">
-				<button className="btn btn-success">Logout</button>
-      </a>
+      return (
+			 <a href="/preLogout?referrer=/ui/index.html?corruption-risk-dashboard">
+				 <button className="btn btn-success">Logout</button>
+       </a>
+			)
     }
-    return <a href="/login?referrer=/ui/index.html">
+    return <a href="/login?referrer=/ui/index.html?corruption-risk-dashboard">
         <button className="btn btn-success">Login</button>
     </a>
   }
 
   getPage(){
-    const {page} = this.state;
+		const {translations} = this.props;
+    const {page, filters, years, months} = this.state;
+		const monthly = years.count() == 1;
     if(page == 'overview'){
-      return <OverviewPage/>;
+      return <OverviewPage
+                 filters={filters}
+								 translations={translations}
+								 years={years}
+								 monthly={monthly}
+								 months={months}
+             />;
     } else if(page == 'corruption-type') {
       const {corruptionType, indicatorTypesMapping} = this.state;
       const indicatorType = {
-        process_rigging: 'RIGGING'
+        fraud: 'FRAUD',
+        process_rigging: 'RIGGING',
+        collusion: 'COLLUSION'
       }[corruptionType];
 
       const indicators =
@@ -189,18 +139,31 @@ class CorruptionRiskDashboard extends React.Component{
       return <CorruptionTypePage
                  indicators={indicators}
                  onGotoIndicator={individualIndicator => this.setState({page: 'individual-indicator', individualIndicator})}
+                 filters={filters}
+								 translations={translations}
+                 corruptionType={corruptionType}
+								 years={years}
+								 monthly={monthly}
+								 months={months}
              />;
     } else if(page == 'individual-indicator'){
       const {individualIndicator} = this.state;
-      return <IndividualIndicatorPage
-                 indicator={individualIndicator}
-             />
+      return (
+				<IndividualIndicatorPage
+						indicator={individualIndicator}
+						filters={filters}
+						translations={translations}
+						years={years}
+						monthly={monthly}
+						months={months}
+				/>
+			)
     }
   }
 
   render(){
-    const {dashboardSwitcherOpen, filterBox, corruptionType, page} = this.state;
-    const {onSwitch} = this.props;
+    const {dashboardSwitcherOpen, corruptionType, page, filters, years, months, filterBoxIndex} = this.state;
+    const {onSwitch, translations} = this.props;
     const tabs = [{
 	    slug: "fraud",
 	    name: "Fraud"
@@ -213,7 +176,7 @@ class CorruptionRiskDashboard extends React.Component{
     }];
     return (
       <div className="container-fluid dashboard-corruption-risk"
-           onClick={e => this.setState({dashboardSwitcherOpen: false, filterBox: ""})}
+           onClick={e => this.setState({dashboardSwitcherOpen: false, filterBoxIndex: null})}
       >
         <header className="branding row">
           <div className="col-sm-1 logo-wrapper">
@@ -240,10 +203,19 @@ class CorruptionRiskDashboard extends React.Component{
           <div className="col-sm-1">
           </div>
         </header>
-        <Filters box={filterBox} requestNewFilterBox={filterBox => this.setState({filterBox})}/>
-         <aside className="col-xs-4 col-md-4 col-lg-3">
-          <div>
-            <h4 className="crd-overview-link" onClick={e => this.setState({page: 'overview'})}>
+        <Filters
+            onUpdate={filters => this.setState({
+              filters: filters.delete('years').delete('months'),
+              years: filters.get('years'),
+              months: filters.get('months')
+            })}
+            translations={translations}
+            currentBoxIndex={filterBoxIndex}
+            requestNewBox={index => this.setState({filterBoxIndex: index})}
+        />
+        <aside className="col-xs-4 col-md-4 col-lg-3">
+          <div className="crd-overview-link" onClick={e => this.setState({page: 'overview'})}>
+            <h4>
               Corruption Risk Overview
               <i className="glyphicon glyphicon-info-sign"></i>
             </h4>
@@ -271,7 +243,7 @@ class CorruptionRiskDashboard extends React.Component{
 						 )}
           </section>
           <TotalFlags
-              filters={Map()}
+              filters={filters}
               requestNewData={e => null}
               translations={{}}
               data={Map({a: 1})}

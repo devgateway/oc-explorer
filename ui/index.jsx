@@ -81,16 +81,20 @@ class OCEChild extends OCApp{
   }
 }
 
-OCEChild.TRANSLATIONS = {
+const translations = {
   en_US: require('../web/public/languages/en_US.json')
 };
+
+OCEChild.TRANSLATIONS = translations;
 
 class OceSwitcher extends ViewSwitcher{}
 
 OceSwitcher.views.default = OCEChild;
 OceSwitcher.views.corruptionRiskDashboard = CorruptionRickDashboard;
 
-ReactDOM.render(<OceSwitcher/>, document.getElementById('dg-container'));
+ReactDOM.render(<OceSwitcher
+                    translations={translations['en_US']}
+                />, document.getElementById('dg-container'));
 
 if("ocvn.developmentgateway.org" == location.hostname){
   (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
