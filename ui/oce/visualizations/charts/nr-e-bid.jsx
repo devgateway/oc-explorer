@@ -15,7 +15,7 @@ class NrEbid extends FrontendDateFilterableChart{
       x: dates,
       y: data.map(pluckImm('totalTendersUsingEbid')).toArray(),
       type: 'scatter',
-      fill: 'tonextx',
+      fill: 'tonexty',
       marker: {
         color: this.props.styling.charts.traceColors[0]
       }
