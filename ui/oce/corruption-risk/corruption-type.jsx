@@ -222,7 +222,7 @@ class CorruptionType extends React.Component{
     if(!indicators || !indicators.length) return null;
     return (
       <div className="page-corruption-type">
-        <blockquote>{CORRUPTION_TYPE_DESCRIPTION[corruptionType].introduction}</blockquote>
+        <p className="introduction">{CORRUPTION_TYPE_DESCRIPTION[corruptionType].introduction}</p>
         <div className="row">
 	        {indicators.map((indicator, index) => {
              const {name: indicatorName, description: indicatorDescription} = INDICATOR_NAMES[indicator];
@@ -248,7 +248,7 @@ class CorruptionType extends React.Component{
              )
 	         })}
         </div>
-        <blockquote>{CORRUPTION_TYPE_DESCRIPTION[corruptionType].crosstab}</blockquote>
+        <p className="introduction">{CORRUPTION_TYPE_DESCRIPTION[corruptionType].crosstab}</p>
         <Crosstab
             filters={filters}
             years={years}

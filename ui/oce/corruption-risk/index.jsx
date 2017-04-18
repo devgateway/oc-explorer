@@ -215,8 +215,8 @@ class CorruptionRiskDashboard extends React.Component{
             requestNewBox={index => this.setState({filterBoxIndex: index})}
         />
         <aside className="col-xs-4 col-md-4 col-lg-3">
-          <div className="crd-overview-link" onClick={e => this.setState({page: 'overview'})}>
-            <h4>
+          <div>
+            <h4 className="crd-overview-link" onClick={e => this.setState({page: 'overview'})}>
               Corruption Risk Overview
               <i className="glyphicon glyphicon-info-sign"></i>
             </h4>

@@ -37,10 +37,10 @@ class Filters extends React.Component{
     const {BOXES} = this.constructor;
     return (
       <div className="row filters-bar" onClick={e => e.stopPropagation()}>
-        <div className="col-lg-3 col-md-2 col-sm-1 title text-right">
-          Filter your data
+        <div className="col-lg-1 col-md-1 col-sm-1">
         </div>
-        <div className="col-lg-7 col-md-9 col-sm-10">
+        <div className="col-lg-9 col-md-9 col-sm-9">
+        <div className="title">Filter your data</div>
           {BOXES.map((Box, index) => {
              return (
                <Box
@@ -57,11 +57,12 @@ class Filters extends React.Component{
              )
            })}
         </div>
-        <div className="col-lg-2 col-md-1 col-sm-1 download">
+        <div className="col-lg-1 col-md-1 col-sm-1 download">
           <button className="btn btn-success">
             <i className="glyphicon glyphicon-download-alt"></i>
           </button>
         </div>
+        <div className="col-lg-1 col-md-1 col-sm-1"></div>
       </div>
     )
   }
