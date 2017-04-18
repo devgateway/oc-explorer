@@ -8,13 +8,16 @@ const pluckObj = (field, obj) => Object.keys(obj).map(key => obj[key][field]);
 
 class CorruptionType extends CustomPopupChart{
   groupData(data){
-		const {monthly} = this.props;
-    let grouped = {};
+    let grouped = {
+			COLLUSION: {},
+			FRAUD: {},
+			RIGGING: {}
+		};
+    const {monthly} = this.props;
 
     data.forEach(datum => {
       const type = datum.get('type');
 			let date;
-			const {monthly} = this.props;
 			if(monthly){
 				const month = datum.get('month');
 				date = this.t(`general:months:${month}`);
@@ -153,7 +156,7 @@ class OverviewPage extends React.Component{
 
   render(){
     const {corruptionType, topFlaggedContracts} = this.state;
-    const {filters, translations, years, monthly, months, styling} = this.props;
+    const {filters, translations, years, monthly, months, styling, width} = this.props;
     return (
       <div className="page-overview">
         <section className="chart-corruption-types">
@@ -167,6 +170,7 @@ class OverviewPage extends React.Component{
 							monthly={monthly}
 							months={months}
               styling={styling}
+							width={width}
           />
         </section>
         <section>

@@ -54,7 +54,7 @@ class IndicatorTile extends CustomPopupChart{
       yaxis: {
         zeroline: false,
         showline: false,
-        showticklabels: false,
+        showticklabels: true,
         showgrid: false
       }
     }
@@ -217,7 +217,7 @@ class CorruptionType extends React.Component{
 
   render(){
     const {indicators, onGotoIndicator, corruptionType, filters, years, monthly, months,
-					 translations} = this.props;
+					 translations, width} = this.props;
     const {crosstab, indicatorTiles} = this.state;
     if(!indicators || !indicators.length) return null;
     return (
@@ -237,11 +237,12 @@ class CorruptionType extends React.Component{
                        filters={filters}
                        requestNewData={(_, data) => this.updateIndicatorTile(indicator, data)}
                        data={indicatorTiles[indicator]}
-                       margin={{t: 0, r: 0, b: 40, l: 0, pad: 0}}
+                       margin={{t: 0, r: 60, b: 40, l: 60, pad: 20}}
                        height={300}
 											 years={years}
 											 monthly={monthly}
 											 months={months}
+											 width={width/3-60}
     	             />
                  </div>
                </div>

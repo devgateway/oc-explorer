@@ -156,7 +156,7 @@ class IndividualIndicatorPage extends React.Component{
 
   render(){
     const {chart, table} = this.state;
-    const {indicator, translations, filters, years, monthly, months} = this.props;
+    const {indicator, translations, filters, years, monthly, months, width} = this.props;
     return (
       <div className="page-corruption-type">
         <h4>{INDICATOR_NAMES[indicator].name}</h4>
@@ -170,6 +170,7 @@ class IndividualIndicatorPage extends React.Component{
 						months={months}
             requestNewData={(_, data) => this.setState({chart: data})}
             data={chart}
+						width={width}
         />
         <ProjectTable
             indicator={indicator}
