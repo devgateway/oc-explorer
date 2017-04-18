@@ -61,6 +61,7 @@ class IndividualIndicatorChart extends CustomPopupChart{
     const {popup} = this.state;
     const {year} = popup;
     const data = super.getData();
+		if(!data) return null;
 		let datum;
 		if(monthly){
 			datum = data.find(datum => {

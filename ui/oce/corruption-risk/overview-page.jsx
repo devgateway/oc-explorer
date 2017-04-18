@@ -57,7 +57,9 @@ class CorruptionType extends CustomPopupChart{
     const {popup} = this.state;
     const {year, traceName: corruptionType} = popup;
     const data = this.groupData(super.getData());
+		if(!data[corruptionType]) return null;
     const dataForPoint = data[corruptionType][year];
+		if(!dataForPoint) return null;
     return (
       <div className="crd-popup" style={{top: popup.top, left: popup.left}}>
         <div className="row">
