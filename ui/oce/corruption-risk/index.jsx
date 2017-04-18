@@ -49,10 +49,12 @@ class Filters extends React.Component{
     }];
     return (
       <div className="row filters-bar">
-        <div className="col-lg-3 col-md-1 col-sm-2 title text-right">
+        <div className="col-lg-1 col-md-1 col-sm-1">
+        </div>
+        <div className="col-lg-8 col-md-9 col-sm-9">
+        <div className="title">
           Filter your data
         </div>
-        <div className="col-lg-6 col-md-9 col-sm-8">
 	      {filters.map(({title, slug}, index) => (
   	      <Filter
     	    	title={title}
@@ -103,7 +105,6 @@ class TotalFlags extends Chart{
     return {
       legend: {
         orientation: 'h',
-        width,
         height: 50,
         x: '0',
         y: '0'
@@ -275,11 +276,11 @@ class CorruptionRiskDashboard extends React.Component{
               translations={{}}
               data={Map({a: 1})}
               width={250}
-              height={300}
-              margin={{l:40, r:40, t:40, b: 40, pad:40}}
+              height={250}
+              margin={{l:40, r:40, t:20, b: 10, pad:20}}
           />
         </aside>
-        <div className="col-xs-offset-4 col-md-offset-1 col-lg-offset-3 col-xs-8 col-md-8 col-lg-9 content">
+        <div className="col-xs-offset-4 col-md-offset-4 col-lg-offset-3 col-xs-8 col-md-8 col-lg-9 content">
           {this.getPage()}
         </div>
       </div>

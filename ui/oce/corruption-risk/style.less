@@ -3,10 +3,16 @@
 .dashboard-corruption-risk{
     &>header{
         background: #144361;
+        &.branding {
+          height: 54px;
+        }
         .logo-wrapper{
             padding-left: 40px;
-            padding-top: 10px;
+            padding-top: 8px;
             cursor: pointer;
+            img {
+              height: 38px;
+            }
         }
 
         .dash-switcher-wrapper{
@@ -18,12 +24,12 @@
                 &.corruption-dash-title{
                   color: #9fa9ba;
                   font-size: 20px;
-                  margin-top: 16px;
+                  margin-top: 10px;
                 }
                 .glyphicon{
-                    font-size: .33em;
-                    margin-left: 20px;
-                    top: 3px;
+                    font-size: .53em;
+                    margin-left: 10px;
+                    top: 0px;
                 }
             }
             .dashboard-switcher{
@@ -38,7 +44,7 @@
         }
 
         .login-wrapper{
-            padding: 14px 0 15px 15px;
+            padding: 10px 0 15px 15px;
             text-align: right;
             button{
                 width: 150px;
@@ -49,17 +55,18 @@
 
     &>.filters-bar{
         background: #c3e6fc;
-        top: @headerHeight;
-        height: @headerHeight;
+        top: @headerHeight - 15;
+        height: @headerHeight - 15;
         left: 0;
         right: 0;
         position: fixed;
         z-index: 2;
         .title{
             text-transform: uppercase;
+            float: left;
             font-size: 14px;
             font-weight: bold;
-            padding: 20px 30px 20px 0;
+            padding: 17px 30px 20px 8px;
             @media (max-width: 969px) {
                 padding: 0 5px;
             }
@@ -67,8 +74,9 @@
         .filter{
             float: left;
             height: 100%;
-            padding: 20px 0;
+            padding: 12px 0;
             margin-right: 16px;
+            margin-top: 5px;
             color: #899cb1;
             cursor: pointer;
             .glyphicon-menu-down{
@@ -100,10 +108,10 @@
             }
         }
         .download{
-            padding: 10px 0;
+            padding: 11px 0;
             text-align: right;
             button{
-                padding: 10px 25px;
+                padding: 5px 25px;
             };
         }
     }
@@ -115,11 +123,13 @@
         border-right: 1px solid #e6eaee;
         height: 100%;
         padding-left: @leftPadding;
-        padding-top: 20px;
-        top: @headerHeight * 2;
-        overflow-y: auto;
-
-
+        padding-top: 10px;
+        top: @headerHeight * 1.5;
+        // overflow-y: auto;
+        .small {
+          font-size: 80%;
+          line-height:128%;
+        }
         i{
             color: #34ac45;
             float: right;
@@ -146,9 +156,9 @@
                 color: #000000;
                 cursor: pointer;
                 display: block;
-                font-size: 1em;
+                font-size: 0.9em;
                 line-height: 190%;
-                padding: 15px 0 15px 25px;
+                padding: 8px 0 8px 25px;
                 text-decoration: none;
                 text-transform: uppercase;
                 white-space: nowrap;
@@ -168,6 +178,7 @@
                 img{
                     display: inline-block;
                     margin-right: 10px;
+                    width: 32px;
                 }
             }
         }
@@ -180,7 +191,7 @@
       background: #f5f8fa;
     }
     .content{
-        margin-top: @headerHeight * 2;
+        margin-top: 89px;
         margin-bottom: auto;
         padding: 20px 40px 0 30px;
 
