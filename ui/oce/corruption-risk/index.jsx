@@ -80,7 +80,7 @@ class CorruptionRiskDashboard extends React.Component{
     ).catch(
       err => {
         alert('You must be logged in to access Corruption Risk Dashboard');
-        location.href = '/login?referrer=/ui/index.html'
+        location.href = '/login?referrer=/ui/index.html?corruption-risk-dashboard'
       }
     )
   }
@@ -102,11 +102,13 @@ class CorruptionRiskDashboard extends React.Component{
 
   loginBox(){
     if(this.state.user.loggedIn){
-      return <a href="/preLogout?referrer=/ui/index.html">
-				<button className="btn btn-success">Logout</button>
-      </a>
+      return (
+			 <a href="/preLogout?referrer=/ui/index.html?corruption-risk-dashboard">
+				 <button className="btn btn-success">Logout</button>
+       </a>
+			)
     }
-    return <a href="/login?referrer=/ui/index.html">
+    return <a href="/login?referrer=/ui/index.html?corruption-risk-dashboard">
         <button className="btn btn-success">Login</button>
     </a>
   }
