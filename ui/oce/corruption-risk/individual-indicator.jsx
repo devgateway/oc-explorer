@@ -24,7 +24,7 @@ class IndividualIndicatorChart extends CustomPopupChart{
       x: dates,
       y: data.map(pluckImm('totalTrue')).toJS(),
       type: 'scatter',
-      fill: 'tozerox',
+      fill: 'tonexty',
       name: 'Flagged',
       hoverinfo: 'name',
       fillcolor: '#85cbfe',

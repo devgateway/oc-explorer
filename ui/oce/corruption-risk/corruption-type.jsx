@@ -40,7 +40,7 @@ class IndicatorTile extends CustomPopupChart{
       x: dates,
       y: data.map(pluckImm('totalTrue')).toJS(),
       type: 'scatter',
-      fill: 'tozerox'
+      fill: 'tonexty'
     }];
   }
 
@@ -74,27 +74,27 @@ class IndicatorTile extends CustomPopupChart{
 		} else {
 			datum = data.find(datum => datum.get('year') == year);
 		}
-			return (
-				<div className="crd-popup" style={{top: popup.top, left: popup.left}}>
-					<div className="row">
-						<div className="col-sm-12 info text-center">
-							{year}
-						</div>
-						<div className="col-sm-12">
-							<hr/>
-						</div>
-						<div className="col-sm-7 text-right title">Projects Flagged</div>
-						<div className="col-sm-5 text-left info">{datum.get('totalTrue')}</div>
-						<div className="col-sm-7 text-right title">Eligible Projects</div>
-						<div className="col-sm-5 text-left info">{datum.get('totalPrecondMet')}</div>
-						<div className="col-sm-7 text-right title">Eligible Projects %</div>
-						<div className="col-sm-5 text-left info">{datum.get('percentPrecondMet').toFixed(2)} %</div>
-						<div className="col-sm-7 text-right title">Total Eligible %</div>
-						<div className="col-sm-5 text-left info">{datum.get('percentTruePrecondMet').toFixed(2)} %</div>
+		return (
+			<div className="crd-popup" style={{top: popup.top, left: popup.left}}>
+				<div className="row">
+					<div className="col-sm-12 info text-center">
+						{year}
 					</div>
-					<div className="arrow"/>
+					<div className="col-sm-12">
+						<hr/>
+					</div>
+					<div className="col-sm-7 text-right title">Projects Flagged</div>
+					<div className="col-sm-5 text-left info">{datum.get('totalTrue')}</div>
+					<div className="col-sm-7 text-right title">Eligible Projects</div>
+					<div className="col-sm-5 text-left info">{datum.get('totalPrecondMet')}</div>
+					<div className="col-sm-7 text-right title">Eligible Projects %</div>
+					<div className="col-sm-5 text-left info">{datum.get('percentPrecondMet').toFixed(2)} %</div>
+					<div className="col-sm-7 text-right title">Total Eligible %</div>
+					<div className="col-sm-5 text-left info">{datum.get('percentTruePrecondMet').toFixed(2)} %</div>
 				</div>
-			)
+				<div className="arrow"/>
+			</div>
+		)
   }
 }
 
