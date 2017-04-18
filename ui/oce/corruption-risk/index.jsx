@@ -114,7 +114,7 @@ class CorruptionRiskDashboard extends React.Component{
   }
 
   getPage(){
-		const {translations} = this.props;
+		const {translations, styling} = this.props;
     const {page, filters, years, months} = this.state;
 		const monthly = years.count() == 1;
     if(page == 'overview'){
@@ -124,6 +124,7 @@ class CorruptionRiskDashboard extends React.Component{
 								 years={years}
 								 monthly={monthly}
 								 months={months}
+                 styling={styling}
              />;
     } else if(page == 'corruption-type') {
       const {corruptionType, indicatorTypesMapping} = this.state;
