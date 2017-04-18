@@ -7,9 +7,11 @@ class OCESwitcher extends React.Component{
   }
 
   render(){
+    const {translations} = this.props;
     const CurrentView = this.constructor.views[this.state.view];
     return <CurrentView
                onSwitch={view => this.setState({view})}
+               translations={translations}
            />;
   }
 }

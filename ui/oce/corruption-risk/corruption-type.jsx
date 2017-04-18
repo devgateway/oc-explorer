@@ -3,51 +3,20 @@ import {Map} from "immutable";
 import {pluckImm} from "../tools";
 import CustomPopupChart from "./custom-popup-chart";
 import Table from "../visualizations/tables/index";
+import INDICATOR_NAMES from "./indicator-names";
 
-const INDICATOR_NAMES = {
-  i002: {
-	  name: "Low Bid Price",
-    description: "Winning supplier provides a substantially lower bid price than competitors"
+const CORRUPTION_TYPE_DESCRIPTION = {
+  fraud: {
+    introduction: `Fraud is “Any act or omission, including a misrepresentation, that knowingly or recklessly misleads, or attempts to mislead, a party to obtain a financial or other benefit or to avoid an obligation, according to the International Financial Institutions (IFI) Anti-Corruption Task Force Guidelines. Suppliers may engage in a variety of fraudulent activities in attempt to increase their chances at winning contracts or in demonstration of progress in implementation. Some of these fraud schemes include: false invoicing, false bidding, product substitution, fictitious contracting, and shadow bidding. The flags represented in each tile below indicate the possible existance of fraud in a contracting process. To learn more about each flag, click on the associated tile.`,
+    crosstab: `The table below shows the overlap between any two fraud flags. Darker colored cells indicate a higher percentage of overlap between the corresponding flags. Projects with more fraud flags may be at a higher risk for fraud and may warrant additional investigation. Hover the mouse over a cell to learn more about the number of projects that have been flagged and the corresponding flags.`
   },
-  i003: {
-	  name: "Only Winner Eligible",
-    description: "Only the winning bidder was eligible to have received the contract for a tender when 2+ bidders apply"
+  process_rigging: {
+    introduction: `"Process rigging" is a term used here to refer to an effort to rig the bidding, awarding, contracting or implementation process in favor of a particular player or entity to the exclusion of other legitimate participants. Implicit in this definition is the possible role of government officials, who either initiate the corrupt act or distort the procurement process to facilitate said act. Specific forms of process rigging may include: information withholding or misinformation, riged specifications, unjustified direct (sole source) contracting, split purchasing, bid manipulation, favoring/excluding qualified bidders, change order abuse, and contracting abuse`,
+    crosstab: `The table below shows the overlap between any two process rigging flags. Darker colored cells indicate a higher percentage of overlap between the corresponding flags. Projects with more process rigging flags may be at a higher risk for process rigging and may warrant additional investigation. Hover the mouse over a cell to learn more about the number of projects that have been flagged and the corresponding flags.`
   },
-  i004: {
-	  name: "Ineligible Direct Award",
-    description: "Sole source award is awarded above the competitive threshold despite legal requirements"
-  },
-  i007: {
-	  name: "Single Bidder Only",
-    description: "This awarded competitive tender only featured a single bid "
-  },
-  i019: {
-	  name: "Contract Negotiation Delay",
-    description: "Long delays in contract negotiations or award (as bribe demands are possibly negotiated)"
-  },
-  i038: {
-	  name: "Short Bid Period",
-    description: "Bid period is shorter than 7 number of days "
-  },
-  i077: {
-	  name: "Multiple Contract Winner",
-    description: "High number of contract awards to one supplier within a given time period by a single procurement entity"
-  },
-  i083: {
-	  name: "Winner-Loser Pattern",
-    description: "When X supplier wins, same tenderers always lose (this could be linked to a certain PE)"
-  },
-  i085: {
-	  name: "Whole % Bid Prices",
-    description: "Difference between bid prices is an exact percentage (whole number)"
-  },
-  i171: {
-	  name: "Bid Near Estimate",
-    description: "Winning bid is within 1% of estimated price"
-  },
-  i180: {
-	  name: "Multiple Direct Awards",
-    description: "Supplier receives multiple single-source/non-competitive contracts from a single procuring entity during a defined time period"
+  collusion: {
+    introduction: `IFI Guidelines define collusive practices as: “…an arrangement between two or more parties designed to achieve an improper purpose, including to influence improperly the actions of another party.” Here, we focus on collusive behavior between and among bidders; not betwen bidders and government officials (for this, see the process rigging page).`,
+    crosstab: `The table below shows the overlap between any two collusion flags. Darker colored cells indicate a higher percentage of overlap between the corresponding flags. Projects with more collusion flags may be at a higher risk for collusion and may warrant additional investigation. Hover the mouse over a cell to learn more about the number of projects that have been flagged and the corresponding flags.`
   }
 };
 
@@ -60,12 +29,18 @@ class IndicatorTile extends CustomPopupChart{
   getData(){
     const data = super.getData();
     if(!data) return [];
-    const sortedData = data.sort((a, b) => a.get('year') - b.get('year'));
+		const {monthly} = this.props;
+		const dates = monthly ?
+									data.map(datum => {
+										const month = datum.get('month');
+										return this.t(`general:months:${month}`);
+									}).toJS() :
+									data.map(pluckImm('year')).toJS();
     return [{
-      x: sortedData.map(pluckImm('year')).toJS(),
-      y: sortedData.map(pluckImm('totalTrue')).toJS(),
+      x: dates,
+      y: data.map(pluckImm('totalTrue')).toJS(),
       type: 'scatter',
-      fill: 'tozerox'
+      fill: 'tonexty'
     }];
   }
 
@@ -86,32 +61,41 @@ class IndicatorTile extends CustomPopupChart{
   }
 
   getPopup(){
-    const {indicator} = this.props;
+    const {indicator, monthly} = this.props;
     const {popup} = this.state;
     const {year} = popup;
     const data = super.getData();
-    const datum = data.find(datum => datum.get('year') == year);
-    return (
-      <div className="crd-popup" style={{top: popup.top, left: popup.left}}>
-        <div className="row">
-          <div className="col-sm-12 info text-center">
-            {year}
-          </div>
-          <div className="col-sm-12">
-            <hr/>
-          </div>
-          <div className="col-sm-7 text-right title">Projects Flagged</div>
-          <div className="col-sm-5 text-left info">{datum.get('totalTrue')}</div>
-          <div className="col-sm-7 text-right title">Eligible Projects</div>
-          <div className="col-sm-5 text-left info">{datum.get('totalPrecondMet')}</div>
-          <div className="col-sm-7 text-right title">Eligible Projects %</div>
-          <div className="col-sm-5 text-left info">{datum.get('percentPrecondMet').toFixed(2)} %</div>
-          <div className="col-sm-7 text-right title">Total Eligible %</div>
-          <div className="col-sm-5 text-left info">{datum.get('percentTruePrecondMet').toFixed(2)} %</div>
-        </div>
-        <div className="arrow"/>
-      </div>
-    )
+		if(!data) return null;
+		let datum;
+		if(monthly){
+			datum = data.find(datum => {
+				const month = datum.get('month');
+				return year == this.t(`general:months:${month}`);
+			})
+		} else {
+			datum = data.find(datum => datum.get('year') == year);
+		}
+		return (
+			<div className="crd-popup" style={{top: popup.top, left: popup.left}}>
+				<div className="row">
+					<div className="col-sm-12 info text-center">
+						{year}
+					</div>
+					<div className="col-sm-12">
+						<hr/>
+					</div>
+					<div className="col-sm-7 text-right title">Projects Flagged</div>
+					<div className="col-sm-5 text-left info">{datum.get('totalTrue')}</div>
+					<div className="col-sm-7 text-right title">Eligible Projects</div>
+					<div className="col-sm-5 text-left info">{datum.get('totalPrecondMet')}</div>
+					<div className="col-sm-7 text-right title">Eligible Projects %</div>
+					<div className="col-sm-5 text-left info">{datum.get('percentPrecondMet').toFixed(2)} %</div>
+					<div className="col-sm-7 text-right title">Total Eligible %</div>
+					<div className="col-sm-5 text-left info">{datum.get('percentTruePrecondMet').toFixed(2)} %</div>
+				</div>
+				<div className="arrow"/>
+			</div>
+		)
   }
 }
 
@@ -137,9 +121,16 @@ class Crosstab extends Table{
       const datum = data[x][0];
       for(y = 0; y<indicators.length; y++){
         const yIndicatorID = indicators[y];
-        matrix[xIndicatorID][yIndicatorID] = {
-          count: datum[yIndicatorID],
-          percent: datum.percent[yIndicatorID]
+        if(datum){
+          matrix[xIndicatorID][yIndicatorID] = {
+            count: datum[yIndicatorID],
+            percent: datum.percent[yIndicatorID]
+          }
+        } else {
+          matrix[xIndicatorID][yIndicatorID] = {
+            count: 0,
+            percent: 0
+          }
         }
       }
     }
@@ -163,7 +154,7 @@ class Crosstab extends Table{
              const style = {backgroundColor: `rgb(${color}, 255, ${color})`}
              return (
                <td key={indicatorID} className="hoverable" style={style}>
-                 {percent.toFixed(2)} %
+                 {percent && percent.toFixed(2)} %
                  <div className="crd-popup text-left">
                    <div className="row">
                      <div className="col-sm-12 info">
@@ -225,11 +216,13 @@ class CorruptionType extends React.Component{
   }
 
   render(){
-    const {indicators, onGotoIndicator} = this.props;
-    if(!indicators || !indicators.length) return null;
+    const {indicators, onGotoIndicator, corruptionType, filters, years, monthly, months,
+					 translations} = this.props;
     const {crosstab, indicatorTiles} = this.state;
+    if(!indicators || !indicators.length) return null;
     return (
       <div className="page-corruption-type">
+        <blockquote>{CORRUPTION_TYPE_DESCRIPTION[corruptionType].introduction}</blockquote>
         <div className="row">
 	        {indicators.map((indicator, index) => {
              const {name: indicatorName, description: indicatorDescription} = INDICATOR_NAMES[indicator];
@@ -240,23 +233,27 @@ class CorruptionType extends React.Component{
                    <p>{indicatorDescription}</p>
                    <IndicatorTile
                        indicator={indicator}
-                       translations={{}}
-                       filters={Map()}
+                       translations={translations}
+                       filters={filters}
                        requestNewData={(_, data) => this.updateIndicatorTile(indicator, data)}
                        data={indicatorTiles[indicator]}
                        margin={{t: 0, r: 0, b: 40, l: 0, pad: 0}}
                        height={300}
+											 years={years}
+											 monthly={monthly}
+											 months={months}
     	             />
                  </div>
                </div>
              )
 	         })}
         </div>
-        <h4>Fraud Crosstab</h4>
-        <p>This tool helps users understand the overlap between any two fraud indicators</p>
+        <blockquote>{CORRUPTION_TYPE_DESCRIPTION[corruptionType].crosstab}</blockquote>
         <Crosstab
-            filters={Map()}
-            years={Map()}
+            filters={filters}
+            years={years}
+						monthly={monthly}
+						months={months}
             indicators={indicators}
             data={crosstab}
             requestNewData={(_, data) => this.setState({crosstab: data})}
