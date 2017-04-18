@@ -40,8 +40,8 @@ Thresholds: Award period is longer than 60 days.
 Description: A long delay in the negotiation of a contract or assigning of an award could indicate that malfeasance is taking place in the form or bribery negotiation or other illicit behaviors.`
   },
   i038: {
-	  name: "Short Bid Period",
-    description: "Bid period is shorter than 7 number of days ",
+    name: "Short Bid Period",
+    description: "Bid period is shorter than 3 days",
     long_desc: `Indicator: Bid period is shorter than 3 days.
 Eligibility: Bid period complete; Procurement method is competitive.
 Thresholds: 3-day bid period.
