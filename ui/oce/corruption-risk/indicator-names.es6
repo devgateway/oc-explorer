@@ -33,7 +33,7 @@ Description: The presence of a single bidder only in a competitive process could
   },
   i019: {
 	  name: "Contract Negotiation Delay",
-    description: "Long delays in contract negotiations or award (as bribe demands are possibly negotiated)",
+    description: "Long delays in contract negotiations or award (over 60 days)",
     long_desc: `Indicator: Long delays in contract negotiations or award. 
 Eligibility: Award has been made.
 Thresholds: Award period is longer than 60 days.
@@ -49,7 +49,7 @@ Description: A particularly short bidding period could indicate that the period 
   },
   i077: {
 	  name: "Multiple Contract Winner",
-    description: "High number of contract awards to one supplier within a given time period by a single procurement entity",
+    description: "High number of competitive contract awards to one supplier within a calendar year",
     long_desc: `Indicator: A high number of contracts are awarded to one supplier within a one-year time period by a single procuring entity.
 Eligibility: Award has been made.
 Thresholds: Minimum of 2 awards made to 1 supplier by 1 procuring entity.
@@ -57,7 +57,7 @@ Description: When a single supplier wins multiple contracts from a procuring ent
   },
   i083: {
 	  name: "Winner-Loser Pattern",
-    description: "When X supplier wins, same tenderers always lose (this could be linked to a certain PE)",
+    description: "When X supplier wins, same set of tenderers loses (at least twice)",
     long_desc: `Indicator: When one supplier wins, the same tenderers always lose.
 Eligibility: Award has been made; Procurement method is competitive; At least 2 suppliers bid.
 Thresholds: 1 supplier wins at least 2 awards against the same group of bidders.
@@ -81,7 +81,7 @@ Description: In most instances, the estimated price of a good or work is 7%-12% 
   },
   i180: {
 	  name: "Multiple Direct Awards",
-    description: "Supplier receives multiple single-source/non-competitive contracts from a single procuring entity during a defined time period",
+    description: "Supplier receives multiple single-source/non-competitive contracts from a single procuring entity during a calendar year",
     long_desc: `Indicator: Supplier receives multiple sole-source/non-competitive contracts from a single procuring entity during a defined time period.
 Eligibility: Award has been made; Procurement method is sole source (direct).
 Thresholds: Supplier must receive at least 2 awards from a single procuring entity; Time period is 1 calendar year.
