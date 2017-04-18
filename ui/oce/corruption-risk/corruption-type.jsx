@@ -52,7 +52,7 @@ class IndicatorTile extends CustomPopupChart{
         showline: false
       },
       yaxis: {
-        zeroline: true,
+        zeroline: false,
         showline: false,
         showticklabels: true,
         showgrid: false
