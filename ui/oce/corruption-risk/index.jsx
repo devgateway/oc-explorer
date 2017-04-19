@@ -1,7 +1,7 @@
 import style from "./style.less";
 import cn from "classnames";
 import URI from "urijs";
-import {fetchJson} from "../tools";
+import {fetchJson, debounce} from "../tools";
 import OverviewPage from "./overview-page";
 import CorruptionTypePage from "./corruption-type";
 import {Map, Set} from "immutable";
@@ -63,7 +63,8 @@ class CorruptionRiskDashboard extends React.Component{
       filters: Map(),
 			years: Set(),
 			months: Set(),
-      filterBoxIndex: null
+      filterBoxIndex: null,
+			width: 0
     }
   }
 
@@ -92,6 +93,15 @@ class CorruptionRiskDashboard extends React.Component{
   componentDidMount(){
     this.fetchUserInfo();
     this.fetchIndicatorTypesMapping()
+		this.setState({
+      width: document.querySelector('.content').offsetWidth - 30
+    });
+
+    window.addEventListener("resize", debounce(() => {
+      this.setState({
+        width: document.querySelector('.content').offsetWidth - 30
+      });
+    }));
   }
 
   toggleDashboardSwitcher(e){
@@ -115,7 +125,7 @@ class CorruptionRiskDashboard extends React.Component{
 
   getPage(){
 		const {translations, styling} = this.props;
-    const {page, filters, years, months, indicatorTypesMapping} = this.state;
+    const {page, filters, years, months, indicatorTypesMapping, width} = this.state;
 		const monthly = years.count() == 1;
     if(page == 'overview'){
       return <OverviewPage
@@ -126,6 +136,7 @@ class CorruptionRiskDashboard extends React.Component{
 								 months={months}
 								 indicatorTypesMapping={indicatorTypesMapping}
                  styling={styling}
+								 width={width}
              />;
     } else if(page == 'corruption-type') {
       const {corruptionType} = this.state;
@@ -147,6 +158,7 @@ class CorruptionRiskDashboard extends React.Component{
 								 years={years}
 								 monthly={monthly}
 								 months={months}
+								 width={width}
              />;
     } else if(page == 'individual-indicator'){
       const {individualIndicator} = this.state;
@@ -158,6 +170,7 @@ class CorruptionRiskDashboard extends React.Component{
 						years={years}
 						monthly={monthly}
 						months={months}
+						width={width}
 				/>
 			)
     }

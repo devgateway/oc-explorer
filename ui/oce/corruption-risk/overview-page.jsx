@@ -6,15 +6,39 @@ import CustomPopupChart from "./custom-popup-chart";
 
 const pluckObj = (field, obj) => Object.keys(obj).map(key => obj[key][field]);
 
+//copypasted from https://www.sitepoint.com/javascript-generate-lighter-darker-color/
+function colorLuminance(hex, lum) {
+
+	// validate hex string
+	hex = String(hex).replace(/[^0-9a-f]/gi, '');
+	if (hex.length < 6) {
+		hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+	}
+	lum = lum || 0;
+
+	// convert to decimal and change luminosity
+	var rgb = "#", c, i;
+	for (i = 0; i < 3; i++) {
+		c = parseInt(hex.substr(i*2,2), 16);
+		c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
+		rgb += ("00"+c).substr(c.length);
+	}
+
+	return rgb;
+}
+
 class CorruptionType extends CustomPopupChart{
   groupData(data){
-		const {monthly} = this.props;
-    let grouped = {};
+    let grouped = {
+			COLLUSION: {},
+			FRAUD: {},
+			RIGGING: {}
+		};
+    const {monthly} = this.props;
 
     data.forEach(datum => {
       const type = datum.get('type');
 			let date;
-			const {monthly} = this.props;
 			if(monthly){
 				const month = datum.get('month');
 				date = this.t(`general:months:${month}`);
@@ -43,7 +67,7 @@ class CorruptionType extends CustomPopupChart{
         name: type,
         fillcolor: styling.charts.traceColors[index],
         line: {
-          color: styling.charts.traceColors[index]
+          color: colorLuminance(styling.charts.traceColors[index], -.3)
         }
       }
     });
@@ -159,7 +183,7 @@ class OverviewPage extends React.Component{
 
   render(){
     const {corruptionType, topFlaggedContracts} = this.state;
-    const {filters, translations, years, monthly, months, indicatorTypesMapping, styling} = this.props;
+    const {filters, translations, years, monthly, months, indicatorTypesMapping, styling, width} = this.props;
     return (
       <div className="page-overview">
         <section className="chart-corruption-types">
@@ -174,6 +198,7 @@ class OverviewPage extends React.Component{
 							months={months}
               styling={styling}
 							indicatorTypesMapping={indicatorTypesMapping}
+							width={width}
           />
         </section>
         <section>
