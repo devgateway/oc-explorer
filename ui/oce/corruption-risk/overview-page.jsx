@@ -1,5 +1,5 @@
 import {Map} from "immutable";
-import {pluck} from "../tools";
+import {pluck, range} from "../tools";
 import Table from "../visualizations/tables/index";
 import ReactDOMServer from "react-dom/server";
 import CustomPopupChart from "./custom-popup-chart";
@@ -28,7 +28,7 @@ function colorLuminance(hex, lum) {
 }
 
 class CorruptionType extends CustomPopupChart{
-  groupData(data){
+	groupData(data){
     let grouped = {
 			COLLUSION: {},
 			FRAUD: {},
@@ -55,14 +55,25 @@ class CorruptionType extends CustomPopupChart{
   getData(){
     const data = super.getData();
     if(!data) return [];
-		const {styling} = this.props;
+		const {styling, months, monthly} = this.props;
     const grouped = this.groupData(data);
     return Object.keys(grouped).map((type, index) => {
       const dataForType = grouped[type];
-      return {
-        x: Object.keys(dataForType),
-        y: pluckObj('flaggedCount', dataForType),
-        type: 'scatter',
+			let values = [], dates = [];
+			if(monthly){
+				dates = range(1, 12)
+					.filter(month => months.has(month))
+					.map(month => this.t(`general:months:${month}`));
+
+				values = dates.map(month => dataForType[month] && dataForType[month].flaggedCount);
+			} else {
+				dates = Object.keys(dataForType);
+				values = pluckObj('flaggedCount', dataForType);
+			}
+			return {
+        x: dates,
+        y: values,
+				type: 'scatter',
         fill: 'tonexty',
         name: type,
         fillcolor: styling.charts.traceColors[index],
