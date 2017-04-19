@@ -160,10 +160,10 @@ class IndividualIndicatorPage extends React.Component{
     return (
       <div className="page-corruption-type">
         <h4>{INDICATOR_NAMES[indicator].name}</h4>
-        <p class="definition">{INDICATOR_NAMES[indicator].indicator}</p>
-        <p class="definition">{INDICATOR_NAMES[indicator].eligibility}</p>
-        <p class="definition">{INDICATOR_NAMES[indicator].thresholds}</p>
-        <p class="definition">{INDICATOR_NAMES[indicator].description_text}</p>        <IndividualIndicatorChart
+        <p className="definition">{INDICATOR_NAMES[indicator].indicator}</p>
+        <p className="definition">{INDICATOR_NAMES[indicator].eligibility}</p>
+        <p className="definition">{INDICATOR_NAMES[indicator].thresholds}</p>
+        <p className="definition">{INDICATOR_NAMES[indicator].description_text}</p>        <IndividualIndicatorChart
             indicator={indicator}
             translations={translations}
 						filters={filters}
