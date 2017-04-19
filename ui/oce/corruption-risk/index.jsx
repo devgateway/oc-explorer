@@ -6,48 +6,10 @@ import OverviewPage from "./overview-page";
 import CorruptionTypePage from "./corruption-type";
 import {Map, Set} from "immutable";
 import IndividualIndicatorPage from "./individual-indicator";
-import Chart from "../visualizations/charts/index.jsx";
-import Plotly from "plotly.js/lib/core";
 import Filters from "./filters";
+import {TotalFlags, TotalFlagsCounter} from "./total-flags";
 
 const ROLE_ADMIN = 'ROLE_ADMIN';
-
-Plotly.register([
-  require('plotly.js/lib/pie')
-]);
-
-class TotalFlags extends Chart{
-  constructor(...args){
-    super(...args);
-    this.state = {
-
-    }
-  }
-
-  getData(){
-    return [{
-      values: [22565, 5450, 5850],
-      labels: ["Fraud", "Process rigging", "Collusion"],
-      textinfo: 'value',
-      hole: .85,
-      type: 'pie'
-    }];
-  }
-
-  getLayout(){
-    const {width} = this.props;
-    return {
-      legend: {
-        orientation: 'h',
-        width,
-        height: 50,
-        x: '0',
-        y: '0'
-      },
-      paper_bgcolor: 'rgba(0,0,0,0)'
-    }
-  }
-}
 
 class CorruptionRiskDashboard extends React.Component{
   constructor(...args){
@@ -177,7 +139,8 @@ class CorruptionRiskDashboard extends React.Component{
   }
 
   render(){
-    const {dashboardSwitcherOpen, corruptionType, page, filters, years, months, filterBoxIndex} = this.state;
+    const {dashboardSwitcherOpen, corruptionType, page, filters, years, months, filterBoxIndex
+				 , totalFlags, totalFlagsCounter} = this.state;
     const {onSwitch, translations} = this.props;
     const tabs = [{
 	    slug: "fraud",
@@ -189,6 +152,7 @@ class CorruptionRiskDashboard extends React.Component{
 	    slug: "collusion",
 	    name: "Collusion"
     }];
+		const monthly = years.count() == 1;
     return (
       <div className="container-fluid dashboard-corruption-risk"
            onClick={e => this.setState({dashboardSwitcherOpen: false, filterBoxIndex: null})}
@@ -220,10 +184,10 @@ class CorruptionRiskDashboard extends React.Component{
         </header>
         <Filters
             onUpdate={filters => this.setState({
-              filters: filters.delete('years').delete('months'),
-              years: filters.get('years'),
-              months: filters.get('months')
-            })}
+								filters: filters.delete('years').delete('months'),
+								years: filters.get('years'),
+								months: filters.get('months')
+							})}
             translations={translations}
             currentBoxIndex={filterBoxIndex}
             requestNewBox={index => this.setState({filterBoxIndex: index})}
@@ -235,13 +199,13 @@ class CorruptionRiskDashboard extends React.Component{
               <i className="glyphicon glyphicon-info-sign"></i>
             </h4>
             <p className="small">
-                The Corruption Risk Dashboard employs a
-                red flagging approach to help users understand
-                the potential presence of fraud, collusion or
-                rigging in public contracting. While flags may
-                indicate the presence of corruption, they may
-                also be attributable to data quality issues or
-                approved practices.
+              The Corruption Risk Dashboard employs a
+              red flagging approach to help users understand
+              the potential presence of fraud, collusion or
+              rigging in public contracting. While flags may
+              indicate the presence of corruption, they may
+              also be attributable to data quality issues or
+              approved practices.
             </p>
           </div>
           <section role="navigation" className="row">
@@ -257,14 +221,26 @@ class CorruptionRiskDashboard extends React.Component{
               </a>
 						 )}
           </section>
+					{/* <TotalFlagsCounter
+							data={totalFlagsCounter}
+							requestNewData={(_, totalFlagsCounter) => this.setState({totalFlagsCounter})}
+							translations={translations}
+							filters={filters}
+							years={years}
+							monthly={monthly}
+							months={months}
+							/> */}
           <TotalFlags
               filters={filters}
-              requestNewData={e => null}
-              translations={{}}
-              data={Map({a: 1})}
+              requestNewData={(_, totalFlags) => this.setState({totalFlags})}
+              translations={translations}
+              data={totalFlags}
               width={250}
               height={250}
-              margin={{l:40, r:40, t:20, b: 10, pad:20}}
+              margin={{l:40, r:40, t:40, b: 10, pad:20}}
+							years={years}
+							months={months}
+							monthly={monthly}
           />
         </aside>
         <div className="col-xs-offset-4 col-md-offset-4 col-lg-offset-3 col-xs-8 col-md-8 col-lg-9 content">
