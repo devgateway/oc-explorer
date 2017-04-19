@@ -227,7 +227,7 @@ class CorruptionType extends React.Component{
 	        {indicators.map((indicator, index) => {
              const {name: indicatorName, description: indicatorDescription} = INDICATOR_NAMES[indicator];
              return (
-               <div className="col-sm-4 indicator-tile-container" key={index} onClick={e => onGotoIndicator(indicator)}>
+               <div className="col-sm-4 indicator-tile-container" key={corruptionType+indicator} onClick={e => onGotoIndicator(indicator)}>
                  <div className="border">
                    <h4>{indicatorName}</h4>
                    <p>{indicatorDescription}</p>
