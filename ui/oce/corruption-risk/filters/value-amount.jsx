@@ -14,7 +14,6 @@ class ValueAmount extends FilterBox {
     if(minValue != min) {
       onUpdate("min" + slug, min == minPossibleValue ? undefined : min)
     }else if(maxValue != max) {
-			console.log('updating max');
       onUpdate("max" + slug, max == maxPossibleValue ? undefined : max)
     }
   }
