@@ -84,14 +84,14 @@ class IndicatorTile extends CustomPopupChart{
 					<div className="col-sm-12">
 						<hr/>
 					</div>
-					<div className="col-sm-7 text-right title">Projects Flagged</div>
-					<div className="col-sm-5 text-left info">{datum.get('totalTrue')}</div>
-					<div className="col-sm-7 text-right title">Eligible Projects</div>
-					<div className="col-sm-5 text-left info">{datum.get('totalPrecondMet')}</div>
-					<div className="col-sm-7 text-right title">Eligible Projects %</div>
-					<div className="col-sm-5 text-left info">{datum.get('percentPrecondMet').toFixed(2)} %</div>
-					<div className="col-sm-7 text-right title">Total Eligible %</div>
-					<div className="col-sm-5 text-left info">{datum.get('percentTruePrecondMet').toFixed(2)} %</div>
+					<div className="col-sm-8 text-right title">Projects Flagged</div>
+					<div className="col-sm-4 text-left info">{datum.get('totalTrue')}</div>
+					<div className="col-sm-8 text-right title">Eligible Projects</div>
+					<div className="col-sm-4 text-left info">{datum.get('totalPrecondMet')}</div>
+					<div className="col-sm-8 text-right title">% Eligible Projects Flagged</div>
+					<div className="col-sm-4 text-left info">{datum.get('percentTruePrecondMet').toFixed(2)} %</div>
+					<div className="col-sm-8 text-right title">% Projects Eligible</div>
+					<div className="col-sm-4 text-left info">{datum.get('percentPrecondMet').toFixed(2)} %</div>
 				</div>
 				<div className="arrow"/>
 			</div>
@@ -222,7 +222,7 @@ class CorruptionType extends React.Component{
     if(!indicators || !indicators.length) return null;
     return (
       <div className="page-corruption-type">
-        <blockquote>{CORRUPTION_TYPE_DESCRIPTION[corruptionType].introduction}</blockquote>
+        <p className="introduction">{CORRUPTION_TYPE_DESCRIPTION[corruptionType].introduction}</p>
         <div className="row">
 	        {indicators.map((indicator, index) => {
              const {name: indicatorName, description: indicatorDescription} = INDICATOR_NAMES[indicator];
@@ -248,7 +248,7 @@ class CorruptionType extends React.Component{
              )
 	         })}
         </div>
-        <blockquote>{CORRUPTION_TYPE_DESCRIPTION[corruptionType].crosstab}</blockquote>
+        <p className="introduction">{CORRUPTION_TYPE_DESCRIPTION[corruptionType].crosstab}</p>
         <Crosstab
             filters={filters}
             years={years}

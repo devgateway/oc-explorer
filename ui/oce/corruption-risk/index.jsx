@@ -114,7 +114,7 @@ class CorruptionRiskDashboard extends React.Component{
   }
 
   getPage(){
-		const {translations} = this.props;
+		const {translations, styling} = this.props;
     const {page, filters, years, months, indicatorTypesMapping} = this.state;
 		const monthly = years.count() == 1;
     if(page == 'overview'){
@@ -125,6 +125,7 @@ class CorruptionRiskDashboard extends React.Component{
 								 monthly={monthly}
 								 months={months}
 								 indicatorTypesMapping={indicatorTypesMapping}
+                 styling={styling}
              />;
     } else if(page == 'corruption-type') {
       const {corruptionType} = this.state;
@@ -185,7 +186,7 @@ class CorruptionRiskDashboard extends React.Component{
           </div>
           <div className="col-sm-8">
             <div className={cn('dash-switcher-wrapper', {open: dashboardSwitcherOpen})}>
-              <h1 onClick={this.toggleDashboardSwitcher.bind(this)}>
+              <h1 className="corruption-dash-title" onClick={this.toggleDashboardSwitcher.bind(this)}>
                 Corruption Risk Dashboard
                 <i className="glyphicon glyphicon-menu-down"></i>
               </h1>
@@ -206,30 +207,28 @@ class CorruptionRiskDashboard extends React.Component{
         </header>
         <Filters
             onUpdate={filters => this.setState({
-								filters: filters.delete('years').delete('months'),
-								years: filters.get('years'),
-								months: filters.get('months')
-							})}
+              filters: filters.delete('years').delete('months'),
+              years: filters.get('years'),
+              months: filters.get('months')
+            })}
             translations={translations}
             currentBoxIndex={filterBoxIndex}
             requestNewBox={index => this.setState({filterBoxIndex: index})}
         />
-        <aside className="col-xs-4 col-md-3 col-lg-2">
-          <div className="crd-overview-link" onClick={e => this.setState({page: 'overview'})}>
-            <h4>
+        <aside className="col-xs-4 col-md-4 col-lg-3">
+          <div>
+            <h4 className="crd-overview-link" onClick={e => this.setState({page: 'overview'})}>
               Corruption Risk Overview
               <i className="glyphicon glyphicon-info-sign"></i>
             </h4>
-            <p>
-              <small>
+            <p className="small">
                 The Corruption Risk Dashboard employs a
                 red flagging approach to help users understand
                 the potential presence of fraud, collusion or
-                rigging in public contracting. White flags may
+                rigging in public contracting. While flags may
                 indicate the presence of corruption, they may
                 also be attributable to data quality issues or
                 approved practices.
-              </small>
             </p>
           </div>
           <section role="navigation" className="row">
@@ -251,11 +250,11 @@ class CorruptionRiskDashboard extends React.Component{
               translations={{}}
               data={Map({a: 1})}
               width={250}
-              height={300}
-              margin={{l:40, r:40, t:40, b: 40, pad:40}}
+              height={250}
+              margin={{l:40, r:40, t:20, b: 10, pad:20}}
           />
         </aside>
-        <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 content">
+        <div className="col-xs-offset-4 col-md-offset-4 col-lg-offset-3 col-xs-8 col-md-8 col-lg-9 content">
           {this.getPage()}
         </div>
       </div>

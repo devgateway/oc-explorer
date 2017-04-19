@@ -31,15 +31,20 @@ class CorruptionType extends CustomPopupChart{
   getData(){
     const data = super.getData();
     if(!data) return [];
-		const {monthly} = this.props;
+		const {styling} = this.props;
     const grouped = this.groupData(data);
-    return Object.keys(grouped).map(type => {
+    return Object.keys(grouped).map((type, index) => {
       const dataForType = grouped[type];
       return {
-        x:Object.keys(dataForType),
+        x: Object.keys(dataForType),
         y: pluckObj('flaggedCount', dataForType),
         type: 'scatter',
-        name: type
+        fill: 'tonexty',
+        name: type,
+        fillcolor: styling.charts.traceColors[index],
+        line: {
+          color: styling.charts.traceColors[index]
+        }
       }
     });
   }
@@ -49,7 +54,8 @@ class CorruptionType extends CustomPopupChart{
       hovermode: 'closest',
       xaxis: {
         type: 'category'
-      }
+      },
+      yaxis: {}
     }
   }
 
@@ -153,7 +159,7 @@ class OverviewPage extends React.Component{
 
   render(){
     const {corruptionType, topFlaggedContracts} = this.state;
-    const {filters, translations, years, monthly, months, indicatorTypesMapping} = this.props;
+    const {filters, translations, years, monthly, months, indicatorTypesMapping, styling} = this.props;
     return (
       <div className="page-overview">
         <section className="chart-corruption-types">
@@ -166,6 +172,7 @@ class OverviewPage extends React.Component{
               years={years}
 							monthly={monthly}
 							months={months}
+              styling={styling}
 							indicatorTypesMapping={indicatorTypesMapping}
           />
         </section>

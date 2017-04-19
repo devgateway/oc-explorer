@@ -29,7 +29,7 @@ class IndividualIndicatorChart extends CustomPopupChart{
       hoverinfo: 'name',
       fillcolor: '#85cbfe',
       line: {
-        color: '#85cbfe'
+        color: '#63a0cd'
       }
     }, {
       x: dates,
@@ -40,7 +40,7 @@ class IndividualIndicatorChart extends CustomPopupChart{
       hoverinfo: 'name',
       fillcolor: '#336ba6',
       line: {
-        color: '#336ba6'
+        color: '#224a74'
       }
     }];
   }
@@ -80,14 +80,14 @@ class IndividualIndicatorChart extends CustomPopupChart{
           <div className="col-sm-12">
             <hr/>
           </div>
-          <div className="col-sm-7 text-right title">Projects Flagged</div>
-          <div className="col-sm-5 text-left info">{datum.get('totalTrue')}</div>
-          <div className="col-sm-7 text-right title">Eligible Projects</div>
-          <div className="col-sm-5 text-left info">{datum.get('totalPrecondMet')}</div>
-          <div className="col-sm-7 text-right title">Eligible Projects %</div>
-          <div className="col-sm-5 text-left info">{datum.get('percentPrecondMet').toFixed(2)} %</div>
-          <div className="col-sm-7 text-right title">Total Eligible %</div>
-          <div className="col-sm-5 text-left info">{datum.get('percentTruePrecondMet').toFixed(2)} %</div>
+          <div className="col-sm-8 text-right title">Projects Flagged</div>
+          <div className="col-sm-4 text-left info">{datum.get('totalTrue')}</div>
+          <div className="col-sm-8 text-right title">Eligible Projects</div>
+          <div className="col-sm-4 text-left info">{datum.get('totalPrecondMet')}</div>
+          <div className="col-sm-8 text-right title">% Eligible Projects Flagged</div>
+          <div className="col-sm-4 text-left info">{datum.get('percentTruePrecondMet').toFixed(2)} %</div>
+          <div className="col-sm-8 text-right title">% Projects Eligible</div>
+          <div className="col-sm-4 text-left info">{datum.get('percentPrecondMet').toFixed(2)} %</div>
         </div>
         <div className="arrow"/>
       </div>
