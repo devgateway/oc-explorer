@@ -35,7 +35,6 @@ class CorruptionType extends CustomPopupChart{
 			RIGGING: {}
 		};
     const {monthly} = this.props;
-
     data.forEach(datum => {
       const type = datum.get('type');
 			let date;
@@ -55,7 +54,7 @@ class CorruptionType extends CustomPopupChart{
   getData(){
     const data = super.getData();
     if(!data) return [];
-		const {styling, months, monthly} = this.props;
+		const {styling, months, monthly, years} = this.props;
     const grouped = this.groupData(data);
     return Object.keys(grouped).map((type, index) => {
       const dataForType = grouped[type];
@@ -65,10 +64,10 @@ class CorruptionType extends CustomPopupChart{
 					.filter(month => months.has(month))
 					.map(month => this.t(`general:months:${month}`));
 
-				values = dates.map(month => dataForType[month] && dataForType[month].flaggedCount);
+				values = dates.map(month => dataForType[month] ? dataForType[month].flaggedCount : 0);
 			} else {
-				dates = Object.keys(dataForType);
-				values = pluckObj('flaggedCount', dataForType);
+				dates = years.sort().toArray();
+				values = dates.map(year => dataForType[year] ? dataForType[year].flaggedCount : 0);
 			}
 			return {
         x: dates,
