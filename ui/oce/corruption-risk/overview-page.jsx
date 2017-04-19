@@ -37,7 +37,7 @@ class CorruptionType extends CustomPopupChart{
       const dataForType = grouped[type];
       return {
         x:Object.keys(dataForType),
-        y: pluckObj('indicatorCount', dataForType),
+        y: pluckObj('flaggedCount', dataForType),
         type: 'scatter',
         name: type
       }
@@ -56,10 +56,16 @@ class CorruptionType extends CustomPopupChart{
   getPopup(){
     const {popup} = this.state;
     const {year, traceName: corruptionType} = popup;
+		const {indicatorTypesMapping} = this.props;
     const data = this.groupData(super.getData());
 		if(!data[corruptionType]) return null;
     const dataForPoint = data[corruptionType][year];
 		if(!dataForPoint) return null;
+		const indicatorCount =
+			Object.keys(indicatorTypesMapping).filter(indicatorId =>
+				indicatorTypesMapping[indicatorId].types.indexOf(dataForPoint.type) > -1
+			).length;
+
     return (
       <div className="crd-popup" style={{top: popup.top, left: popup.left}}>
         <div className="row">
@@ -70,12 +76,12 @@ class CorruptionType extends CustomPopupChart{
             <hr/>
           </div>
           <div className="col-sm-7 text-right title">Indicators</div>
-          <div className="col-sm-5 text-left info">{dataForPoint.indicatorCount}</div>
-          <div className="col-sm-7 text-right title">Flags</div>
+          <div className="col-sm-5 text-left info">{indicatorCount}</div>
+          <div className="col-sm-7 text-right title">Total Flags</div>
+          <div className="col-sm-5 text-left info">{dataForPoint.flaggedCount}</div>
+          <div className="col-sm-7 text-right title">Total Projects Flagged</div>
           <div className="col-sm-5 text-left info">{dataForPoint.flaggedProjectCount}</div>
-          <div className="col-sm-7 text-right title">Projects</div>
-          <div className="col-sm-5 text-left info">{dataForPoint.projectCount}</div>
-          <div className="col-sm-7 text-right title">% of Projects Flagged</div>
+          <div className="col-sm-7 text-right title">% Total Projects Flagged</div>
           <div className="col-sm-5 text-left info">{dataForPoint.percent.toFixed(2)}%</div>
         </div>
         <div className="arrow"/>
@@ -147,7 +153,7 @@ class OverviewPage extends React.Component{
 
   render(){
     const {corruptionType, topFlaggedContracts} = this.state;
-    const {filters, translations, years, monthly, months} = this.props;
+    const {filters, translations, years, monthly, months, indicatorTypesMapping} = this.props;
     return (
       <div className="page-overview">
         <section className="chart-corruption-types">
@@ -160,6 +166,7 @@ class OverviewPage extends React.Component{
               years={years}
 							monthly={monthly}
 							months={months}
+							indicatorTypesMapping={indicatorTypesMapping}
           />
         </section>
         <section>
