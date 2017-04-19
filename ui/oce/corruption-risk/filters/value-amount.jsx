@@ -11,15 +11,21 @@ class ValueAmount extends FilterBox{
     const {state, onUpdate, translations} = this.props;
     const minValue = state.get('min'+slug);
     const maxValue = state.get('max'+slug);
-    return <Component
-               translations={translations}
-               minValue={minValue}
-               maxValue={maxValue}
-               onUpdate={({min, max}) => {
-                   minValue != min && onUpdate("min"+slug, min);
-                   maxValue != max && onUpdate("max"+slug, max);
-                 }}
-    />
+    return (
+			<Component
+			translations={translations}
+			minValue={minValue}
+			maxValue={maxValue}
+			onUpdate={({min, max}, {min: minPossibleValue, max: maxPossibleValue}) => {
+				if(minValue != min){
+					onUpdate("min"+slug, min == minPossibleValue ? "" : min)
+				}
+				if(maxValue != max){
+					onUpdate("max"+slug, max == maxPossibleValue ? "" : max)
+				}
+			}}
+			/>
+		)
   }
 
   getBox(){
