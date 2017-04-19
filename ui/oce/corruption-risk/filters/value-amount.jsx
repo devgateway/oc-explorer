@@ -9,13 +9,13 @@ class ValueAmount extends FilterBox {
 
   update(slug, {min, max}, {min: minPossibleValue, max: maxPossibleValue}) {
     const {state, onUpdate} = this.props;
-    const minValue = state.get('min' + slug, minPossibleValue);
-    const maxValue = state.get('max' + slug, maxPossibleValue);
+    const minValue = state.get('min' + slug) || minPossibleValue;
+    const maxValue = state.get('max' + slug) || maxPossibleValue;
     if(minValue != min) {
-      onUpdate("min" + slug, min == minPossibleValue ? "" : min)
-    }
-    if(maxValue != max) {
-      onUpdate("max" + slug, max == maxPossibleValue ? "" : max)
+      onUpdate("min" + slug, min == minPossibleValue ? undefined : min)
+    }else if(maxValue != max) {
+			console.log('updating max');
+      onUpdate("max" + slug, max == maxPossibleValue ? undefined : max)
     }
   }
 
