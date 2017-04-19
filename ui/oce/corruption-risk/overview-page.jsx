@@ -65,7 +65,7 @@ class CorruptionType extends CustomPopupChart{
 					.filter(month => months.has(month))
 					.map(month => this.t(`general:months:${month}`));
 
-				values = dates.map(month => dataForType[month] && dataForType[month].flaggedCount);
+				values = dates.map(month => dataForType[month] ? dataForType[month].flaggedCount : 0);
 			} else {
 				dates = Object.keys(dataForType);
 				values = pluckObj('flaggedCount', dataForType);
