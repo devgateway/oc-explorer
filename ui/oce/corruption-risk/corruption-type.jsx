@@ -54,7 +54,7 @@ class IndicatorTile extends CustomPopupChart{
       yaxis: {
         zeroline: false,
         showline: false,
-        showticklabels: true,
+        showticklabels: false,
         showgrid: false
       }
     }
@@ -237,7 +237,7 @@ class CorruptionType extends React.Component{
                        filters={filters}
                        requestNewData={(_, data) => this.updateIndicatorTile(indicator, data)}
                        data={indicatorTiles[indicator]}
-                       margin={{t: 0, r: 60, b: 40, l: 60, pad: 20}}
+                       margin={{t: 0, r: 20, b: 40, l: 20, pad: 20}}
                        height={300}
 											 years={years}
 											 monthly={monthly}
