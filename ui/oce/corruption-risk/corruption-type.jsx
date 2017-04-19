@@ -54,7 +54,7 @@ class IndicatorTile extends CustomPopupChart{
       yaxis: {
         zeroline: false,
         showline: false,
-        showticklabels: true,
+        showticklabels: false,
         showgrid: false
       }
     }
@@ -227,7 +227,7 @@ class CorruptionType extends React.Component{
 	        {indicators.map((indicator, index) => {
              const {name: indicatorName, description: indicatorDescription} = INDICATOR_NAMES[indicator];
              return (
-               <div className="col-sm-4 indicator-tile-container" key={index} onClick={e => onGotoIndicator(indicator)}>
+               <div className="col-sm-4 indicator-tile-container" key={corruptionType+indicator} onClick={e => onGotoIndicator(indicator)}>
                  <div className="border">
                    <h4>{indicatorName}</h4>
                    <p>{indicatorDescription}</p>
@@ -237,7 +237,7 @@ class CorruptionType extends React.Component{
                        filters={filters}
                        requestNewData={(_, data) => this.updateIndicatorTile(indicator, data)}
                        data={indicatorTiles[indicator]}
-                       margin={{t: 0, r: 60, b: 40, l: 60, pad: 20}}
+                       margin={{t: 0, r: 20, b: 40, l: 20, pad: 20}}
                        height={300}
 											 years={years}
 											 monthly={monthly}
