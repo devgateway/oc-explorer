@@ -144,7 +144,7 @@ class CorruptionRiskDashboard extends React.Component{
 
   render(){
     const {dashboardSwitcherOpen, corruptionType, page, filters, years, months, filterBoxIndex
-				 , totalFlags, totalFlagsCounter} = this.state;
+				 , totalFlags, totalFlagsCounter, indicatorTypesMapping} = this.state;
     const {onSwitch, translations} = this.props;
 
 		const monthly = years.count() == 1;
@@ -206,6 +206,10 @@ class CorruptionRiskDashboard extends React.Component{
           <section role="navigation" className="row">
             {Object.keys(CORRUPTION_TYPES).map(slug => {
               const name = CORRUPTION_TYPES[slug];
+							const count = Object.keys(indicatorTypesMapping)
+																	.filter(key => indicatorTypesMapping[key].types.indexOf(slug) > -1)
+																	.length;
+
               return (
                   <a
                       href="javascript:void(0);"
@@ -214,7 +218,7 @@ class CorruptionRiskDashboard extends React.Component{
                       key={slug}
                   >
                     <img src={`assets/icons/${slug}.png`}/>
-                    {name} <span className="count">(0)</span>
+                    {name} <span className="count">({count})</span>
                   </a>
               )
             })}
