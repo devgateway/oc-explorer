@@ -89,7 +89,14 @@ class CorruptionType extends CustomPopupChart{
       xaxis: {
         type: 'category'
       },
-      yaxis: {}
+      yaxis: {},
+			legend: {
+				orientation: 'h',
+				xanchor: 'right',
+				yanchor: 'top',
+				x: 1,
+				y: 1.3
+			}
     }
   }
 
