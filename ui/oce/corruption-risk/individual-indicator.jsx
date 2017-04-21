@@ -110,7 +110,7 @@ class ProjectTable extends Table{
     const flaggedStats = entry.get('flaggedStats');
     return (
       <tr key={index}>
-        <td></td>
+        <td>{entry.get('tag', []).join(', ')}</td>
         <td>{entry.get('ocid')}</td>
         <td>{entry.get('title')}</td>
         <td>{entry.getIn(['procuringEntity', 'name'])}</td>
