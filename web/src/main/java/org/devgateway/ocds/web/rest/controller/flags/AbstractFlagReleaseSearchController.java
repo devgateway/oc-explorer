@@ -37,11 +37,11 @@ public abstract class AbstractFlagReleaseSearchController extends AbstractFlagCo
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 unwind("flags.flaggedStats"),
                 match(where(getFlagProperty()).is(true)),
-                project("ocid", "tender.procuringEntity.name", "tender.tenderPeriod", "flags.flaggedStats",
+                project("ocid", "tender.procuringEntity.name", "tender.tenderPeriod", "flags",
                         "contracts.title")
                         .and("tender.value").as("tender.value").and("awards.value").as("awards.value")
                         .andExclude(Fields.UNDERSCORE_ID),
-                sort(Sort.Direction.DESC, "flaggedStats.count"),
+                sort(Sort.Direction.DESC, "flags.flaggedStats.count"),
                 limit(filter.getPageSize())
         );
 
