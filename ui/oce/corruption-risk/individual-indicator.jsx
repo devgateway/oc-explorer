@@ -118,6 +118,7 @@ class ProjectTable extends Table{
         <td>{awardValue.get('amount')} {awardValue.get('currency')}</td>
         <td>{startDate.toLocaleDateString()}&mdash;{endDate.toLocaleDateString()}</td>
         <td>{flaggedStats.get('type')}</td>
+				<td>{flaggedStats.get('count')}</td>
       </tr>
     )
   }
@@ -137,6 +138,7 @@ class ProjectTable extends Table{
             <th>Award Amount</th>
             <th>Tender Date</th>
             <th>Flag Type</th>
+						<th>Number of<br/>risk type flags</th>
           </tr>
         </thead>
         <tbody>
@@ -163,7 +165,8 @@ class IndividualIndicatorPage extends React.Component{
         <p className="definition">{INDICATOR_NAMES[indicator].indicator}</p>
         <p className="definition">{INDICATOR_NAMES[indicator].eligibility}</p>
         <p className="definition">{INDICATOR_NAMES[indicator].thresholds}</p>
-        <p className="definition">{INDICATOR_NAMES[indicator].description_text}</p>        <IndividualIndicatorChart
+        <p className="definition">{INDICATOR_NAMES[indicator].description_text}</p>
+        <IndividualIndicatorChart
             indicator={indicator}
             translations={translations}
 						filters={filters}
