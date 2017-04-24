@@ -4,6 +4,7 @@ import {pluckImm} from "../tools";
 import CustomPopupChart from "./custom-popup-chart";
 import Table from "../visualizations/tables/index";
 import INDICATOR_NAMES from "./indicator-names";
+import translatable from '../translatable';
 
 const CORRUPTION_TYPE_DESCRIPTION = {
   FRAUD: {
@@ -201,7 +202,7 @@ class Crosstab extends Table{
   }
 }
 
-class CorruptionType extends React.Component{
+class CorruptionType extends translatable(React.Component){
   constructor(...args){
     super(...args);
     this.state = {
@@ -222,6 +223,7 @@ class CorruptionType extends React.Component{
     if(!indicators || !indicators.length) return null;
     return (
       <div className="page-corruption-type">
+				<h3>{this.t(`crd:corruption-type:${corruptionType}`)}</h3>
         <p className="introduction">{CORRUPTION_TYPE_DESCRIPTION[corruptionType].introduction}</p>
         <div className="row">
 	        {indicators.map((indicator, index) => {
