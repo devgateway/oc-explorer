@@ -138,7 +138,7 @@
   "tables:top10suppliers:totalAwardedValue": "Total awarded value (in VND)",
   "tables:top10suppliers:title": "Top 10 suppliers",
   "yearsBar:ctrlClickHint": "To select a single year only, press 'control' while clicking, or simply double click.",
-	"crd:corruption-type:FRAUD": "Fraud",
-	"crd:corruption-type:RIGGING": "Process Rigging",
-	"crd:corruption-type:COLLUSION": "Collusion"
+  "crd:corruption-type:FRAUD": "Fraud",
+  "crd:corruption-type:RIGGING": "Process Rigging",
+  "crd:corruption-type:COLLUSION": "Collusion"
 }
