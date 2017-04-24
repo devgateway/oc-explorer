@@ -251,6 +251,7 @@ class CorruptionType extends translatable(React.Component){
              )
            })}
         </div>
+        <h3>Contracting Process with the Most {this.t(`crd:corruption-type:${corruptionType}`)} Flags</h3>
         <p className="introduction">{CORRUPTION_TYPE_DESCRIPTION[corruptionType].crosstab}</p>
         <Crosstab
             filters={filters}
