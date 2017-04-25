@@ -1,7 +1,7 @@
 import style from "./style.less";
 import cn from "classnames";
 import URI from "urijs";
-import {fetchJson, debounce, cacheFn} from "../tools";
+import {fetchJson, debounce, cacheFn, range, pluck} from "../tools";
 import OverviewPage from "./overview-page";
 import CorruptionTypePage from "./corruption-type";
 import {Map, Set} from "immutable";
@@ -31,6 +31,8 @@ class CorruptionRiskDashboard extends React.Component{
       currentFiltersState: Map(),
       appliedFilters: Map(),
       filterBoxIndex: null,
+      allMonths: range(1, 12),
+      allYears: [],
       width: 0
     };
 
@@ -65,9 +67,27 @@ class CorruptionRiskDashboard extends React.Component{
     fetchJson('/api/indicatorTypesMapping').then(data => this.setState({indicatorTypesMapping: data}));
   }
 
+  fetchYears(){
+    fetchJson('/api/tendersAwardsYears').then(data => {
+      const years = data.map(pluck('_id'));
+      const {allMonths, currentFiltersState, appliedFilters} = this.state;
+      this.setState({
+        currentFiltersState: currentFiltersState
+          .set('years', Set(years))
+          .set('months', Set(allMonths)),
+        appliedFilters: appliedFilters
+          .set('years', Set(years))
+          .set('months', Set(allMonths)),
+        allYears: years
+      });
+    });
+  }
+
   componentDidMount(){
     this.fetchUserInfo();
     this.fetchIndicatorTypesMapping();
+    this.fetchYears();
+
     this.setState({
       width: document.querySelector('.content').offsetWidth - 30
     });
@@ -151,7 +171,7 @@ class CorruptionRiskDashboard extends React.Component{
 
   render(){
     const {dashboardSwitcherOpen, corruptionType, page, filterBoxIndex, currentFiltersState, appliedFilters
-         , totalFlags, totalFlagsCounter, indicatorTypesMapping} = this.state;
+         , totalFlags, totalFlagsCounter, indicatorTypesMapping, allYears, allMonths} = this.state;
     const {onSwitch, translations} = this.props;
 
     const {filters, years, months} = this.destructFilters(appliedFilters);
@@ -187,12 +207,15 @@ class CorruptionRiskDashboard extends React.Component{
           </div>
         </header>
         <Filters
-            onUpdate={filters => this.setState({appliedFilters: filters})}
+            onUpdate={currentFiltersState => this.setState({currentFiltersState})}
+            onApply={() => this.setState({filterBoxIndex: null, appliedFilters: this.state.currentFiltersState})}
             translations={translations}
             currentBoxIndex={filterBoxIndex}
             requestNewBox={index => this.setState({filterBoxIndex: index})}
             state={currentFiltersState}
             appliedFilters={appliedFilters}
+            allYears={allYears}
+            allMonths={allMonths}
         />
         <aside className="col-xs-4 col-md-4 col-lg-3">
           <div>
