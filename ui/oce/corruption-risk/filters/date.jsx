@@ -4,6 +4,12 @@ import {Set} from "immutable";
 import cn from "classnames";
 
 class DateBox extends FilterBox{
+  isActive(){
+    const {appliedFilters, allYears} = this.props;
+    const selectedYears = appliedFilters.get('years', Set());
+    return selectedYears.count() > 0 && !selectedYears.equals(Set(allYears));
+  }
+
 	getTitle(){
 		return 'Date';
 	}
