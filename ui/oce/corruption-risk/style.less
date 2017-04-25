@@ -60,7 +60,7 @@
     &>.filters-bar{
         background: #c3e6fc;
         top: @headerHeight - 15;
-        height: @headerHeight - 15;
+        height: @headerHeight - 9;
         left: 0;
         right: 0;
         position: fixed;
@@ -70,7 +70,7 @@
             float: left;
             font-size: 14px;
             font-weight: bold;
-            padding: 17px 30px 20px 8px;
+            padding: 20px 30px 20px 8px;
             @media (max-width: 969px) {
                 padding: 0 5px;
             }
@@ -85,6 +85,8 @@
             margin-top: 5px;
             color: #899cb1;
             cursor: pointer;
+            border-top: 3px solid transparent;
+            border-bottom: 3px solid transparent;
             &.active{
               border-bottom: 3px solid @boxFilterColor;
             }
@@ -141,7 +143,7 @@
             }
         }
         .download{
-            padding: 11px 0;
+            padding: 14px 0;
             text-align: right;
             button{
                 padding: 5px 25px;
