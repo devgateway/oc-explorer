@@ -1,8 +1,17 @@
 import FilterBox from "./box";
 import TenderPrice from "../../filters/tender-price";
 import AwardValue from "../../filters/award-value";
+import {Map} from "immutable";
 
 class ValueAmount extends FilterBox {
+  isActive(){
+    const {appliedFilters} = this.props;
+    return appliedFilters.get('minTenderValue') ||
+           appliedFilters.get('maxTenderValue') ||
+           appliedFilters.get('minAwardValue') ||
+           appliedFilters.get('maxAwardValue');
+  }
+
   getTitle() {
     return 'Value amount';
   }
