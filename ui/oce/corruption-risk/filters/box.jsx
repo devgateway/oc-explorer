@@ -2,10 +2,14 @@ import FilterTab from "../../filters/tabs";
 import cn from "classnames";
 
 class FilterBox extends FilterTab{
+  isActive(){
+    console.warn(`Implement an "isActive" method for ${this.getTitle()}`);
+  }
+
   render(){
-    const {open, onClick, onApply} = this.props;
+    const {open, onClick, onApply, state} = this.props;
     return(
-      <div onClick={onClick} className={cn('filter', {open})}>
+      <div onClick={onClick} className={cn('filter', {open, active: this.isActive()})}>
         <span className="box-title">
           {this.getTitle()}
         </span>
