@@ -127,7 +127,7 @@ class ProjectTable extends Table{
         <td>{awardValue.get('amount')} {awardValue.get('currency')}</td>
         <td>{startDate.toLocaleDateString()}&mdash;{endDate.toLocaleDateString()}</td>
         <td>{type}</td>
-				<td className="hoverable">
+				<td className="hoverable popup-left">
 					{flaggedStats.get('count')}
 					<div className="crd-popup text-center">
             <div className="row">
