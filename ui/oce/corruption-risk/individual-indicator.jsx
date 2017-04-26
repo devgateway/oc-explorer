@@ -132,7 +132,7 @@ class ProjectTable extends Table{
 					<div className="crd-popup text-center">
             <div className="row">
               <div className="col-sm-12 info">
-								{type}
+                Associated {type[0] + type.substr(1).toLowerCase()} Flags
               </div>
               <div className="col-sm-12">
                 <hr/>
@@ -163,7 +163,7 @@ class ProjectTable extends Table{
             <th>Award Amount</th>
             <th>Tender Date</th>
             <th>Flag Type</th>
-						<th>Number of<br/>risk type flags</th>
+						<th>No. of Flags</th>
           </tr>
         </thead>
         <tbody>
