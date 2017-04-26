@@ -28,6 +28,11 @@ class ProcurementMethodBox extends FilterBox{
     return appliedFilters.get('procurementMethod', Set()).count() > 0;
   }
 
+  reset(){
+    const {onApply, state} = this.props;
+    onApply(state.delete('procurementMethod'));
+  }
+
   getTitle(){
     return 'Procurement Method';
   }
