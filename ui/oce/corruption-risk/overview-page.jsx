@@ -201,7 +201,7 @@ class TopFlaggedContracts extends Table{
             <th>Awards Amount</th>
             <th>Tender Date</th>
             <th className="flag-type">Flag Type</th>
-            <th>Number of<br/>risk type flags</th>
+            <th>No. of Flags</th>
           </tr>
         </thead>
         <tbody>
