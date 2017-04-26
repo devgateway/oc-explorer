@@ -146,7 +146,16 @@ class TopFlaggedContracts extends Table{
     const tenderPeriod = entry.get('tenderPeriod');
     const startDate = new Date(tenderPeriod.get('startDate'));
     const endDate = new Date(tenderPeriod.get('endDate'));
-    const flaggedStats = entry.get('flaggedStats');
+    const flags = entry.get('flags');
+    const flaggedStats = flags.get('flaggedStats');
+    const type = flaggedStats.get('type');
+    const flagIds = 
+      flags
+        .filter(
+          flag => flag.has('types') && flag.get('types').includes(type) && flag.get('value')
+        )
+        .keySeq();
+
     return (
       <tr key={index}>
         <td>{entry.get('tag', []).join(', ')}</td>
@@ -156,8 +165,24 @@ class TopFlaggedContracts extends Table{
         <td>{tenderValue && tenderValue.get('amount')} {tenderValue && tenderValue.get('currency')}</td>
         <td>{awardValue.get('amount')} {awardValue.get('currency')}</td>
         <td>{startDate.toLocaleDateString()}&mdash;{endDate.toLocaleDateString()}</td>
-        <td>{flaggedStats.get('type')}</td>
-        <td>{flaggedStats.get('count')}</td>
+        <td>{type}</td>
+        <td className="hoverable popup-left">
+          {flaggedStats.get('count')}
+          <div className="crd-popup text-center">
+            <div className="row">
+              <div className="col-sm-12 info">
+                Associated {type[0] + type.substr(1).toLowerCase()} Flags
+              </div>
+              <div className="col-sm-12">
+                <hr/>
+              </div>
+              <div className="col-sm-12 info">
+                {flagIds.map(flagId => <p key={flagId}>{INDICATOR_NAMES[flagId].name}</p>)}
+              </div>
+            </div>
+            <div className="arrow"/>
+          </div>
+        </td>
       </tr>
     )
   }
