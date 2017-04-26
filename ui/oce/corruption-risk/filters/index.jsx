@@ -25,7 +25,7 @@ class Filters extends React.Component{
                    state={state}
                    onUpdate={(slug, newState) => onUpdate(state.set(slug, newState))}
                    translations={translations}
-                   onApply={onApply}
+                   onApply={e => onApply(state)}
                    allYears={allYears}
                    allMonths={allMonths}
                    appliedFilters={appliedFilters}
