@@ -10,6 +10,11 @@ class Organizations extends FilterBox{
            appliedFilters.get('supplierId', Set()).count() > 0;
   }
 
+  reset(){
+    const {onApply, state} = this.props;
+    onApply(state.delete('procuringEntityId').delete('supplierId'));
+  }
+
   getTitle(){
     return 'Organizations';
   }

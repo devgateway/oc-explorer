@@ -14,6 +14,12 @@ class DateBox extends FilterBox{
     return 'Date';
   }
 
+  reset(){
+    const {onApply, state, allYears, allMonths} = this.props;
+    onApply(state.set('years', Set(allYears))
+                 .set('months', Set(allMonths)));
+  }
+
   getBox(){
     const {onUpdate, translations, state, allYears: years, allMonths: months} = this.props;
     const selectedYears = state.get('years', Set());

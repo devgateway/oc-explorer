@@ -12,6 +12,14 @@ class ValueAmount extends FilterBox {
            appliedFilters.get('maxAwardValue');
   }
 
+  reset(){
+    const {onApply, state} = this.props;
+    onApply(state.delete('minTenderValue')
+                 .delete('maxTenderValue')
+                 .delete('minAwardValue')
+                 .delete('maxAwardValue'));
+  }
+
   getTitle() {
     return 'Value amount';
   }
