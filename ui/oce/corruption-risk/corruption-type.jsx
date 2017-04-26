@@ -31,15 +31,25 @@ class IndicatorTile extends CustomPopupChart{
     const data = super.getData();
     if(!data) return [];
     const {monthly} = this.props;
-    const dates = monthly ?
+    let dates = monthly ?
                   data.map(datum => {
                     const month = datum.get('month');
                     return this.t(`general:months:${month}`);
                   }).toJS() :
                   data.map(pluckImm('year')).toJS();
+
+    let values = data.map(pluckImm('totalTrue')).toJS();
+
+    //OCE-273, preventing the chart from showing only a dot
+    if(dates.length == 1){
+      dates.unshift("");
+      dates.push(" ");
+      values.unshift(0);
+      values.push(0);
+    }
     return [{
       x: dates,
-      y: data.map(pluckImm('totalTrue')).toJS(),
+      y: values,
       type: 'scatter',
       fill: 'tonexty'
     }];
