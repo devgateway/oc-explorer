@@ -6,6 +6,10 @@ class FilterBox extends FilterTab{
     console.warn(`Implement an "isActive" method for ${this.getTitle()}`);
   }
 
+  reset(){
+    console.warn(`Implement an "reset" method for ${this.getTitle()}`);
+  }
+
   render(){
     const {open, onClick, onApply, state} = this.props;
     return(
@@ -14,12 +18,16 @@ class FilterBox extends FilterTab{
           {this.getTitle()}
         </span>
         <i className="glyphicon glyphicon-menu-down"></i>
-        {open && <div className="dropdown" onClick={e => e.stopPropagation()}>
-        {this.getBox()}
-          <div className="controls">
-            <button className="btn btn-primary" onClick={onApply}>Apply</button>
-          </div>
-        </div>}
+        {open &&
+         <div className="dropdown" onClick={e => e.stopPropagation()}>
+           {this.getBox()}
+           <div className="controls">
+             <button className="btn btn-primary" onClick={e => onApply(state)}>Apply</button>
+             &nbsp;
+             <button className="btn btn-default" onClick={this.reset.bind(this)}>Reset</button>
+           </div>
+         </div>
+        }
       </div>
     )
   }
