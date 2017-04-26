@@ -22,7 +22,7 @@ class IndividualIndicatorChart extends CustomPopupChart{
 									data.map(pluckImm('year')).toJS();
     return [{
       x: dates,
-      y: data.map(pluckImm('totalTrue')).toJS(),
+      y: data.map(pluckImm('totalTrue', 0)).toJS(),
       type: 'scatter',
       fill: 'tonexty',
       name: 'Flagged',
@@ -33,7 +33,7 @@ class IndividualIndicatorChart extends CustomPopupChart{
       }
     }, {
       x: dates,
-      y: data.map(pluckImm('totalPrecondMet')).toJS(),
+      y: data.map(pluckImm('totalPrecondMet', 0)).toJS(),
       type: 'scatter',
       fill: 'tonexty',
       name: 'Eligible to be flagged',
