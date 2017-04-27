@@ -1,6 +1,13 @@
 package org.devgateway.ocds.web.flags.release;
 
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.annotation.PostConstruct;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.Flag;
@@ -9,14 +16,6 @@ import org.devgateway.ocds.persistence.mongo.flags.preconditions.FlaggedReleaseP
 import org.devgateway.ocds.web.rest.controller.FrequentSuppliersTimeIntervalController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author mpostelnicu
@@ -29,8 +28,8 @@ public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcesso
     private static final Integer INTERVAL_DAYS = 365;
     private static final Integer MAX_AWARDS = 3;
 
-    private ConcurrentHashMap<String, FrequentSuppliersTimeIntervalController.FrequentSuppliersTuple>
-            awardsMap;
+    private ConcurrentHashMap<FrequentSuppliersTimeIntervalController.FrequentSuppliersId, Integer>
+            frequentSuppliersMap;
 
     @Autowired
     private FrequentSuppliersTimeIntervalController frequentSuppliersTimeIntervalController;
@@ -39,6 +38,8 @@ public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcesso
     protected void setFlag(Flag flag, FlaggedRelease flaggable) {
         flaggable.getFlags().setI077(flag);
     }
+
+    protected Integer getInterval(Date awardDate)
 
     @Override
     protected Boolean calculateFlag(FlaggedRelease flaggable, StringBuffer rationale) {
@@ -54,14 +55,14 @@ public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcesso
      */
     @Override
     public void reInitialize() {
-        List<FrequentSuppliersTimeIntervalController.FrequentSuppliersTuple> frequentSuppliersTimeInterval
+        List<FrequentSuppliersTimeIntervalController.FrequentSuppliersResponse> frequentSuppliersTimeInterval
                 = frequentSuppliersTimeIntervalController.frequentSuppliersTimeInterval(getIntervalDays(),
                 getMaxAwards());
 
-        awardsMap = new ConcurrentHashMap<>();
+        frequentSuppliersMap = new ConcurrentHashMap<>();
 
         frequentSuppliersTimeInterval.
-                forEach(tuple -> tuple.getAwardIds().forEach(awardId -> awardsMap.put(awardId, tuple)));
+                forEach(response -> frequentSuppliersMap.put(response.getIdentifier(), response.getCount()));
     }
 
     protected Integer getMaxAwards() {

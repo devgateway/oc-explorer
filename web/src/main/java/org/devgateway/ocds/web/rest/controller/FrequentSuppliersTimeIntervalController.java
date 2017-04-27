@@ -14,20 +14,20 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
@@ -38,9 +38,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 
 /**
- *
  * @author mpostelnicu
- *
  */
 @RestController
 public class FrequentSuppliersTimeIntervalController extends GenericOCDSController {
@@ -50,6 +48,29 @@ public class FrequentSuppliersTimeIntervalController extends GenericOCDSControll
         private String procuringEntityId;
         private String supplierId;
         private Integer timeInterval;
+
+        @Override
+        public int hashCode() {
+            return (procuringEntityId + supplierId + timeInterval.toString()).hashCode();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (null == obj) {
+                return false;
+            } else if (this == obj) {
+                return true;
+            } else if (!this.getClass().equals(ClassUtils.getUserClass(obj))) {
+                return false;
+            } else {
+                FrequentSuppliersId that = (FrequentSuppliersId) obj;
+                if (that.getProcuringEntityId().equals(this.getProcuringEntityId())
+                        && that.getSupplierId().equals(this.getSupplierId())
+                        && that.getTimeInterval().equals(this.getTimeInterval()))
+                    return true;
+                return false;
+            }
+        }
 
         public String getProcuringEntityId() {
             return procuringEntityId;
@@ -82,10 +103,9 @@ public class FrequentSuppliersTimeIntervalController extends GenericOCDSControll
         }
     }
 
-    public static class FrequentSuppliersTuple {
+    public static class FrequentSuppliersResponse {
         private FrequentSuppliersId identifier;
         private Integer count;
-        private Set<String> awardIds;
 
         public FrequentSuppliersId getIdentifier() {
             return identifier;
@@ -101,14 +121,6 @@ public class FrequentSuppliersTimeIntervalController extends GenericOCDSControll
 
         public void setCount(Integer count) {
             this.count = count;
-        }
-
-        public Set<String> getAwardIds() {
-            return awardIds;
-        }
-
-        public void setAwardIds(Set<String> awardIds) {
-            this.awardIds = awardIds;
         }
 
         @Override
@@ -127,12 +139,14 @@ public class FrequentSuppliersTimeIntervalController extends GenericOCDSControll
             + " default value for intervalDays is 365.")
     @RequestMapping(value = "/api/frequentSuppliersTimeInterval", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<FrequentSuppliersTuple> frequentSuppliersTimeInterval(
+    public List<FrequentSuppliersResponse> frequentSuppliersTimeInterval(
             @RequestParam(defaultValue = "365", required = false) Integer intervalDays,
-            @RequestParam(defaultValue = "3", required = false) Integer maxAwards) {
+            @RequestParam(defaultValue = "3", required = false) Integer maxAwards,
+            @RequestParam(required = false) Date now
+            ) {
 
+        if(now)
         DBObject project = new BasicDBObject();
-        project.put("awards._id", 1);
         project.put("tender.procuringEntity._id", 1);
         project.put("awards.suppliers._id", 1);
         project.put("awards.date", 1);
@@ -140,7 +154,6 @@ public class FrequentSuppliersTimeIntervalController extends GenericOCDSControll
         project.put("timeInterval", new BasicDBObject("$ceil", new BasicDBObject("$divide",
                 Arrays.asList(new BasicDBObject("$divide", Arrays.asList(new BasicDBObject("$subtract",
                         Arrays.asList(new Date(), "$awards.date")), 86400000)), intervalDays))));
-
 
         Aggregation agg = Aggregation.newAggregation(
                 match(where("tender.procuringEntity").exists(true).and("awards.suppliers.0").exists(true)
@@ -152,15 +165,15 @@ public class FrequentSuppliersTimeIntervalController extends GenericOCDSControll
                         Fields.field("supplierId", "awards.suppliers._id"),
                         Fields.field("timeInterval", "timeInterval")
                 )).
-                        count().as("count").addToSet("awards._id").as("awardIds"),
-                project("count", "awardIds").and("identifier").previousOperation(),
+                        count().as("count"),
+                project("count").and("identifier").previousOperation(),
                 match(where("count").gt(maxAwards)),
                 sort(Sort.Direction.DESC, "count")
         );
 
-        AggregationResults<FrequentSuppliersTuple> results = mongoTemplate.aggregate(agg, "release",
-                FrequentSuppliersTuple.class);
-        List<FrequentSuppliersTuple> list = results.getMappedResults();
+        AggregationResults<FrequentSuppliersResponse> results = mongoTemplate.aggregate(agg, "release",
+                FrequentSuppliersResponse.class);
+        List<FrequentSuppliersResponse> list = results.getMappedResults();
         return list;
     }
 
