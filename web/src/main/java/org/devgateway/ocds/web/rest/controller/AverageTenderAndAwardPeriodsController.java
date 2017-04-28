@@ -51,7 +51,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @Cacheable
 public class AverageTenderAndAwardPeriodsController extends GenericOCDSController {
 
-    private static final int DAY_MS = 86400000;
+
 
     public static final class Keys {
         public static final String AVERAGE_TENDER_DAYS = "averageTenderDays";
