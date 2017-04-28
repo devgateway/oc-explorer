@@ -164,7 +164,7 @@ class TopFlaggedContracts extends Table{
           <td>
             <div title={procuringEntityName} className="oce-3-line-text">
               {procuringEntityName}
-            </div>a
+            </div>
           </td>
           <td>{tenderValue && tenderValue.get('amount')} {tenderValue && tenderValue.get('currency')}</td>
           <td>{awardValue.get('amount')} {awardValue.get('currency')}</td>
