@@ -3,7 +3,6 @@ import {pluck, range} from "../tools";
 import Table from "../visualizations/tables/index";
 import ReactDOMServer from "react-dom/server";
 import CustomPopupChart from "./custom-popup-chart";
-import ThreeLinesText from "./3-line-text";
 
 const pluckObj = (field, obj) => Object.keys(obj).map(key => obj[key][field]);
 
@@ -156,24 +155,24 @@ class TopFlaggedContracts extends Table{
     const startDate = new Date(tenderPeriod.get('startDate'));
     const endDate = new Date(tenderPeriod.get('endDate'));
     const flaggedStats = entry.get('flaggedStats');
-    return (
-      <tr key={index}>
-        <td>{entry.get('tag', []).join(', ')}</td>
-        <td>{entry.get('ocid')}</td>
-        <td>{entry.get('title')}</td>
-        <td>
-          <ThreeLineText
-              text={entry.getIn(['procuringEntity', 'name'])}
-          />
-          {}
-        </td>
-        <td>{tenderValue && tenderValue.get('amount')} {tenderValue && tenderValue.get('currency')}</td>
-        <td>{awardValue.get('amount')} {awardValue.get('currency')}</td>
-        <td>{startDate.toLocaleDateString()}&mdash;{endDate.toLocaleDateString()}</td>
-        <td>{flaggedStats.get('type')}</td>
-        <td>{flaggedStats.get('count')}</td>
-      </tr>
-    )
+    const procuringEntityName = entry.getIn(['procuringEntity', 'name']);
+      return (
+        <tr key={index}>
+          <td>{entry.get('tag', []).join(', ')}</td>
+          <td>{entry.get('ocid')}</td>
+          <td>{entry.get('title')}</td>
+          <td>
+            <div title={procuringEntityName} className="oce-3-line-text">
+              {procuringEntityName}
+            </div>a
+          </td>
+          <td>{tenderValue && tenderValue.get('amount')} {tenderValue && tenderValue.get('currency')}</td>
+          <td>{awardValue.get('amount')} {awardValue.get('currency')}</td>
+          <td>{startDate.toLocaleDateString()}&mdash;{endDate.toLocaleDateString()}</td>
+          <td>{flaggedStats.get('type')}</td>
+          <td>{flaggedStats.get('count')}</td>
+        </tr>
+      )
   }
 
   render(){

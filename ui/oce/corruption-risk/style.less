@@ -243,11 +243,6 @@
   }
   .table-striped>tbody>tr:nth-of-type(even){
     background: #f5f8fa;
-    .oce-3-line-text.overflown::after{
-      background: linear-gradient(left, rgba(245, 248, 250, 0), rgba(245, 248, 250, 1));
-      background: -webkit-linear-gradient(left, rgba(245, 248, 250, 0), rgba(245, 248, 250, 1));
-      background: -moz-linear-gradient(left, rgba(245, 248, 250, 0), rgba(245, 248, 250, 1));
-    }
   }
   .content{
     @arrowSize: 8px;
@@ -420,18 +415,5 @@
   .oce-3-line-text{
     overflow: hidden;
     max-height: 3.9em;
-    position: relative;
-    &.overflown::after{
-      display: block;
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 1.2em;
-      background: linear-gradient(left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
-      background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
-      background: -moz-linear-gradient(left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
-    }
   }
 }
