@@ -3,6 +3,7 @@ import {pluck, range} from "../tools";
 import Table from "../visualizations/tables/index";
 import ReactDOMServer from "react-dom/server";
 import CustomPopupChart from "./custom-popup-chart";
+import ThreeLinesText from "./3-line-text";
 
 const pluckObj = (field, obj) => Object.keys(obj).map(key => obj[key][field]);
 
@@ -160,7 +161,12 @@ class TopFlaggedContracts extends Table{
         <td>{entry.get('tag', []).join(', ')}</td>
         <td>{entry.get('ocid')}</td>
         <td>{entry.get('title')}</td>
-        <td>{entry.getIn(['procuringEntity', 'name'])}</td>
+        <td>
+          <ThreeLineText
+              text={entry.getIn(['procuringEntity', 'name'])}
+          />
+          {}
+        </td>
         <td>{tenderValue && tenderValue.get('amount')} {tenderValue && tenderValue.get('currency')}</td>
         <td>{awardValue.get('amount')} {awardValue.get('currency')}</td>
         <td>{startDate.toLocaleDateString()}&mdash;{endDate.toLocaleDateString()}</td>
