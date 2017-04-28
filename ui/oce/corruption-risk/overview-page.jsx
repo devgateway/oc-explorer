@@ -155,19 +155,24 @@ class TopFlaggedContracts extends Table{
     const startDate = new Date(tenderPeriod.get('startDate'));
     const endDate = new Date(tenderPeriod.get('endDate'));
     const flaggedStats = entry.get('flaggedStats');
-    return (
-      <tr key={index}>
-        <td>{entry.get('tag', []).join(', ')}</td>
-        <td>{entry.get('ocid')}</td>
-        <td>{entry.get('title')}</td>
-        <td>{entry.getIn(['procuringEntity', 'name'])}</td>
-        <td>{tenderValue && tenderValue.get('amount')} {tenderValue && tenderValue.get('currency')}</td>
-        <td>{awardValue.get('amount')} {awardValue.get('currency')}</td>
-        <td>{startDate.toLocaleDateString()}&mdash;{endDate.toLocaleDateString()}</td>
-        <td>{flaggedStats.get('type')}</td>
-        <td>{flaggedStats.get('count')}</td>
-      </tr>
-    )
+    const procuringEntityName = entry.getIn(['procuringEntity', 'name']);
+      return (
+        <tr key={index}>
+          <td>{entry.get('tag', []).join(', ')}</td>
+          <td>{entry.get('ocid')}</td>
+          <td>{entry.get('title')}</td>
+          <td>
+            <div title={procuringEntityName} className="oce-3-line-text">
+              {procuringEntityName}
+            </div>
+          </td>
+          <td>{tenderValue && tenderValue.get('amount')} {tenderValue && tenderValue.get('currency')}</td>
+          <td>{awardValue.get('amount')} {awardValue.get('currency')}</td>
+          <td>{startDate.toLocaleDateString()}&mdash;{endDate.toLocaleDateString()}</td>
+          <td>{flaggedStats.get('type')}</td>
+          <td>{flaggedStats.get('count')}</td>
+        </tr>
+      )
   }
 
   render(){
