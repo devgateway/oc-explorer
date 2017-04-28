@@ -47,6 +47,7 @@ class IndicatorTile extends CustomPopupChart{
       values.unshift(0);
       values.push(0);
     }
+
     return [{
       x: dates,
       y: values,
