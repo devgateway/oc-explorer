@@ -157,19 +157,25 @@ class TopFlaggedContracts extends Table{
     const flags = entry.get('flags');
     const flaggedStats = flags.get('flaggedStats');
     const type = flaggedStats.get('type');
-    const flagIds = 
+    const flagIds =
       flags
         .filter(
           flag => flag.has('types') && flag.get('types').includes(type) && flag.get('value')
         )
         .keySeq();
 
+    const procuringEntityName = entry.getIn(['procuringEntity', 'name']);
+
     return (
       <tr key={index}>
         <td>{entry.get('tag', []).join(', ')}</td>
         <td>{entry.get('ocid')}</td>
         <td>{entry.get('title')}</td>
-        <td>{entry.getIn(['procuringEntity', 'name'])}</td>
+        <td>
+          <div title={procuringEntityName} className="oce-3-line-text">
+            {procuringEntityName}
+          </div>
+        </td>
         <td>{tenderValue && tenderValue.get('amount')} {tenderValue && tenderValue.get('currency')}</td>
         <td>{awardValue.get('amount')} {awardValue.get('currency')}</td>
         <td>{startDate.toLocaleDateString()}&mdash;{endDate.toLocaleDateString()}</td>
