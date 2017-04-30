@@ -38,18 +38,18 @@ class IndividualIndicatorChart extends CustomPopupChart{
       y: totalTrueValues,
       type: 'scatter',
       fill: 'tonexty',
-      name: 'Flagged',
+      name: 'Flagged Procurements',
       hoverinfo: 'name',
       fillcolor: '#85cbfe',
       line: {
         color: '#63a0cd'
-      }
+      },
     }, {
       x: dates,
       y: totalPrecondMetValues,
       type: 'scatter',
       fill: 'tonexty',
-      name: 'Eligible to be flagged',
+      name: 'Eligible Procurements',
       hoverinfo: 'name',
       fillcolor: '#336ba6',
       line: {
@@ -60,7 +60,13 @@ class IndividualIndicatorChart extends CustomPopupChart{
 
   getLayout(){
     return {
-      showlegend: false,
+      legend: {
+        orientation: 'h',
+        xanchor: 'right',
+        yanchor: 'top',
+        x: 1,
+        y: 1.3
+      },
       hovermode: 'closest',
       xaxis: {
         type: 'category',
