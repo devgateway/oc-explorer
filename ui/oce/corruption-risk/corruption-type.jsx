@@ -234,7 +234,7 @@ class CorruptionType extends translatable(React.Component){
     if(!indicators || !indicators.length) return null;
     return (
       <div className="page-corruption-type">
-        <h3>{this.t(`crd:corruption-type:${corruptionType}`)}</h3>
+        <h2 className="page-header">{this.t(`crd:corruption-type:${corruptionType}`)}</h2>
         <p className="introduction">{CORRUPTION_TYPE_DESCRIPTION[corruptionType].introduction}</p>
         <div className="row">
           {indicators.map((indicator, index) => {
