@@ -234,36 +234,34 @@ class CorruptionType extends translatable(React.Component){
     if(!indicators || !indicators.length) return null;
     return (
       <div className="page-corruption-type">
-        <section>
-          <h2 className="page-header">{this.t(`crd:corruption-type:${corruptionType}`)}</h2>
-          <p className="introduction">{CORRUPTION_TYPE_DESCRIPTION[corruptionType].introduction}</p>
-          <div className="row">
-            {indicators.map((indicator, index) => {
-               const {name: indicatorName, description: indicatorDescription} = INDICATOR_NAMES[indicator];
-               return (
-                 <div className="col-sm-4 indicator-tile-container" key={corruptionType+indicator} onClick={e => onGotoIndicator(indicator)}>
-                   <div className="border">
-                     <h4>{indicatorName}</h4>
-                     <p>{indicatorDescription}</p>
-                     <IndicatorTile
-                         indicator={indicator}
-                         translations={translations}
-                         filters={filters}
-                         requestNewData={(_, data) => this.updateIndicatorTile(indicator, data)}
-                         data={indicatorTiles[indicator]}
-                         margin={{t: 0, r: 20, b: 40, l: 20, pad: 20}}
-                         height={300}
-                         years={years}
-                         monthly={monthly}
-                         months={months}
-                         width={width/3-60}
-                     />
-                   </div>
+        <h2 className="page-header">{this.t(`crd:corruption-type:${corruptionType}`)}</h2>
+        <p className="introduction">{CORRUPTION_TYPE_DESCRIPTION[corruptionType].introduction}</p>
+        <div className="row">
+          {indicators.map((indicator, index) => {
+             const {name: indicatorName, description: indicatorDescription} = INDICATOR_NAMES[indicator];
+             return (
+               <div className="col-sm-4 indicator-tile-container" key={corruptionType+indicator} onClick={e => onGotoIndicator(indicator)}>
+                 <div className="border">
+                   <h4>{indicatorName}</h4>
+                   <p>{indicatorDescription}</p>
+                   <IndicatorTile
+                       indicator={indicator}
+                       translations={translations}
+                       filters={filters}
+                       requestNewData={(_, data) => this.updateIndicatorTile(indicator, data)}
+                       data={indicatorTiles[indicator]}
+                       margin={{t: 0, r: 20, b: 40, l: 20, pad: 20}}
+                       height={300}
+                       years={years}
+                       monthly={monthly}
+                       months={months}
+                       width={width/3-60}
+                   />
                  </div>
-               )
-             })}
-          </div>
-        </section>
+               </div>
+             )
+           })}
+        </div>
         <section>
           <h3 className="page-header">Contracting Process with the Most {this.t(`crd:corruption-type:${corruptionType}`)} Flags</h3>
           <p className="introduction">{CORRUPTION_TYPE_DESCRIPTION[corruptionType].crosstab}</p>
