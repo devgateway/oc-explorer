@@ -210,32 +210,43 @@ class IndividualIndicatorPage extends React.Component{
     const {indicator, translations, filters, years, monthly, months, width} = this.props;
     return (
       <div className="page-corruption-type">
-        <h4>{INDICATOR_NAMES[indicator].name}</h4>
+        <h2 className="page-header">{INDICATOR_NAMES[indicator].name}</h2>
         <p className="definition">{INDICATOR_NAMES[indicator].indicator}</p>
         <p className="definition">{INDICATOR_NAMES[indicator].eligibility}</p>
         <p className="definition">{INDICATOR_NAMES[indicator].thresholds}</p>
         <p className="definition">{INDICATOR_NAMES[indicator].description_text}</p>
-        <IndividualIndicatorChart
-            indicator={indicator}
-            translations={translations}
-            filters={filters}
-            years={years}
-            monthly={monthly}
-            months={months}
-            requestNewData={(_, data) => this.setState({chart: data})}
-            data={chart}
-            width={width}
-        />
-        <ProjectTable
-            indicator={indicator}
-            requestNewData={(_, data) => this.setState({table: data})}
-            data={table}
-            translations={translations}
-            filters={filters}
-            years={years}
-            monthly={monthly}
-            months={months}
-        />
+        <section>
+          <h3 className="page-header">
+            Eligible Procurements and Flagged Procurements for {INDICATOR_NAMES[indicator].name}
+          </h3>
+          <IndividualIndicatorChart
+              indicator={indicator}
+              translations={translations}
+              filters={filters}
+              years={years}
+              monthly={monthly}
+              months={months}
+              requestNewData={(_, data) => this.setState({chart: data})}
+              data={chart}
+              width={width}
+              title=""
+          />
+        </section>
+        <section>
+          <h3 className="page-header">
+            List of Procurements Flagged for {INDICATOR_NAMES[indicator].name}
+          </h3>
+          <ProjectTable
+              indicator={indicator}
+              requestNewData={(_, data) => this.setState({table: data})}
+              data={table}
+              translations={translations}
+              filters={filters}
+              years={years}
+              monthly={monthly}
+              months={months}
+          />
+        </section>
       </div>
     )
   }
