@@ -244,7 +244,7 @@ class OverviewPage extends React.Component{
     return (
       <div className="page-overview">
         <section className="chart-corruption-types">
-          <h4>Risk of Fraud, Collusion and Process Rigging Over Time</h4>
+          <h3 className="page-header">Risk of Fraud, Collusion and Process Rigging Over Time</h3>
           <CorruptionType
               filters={filters}
               requestNewData={(_, corruptionType) => this.setState({corruptionType})}
@@ -260,16 +260,16 @@ class OverviewPage extends React.Component{
           />
         </section>
         <section>
-          <h4>The Projects with the Most Fraud, Collusion and Process Rigging Flags</h4>
-          <TopFlaggedContracts
-              filters={filters}
-              data={topFlaggedContracts}
-              translations={translations}
-              years={years}
-              monthly={monthly}
-              months={months}
-              requestNewData={(_, topFlaggedContracts) => this.setState({topFlaggedContracts})}
-          />
+          <h3 className="page-header">The Projects with the Most Fraud, Collusion and Process Rigging Flags</h3>
+            <TopFlaggedContracts
+                filters={filters}
+                data={topFlaggedContracts}
+                translations={translations}
+                years={years}
+                monthly={monthly}
+                months={months}
+                requestNewData={(_, topFlaggedContracts) => this.setState({topFlaggedContracts})}
+            />
         </section>
       </div>
     )
