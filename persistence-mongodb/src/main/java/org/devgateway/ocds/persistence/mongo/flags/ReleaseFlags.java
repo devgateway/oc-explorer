@@ -45,6 +45,9 @@ public class ReleaseFlags implements FlagsWrappable {
 
     private Collection<FlagTypeCount> eligibleStats;
 
+    //total number of indicators flagged for this release
+    private Integer totalFlagged = 0;
+
     @Transient
     private HashMap<FlagType, FlagTypeCount> flaggedStatsMap = new HashMap<>();
 
@@ -84,6 +87,14 @@ public class ReleaseFlags implements FlagsWrappable {
 
     public void setEligibleStatsMap(HashMap<FlagType, FlagTypeCount> eligibleStatsMap) {
         this.eligibleStatsMap = eligibleStatsMap;
+    }
+
+    public Integer getTotalFlagged() {
+        return totalFlagged;
+    }
+
+    public void setTotalFlagged(Integer totalFlagged) {
+        this.totalFlagged = totalFlagged;
     }
 
     public Flag getI019() {
@@ -156,6 +167,10 @@ public class ReleaseFlags implements FlagsWrappable {
 
     public void setI171(Flag i171) {
         this.i171 = i171;
+    }
+
+    public void incTotalFlagged() {
+        totalFlagged++;
     }
 }
 
