@@ -211,7 +211,7 @@ class IndividualIndicatorPage extends translatable(React.Component){
     return (
       <div className="page-corruption-type">
         <h2 className="page-header">{this.t(`crd:indicators:${indicator}:name`)}</h2>
-        <p className="definition">{this.t(`crd:indicators:${indicator}:description`)}</p>
+        <p className="definition">{this.t(`crd:indicators:${indicator}:indicator`)}</p>
         <p className="definition">{this.t(`crd:indicators:${indicator}:eligibility`)}</p>
         <p className="definition">{this.t(`crd:indicators:${indicator}:thresholds`)}</p>
         <p className="definition">{this.t(`crd:indicators:${indicator}:description_text`)}</p>
