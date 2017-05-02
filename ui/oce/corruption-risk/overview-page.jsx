@@ -260,16 +260,16 @@ class OverviewPage extends React.Component{
           />
         </section>
         <section>
-          <h3 className="page-header">The Projects with the Most Fraud, Collusion and Process Rigging Flags</h3>
-            <TopFlaggedContracts
-                filters={filters}
-                data={topFlaggedContracts}
-                translations={translations}
-                years={years}
-                monthly={monthly}
-                months={months}
-                requestNewData={(_, topFlaggedContracts) => this.setState({topFlaggedContracts})}
-            />
+          <h3 className="page-header">The Procurement Processes with the Most Flags</h3>
+          <TopFlaggedContracts
+              filters={filters}
+              data={topFlaggedContracts}
+              translations={translations}
+              years={years}
+              monthly={monthly}
+              months={months}
+              requestNewData={(_, topFlaggedContracts) => this.setState({topFlaggedContracts})}
+          />
         </section>
       </div>
     )
