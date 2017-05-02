@@ -1,4 +1,5 @@
 function() {
+    if(this.awards==null) return;
     var tenderersSet = new Set();
     this.tender.tenderers.forEach(function(tenderer, it, array) {
         tenderersSet.add(tenderer._id);
