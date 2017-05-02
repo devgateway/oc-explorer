@@ -3,7 +3,6 @@ import {Map} from "immutable";
 import {pluckImm} from "../tools";
 import CustomPopupChart from "./custom-popup-chart";
 import Table from "../visualizations/tables/index";
-import INDICATOR_NAMES from "./indicator-names";
 import translatable from '../translatable';
 
 class IndicatorTile extends CustomPopupChart{
@@ -134,44 +133,46 @@ class Crosstab extends Table{
   }
 
   row(rowData, rowIndicatorID){
-    const {name: rowIndicatorName, description: rowIndicatorDecription} = INDICATOR_NAMES[rowIndicatorID];
+    const rowIndicatorName = this.t(`crd:indicators:${rowIndicatorID}:name`);
+    const rowIndicatorDescription = this.t(`crd:indicators:${rowIndicatorID}:description`);
     return (
       <tr key={rowIndicatorID}>
-        <td>{rowIndicatorName}</td>
-        <td className="nr-flags">{rowData.getIn([rowIndicatorID, 'count'])}</td>
-        {rowData.map((datum, indicatorID) => {
-           const {name: indicatorName, description: indicatorDecription} = INDICATOR_NAMES[indicatorID];
-           if(indicatorID == rowIndicatorID){
-             return <td className="not-applicable" key={indicatorID}>&mdash;</td>
-           } else {
-             const percent = datum.get('percent');
-             const count = datum.get('count');
-             const color = Math.round(255 - 255 * (percent/100))
-             const style = {backgroundColor: `rgb(${color}, 255, ${color})`}
-             return (
-               <td key={indicatorID} className="hoverable" style={style}>
-                 {percent && percent.toFixed(2)} %
-                 <div className="crd-popup text-left">
-                   <div className="row">
-                     <div className="col-sm-12 info">
-                       {percent.toFixed(2)}% of projects flagged for "{rowIndicatorName}" are also flagged for "{indicatorName}"
-                     </div>
-                     <div className="col-sm-12">
-                       <hr/>
-                     </div>
-                     <div className="col-sm-12 info">
-                       <h4>{count} Projects flagged with both;</h4>
-                       <p><strong>{rowIndicatorName}</strong>: {rowIndicatorDecription}</p>
-                       <p className="and">and</p>
-                       <p><strong>{indicatorName}</strong>: {indicatorDecription}</p>
-                     </div>
-                   </div>
-                   <div className="arrow"/>
-                 </div>
-               </td>
-             )
-           }
-         }).toArray()}
+      <td>{rowIndicatorName}</td>
+      <td className="nr-flags">{rowData.getIn([rowIndicatorID, 'count'])}</td>
+      {rowData.map((datum, indicatorID) => {
+        const indicatorName = this.t(`crd:indicators:${indicatorID}:name`);
+        const indicatorDescription = this.t(`crd:indicators:${indicatorID}:description`);
+        if(indicatorID == rowIndicatorID){
+          return <td className="not-applicable" key={indicatorID}>&mdash;</td>
+        } else {
+          const percent = datum.get('percent');
+          const count = datum.get('count');
+          const color = Math.round(255 - 255 * (percent/100))
+          const style = {backgroundColor: `rgb(${color}, 255, ${color})`}
+          return (
+            <td key={indicatorID} className="hoverable" style={style}>
+              {percent && percent.toFixed(2)} %
+              <div className="crd-popup text-left">
+                <div className="row">
+                  <div className="col-sm-12 info">
+                    {percent.toFixed(2)}% of projects flagged for "{rowIndicatorName}" are also flagged for "{indicatorName}"
+                  </div>
+                  <div className="col-sm-12">
+                    <hr/>
+                  </div>
+                  <div className="col-sm-12 info">
+                    <h4>{count} Projects flagged with both;</h4>
+                    <p><strong>{rowIndicatorName}</strong>: {rowIndicatorDescription}</p>
+                    <p className="and">and</p>
+                    <p><strong>{indicatorName}</strong>: {indicatorDescription}</p>
+                  </div>
+                </div>
+                <div className="arrow"/>
+              </div>
+            </td>
+          )
+        }
+      }).toArray()}
       </tr>
     )
   }
@@ -186,7 +187,7 @@ class Crosstab extends Table{
           <tr>
             <th></th>
             <th># Flags</th>
-            {data.map((_, indicatorID) => <th key={indicatorID}>{INDICATOR_NAMES[indicatorID].name}</th>).toArray()}
+            {data.map((_, indicatorID) => <th key={indicatorID}>{this.t(`crd:indicators:${indicatorID}:name`)}</th>).toArray()}
           </tr>
         </thead>
         <tbody>
@@ -222,7 +223,8 @@ class CorruptionType extends translatable(React.Component){
         <p className="introduction" dangerouslySetInnerHTML={{__html: this.t(`crd:corruptionType:${corruptionType}:introduction`)}}/>
         <div className="row">
           {indicators.map((indicator, index) => {
-             const {name: indicatorName, description: indicatorDescription} = INDICATOR_NAMES[indicator];
+            const indicatorName = this.t(`crd:indicators:${indicator}:name`);
+            const indicatorDescription = this.t(`crd:indicators:${indicator}:description`);
              return (
                <div className="col-sm-4 indicator-tile-container" key={corruptionType+indicator} onClick={e => onGotoIndicator(indicator)}>
                  <div className="border">
@@ -259,6 +261,7 @@ class CorruptionType extends translatable(React.Component){
               indicators={indicators}
               data={crosstab}
               requestNewData={(_, data) => this.setState({crosstab: data})}
+              translations={translations}
           />
         </section>
       </div>
