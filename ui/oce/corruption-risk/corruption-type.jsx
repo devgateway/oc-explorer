@@ -250,7 +250,7 @@ class CorruptionType extends translatable(React.Component){
         </div>
         <section>
           <h3 className="page-header">
-            Contracting Process with the Most {this.t(`crd:corruptionType:${corruptionType}:name`)} Flags
+            {this.t(`crd:corruptionType:${corruptionType}:crosstabTitle`)}
           </h3>
           <p className="introduction">{this.t(`crd:corruptionType:${corruptionType}:crosstab`)}</p>
           <Crosstab
