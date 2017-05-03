@@ -211,10 +211,26 @@ class IndividualIndicatorPage extends translatable(React.Component){
     return (
       <div className="page-corruption-type">
         <h2 className="page-header">{this.t(`crd:indicators:${indicator}:name`)}</h2>
-        <p className="definition">{this.t(`crd:indicators:${indicator}:indicator`)}</p>
-        <p className="definition">{this.t(`crd:indicators:${indicator}:eligibility`)}</p>
-        <p className="definition">{this.t(`crd:indicators:${indicator}:thresholds`)}</p>
-        <p className="definition">{this.t(`crd:indicators:${indicator}:descripion`)}</p>
+        <p className="definition">
+          <strong>{this.t("crd:indicators:general:indicator")}</strong>
+          &nbsp;
+          {this.t(`crd:indicators:${indicator}:indicator`)}
+        </p>
+        <p className="definition">
+          <strong>{this.t("crd:indicators:general:eligibility")}</strong>
+          &nbsp;
+          {this.t(`crd:indicators:${indicator}:eligibility`)}
+        </p>
+        <p className="definition">
+          <strong>{this.t("crd:indicators:general:thresholds")}</strong>
+          &nbsp;
+          {this.t(`crd:indicators:${indicator}:thresholds`)}
+        </p>
+        <p className="definition">
+          <strong>{this.t("crd:indicators:general:description")}</strong>
+          &nbsp;
+          {this.t(`crd:indicators:${indicator}:description`)}
+        </p>
         <section>
           <h3 className="page-header">
             Eligible Procurements and Flagged Procurements for {this.t(`crd:indicators:${indicator}:name`)}
