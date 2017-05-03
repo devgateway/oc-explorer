@@ -214,7 +214,7 @@ class IndividualIndicatorPage extends translatable(React.Component){
         <p className="definition">{this.t(`crd:indicators:${indicator}:indicator`)}</p>
         <p className="definition">{this.t(`crd:indicators:${indicator}:eligibility`)}</p>
         <p className="definition">{this.t(`crd:indicators:${indicator}:thresholds`)}</p>
-        <p className="definition">{this.t(`crd:indicators:${indicator}:description_text`)}</p>
+        <p className="definition">{this.t(`crd:indicators:${indicator}:descripion`)}</p>
         <section>
           <h3 className="page-header">
             Eligible Procurements and Flagged Procurements for {this.t(`crd:indicators:${indicator}:name`)}
