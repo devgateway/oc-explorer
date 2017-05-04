@@ -6,7 +6,6 @@ package org.devgateway.ocds.web.rest.controller.request;
 import cz.jirutka.validator.collection.constraints.EachRange;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.Set;
 import java.util.TreeSet;
 
 /**
@@ -50,7 +49,7 @@ public class YearFilterPagingRequest extends DefaultFilterPagingRequest {
         super();
     }
 
-    public Set<Integer> getYear() {
+    public TreeSet<Integer> getYear() {
         return year;
     }
 
@@ -58,7 +57,7 @@ public class YearFilterPagingRequest extends DefaultFilterPagingRequest {
         this.year = year;
     }
 
-    public Set<Integer> getMonth() {
+    public TreeSet<Integer> getMonth() {
         return month;
     }
 
