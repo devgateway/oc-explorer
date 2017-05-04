@@ -7,7 +7,7 @@ import cz.jirutka.validator.collection.constraints.EachPattern;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.TreeSet;
 
 /**
  * @author mpostelnicu Filtering bean applied to all endpoints
@@ -16,33 +16,33 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
     @EachPattern(regexp = "^[a-zA-Z0-9]*$")
     @ApiModelProperty(value = "This corresponds to the tender.items.classification._id")
-    private List<String> bidTypeId;
+    private TreeSet<String> bidTypeId;
 
     @EachPattern(regexp = "^[a-zA-Z0-9]*$")
-    @ApiModelProperty(
-            value = "This corresponds the negated bidTypeId filter, matches elements that are NOT in the list of Ids")
-    private List<String> notBidTypeId;
+    @ApiModelProperty(value =
+            "This corresponds the negated bidTypeId filter, matches elements that are NOT in the TreeSet of Ids")
+    private TreeSet<String> notBidTypeId;
 
     @EachPattern(regexp = "^[a-zA-Z0-9]*$")
     @ApiModelProperty(value = "This is the id of the organization/procuring entity. "
             + "Corresponds to the OCDS Organization.identifier")
-    private List<String> procuringEntityId;
+    private TreeSet<String> procuringEntityId;
 
     @EachPattern(regexp = "^[a-zA-Z0-9]*$")
     @ApiModelProperty(value = "This corresponds the negated procuringEntityId filter,"
-            + " matches elements that are NOT in the list of Ids")
-    private List<String> notProcuringEntityId;
+            + " matches elements that are NOT in the TreeSet of Ids")
+    private TreeSet<String> notProcuringEntityId;
 
     // @EachPattern(regexp = "^[\\p{L}0-9]*$")
     @ApiModelProperty(value = "This is the id of the organization/supplier entity. "
             + "Corresponds to the OCDS Organization.identifier")
-    private List<String> supplierId;
+    private TreeSet<String> supplierId;
 
     @ApiModelProperty(value = "This will filter after tender.items.deliveryLocation._id")
-    private List<String> tenderLoc;
+    private TreeSet<String> tenderLoc;
 
     @ApiModelProperty(value = "This will filter after tender.procurementMethod")
-    private List<String> procurementMethod;
+    private TreeSet<String> procurementMethod;
 
     @ApiModelProperty(value = "This will filter after tender.value.amount and will specify a minimum"
             + "Use /api/tenderValueInterval to get the minimum allowed.")
@@ -69,27 +69,27 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
         super();
     }
 
-    public List<String> getBidTypeId() {
+    public TreeSet<String> getBidTypeId() {
         return bidTypeId;
     }
 
-    public void setBidTypeId(final List<String> bidTypeId) {
+    public void setBidTypeId(final TreeSet<String> bidTypeId) {
         this.bidTypeId = bidTypeId;
     }
 
-    public List<String> getProcuringEntityId() {
+    public TreeSet<String> getProcuringEntityId() {
         return procuringEntityId;
     }
 
-    public void setProcuringEntityId(final List<String> procuringEntityId) {
+    public void setProcuringEntityId(final TreeSet<String> procuringEntityId) {
         this.procuringEntityId = procuringEntityId;
     }
 
-    public List<String> getTenderLoc() {
+    public TreeSet<String> getTenderLoc() {
         return tenderLoc;
     }
 
-    public void setTenderLoc(final List<String> tenderDeliveryLocationGazetteerIdentifier) {
+    public void setTenderLoc(final TreeSet<String> tenderDeliveryLocationGazetteerIdentifier) {
         this.tenderLoc = tenderDeliveryLocationGazetteerIdentifier;
     }
 
@@ -125,27 +125,27 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
         this.maxAwardValue = maxAwardValue;
     }
 
-    public List<String> getSupplierId() {
+    public TreeSet<String> getSupplierId() {
         return supplierId;
     }
 
-    public void setSupplierId(final List<String> supplierId) {
+    public void setSupplierId(final TreeSet<String> supplierId) {
         this.supplierId = supplierId;
     }
 
-    public List<String> getNotBidTypeId() {
+    public TreeSet<String> getNotBidTypeId() {
         return notBidTypeId;
     }
 
-    public void setNotBidTypeId(List<String> notBidTypeId) {
+    public void setNotBidTypeId(TreeSet<String> notBidTypeId) {
         this.notBidTypeId = notBidTypeId;
     }
 
-    public List<String> getNotProcuringEntityId() {
+    public TreeSet<String> getNotProcuringEntityId() {
         return notProcuringEntityId;
     }
 
-    public void setNotProcuringEntityId(List<String> notProcuringEntityId) {
+    public void setNotProcuringEntityId(TreeSet<String> notProcuringEntityId) {
         this.notProcuringEntityId = notProcuringEntityId;
     }
 
@@ -157,11 +157,11 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
         this.electronicSubmission = electronicSubmission;
     }
 
-    public List<String> getProcurementMethod() {
+    public TreeSet<String> getProcurementMethod() {
         return procurementMethod;
     }
 
-    public void setProcurementMethod(List<String> procurementMethod) {
+    public void setProcurementMethod(TreeSet<String> procurementMethod) {
         this.procurementMethod = procurementMethod;
     }
 }
