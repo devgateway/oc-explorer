@@ -31,6 +31,17 @@ class LandingPopup extends React.Component{
                   </small>
                 </h5>
               </div>
+              <ol>
+                <li className="col-sm-5 col-sm-offset-1 text-column-left">
+                  To aid these individuals to monitor corruption risk in procurement markets over time.
+                </li>
+                <li className="col-sm-5 end text-column-right">
+                  To aid these individuals to monitor corruption risk in procurement markets over time.
+                </li>
+              </ol>
+
+              <hr className="col-sm-offset-1 col-sm-10 end separator"/>
+
             </div>
           </div>
         </div>
