@@ -18,7 +18,7 @@ class LandingPopup extends React.Component{
                 The Corruption Risk Dashboard (CRD) is an open source tool that aims to help users understand the potential presence of corruption in public contracting. Through a red flagging approach (highlighting procurement activities that have certain risk factors), this prototype explores corruption risk through the visualization of 10 indicators that are mapped to three different forms of corruption: fraud, collusion, and process rigging. Users are free to explore the data, which has been converted to the Open Contracting Data Standard (OCDS), using a variety of filters. A crosstab table enables users to explore the overlap between any two indicators that are mapped to the same risk type.
               </div>
               <div className="col-sm-5 end text-column-right">
-                The methodological approach that informs the CRD, which was built by Development Gateway (DG) with the collaboration and support of the Open Contracting Partnership (OCP), is presented and co-authored research paper. Explanations of the principal concepts and indicators are avaible within the Dashboard.
+                The methodological approach that informs the CRD, which was built by Development Gateway (DG) with the collaboration and support of the Open Contracting Partnership (OCP), is presented in a co-authored <a href="http://www.open-contracting.org/resources/red-flags-integrity-giving-green-light-open-data-solutions/">research paper.</a> Explanations of the principal concepts and indicators are available within the Dashboard.
               </div>
               <div className="col-sm-1"/>
 
@@ -26,7 +26,7 @@ class LandingPopup extends React.Component{
               <div className="col-sm-1"/>
 
             </div>
-            <div className="row intended-use">
+            <div className="row">
               <div className="col-sm-offset-1 col-sm-11 section-title">
                 <h5>
                   Intended Use:&nbsp;
@@ -36,11 +36,11 @@ class LandingPopup extends React.Component{
                 </h5>
               </div>
 
-              <div className="col-sm-5 col-sm-offset-1 text-column-left">
-                1. To aid these individuals to monitor corruption risk in procurement markets over time.
+              <div className="col-sm-5 col-sm-offset-1 text-column-left intended-use-item">
+                1. To facilitate the efforts of procurement regulators and informed observers to identify individual contracts that may warrant investigation, and;
               </div>
 
-              <div className="col-sm-5 text-column-right">
+              <div className="col-sm-5 text-column-right intended-use-item">
                 2. To aid these individuals to monitor corruption risk in procurement markets over time.
               </div>
             </div>
@@ -57,10 +57,10 @@ class LandingPopup extends React.Component{
               </div>
 
               <div className="col-sm-5 col-sm-offset-1 text-column-left">
-                While flags associated with a procurement process may indicate the possibility that corruption has taken place, they may also be attributable to poor data quality, systemic weaknesses, or practices that may be appropriate when specifically authorized by a procurement authority or regulatory institution. For this reason, this tool is best viewed as a mechanism for identifying the &ldquo;risk&rdquo; of corruption, rathen than &ldquo;corruption&rdquo; itself.
+                While flags associated with a procurement process may indicate the possibility that corruption has taken place, they may also be attributable to poor data quality, systemic weaknesses, or practices that may be appropriate when specifically authorized by a procurement authority or regulatory institution. For this reason, this tool is best viewed as a mechanism for identifying the “risk” of corruption, rather than “corruption” itself.
               </div>
               <div className="col-sm-5 end text-column-right">
-                Furthermore, in some instances, a single flag &mdash; such as for the awarding of two contracts to the same supplier by a single procuring entity &mdash; may not show any evidence of wrongdoing, though the confluence of multiple indicators suggests greater cause of concern.
+                Furthermore, in some instances, a single flag - such as for the awarding of two contracts to the same supplier by a single procuring entity - may not show any evidence of wrongdoing, though the confluence of multiple indicators suggests greater cause of concern.
               </div>
 
               <hr className="col-sm-offset-1 col-sm-10 end separator"/>
@@ -69,14 +69,14 @@ class LandingPopup extends React.Component{
                 <h5>Your feedback is welcome</h5>
               </div>
 
-              <div className="col-sm-8 col-sm-offset-1 contact">
-                Please contact Andrew Mandelbaum at DG if you have any questions or suggestions:&nbsp;
+              <div className="col-sm-9 col-sm-offset-1 contact">
+                We welcome your feedback on this prototype. Please contact Andrew Mandelbaum at DG if you have any questions or suggestions:&nbsp;
                 <a href="mailto:amandelbaum@developmentgateway.org">amandelbaum@developmentgateway.org</a>
               </div>
 
-              <div className="col-sm-3 end">
+              <div className="col-sm-2 end">
                 <button className="btn btn-primary">
-                  Go to the dashboard
+                  Enter!
                 </button>
               </div>
             </div>
