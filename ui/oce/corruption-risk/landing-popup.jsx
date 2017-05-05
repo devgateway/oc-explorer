@@ -25,6 +25,8 @@ class LandingPopup extends React.Component{
               <hr className="col-sm-offset-1 col-sm-10 end separator"/>
               <div className="col-sm-1"/>
 
+            </div>
+            <div className="row intended-use">
               <div className="col-sm-offset-1 col-sm-11 section-title">
                 <h5>
                   Intended Use:&nbsp;
@@ -37,9 +39,12 @@ class LandingPopup extends React.Component{
               <div className="col-sm-5 col-sm-offset-1 text-column-left">
                 1. To aid these individuals to monitor corruption risk in procurement markets over time.
               </div>
+
               <div className="col-sm-5 text-column-right">
                 2. To aid these individuals to monitor corruption risk in procurement markets over time.
               </div>
+            </div>
+            <div className="row">
 
               <div className="col-sm-1"/>
 
