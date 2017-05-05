@@ -60,12 +60,7 @@ class CorruptionRiskDashboard extends React.Component{
           id
         }
       })
-    ).catch(
-      err => {
-        alert('You must be logged in to access Corruption Risk Dashboard');
-        location.href = LOGIN_URL;
-      }
-    )
+    ).catch(err => this.setState({showLandingPopup: true}))
   }
 
   fetchIndicatorTypesMapping(){
