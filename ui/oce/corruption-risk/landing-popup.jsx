@@ -42,6 +42,24 @@ class LandingPopup extends React.Component{
 
               <hr className="col-sm-offset-1 col-sm-10 end separator"/>
 
+              <div className="col-sm-offset-1 col-sm-11 section-title">
+                <h5>
+                  Distinguishing between &ldquo;Corruption&rdquo; and &ldquo;Corruption Risk&rdquo;
+                </h5>
+              </div>
+
+              <div className="col-sm-5 col-sm-offset-1 text-column-left">
+                While flags associated with a procurement process may indicate the possibility that corruption has taken place, they may also be attributable to poor data quality, systemic weaknesses, or practices that may be appropriate when specifically authorized by a procurement authority or regulatory institution. For this reason, this tool is best viewed as a mechanism for identifying the &ldquo;risk&rdquo; of corruption, rathen than &ldquo;corruption&rdquo; itself.
+              </div>
+              <div className="col-sm-5 end text-column-right">
+                Furthermore, in some instances, a single flag &mdash; such as for the awarding of two contracts to the same supplier by a single procuring entity &mdash; may not show any evidence of wrongdoing, though the confluence of multiple indicators suggests greater cause of concern.
+              </div>
+
+              <hr className="col-sm-offset-1 col-sm-10 end separator"/>
+
+              <div className="col-sm-11 col-sm-offset-1 section-title">
+                <h5>Your feedback is welcome</h5>
+              </div>
             </div>
           </div>
         </div>
