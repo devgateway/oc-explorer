@@ -422,14 +422,30 @@
   }
 
   .crd-landing-popup{
+    @popupWidth: 75%;
     position: fixed;
     background: #f9fff6;
     z-index: 9999;
-    width: 75%;
-    height: 75%;
-    top: 25%/2;
-    left: 25%/2;
+    width: @popupWidth;
+    height: @popupWidth;
+    top: (100% - @popupWidth) / 2;
+    left: (100% - @popupWidth) / 2;
     padding: 30px 50px;
+    .popup-title, .section-title h5{
+      color: #27587e;
+      font-weight: bold;
+    }
+    .text-column-left{
+      padding-right: 45px;
+    }
+    .text-column-right{
+      padding-left: 45px;
+    }
+    .section-title{
+      *{
+        font-size: 15px;
+      }
+    }
   }
 
   .crd-landing-popup-overlay{

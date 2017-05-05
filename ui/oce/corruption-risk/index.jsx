@@ -179,8 +179,6 @@ class CorruptionRiskDashboard extends React.Component{
     const {filters, years, months} = this.destructFilters(appliedFilters);
     const monthly = years.count() == 1;
 
-    console.log(showLandingPopup);
-
     return (
       <div className="container-fluid dashboard-corruption-risk"
            onClick={e => this.setState({dashboardSwitcherOpen: false, filterBoxIndex: null})}
