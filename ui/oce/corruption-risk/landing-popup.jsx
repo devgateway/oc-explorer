@@ -1,16 +1,26 @@
+import {LOGIN_URL} from "./constants";
+
 class LandingPopup extends React.Component{
+  gotoLogin(){
+    location.href = LOGIN_URL;
+  }
+
   render(){
     return (
       <div>
-        <div className="crd-landing-popup-overlay"/>
+        <div className="crd-landing-popup-overlay" onClick={this.gotoLogin}/>
+
         <div className="crd-landing-popup">
           <div className="container-fluid">
             <div className="row">
               <div className="col-sm-1 text-right">
                 <img src="assets/logo.png"/>
               </div>
-              <div className="col-sm-11">
+              <div className="col-sm-10">
                 <h4 className="popup-title">Corruption Risk Dashboard</h4>
+              </div>
+              <div className="col-ms-1 text-right">
+                <i className="glyphicon glyphicon-remove-circle close-button" onClick={this.gotoLogin}></i>
               </div>
             </div>
             <div className="row">
@@ -75,7 +85,7 @@ class LandingPopup extends React.Component{
               </div>
 
               <div className="col-sm-2 end">
-                <button className="btn btn-primary">
+                <button className="btn btn-primary" onClick={this.gotoLogin}>
                   Enter!
                 </button>
               </div>
