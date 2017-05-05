@@ -20,8 +20,10 @@ class LandingPopup extends React.Component{
               <div className="col-sm-5 end text-column-right">
                 The methodological approach that informs the CRD, which was built by Development Gateway (DG) with the collaboration and support of the Open Contracting Partnership (OCP), is presented and co-authored research paper. Explanations of the principal concepts and indicators are avaible within the Dashboard.
               </div>
+              <div className="col-sm-1"/>
 
               <hr className="col-sm-offset-1 col-sm-10 end separator"/>
+              <div className="col-sm-1"/>
 
               <div className="col-sm-offset-1 col-sm-11 section-title">
                 <h5>
@@ -32,14 +34,14 @@ class LandingPopup extends React.Component{
                 </h5>
               </div>
 
-              <ol>
-                <li className="col-sm-5 col-sm-offset-1 text-column-left">
-                  To aid these individuals to monitor corruption risk in procurement markets over time.
-                </li>
-                <li className="col-sm-5 end text-column-right">
-                  To aid these individuals to monitor corruption risk in procurement markets over time.
-                </li>
-              </ol>
+              <div className="col-sm-5 col-sm-offset-1 text-column-left">
+                1. To aid these individuals to monitor corruption risk in procurement markets over time.
+              </div>
+              <div className="col-sm-5 text-column-right">
+                2. To aid these individuals to monitor corruption risk in procurement markets over time.
+              </div>
+
+              <div className="col-sm-1"/>
 
               <hr className="col-sm-offset-1 col-sm-10 end separator"/>
 

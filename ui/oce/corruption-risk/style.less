@@ -427,28 +427,24 @@
     background: #f9fff6;
     z-index: 9999;
     width: @popupWidth;
-    height: @popupWidth;
+    min-height: @popupWidth;
     top: (100% - @popupWidth) / 2;
     left: (100% - @popupWidth) / 2;
-    padding: 30px 0;
+    padding: 30px;
     .popup-title, .section-title h5{
       color: #27587e;
       font-weight: bold;
     }
     .text-column-left{
-      margin-right: 45px;
+      text-align: justify;
     }
     .text-column-right{
-      margin-left: 45px;
+      text-align: justify;
     }
     .section-title{
       *{
         font-size: 15px;
       }
-    }
-    ol>li{
-      margin-top: 15px;
-      padding-left: 0;
     }
     .contact{
       padding-top: 10px;
