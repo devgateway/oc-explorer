@@ -54,6 +54,7 @@ class OCEChild extends OCApp{
             <div role="navigation">
               {this.navigation()}
             </div>
+            {/*
             <section className="col-sm-12 description">
               <h3><strong>{this.t('general:description:title')}</strong></h3>
               <p>
@@ -62,6 +63,7 @@ class OCEChild extends OCApp{
                 </small>
               </p>
             </section>
+            */}
           </div>
         </aside>
         <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10">
