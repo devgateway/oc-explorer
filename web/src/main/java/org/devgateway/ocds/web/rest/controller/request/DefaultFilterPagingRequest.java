@@ -65,6 +65,9 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
             + " eBids")
     private Boolean electronicSubmission;
 
+    @ApiModelProperty(value = "Only show the releases that were flagged by at least one indicator")
+    private Boolean flagged;
+
     public DefaultFilterPagingRequest() {
         super();
     }
@@ -163,5 +166,13 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
     public void setProcurementMethod(TreeSet<String> procurementMethod) {
         this.procurementMethod = procurementMethod;
+    }
+
+    public Boolean getFlagged() {
+        return flagged;
+    }
+
+    public void setFlagged(Boolean flagged) {
+        this.flagged = flagged;
     }
 }
