@@ -339,6 +339,20 @@ public abstract class GenericOCDSController {
         return new Criteria();
     }
 
+    /**
+     * Add the filter by flagged
+     *
+     * @param filter
+     * @return
+     */
+    protected Criteria getFlaggedCriteria(final DefaultFilterPagingRequest filter) {
+        if (filter.getFlagged() != null && filter.getFlagged()) {
+            return where("flags.flaggedStats.0").exists(true);
+        }
+
+        return new Criteria();
+    }
+
     protected Criteria getNotProcuringEntityIdCriteria(final DefaultFilterPagingRequest filter) {
         return createNotFilterCriteria("tender.procuringEntity._id", filter.getNotProcuringEntityId(), filter);
     }
@@ -428,6 +442,7 @@ public abstract class GenericOCDSController {
                 getByTenderDeliveryLocationIdentifier(filter),
                 getByTenderAmountIntervalCriteria(filter),
                 getByAwardAmountIntervalCriteria(filter),
+                getFlaggedCriteria(filter),
                 getElectronicSubmissionCriteria(filter));
     }
 
@@ -443,6 +458,7 @@ public abstract class GenericOCDSController {
                 getByTenderAmountIntervalCriteria(filter),
                 getByAwardAmountIntervalCriteria(filter),
                 getElectronicSubmissionCriteria(filter),
+                getFlaggedCriteria(filter),
                 getYearFilterCriteria(filter, dateProperty));
     }
 

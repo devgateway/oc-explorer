@@ -2,6 +2,21 @@ import FilterBox from "./box";
 import TenderPrice from "../../filters/tender-price";
 import AwardValue from "../../filters/award-value";
 import {Map} from "immutable";
+import {fetchJson} from "../../tools";
+
+class FlaggedTenderPrice extends TenderPrice{
+  componentDidMount(){
+    fetchJson('/api/tenderValueInterval?flagged=true')
+      .then(([{minTenderValue: min, maxTenderValue: max}]) => this.setState({min, max}))
+  }
+};
+
+class FlaggedAwardValue extends AwardValue{
+  componentDidMount(){
+    fetchJson('/api/awardValueInterval?flagged=true')
+      .then(([{minAwardValue: min, maxAwardValue: max}]) => this.setState({min, max}))
+  }
+};
 
 class ValueAmount extends FilterBox {
   isActive(){
@@ -52,8 +67,8 @@ class ValueAmount extends FilterBox {
   getBox() {
     return (
         <div className="box-content">
-          {this.renderChild("TenderValue", TenderPrice)}
-          {this.renderChild("AwardValue", AwardValue)}
+          {this.renderChild("TenderValue", FlaggedTenderPrice)}
+          {this.renderChild("AwardValue", FlaggedAwardValue)}
         </div>
     )
   }
