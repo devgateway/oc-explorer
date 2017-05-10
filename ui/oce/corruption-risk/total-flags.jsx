@@ -30,10 +30,11 @@ class TotalFlagsChart extends backendYearFilterable(Chart){
     return {
       legend: {
         orientation: 'h',
-				width: 500,
-        height: 50,
-        x: '0',
-        y: '0'
+        font: {
+          size: 9
+        },
+        x: 0.1,
+        y: -0.2
       },
       paper_bgcolor: 'rgba(0,0,0,0)'
     }
@@ -59,28 +60,29 @@ Counter.endpoint = 'totalFlags';
 class TotalFlags extends React.Component{
   render(){
     const {data, requestNewData, translations, filters, years, months, monthly} = this.props;
+    const width = 450;
     return (
       <div className="total-flags">
         <Counter
-            data={data.get('counter')}
-            requestNewData={(_, data) => requestNewData(['counter'], data)}
-            translations={translations}
-            filters={filters}
-            years={years}
-            months={months}
-            monthly={monthly}
+          data={data.get('counter')}
+          requestNewData={(_, data) => requestNewData(['counter'], data)}
+          translations={translations}
+          filters={filters}
+          years={years}
+          months={months}
+          monthly={monthly}
         />
         <TotalFlagsChart
-            data={data.get('chart')}
-            requestNewData={(_, data) => requestNewData(['chart'], data)}
-            translations={translations}
-            width={250}
-            height={250}
-            margin={{l:40, r:40, t:40, b: 10, pad:20}}
-            filters={filters}
-            years={years}
-            months={months}
-            monthly={monthly}
+          data={data.get('chart')}
+          requestNewData={(_, data) => requestNewData(['chart'], data)}
+          translations={translations}
+          width={width}
+          height={250}
+          margin={{l:40, r:40, t:40, b: 10, pad:20}}
+          filters={filters}
+          years={years}
+          months={months}
+          monthly={monthly}
         />
       </div>
     )
