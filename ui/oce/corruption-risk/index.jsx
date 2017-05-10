@@ -179,7 +179,7 @@ class CorruptionRiskDashboard extends React.Component{
 
     return (
       <div className="container-fluid dashboard-corruption-risk"
-           onClick={e => this.setState({dashboardSwitcherOpen: false, filterBoxIndex: null})}
+           onMouseDown={e => this.setState({dashboardSwitcherOpen: false, filterBoxIndex: null})}
       >
         {showLandingPopup && <LandingPopup/>}
         <header className="branding row">
