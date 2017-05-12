@@ -7,14 +7,20 @@ import {fetchJson} from "../../tools";
 class FlaggedTenderPrice extends TenderPrice{
   componentDidMount(){
     fetchJson('/api/tenderValueInterval?flagged=true')
-      .then(([{minTenderValue: min, maxTenderValue: max}]) => this.setState({min, max}))
+      .then(([{minTenderValue, maxTenderValue}]) => this.setState({
+        min: Math.floor(minTenderValue),
+        max: Math.ceil(maxTenderValue)
+      }))
   }
 };
 
 class FlaggedAwardValue extends AwardValue{
   componentDidMount(){
     fetchJson('/api/awardValueInterval?flagged=true')
-      .then(([{minAwardValue: min, maxAwardValue: max}]) => this.setState({min, max}))
+      .then(([{minAwardValue, maxAwardValue}]) => this.setState({
+        min: Math.floor(minAwardValue),
+        max: Math.ceil(maxAwardValue)
+      }))
   }
 };
 
