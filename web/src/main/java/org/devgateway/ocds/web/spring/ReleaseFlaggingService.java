@@ -16,9 +16,8 @@ import org.devgateway.ocds.web.flags.release.ReleaseFlagI077Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI085Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI171Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI180Processor;
+import org.devgateway.toolkit.persistence.mongo.spring.MongoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -39,7 +38,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @Service
 public class ReleaseFlaggingService {
 
-    public static final int FLAGGING_BATCH_SIZE = 5000;
+
     protected static Logger logger = Logger.getLogger(ReleaseFlaggingService.class);
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -102,16 +101,8 @@ public class ReleaseFlaggingService {
 
         reinitialize();
 
-        int pageNumber = 0;
-        int processedCount = 0;
-
-        Page<FlaggedRelease> page;
-        do {
-            page = releaseRepository.findAll(new PageRequest(pageNumber++, FLAGGING_BATCH_SIZE));
-            page.getContent().parallelStream().forEach(this::processAndSaveFlagsForRelease);
-            processedCount += page.getNumberOfElements();
-            logMessage.accept("Flagged " + processedCount + " releases");
-        } while (!page.isLast());
+        MongoUtil.processRepositoryItemsPaginated(releaseRepository, this::processAndSaveFlagsForRelease,
+                this::logMessage);
 
         logMessage.accept("<b>CORRUPTION FLAGGING COMPLETE.</b>");
     }
@@ -140,6 +131,6 @@ public class ReleaseFlaggingService {
                 releaseFlagI171Processor
         ));
 
-   //   processAndSaveFlagsForAllReleases(this::logMessage);
+     processAndSaveFlagsForAllReleases(this::logMessage);
     }
 }
