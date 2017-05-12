@@ -41,6 +41,12 @@ class IndicatorTile extends CustomPopupChart{
   }
 
   getLayout(){
+    const data = super.getData();
+    const maxValue = data ?
+      data.reduce((max, datum) => Math.max(max, datum.get('totalTrue')), 0) :
+      0;
+
+    console.log(maxValue);
     return {
       xaxis: {
         type: 'category',
@@ -50,7 +56,9 @@ class IndicatorTile extends CustomPopupChart{
       },
       yaxis: {
         tickangle: -90,
-        nticks: 2
+        tickmode: 'linear',
+        tick0: 0,
+        dtick: maxValue / 2
       }
     }
   }
@@ -236,7 +244,7 @@ class CorruptionType extends translatable(React.Component){
                        filters={filters}
                        requestNewData={(_, data) => this.updateIndicatorTile(indicator, data)}
                        data={indicatorTiles[indicator]}
-                       margin={{t: 10, r: 5, b: 40, l: 20, pad: 5}}
+                       margin={{t: 50, r: 5, b: 40, l: 20, pad: 5}}
                        height={300}
                        years={years}
                        monthly={monthly}

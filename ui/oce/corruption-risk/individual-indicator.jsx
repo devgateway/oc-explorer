@@ -174,7 +174,6 @@ class IndividualIndicatorPage extends translatable(React.Component){
               requestNewData={(_, data) => this.setState({chart: data})}
               data={chart}
               width={width}
-              title=""
           />
         </section>
         <section>
