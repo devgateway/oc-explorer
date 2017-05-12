@@ -35,7 +35,6 @@ class Popup extends translatable(React.Component){
 
   showPopup(){
     const el = ReactDOM.findDOMNode(this);
-    console.log(el.offsetHeight);
     this.setState({
       showPopup: true,
       popupTop: -(POPUP_HEIGHT / 2) + (el.offsetHeight / 4)
