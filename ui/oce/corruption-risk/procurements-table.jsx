@@ -1,8 +1,66 @@
 import cn from "classnames";
 import Table from "../visualizations/tables";
+import translatable from "../translatable";
+import ReactDOM from "react-dom";
+import {POPUP_HEIGHT} from './constants';
+
+class Popup extends translatable(React.Component){
+  constructor(...args){
+    super(...args);
+    this.state = {
+      showPopup: false
+    }
+  }
+
+  getPopup(){
+    const {type, flagIds} = this.props;
+    const {popupTop} = this.state;
+    return (
+      <div className="crd-popup text-center" style={{top: popupTop}}>
+        <div className="row">
+          <div className="col-sm-12 info">
+            <h5>Associated {type[0] + type.substr(1).toLowerCase()} Flags</h5>
+          </div>
+          <div className="col-sm-12">
+            <hr/>
+          </div>
+          <div className="col-sm-12 info">
+            {flagIds.map(flagId => <p key={flagId}>{this.t(`crd:indicators:${flagId}:name`)}</p>)}
+          </div>
+        </div>
+        <div className="arrow"/>
+      </div>
+    )
+  }
+
+  showPopup(){
+    const el = ReactDOM.findDOMNode(this);
+    console.log(el.offsetHeight);
+    this.setState({
+      showPopup: true,
+      popupTop: -(POPUP_HEIGHT / 2) + (el.offsetHeight / 4)
+    });
+  }
+
+  render(){
+    const {flaggedStats} = this.props;
+    const {showPopup} = this.state;
+    return (
+      <td
+        className="hoverable popup-left"
+        onMouseEnter={this.showPopup.bind(this)}
+        onMouseLeave={e => this.setState({showPopup: false})}
+      >
+        {flaggedStats.get('count')}
+        {showPopup && this.getPopup()}
+      </td>
+    )
+  }
+}
 
 class ProcurementsTable extends Table{
   row(entry, index){
+    const {translations} = this.props;
     const tenderValue = entry.getIn(['tender', 'value']);
     const awardValue = entry.getIn(['awards', 0, 'value']);
     const tenderPeriod = entry.get('tenderPeriod');
@@ -39,23 +97,12 @@ class ProcurementsTable extends Table{
         <td>{awardValue.get('amount')} {awardValue.get('currency')}</td>
         <td>{startDate.toLocaleDateString()}&mdash;{endDate.toLocaleDateString()}</td>
         <td>{type}</td>
-        <td className="hoverable popup-left">
-          {flaggedStats.get('count')}
-          <div className="crd-popup text-center">
-            <div className="row">
-              <div className="col-sm-12 info">
-                <h5>Associated {type[0] + type.substr(1).toLowerCase()} Flags</h5>
-              </div>
-              <div className="col-sm-12">
-                <hr/>
-              </div>
-              <div className="col-sm-12 info">
-                {flagIds.map(flagId => <p key={flagId}>{this.t(`crd:indicators:${flagId}:name`)}</p>)}
-              </div>
-            </div>
-            <div className="arrow"/>
-          </div>
-        </td>
+        <Popup
+          flaggedStats={flaggedStats}
+          type={type}
+          flagIds={flagIds}
+          translations={translations}
+        />
       </tr>
     )
   }
