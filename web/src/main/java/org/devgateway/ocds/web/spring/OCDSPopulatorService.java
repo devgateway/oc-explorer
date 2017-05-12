@@ -98,13 +98,16 @@ public class OCDSPopulatorService {
                                                                                         MongoRepository<T, ID>
                                                                                                 repository) {
         T newOrg = repository.findOne((ID) t.getIdProperty());
-        if (newOrg == null) throw new RuntimeException("An unidentified element was used inline");
+        if (newOrg == null) {
+            throw new RuntimeException("An unidentified element was used inline");
+        }
         return newOrg;
     }
 
 
-    public <T extends Identifiable, ID extends Serializable> void replaceEntitiesWithSavedEntities(Collection<T> c,
-                                                                                                   MongoRepository<T, ID> repository) {
+    public <T extends Identifiable, ID extends Serializable>
+    void replaceEntitiesWithSavedEntities(Collection<T> c,
+                                          MongoRepository<T, ID> repository) {
         Iterator<T> i = c.iterator();
         while (i.hasNext()) {
             T o = i.next();
@@ -120,8 +123,10 @@ public class OCDSPopulatorService {
         }
         if (r.getAwards() != null) {
             r.getAwards().forEach(award -> {
-                if (award.getSuppliers() != null) replaceEntitiesWithSavedEntities(award.getSuppliers(),
-                        organizationRepository);
+                if (award.getSuppliers() != null) {
+                    replaceEntitiesWithSavedEntities(award.getSuppliers(),
+                            organizationRepository);
+                }
                 award.setDescription(getRandomTxt());
                 award.setTitle(getRandomTxt());
             });
@@ -135,15 +140,17 @@ public class OCDSPopulatorService {
             }
 
             if (r.getTender() != null) {
-                if (r.getTender().getProcuringEntity() != null)
+                if (r.getTender().getProcuringEntity() != null) {
                     r.getTender().setProcuringEntity(getSavedEntityFromEntity(r.getTender().getProcuringEntity(),
                             organizationRepository));
+                }
 
                 if (r.getTender().getItems() != null) {
                     r.getTender().getItems().forEach(i -> {
                         i.setDescription(getRandomTxt());
                         if (i.getClassification() != null) {
-                            i.setClassification(getSavedEntityFromEntity(i.getClassification(), classificationRepository));
+                            i.setClassification(getSavedEntityFromEntity(i.getClassification(),
+                                    classificationRepository));
                         }
                     });
                 }

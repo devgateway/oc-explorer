@@ -11,7 +11,11 @@ import java.util.function.Consumer;
 /**
  * Created by mpostelnicu on 11-May-17.
  */
-public class MongoUtil {
+public final class MongoUtil {
+
+    private MongoUtil() {
+
+    }
 
     public static final int BATCH_SIZE = 5000;
 
