@@ -264,7 +264,7 @@
 
     .crd-popup{
       @popupColor: #222c3c;
-      @popupWidth: 300px;//if you're changing this you need to also change POPUP_WIDTH in custom-popup-chart
+      @popupWidth: 300px;//if you're changing this you need to also change POPUP_WIDTH in constants.es6
       position: absolute;
       top: 0;
       left: 0;
@@ -380,7 +380,6 @@
     td.hoverable{
       position: relative;
       .crd-popup{
-        display: none;
         padding: 15px;
         height: auto;
         .and{
@@ -389,6 +388,9 @@
         }
         hr{
           width: auto;
+        }
+        h5{
+          font-weight: bold;
         }
       }
 
@@ -408,7 +410,7 @@
         right: 100%;
         top: -100%;
         bottom: auto;
-        margin-left:0;
+        margin-left: 0;
         margin-right: @arrowSize;
       }
     }
