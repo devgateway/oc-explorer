@@ -131,6 +131,6 @@ public class ReleaseFlaggingService {
                 releaseFlagI171Processor
         ));
 
-     processAndSaveFlagsForAllReleases(this::logMessage);
+     //processAndSaveFlagsForAllReleases(this::logMessage);
     }
 }
