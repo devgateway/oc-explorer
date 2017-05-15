@@ -1,13 +1,12 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import java.util.List;
-
+import com.mongodb.DBObject;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.mongodb.DBObject;
+import java.util.List;
 
 /**
  * @author idobre
@@ -131,5 +130,35 @@ public class TenderPercentagesControllerTest extends AbstractEndPointControllerT
         Assert.assertEquals(1, totalTenders);
         Assert.assertEquals(1, totalTendersUsingEbid);
         Assert.assertEquals(100.0, percentageTendersUsingEbid, 0);
+    }
+
+    @Test
+    public void percentTendersWithLinkedProcurementPlan() throws Exception {
+        final List<DBObject> percentTendersWithLinkedProcurementPlan = tenderPercentagesController
+                .percentTendersWithLinkedProcurementPlan(new YearFilterPagingRequest());
+
+        final DBObject first = percentTendersWithLinkedProcurementPlan.get(0);
+        int year = (int) first.get(TenderPercentagesController.Keys.YEAR);
+        int totalTendersWithLinkedProcurementPlan = (int) first
+                .get(TenderPercentagesController.Keys.TOTAL_TENDERS_WITH_LINKED_PROCUREMENT_PLAN);
+        int totalTenders = (int) first
+                .get(TenderPercentagesController.Keys.TOTAL_TENDERS);
+        double percentTenders = (double) first.get(TenderPercentagesController.Keys.PERCENT_TENDERS);
+        Assert.assertEquals(2014, year);
+        Assert.assertEquals(1, totalTendersWithLinkedProcurementPlan);
+        Assert.assertEquals(1, totalTenders);
+        Assert.assertEquals(100.0, percentTenders, 0);
+
+        final DBObject second = percentTendersWithLinkedProcurementPlan.get(1);
+        year = (int) second.get(TenderPercentagesController.Keys.YEAR);
+        totalTendersWithLinkedProcurementPlan = (int) second
+                .get(TenderPercentagesController.Keys.TOTAL_TENDERS_WITH_LINKED_PROCUREMENT_PLAN);
+        totalTenders = (int) second
+                .get(TenderPercentagesController.Keys.TOTAL_TENDERS);
+        percentTenders = (double) second.get(TenderPercentagesController.Keys.PERCENT_TENDERS);
+        Assert.assertEquals(2015, year);
+        Assert.assertEquals(2, totalTendersWithLinkedProcurementPlan);
+        Assert.assertEquals(2, totalTenders);
+        Assert.assertEquals(100.0, percentTenders, 0);
     }
 }
