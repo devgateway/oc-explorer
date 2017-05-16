@@ -39,13 +39,13 @@ class LandingPopup extends React.Component{
             <div className="row">
               <div className="col-sm-offset-1 col-sm-11 section-title">
                 <h5>
-                  Intended Use:&nbsp;
-                  <small>
-                    The CRD was designed with the primary objective of supporting two specific use cases:
-                  </small>
+                  Intended Use
                 </h5>
               </div>
 
+              <div className="col-sm-11 col-sm-offset-1">
+                The CRD was designed with the primary objective of supporting two specific use cases:
+              </div>
               <div className="col-sm-5 col-sm-offset-1 text-column-left intended-use-item">
                 1. To facilitate the efforts of procurement regulators and informed observers to identify individual contracts that may warrant investigation, and;
               </div>
