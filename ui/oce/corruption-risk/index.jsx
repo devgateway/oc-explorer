@@ -219,7 +219,7 @@ class CorruptionRiskDashboard extends React.Component{
             allMonths={allMonths}
         />
         <aside className="col-xs-4 col-md-4 col-lg-3" id="crd-sidebar">
-          <div>
+          <div className="crd-description-text">
             <h4 className="crd-overview-link" onClick={e => this.setState({page: 'overview'})}>
               Corruption Risk Overview
               <i className="glyphicon glyphicon-info-sign"></i>
