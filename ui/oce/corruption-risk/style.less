@@ -174,8 +174,15 @@
   @media (max-height: 650px) {
     position: relative;
     aside{
-      position: absolute!important;
-      overflow: hidden;
+      .crd-description-text p{
+        display: none;
+      }
+      section[role=navigation]{
+        margin-top: 0;
+      }
+      .crd-description-text:hover p{
+        display: block;
+      }
     }
   }
 
