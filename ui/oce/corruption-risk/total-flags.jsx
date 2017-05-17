@@ -22,7 +22,15 @@ class TotalFlagsChart extends backendYearFilterable(Chart){
       type: 'pie',
       marker: {
         colors: ['#fac329', '#289df5', '#3372b1']//if you change this colors you'll have to also change it for the custom legend in ./style.less
-      }
+      },
+      outsidetextfont: {
+        size: 15,
+        color: '#3fc529'
+      },
+      insidetextfont: {
+        size: 15,
+        color: '#3fc529'
+      },
     }];
   }
 
