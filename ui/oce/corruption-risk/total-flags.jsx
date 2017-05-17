@@ -20,7 +20,7 @@ class TotalFlagsChart extends backendYearFilterable(Chart){
       hole: .85,
       type: 'pie',
       marker: {
-        colors: ['#fac329', '#289df5', '#3372b1']
+        colors: ['#fac329', '#289df5', '#3372b1']//if you change this colors you'll have to also change it for the custom legend in ./style.less
       }
     }];
   }
@@ -104,9 +104,9 @@ class TotalFlags extends React.Component{
           monthly={monthly}
         />
         <div className="crd-legend">
-          <div>Rigging</div>
-          <div>Fraud</div>
-          <div>Collusion</div>
+          <div className="rigging">Rigging</div>
+          <div className="fraud">Fraud</div>
+          <div className="collusion">Collusion</div>
         </div>
       </div>
     )
