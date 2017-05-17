@@ -46,12 +46,15 @@ TotalFlagsChart.endpoint = 'totalFlaggedIndicatorsByIndicatorType';
 
 class Counter extends backendYearFilterable(Visualization){
   render(){
-    const {data, width} = this.props;
+    const {data} = this.props;
     if(!data) return null;
     return (
-      <h4 className="total-flags-counter" style={{width}}>
-        Total flags: {data.getIn([0, 'flaggedCount'], 0)} 
-      </h4>
+      <div className="total-flags-counter">
+        <div className="text text-left">Flags general:</div>
+        <div className="count text-right">
+          {data.getIn([0, 'flaggedCount'], 0)}
+        </div>
+      </div>
     )
   }
 }
@@ -95,7 +98,6 @@ class TotalFlags extends React.Component{
           years={years}
           months={months}
           monthly={monthly}
-          width={width}
         />
         <TotalFlagsChart
           data={data.get('chart')}
