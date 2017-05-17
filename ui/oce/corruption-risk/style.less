@@ -210,9 +210,10 @@
       position: absolute;
       width: 100%;
       height: 100%;
+      @infoWidth: 250px;
       .total-flags-counter{
-        width: 250px;
-        margin: 20px auto;
+        width: @infoWidth;
+        margin: 20px auto 0 auto;
         .text{
           float: left;
           font-size: 1.5em;
@@ -220,6 +221,28 @@
         }
         .count{
           font-size: 2em;
+        }
+      }
+      .crd-legend{
+        width: @infoWidth;
+        @boxSize: 11px;
+        margin: 20px auto;
+        div{
+          width: @infoWidth/3;
+          float: left;
+          font-size: @boxSize;
+          text-align: center;
+          &:before{
+            display: inline-block;
+            content: "";
+            width: @boxSize;
+            height: @boxSize;
+            margin-top: 4px;
+            margin-right: @boxSize / 2;
+            transform: translateY(1px);
+            border: 1px solid red;
+            border-radius: @boxSize;
+          }
         }
       }
     }

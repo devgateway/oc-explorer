@@ -28,15 +28,7 @@ class TotalFlagsChart extends backendYearFilterable(Chart){
   getLayout(){
     const {width} = this.props;
     return {
-      legend: {
-        orientation: 'h',
-        font: {
-          size: 9
-        },
-        x: 0.15,
-        y: -0.2,
-        tracegroupgap: 1
-      },
+      showlegend: false,
       paper_bgcolor: 'rgba(0,0,0,0)'
     }
   }
@@ -69,7 +61,7 @@ class TotalFlags extends React.Component{
 
     this.updateSidebarWidth = debounce(() =>
       this.setState({
-        width: document.getElementById('crd-sidebar').offsetWidth - 30
+        width: document.getElementById('crd-sidebar').offsetWidth
       })
     );
   }
@@ -104,13 +96,18 @@ class TotalFlags extends React.Component{
           requestNewData={(_, data) => requestNewData(['chart'], data)}
           translations={translations}
           width={width}
-          height={250}
-          margin={{l:0, r:0, t: 40, b: 0, pad:0}}
+          height={200}
+          margin={{l:0, r:0, t: 40, b: 20, pad:0}}
           filters={filters}
           years={years}
           months={months}
           monthly={monthly}
         />
+        <div className="crd-legend">
+          <div>Rigging</div>
+          <div>Fraud</div>
+          <div>Collusion</div>
+        </div>
       </div>
     )
   }
