@@ -4,6 +4,7 @@ import {pluckImm, debounce} from "../tools";
 import backendYearFilterable from "../backend-year-filterable";
 import Visualization from "../visualization";
 import {fromJS} from "immutable";
+import translatable from "../translatable";
 
 Plotly.register([
   require('plotly.js/lib/pie')
@@ -53,7 +54,7 @@ class Counter extends backendYearFilterable(Visualization){
 
 Counter.endpoint = 'totalFlags';
 
-class TotalFlags extends React.Component{
+class TotalFlags extends translatable(React.Component){
   constructor(...args){
     super(...args);
     this.state = {
@@ -65,7 +66,6 @@ class TotalFlags extends React.Component{
       })
     );
   }
-
 
   componentDidMount(){
     this.updateSidebarWidth();
@@ -104,9 +104,9 @@ class TotalFlags extends React.Component{
           monthly={monthly}
         />
         <div className="crd-legend">
-          <div className="rigging">Rigging</div>
-          <div className="fraud">Fraud</div>
-          <div className="collusion">Collusion</div>
+          <div className="fraud">{this.t("crd:corruptionType:FRAUD:name")}</div>
+          <div className="rigging">{this.t("crd:corruptionType:RIGGING:name")}</div>
+          <div className="collusion">{this.t("crd:corruptionType:COLLUSION:name")}</div>
         </div>
       </div>
     )

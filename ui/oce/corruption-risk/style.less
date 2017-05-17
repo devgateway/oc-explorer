@@ -228,7 +228,7 @@
         @boxSize: 11px;
         margin: 20px auto;
         div{
-          width: @infoWidth/3;
+          width: @infoWidth / 4;
           float: left;
           font-size: @boxSize;
           text-align: center;
@@ -244,14 +244,17 @@
             border-radius: @boxSize;
           }
         }
-        .rigging:before{
-          border-color: #fac329;
+        .rigging{
+          width: @infoWidth / 2;
+          &:before{
+            border-color: #3372b1;
+          }
         }
         .fraud:before{
           border-color: #289df5;
         }
         .collusion:before{
-          border-color: #3372b1;
+          border-color: #fac329;
         }
       }
     }
