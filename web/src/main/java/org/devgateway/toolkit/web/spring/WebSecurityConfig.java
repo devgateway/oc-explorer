@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.devgateway.toolkit.web.spring;
 
-import org.devgateway.toolkit.persistence.dao.AdminSettings;
 import org.devgateway.toolkit.persistence.repository.AdminSettingsRepository;
 import org.devgateway.toolkit.persistence.spring.CustomJPAUserDetailsService;
+import org.devgateway.toolkit.web.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -34,8 +34,6 @@ import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
-
-import java.util.List;
 
 /**
  * @author mpostelnicu This configures the spring security for the Web project.
@@ -62,21 +60,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${roleHierarchy}")
     private String roleHierarchyStringRepresentation;
 
-    protected Boolean getDisabledApiSecurity() {
-        List<AdminSettings> all = adminSettingsRepository.findAll();
-        if (all == null || all.size() == 0) {
-            return false;
-        }
-        if (all.size() > 1) {
-            throw new RuntimeException("Multiple admin settings found! Only one or zero allowed!");
-        }
-
-        if (all.get(0).getDisableApiSecurity() == null) {
-            return false;
-        }
-
-        return all.get(0).getDisableApiSecurity();
-    }
 
     @Bean
     public HttpSessionSecurityContextRepository httpSessionSecurityContextRepository() {
@@ -95,7 +78,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/", "/home", "/v2/api-docs/**", "/swagger-ui.html**", "/webjars/**", "/images/**",
                 "/configuration/**", "/swagger-resources/**", "/dashboard", "/languages/**", "/isAuthenticated",
-                "/wicket/resource/**/*.ttf", "/wicket/resource/**/*.woff", getDisabledApiSecurity() ? "/api/**" : "/",
+                "/wicket/resource/**/*.ttf", "/wicket/resource/**/*.woff",
+                SecurityUtil.getDisabledApiSecurity(adminSettingsRepository) ? "/api/**" : "/",
                 "/wicket/resource/**/*.woff2", "/wicket/resource/**/*.css.map"
         ).antMatchers(allowedApiEndpoints);
 
