@@ -52,7 +52,6 @@ class CorruptionRiskDashboard extends React.Component{
 
   fetchUserInfo(){
     const noCacheUrl = new URI('/isAuthenticated').addSearch('time', Date.now());
-    const userInfo = fetchJson(noCacheUrl);
     fetchJson(noCacheUrl).then(({authenticated, disabledApiSecurity}) => {
       this.setState({
         user: {
