@@ -51,16 +51,16 @@ class CorruptionRiskDashboard extends React.Component{
   }
 
   fetchUserInfo(){
-    const noCacheUrl = new URI('/rest/userDashboards/getCurrentAuthenticatedUserDetails').addSearch('time', Date.now());
-    fetchJson(noCacheUrl).then(
-      ({username, id, roles}) => this.setState({
+    const noCacheUrl = new URI('/isAuthenticated').addSearch('time', Date.now());
+    const userInfo = fetchJson(noCacheUrl);
+    fetchJson(noCacheUrl).then(({authenticated, disabledApiSecurity}) => {
+      this.setState({
         user: {
-          loggedIn: true,
-          isAdmin: roles.some(({authority}) => authority == ROLE_ADMIN),
-          id
-        }
+          loggedIn: authenticated,
+        },
+        showLandingPopup: !authenticated && !disabledApiSecurity
       })
-    ).catch(err => this.setState({showLandingPopup: true}))
+    });
   }
 
   fetchIndicatorTypesMapping(){
