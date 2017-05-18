@@ -64,7 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     protected Boolean getDisabledApiSecurity() {
         List<AdminSettings> all = adminSettingsRepository.findAll();
-        if (all == null) {
+        if (all == null || all.size() == 0) {
             return false;
         }
         if (all.size() > 1) {
