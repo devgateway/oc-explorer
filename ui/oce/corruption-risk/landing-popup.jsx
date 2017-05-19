@@ -1,14 +1,19 @@
 import {LOGIN_URL} from "./constants";
 
 class LandingPopup extends React.Component{
-  gotoLogin(){
-    location.href = LOGIN_URL;
+  onClose(){
+    const {redirectToLogin, requestClosing} = this.props;
+    if(redirectToLogin){
+      location.href = LOGIN_URL;
+    } else {
+      requestClosing();
+    }
   }
 
   render(){
     return (
       <div>
-        <div className="crd-landing-popup-overlay" onClick={this.gotoLogin}/>
+        <div className="crd-landing-popup-overlay" onClick={this.onClose.bind(this)}/>
 
         <div className="crd-landing-popup">
           <div className="container-fluid">
@@ -20,7 +25,7 @@ class LandingPopup extends React.Component{
                 <h4 className="popup-title">Corruption Risk Dashboard</h4>
               </div>
               <div className="col-ms-1 text-right">
-                <i className="glyphicon glyphicon-remove-circle close-button" onClick={this.gotoLogin}></i>
+                <i className="glyphicon glyphicon-remove-circle close-button" onClick={this.onClose.bind(this)}></i>
               </div>
             </div>
             <div className="row">
@@ -85,7 +90,7 @@ class LandingPopup extends React.Component{
               </div>
 
               <div className="col-sm-2 end">
-                <button className="btn btn-primary" onClick={this.gotoLogin}>
+                <button className="btn btn-primary" onClick={this.onClose.bind(this)}>
                   Enter!
                 </button>
               </div>
