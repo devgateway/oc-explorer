@@ -57,7 +57,8 @@ class CorruptionRiskDashboard extends React.Component{
         user: {
           loggedIn: authenticated,
         },
-        showLandingPopup: !authenticated && !disabledApiSecurity
+        showLandingPopup: !authenticated || disabledApiSecurity,
+        disabledApiSecurity
       })
     });
   }
@@ -170,7 +171,7 @@ class CorruptionRiskDashboard extends React.Component{
 
   render(){
     const {dashboardSwitcherOpen, corruptionType, page, filterBoxIndex, currentFiltersState, appliedFilters
-         , data, indicatorTypesMapping, allYears, allMonths, showLandingPopup} = this.state;
+      , data, indicatorTypesMapping, allYears, allMonths, showLandingPopup, disabledApiSecurity, user} = this.state;
     const {onSwitch, translations} = this.props;
 
     const {filters, years, months} = this.destructFilters(appliedFilters);
@@ -180,7 +181,8 @@ class CorruptionRiskDashboard extends React.Component{
       <div className="container-fluid dashboard-corruption-risk"
            onMouseDown={e => this.setState({dashboardSwitcherOpen: false, filterBoxIndex: null})}
       >
-        {showLandingPopup && <LandingPopup/>}
+        {showLandingPopup &&
+          <LandingPopup redirectToLogin={!disabledApiSecurity} requestClosing={e => this.setState({showLandingPopup: false})}/>}
         <header className="branding row">
           <div className="col-sm-1 logo-wrapper">
             <img src="assets/logo.png"/>
@@ -192,30 +194,30 @@ class CorruptionRiskDashboard extends React.Component{
                 <i className="glyphicon glyphicon-menu-down"></i>
               </h1>
               {dashboardSwitcherOpen &&
-               <div className="dashboard-switcher">
-                 <a href="javascript:void(0);" onClick={e => onSwitch('default')} onMouseDown={callFunc('stopPropagation')}>
-                   Default dashboard
-                 </a>
-               </div>
+                <div className="dashboard-switcher">
+                  <a href="javascript:void(0);" onClick={e => onSwitch('default')} onMouseDown={callFunc('stopPropagation')}>
+                    Default dashboard
+                  </a>
+                </div>
               }
             </div>
           </div>
           <div className="col-sm-2 login-wrapper">
-            {this.loginBox()}
+            {!disabledApiSecurity && this.loginBox()}
           </div>
           <div className="col-sm-1">
           </div>
         </header>
         <Filters
-            onUpdate={currentFiltersState => this.setState({currentFiltersState})}
-            onApply={filtersToApply => this.setState({filterBoxIndex: null, appliedFilters: filtersToApply, currentFiltersState: filtersToApply})}
-            translations={translations}
-            currentBoxIndex={filterBoxIndex}
-            requestNewBox={index => this.setState({filterBoxIndex: index})}
-            state={currentFiltersState}
-            appliedFilters={appliedFilters}
-            allYears={allYears}
-            allMonths={allMonths}
+          onUpdate={currentFiltersState => this.setState({currentFiltersState})}
+          onApply={filtersToApply => this.setState({filterBoxIndex: null, appliedFilters: filtersToApply, currentFiltersState: filtersToApply})}
+          translations={translations}
+          currentBoxIndex={filterBoxIndex}
+          requestNewBox={index => this.setState({filterBoxIndex: index})}
+          state={currentFiltersState}
+          appliedFilters={appliedFilters}
+          allYears={allYears}
+          allMonths={allMonths}
         />
         <aside className="col-xs-4 col-md-4 col-lg-3" id="crd-sidebar">
           <div className="crd-description-text">
@@ -231,31 +233,31 @@ class CorruptionRiskDashboard extends React.Component{
             {Object.keys(CORRUPTION_TYPES).map(slug => {
                const name = CORRUPTION_TYPES[slug];
                const count = Object.keys(indicatorTypesMapping)
-                                   .filter(key => indicatorTypesMapping[key].types.indexOf(slug) > -1)
-                                   .length;
+                 .filter(key => indicatorTypesMapping[key].types.indexOf(slug) > -1)
+                 .length;
 
                return (
                  <a
-                     href="javascript:void(0);"
-                     onClick={e => this.setState({page: 'corruption-type', corruptionType: slug})}
-                     className={cn({active: 'corruption-type' == page && slug == corruptionType})}
-                     key={slug}
+                   href="javascript:void(0);"
+                   onClick={e => this.setState({page: 'corruption-type', corruptionType: slug})}
+                   className={cn({active: 'corruption-type' == page && slug == corruptionType})}
+                   key={slug}
                  >
                    <img src={`assets/icons/${slug}.png`}/>
                    {name} <span className="count">({count})</span>
                  </a>
                )
-             })}
+            })}
           </section>
           <TotalFlags
-              filters={filters}
-              requestNewData={(path, newData) =>
-                this.setState({data: this.state.data.setIn(['totalFlags'].concat(path), newData)})}
-              translations={translations}
-              data={data.get('totalFlags', Map())}
-              years={years}
-              months={months}
-              monthly={monthly}
+            filters={filters}
+            requestNewData={(path, newData) =>
+              this.setState({data: this.state.data.setIn(['totalFlags'].concat(path), newData)})}
+            translations={translations}
+            data={data.get('totalFlags', Map())}
+            years={years}
+            months={months}
+            monthly={monthly}
           />
         </aside>
         <div className="col-xs-offset-4 col-md-offset-4 col-lg-offset-3 col-xs-8 col-md-8 col-lg-9 content">
