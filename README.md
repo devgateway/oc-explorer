@@ -87,3 +87,25 @@ DG-toolkit is a package of several modules, among which forms and web are runnab
 
 We are closely following the spring boot executable/fat jar documentation which provides an extremely nice way to run a jar as a linux system service. This works for both the old System V and the new systemd. You can find [the full Spring documentation here] (http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#deployment-service).
 
+
+## Start a new project with DG-Toolkit as the base
+
+DG-Toolkit should be used as a template project, so as starting point for other projects. This should be done by forking the repository. Unfortunately Github denies forking of repositories inside the same organization, so @devgateway can own only one DG-Toolkit fork (the current one). A chat with Github support has not solved the problem, they used to have this functionality but have opted to disable it. Therefore one cannot use the FORK button on Github, but since Git is the back-end of Github, this does not mean you cannot fork it using git on your machine. 
+
+To fork DG-Toolkit you can simply create a new independent github repository, and after creation add a new remote on your machine. So you will have /origin/ that points to the new repo, and say dg-toolkit remote that points to the DG-Toolkit repo url. After this you should be able to merge from dg-toolkit remote to the origin remote, that is, you can take DG-Toolkit code and merge it over your existing empty project, thus you will get the DG-Toolkit tree inside your local project. This is much better than just copy-pasting the contents of DG-Toolkit. If you use remotes, you can later merge new fixes and features from DG-Toolkit back into your project, thus you keep your project up to date with fixes coming from DG-Toolkit. 
+
+## Contributing code back to DG-Toolkit
+
+There are several ways in which this can be achieved:
+
+### Forking DG-Tookit for a feature/fix development
+
+The best and easiest is to fork DG-Toolkit for the sole purpose of developing a new module/feature/fix. You can very well use your own private github user space to do this and thus you can use the FORK button on the Ghihub page. After the fork you can commit all your new stuff to your copy of DG-Tooolkit then ask for a Pull Request of your code back into DG-Toolkit. 
+
+### Develop the contributions in an already forked project
+
+Yes, it would be cool if we could develop the new contribution as part of your current project, which was forked some time ago from DG-Toolkit. It is possible but it is a bit trickier. You will not be able to merge your project back to DG-Toolkit, because this will bring all your project's custom code into DG-Toolkit, so basically the customized implementation the client has asked for, like all the dashboards and forms that it asked. That is undesirable.
+
+One simple solution to this is to commit the changes you are willing to merge back to DG-Toolkit as atomic changes. That means that when you commit your files, you commit only those files that are related to that new feature and nothing else. For example let's suppose you want to develop a new search module that will use Lucene for indexing and you will like to merge this new module to DG-Toolkit. You should commit all the code that has to do with the search module in separate commits that do not contain other code, for example if the search module is also used in a dashboard page in your project, you will commit that linking in a separate commit , so keep the commits that target the module functionality separate. 
+
+Then, you can cherry-pick your project's branch over the dg-tookit remote branch. By doing so, you can pick what commits to apply and what to leave out and you will choose only the commits that implement the generic new module functionality and you will leave out the client-specific customizations that are not meant to be posted to DG-Toolkit
