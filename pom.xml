@@ -73,6 +73,10 @@
 
     <repositories>
         <repository>
+            <id>jcenter</id>
+            <url>http://jcenter.bintray.com/</url>
+        </repository>
+        <repository>
             <id>DGToolkit</id>
             <name>DGToolkit</name>
             <url>http://artifactory.ampdev.net/artifactory/dg-toolkit/</url>
@@ -83,6 +87,11 @@
     </repositories>
 
     <pluginRepositories>
+        <pluginRepository>
+            <id>jcenter</id>
+            <name>jcenter</name>
+            <url>http://jcenter.bintray.com</url>
+        </pluginRepository>
         <pluginRepository>
             <id>DGToolkit</id>
             <name>DGToolkit</name>
