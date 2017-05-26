@@ -37,6 +37,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.limi
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
@@ -80,7 +81,7 @@ public class FrequentTenderersController extends GenericOCDSController {
                                 Criteria.where("cmp").is(1)).thenValueOf("$tendererId")
                                 .otherwiseValueOf("$supplierId")).as("tendererId2"),
                 group("tendererId1", "tendererId2").count().as("pairCount"),
-                sort(Sort.Direction.DESC, "pairCount"), limit(10)
+                sort(Sort.Direction.DESC, "pairCount"),  skip(filter.getSkip()), limit(filter.getPageSize())
         );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
