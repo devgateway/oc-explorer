@@ -25,4 +25,13 @@ public class FrequentTenderersControllerTest extends AbstractEndPointControllerT
         Assert.assertEquals(0, frequentTenderers.size());
     }
 
+    @Test
+    public void activeAwardsCountTest() throws Exception {
+        final List<DBObject> frequentTenderers = frequentTenderersController
+                .activeAwardsCount(new YearFilterPagingRequest());
+
+        Assert.assertEquals(1, frequentTenderers.size());
+        Assert.assertEquals(2, frequentTenderers.get(0).get("cnt"));
+    }
+
 }

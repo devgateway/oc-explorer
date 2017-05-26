@@ -89,4 +89,28 @@ public class FrequentTenderersController extends GenericOCDSController {
         return tagCount;
     }
 
+    @ApiOperation(value = "Counts the tenders/awards where the given supplier id is among the winners. "
+            + "This assumes there is only  one active award, which always seems to be the case, per tender. ")
+    @RequestMapping(value = "/api/activeAwardsCount",
+            method = {RequestMethod.POST, RequestMethod.GET},
+            produces = "application/json")
+    public List<DBObject> activeAwardsCount(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+
+        Aggregation agg = newAggregation(
+                match(where("awards.status").is("active")
+                        .andOperator(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
+                unwind("awards"),
+                match(where("awards.status").is("active")
+                        .andOperator(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
+                group().count().as("cnt"),
+                project("cnt").andExclude(Fields.UNDERSCORE_ID)
+        );
+
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+        List<DBObject> tagCount = results.getMappedResults();
+        return tagCount;
+    }
+
 }
