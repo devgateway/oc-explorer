@@ -3,6 +3,7 @@ import {Map} from "immutable";
 import {pluckImm} from "../tools";
 import Table from "../visualizations/tables/index";
 import translatable from "../translatable";
+import CRDPage from "./page";
 
 class IndividualIndicatorChart extends CustomPopupChart{
   getCustomEP(){
@@ -127,7 +128,7 @@ class ProjectTable extends ProcurementsTable{
   }
 }
 
-class IndividualIndicatorPage extends translatable(React.Component){
+class IndividualIndicatorPage extends translatable(CRDPage){
   constructor(...args){
     super(...args);
     this.state = {
