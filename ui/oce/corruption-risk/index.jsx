@@ -142,17 +142,20 @@ class CorruptionRiskDashboard extends React.Component{
       const indicators =
         Object.keys(indicatorTypesMapping).filter(key => indicatorTypesMapping[key].types.indexOf(corruptionType) > -1);
 
-      return <CorruptionTypePage
-                 indicators={indicators}
-                 onGotoIndicator={individualIndicator => this.setState({page: 'individual-indicator', individualIndicator})}
-                 filters={filters}
-                 translations={translations}
-                 corruptionType={corruptionType}
-                 years={years}
-                 monthly={monthly}
-                 months={months}
-                 width={width}
-             />;
+      return (
+        <CorruptionTypePage
+          indicators={indicators}
+          onGotoIndicator={individualIndicator => this.setState({page: 'individual-indicator', individualIndicator})}
+          filters={filters}
+          translations={translations}
+          corruptionType={corruptionType}
+          years={years}
+          monthly={monthly}
+          months={months}
+          width={width}
+          styling={styling}
+        />
+      );
     } else if(page == 'individual-indicator'){
       const {individualIndicator} = this.state;
       return (
