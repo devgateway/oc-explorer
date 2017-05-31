@@ -88,6 +88,30 @@ class OCEChild extends OCApp{
     )
   }
 
+  navigationLink(Tab, index){
+    if(OverviewTab != Tab) return super.navigationLink(Tab, index);
+    const {getName, icon} = Tab;
+    return (
+      <div
+        className={cn('navigation-item-overview', {active: index == this.state.currentTab})}
+        onClick={_ => this.setState({currentTab: index})}
+      >
+        <a href="javascript:void(0);" key={index} className="col-sm-12">
+          <span className="circle">
+            <img className="nav-icon" src={`assets/icons/${icon}.svg`}/>
+            <i className={`glyphicon glyphicon-${icon}`}/>
+          </span>
+    	    &nbsp;
+		  {getName(this.t.bind(this))}
+      <i className="glyphicon glyphicon-info-sign"/>
+        </a>
+        <div className="description col-sm-12">
+          The Procurement M&E Prototype is an interactive platform for analyzing, monitoring, and evaluating information on public procurement. It is specifically designed to help users understand procurement efficiency, and the competitiveness and cost-effectiveness of public markets.
+        </div>
+      </div>
+    )
+  }
+
   render(){
     return (
       <div className="container-fluid dashboard-default" onClick={_ => this.setState({menuBox: ""})}>

@@ -75,17 +75,6 @@ aside {
     padding: 15px 20px 15px 20px;
     border-bottom: 1px solid #ccc;
   }
-
-  section.description{
-    background: #ffffff;
-    line-height: 120%;
-    h3 {
-      color: @red;
-      font-size: 1em;
-      margin-top: 10px;
-      text-transform: uppercase;
-    }
-  }
 }
 
 @yearsBarBottom: 34px;
@@ -155,38 +144,59 @@ footer.main-footer{
   z-index: 1;
 }
 
-@active-color: #808080;
 @circle-grey: #666666;
 @tab-light-grey: #f2f2f2;
 
-aside [role=navigation] a{
-  border-bottom: 1px solid #c5c5c5;
-  color: #707070;
-  display: block;
-  cursor: pointer;
-  font-size: 1.05em;
-  line-height: 190%;
-  padding: 15px 0 15px 20px;
-  text-decoration: none;
-  text-transform: uppercase;
-  &:hover {
-    background-color: @active-color;
-    color: @tab-light-grey;
-  }
-  &.active{
-    background-color: @active-color;
-    color: @tab-light-grey;
-  }
-  .circle{
-    background-color: @circle-grey;
-    border-radius: 50%;
-    color: @tab-light-grey;
+aside [role=navigation]{
+  @active-color: #ffffff;
+  a{
+    border-bottom: 1px solid #c5c5c5;
+    color: #707070;
     display: block;
-    float: left;
-    height: 1.6em;
-    margin-right: 0.4em;
-    text-align: center;
-    width: 1.6em;
+    cursor: pointer;
+    font-size: 1.05em;
+    line-height: 190%;
+    padding: 15px 0 15px 20px;
+    text-decoration: none;
+    text-transform: uppercase;
+    &:hover, &.active{
+      background-color: @active-color;
+    }
+    .circle{
+      background-color: @circle-grey;
+      border-radius: 50%;
+      color: @tab-light-grey;
+      display: block;
+      float: left;
+      height: 1.6em;
+      margin-right: 0.4em;
+      text-align: center;
+      width: 1.6em;
+    }
+  }
+
+  .navigation-item-overview{
+    cursor: pointer;
+    a{
+      border-bottom: none;
+      .glyphicon-info-sign{
+        font-size: 1.3em;
+        color: #3bb54e;
+        float: right;
+        padding-right: 20px;
+      }
+    }
+    .description{
+      border-bottom: 1px solid #c5c5c5;
+      padding: 0 20px 20px 20px;
+      color: #bc2626;
+      font-size: 12px;
+    }
+    &:hover, &.active{
+      .description, a{
+        background: @active-color;
+      }
+    }
   }
 }
 
