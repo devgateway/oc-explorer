@@ -130,7 +130,7 @@ class OCEChild extends OCApp{
         <div className="header-tools row">
           <div className="col-xs-offset-4 col-md-osset-3 col-lg-offset-2 col-sm-5 menu">
             <div className="filters-hint">
-              Filter you data
+              Filter your data
             </div>
             {this.filters()}
             {this.comparison()}
