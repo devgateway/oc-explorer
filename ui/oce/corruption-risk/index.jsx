@@ -160,13 +160,14 @@ class CorruptionRiskDashboard extends React.Component{
       const {individualIndicator} = this.state;
       return (
         <IndividualIndicatorPage
-            indicator={individualIndicator}
-            filters={filters}
-            translations={translations}
-            years={years}
-            monthly={monthly}
-            months={months}
-            width={width}
+          indicator={individualIndicator}
+          filters={filters}
+          translations={translations}
+          years={years}
+          monthly={monthly}
+          months={months}
+          width={width}
+          styling={styling}
         />
       )
     }
