@@ -30,13 +30,9 @@ header.branding{
   }
 
   h1{
-    font-size: 24px;
-    margin-top: 10px;
-    small{
-      text-transform: uppercase;
-      display: block;
-      font-size: 18px;
-    }
+    @fontSize: 21px;
+    font-size: @fontSize;
+    margin-top: (@headerHeight - @fontSize) / 2.1;
   }
 
   .menu{
@@ -52,41 +48,6 @@ header.branding{
     &>div{
       cursor: pointer;
       padding: 20px;
-    }
-  }
-
-  .header-icons.user-tools{
-    font-size: 1em;
-    .glyphicon {
-      color: #f0f0f0;
-    }
-    a{
-      color: white;
-      text-transform: uppercase;
-      &, :hover{
-        text-decoration: none;
-      }
-    }
-  }
-
-  .header-icons{
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    .icon {
-      box-shadow: 0px 1px 10px 1px #B53636;
-      -webkit-box-shadow: 0px 1px 10px 1px #B53636;
-      -moz-box-shadow: 0px 1px 10px 1px #B53636;
-      -o-box-shadow: 0px 1px 10px 1px #B53636;
-      margin-right: @base-unit / 2.5;
-      width: 2.2em;
-      &:hover {
-        box-shadow: 0px 1px 10px 1px #db5151;
-        -webkit-box-shadow: 0px 1px 10px 1px #db5151;
-        -moz-box-shadow: 0px 1px 10px 1px #db5151;
-        -o-box-shadow: 0px 1px 10px 1px #db5151;
-      }
     }
   }
 }
@@ -256,8 +217,7 @@ aside [role=navigation] a{
 
 .filters{
   background: @lessRed;
-  border-left: 1px solid transparent;
-  border-right: 1px solid #a62323;
+  color: white;
   cursor: pointer;
   display: block;
   float: left;
@@ -300,6 +260,7 @@ aside [role=navigation] a{
     transform-origin: 50% 0;
     transition: transform .4s ease-in-out, opacity .4s ease-in-out;
     width: 800px;
+    z-index: 1;
 
     section{
       header{
@@ -350,8 +311,6 @@ aside [role=navigation] a{
 
   &.open{
     background-color: @active-color;
-    border-left: 1px solid white;
-    border-right: 1px solid white;
     .box{
       opacity: 1;
       transform: scaleY(1) scaleX(1) translateY(0);
@@ -390,7 +349,6 @@ aside [role=navigation] a{
 .top-nav-icon {
   display: inline-block;
   margin-right: 0.3em;
-  margin-top: -0.3em;
   position: relative;
   width: 1.2em;
 }
@@ -430,4 +388,33 @@ aside [role=navigation] a{
 .dashboard-hint{
   text-transform: none;
   margin-top: 10px;
+}
+
+.login-logout, .export-btn{
+  float: right;
+  button{
+    @buttonHeight: 36px;
+    background: #9d9d9d;
+    color: white;
+    border: none;
+    margin-right: 20px;
+    height: @buttonHeight;
+    margin-top: (@headerHeight - @buttonHeight) / 2;
+  }
+}
+
+.login-logout button{
+  width: 130px;
+}
+
+.export-btn button{
+  width: 70px;
+}
+
+.export-progress .progress{
+  @progressBarHeight: 20px;
+  margin-top: (@headerHeight - @progressBarHeight) / 2;
+  margin-right: 20px;
+  float: right;
+  width: 200px;
 }

@@ -10,6 +10,7 @@ import {Map} from "immutable";
 import styles from "./style.less";
 import ViewSwitcher from "../oce/switcher.jsx";
 import CorruptionRickDashboard from "../oce/corruption-risk";
+import cn from "classnames";
 
 class OCEChild extends OCApp{
   constructor(props) {
@@ -30,6 +31,63 @@ class OCEChild extends OCApp{
     );
   }
 
+  loginBox(){
+    let linkUrl, text;
+    if(this.state.user.loggedIn){
+      linkUrl = "/preLogout?referrer=/ui/index.html"
+      text = this.t("general:logout");
+    } else {
+      linkUrl = "/login?referrer=/ui/index.html";
+      text = this.t("general:login");
+    }
+    return <a href={linkUrl} className="login-logout">
+      <button className="btn btn-default">
+        {text}
+      </button>
+    </a>
+  }
+
+  dashboardSwitcher(){
+    const {dashboardSwitcherOpen} = this.state;
+    const {onSwitch} = this.props;
+    return (
+      <div className={cn('dash-switcher-wrapper', {open: dashboardSwitcherOpen})}>
+        <h1 onClick={this.toggleDashboardSwitcher.bind(this)}>
+          <strong>Monitoring & Evaluation</strong> Toolkit
+          <i className="glyphicon glyphicon-menu-down"/>
+        </h1>
+        {dashboardSwitcherOpen &&
+          <div className="dashboard-switcher">
+            <a href="javascript:void(0);" onClick={e => onSwitch('corruptionRiskDashboard')}>
+              Corruption Risk Dashboard
+            </a>
+          </div>
+        }
+      </div>
+    )
+  }
+
+  exportBtn(){
+    if(this.state.exporting){
+      return (
+        <div className="export-progress">
+          <div className="progress">
+            <div className="progress-bar progress-bar-danger" role="progressbar" style={{width: "100%"}}>
+              {this.t('export:exporting')}
+            </div>
+          </div>
+        </div>
+      )
+    }
+    return (
+      <div className="export-btn">
+        <button className="btn btn-default" onClick={e => this.downloadExcel()}>
+          <i className="glyphicon glyphicon-download-alt"></i>
+        </button>
+      </div>
+    )
+  }
+
   render(){
     return (
       <div className="container-fluid dashboard-default" onClick={_ => this.setState({menuBox: ""})}>
@@ -41,7 +99,7 @@ class OCEChild extends OCApp{
             {this.dashboardSwitcher()}
           </div>
           <div className="col-sm-5"></div>
-          <div className="col-sm-3 header-icons user-tools">
+          <div className="col-sm-3">
             {this.loginBox()}
           </div>
         </header>
@@ -52,6 +110,9 @@ class OCEChild extends OCApp{
             </div>
             {this.filters()}
             {this.comparison()}
+          </div>
+          <div className="col-xs-3 col-md-4 col-lg-5">
+            {this.exportBtn()}
           </div>
         </div>
         <aside className="col-xs-4 col-md-3 col-lg-2">
