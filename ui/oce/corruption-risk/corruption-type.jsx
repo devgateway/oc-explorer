@@ -38,7 +38,8 @@ class IndicatorTile extends CustomPopupChart{
       y: values,
       hoverinfo: 'none',
       type: 'scatter',
-      fill: 'tonexty'
+      fill: 'tonexty',
+      fillcolor: this.props.styling.charts.traceColors[0],
     }];
   }
 
@@ -235,7 +236,7 @@ class CorruptionType extends translatable(CRDPage){
 
   render(){
     const {indicators, onGotoIndicator, corruptionType, filters, years, monthly, months,
-           translations, width} = this.props;
+           translations, width, styling} = this.props;
     const {crosstab, indicatorTiles} = this.state;
     if(!indicators || !indicators.length) return null;
 
@@ -244,35 +245,36 @@ class CorruptionType extends translatable(CRDPage){
         <h2 className="page-header">{this.t(`crd:corruptionType:${corruptionType}:pageTitle`)}</h2>
         <p className="introduction" dangerouslySetInnerHTML={{__html: this.t(`crd:corruptionType:${corruptionType}:introduction`)}}/>
         {groupBy3(indicators).map(row => {
-          return (
-              <div className="row">
-                {row.map(indicator => {
+           return (
+             <div className="row">
+               {row.map(indicator => {
                   const indicatorName = this.t(`crd:indicators:${indicator}:name`);
                   const indicatorDescription = this.t(`crd:indicators:${indicator}:indicator`);
                   return (
-                      <div className="col-sm-4 indicator-tile-container" key={corruptionType+indicator} onClick={e => onGotoIndicator(indicator)}>
-                        <div className="border">
-                          <h4>{indicatorName}</h4>
-                          <p>{indicatorDescription}</p>
-                          <IndicatorTile
-                              indicator={indicator}
-                              translations={translations}
-                              filters={filters}
-                              requestNewData={(_, data) => this.updateIndicatorTile(indicator, data)}
-                              data={indicatorTiles[indicator]}
-                              margin={{t: 10, r: 5, b: 50, l: 20, pad: 5}}
-                              height={300}
-                              years={years}
-                              monthly={monthly}
-                              months={months}
-                              width={width/3-60}
-                          />
-                        </div>
+                    <div className="col-sm-4 indicator-tile-container" key={corruptionType+indicator} onClick={e => onGotoIndicator(indicator)}>
+                      <div className="border">
+                        <h4>{indicatorName}</h4>
+                        <p>{indicatorDescription}</p>
+                        <IndicatorTile
+                          indicator={indicator}
+                          translations={translations}
+                          filters={filters}
+                          requestNewData={(_, data) => this.updateIndicatorTile(indicator, data)}
+                          data={indicatorTiles[indicator]}
+                          margin={{t: 10, r: 5, b: 50, l: 20, pad: 5}}
+                          height={300}
+                          years={years}
+                          monthly={monthly}
+                          months={months}
+                          width={width/3-60}
+                          styling={styling}
+                        />
                       </div>
+                    </div>
                   )
-                })}
-              </div>
-          )
+               })}
+             </div>
+           )
         })}
         <section>
           <h3 className="page-header">
