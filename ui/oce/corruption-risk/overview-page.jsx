@@ -3,6 +3,7 @@ import {pluck, range} from "../tools";
 import Table from "../visualizations/tables/index";
 import ReactDOMServer from "react-dom/server";
 import CustomPopupChart from "./custom-popup-chart";
+import CRDPage from "./page";
 
 const pluckObj = (field, obj) => Object.keys(obj).map(key => obj[key][field]);
 
@@ -157,7 +158,7 @@ class TopFlaggedContracts extends ProcurementsTable{
 
 TopFlaggedContracts.endpoint = 'corruptionRiskOverviewTable?pageSize=10';
 
-class OverviewPage extends React.Component{
+class OverviewPage extends CRDPage{
   constructor(...args){
     super(...args);
     this.state = {

@@ -4,6 +4,7 @@ import {pluckImm} from "../tools";
 import CustomPopupChart from "./custom-popup-chart";
 import Table from "../visualizations/tables/index";
 import translatable from '../translatable';
+import CRDPage from "./page";
 
 class IndicatorTile extends CustomPopupChart{
   getCustomEP(){
@@ -212,7 +213,7 @@ function groupBy3(arr){
   return [arr.slice(0, 3)].concat(groupBy3(arr.slice(3)));
 }
 
-class CorruptionType extends translatable(React.Component){
+class CorruptionType extends translatable(CRDPage){
   constructor(...args){
     super(...args);
     this.state = {
@@ -224,6 +225,12 @@ class CorruptionType extends translatable(React.Component){
     let {indicatorTiles} = this.state;
     indicatorTiles[indicator] = data;
     this.setState({indicatorTiles})
+  }
+
+  componentDidUpdate(prevProps){
+    if(this.props.corruptionType != prevProps.corruptionType){
+      this.scrollTop();
+    }
   }
 
   render(){
