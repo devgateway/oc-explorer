@@ -201,6 +201,7 @@ const styling = {
   }
 };
 
+OCEChild.STYLING = styling;
 OCEChild.TRANSLATIONS = translations;
 
 class OceSwitcher extends ViewSwitcher{}
