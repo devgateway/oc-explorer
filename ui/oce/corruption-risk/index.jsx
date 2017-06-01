@@ -119,7 +119,8 @@ class CorruptionRiskDashboard extends React.Component{
   }
 
   getPage(){
-    const {translations, styling} = this.props;
+    const {translations} = this.props;
+    const styling = this.constructor.STYLING || this.props.styling;
     const {page, appliedFilters, indicatorTypesMapping, width} = this.state;
 
     const {filters, years, months} = this.destructFilters(appliedFilters);

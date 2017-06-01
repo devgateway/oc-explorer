@@ -204,6 +204,10 @@ const styling = {
 OCEChild.STYLING = styling;
 OCEChild.TRANSLATIONS = translations;
 
+CorruptionRickDashboard.STYLING = JSON.parse(JSON.stringify(styling));
+
+CorruptionRickDashboard.STYLING.charts.traceColors = ["#234e6d", "#3f7499", "#80b1d3", "#afd5ee", "#d9effd"];
+
 class OceSwitcher extends ViewSwitcher{}
 
 OceSwitcher.views.default = OCEChild;
