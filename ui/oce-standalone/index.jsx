@@ -12,11 +12,14 @@ import ViewSwitcher from "../oce/switcher.jsx";
 import CorruptionRickDashboard from "../oce/corruption-risk";
 import cn from "classnames";
 
+class OCEDemoLocation extends LocationTab{}
+OCEDemoLocation.CENTER = [37, -100];
+
 class OCEChild extends OCApp{
   constructor(props) {
     super(props);
     this.registerTab(OverviewTab);
-    this.registerTab(LocationTab);
+    this.registerTab(OCEDemoLocation);
     this.registerTab(CompetitivenessTab);
     this.registerTab(EfficiencyTab);
     this.registerTab(EProcurementTab);
