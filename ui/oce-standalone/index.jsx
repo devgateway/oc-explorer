@@ -119,13 +119,10 @@ class OCEChild extends OCApp{
     return (
       <div className="container-fluid dashboard-default" onClick={_ => this.setState({menuBox: ""})}>
         <header className="branding row">
-          <div className="col-sm-1 logo-wrapper">
+          <div className="col-sm-9 logo-wrapper">
             <img src="assets/dg-logo.svg"/>
-          </div>
-          <div className="col-sm-3">
             {this.dashboardSwitcher()}
           </div>
-          <div className="col-sm-5"></div>
           <div className="col-sm-3">
             {this.loginBox()}
           </div>
