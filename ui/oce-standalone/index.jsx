@@ -128,14 +128,14 @@ class OCEChild extends OCApp{
           </div>
         </header>
         <div className="header-tools row">
-          <div className="col-xs-offset-4 col-md-osset-3 col-lg-offset-2 col-sm-5 menu">
+          <div className="col-xs-offset-4 col-md-offset-3 col-sm-4 menu">
             <div className="filters-hint">
               Filter your data
             </div>
             {this.filters()}
             {this.comparison()}
           </div>
-          <div className="col-xs-3 col-md-4 col-lg-5">
+          <div className="col-xs-4 col-md-5">
             {this.exportBtn()}
           </div>
         </div>
