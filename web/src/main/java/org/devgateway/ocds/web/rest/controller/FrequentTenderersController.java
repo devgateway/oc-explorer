@@ -104,8 +104,10 @@ public class FrequentTenderersController extends GenericOCDSController {
                 match(where("awards.status").is("active")
                         .andOperator(getYearDefaultFilterCriteria(filter,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
-                group().count().as("cnt"),
-                project("cnt").andExclude(Fields.UNDERSCORE_ID)
+                unwind("awards.suppliers"),
+                group("awards.suppliers._id").count().as("cnt"),
+                project("cnt").and(Fields.UNDERSCORE_ID).as("supplierId")
+                        .andExclude(Fields.UNDERSCORE_ID)
         );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
