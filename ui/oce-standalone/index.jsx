@@ -84,7 +84,7 @@ class OCEChild extends OCApp{
     }
     return (
       <div className="export-btn">
-        <button className="btn btn-default" onClick={e => this.downloadExcel()}>
+        <button className="btn btn-default">
           <i className="glyphicon glyphicon-download-alt"></i>
         </button>
       </div>
