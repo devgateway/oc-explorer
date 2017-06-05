@@ -6,6 +6,6 @@ class TenderRules extends Tab{
   }
 }
 
-TenderRules.getName = t => t('filters:tabs:tenderRules:title');
+TenderRules.getName = t => t('filters:tabs:procurementRules:title');
 
 export default TenderRules;
