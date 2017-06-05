@@ -4,7 +4,6 @@ import ProcurementMethod from '../../filters/procurement-method.jsx';
 
 class ProcurementMethodBox extends FilterBox{
   isActive(){
-    console.log(this.props);
     const {appliedFilters} = this.props;
     return appliedFilters.get('procurementMethod', Set()).count() > 0;
   }
