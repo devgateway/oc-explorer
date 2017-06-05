@@ -57,7 +57,7 @@
   "filters:typeAhead:result:pl": "results",
   "filters:tabs:amounts:title": "Amounts",
   "filters:tabs:organizations:title": "Organizations",
-  "filters:tabs:tenderRules:title": "Tender rules",
+  "filters:tabs:procurementRules:title": "Procurement rules",
   "tabs:competitiveness:title": "Competitiveness",
   "tabs:eProcurement:title": "E-Procurement",
   "tabs:efficiency:title": "Efficiency",
