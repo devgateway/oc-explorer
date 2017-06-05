@@ -77,6 +77,7 @@ class Tab extends Visualization{
                       width={width}
                       translations={translations}
                       styling={styling}
+                      margin={{t: 0, l: 100, b: 80, r: 0, pad: 20}}
                   />
               )
       )}
