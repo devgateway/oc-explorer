@@ -185,7 +185,7 @@ const formatNumber = number => number.toLocaleString(undefined, {maximumFraction
 const styling = {
   charts: {
     axisLabelColor: "#cc3c3b",
-    traceColors: ['#4b6f33', '#324d6e', '#ecac00'],
+    traceColors: ['#324d6e', '#ecac00', '#4b6f33'],
     hoverFormat: ',.2f',
     hoverFormatter: number => {
       if(typeof number == "undefined") return number;
