@@ -62,7 +62,7 @@ public class TranslationService {
      */
     private Set<String> getAllTranslationFileNamesForLanguage(String language) {
         return new TreeSet<String>(new Reflections(TRANSLATION_PKG_NAME, new ResourcesScanner()).
-                getResources(Pattern.compile(language + "(.*).json"))).descendingSet();
+                getResources(Pattern.compile(language + "(.*).json")));
     }
 
     /**
