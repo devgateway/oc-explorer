@@ -66,9 +66,9 @@ class IndividualIndicatorChart extends CustomPopupChart{
       legend: {
         orientation: 'h',
         xanchor: 'right',
-        yanchor: 'top',
+        yanchor: 'bottom',
         x: 1,
-        y: 1.3
+        y: 1
       },
       hovermode: 'closest',
       xaxis: {
@@ -178,8 +178,9 @@ class IndividualIndicatorPage extends translatable(CRDPage){
             months={months}
             requestNewData={(_, data) => this.setState({chart: data})}
             data={chart}
-            width={width}
+            width={width - 20}
             styling={styling}
+            margin={{t: 0, b: 80, r: 40, pad: 40}}
           />
         </section>
         <section>

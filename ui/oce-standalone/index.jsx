@@ -84,7 +84,7 @@ class OCEChild extends OCApp{
     }
     return (
       <div className="export-btn">
-        <button className="btn btn-default" onClick={e => this.downloadExcel()}>
+        <button className="btn btn-default" disabled>
           <i className="glyphicon glyphicon-download-alt"></i>
         </button>
       </div>
@@ -104,7 +104,7 @@ class OCEChild extends OCApp{
             <img className="nav-icon" src={`assets/icons/${icon}.svg`}/>
             <i className={`glyphicon glyphicon-${icon}`}/>
           </span>
-    	    &nbsp;
+    	  &nbsp;
 		  {getName(this.t.bind(this))}
       <i className="glyphicon glyphicon-info-sign"/>
         </a>
@@ -128,14 +128,14 @@ class OCEChild extends OCApp{
           </div>
         </header>
         <div className="header-tools row">
-          <div className="col-xs-offset-4 col-md-offset-3 col-sm-4 menu">
+          <div className="col-xs-offset-4 col-md-offset-3 col-sm-5 menu">
             <div className="filters-hint">
               Filter your data
             </div>
             {this.filters()}
             {this.comparison()}
           </div>
-          <div className="col-xs-4 col-md-5">
+          <div className="col-xs-3 col-md-4">
             {this.exportBtn()}
           </div>
         </div>
@@ -185,7 +185,7 @@ const formatNumber = number => number.toLocaleString(undefined, {maximumFraction
 const styling = {
   charts: {
     axisLabelColor: "#cc3c3b",
-    traceColors: ["#137acb", "#ffcc00", "#69bd48"],
+    traceColors: ['#324d6e', '#ecac00', '#4b6f33'],
     hoverFormat: ',.2f',
     hoverFormatter: number => {
       if(typeof number == "undefined") return number;
