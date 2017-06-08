@@ -5,6 +5,7 @@ package org.devgateway.ocds.web.rest.controller;
 
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.FlagType;
+import org.devgateway.ocds.persistence.mongo.flags.ReleaseFlags;
 import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
 import org.devgateway.ocds.web.spring.ReleaseFlaggingService;
 import org.junit.Assert;
@@ -115,7 +116,7 @@ public class ReleaseFlaggingServiceTest extends AbstractEndPointControllerTest {
         Assert.assertNotNull(release1);
         Assert.assertEquals(2, release1.getFlags().getFlaggedStats().
                 stream().filter(f -> f.getType().equals(FlagType.RIGGING)).findFirst().get().getCount(), 0);
-        Assert.assertEquals(4, release1.getFlags().getEligibleStats().
+        Assert.assertEquals(5, release1.getFlags().getEligibleStats().
                 stream().filter(f -> f.getType().equals(FlagType.RIGGING)).findFirst().get().getCount(), 0);
 
         FlaggedRelease release2 = flaggedReleaseRepository.findByOcid("ocds-endpoint-002");
@@ -128,4 +129,10 @@ public class ReleaseFlaggingServiceTest extends AbstractEndPointControllerTest {
                 stream().filter(f -> f.getType().equals(FlagType.RIGGING)).findFirst().get().getCount(), 0);
     }
 
+
+    @Test
+    public void testCreateStubFlagTypes() {
+        ReleaseFlags stubFlagTypes = releaseFlaggingService.createStubFlagTypes();
+        Assert.assertTrue(stubFlagTypes.getI038().getTypes().contains(FlagType.RIGGING));
+    }
 }

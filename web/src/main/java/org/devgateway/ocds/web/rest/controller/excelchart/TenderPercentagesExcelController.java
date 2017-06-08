@@ -111,4 +111,82 @@ public class TenderPercentagesExcelController extends ExcelChartOCDSController {
                         seriesTitle,
                         categories, values));
     }
+
+    @ApiOperation(value = "Exports *Number of eBid Awards* dashboard in Excel format.")
+    @RequestMapping(value = "/api/ocds/numberTendersUsingEBidExcelChart",
+            method = {RequestMethod.GET, RequestMethod.POST})
+    public void numberTendersUsingEBidExcelChart(@ModelAttribute @Valid final LangYearFilterPagingRequest filter,
+                                                 final HttpServletResponse response) throws IOException {
+
+        final String chartTitle = translationService.getValue(filter.getLanguage(), "charts:nrEBid:title");
+
+        // fetch the data that will be displayed in the chart
+        final List<DBObject> totalCancelledTenders = tenderPercentagesController.percentTendersUsingEBid(filter);
+
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),
+                totalCancelledTenders);
+        final List<List<? extends Number>> values = new ArrayList<>();
+
+        final List<Number> countUsingEBid = excelChartHelper.getValuesFromDBObject(totalCancelledTenders, categories,
+                getExportYearMonthXAxis(filter), TenderPercentagesController.Keys.TOTAL_TENDERS_USING_EBID);
+        if (!countUsingEBid.isEmpty()) {
+            values.add(countUsingEBid);
+        }
+
+        // check if we have anything to display before setting the *seriesTitle*.
+        final List<String> seriesTitle;
+        if (!values.isEmpty()) {
+            seriesTitle = Arrays.asList(
+                    translationService.getValue(filter.getLanguage(), "charts:nrEBid:yAxisTitle"));
+        } else {
+            seriesTitle = new ArrayList<>();
+        }
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
+        response.getOutputStream().write(
+                excelChartGenerator.getExcelChart(
+                        ChartType.area,
+                        chartTitle,
+                        seriesTitle,
+                        categories, values));
+    }
+
+    @ApiOperation(value = "Exports *Percentage of plans with tender* dashboard in Excel format.")
+    @RequestMapping(value = "/api/ocds/tendersWithLinkedProcurementPlanExcelChart",
+            method = {RequestMethod.GET, RequestMethod.POST})
+    public void tendersWithLinkedProcurementPlanExcelChart(@ModelAttribute @Valid
+                                                           final LangYearFilterPagingRequest filter,
+                                                           final HttpServletResponse response) throws IOException {
+        final String chartTitle = translationService.getValue(filter.getLanguage(),
+                "charts:percentWithTenders:title");
+
+
+
+        // fetch the data that will be displayed in the chart
+        final List<DBObject> percentTendersWithLinkedProcurementPlan = tenderPercentagesController
+                .percentTendersWithLinkedProcurementPlan(filter);
+
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),
+                percentTendersWithLinkedProcurementPlan);
+        final List<List<? extends Number>> values = new ArrayList<>();
+
+        final List<Number> percentTenders = excelChartHelper.getValuesFromDBObject(
+                percentTendersWithLinkedProcurementPlan, categories, getExportYearMonthXAxis(filter),
+                TenderPercentagesController.Keys.PERCENT_TENDERS);
+        values.add(percentTenders);
+
+        final List<String> seriesTitle = Arrays.asList(
+                translationService.getValue(filter.getLanguage(),
+                        "charts:percentWithTenders:yAxisTitle"));
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
+        response.getOutputStream().write(
+                excelChartGenerator.getExcelChart(
+                        ChartType.area,
+                        chartTitle,
+                        seriesTitle,
+                        categories, values));
+    }
 }

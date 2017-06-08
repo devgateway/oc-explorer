@@ -31,6 +31,8 @@
     <cache name="tendersAwardsYears" eternal="true" overflowToDisk="false"
            diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="1000"/>
 
+    <cache name="indicatorTypesMappingJson" eternal="true" overflowToDisk="false"
+           diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="1000"/>
 
     <cache name="excelExport"
            eternal="true"

@@ -3,9 +3,10 @@
  */
 package org.devgateway.ocds.persistence.mongo.flags;
 
+import org.springframework.data.annotation.Transient;
+
 import java.util.Collection;
 import java.util.HashMap;
-import org.springframework.data.annotation.Transient;
 
 /**
  * @author mpostelnicu Represents the list of red flags at the Release level
@@ -31,9 +32,25 @@ public class ReleaseFlags implements FlagsWrappable {
     // during a defined time period
     private Flag i180;
 
+    //i002: Winning supplier provides a substantially lower bid price than competitors
+    private Flag i002;
+
+    //i085: Bids are an exact percentage apart
+    private Flag i085;
+
+    //i171: Bid is too close to budget, estimate or preferred solution
+    private Flag i171;
+
     private Collection<FlagTypeCount> flaggedStats;
 
     private Collection<FlagTypeCount> eligibleStats;
+
+    //total number of indicators flagged for this release
+
+    private Integer totalFlagged;
+
+    @Transient
+    private Integer flagCnt;
 
     @Transient
     private HashMap<FlagType, FlagTypeCount> flaggedStatsMap = new HashMap<>();
@@ -74,6 +91,14 @@ public class ReleaseFlags implements FlagsWrappable {
 
     public void setEligibleStatsMap(HashMap<FlagType, FlagTypeCount> eligibleStatsMap) {
         this.eligibleStatsMap = eligibleStatsMap;
+    }
+
+    public Integer getTotalFlagged() {
+        return totalFlagged;
+    }
+
+    public void setTotalFlagged(Integer totalFlagged) {
+        this.totalFlagged = totalFlagged;
     }
 
     public Flag getI019() {
@@ -122,6 +147,46 @@ public class ReleaseFlags implements FlagsWrappable {
 
     public void setI180(Flag i180) {
         this.i180 = i180;
+    }
+
+    public Flag getI002() {
+        return i002;
+    }
+
+    public void setI002(Flag i002) {
+        this.i002 = i002;
+    }
+
+    public Flag getI085() {
+        return i085;
+    }
+
+    public void setI085(Flag i085) {
+        this.i085 = i085;
+    }
+
+    public Flag getI171() {
+        return i171;
+    }
+
+    public void setI171(Flag i171) {
+        this.i171 = i171;
+    }
+
+    public Integer getFlagCnt() {
+        return flagCnt;
+    }
+
+    public void setFlagCnt(Integer flagCnt) {
+        this.flagCnt = flagCnt;
+    }
+
+    public void incFlagCnt() {
+        if (flagCnt == null) {
+            flagCnt = 1;
+        } else {
+            flagCnt++;
+        }
     }
 }
 
