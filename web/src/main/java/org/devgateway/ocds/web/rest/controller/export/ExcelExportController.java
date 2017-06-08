@@ -77,6 +77,10 @@ public class ExcelExportController extends GenericOCDSController {
 
             response.getOutputStream().write(excelGenerator.getExcelDownload(filter));
         } else {
+            response.setContentType("application/zip");
+            response.setHeader("Content-Disposition", "attachment; filename=" + "excel-export.zip");
+            response.flushBuffer();
+
             File file = File.createTempFile("createZip", ".zip");
             logger.info("Created temp file: " + file.getAbsolutePath());
 
@@ -101,11 +105,6 @@ public class ExcelExportController extends GenericOCDSController {
             zout.close();
             fileCleaningTracker.track(file, file);
             IOUtils.closeQuietly(bos);
-
-            response.setContentType("application/zip");
-            response.setHeader("Content-Disposition", "attachment; filename=" + "excel-export.zip");
-            response.setContentLength((int) file.length());
-
             InputStream is = new FileInputStream(file);
             IOUtils.copy(is, response.getOutputStream());
             response.flushBuffer();
