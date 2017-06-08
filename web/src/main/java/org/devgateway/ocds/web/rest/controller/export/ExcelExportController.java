@@ -104,6 +104,7 @@ public class ExcelExportController extends GenericOCDSController {
 
             response.setContentType("application/zip");
             response.setHeader("Content-Disposition", "attachment; filename=" + "excel-export.zip");
+            response.setContentLength((int) file.length());
 
             InputStream is = new FileInputStream(file);
             IOUtils.copy(is, response.getOutputStream());
