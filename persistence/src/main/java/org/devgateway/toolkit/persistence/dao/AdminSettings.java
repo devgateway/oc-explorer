@@ -21,6 +21,10 @@ public class AdminSettings extends AbstractAuditableEntity implements Serializab
 
     private Boolean rebootServer = false;
 
+    private String adminEmail = null;
+
+    private Boolean enableDailyAutomatedImport = false;
+
     /**
      * This disables the security of /api/ endpoints, should be used for demo purposes only
      */
@@ -53,5 +57,22 @@ public class AdminSettings extends AbstractAuditableEntity implements Serializab
 
     public void setDisableApiSecurity(Boolean disableApiSecurity) {
         this.disableApiSecurity = disableApiSecurity;
+    }
+
+
+    public String getAdminEmail() {
+        return adminEmail;
+    }
+
+    public void setAdminEmail(String adminEmail) {
+        this.adminEmail = adminEmail;
+    }
+
+    public Boolean getEnableDailyAutomatedImport() {
+        return enableDailyAutomatedImport;
+    }
+
+    public void setEnableDailyAutomatedImport(Boolean enableDailyAutomatedImport) {
+        this.enableDailyAutomatedImport = enableDailyAutomatedImport;
     }
 }
