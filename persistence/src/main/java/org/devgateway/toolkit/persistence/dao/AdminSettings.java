@@ -25,6 +25,8 @@ public class AdminSettings extends AbstractAuditableEntity implements Serializab
 
     private Boolean enableDailyAutomatedImport = false;
 
+    private String importFilesPath = null;
+
     /**
      * This disables the security of /api/ endpoints, should be used for demo purposes only
      */
@@ -74,5 +76,13 @@ public class AdminSettings extends AbstractAuditableEntity implements Serializab
 
     public void setEnableDailyAutomatedImport(Boolean enableDailyAutomatedImport) {
         this.enableDailyAutomatedImport = enableDailyAutomatedImport;
+    }
+
+    public String getImportFilesPath() {
+        return importFilesPath;
+    }
+
+    public void setImportFilesPath(String importFilesPath) {
+        this.importFilesPath = importFilesPath;
     }
 }
