@@ -14,12 +14,12 @@ package org.devgateway.toolkit.forms.service;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.spring.ExcelImportService;
+import org.devgateway.ocds.persistence.mongo.spring.ImportResult;
 import org.devgateway.ocds.web.util.SettingsUtils;
+import org.devgateway.toolkit.persistence.dao.AdminSettings;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
 
-@Service
+//@Service
 public class ScheduledExcelImportService {
 
     private static final Logger LOGGER = Logger.getLogger(ScheduledExcelImportService.class);
@@ -28,19 +28,26 @@ public class ScheduledExcelImportService {
     private ExcelImportService excelImportService;
 
     @Autowired
+    private SendEmailService sendEmailService;
+
+    @Autowired
     private SettingsUtils settingsUtils;
 
-    @Scheduled(cron = "0 0 3 * * ?")
+    //@Scheduled(cron = "0 0 3 * * ?")
     public void excelImportService() {
 
-        if (BooleanUtils.isFalse(settingsUtils.getSettings().getEnableDailyAutomatedImport())) {
+        AdminSettings settings = settingsUtils.getSettings();
+
+        if (BooleanUtils.isFalse(settings.getEnableDailyAutomatedImport())) {
             return;
         }
 
-        //       excelImportService=excelImportService.importAllSheets()
+        ImportResult result = null;
+        //result = excelImportService.importAllSheets();
 
-
+        if (!result.getSuccess()) {
+            sendEmailService.sendEmail("Excel import failed!", result.getMsgBuffer().toString(),
+                    settings.getAdminEmail());
+        }
     }
-
-
 }
