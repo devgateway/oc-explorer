@@ -6,7 +6,6 @@ import org.devgateway.toolkit.persistence.repository.AdminSettingsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
  * @since 6/22/16
  */
 @Service
-@Profile("!integration")
 public class SettingsUtils {
     protected static Logger logger = LoggerFactory.getLogger(SettingsUtils.class);
 
