@@ -115,7 +115,8 @@ public abstract class RowImporter<T, ID extends Serializable, R extends MongoRep
                     r = false;
                 }
                 importService.logMessage(
-                        "<font style='" + (criticalError ? "color:red" : "italic") + "'>Error importing row "
+                        "<font style='" + (criticalError ? "color:red" : "") + "'>"
+                                + (criticalError ? "CRITICAL " : "") + "Problem importing row "
                                 + cursorRowNo + ". " + e + "</font>");
             }
         }
