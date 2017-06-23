@@ -16,13 +16,10 @@ import java.util.List;
 /**
  * Generic superclass for importing rows from excel data sources
  *
- * @author mpostelnicu
- *
- * @param <T>
- *            - the type of OCDS/dervied entity to be imported
+ * @param <T>  - the type of OCDS/dervied entity to be imported
  * @param <ID> the id type
- * @param <R>
- *            - the main repository that is able to save <T>
+ * @param <R>  - the main repository that is able to save <T>
+ * @author mpostelnicu
  */
 public abstract class RowImporter<T, ID extends Serializable, R extends MongoRepository<T, ID>> {
 
@@ -111,8 +108,14 @@ public abstract class RowImporter<T, ID extends Serializable, R extends MongoRep
                 importRow(row);
                 importedRows++;
             } catch (Exception e) {
+                if (e instanceof ImportWarningRuntimeException) {
+                    r = true;
+                } else {
+                    r = false;
+                }
                 importService.logMessage(
-                        "<font style='color:red'>Error importing row " + cursorRowNo + ". " + e + "</font>");
+                        "<font style='" + (r ? "italic" : "color:red") + "'>Error importing row "
+                                + cursorRowNo + ". " + e + "</font>");
                 // throw e; we do not stop
                 r = false;
             }
