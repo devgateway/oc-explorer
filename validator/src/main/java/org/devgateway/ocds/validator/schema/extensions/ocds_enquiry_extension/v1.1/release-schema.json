@@ -1,0 +1,70 @@
+{
+  "definitions": {
+    "Tender": {
+      "properties": {
+        "enquiries": {
+          "title":"Enquiries",
+          "type": ["array","null"],
+          "description": "Questions sent to the procuring entity, and the answers given",
+          "items": {
+            "$ref": "#/definitions/Enquiry"
+          }
+        }
+      }
+    },
+    "Enquiry": {
+      "type": "object",
+      "title":"Enquiry",
+      "description": "A question related to this contracting process, generally sent during the enquiry period.",
+      "properties": {
+        "id": {
+          "title":"Identifier",
+          "description": "A unique identifier for the enquiry.",
+          "type": ["string","null"]
+        },
+        "date": {
+          "type": "string",
+          "title":"Date",
+          "description": "The date the enquiry was received or processed.",
+          "format":"date-time"
+        },
+        "author": {
+          "title":"Question author",
+          "description": "The identifier and name of the party asking this question. Questioners may be listed in the parties array with a role of 'enquirer'. Procurement policies vary on whether or not the identity of those asking questions should be disclosed, or at which stage this information may be disclosed.",
+          "$ref": "#/definitions/Organization"
+        },
+        "title": {
+          "title":"Question title",
+          "description": "The subject line of the question.",
+          "type": ["string","null"]
+        },
+        "description": {
+          "title":"Description",
+          "description": "The body of the question.",
+          "type": ["string","null"]          
+        },
+        "answer": {
+              "title":"Answer",
+              "description": "The answer to this question, when available.",
+              "type": ["string","null"]
+        },
+        "dateAnswered": {
+              "title":"Date answered",
+              "description": "The date the answer to the question was provided.",
+              "type": ["string","null"],
+              "format":"date-time"
+        },
+        "relatedItem":{
+            "title":"Related item",
+            "description":"If this question relates to a specific line-item, this field contains the line-item identifier.",
+            "type": ["string","null"]
+        },
+        "relatedLot":{
+            "title":"Related lot",
+            "description":"Where lots are used, if this question relates to a specific lot, this field contains the lot identifier.",
+            "type": ["string","null"]
+        }
+      }
+    }
+  }
+}

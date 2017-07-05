@@ -1,0 +1,6 @@
+{
+  "name": "Enquiries",
+  "description": "The enquiries extension can be used to record questions raised during a contracting process, and the answers provided.",
+  "compatibility": ">=1.0.0",
+  "dependencies": [""]
+}

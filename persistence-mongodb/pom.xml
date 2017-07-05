@@ -27,8 +27,8 @@
         <joda.time.version>2.7</joda.time.version>
         <jadira.usertype.version>5.0.0.GA</jadira.usertype.version>
         <ehcache.version>2.6.11</ehcache.version>
-        <json.schema.validator.version>2.2.6</json.schema.validator.version>
         <json.patch.version>1.9</json.patch.version>
+        <json.schema.validator.version>2.2.6</json.schema.validator.version>
     </properties>
 
     <parent>
