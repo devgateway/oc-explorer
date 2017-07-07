@@ -86,6 +86,8 @@ public class OcdsValidatorService {
             return validateRelease(nodeRequest);
         }
 
+        return null;
+
     }
 
     private JsonNode getJsonNodeFromString(String json) {
@@ -113,7 +115,13 @@ public class OcdsValidatorService {
      * @return
      */
     private ProcessingReport validateRelease(OcdsValidatorNodeRequest nodeRequest) {
-        return null;
+        JsonSchema schema = getSchema(nodeRequest);
+        try {
+            return schema.validate(nodeRequest.getNode());
+        } catch (ProcessingException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     private OcdsValidatorNodeRequest convertApiRequestToNodeRequest(OcdsValidatorApiRequest request) {
