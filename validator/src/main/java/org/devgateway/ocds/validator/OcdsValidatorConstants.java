@@ -24,9 +24,9 @@ public final class OcdsValidatorConstants {
     }
 
     public static final class SchemaPrefixes {
-        public static final String RELEASE = "release/release-schema-";
-        public static final String RELEASE_PACKAGE = "release-package/release-package-schema-";
-        public static final String RECORD_PACKAGE = "record-package/record-package-schema-";
+        public static final String RELEASE = "/schema/release/release-schema-";
+        public static final String RELEASE_PACKAGE = "/schema/release-package/release-package-schema-";
+        public static final String RECORD_PACKAGE = "/schema/record-package/record-package-schema-";
     }
 
     public static final String SCHEMA_POSTFIX = ".json";
