@@ -23,23 +23,25 @@ class LocationWrapper extends translatable(Component){
     let {data, translations, filters, years, styling, monthly, months} = this.props;
     let CurrentTab = this.constructor.TABS[currentTab];
     return (
-        <Marker {...this.props}>
-          <Popup className="tender-locations-popup">
-            <div>
-              <header>
-                {data.name}
-              </header>
-              <section className="tabs-bar row">
+      <Marker {...this.props}>
+        <Popup className="tender-locations-popup">
+          <div>
+            <header>
+              {data.name}
+            </header>
+            <div className="row">
+              <div className="tabs-bar col-md-3">
                 {this.constructor.TABS.map((Tab, index) =>
-                    <div key={index}
-                        className={cn("col-sm-3 text-center", {active: index == currentTab})}
-                        onClick={e => this.setState({currentTab: index})}
+                  <div key={index}
+                       className={cn({active: index == currentTab})}
+                       onClick={e => this.setState({currentTab: index})}
                     >
-                      <a href="javascript:void(0);">{Tab.getName(this.t.bind(this))}</a>
-                    </div>
+                    <a href="javascript:void(0);">{Tab.getName(this.t.bind(this))}</a>
+                  </div>
                 )}
-              </section>
-              <CurrentTab
+              </div>
+              <div className="col-md-9">
+                <CurrentTab
                   data={data}
                   translations={translations}
                   filters={filters}
@@ -47,10 +49,12 @@ class LocationWrapper extends translatable(Component){
                   monthly={monthly}
                   months={months}
                   styling={styling}
-              />
+                />
+              </div>
             </div>
-          </Popup>
-        </Marker>
+          </div>
+        </Popup>
+      </Marker>
     )
   }
 }
