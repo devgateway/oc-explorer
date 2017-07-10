@@ -32,7 +32,7 @@ class LocationWrapper extends translatable(Component) {
               {data.name}
             </header>
             <div className="row">
-              <div className="tabs-bar col-md-3">
+              <div className="tabs-bar col-xs-4">
                 {this.constructor.TABS.map((Tab, index) => (
                   <div
                     key={Tab.getName(t)}
@@ -45,7 +45,7 @@ class LocationWrapper extends translatable(Component) {
                   </div>
                 ))}
               </div>
-              <div className="col-md-9">
+              <div className="col-xs-8">
                 <CurrentTab
                   data={data}
                   translations={translations}
