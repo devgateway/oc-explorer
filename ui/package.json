@@ -65,6 +65,7 @@
     "less": "^2.5.1",
     "less-loader": "^2.2.0",
     "plotly.js": "^1.5.1",
+    "prop-types": "^15.5.10",
     "rc-slider": "^7.0.3",
     "react": "^15.3.1",
     "react-addons-test-utils": "^15.1.0",

@@ -1,6 +1,7 @@
 import { Map } from 'immutable';
 import Plotly from 'plotly.js/lib/core';
 import PlotlyBar from 'plotly.js/lib/bar';
+import PropTypes from 'prop-types';
 import Visualization from '../../visualization';
 import ReactIgnore from '../../react-ignore';
 import { max } from '../../tools';
@@ -87,10 +88,10 @@ Chart.getMaxField = data => data.flatten().filter((value, key) => value && key !
 
 Chart.UPDATABLE_FIELDS = ['data'];
 
-Chart.propTypes.styling = React.PropTypes.shape({
-  charts: React.PropTypes.shape({
-    axisLabelColor: React.PropTypes.string.isRequired,
-    traceColors: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+Chart.propTypes.styling = PropTypes.shape({
+  charts: PropTypes.shape({
+    axisLabelColor: PropTypes.string.isRequired,
+    traceColors: PropTypes.arrayOf(PropTypes.string).isRequired,
   }).isRequired,
 }).isRequired;
 
