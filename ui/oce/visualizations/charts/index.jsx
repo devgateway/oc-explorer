@@ -99,7 +99,7 @@ Chart.propTypes.styling = PropTypes.shape({
 }).isRequired;
 
 Chart.defaultProps = {
-  legend: 'h'
-}
+  legend: 'h',
+};
 
 export default Chart;
