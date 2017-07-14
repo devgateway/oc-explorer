@@ -36,7 +36,10 @@ class Chart extends Visualization {
     if (legend === 'h') {
       layout.legend = layout.legend || {};
       layout.legend.orientation = 'h';
-      layout.legend.y = 1.1;
+      layout.legend.xanchor = 'right';
+      layout.legend.yanchor = 'bottom';
+      layout.legend.x = 1;
+      layout.legend.y = 1;
     }
     return layout;
   }
@@ -94,5 +97,9 @@ Chart.propTypes.styling = PropTypes.shape({
     traceColors: PropTypes.arrayOf(PropTypes.string).isRequired,
   }).isRequired,
 }).isRequired;
+
+Chart.defaultProps = {
+  legend: 'h'
+}
 
 export default Chart;
