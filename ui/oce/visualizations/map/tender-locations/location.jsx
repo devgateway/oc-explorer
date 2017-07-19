@@ -175,13 +175,6 @@ CostEffectivenessTab.Chart = CostEffectiveness;
 
 export class ProcurementMethodTab extends ChartTab {
   static getName(t) { return t('charts:procurementMethod:title'); }
-
-  static getMargins() {
-    const margins = super.getMargins();
-    margins.r = 100;
-    margins.b = 100;
-    return margins;
-  }
 }
 
 ProcurementMethodTab.Chart = ProcurementMethodChart;
