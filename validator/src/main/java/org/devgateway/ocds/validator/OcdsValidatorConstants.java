@@ -1,5 +1,10 @@
 package org.devgateway.ocds.validator;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Set;
+import java.util.TreeSet;
+
 /**
  * Created by mpostelnicu on 7/5/17.
  */
@@ -31,4 +36,9 @@ public final class OcdsValidatorConstants {
 
     public static final String SCHEMA_POSTFIX = ".json";
 
+    public static final Set<String> EXTENSIONS = Collections.unmodifiableSet(new TreeSet<>(Arrays.asList(
+            new String[]{"ocds_bid_extension", "ocds_enquiry_extension"})));
+
+    public static final String EXTENSION_META = "extension.json";
+    public static final String EXTENSION_RELEASE_JSON = "release-schema.json";
 }

@@ -11,11 +11,14 @@ import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
@@ -29,6 +32,10 @@ public class OcdsValidatorService {
 
     private Map<String, String> schemaNamePrefix = new ConcurrentHashMap<>();
 
+    private Map<String, JsonNode> extensionMeta = new ConcurrentHashMap<>();
+
+    private Map<String, JsonNode> extensionJson = new ConcurrentHashMap<>();
+
 
     @Autowired
     private ObjectMapper jacksonObjectMapper;
@@ -41,6 +48,27 @@ public class OcdsValidatorService {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    private JsonNode applyExtensions(JsonNode schemaNode, OcdsValidatorRequest request) {
+        if (ObjectUtils.isEmpty(request.getExtensions())) {
+            return schemaNode;
+        }
+
+        List<String> unrecognizedExtensions =
+                request.getExtensions().stream().filter(e -> !OcdsValidatorConstants.EXTENSIONS.contains(e))
+                        .collect(Collectors.toList());
+
+        if (!unrecognizedExtensions.isEmpty()) {
+            throw new RuntimeException("Unknown extensions by name: " + unrecognizedExtensions);
+        }
+
+
+    }
+
+    public JsonNode readExtensionData(OcdsValidatorRequest request, String extensionName) {
+        //reading meta
+        JsonLoader.fromResource();
     }
 
     private JsonSchema getSchema(OcdsValidatorRequest request) {
@@ -70,6 +98,10 @@ public class OcdsValidatorService {
                 OcdsValidatorConstants.SchemaPrefixes.RECORD_PACKAGE);
         schemaNamePrefix.put(OcdsValidatorConstants.Schemas.RELEASE_PACKAGE,
                 OcdsValidatorConstants.SchemaPrefixes.RELEASE_PACKAGE);
+    }
+
+    private void initExtensions() {
+
     }
 
     @PostConstruct

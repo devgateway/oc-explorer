@@ -32,6 +32,8 @@ public abstract class OcdsValidatorRequest {
 
     private TreeSet<String> extensions;
 
+    private String operation;
+
     @NotEmpty(message = "Please provide schemaType!")
     private String schemaType;
 
