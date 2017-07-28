@@ -39,7 +39,15 @@ public final class OcdsValidatorConstants {
     public static final class Extensions {
         public static final String OCDS_BID_EXTENSION = "ocds_bid_extension";
         public static final String OCDS_ENQUIRY_EXTENSION = "ocds_enquiry_extension";
-        public static final String[] ALL = {OCDS_BID_EXTENSION, OCDS_ENQUIRY_EXTENSION};
+        public static final String OCDS_LOCATION_EXTENSION = "ocds_location_extension";
+        public static final String OCDS_LOTS_EXTENSION = "ocds_lots_extension";
+        public static final String OCDS_MILESTONE_DOCUMENTS_EXTENSION = "ocds_milestone_documents_extension";
+        public static final String OCDS_PARTICIPATION_FEE_EXTENSION = "ocds_participationFee_extension";
+        public static final String OCDS_PROCESS_TITLE_EXTENSION = "ocds_process_title_extension";
+
+        public static final String[] ALL = {OCDS_BID_EXTENSION, OCDS_ENQUIRY_EXTENSION, OCDS_LOCATION_EXTENSION,
+                OCDS_LOTS_EXTENSION, OCDS_MILESTONE_DOCUMENTS_EXTENSION, OCDS_PARTICIPATION_FEE_EXTENSION,
+                OCDS_PROCESS_TITLE_EXTENSION};
     }
 
     public static final String EXTENSIONS_PREFIX = "/schema/extensions/";
