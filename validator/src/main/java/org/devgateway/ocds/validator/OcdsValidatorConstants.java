@@ -36,6 +36,8 @@ public final class OcdsValidatorConstants {
 
     public static final String SCHEMA_POSTFIX = ".json";
 
+    public static final String EXTENSIONS_PREFIX = "/extensions/";
+
     public static final Set<String> EXTENSIONS = Collections.unmodifiableSet(new TreeSet<>(Arrays.asList(
             new String[]{"ocds_bid_extension", "ocds_enquiry_extension"})));
 

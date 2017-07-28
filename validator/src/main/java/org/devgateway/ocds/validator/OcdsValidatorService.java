@@ -9,6 +9,8 @@ import com.github.fge.jsonschema.core.report.LogLevel;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
+
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -34,7 +36,7 @@ public class OcdsValidatorService {
 
     private Map<String, JsonNode> extensionMeta = new ConcurrentHashMap<>();
 
-    private Map<String, JsonNode> extensionJson = new ConcurrentHashMap<>();
+    private Map<String, JsonNode> extensionReleaseJson = new ConcurrentHashMap<>();
 
 
     @Autowired
@@ -66,9 +68,26 @@ public class OcdsValidatorService {
 
     }
 
-    public JsonNode readExtensionData(OcdsValidatorRequest request, String extensionName) {
+    private JsonNode readExtensionMeta(String extensionName) {
         //reading meta
-        JsonLoader.fromResource();
+        try {
+            return JsonLoader.fromResource(OcdsValidatorConstants.EXTENSIONS_PREFIX+ File
+                    .separator+OcdsValidatorConstants
+                    .EXTENSION_META);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private JsonNode readExtensionReleaseJson(String extensionName) {
+        //reading meta
+        try {
+            return JsonLoader.fromResource(OcdsValidatorConstants.EXTENSIONS_PREFIX+ File
+                    .separator+OcdsValidatorConstants
+                    .EXTENSION_RELEASE_JSON);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private JsonSchema getSchema(OcdsValidatorRequest request) {
@@ -101,6 +120,11 @@ public class OcdsValidatorService {
     }
 
     private void initExtensions() {
+
+        OcdsValidatorConstants.EXTENSIONS.forEach(e -> {
+            extensionMeta.put(e, readExtensionMeta(e));
+            extensionReleaseJson.put(e, readExtensionReleaseJson(e));
+        });
 
     }
 
