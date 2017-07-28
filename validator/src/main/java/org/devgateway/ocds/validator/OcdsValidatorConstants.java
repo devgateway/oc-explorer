@@ -2,7 +2,7 @@ package org.devgateway.ocds.validator;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
@@ -36,10 +36,17 @@ public final class OcdsValidatorConstants {
 
     public static final String SCHEMA_POSTFIX = ".json";
 
-    public static final String EXTENSIONS_PREFIX = "/extensions/";
+    public static final class Extensions {
+        public static final String OCDS_BID_EXTENSION = "ocds_bid_extension";
+        public static final String OCDS_ENQUIRY_EXTENSION = "ocds_enquiry_extension";
+        public static final String[] ALL = {OCDS_BID_EXTENSION, OCDS_ENQUIRY_EXTENSION};
+    }
 
-    public static final Set<String> EXTENSIONS = Collections.unmodifiableSet(new TreeSet<>(Arrays.asList(
-            new String[]{"ocds_bid_extension", "ocds_enquiry_extension"})));
+    public static final String EXTENSIONS_PREFIX = "/schema/extensions/";
+
+    public static final SortedSet<String> EXTENSIONS = Collections.unmodifiableSortedSet(new TreeSet<>(Arrays.asList(
+            Extensions.ALL)));
+
 
     public static final String EXTENSION_META = "extension.json";
     public static final String EXTENSION_RELEASE_JSON = "release-schema.json";

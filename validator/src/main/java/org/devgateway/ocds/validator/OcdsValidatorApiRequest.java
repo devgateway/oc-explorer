@@ -1,6 +1,6 @@
 package org.devgateway.ocds.validator;
 
-import java.util.TreeSet;
+import java.util.SortedSet;
 
 /**
  * Created by mpostelnicu on 7/6/17.
@@ -11,7 +11,7 @@ public class OcdsValidatorApiRequest extends OcdsValidatorRequest {
 
     private String url;
 
-    public OcdsValidatorApiRequest(String version, TreeSet<String> extensions, String schemaType) {
+    public OcdsValidatorApiRequest(String version, SortedSet<String> extensions, String schemaType) {
         super(version, extensions, schemaType);
     }
 

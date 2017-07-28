@@ -1,6 +1,6 @@
 package org.devgateway.ocds.validator;
 
-import java.util.TreeSet;
+import java.util.SortedSet;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -14,7 +14,7 @@ public abstract class OcdsValidatorRequest {
         this.schemaType = request.getSchemaType();
     }
 
-    public OcdsValidatorRequest(String version, TreeSet<String> extensions, String schemaType) {
+    public OcdsValidatorRequest(String version, SortedSet<String> extensions, String schemaType) {
         this.version = version;
         this.extensions = extensions;
         this.schemaType = schemaType;
@@ -30,7 +30,7 @@ public abstract class OcdsValidatorRequest {
 
     private String version;
 
-    private TreeSet<String> extensions;
+    private SortedSet<String> extensions;
 
     private String operation;
 
@@ -45,11 +45,11 @@ public abstract class OcdsValidatorRequest {
         this.version = version;
     }
 
-    public TreeSet<String> getExtensions() {
+    public SortedSet<String> getExtensions() {
         return extensions;
     }
 
-    public void setExtensions(TreeSet<String> extensions) {
+    public void setExtensions(SortedSet<String> extensions) {
         this.extensions = extensions;
     }
 

@@ -33,7 +33,7 @@ public class OcdsValidatorTestRelease {
     public void testReleaseValidation() {
 
         OcdsValidatorApiRequest request=new OcdsValidatorApiRequest(OcdsValidatorConstants.Versions.OCDS_1_1_0,
-                null, OcdsValidatorConstants.Schemas.RELEASE);
+                OcdsValidatorConstants.EXTENSIONS, OcdsValidatorConstants.Schemas.RELEASE);
         InputStream resourceAsStream = this.getClass().getResourceAsStream("/full-release.json");
         try {
             request.setJson(StreamUtils.copyToString(resourceAsStream, Charset.defaultCharset()));

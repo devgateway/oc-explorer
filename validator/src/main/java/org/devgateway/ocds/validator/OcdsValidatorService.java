@@ -3,13 +3,14 @@ package org.devgateway.ocds.validator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jackson.JsonLoader;
+import com.github.fge.jsonpatch.JsonPatchException;
+import com.github.fge.jsonpatch.mergepatch.JsonMergePatch;
 import com.github.fge.jsonschema.core.exceptions.ProcessingException;
 import com.github.fge.jsonschema.core.report.ListReportProvider;
 import com.github.fge.jsonschema.core.report.LogLevel;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -18,6 +19,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -29,6 +32,7 @@ import org.springframework.util.StringUtils;
 @Service
 public class OcdsValidatorService {
 
+    private final Logger logger = LoggerFactory.getLogger(OcdsValidatorService.class);
 
     private Map<String, JsonSchema> keySchema = new ConcurrentHashMap<>();
 
@@ -36,7 +40,7 @@ public class OcdsValidatorService {
 
     private Map<String, JsonNode> extensionMeta = new ConcurrentHashMap<>();
 
-    private Map<String, JsonNode> extensionReleaseJson = new ConcurrentHashMap<>();
+    private Map<String, JsonMergePatch> extensionReleaseJson = new ConcurrentHashMap<>();
 
 
     @Autowired
@@ -44,6 +48,8 @@ public class OcdsValidatorService {
 
     private JsonNode getUnmodifiedSchemaNode(OcdsValidatorRequest request) {
         try {
+            logger.debug("Loading unmodified schema node of type " + request.getSchemaType() + " version "
+                    + request.getVersion());
             return JsonLoader.fromResource(schemaNamePrefix.get(request.getSchemaType()) + request.getVersion()
                     + OcdsValidatorConstants.SCHEMA_POSTFIX);
         } catch (IOException e) {
@@ -54,6 +60,7 @@ public class OcdsValidatorService {
 
     private JsonNode applyExtensions(JsonNode schemaNode, OcdsValidatorRequest request) {
         if (ObjectUtils.isEmpty(request.getExtensions())) {
+            logger.debug("No schema extensions are requested.");
             return schemaNode;
         }
 
@@ -65,42 +72,60 @@ public class OcdsValidatorService {
             throw new RuntimeException("Unknown extensions by name: " + unrecognizedExtensions);
         }
 
+        //TODO: check extension meta and see if they apply for the current standard
 
+        JsonNode schemaResult = null;
+
+        for (String ext : request.getExtensions()) {
+            try {
+                logger.debug("Applying schema extension " + ext);
+                schemaResult = extensionReleaseJson.get(ext).apply(schemaNode);
+            } catch (JsonPatchException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return schemaResult;
     }
 
     private JsonNode readExtensionMeta(String extensionName) {
         //reading meta
         try {
-            return JsonLoader.fromResource(OcdsValidatorConstants.EXTENSIONS_PREFIX+ File
-                    .separator+OcdsValidatorConstants
+            logger.debug("Reading extension metadata for extension " + extensionName);
+            return JsonLoader.fromResource(OcdsValidatorConstants.EXTENSIONS_PREFIX + extensionName + File
+                    .separator + OcdsValidatorConstants
                     .EXTENSION_META);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private JsonNode readExtensionReleaseJson(String extensionName) {
+    private JsonMergePatch readExtensionReleaseJson(String extensionName) {
         //reading meta
         try {
-            return JsonLoader.fromResource(OcdsValidatorConstants.EXTENSIONS_PREFIX+ File
-                    .separator+OcdsValidatorConstants
+            logger.debug("Reading extension JSON contents for extension " + extensionName);
+            JsonNode jsonMergePatch = JsonLoader.fromResource(OcdsValidatorConstants.EXTENSIONS_PREFIX
+                    + extensionName + File.separator + OcdsValidatorConstants
                     .EXTENSION_RELEASE_JSON);
-        } catch (IOException e) {
+            JsonMergePatch patch = JsonMergePatch.fromJson(jsonMergePatch);
+            return patch;
+        } catch (IOException | JsonPatchException e) {
             throw new RuntimeException(e);
         }
     }
 
     private JsonSchema getSchema(OcdsValidatorRequest request) {
         if (keySchema.containsKey(request.getKey())) {
+            logger.debug("Returning cached schema with extensions " + request.getKey());
             return keySchema.get(request.getKey());
         } else {
             JsonNode schemaNode = getUnmodifiedSchemaNode(request);
-            //TODO: this is where we should apply extensions !
-
+            schemaNode = applyExtensions(schemaNode, request);
             try {
                 JsonSchema schema = JsonSchemaFactory.newBuilder()
                         .setReportProvider(new ListReportProvider(LogLevel.ERROR, LogLevel.FATAL)).freeze()
                         .getJsonSchema(schemaNode);
+                logger.debug("Saving to cache schema with extensions " + request.getKey());
                 keySchema.put(request.getKey(), schema);
                 return schema;
             } catch (ProcessingException e) {
@@ -112,6 +137,7 @@ public class OcdsValidatorService {
     }
 
     private void initSchemaNamePrefix() {
+        logger.debug("Initializing prefixes for all available schemas");
         schemaNamePrefix.put(OcdsValidatorConstants.Schemas.RELEASE, OcdsValidatorConstants.SchemaPrefixes.RELEASE);
         schemaNamePrefix.put(OcdsValidatorConstants.Schemas.RECORD_PACKAGE,
                 OcdsValidatorConstants.SchemaPrefixes.RECORD_PACKAGE);
@@ -120,22 +146,25 @@ public class OcdsValidatorService {
     }
 
     private void initExtensions() {
-
+        logger.debug("Initializing schema extensions");
         OcdsValidatorConstants.EXTENSIONS.forEach(e -> {
+            logger.debug("Initializing schema extension " + e);
             extensionMeta.put(e, readExtensionMeta(e));
             extensionReleaseJson.put(e, readExtensionReleaseJson(e));
         });
-
     }
 
     @PostConstruct
     private void init() {
         initSchemaNamePrefix();
+        initExtensions();
     }
 
 
     public ProcessingReport validate(OcdsValidatorApiRequest request) {
-
+        logger.debug("Running validation for api request for schema of type " + request.getSchemaType()
+                +
+" and version " + request.getVersion());
         OcdsValidatorNodeRequest nodeRequest = convertApiRequestToNodeRequest(request);
 
         if (nodeRequest.getSchemaType().equals(OcdsValidatorConstants.Schemas.RELEASE)) {
