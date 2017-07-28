@@ -74,12 +74,12 @@ public class OcdsValidatorService {
 
         //TODO: check extension meta and see if they apply for the current standard
 
-        JsonNode schemaResult = null;
+        JsonNode schemaResult = schemaNode;
 
         for (String ext : request.getExtensions()) {
             try {
                 logger.debug("Applying schema extension " + ext);
-                schemaResult = extensionReleaseJson.get(ext).apply(schemaNode);
+                schemaResult = extensionReleaseJson.get(ext).apply(schemaResult);
             } catch (JsonPatchException e) {
                 throw new RuntimeException(e);
             }
@@ -163,8 +163,7 @@ public class OcdsValidatorService {
 
     public ProcessingReport validate(OcdsValidatorApiRequest request) {
         logger.debug("Running validation for api request for schema of type " + request.getSchemaType()
-                +
-" and version " + request.getVersion());
+                + " and version " + request.getVersion());
         OcdsValidatorNodeRequest nodeRequest = convertApiRequestToNodeRequest(request);
 
         if (nodeRequest.getSchemaType().equals(OcdsValidatorConstants.Schemas.RELEASE)) {
