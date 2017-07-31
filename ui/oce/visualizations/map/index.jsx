@@ -7,6 +7,8 @@ import Visualization from '../../visualization';
 // eslint-disable-next-line no-unused-vars
 import style from './style.less';
 
+const swap = ([a, b]) => [b, a];
+
 class MapVisual extends frontendDateFilterable(Visualization) {
   getMaxAmount() {
     return Math.max(0, ...this.getData().map(pluck('amount')));
@@ -22,9 +24,13 @@ class MapVisual extends frontendDateFilterable(Visualization) {
   }
 
   render() {
-    const { translations, filters, years, styling, monthly, months, center, zoom } = this.props;
+    const { translations, filters, years, styling, monthly, months, zoom } = this.props;
+    const center = this.props.data ?
+      L.latLngBounds(this.getData().map(pluck('coords')).map(swap)).getCenter() :
+      [0, 0];
+
     return (
-      <Map>
+      <Map center={center} zoom={zoom} ref="map">
         {this.getTiles()}
         <Cluster maxAmount={this.getMaxAmount()}>
           {this.getData().map(location => (
