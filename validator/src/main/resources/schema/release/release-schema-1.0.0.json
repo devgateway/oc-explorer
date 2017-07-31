@@ -1,5 +1,4 @@
 {
-    "id": "http://ocds.open-contracting.org/standard/r/1__0__0/release-schema.json",
     "$schema": "http://json-schema.org/draft-04/schema#",
     "title": "Schema for an Open Contracting Release",
     "type": "object",
