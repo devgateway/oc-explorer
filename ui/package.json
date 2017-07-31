@@ -8,7 +8,8 @@
     "test": "jest",
     "build": "gulp",
     "extract-translatables": "extract-gettext -o languages/en_US.json components/",
-    "lint": "eslint index.jsx"
+    "lint": "eslint index.jsx",
+    "build-dll": "webpack --config webpack.dll.config.js"
   },
   "jest": {
     "scriptPreprocessor": "./node_modules/babel-jest",

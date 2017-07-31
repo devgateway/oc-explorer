@@ -5,7 +5,8 @@ config.output.filename = "index.min.js";
 delete config.output.publicPath;
 delete config.devtool;
 config.plugins = config.plugins.filter(function(plugin){
-  return !(plugin instanceof webpack.HotModuleReplacementPlugin);
+  return !(plugin instanceof webpack.HotModuleReplacementPlugin) &&
+    !(plugin instanceof webpack.DllReferencePlugin);
 }).concat([
   new webpack.DefinePlugin({
     "process.env": {
