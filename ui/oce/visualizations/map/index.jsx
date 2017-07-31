@@ -26,11 +26,12 @@ class MapVisual extends frontendDateFilterable(Visualization) {
   render() {
     const { translations, filters, years, styling, monthly, months, zoom } = this.props;
     const center = this.props.data ?
+      // eslint-disable-next-line no-undef
       L.latLngBounds(this.getData().map(pluck('coords')).map(swap)).getCenter() :
       [0, 0];
 
     return (
-      <Map center={center} zoom={zoom} ref="map">
+      <Map center={center} zoom={zoom}>
         {this.getTiles()}
         <Cluster maxAmount={this.getMaxAmount()}>
           {this.getData().map(location => (
