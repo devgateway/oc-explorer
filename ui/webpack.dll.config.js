@@ -11,7 +11,8 @@ module.exports = {
       'react-leaflet',
       'plotly.js/lib/core',
       'plotly.js/lib/bar',
-      'plotly.js/lib/pie.js'
+      'plotly.js/lib/pie.js',
+      'immutable'
     ]
   },
 
