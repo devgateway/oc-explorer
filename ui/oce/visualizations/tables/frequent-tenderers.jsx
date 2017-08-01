@@ -1,31 +1,8 @@
 import { List } from 'immutable';
+import URI from 'urijs';
 import Table from './index';
 import orgNamesFetching from '../../orgnames-fetching';
-import { fetchJson } from '../../tools';
-import translatable from '../../translatable';
-
-// eslint-disable-next-line no-undef
-class WinCount extends translatable(React.Component) {
-  constructor(...args) {
-    super(...args);
-    this.state = {
-      cnt: this.t('general:loading'),
-    };
-  }
-
-  componentDidMount() {
-    const { id } = this.props;
-    fetchJson(`/api/activeAwardsCount?supplierId=${id}`)
-      .then(response => this.setState({
-        cnt: response[0].cnt,
-      }));
-  }
-
-  render() {
-    const { cnt } = this.state;
-    return <td>{cnt}</td>;
-  }
-}
+import { send, callFunc } from '../../tools';
 
 const maybeSlice = (flag, list) => (flag ? list.slice(0, 10) : list);
 
@@ -34,18 +11,19 @@ class FrequentTenderers extends orgNamesFetching(Table) {
     super(...args);
     this.state = this.state || {};
     this.state.showAll = false;
+    this.state.winCounts = {};
   }
 
   row(entry, index) {
-    const { translations } = this.props;
+    const { winCounts } = this.state;
     const id1 = entry.get('tendererId1');
     const id2 = entry.get('tendererId2');
     return (<tr key={index}>
       <td>{this.getOrgName(id1)}</td>
       <td>{this.getOrgName(id2)}</td>
       <td>{entry.get('pairCount')}</td>
-      <WinCount id={id1} translations={translations} />
-      <WinCount id={id2} translations={translations} />
+      <td>{winCounts[id1]}</td>
+      <td>{winCounts[id2]}</td>
     </tr>);
   }
 
@@ -55,6 +33,40 @@ class FrequentTenderers extends orgNamesFetching(Table) {
     return data.map(datum => List([datum.get('tendererId1'), datum.get('tendererId2')]))
       .flatten()
       .filter(id => !this.state.orgNames[id]).toJS();
+  }
+
+  getSuppliersWithoutWinCountIds() {
+    const { data } = this.props;
+    if (!data) return [];
+    return data.map(datum => List([datum.get('tendererId1'), datum.get('tendererId2')]))
+      .flatten()
+      .filter(id => !this.state.winCounts[id]).toJS();
+  }
+
+  maybeFetchWinCounts() {
+    const idsWithoutWinCounts = this.getSuppliersWithoutWinCountIds();
+    if (!idsWithoutWinCounts.length) return;
+    send(new URI('/api/activeAwardsCount').addSearch('supplierId', idsWithoutWinCounts))
+      .then(callFunc('json'))
+      .then((counts) => {
+        const winCounts = {};
+        counts.forEach(({ supplierId, cnt }) => {
+          winCounts[supplierId] = cnt;
+        });
+        this.setState({ winCounts });
+      });
+  }
+
+  componentDidMount() {
+    super.componentDidMount();
+    this.maybeFetchWinCounts();
+  }
+
+  componentDidUpdate(prevProps, ...args) {
+    super.componentDidUpdate(prevProps, ...args);
+    if (prevProps.data !== this.props.data) {
+      this.maybeFetchWinCounts();
+    }
   }
 
   render() {
