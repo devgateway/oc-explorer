@@ -1,0 +1,6 @@
+{
+  "name": "Contract extensions as contracts: extendsContractID",
+  "description": "Under some procurement rules and processes, to extend the duration or value of a contract, or to make other substantial alterations, requires a new contract to be signed. This extension allows these relationships between two or more contracts in the same contracting process to be made explicit.",
+  "compatibility": ">=1.1.0",
+  "dependencies": []
+}

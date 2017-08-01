@@ -1,0 +1,105 @@
+{
+  "definitions": {
+    "BudgetBreakdown": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "releaseDate": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "releaseID": {
+                "type": "string"
+              },
+              "value": {
+                "type": [
+                  "string",
+                  "integer",
+                  "null"
+                ]
+              },
+              "releaseTag": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": {
+          "$ref": "#/definitions/StringNullVersioned"
+        },
+        "amount": {
+          "$ref": "#/definitions/Value"
+        },
+        "uri": {
+          "$ref": "#/definitions/StringNullUriVersioned"
+        },
+        "period": {
+          "$ref": "#/definitions/Period"
+        },
+        "sourceParty": {
+          "$ref": "#/definitions/OrganizationReference"
+        }
+      }
+    },
+    "BudgetBreakdownUnversioned": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": [
+            "string",
+            "integer",
+            "null"
+          ]
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "amount": {
+          "$ref": "#/definitions/ValueUnversioned"
+        },
+        "uri": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "period": {
+          "$ref": "#/definitions/PeriodUnversioned"
+        },
+        "sourceParty": {
+          "$ref": "#/definitions/OrganizationReferenceUnversioned"
+        }
+      }
+    },
+    "Budget": {
+      "properties": {
+        "budgetBreakdown": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BudgetBreakdown"
+          }
+        }
+      }
+    },
+    "BudgetUnversioned": {
+      "properties": {
+        "budgetBreakdown": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BudgetBreakdownUnversioned"
+          }
+        }
+      }
+    }
+  }
+}

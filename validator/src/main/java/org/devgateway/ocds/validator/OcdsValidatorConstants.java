@@ -37,17 +37,31 @@ public final class OcdsValidatorConstants {
     public static final String SCHEMA_POSTFIX = ".json";
 
     public static final class Extensions {
-        public static final String OCDS_BID_EXTENSION = "ocds_bid_extension";
-        public static final String OCDS_ENQUIRY_EXTENSION = "ocds_enquiry_extension";
-        public static final String OCDS_LOCATION_EXTENSION = "ocds_location_extension";
-        public static final String OCDS_LOTS_EXTENSION = "ocds_lots_extension";
-        public static final String OCDS_MILESTONE_DOCUMENTS_EXTENSION = "ocds_milestone_documents_extension";
-        public static final String OCDS_PARTICIPATION_FEE_EXTENSION = "ocds_participationFee_extension";
-        public static final String OCDS_PROCESS_TITLE_EXTENSION = "ocds_process_title_extension";
+        //OFFICIAL
+        public static final String OCDS_BID_EXTENSION_V1_1 = "ocds_bid_extension/v1.1";
+        public static final String OCDS_ENQUIRY_EXTENSION_V1_1 = "ocds_enquiry_extension/v1.1";
+        public static final String OCDS_LOCATION_EXTENSION_V1_1 = "ocds_location_extension/v1.1";
+        public static final String OCDS_LOTS_EXTENSION_V1_1 = "ocds_lots_extension/v1.1";
+        public static final String OCDS_MILESTONE_DOCUMENTS_EXTENSION_V1_1 = "ocds_milestone_documents_extension/v1.1";
+        public static final String OCDS_PARTICIPATION_FEE_EXTENSION_V1_1 = "ocds_participationFee_extension/v1.1";
+        public static final String OCDS_PROCESS_TITLE_EXTENSION_V1_1 = "ocds_process_title_extension/v1.1";
 
-        public static final String[] ALL = {OCDS_BID_EXTENSION, OCDS_ENQUIRY_EXTENSION, OCDS_LOCATION_EXTENSION,
-                OCDS_LOTS_EXTENSION, OCDS_MILESTONE_DOCUMENTS_EXTENSION, OCDS_PARTICIPATION_FEE_EXTENSION,
-                OCDS_PROCESS_TITLE_EXTENSION};
+        //COMMUNITY
+        public static final String OCDS_ADDITIONAl_CONTACT_POINTS_EXTENSION = "ocds_additionalContactPoints_extension";
+        public static final String OCDS_BUDGET_BREAKDOWN_EXTENSION = "ocds_budget_breakdown_extension";
+        public static final String OCDS_BUDGET_PROJECTS_EXTENSION = "ocds_budget_projects_extension";
+        public static final String OCDS_CHARGES_EXTENSION = "ocds_charges_extension";
+        public static final String OCDS_CONTRACT_SUPPLIERS_EXTENSION = "ocds_contract_suppliers_extension";
+        public static final String OCDS_DOCUMENTATION_EXTENSION = "ocds_documentation_extension";
+        public static final String OCDS_EXTENDS_CONTRACTID_EXTENSION = "ocds_extendsContractID_extension";
+
+        public static final String[] ALL = {OCDS_BID_EXTENSION_V1_1, OCDS_ENQUIRY_EXTENSION_V1_1,
+                OCDS_LOCATION_EXTENSION_V1_1, OCDS_LOTS_EXTENSION_V1_1, OCDS_MILESTONE_DOCUMENTS_EXTENSION_V1_1,
+                OCDS_PARTICIPATION_FEE_EXTENSION_V1_1, OCDS_PROCESS_TITLE_EXTENSION_V1_1,
+
+                OCDS_ADDITIONAl_CONTACT_POINTS_EXTENSION, OCDS_BUDGET_BREAKDOWN_EXTENSION,
+                OCDS_BUDGET_PROJECTS_EXTENSION, OCDS_CHARGES_EXTENSION, OCDS_CONTRACT_SUPPLIERS_EXTENSION,
+                OCDS_DOCUMENTATION_EXTENSION, OCDS_EXTENDS_CONTRACTID_EXTENSION};
     }
 
     public static final String EXTENSIONS_PREFIX = "/schema/extensions/";

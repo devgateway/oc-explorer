@@ -1,0 +1,6 @@
+{
+  "name": "Additional Contact Points",
+  "description": "For including extra contact points on each organization. Particularly used when each contact point deals only in a particular language or group of languages.",
+  "compatibility": ">=1.1.0",
+  "dependencies": []
+}

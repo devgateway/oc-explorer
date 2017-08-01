@@ -1,0 +1,65 @@
+{
+  "definitions": {
+    "BudgetBreakdown": {
+      "type": "object",
+      "title": "Detailed budget breakdown",
+      "description": "This section allows a detailed budget breakdown to be expressed, covering multiple budget sources and multiple periods",
+      "properties": {
+        "id": {
+          "description": "An identifier for this particular budget entry.",
+          "mergeStrategy": "ocdsVersion",
+          "type": [
+            "string",
+            "integer",
+            "null"
+          ]
+        },
+        "description": {
+          "title": "Description",
+          "description": "A short free text description of this budget entry.",
+          "mergeStrategy": "ocdsVersion",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "amount": {
+          "description": "The value of the budget line item.",
+          "$ref": "#/definitions/Value"
+        },
+        "uri": {
+          "title": "Linked budget information",
+          "description": "A URI pointing directly to a machine-readable information about this budget entry.",
+          "mergeStrategy": "ocdsVersion",
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "period": {
+          "$ref": "#/definitions/Period",
+          "title": "Budget period",
+          "description": "The period covered by this budget entry."
+        },
+        "sourceParty": {
+          "$ref": "#/definitions/OrganizationReference",
+          "title": "Source party",
+          "description": "The organization or other party related to this budget entry. If the budget amount is positive, this indicates a flow of resources from the party to the contracting process. If the budget amount is negative, it indicates a payment from the contracting process to this party."
+        }
+      }
+    },
+    "Budget": {
+      "properties": {
+        "budgetBreakdown": {
+          "type": "array",
+          "title": "Budget breakdown",
+          "description": "A detailed breakdown of the budget by period and/or participating funders.",
+          "items": {
+            "$ref": "#/definitions/BudgetBreakdown"
+          }
+        }
+      }
+    }
+  }
+}

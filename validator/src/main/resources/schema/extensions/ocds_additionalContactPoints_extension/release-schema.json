@@ -1,0 +1,36 @@
+{
+  "definitions": {
+    "Organization": {
+      "properties": {
+        "additionalContactPoints": {
+          "title": "Additional Contact Points",
+          "description": "An array of additional contact points that may be consulted for information. Additional contact points should each list the languages they operate in their name, and as structured data in the availableLanguage field. ",
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/definitions/ContactPoint"
+          }
+        }
+      }
+    },
+    "ContactPoint": {
+      "properties": {
+        "availableLanguage": {
+          "title": "Available Language(s)",
+          "type": [
+            "array",
+            "null"
+          ],
+          "description": "An array of language codes (e.g. en, es, uk)",
+          "items": {
+            "type": "string",
+            "name": "Language code",
+            "description": "ISO language code"
+          }
+        }
+      }
+    }
+  }
+}
