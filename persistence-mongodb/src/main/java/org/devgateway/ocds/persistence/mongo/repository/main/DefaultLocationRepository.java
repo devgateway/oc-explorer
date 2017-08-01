@@ -1,4 +1,4 @@
-package org.devgateway.ocds.persistence.mongo.repository;
+package org.devgateway.ocds.persistence.mongo.repository.main;
 
 import org.devgateway.ocds.persistence.mongo.DefaultLocation;
 import org.springframework.cache.annotation.CacheConfig;

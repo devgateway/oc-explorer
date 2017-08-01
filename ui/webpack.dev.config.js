@@ -31,10 +31,15 @@ module.exports = {
   },
   devtool: 'source-map',
   plugins: [
+    new webpack.DllReferencePlugin({
+      context: __dirname,
+      name: 'lib',
+      manifest: require('./dll/manifest.json')
+    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.ProvidePlugin({
       fetch: 'imports?this=>global!exports?global.fetch!whatwg-fetch',
-      React: "react"
+      React: "react",
     })
   ],
   eslint:{

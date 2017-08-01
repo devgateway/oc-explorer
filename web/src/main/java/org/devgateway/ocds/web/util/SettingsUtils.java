@@ -18,12 +18,12 @@ public class SettingsUtils {
 
     public static final String DEFAULT_LANGUAGE = "en_US";
 
-    private static final Integer EXCELBATCHSIZEDEFAULT = 10000;
+    private static final Integer EXCELBATCHSIZEDEFAULT = 5000;
 
     @Autowired
     private AdminSettingsRepository adminSettingsRepository;
 
-    private AdminSettings getSettings() {
+    public AdminSettings getSettings() {
         List<AdminSettings> list = adminSettingsRepository.findAll();
         if (list.size() == 0) {
             return new AdminSettings();
