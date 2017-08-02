@@ -8,8 +8,6 @@ import OverviewChart from '../../../visualizations/charts/overview';
 import CostEffectiveness from '../../../visualizations/charts/cost-effectiveness';
 import { cacheFn, download } from '../../../tools';
 import ProcurementMethodChart from '../../../visualizations/charts/procurement-method';
-// eslint-disable-next-line no-unused-vars
-import style from './style.less';
 
 class LocationWrapper extends translatable(Component) {
   constructor(props) {
@@ -30,6 +28,13 @@ class LocationWrapper extends translatable(Component) {
           <div>
             <header>
               {data.name}
+              <img
+                src="assets/icons/export-black.svg"
+                alt="Export"
+                width="16"
+                height="16"
+              />
+              <img src="assets/icons/camera.svg" alt="Screenshot" />
             </header>
             <div className="row">
               <div className="tabs-bar col-xs-4">
@@ -40,7 +45,7 @@ class LocationWrapper extends translatable(Component) {
                     onClick={() => this.setState({ currentTab: index })}
                     role="button"
                     tabIndex={0}
-                  >
+                    >
                     <a href="#">{Tab.getName(t)}</a>
                   </div>
                 ))}
@@ -132,30 +137,6 @@ export class ChartTab extends Tab {
         margin={this.constructor.getMargins()}
         legend="h"
         />
-        <div className="chart-toolbar">
-          <div
-            className="btn btn-default"
-            onClick={doExcelExport}
-            role="button"
-            tabIndex={0}
-          >
-            <img
-              src="assets/icons/export-black.svg"
-              alt="Export"
-              width="16"
-              height="16"
-            />
-          </div>
-
-          <div
-            className="btn btn-default"
-            onClick={() => ReactDOM.findDOMNode(this).querySelector('.modebar-btn:first-child').click()}
-            role="button"
-            tabIndex={0}
-          >
-            <img src="assets/icons/camera.svg" alt="Screenshot" />
-          </div>
-        </div>
       </div>
     );
   }
