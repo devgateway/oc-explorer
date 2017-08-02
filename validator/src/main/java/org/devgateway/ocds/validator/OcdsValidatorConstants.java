@@ -65,6 +65,10 @@ public final class OcdsValidatorConstants {
     }
 
     public static final String EXTENSIONS_PREFIX = "/schema/extensions/";
+    public static final String REMOTE_EXTENSION_META_POSTFIX = "extension.json";
+
+    public static final String EXTENSIONS_PROPERTY = "extensions";
+    public static final String RELEASES_PROPERTY = "releases";
 
     public static final SortedSet<String> EXTENSIONS = Collections.unmodifiableSortedSet(new TreeSet<>(Arrays.asList(
             Extensions.ALL)));

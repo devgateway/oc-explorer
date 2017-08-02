@@ -17,12 +17,6 @@
             "type": "string",
             "format": "date-time"
         },
-        "releases": {
-            "type": "array",
-            "minItems": 1,
-            "items": { "$ref": "http://standard.open-contracting.org/schema/1__0__1/release-schema.json" },
-            "uniqueItems": true
-        },
         "publisher": { 
             "description": "Information to uniquely identify the publisher of this package.",
             "type": "object",

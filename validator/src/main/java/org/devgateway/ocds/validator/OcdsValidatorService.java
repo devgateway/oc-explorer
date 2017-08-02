@@ -13,11 +13,10 @@ import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +41,6 @@ public class OcdsValidatorService {
 
     private Map<String, JsonMergePatch> extensionReleaseJson = new ConcurrentHashMap<>();
 
-
     @Autowired
     private ObjectMapper jacksonObjectMapper;
 
@@ -60,32 +58,66 @@ public class OcdsValidatorService {
 
     private JsonNode applyExtensions(JsonNode schemaNode, OcdsValidatorRequest request) {
         if (ObjectUtils.isEmpty(request.getExtensions())) {
-            logger.debug("No schema extensions are requested.");
+            logger.debug("No explicit schema extensions were requested.");
             return schemaNode;
         }
 
-        List<String> unrecognizedExtensions =
-                request.getExtensions().stream().filter(e -> !OcdsValidatorConstants.EXTENSIONS.contains(e))
-                        .collect(Collectors.toList());
-
-        if (!unrecognizedExtensions.isEmpty()) {
-            throw new RuntimeException("Unknown extensions by name: " + unrecognizedExtensions);
-        }
-
-        //TODO: check extension meta and see if they apply for the current standard
+//        List<String> unrecognizedExtensions =
+//                request.getExtensions().stream().filter(e -> !extensionMeta.containsKey(e))
+//                        .collect(Collectors.toList());
+//
+//        if (!unrecognizedExtensions.isEmpty()) {
+//            throw new RuntimeException("Unknown extensions by name: " + unrecognizedExtensions);
+//        }
 
         JsonNode schemaResult = schemaNode;
 
         for (String ext : request.getExtensions()) {
             try {
                 logger.debug("Applying schema extension " + ext);
-                schemaResult = extensionReleaseJson.get(ext).apply(schemaResult);
+                getExtensionMeta(ext); //TODO: check extension meta and see if they apply for the current standard
+                schemaResult = getExtensionReleaseJson(ext).apply(schemaResult);
             } catch (JsonPatchException e) {
                 throw new RuntimeException(e);
             }
         }
 
         return schemaResult;
+    }
+
+    private JsonNode getExtensionMeta(String id) {
+
+        //check if preloaded as extension
+        if (extensionMeta.containsKey(id)) {
+            return extensionMeta.get(id);
+        }
+
+        //attempt load via URL
+        try {
+            JsonNode jsonNode = readExtensionMeta(new URL(id));
+            extensionMeta.put(id, jsonNode);
+            return jsonNode;
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private JsonMergePatch getExtensionReleaseJson(String id) {
+        //check if preloaded as extension
+        if (extensionReleaseJson.containsKey(id)) {
+            return extensionReleaseJson.get(id);
+        }
+
+        //attempt load via URL
+        try {
+            String releaseUrl = id.replace(OcdsValidatorConstants.REMOTE_EXTENSION_META_POSTFIX,
+                    OcdsValidatorConstants.EXTENSION_RELEASE_JSON);
+            JsonMergePatch patch = readExtensionReleaseJson(new URL(releaseUrl));
+            extensionReleaseJson.put(id, patch);
+            return patch;
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private JsonNode readExtensionMeta(String extensionName) {
@@ -99,6 +131,28 @@ public class OcdsValidatorService {
             throw new RuntimeException(e);
         }
     }
+
+    private JsonNode readExtensionMeta(URL url) {
+        try {
+            logger.debug("Reading extension metadata from URL " + url);
+            return JsonLoader.fromURL(url);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private JsonMergePatch readExtensionReleaseJson(URL url) {
+        //reading meta
+        try {
+            logger.debug("Reading extension JSON contents for extension " + url);
+            JsonNode jsonMergePatch = JsonLoader.fromURL(url);
+            JsonMergePatch patch = JsonMergePatch.fromJson(jsonMergePatch);
+            return patch;
+        } catch (IOException | JsonPatchException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     private JsonMergePatch readExtensionReleaseJson(String extensionName) {
         //reading meta
@@ -146,7 +200,7 @@ public class OcdsValidatorService {
     }
 
     private void initExtensions() {
-        logger.debug("Initializing schema extensions");
+        logger.debug("Initializing predefined schema extensions");
         OcdsValidatorConstants.EXTENSIONS.forEach(e -> {
             logger.debug("Initializing schema extension " + e);
             extensionMeta.put(e, readExtensionMeta(e));
@@ -168,6 +222,10 @@ public class OcdsValidatorService {
 
         if (nodeRequest.getSchemaType().equals(OcdsValidatorConstants.Schemas.RELEASE)) {
             return validateRelease(nodeRequest);
+        }
+
+        if (nodeRequest.getSchemaType().equals(OcdsValidatorConstants.Schemas.RELEASE_PACKAGE)) {
+            return validateReleasePackage(nodeRequest);
         }
 
         return null;
@@ -207,6 +265,47 @@ public class OcdsValidatorService {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Validates a release package
+     *
+     * @param nodeRequest
+     * @return
+     */
+    private ProcessingReport validateReleasePackage(OcdsValidatorNodeRequest nodeRequest) {
+        JsonSchema schema = getSchema(nodeRequest);
+        try {
+            ProcessingReport releasePackageReport = schema.validate(nodeRequest.getNode());
+            if (!releasePackageReport.isSuccess()) {
+                return releasePackageReport;
+            }
+
+            //get release package extensions
+            if (nodeRequest.getNode().hasNonNull(OcdsValidatorConstants.EXTENSIONS_PROPERTY)) {
+                for (JsonNode extension : nodeRequest.getNode().get(OcdsValidatorConstants.EXTENSIONS_PROPERTY)) {
+                    nodeRequest.getExtensions().add(extension.asText());
+                }
+            }
+
+            if (nodeRequest.getNode().hasNonNull(OcdsValidatorConstants.RELEASES_PROPERTY)) {
+                for (JsonNode release : nodeRequest.getNode().get(OcdsValidatorConstants.RELEASES_PROPERTY)) {
+                    OcdsValidatorNodeRequest releaseValidationRequest
+                            = new OcdsValidatorNodeRequest(nodeRequest, release);
+                    releaseValidationRequest.setSchemaType(OcdsValidatorConstants.Schemas.RELEASE);
+                    releasePackageReport.mergeWith(validateRelease(releaseValidationRequest));
+                }
+            } else {
+                throw new RuntimeException("No releases were found during release package validation!");
+            }
+
+            return releasePackageReport;
+
+        } catch (ProcessingException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
 
     private OcdsValidatorNodeRequest convertApiRequestToNodeRequest(OcdsValidatorApiRequest request) {
         JsonNode node = null;

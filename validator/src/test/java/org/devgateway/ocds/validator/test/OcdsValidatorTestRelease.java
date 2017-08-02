@@ -4,6 +4,7 @@ import com.github.fge.jsonschema.core.report.ProcessingReport;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.TreeSet;
 import org.devgateway.ocds.validator.OcdsValidatorApiRequest;
 import org.devgateway.ocds.validator.OcdsValidatorConstants;
 import org.devgateway.ocds.validator.OcdsValidatorService;
@@ -22,7 +23,7 @@ import org.springframework.util.StreamUtils;
  */
 @RunWith(SpringRunner.class)
 @ActiveProfiles("integration")
-@SpringBootTest(classes = { ValidatorApplication.class })
+@SpringBootTest(classes = {ValidatorApplication.class})
 //@TestPropertySource("classpath:test.properties")
 public class OcdsValidatorTestRelease {
 
@@ -32,11 +33,23 @@ public class OcdsValidatorTestRelease {
     @Test
     public void testReleaseValidation() {
 
-        OcdsValidatorApiRequest request=new OcdsValidatorApiRequest(OcdsValidatorConstants.Versions.OCDS_1_1_0,
+        OcdsValidatorApiRequest request = new OcdsValidatorApiRequest(OcdsValidatorConstants.Versions.OCDS_1_1_0,
                 OcdsValidatorConstants.EXTENSIONS, OcdsValidatorConstants.Schemas.RELEASE);
-        InputStream resourceAsStream = this.getClass().getResourceAsStream("/full-release.json");
+        request.setJson(getJsonFromResource("/full-release.json"));
+
+        ProcessingReport processingReport = ocdsValidatorService.validate(request);
+        if (!processingReport.isSuccess()) {
+            System.out.println(processingReport);
+        }
+
+        Assert.assertTrue(processingReport.isSuccess());
+
+    }
+
+    private String getJsonFromResource(String resourceName) {
+        InputStream resourceAsStream = this.getClass().getResourceAsStream(resourceName);
         try {
-            request.setJson(StreamUtils.copyToString(resourceAsStream, Charset.defaultCharset()));
+            return StreamUtils.copyToString(resourceAsStream, Charset.defaultCharset());
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -49,8 +62,18 @@ public class OcdsValidatorTestRelease {
             }
         }
 
+    }
+
+    @Test
+    public void testReleasePackageValidation() {
+
+        OcdsValidatorApiRequest request = new OcdsValidatorApiRequest(OcdsValidatorConstants.Versions.OCDS_1_1_0,
+               new TreeSet<>(OcdsValidatorConstants.EXTENSIONS), OcdsValidatorConstants.Schemas.RELEASE_PACKAGE);
+
+        request.setJson(getJsonFromResource("/release-package.json"));
+
         ProcessingReport processingReport = ocdsValidatorService.validate(request);
-        if(!processingReport.isSuccess()) {
+        if (!processingReport.isSuccess()) {
             System.out.println(processingReport);
         }
 
