@@ -116,8 +116,9 @@ export class ChartTab extends Tab {
       months,
       t: translationKey => this.t(translationKey),
     });
-    return (<div className={cn('map-chart', this.constructor.getChartClass())}>
-      <this.constructor.Chart
+    return (
+      <div className={cn('map-chart', this.constructor.getChartClass())}>
+        <this.constructor.Chart
         filters={decoratedFilters}
         styling={styling}
         years={years}
@@ -130,32 +131,33 @@ export class ChartTab extends Tab {
         height={350}
         margin={this.constructor.getMargins()}
         legend="h"
-      />
-      <div className="chart-toolbar">
-        <div
-          className="btn btn-default"
-          onClick={doExcelExport}
-          role="button"
-          tabIndex={0}
-        >
-          <img
-            src="assets/icons/export-black.svg"
-            alt="Export"
-            width="16"
-            height="16"
-          />
-        </div>
+        />
+        <div className="chart-toolbar">
+          <div
+            className="btn btn-default"
+            onClick={doExcelExport}
+            role="button"
+            tabIndex={0}
+          >
+            <img
+              src="assets/icons/export-black.svg"
+              alt="Export"
+              width="16"
+              height="16"
+            />
+          </div>
 
-        <div
-          className="btn btn-default"
-          onClick={() => ReactDOM.findDOMNode(this).querySelector('.modebar-btn:first-child').click()}
-          role="button"
-          tabIndex={0}
-        >
-          <img src="assets/icons/camera.svg" alt="Screenshot" />
+          <div
+            className="btn btn-default"
+            onClick={() => ReactDOM.findDOMNode(this).querySelector('.modebar-btn:first-child').click()}
+            role="button"
+            tabIndex={0}
+          >
+            <img src="assets/icons/camera.svg" alt="Screenshot" />
+          </div>
         </div>
       </div>
-    </div>);
+    );
   }
 }
 
