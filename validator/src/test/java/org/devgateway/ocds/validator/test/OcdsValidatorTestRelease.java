@@ -81,4 +81,21 @@ public class OcdsValidatorTestRelease {
 
     }
 
+    @Test
+    public void testReleasePackageValidationWithVersionAutodetect() {
+
+        OcdsValidatorApiRequest request = new OcdsValidatorApiRequest(null,
+                new TreeSet<>(OcdsValidatorConstants.EXTENSIONS), OcdsValidatorConstants.Schemas.RELEASE_PACKAGE);
+
+        request.setJson(getJsonFromResource("/release-package.json"));
+
+        ProcessingReport processingReport = ocdsValidatorService.validate(request);
+        if (!processingReport.isSuccess()) {
+            System.out.println(processingReport);
+        }
+
+        Assert.assertTrue(processingReport.isSuccess());
+
+    }
+
 }

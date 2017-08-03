@@ -41,6 +41,9 @@ public class OcdsValidatorService {
 
     private Map<String, JsonMergePatch> extensionReleaseJson = new ConcurrentHashMap<>();
 
+    private Map<String, Integer> majorLatestFullVersion = new ConcurrentHashMap<>();
+
+
     @Autowired
     private ObjectMapper jacksonObjectMapper;
 
@@ -208,9 +211,29 @@ public class OcdsValidatorService {
         });
     }
 
+    private void initMajorLatestFullVersion() {
+
+        for (int i = 0; i < OcdsValidatorConstants.Versions.ALL.length; i++) {
+            String[] versions = OcdsValidatorConstants.Versions.ALL[i].split("\\.");
+            String majorMinor = versions[0] + "." + versions[1];
+
+            if (majorLatestFullVersion.containsKey(majorMinor)) {
+                if (majorLatestFullVersion.get(majorMinor) < Integer.parseInt(versions[2])) {
+                    majorLatestFullVersion.put(majorMinor, Integer.parseInt(versions[2]));
+                }
+            } else {
+                majorLatestFullVersion.put(majorMinor, Integer.parseInt(versions[2]));
+            }
+
+        }
+
+
+    }
+
     @PostConstruct
     private void init() {
         initSchemaNamePrefix();
+        initMajorLatestFullVersion();
         initExtensions();
     }
 
@@ -221,6 +244,11 @@ public class OcdsValidatorService {
         OcdsValidatorNodeRequest nodeRequest = convertApiRequestToNodeRequest(request);
 
         if (nodeRequest.getSchemaType().equals(OcdsValidatorConstants.Schemas.RELEASE)) {
+
+            if (request.getVersion() == null) {
+                throw new RuntimeException("Not allowed null version info for release validation!");
+            }
+
             return validateRelease(nodeRequest);
         }
 
@@ -250,6 +278,7 @@ public class OcdsValidatorService {
         }
     }
 
+
     /**
      * Validates a release or an array of releases
      *
@@ -266,6 +295,10 @@ public class OcdsValidatorService {
         }
     }
 
+    private String constructFullVersion(String majorMinor, Integer bugfix) {
+        return majorMinor + "." + bugfix;
+    }
+
     /**
      * Validates a release package
      *
@@ -273,6 +306,20 @@ public class OcdsValidatorService {
      * @return
      */
     private ProcessingReport validateReleasePackage(OcdsValidatorNodeRequest nodeRequest) {
+
+        if (nodeRequest.getVersion() == null) {
+            //try autodetect using version in node
+            if (nodeRequest.getNode().hasNonNull(OcdsValidatorConstants.VERSION_PROPERTY)) {
+                String majorMinor = nodeRequest.getNode().get(OcdsValidatorConstants.VERSION_PROPERTY).asText();
+                if (!majorLatestFullVersion.containsKey(majorMinor)) {
+                    throw new RuntimeException("Unrecognized package release version " + majorMinor);
+                }
+                nodeRequest.setVersion(constructFullVersion(majorMinor, majorLatestFullVersion.get(majorMinor)));
+            } else {
+                throw new RuntimeException("Version schema property has to be present!");
+            }
+        }
+
         JsonSchema schema = getSchema(nodeRequest);
         try {
             ProcessingReport releasePackageReport = schema.validate(nodeRequest.getNode());
