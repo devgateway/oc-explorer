@@ -50,8 +50,8 @@ export class ChartTab extends Tab {
           translations={translations}
           data={this.state.chartData}
           requestNewData={(_, chartData) => this.setState({ chartData })}
-          width={500}
-          height={350}
+          width={400}
+          height={250}
           margin={this.constructor.getMargins()}
           legend="h"
         />
