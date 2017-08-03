@@ -108,7 +108,6 @@ class LocationWrapper extends translatable(Component) {
                   >
                     <img
                       src="assets/icons/camera.svg"
-
                       alt="Screenshot"
                     />
                   </a>
@@ -173,19 +172,28 @@ export class OverviewChartTab extends ChartTab {
   static getChartClass() { return 'overview'; }
 }
 
-OverviewChartTab.Chart = OverviewChart;
+const capitalizeAxisTitles = Class => class extends Class {
+  getLayout() {
+    const layout = super.getLayout();
+    layout.xaxis.title = layout.xaxis.title.toUpperCase();
+    layout.yaxis.title = layout.yaxis.title.toUpperCase();
+    return layout;
+  }
+};
+
+OverviewChartTab.Chart = capitalizeAxisTitles(OverviewChart);
 
 export class CostEffectivenessTab extends ChartTab {
   static getName(t) { return t('charts:costEffectiveness:title'); }
 }
 
-CostEffectivenessTab.Chart = CostEffectiveness;
+CostEffectivenessTab.Chart = capitalizeAxisTitles(CostEffectiveness);
 
 export class ProcurementMethodTab extends ChartTab {
   static getName(t) { return t('charts:procurementMethod:title'); }
 }
 
-ProcurementMethodTab.Chart = ProcurementMethodChart;
+ProcurementMethodTab.Chart = capitalizeAxisTitles(ProcurementMethodChart);
 
 LocationWrapper.TABS = [OverviewTab, OverviewChartTab, CostEffectivenessTab, ProcurementMethodTab];
 
