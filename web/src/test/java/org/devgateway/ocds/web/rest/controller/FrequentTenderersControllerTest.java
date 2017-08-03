@@ -30,8 +30,9 @@ public class FrequentTenderersControllerTest extends AbstractEndPointControllerT
         final List<DBObject> frequentTenderers = frequentTenderersController
                 .activeAwardsCount(new YearFilterPagingRequest());
 
-        Assert.assertEquals(1, frequentTenderers.size());
-        Assert.assertEquals(2, frequentTenderers.get(0).get("cnt"));
+        Assert.assertEquals(2, frequentTenderers.size());
+        Assert.assertEquals(1, frequentTenderers.get(0).get("cnt"));
+        Assert.assertEquals(1, frequentTenderers.get(1).get("cnt"));
     }
 
 }
