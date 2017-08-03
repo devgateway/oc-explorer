@@ -39,13 +39,6 @@ export class ChartTab extends Tab {
   render() {
     const { filters, styling, years, translations, data, monthly, months } = this.props;
     const decoratedFilters = addTenderDeliveryLocationId(filters, data._id);
-    const doExcelExport = () => download({
-      ep: this.constructor.Chart.excelEP,
-      filters: decoratedFilters,
-      years,
-      months,
-      t: translationKey => this.t(translationKey),
-    });
     return (
       <div className={cn('map-chart', this.constructor.getChartClass())}>
         <this.constructor.Chart
@@ -75,6 +68,19 @@ class LocationWrapper extends translatable(Component) {
     };
   }
 
+  doExcelExport() {
+    const { currentTab } = this.state;
+    const { data, filters, years, months } = this.props;
+    const CurrentTab = this.constructor.TABS[currentTab];
+    download({
+      ep: CurrentTab.Chart.excelEP,
+      filters: addTenderDeliveryLocationId(filters, data._id),
+      years,
+      months,
+      t: translationKey => this.t(translationKey),
+    });
+  }
+
   render() {
     const { currentTab } = this.state;
     const { data, translations, filters, years, styling, monthly, months } = this.props;
@@ -87,7 +93,7 @@ class LocationWrapper extends translatable(Component) {
             <header>
               {CurrentTab.prototype instanceof ChartTab &&
                 <span className="chart-tools">
-                  <a tabIndex={-1} role="button">
+                  <a tabIndex={-1} role="button" onClick={() => this.doExcelExport()}>
                     <img
                       src="assets/icons/export-very-black.svg"
                       alt="Export"
