@@ -85,12 +85,11 @@ class LocationWrapper extends translatable(Component) {
         <Popup className="tender-locations-popup">
           <div>
             <header>
-
               {CurrentTab.prototype instanceof ChartTab &&
                 <span className="chart-tools">
                   <a tabIndex={-1} role="button">
                     <img
-                      src="assets/icons/export-black.svg"
+                      src="assets/icons/export-very-black.svg"
                       alt="Export"
                       width="16"
                       height="16"
@@ -99,7 +98,7 @@ class LocationWrapper extends translatable(Component) {
                   <a
                     tabIndex={-1}
                     role="button"
-                    onClick={() => ReactDOM.findDOMNode(this).querySelector('.modebar-btn:first-child').click()}
+                    onClick={() => ReactDOM.findDOMNode(this.currentChart).querySelector('.modebar-btn:first-child').click()}
                   >
                     <img
                       src="assets/icons/camera.svg"
@@ -134,6 +133,7 @@ class LocationWrapper extends translatable(Component) {
                   monthly={monthly}
                   months={months}
                   styling={styling}
+                  ref={(c) => { this.currentChart = c; }}
                 />
               </div>
             </div>
