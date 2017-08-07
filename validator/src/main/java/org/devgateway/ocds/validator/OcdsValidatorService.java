@@ -11,6 +11,8 @@ import com.github.fge.jsonschema.core.report.LogLevel;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
+import com.vdurmont.semver4j.Requirement;
+import com.vdurmont.semver4j.Semver;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -22,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
@@ -78,7 +81,12 @@ public class OcdsValidatorService {
         for (String ext : request.getExtensions()) {
             try {
                 logger.debug("Applying schema extension " + ext);
-                getExtensionMeta(ext); //TODO: check extension meta and see if they apply for the current standard
+                JsonNode nodeMeta = getExtensionMeta(ext);
+                if (!compatibleExtension(nodeMeta, request.getVersion())) {
+                    throw new RuntimeException("Cannot apply extension " + ext + " due to version incompatibilities. "
+                            + "Extension meta is " + nodeMeta.toString() + " requested schema version "
+                            + request.getVersion());
+                }
                 schemaResult = getExtensionReleaseJson(ext).apply(schemaResult);
             } catch (JsonPatchException e) {
                 throw new RuntimeException(e);
@@ -104,6 +112,20 @@ public class OcdsValidatorService {
             throw new RuntimeException(e);
         }
     }
+
+    private boolean compatibleExtension(JsonNode extensionNodeMeta, String fullVersion) {
+        Assert.notNull(fullVersion, "OCDS Version cannot be null!");
+        Assert.notNull(extensionNodeMeta, "Extension meta must not be null!");
+
+        JsonNode compatNode = extensionNodeMeta.get(OcdsValidatorConstants.EXTENSION_META_COMPAT_PROPERTY);
+        if (compatNode == null) {
+            return true; //by default if we don't say anything about compatibility, it is compatible
+        }
+
+        Semver requestedVersion = new Semver(fullVersion, Semver.SemverType.NPM);
+        return requestedVersion.satisfies(Requirement.buildNPM(compatNode.asText()));
+    }
+
 
     private JsonMergePatch getExtensionReleaseJson(String id) {
         //check if preloaded as extension

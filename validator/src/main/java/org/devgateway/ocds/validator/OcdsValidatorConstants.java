@@ -79,5 +79,6 @@ public final class OcdsValidatorConstants {
 
 
     public static final String EXTENSION_META = "extension.json";
+    public static final String EXTENSION_META_COMPAT_PROPERTY = "compatibility";
     public static final String EXTENSION_RELEASE_JSON = "release-schema.json";
 }
