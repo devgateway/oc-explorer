@@ -123,7 +123,25 @@ public class OcdsValidatorService {
         }
 
         Semver requestedVersion = new Semver(fullVersion, Semver.SemverType.NPM);
-        return requestedVersion.satisfies(Requirement.buildNPM(compatNode.asText()));
+        return requestedVersion.satisfies(Requirement.buildNPM(patchSemverNPMWildcardNotWorking(compatNode.asText())));
+    }
+
+    /**
+     * see https://github.com/vdurmont/semver4j/issues/7
+     * @param version
+     * @return
+     */
+    private String patchSemverNPMWildcardNotWorking(String version) {
+        String[] split = version.split("\\.");
+        if (split.length < 2) {
+            throw new RuntimeException("Incompatible version format.");
+        }
+
+        if (split.length == 2) {
+            return version + ".0";
+        }
+
+        return version;
     }
 
 
