@@ -38,6 +38,7 @@
         <module>forms</module>
         <module>persistence-mongodb</module>
         <module>validator</module>
+        <module>validator-web</module>
     </modules>
 
     <inceptionYear>2015</inceptionYear>

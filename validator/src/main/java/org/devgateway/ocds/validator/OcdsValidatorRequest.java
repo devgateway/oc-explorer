@@ -1,12 +1,17 @@
 package org.devgateway.ocds.validator;
 
 import java.util.SortedSet;
+import java.util.TreeSet;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * Created by mpostelnicu on 7/5/17.
  */
 public abstract class OcdsValidatorRequest {
+
+    public OcdsValidatorRequest() {
+
+    }
 
     public OcdsValidatorRequest(OcdsValidatorRequest request) {
         this.version = request.getVersion();
@@ -22,6 +27,7 @@ public abstract class OcdsValidatorRequest {
 
     /**
      * This returns a unique key of the validator request based on the set contents , version and schemaType
+     *
      * @return
      */
     public String getKey() {
@@ -30,7 +36,7 @@ public abstract class OcdsValidatorRequest {
 
     private String version;
 
-    private SortedSet<String> extensions;
+    private SortedSet<String> extensions = new TreeSet<>();
 
     private String operation;
 
