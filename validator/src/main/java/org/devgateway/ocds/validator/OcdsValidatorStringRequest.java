@@ -6,19 +6,18 @@ import java.util.SortedSet;
 /**
  * Created by mpostelnicu on 7/6/17.
  */
-public class OcdsValidatorApiRequest extends OcdsValidatorRequest {
+public class OcdsValidatorStringRequest extends OcdsValidatorRequest {
 
     @ApiModelProperty(value = "This parameter specified which category can be used for grouping the results."
             + " Possible values here are: bidTypeId, procuringEntityId.")
     private String json;
 
-    private String url;
 
-    public OcdsValidatorApiRequest(String version, SortedSet<String> extensions, String schemaType) {
+    public OcdsValidatorStringRequest(String version, SortedSet<String> extensions, String schemaType) {
         super(version, extensions, schemaType);
     }
 
-    public OcdsValidatorApiRequest() {
+    public OcdsValidatorStringRequest() {
         super();
     }
 
@@ -30,11 +29,4 @@ public class OcdsValidatorApiRequest extends OcdsValidatorRequest {
         this.json = json;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
 }

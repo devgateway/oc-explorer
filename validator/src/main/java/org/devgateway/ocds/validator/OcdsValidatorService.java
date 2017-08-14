@@ -220,7 +220,7 @@ public class OcdsValidatorService {
             schemaNode = applyExtensions(schemaNode, request);
             try {
                 JsonSchema schema = JsonSchemaFactory.newBuilder()
-                        .setReportProvider(new ListReportProvider(LogLevel.ERROR, LogLevel.FATAL)).freeze()
+                        .setReportProvider(new ListReportProvider(LogLevel.INFO, LogLevel.FATAL)).freeze()
                         .getJsonSchema(schemaNode);
                 logger.debug("Saving to cache schema with extensions " + request.getKey());
                 keySchema.put(request.getKey(), schema);
@@ -277,15 +277,21 @@ public class OcdsValidatorService {
         initExtensions();
     }
 
+    public ProcessingReport validate(OcdsValidatorStringRequest request) {
+        return validate(convertStringRequestToNodeRequest(request));
+    }
 
-    public ProcessingReport validate(OcdsValidatorApiRequest request) {
-        logger.debug("Running validation for api request for schema of type " + request.getSchemaType()
-                + " and version " + request.getVersion());
-        OcdsValidatorNodeRequest nodeRequest = convertApiRequestToNodeRequest(request);
+    public ProcessingReport validate(OcdsValidatorUrlRequest request) {
+        return validate(convertUrlRequestToNodeRequest(request));
+    }
+
+    public ProcessingReport validate(OcdsValidatorNodeRequest nodeRequest) {
+        logger.debug("Running validation for api request for schema of type " + nodeRequest.getSchemaType()
+                + " and version " + nodeRequest.getVersion());
 
         if (nodeRequest.getSchemaType().equals(OcdsValidatorConstants.Schemas.RELEASE)) {
 
-            if (request.getVersion() == null) {
+            if (nodeRequest.getVersion() == null) {
                 throw new RuntimeException("Not allowed null version info for release validation!");
             }
 
@@ -394,18 +400,22 @@ public class OcdsValidatorService {
     }
 
 
-    private OcdsValidatorNodeRequest convertApiRequestToNodeRequest(OcdsValidatorApiRequest request) {
+    private OcdsValidatorNodeRequest convertStringRequestToNodeRequest(OcdsValidatorStringRequest request) {
         JsonNode node = null;
         if (!StringUtils.isEmpty(request.getJson())) {
             node = getJsonNodeFromString(request.getJson());
         }
 
+        return new OcdsValidatorNodeRequest(request, node);
+    }
+
+    private OcdsValidatorNodeRequest convertUrlRequestToNodeRequest(OcdsValidatorUrlRequest request) {
+        JsonNode node = null;
         if (!StringUtils.isEmpty(request.getUrl())) {
             node = getJsonNodeFromUrl(request.getUrl());
         }
 
         return new OcdsValidatorNodeRequest(request, node);
     }
-
 
 }

@@ -14,6 +14,10 @@ public class OcdsValidatorNodeRequest extends OcdsValidatorRequest {
         super(version, extensions, schemaType);
     }
 
+    public OcdsValidatorNodeRequest() {
+
+    }
+
     public OcdsValidatorNodeRequest(OcdsValidatorRequest request, JsonNode node) {
         super(request);
         this.node = node;

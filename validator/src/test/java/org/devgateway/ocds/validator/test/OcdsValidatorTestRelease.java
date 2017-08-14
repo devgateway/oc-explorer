@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.TreeSet;
-import org.devgateway.ocds.validator.OcdsValidatorApiRequest;
+import org.devgateway.ocds.validator.OcdsValidatorStringRequest;
 import org.devgateway.ocds.validator.OcdsValidatorConstants;
 import org.devgateway.ocds.validator.OcdsValidatorService;
 import org.devgateway.ocds.validator.ValidatorApplication;
@@ -33,7 +33,7 @@ public class OcdsValidatorTestRelease {
     @Test
     public void testReleaseValidation() {
 
-        OcdsValidatorApiRequest request = new OcdsValidatorApiRequest(OcdsValidatorConstants.Versions.OCDS_1_1_0,
+        OcdsValidatorStringRequest request = new OcdsValidatorStringRequest(OcdsValidatorConstants.Versions.OCDS_1_1_0,
                 OcdsValidatorConstants.EXTENSIONS, OcdsValidatorConstants.Schemas.RELEASE);
         request.setJson(getJsonFromResource("/full-release.json"));
 
@@ -67,7 +67,7 @@ public class OcdsValidatorTestRelease {
     @Test
     public void testReleasePackageValidation() {
 
-        OcdsValidatorApiRequest request = new OcdsValidatorApiRequest(OcdsValidatorConstants.Versions.OCDS_1_1_0,
+        OcdsValidatorStringRequest request = new OcdsValidatorStringRequest(OcdsValidatorConstants.Versions.OCDS_1_1_0,
                new TreeSet<>(OcdsValidatorConstants.EXTENSIONS), OcdsValidatorConstants.Schemas.RELEASE_PACKAGE);
 
         request.setJson(getJsonFromResource("/release-package.json"));
@@ -84,7 +84,7 @@ public class OcdsValidatorTestRelease {
     @Test
     public void testReleasePackageValidationWithVersionAutodetect() {
 
-        OcdsValidatorApiRequest request = new OcdsValidatorApiRequest(null,
+        OcdsValidatorStringRequest request = new OcdsValidatorStringRequest(null,
                 new TreeSet<>(OcdsValidatorConstants.EXTENSIONS), OcdsValidatorConstants.Schemas.RELEASE_PACKAGE);
 
         request.setJson(getJsonFromResource("/release-package.json"));
