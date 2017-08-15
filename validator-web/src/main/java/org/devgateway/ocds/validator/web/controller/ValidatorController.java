@@ -7,7 +7,9 @@ import com.github.fge.jsonschema.core.report.ProcessingReport;
 import io.swagger.annotations.ApiOperation;
 import java.io.IOException;
 import javax.validation.Valid;
+import org.devgateway.ocds.validator.OcdsValidatorConstants;
 import org.devgateway.ocds.validator.OcdsValidatorNodeRequest;
+import org.devgateway.ocds.validator.OcdsValidatorRequest;
 import org.devgateway.ocds.validator.OcdsValidatorService;
 import org.devgateway.ocds.validator.OcdsValidatorStringRequest;
 import org.devgateway.ocds.validator.OcdsValidatorUrlRequest;
@@ -34,7 +36,7 @@ public class ValidatorController {
     @RequestMapping(value = "/validateFormInline", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<JsonNode> validateFormInline(@Valid OcdsValidatorStringRequest request)
             throws IOException {
-        return new ResponseEntity<JsonNode>(processingReportToJsonNode(ocdsValidatorService.validate(request)),
+        return new ResponseEntity<JsonNode>(processingReportToJsonNode(ocdsValidatorService.validate(request), request),
                 HttpStatus.OK);
     }
 
@@ -46,7 +48,7 @@ public class ValidatorController {
                                                                OcdsValidatorNodeRequest request)
             throws IOException {
         return new ResponseEntity<JsonNode>(processingReportToJsonNode(
-                ocdsValidatorService.validate(request)), HttpStatus.OK);
+                ocdsValidatorService.validate(request), request), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Validates data against Open Contracting Data Standard using the "
@@ -57,12 +59,12 @@ public class ValidatorController {
                                                             OcdsValidatorUrlRequest request)
             throws IOException {
         return new ResponseEntity<JsonNode>(processingReportToJsonNode(
-                ocdsValidatorService.validate(request)), HttpStatus.OK);
+                ocdsValidatorService.validate(request), request), HttpStatus.OK);
     }
 
 
-    private JsonNode processingReportToJsonNode(ProcessingReport report) {
-        if (report.isSuccess()) {
+    private JsonNode processingReportToJsonNode(ProcessingReport report, OcdsValidatorRequest request) {
+        if (report.isSuccess() && request.getOperation().equals(OcdsValidatorConstants.Operations.VALIDATE)) {
             return TextNode.valueOf("OK");
         }
         if (report instanceof ListProcessingReport) {

@@ -287,22 +287,53 @@ public class OcdsValidatorService {
     }
 
     public ProcessingReport validate(OcdsValidatorNodeRequest nodeRequest) {
-        logger.debug("Running validation for api request for schema of type " + nodeRequest.getSchemaType()
-                + " and version " + nodeRequest.getVersion());
+        if (nodeRequest.getOperation().equals(OcdsValidatorConstants.Operations.VALIDATE)) {
+            logger.debug("Running validation for api request for schema of type " + nodeRequest.getSchemaType()
+                    + " and version " + nodeRequest.getVersion());
 
-        if (nodeRequest.getSchemaType().equals(OcdsValidatorConstants.Schemas.RELEASE)) {
+            if (nodeRequest.getSchemaType().equals(OcdsValidatorConstants.Schemas.RELEASE)) {
 
-            if (nodeRequest.getVersion() == null) {
-                throw new RuntimeException("Not allowed null version info for release validation!");
+                if (nodeRequest.getVersion() == null) {
+                    throw new RuntimeException("Not allowed null version info for release validation!");
+                }
+
+                return validateRelease(nodeRequest);
             }
 
-            return validateRelease(nodeRequest);
+            if (nodeRequest.getSchemaType().equals(OcdsValidatorConstants.Schemas.RELEASE_PACKAGE)) {
+                return validateReleasePackage(nodeRequest);
+            }
         }
 
-        if (nodeRequest.getSchemaType().equals(OcdsValidatorConstants.Schemas.RELEASE_PACKAGE)) {
-            return validateReleasePackage(nodeRequest);
+        if (nodeRequest.getOperation().equals(OcdsValidatorConstants.Operations.SHOW_BUILTIN_EXTENSIONS)) {
+            ListProcessingReport list = new ListProcessingReport();
+            OcdsValidatorConstants.EXTENSIONS.forEach(e -> {
+                        ProcessingMessage message = new ProcessingMessage();
+                        message.setMessage(e);
+                        try {
+                            list.info(message);
+                        } catch (ProcessingException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+            );
+            return list;
         }
 
+
+        if (nodeRequest.getOperation().equals(OcdsValidatorConstants.Operations.SHOW_SUPPORTED_OCDS)) {
+            ListProcessingReport list = new ListProcessingReport();
+            for (int i = 0; i < OcdsValidatorConstants.Versions.ALL.length; i++) {
+                ProcessingMessage message = new ProcessingMessage();
+                message.setMessage(OcdsValidatorConstants.Versions.ALL[i]);
+                try {
+                    list.info(message);
+                } catch (ProcessingException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            return list;
+        }
         return null;
 
     }
@@ -393,7 +424,7 @@ public class OcdsValidatorService {
                         message.setLogLevel(LogLevel.ERROR);
                         String ocid = getOcidFromRelease(release);
                         message.setMessage("Error(s) in release #" + i++
-                                + new String((ocid == null) ? "" : " with ocid "+ocid));
+                                + new String((ocid == null) ? "" : " with ocid " + ocid));
 
                         ProcessingReport wrapperReport = new ListProcessingReport();
                         wrapperReport.error(message);

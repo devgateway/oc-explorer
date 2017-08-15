@@ -2,6 +2,7 @@ package org.devgateway.ocds.validator;
 
 import java.util.SortedSet;
 import java.util.TreeSet;
+import javax.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -11,6 +12,14 @@ public abstract class OcdsValidatorRequest {
 
     public OcdsValidatorRequest() {
 
+    }
+
+    public String getOperation() {
+        return operation;
+    }
+
+    public void setOperation(String operation) {
+        this.operation = operation;
     }
 
     public OcdsValidatorRequest(OcdsValidatorRequest request) {
@@ -38,7 +47,10 @@ public abstract class OcdsValidatorRequest {
 
     private SortedSet<String> extensions = new TreeSet<>();
 
-    private String operation;
+    @Pattern(regexp = OcdsValidatorConstants.Operations.VALIDATE + "|"
+            + OcdsValidatorConstants.Operations.SHOW_BUILTIN_EXTENSIONS + "|"
+            + OcdsValidatorConstants.Operations.SHOW_SUPPORTED_OCDS)
+    private String operation = OcdsValidatorConstants.Operations.VALIDATE;
 
     @NotEmpty(message = "Please provide schemaType!")
     private String schemaType;

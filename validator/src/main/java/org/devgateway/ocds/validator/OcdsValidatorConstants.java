@@ -39,6 +39,12 @@ public final class OcdsValidatorConstants {
 
     public static final String SCHEMA_POSTFIX = ".json";
 
+    public static final class Operations {
+        public static final String VALIDATE = "validate";
+        public static final String SHOW_SUPPORTED_OCDS = "show-supported-ocds";
+        public static final String SHOW_BUILTIN_EXTENSIONS = "show-builtin-extensions";
+    }
+
     public static final class Extensions {
         //OFFICIAL
         public static final String OCDS_BID_EXTENSION_V1_1 = "ocds_bid_extension/v1.1";
