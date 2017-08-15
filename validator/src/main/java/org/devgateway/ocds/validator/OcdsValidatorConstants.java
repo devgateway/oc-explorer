@@ -19,8 +19,10 @@ public final class OcdsValidatorConstants {
         public static final String OCDS_1_0_1 = "1.0.1";
         public static final String OCDS_1_0_2 = "1.0.2";
         public static final String OCDS_1_1_0 = "1.1.0";
+        public static final String OCDS_1_1_1 = "1.1.1";
 
-        public static final String[] ALL = {OCDS_1_0_0, OCDS_1_0_1, OCDS_1_0_2, OCDS_1_1_0};
+        public static final String[] ALL = {OCDS_1_0_0, OCDS_1_0_1, OCDS_1_0_2, OCDS_1_1_0,
+        OCDS_1_1_1};
 
     }
 
