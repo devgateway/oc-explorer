@@ -72,6 +72,7 @@ public final class OcdsValidatorConstants {
 
     public static final String EXTENSIONS_PROPERTY = "extensions";
     public static final String RELEASES_PROPERTY = "releases";
+    public static final String OCID_PROPERTY = "ocid";
     public static final String VERSION_PROPERTY = "version";
 
     public static final SortedSet<String> EXTENSIONS = Collections.unmodifiableSortedSet(new TreeSet<>(Arrays.asList(

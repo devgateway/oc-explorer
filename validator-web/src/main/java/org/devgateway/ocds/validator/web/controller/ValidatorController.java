@@ -1,5 +1,8 @@
 package org.devgateway.ocds.validator.web.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.TextNode;
+import com.github.fge.jsonschema.core.report.ListProcessingReport;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
 import io.swagger.annotations.ApiOperation;
 import java.io.IOException;
@@ -29,31 +32,42 @@ public class ValidatorController {
     @ApiOperation(value = "Validates data against Open Contracting Data Standard using x-www-form-urlencoded "
             + "media type")
     @RequestMapping(value = "/validateFormInline", method = {RequestMethod.GET, RequestMethod.POST})
-    public ProcessingReport validateFormInline(@Valid OcdsValidatorStringRequest request)
+    public ResponseEntity<JsonNode> validateFormInline(@Valid OcdsValidatorStringRequest request)
             throws IOException {
-        return ocdsValidatorService.validate(request);
+        return new ResponseEntity<JsonNode>(processingReportToJsonNode(ocdsValidatorService.validate(request)),
+                HttpStatus.OK);
     }
 
     @ApiOperation(value = "Validates data against Open Contracting Data Standard using application/json "
             + "media type")
     @RequestMapping(value = "/validateJsonInline", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ProcessingReport> validateJsonInline(@RequestBody @Valid
-                                                                 OcdsValidatorNodeRequest request)
+    public ResponseEntity<JsonNode> validateJsonInline(@RequestBody @Valid
+                                                               OcdsValidatorNodeRequest request)
             throws IOException {
-        return new ResponseEntity<ProcessingReport>(ocdsValidatorService.validate(request), HttpStatus.OK);
+        return new ResponseEntity<JsonNode>(processingReportToJsonNode(
+                ocdsValidatorService.validate(request)), HttpStatus.OK);
     }
-
 
     @ApiOperation(value = "Validates data against Open Contracting Data Standard using the "
             + "data fetched from a given URL")
     @RequestMapping(value = "/validateJsonUrl", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ProcessingReport> validateJsonUrl(@RequestBody @Valid
-                                                                    OcdsValidatorUrlRequest request)
+    public ResponseEntity<JsonNode> validateJsonUrl(@RequestBody @Valid
+                                                            OcdsValidatorUrlRequest request)
             throws IOException {
-        return new ResponseEntity<ProcessingReport>(ocdsValidatorService.validate(request), HttpStatus.OK);
+        return new ResponseEntity<JsonNode>(processingReportToJsonNode(
+                ocdsValidatorService.validate(request)), HttpStatus.OK);
     }
 
 
+    private JsonNode processingReportToJsonNode(ProcessingReport report) {
+        if (report.isSuccess()) {
+            return TextNode.valueOf("OK");
+        }
+        if (report instanceof ListProcessingReport) {
+            return ((ListProcessingReport) report).asJson();
+        }
+        throw new RuntimeException("Unsupported non ListProcessingReport!");
+    }
 }

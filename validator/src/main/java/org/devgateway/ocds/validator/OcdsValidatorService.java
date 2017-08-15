@@ -6,8 +6,10 @@ import com.github.fge.jackson.JsonLoader;
 import com.github.fge.jsonpatch.JsonPatchException;
 import com.github.fge.jsonpatch.mergepatch.JsonMergePatch;
 import com.github.fge.jsonschema.core.exceptions.ProcessingException;
+import com.github.fge.jsonschema.core.report.ListProcessingReport;
 import com.github.fge.jsonschema.core.report.ListReportProvider;
 import com.github.fge.jsonschema.core.report.LogLevel;
+import com.github.fge.jsonschema.core.report.ProcessingMessage;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
@@ -128,6 +130,7 @@ public class OcdsValidatorService {
 
     /**
      * see https://github.com/vdurmont/semver4j/issues/7
+     *
      * @param version
      * @return
      */
@@ -220,7 +223,7 @@ public class OcdsValidatorService {
             schemaNode = applyExtensions(schemaNode, request);
             try {
                 JsonSchema schema = JsonSchemaFactory.newBuilder()
-                        .setReportProvider(new ListReportProvider(LogLevel.INFO, LogLevel.FATAL)).freeze()
+                        .setReportProvider(new ListReportProvider(LogLevel.ERROR, LogLevel.NONE)).freeze()
                         .getJsonSchema(schemaNode);
                 logger.debug("Saving to cache schema with extensions " + request.getKey());
                 keySchema.put(request.getKey(), schema);
@@ -266,8 +269,6 @@ public class OcdsValidatorService {
             }
 
         }
-
-
     }
 
     @PostConstruct
@@ -381,11 +382,26 @@ public class OcdsValidatorService {
             }
 
             if (nodeRequest.getNode().hasNonNull(OcdsValidatorConstants.RELEASES_PROPERTY)) {
+                int i = 0;
                 for (JsonNode release : nodeRequest.getNode().get(OcdsValidatorConstants.RELEASES_PROPERTY)) {
                     OcdsValidatorNodeRequest releaseValidationRequest
                             = new OcdsValidatorNodeRequest(nodeRequest, release);
                     releaseValidationRequest.setSchemaType(OcdsValidatorConstants.Schemas.RELEASE);
-                    releasePackageReport.mergeWith(validateRelease(releaseValidationRequest));
+                    ProcessingReport report = validateRelease(releaseValidationRequest);
+                    if (!report.isSuccess()) {
+                        ProcessingMessage message = new ProcessingMessage();
+                        message.setLogLevel(LogLevel.ERROR);
+                        String ocid = getOcidFromRelease(release);
+                        message.setMessage("Error(s) in release #" + i++
+                                + new String((ocid == null) ? "" : " with ocid "+ocid));
+
+                        ProcessingReport wrapperReport = new ListProcessingReport();
+                        wrapperReport.error(message);
+                        wrapperReport.mergeWith(report);
+                        releasePackageReport.mergeWith(wrapperReport);
+                    } else {
+                        releasePackageReport.mergeWith(report);
+                    }
                 }
             } else {
                 throw new RuntimeException("No releases were found during release package validation!");
@@ -399,6 +415,12 @@ public class OcdsValidatorService {
         }
     }
 
+    private String getOcidFromRelease(JsonNode release) {
+        if (release.hasNonNull(OcdsValidatorConstants.OCID_PROPERTY)) {
+            return release.get(OcdsValidatorConstants.OCID_PROPERTY).asText();
+        }
+        return null;
+    }
 
     private OcdsValidatorNodeRequest convertStringRequestToNodeRequest(OcdsValidatorStringRequest request) {
         JsonNode node = null;
