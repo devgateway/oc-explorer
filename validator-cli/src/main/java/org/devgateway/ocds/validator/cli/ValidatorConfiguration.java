@@ -1,4 +1,4 @@
-package org.devgateway.ocds.validator;
+package org.devgateway.ocds.validator.cli;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.text.SimpleDateFormat;
