@@ -1,14 +1,14 @@
-package org.devgateway.ocds.validator.test;
+package test;
 
 import com.github.fge.jsonschema.core.report.ProcessingReport;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.TreeSet;
-import org.devgateway.ocds.validator.OcdsValidatorStringRequest;
 import org.devgateway.ocds.validator.OcdsValidatorConstants;
 import org.devgateway.ocds.validator.OcdsValidatorService;
-import org.devgateway.ocds.validator.ValidatorApplication;
+import org.devgateway.ocds.validator.OcdsValidatorStringRequest;
+import org.devgateway.ocds.validator.cli.ValidatorApplication;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

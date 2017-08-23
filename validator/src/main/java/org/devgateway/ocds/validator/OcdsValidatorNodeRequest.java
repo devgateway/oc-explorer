@@ -1,15 +1,15 @@
 package org.devgateway.ocds.validator;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.swagger.annotations.ApiModelProperty;
 import java.util.TreeSet;
-import javax.validation.constraints.NotNull;
 
 /**
  * Created by mpostelnicu on 7/6/17.
  */
 public class OcdsValidatorNodeRequest extends OcdsValidatorRequest {
 
-    @NotNull(message = "Please provide the Json content!")
+    @ApiModelProperty(value = "The json to validate against OCDS schema")
     private JsonNode node;
 
     public OcdsValidatorNodeRequest(String version, TreeSet<String> extensions, String schemaType) {

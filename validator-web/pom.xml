@@ -18,7 +18,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <start-class>org.devgateway.ocds.ValidatorApplication</start-class>
         <java.version>1.8</java.version>
-        <swagger.version>2.6.1</swagger.version>
+        <swagger.version>2.7.0</swagger.version>
     </properties>
 
     <parent>
@@ -35,6 +35,11 @@
             <version>${swagger.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.devgateway.ocds</groupId>

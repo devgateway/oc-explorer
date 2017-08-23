@@ -9,8 +9,7 @@ import javax.validation.constraints.NotNull;
  */
 public class OcdsValidatorStringRequest extends OcdsValidatorRequest {
 
-    @ApiModelProperty(value = "This parameter specified which category can be used for grouping the results."
-            + " Possible values here are: bidTypeId, procuringEntityId.")
+    @ApiModelProperty(value = "The json to validate against OCDS schema, given as text.")
     @NotNull(message = "Please provide the Json text inside a json property!")
     private String json;
 
