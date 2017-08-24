@@ -27,6 +27,7 @@ public abstract class OcdsValidatorRequest {
         this.version = request.getVersion();
         this.extensions = request.getExtensions();
         this.schemaType = request.getSchemaType();
+        this.operation = request.getOperation();
     }
 
     public OcdsValidatorRequest(String version, SortedSet<String> extensions, String schemaType) {
@@ -57,7 +58,8 @@ public abstract class OcdsValidatorRequest {
             + OcdsValidatorConstants.Operations.SHOW_BUILTIN_EXTENSIONS + "|"
             + OcdsValidatorConstants.Operations.SHOW_SUPPORTED_OCDS)
     @ApiModelProperty("Provides the operation that needs to be performed. The default is 'validate'."
-            + "'show-supported-ocds' will list the supported ocds versions")
+            + "'show-supported-ocds' will list the supported ocds versions. show-builtin-extensions will list the "
+            + "core OCDS extensions that are supported internally and in offline mode.")
     private String operation = OcdsValidatorConstants.Operations.VALIDATE;
 
     @NotEmpty(message = "Please provide schemaType!")
