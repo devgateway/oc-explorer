@@ -51,6 +51,12 @@
 
         <dependency>
             <groupId>org.devgateway.ocds</groupId>
+            <artifactId>validator-web</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.devgateway.ocds</groupId>
             <artifactId>ui</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>

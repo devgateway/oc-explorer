@@ -41,7 +41,7 @@ besides the one specified in the incoming JSON.
 
 In addition to that, the json or the URL to validate is given in in each particular case
 
-### GET /validateFormInline
+### GET /api/ocds/validator/validateFormInline
 
 This is a GET request that can be used to validate OCDS JSON data using
 x-www-form-urlencoded request. It is implemented for compatibility purposes and for testing purposes.
@@ -50,7 +50,7 @@ GET requests can be more easily used by non skilled editors, by directly buildin
 The following shows a request that asks the server the supported OCDS version for validation purposes:
 
 ```
-curl -X GET --header 'Accept: application/json' 'http://localhost:8080/validateFormInline?version=1.1.1&operation=show-supported-ocds&schemaType=release-package'
+curl -X GET --header 'Accept: application/json' 'http://localhost:8080/api/ocds/validator/validateFormInline?version=1.1.1&operation=show-supported-ocds&schemaType=release-package'
 
 [
   {
@@ -78,12 +78,12 @@ curl -X GET --header 'Accept: application/json' 'http://localhost:8080/validateF
 ```
 
 
-### POST /validateFormInline
+### POST /api/ocds/validator/validateFormInline
 
 This is the same as the GET but uses POST to send data. It is obviously more useful as it can be used to send
 larger JSON files as POST. Unlike POST, GET requests are limited in terms of size because they have to be URL encoded.
 
-### POST /validateJsonInline
+### POST /api/ocds/validator/validateJsonInline
 
 This endpoint receives `application/json` encoded parameters.
 The OCDS JSON is provided inline, inside the `node` property.
@@ -120,7 +120,7 @@ curl -X POST --header 'Content-Type: application/json;charset=UTF-8' --header 'A
    "schemaType": "release", \
    "version": "1.1.1", \
    "node": {"ocid": "ocds-full-001", "id": "ocds-full-1234", "date": "2016-05-10T09:30:00Z", "tag": ["award"], "initiationType": "tender" } \
- }' 'http://localhost:8080/validateJsonInline'
+ }' 'http://localhost:8080/api/ocds/validator/validateJsonInline'
 "OK"
 ```
 
@@ -132,7 +132,7 @@ curl -X POST --header 'Content-Type: application/json;charset=UTF-8' --header 'A
    "schemaType": "release", \
    "version": "1.1.1", \
    "node": {"ocid": "ocds-full-001", "id": "ocds-full-1234", "date": "2016-05-10T09:30:00Z", "tag": ["awardd"], "initiationType": "tender" } \
- }' 'http://localhost:8080/validateJsonInline'
+ }' 'http://localhost:8080/api/ocds/validator/validateJsonInline'
 
  [
    {
@@ -173,7 +173,7 @@ curl -X POST --header 'Content-Type: application/json;charset=UTF-8' --header 'A
 
 Obviously much more complicated examples will work, this was just a simple example.
 
-### POST /validateJsonUrl
+### POST /api/ocds/validator/validateJsonUrl
 
 This endpoint receives `application/json` encoded parameters.
 The same generic parameters can be sent, however instead of `node` like for the previously described endpoint, here
@@ -181,7 +181,7 @@ we provide the OCDS Json as an URL. We will use an URL from the OCDS github repo
 
 ```json
 curl -X POST --header 'Content-Type: application/json;charset=UTF-8' --header 'Accept: application/json' -d '{"version": "1.1.0", "schemaType": "release-package", \
- "url": "https://raw.githubusercontent.com/open-contracting/sample-data/master/fictional-example/1.1/ocds-213czf-000-00001-02-tender.json"}' 'http://localhost:8080/validateJsonUrl'
+ "url": "https://raw.githubusercontent.com/open-contracting/sample-data/master/fictional-example/1.1/ocds-213czf-000-00001-02-tender.json"}' 'http://localhost:8080/api/ocds/validator/validateJsonUrl'
 "OK"
 ```
 
@@ -234,6 +234,8 @@ this could help see what costs will a migration to a new OCDS version cost and c
 
 
 ## Validating Extensions
+
+### Getting info about extensions
 
 jOCDS has extensive extension support. Schemas are patched using jsonmerge patches and then are cached for later reuse.
 This should leverage good throughput for validating large number of releases with similar extensions (a very common use case).
@@ -317,6 +319,7 @@ provided by the core OCDS extensions. Some of them have an appended suffix that 
 This means that multiple extension versions are supported. Extension versioning currently has poor support in OCDS, see
 [#515](https://github.com/open-contracting/standard/issues/515).
 
+### Validating extensions using core offline extension feature
 
 For example to validate the bids entities, we can use a request such as this:
 
@@ -369,8 +372,10 @@ For example to validate the bids entities, we can use a request such as this:
 	}
 ```
 
-The advantage of using the core builtin extensions is they work offline, so one could validate OCDS json without internet access.
 
+### Validating extensions using the (standard) extension URL option
+
+The advantage of using the core builtin extensions is they work offline, so one could validate OCDS json without internet access.
 Obviously extensions work with the regular URL provided, as described by OCDS:
 
 
@@ -383,3 +388,44 @@ Obviously extensions work with the regular URL provided, as described by OCDS:
 	"node": ...
 }
 ```
+
+
+### Checking vor extension compliance
+
+jOCDS automatically checks if an extension is compliant with the version of OCDS json.
+Extensions often have the `compatibility` property used, to specify what OCDS versions
+are supported
+
+```
+{
+  "name": "Bid statistics and details",
+  "description": "Allowing bid statistics, and detailed bid information to be represented.",
+  "compatibility": ">=1.1.0",
+  "dependencies": []
+}
+```
+
+Example, trying to use the 1.1 bids extension and enforcing 1.0.0 OCDS schema
+will trigger an error:
+
+```
+{
+	"schemaType": "release-package",
+	"version": "1.0.0",
+	"extensions": [
+        "https://raw.githubusercontent.com/open-contracting/ocds_bid_extension/v1.1/extension.json"
+    ],
+	"node":
+	....
+}
+
+{
+	"timestamp": 1503585358302,
+	"status": 500,
+	"error": "Internal Server Error",
+	"exception": "java.lang.RuntimeException",
+	"message": "Cannot apply extension https://raw.githubusercontent.com/open-contracting/ocds_bid_extension/v1.1/extension.json due to version incompatibilities. Extension meta is {\"name\":\"Bid statistics and details\",\"description\":\"Allowing bid statistics, and detailed bid information to be represented.\",\"compatibility\":\">=1.1.0\",\"dependencies\":[]} requested schema version 1.0.0",
+	"path": "/api/ocds/validator/validateJsonInline"
+}
+```
+

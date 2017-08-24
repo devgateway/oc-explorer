@@ -34,7 +34,8 @@ public class ValidatorController {
 
     @ApiOperation(value = "Validates data against Open Contracting Data Standard using x-www-form-urlencoded "
             + "media type")
-    @RequestMapping(value = "/validateFormInline", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/api/ocds/validator/validateFormInline", method = {RequestMethod.GET, RequestMethod.POST},
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<JsonNode> validateFormInline(@Valid @ModelAttribute OcdsValidatorStringRequest request)
             throws IOException {
         return new ResponseEntity<JsonNode>(processingReportToJsonNode(ocdsValidatorService.validate(request), request),
@@ -43,7 +44,7 @@ public class ValidatorController {
 
     @ApiOperation(value = "Validates data against Open Contracting Data Standard using application/json "
             + "media type")
-    @RequestMapping(value = "/validateJsonInline", method = RequestMethod.POST,
+    @RequestMapping(value = "/api/ocds/validator/validateJsonInline", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<JsonNode> validateJsonInline(@RequestBody @Valid
                                                                OcdsValidatorNodeRequest request)
@@ -54,7 +55,7 @@ public class ValidatorController {
 
     @ApiOperation(value = "Validates data against Open Contracting Data Standard using the "
             + "data fetched from a given URL")
-    @RequestMapping(value = "/validateJsonUrl", method = RequestMethod.POST,
+    @RequestMapping(value = "/api/ocds/validator/validateJsonUrl", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<JsonNode> validateJsonUrl(@RequestBody @Valid
                                                                 OcdsValidatorUrlRequest request)
