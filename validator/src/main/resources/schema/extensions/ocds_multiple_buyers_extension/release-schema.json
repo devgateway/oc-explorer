@@ -1,0 +1,13 @@
+{
+  "definitions": {
+    "Contract": {
+      "properties": {
+        "buyer": {
+          "title": "Buyer",
+          "description": "The entity whose budget will be used to purchase the goods or services specified in this particular contract. When the contract buyer extension is used, a buyer must be specified here **unless** the buyer for this contract is the same as the overall buyer specified at the release level.",
+          "$ref": "#/definitions/OrganizationReference"
+        }
+      }
+    }
+  }
+}

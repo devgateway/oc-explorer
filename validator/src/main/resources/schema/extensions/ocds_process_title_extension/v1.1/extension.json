@@ -1,0 +1,6 @@
+{
+  "name": "Process level title and description",
+  "description": "For providing overall process titles and descriptions, often to give a free-text summary of the contracting process as a whole.",
+  "compatibility": ">=1.1",
+  "dependencies": []
+}

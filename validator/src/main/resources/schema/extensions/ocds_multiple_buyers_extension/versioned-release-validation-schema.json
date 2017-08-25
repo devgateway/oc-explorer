@@ -1,0 +1,18 @@
+{
+  "definitions": {
+    "Contract": {
+      "properties": {
+        "buyer": {
+          "$ref": "#/definitions/OrganizationReference"
+        }
+      }
+    },
+    "ContractUnversioned": {
+      "properties": {
+        "buyer": {
+          "$ref": "#/definitions/OrganizationReferenceUnversioned"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Milestone documents",
+  "description": "Documents at the milestone level were deprecated in OCDS 1.1. This extension re-introduces the ability to attach documents to each individual milestone.",
+  "compatibility": ">=1.1.0",
+  "dependencies": []
+}

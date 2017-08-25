@@ -1,0 +1,65 @@
+{
+  "definitions": {
+    "Implementation": {
+      "properties": {
+         "charges": {
+          "type":"array",
+          "title":"Charges",
+          "description":"Information on the revenue to be raised through charges, as set out in the contract or as subsequently revised during the life of the project.",
+          "items": {
+            "$ref": "#/definitions/Charge"
+          }
+        }
+      }
+    },
+    "Charge": {
+      "type": "object",
+      "title": "Charge",
+      "description": "A charge to be incurred by users or government over the course of the contract. Charge information can be broken down by period. Information on the unit prices upon which total values are based can be provided in the tariffs section. ",
+      "properties": {
+        "id": {
+          "title": "Charge identifier",
+          "description": "A local identifier for this specific charge. This field is used to keep track of revisions of a charge across multiple OCDS releases.",
+          "type": "string"
+        },
+        "title": {
+          "title": "Charge title",
+          "description": "A descriptive title for this charge.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "paidBy":{
+            "title":"Paid by",
+            "description":"Is this a user charge (paid by businesses or citizens using the facilities provided by the contract), or a charge paid by the government?",
+            "type":["string","null"],
+            "enum":["government","user"]
+        },
+        "period": {
+          "title": "Period",
+          "description": "The period to which this charge applies.",
+          "$ref": "#/definitions/Period"
+        },
+        "estimatedValue":{
+            "title":"Estimated value",
+            "description":"What is the estimated total value to be raised from this charge during this period.",
+            "$ref": "#/definitions/Value"
+        },
+        "actualValue":{
+            "title":"Actual value",
+            "description":"In the implementation section, this field may be updated with the total revenue raised from this charge during this period.",
+            "$ref": "#/definitions/Value"
+        },
+        "notes": {
+          "title": "Notes",
+          "description": "Any notes on this charge. This may include clarifying information.",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}

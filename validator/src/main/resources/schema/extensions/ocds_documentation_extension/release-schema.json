@@ -1,0 +1,52 @@
+{
+  "definitions": {
+    "Document": {
+      "title": "Documentation",
+      "description": "Documentation can be supporting information, formal notices, downloadable forms, or any other kind of resource that should be made public as part an open contracting process. The documentType field can be used to indicate the nature of each document. The description can be used to provide a summary of the document contents where appropriate, and the URL fields used to link directly to downloadable copies of the document.",
+      "properties": {
+        "description":{
+          "description":"A short summary of the document."
+        },
+        "pageStart": {
+          "title":"Page start",
+          "description": "When the information referenced exists within a large document, indicate the first page on which it can be found. This should refer to the printed page number, not the page number reported by software applications. ",
+          "type": [
+            "string",
+            "null"
+          ],
+          "mergeStrategy": "ocdsVersion"
+        },
+        "pageEnd": {
+          "title":"Page end",
+          "description": "When the information referenced exists within a large document, indicate the last page on which it can be found. This should refer to the printed page number, not the page number reported by software applications. ",
+          "type": [
+            "string",
+            "null"
+          ],
+          "mergeStrategy": "ocdsVersion"
+        },
+        "accessDetails": {
+          "title":"Access details",
+          "description": "A description of any special arrangements required to access this document. This may include a requirement to register for document access, a fee to be paid, or the location where documents can be inspected. ",
+          "type": [
+            "string",
+            "null"
+          ],
+          "mergeStrategy": "ocdsVersion"
+        },
+        "author": {
+          "title":"Author",
+          "description": "The name of the author of these documents. Include the name of individuals and/or organisations responsible. For example, when a technical specification was written by a consultant, include the name and organisation of the consultant. ",
+          "type": [
+            "string",
+            "null"
+          ],
+          "mergeStrategy": "ocdsVersion"
+        },
+        "url": {
+          "description": "A direct link to the documentation. The server providing access to this document should be configured to correctly report the document mime type. Where the information for this documentType is found within a larger document, the page number or section should be included [using a fragment identifier](https://helpx.adobe.com/acrobat/kb/link-html-pdf-page-acrobat.html). E.g. #page=32."
+        }
+      }
+    }
+  }
+}

@@ -29,6 +29,7 @@
         <commons.lang3.version>3.5</commons.lang3.version>
         <docker.image.prefix>devgateway/toolkit</docker.image.prefix>
         <docker-maven-plugin.version>0.4.13</docker-maven-plugin.version>
+        <maven.compiler.plugin.version>3.6.2</maven.compiler.plugin.version>
     </properties>
 
     <modules>
@@ -37,6 +38,9 @@
         <module>ui</module>
         <module>forms</module>
         <module>persistence-mongodb</module>
+        <module>validator</module>
+        <module>validator-web</module>
+        <module>validator-cli</module>
     </modules>
 
     <inceptionYear>2015</inceptionYear>
@@ -102,13 +106,7 @@
         </pluginRepository>
     </pluginRepositories>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derby</artifactId>
-            <version>${derby.version}</version>
-        </dependency>
-    </dependencies>
+
 
     <dependencyManagement>
         <dependencies>
@@ -190,9 +188,10 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven.compiler.plugin.version}</version>
                     <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
                     </configuration>
                 </plugin>
             </plugins>

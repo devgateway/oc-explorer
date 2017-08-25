@@ -1,0 +1,17 @@
+{
+  "definitions": {
+    "Contract": {
+      "properties": {
+        "suppliers": {
+          "title": "Suppliers",
+          "description": "The suppliers explicitly named in this contract.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OrganizationReference"
+          },
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

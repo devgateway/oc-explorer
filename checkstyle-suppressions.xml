@@ -6,7 +6,7 @@
 <suppressions>
 
     <suppress checks="HideUtilityClassConstructor|FinalClass"
-              files="PersistenceApplication\.java|MongoPersistenceApplication\.java|UIWebApplication\.java|WebApplication\.java|ReportingApplication\.java" />
+              files="PersistenceApplication\.java|MongoPersistenceApplication\.java|UIWebApplication\.java|WebApplication\.java|ReportingApplication\.java|ValidatorApplication\.java|ValidatorWebApplication\.java" />
 
     <suppress checks="[a-zA-Z0-9]*" files="[\\/]ui[\\/]" />
 </suppressions>

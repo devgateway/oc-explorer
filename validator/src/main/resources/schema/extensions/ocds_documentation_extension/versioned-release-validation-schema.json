@@ -1,0 +1,48 @@
+{
+  "definitions": {
+    "Document": {
+      "properties": {
+        "pageStart": {
+          "$ref": "#/definitions/StringNullVersioned"
+        },
+        "pageEnd": {
+          "$ref": "#/definitions/StringNullVersioned"
+        },
+        "accessDetails": {
+          "$ref": "#/definitions/StringNullVersioned"
+        },
+        "author": {
+          "$ref": "#/definitions/StringNullVersioned"
+        }
+      }
+    },
+    "DocumentUnversioned": {
+      "properties": {
+        "pageStart": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "pageEnd": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "accessDetails": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "author": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}

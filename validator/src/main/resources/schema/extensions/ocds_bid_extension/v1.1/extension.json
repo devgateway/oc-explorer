@@ -1,0 +1,6 @@
+{
+  "name": "Bid statistics and details",
+  "description": "Allowing bid statistics, and detailed bid information to be represented.",
+  "compatibility": ">=1.1.0",
+  "dependencies": []
+}
