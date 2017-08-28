@@ -60,6 +60,11 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
             + "Use /api/awardValueInterval to get the maximum allowed.")
     private BigDecimal maxAwardValue;
 
+    @EachPattern(regexp = "^[a-zA-Z0-9]*$")
+    @ApiModelProperty(value = "This will filter releases that were flagged with a specific flag type "
+            + ", by flags.flaggedStats.type, so it can filter by FRAUD, RIGGING, etc...")
+    private TreeSet<String> flagType;
+
 
     @ApiModelProperty(value = "Filters after tender.submissionMethod='electronicSubmission', also known as"
             + " eBids")
@@ -67,6 +72,14 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
     @ApiModelProperty(value = "Only show the releases that were flagged by at least one indicator")
     private Boolean flagged;
+
+    public TreeSet<String> getFlagType() {
+        return flagType;
+    }
+
+    public void setFlagType(TreeSet<String> flagType) {
+        this.flagType = flagType;
+    }
 
     public DefaultFilterPagingRequest() {
         super();
