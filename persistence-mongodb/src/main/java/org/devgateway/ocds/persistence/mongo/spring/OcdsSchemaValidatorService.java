@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 /**
  * @author mpostelnicu
  */
-@Deprecated
 public class OcdsSchemaValidatorService {
     private final Logger logger = LoggerFactory.getLogger(OcdsSchemaValidatorService.class);
     private String schemaLocation = null;
