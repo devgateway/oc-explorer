@@ -136,6 +136,14 @@ public abstract class GenericOCDSController {
     }
 
     /**
+     * Appends flags.flaggedStats.type filter
+     *
+     */
+    protected Criteria getFlagTypeFilterCriteria(final DefaultFilterPagingRequest filter) {
+        return createFilterCriteria("flags.flaggedStats.type", filter.getFlagType(), filter);
+    }
+
+    /**
      * Adds monthly projection operation, when needed, if the
      * {@link YearFilterPagingRequest#getMonthly()}
      *
@@ -443,6 +451,7 @@ public abstract class GenericOCDSController {
                 getByTenderAmountIntervalCriteria(filter),
                 getByAwardAmountIntervalCriteria(filter),
                 getFlaggedCriteria(filter),
+                getFlagTypeFilterCriteria(filter),
                 getElectronicSubmissionCriteria(filter));
     }
 
@@ -459,6 +468,7 @@ public abstract class GenericOCDSController {
                 getByAwardAmountIntervalCriteria(filter),
                 getElectronicSubmissionCriteria(filter),
                 getFlaggedCriteria(filter),
+                getFlagTypeFilterCriteria(filter),
                 getYearFilterCriteria(filter, dateProperty));
     }
 
