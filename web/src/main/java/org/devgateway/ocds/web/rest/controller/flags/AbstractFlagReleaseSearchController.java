@@ -37,7 +37,7 @@ public abstract class AbstractFlagReleaseSearchController extends AbstractFlagCo
                         .andOperator(getYearDefaultFilterCriteria(filter,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 unwind("flags.flaggedStats"),
-                match(where(getFlagProperty()).is(true)),
+                match(where(getFlagProperty()).is(true).andOperator(getFlagTypeFilterCriteria(filter))),
                 project("ocid", "tender.procuringEntity.name", "tender.tenderPeriod", "flags",
                         "tender.title", "tag")
                         .and("tender.value").as("tender.value").and("awards.value").as("awards.value")
