@@ -96,7 +96,7 @@ class CorruptionRiskDashboard extends React.Component {
       return (
         <CorruptionTypePage
           indicators={indicators}
-          onGotoIndicator={individualIndicator => navigate('indicator', individualIndicator)}
+          onGotoIndicator={individualIndicator => navigate('indicator', corruptionType, individualIndicator)}
           filters={filters}
           translations={translations}
           corruptionType={corruptionType}
@@ -108,10 +108,11 @@ class CorruptionRiskDashboard extends React.Component {
         />
       );
     } else if (page === 'indicator') {
-      const [, individualIndicator] = route;
+      const [, corruptionType, individualIndicator] = route;
       return (
         <IndividualIndicatorPage
           indicator={individualIndicator}
+          corruptionType={corruptionType}
           filters={filters}
           translations={translations}
           years={years}

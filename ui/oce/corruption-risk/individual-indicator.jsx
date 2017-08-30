@@ -122,8 +122,8 @@ import ProcurementsTable from "./procurements-table";
 
 class ProjectTable extends ProcurementsTable{
   getCustomEP(){
-    const {indicator} = this.props;
-    return `flags/${indicator}/releases?pageSize=10`;
+    const {corruptionType, indicator} = this.props;
+    return `flags/${indicator}/releases?pageSize=10&flagType=${corruptionType}`;
   }
 
   getClassName(){
@@ -140,7 +140,7 @@ class IndividualIndicatorPage extends translatable(CRDPage){
 
   render(){
     const {chart, table} = this.state;
-    const {indicator, translations, filters, years, monthly, months, width
+    const {corruptionType, indicator, translations, filters, years, monthly, months, width
     , styling} = this.props;
     return (
       <div className="page-corruption-type">
@@ -189,6 +189,7 @@ class IndividualIndicatorPage extends translatable(CRDPage){
           </h3>
           <ProjectTable
             indicator={indicator}
+            corruptionType={corruptionType}
             requestNewData={(_, data) => this.setState({table: data})}
             data={table}
             translations={translations}
