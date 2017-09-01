@@ -24,14 +24,19 @@ class MapVisual extends frontendDateFilterable(Visualization) {
   }
 
   render() {
-    const { translations, filters, years, styling, monthly, months, zoom } = this.props;
-    const center = this.props.data ?
-      // eslint-disable-next-line no-undef
-      L.latLngBounds(this.getData().map(pluck('coords')).map(swap)).getCenter() :
-      [0, 0];
+    const { translations, filters, years, styling, monthly, months, zoom, data } = this.props;
+    let center;
+    let _zoom;
+    if (data){
+      center = L.latLngBounds(this.getData().map(pluck('coords')).map(swap)).getCenter();
+      _zoom = zoom;
+    } else {
+      center = [0, 0];
+      _zoom = 1;
+    }
 
     return (
-      <Map center={center} zoom={zoom}>
+      <Map center={center} zoom={_zoom}>
         {this.getTiles()}
         <Cluster maxAmount={this.getMaxAmount()}>
           {this.getData().map(location => (
