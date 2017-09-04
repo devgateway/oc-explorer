@@ -75,18 +75,7 @@ class CorruptionRiskDashboard extends React.Component {
     const { filters, years, months } = this.destructFilters(appliedFilters);
     const monthly = years.count() === 1;
 
-    if (page === 'overview') {
-      return (<OverviewPage
-        filters={filters}
-        translations={translations}
-        years={years}
-        monthly={monthly}
-        months={months}
-        indicatorTypesMapping={indicatorTypesMapping}
-        styling={styling}
-        width={width}
-      />);
-    } else if (page === 'type') {
+    if (page === 'type') {
       const [, corruptionType] = route;
 
       const indicators =
@@ -122,8 +111,20 @@ class CorruptionRiskDashboard extends React.Component {
           styling={styling}
         />
       );
+    } else {
+      return (
+        <OverviewPage
+          filters={filters}
+          translations={translations}
+          years={years}
+          monthly={monthly}
+          months={months}
+          indicatorTypesMapping={indicatorTypesMapping}
+          styling={styling}
+          width={width}
+        />
+      );
     }
-    return null;
   }
 
   loginBox() {
