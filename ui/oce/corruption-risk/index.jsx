@@ -75,18 +75,7 @@ class CorruptionRiskDashboard extends React.Component {
     const { filters, years, months } = this.destructFilters(appliedFilters);
     const monthly = years.count() === 1;
 
-    if (page === 'overview') {
-      return (<OverviewPage
-        filters={filters}
-        translations={translations}
-        years={years}
-        monthly={monthly}
-        months={months}
-        indicatorTypesMapping={indicatorTypesMapping}
-        styling={styling}
-        width={width}
-      />);
-    } else if (page === 'type') {
+    if (page === 'type') {
       const [, corruptionType] = route;
 
       const indicators =
@@ -122,8 +111,20 @@ class CorruptionRiskDashboard extends React.Component {
           styling={styling}
         />
       );
+    } else {
+      return (
+        <OverviewPage
+          filters={filters}
+          translations={translations}
+          years={years}
+          monthly={monthly}
+          months={months}
+          indicatorTypesMapping={indicatorTypesMapping}
+          styling={styling}
+          width={width}
+        />
+      );
     }
-    return null;
   }
 
   loginBox() {
@@ -205,7 +206,7 @@ class CorruptionRiskDashboard extends React.Component {
             <div className={cn('dash-switcher-wrapper', { open: dashboardSwitcherOpen })}>
               <h1
                 className="corruption-dash-title"
-                onClick={() => this.toggleDashboardSwitcher()}
+                onClick={(e) => this.toggleDashboardSwitcher(e)}
               >
                 Corruption Risk Dashboard
                 <i className="glyphicon glyphicon-menu-down" />
@@ -225,7 +226,7 @@ class CorruptionRiskDashboard extends React.Component {
           <div className="col-sm-1" />
         </header>
         <Filters
-          onUpdate={filtersState => this.setState({ filtersState })}
+          onUpdate={currentFiltersState => this.setState({ currentFiltersState })}
           onApply={filtersToApply => this.setState({
             filterBoxIndex: null,
             appliedFilters: filtersToApply,
