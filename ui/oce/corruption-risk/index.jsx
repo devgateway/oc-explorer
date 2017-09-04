@@ -206,7 +206,7 @@ class CorruptionRiskDashboard extends React.Component {
             <div className={cn('dash-switcher-wrapper', { open: dashboardSwitcherOpen })}>
               <h1
                 className="corruption-dash-title"
-                onClick={() => this.toggleDashboardSwitcher()}
+                onClick={(e) => this.toggleDashboardSwitcher(e)}
               >
                 Corruption Risk Dashboard
                 <i className="glyphicon glyphicon-menu-down" />
