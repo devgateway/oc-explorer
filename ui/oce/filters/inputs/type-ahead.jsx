@@ -79,7 +79,7 @@ class TypeAhead extends orgNamesFetching(translatable(Component)) {
             id: option.get('id'),
             name: option.get('name'),
             checked: false,
-            cb: selectedOption => this.select(selectedOption),
+            cb: () => this.select(option),
           }))}
         </section>
       </section>
