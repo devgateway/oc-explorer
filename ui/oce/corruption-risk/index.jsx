@@ -38,6 +38,7 @@ class CorruptionRiskDashboard extends React.Component {
       width: 0,
       data: Map(),
       showLandingPopup: !localStorage.alreadyVisited,
+      locale: localStorage.oceLocale || 'en_US',
     };
     localStorage.alreadyVisited = true;
 
@@ -79,6 +80,10 @@ class CorruptionRiskDashboard extends React.Component {
     );
   }
 
+  setLocale(locale) {
+    this.setState({ locale });
+    localStorage.oceLocale = locale;
+  }
 
   getPage() {
     const { translations, route, navigate } = this.props;
@@ -192,6 +197,12 @@ class CorruptionRiskDashboard extends React.Component {
         disabledApiSecurity,
       });
     });
+  }
+
+  t(str){
+    const { locale } = this.state;
+    const { TRANSLATIONS } = this.constructor;
+    return TRANSLATIONS[locale][str] || TRANSLATIONS['en_US'][str] || str;
   }
 
   render() {
