@@ -13,11 +13,7 @@ import { LOGIN_URL } from './constants';
 // eslint-disable-next-line no-unused-vars
 import style from './style.less';
 
-const CORRUPTION_TYPES = {
-  FRAUD: 'Fraud',
-  RIGGING: 'Process rigging',
-  COLLUSION: 'Collusion',
-};
+const CORRUPTION_TYPES = ['FRAUD', 'RIGGING', 'COLLUSION'];
 
 // eslint-disable-next-line no-undef
 class CorruptionRiskDashboard extends React.Component {
@@ -234,7 +230,7 @@ class CorruptionRiskDashboard extends React.Component {
                 className="corruption-dash-title"
                 onClick={(e) => this.toggleDashboardSwitcher(e)}
               >
-                Corruption Risk Dashboard
+                {this.t('crd:title')}
                 <i className="glyphicon glyphicon-menu-down" />
               </h1>
               {dashboardSwitcherOpen &&
@@ -272,31 +268,30 @@ class CorruptionRiskDashboard extends React.Component {
         <aside className="col-xs-4 col-md-4 col-lg-3" id="crd-sidebar">
           <div className="crd-description-text">
             <h4 className="crd-overview-link" onClick={() => navigate('overview')}>
-              Corruption Risk Overview
+              {this.t('crd:overview')}
               <i className="glyphicon glyphicon-info-sign" />
             </h4>
             <p className="small">
-              The Corruption Risk Dashboard employs a red flagging approach to help users understand the potential presence of fraud, collusion or rigging in public contracting. While flags may indicate the presence of corruption, they may also be attributable to data quality issues, infringements of law or international good practice, or other issues.
+              {this.t('crd:description')}
             </p>
           </div>
           <section role="navigation" className="row">
-            {Object.keys(CORRUPTION_TYPES).map((slug) => {
-              const name = CORRUPTION_TYPES[slug];
-              const count = Object.keys(indicatorTypesMapping)
-                .filter(key => indicatorTypesMapping[key].types.indexOf(slug) > -1)
-                .length;
+            {CORRUPTION_TYPES.map((slug) => {
+               const count = Object.keys(indicatorTypesMapping)
+                 .filter(key => indicatorTypesMapping[key].types.indexOf(slug) > -1)
+                 .length;
 
-              return (
-                <a
-                  href="javascript:void(0);"
-                  onClick={() => navigate('type', slug)}
-                  className={cn({ active: page === 'type' && slug === corruptionType })}
-                  key={slug}
-                >
-                  <img src={`assets/icons/${slug}.png`} alt="Tab icon" />
-                  {name} <span className="count">({count})</span>
-                </a>
-              );
+               return (
+                 <a
+                   href="javascript:void(0);"
+                   onClick={() => navigate('type', slug)}
+                   className={cn({ active: page === 'type' && slug === corruptionType })}
+                   key={slug}
+                   >
+                   <img src={`assets/icons/${slug}.png`} alt="Tab icon" />
+                   {this.t(`crd:corruptionType:${slug}:name`)} <span className="count">({count})</span>
+                 </a>
+               );
             })}
           </section>
           <TotalFlags
