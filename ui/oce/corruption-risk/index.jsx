@@ -82,8 +82,9 @@ class CorruptionRiskDashboard extends React.Component {
   }
 
   getPage() {
-    const { translations, route, navigate } = this.props;
+    const { route, navigate } = this.props;
     const styling = this.constructor.STYLING || this.props.styling;
+    const t = this.t.bind(this);
     const [page] = route;
 
     const { appliedFilters, indicatorTypesMapping, width } = this.state;
@@ -103,7 +104,7 @@ class CorruptionRiskDashboard extends React.Component {
           indicators={indicators}
           onGotoIndicator={individualIndicator => navigate('indicator', corruptionType, individualIndicator)}
           filters={filters}
-          translations={translations}
+          t={t}
           corruptionType={corruptionType}
           years={years}
           monthly={monthly}
@@ -119,7 +120,7 @@ class CorruptionRiskDashboard extends React.Component {
           indicator={individualIndicator}
           corruptionType={corruptionType}
           filters={filters}
-          translations={translations}
+          t={t}
           years={years}
           monthly={monthly}
           months={months}
@@ -131,7 +132,7 @@ class CorruptionRiskDashboard extends React.Component {
       return (
         <OverviewPage
           filters={filters}
-          translations={translations}
+          t={t}
           years={years}
           monthly={monthly}
           months={months}
@@ -205,7 +206,8 @@ class CorruptionRiskDashboard extends React.Component {
     const { dashboardSwitcherOpen, corruptionType, filterBoxIndex, currentFiltersState,
       appliedFilters, data, indicatorTypesMapping, allYears, allMonths, showLandingPopup,
       disabledApiSecurity } = this.state;
-    const { onSwitch, translations, route, navigate } = this.props;
+    const { onSwitch, route, navigate } = this.props;
+    const t = this.t.bind(this);
     const [page] = route;
 
     const { filters, years, months } = this.destructFilters(appliedFilters);
@@ -257,7 +259,7 @@ class CorruptionRiskDashboard extends React.Component {
             appliedFilters: filtersToApply,
             currentFiltersState: filtersToApply,
           })}
-          translations={translations}
+          t={t}
           currentBoxIndex={filterBoxIndex}
           requestNewBox={index => this.setState({ filterBoxIndex: index })}
           state={currentFiltersState}
@@ -298,7 +300,7 @@ class CorruptionRiskDashboard extends React.Component {
             filters={filters}
             requestNewData={(path, newData) =>
               this.setState({ data: this.state.data.setIn(['totalFlags'].concat(path), newData) })}
-            translations={translations}
+            t={t}
             data={data.get('totalFlags', Map())}
             years={years}
             months={months}
