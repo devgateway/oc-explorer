@@ -65,6 +65,21 @@ class CorruptionRiskDashboard extends React.Component {
     }));
   }
 
+  languageSwitcher() {
+    const { TRANSLATIONS } = this.constructor;
+    if (Object.keys(TRANSLATIONS).length <= 1) return null;
+    return Object.keys(TRANSLATIONS).map(locale =>
+      (<img
+        className="icon"
+        src={`assets/flags/${locale}.png`}
+        alt={`${locale} flag`}
+        onClick={() => this.setLocale(locale)}
+        key={locale}
+      />),
+    );
+  }
+
+
   getPage() {
     const { translations, route, navigate } = this.props;
     const styling = this.constructor.STYLING || this.props.styling;
@@ -220,7 +235,10 @@ class CorruptionRiskDashboard extends React.Component {
               }
             </div>
           </div>
-          <div className="col-sm-2 login-wrapper">
+          <div className="col-sm-1 language-switcher">
+            {this.languageSwitcher()}
+          </div>
+          <div className="col-sm-1 login-wrapper">
             {!disabledApiSecurity && this.loginBox()}
           </div>
           <div className="col-sm-1" />
@@ -296,5 +314,10 @@ CorruptionRiskDashboard.propTypes = {
   route: PropTypes.array.isRequired,
   navigate: PropTypes.func.isRequired
 };
+
+CorruptionRiskDashboard.TRANSLATIONS = {
+  en_US: require('../../../web/public/languages/en_US.json'),
+  es_ES: require('../../../web/public/languages/es_ES.json'),
+}
 
 export default CorruptionRiskDashboard;
