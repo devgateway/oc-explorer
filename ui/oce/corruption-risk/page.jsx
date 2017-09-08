@@ -1,4 +1,6 @@
-class Page extends React.Component{
+import translatable from '../translatable';
+
+class Page extends translatable(React.Component){
   scrollTop(){
     window.scrollTo(0, 0);
   }

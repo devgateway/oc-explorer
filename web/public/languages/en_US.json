@@ -216,5 +216,11 @@
   "crd:indicators:i180:description": "This flag identifies instances in which a single supplier receives multiple direct contracts during a one-year period. This could be an indication of split bidding, where a larger award is split into two or more smaller awards to avoid breaching the competitive threshold, or of a preference for an individual supplier, which may provide kickbacks to individuals involved in the award process.",
   "crd:title": "Corruption Risk Dashboard",
   "crd:overview": "Corruption Risk Overview",
-  "crd:description": "The Corruption Risk Dashboard employs a red flagging approach to help users understand the potential presence of fraud, collusion or rigging in public contracting. While flags may indicate the presence of corruption, they may also be attributable to data quality issues, infringements of law or international good practice, or other issues."
+  "crd:description": "The Corruption Risk Dashboard employs a red flagging approach to help users understand the potential presence of fraud, collusion or rigging in public contracting. While flags may indicate the presence of corruption, they may also be attributable to data quality issues, infringements of law or international good practice, or other issues.",
+  "crd:overview:overTimeChart:indicators": "Indicators",
+  "crd:overview:overTimeChart:totalFlags": "Total Flags",
+  "crd:overview:overTimeChart:totalProcurementsFlagged": "Total Procurements Flagged",
+  "crd:overview:overTimeChart:percentFlagged": "% Total Procurements Flagged",
+  "crd:overview:overTimeChart:title": "Risk of Fraud, Collusion and Process Rigging Over Time",
+  "crd:overview:topFlagged:title": "The Procurement Processes with the Most Flags"
 }

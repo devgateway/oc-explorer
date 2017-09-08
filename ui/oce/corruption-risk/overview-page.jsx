@@ -111,13 +111,13 @@ class CorruptionType extends CustomPopupChart{
           <div className="col-sm-12">
             <hr/>
           </div>
-          <div className="col-sm-7 text-right title">Indicators</div>
+          <div className="col-sm-7 text-right title">{this.t('crd:overview:overTimeChart:indicators')}</div>
           <div className="col-sm-5 text-left info">{indicatorCount}</div>
-          <div className="col-sm-7 text-right title">Total Flags</div>
+          <div className="col-sm-7 text-right title">{this.t('crd:overview:overTimeChart:totalFlags')}</div>
           <div className="col-sm-5 text-left info">{dataForPoint.flaggedCount}</div>
-          <div className="col-sm-7 text-right title">Total Procurements Flagged</div>
+          <div className="col-sm-7 text-right title">{this.t('crd:overview:overTimeChart:totalProcurementsFlagged')}</div>
           <div className="col-sm-5 text-left info">{dataForPoint.flaggedProjectCount}</div>
-          <div className="col-sm-7 text-right title">% Total Procurements Flagged</div>
+          <div className="col-sm-7 text-right title">{this.t('crd:overview:overTimeChart:percentFlagged')}</div>
           <div className="col-sm-5 text-left info">{dataForPoint.percent.toFixed(2)}%</div>
         </div>
         <div className="arrow"/>
@@ -149,15 +149,16 @@ class OverviewPage extends CRDPage{
 
   render(){
     const {corruptionType, topFlaggedContracts} = this.state;
-    const {filters, translations, years, monthly, months, indicatorTypesMapping, styling, width} = this.props;
+    const {filters, t, years, monthly, months, indicatorTypesMapping, styling, width} = this.props;
+
     return (
       <div className="page-overview">
         <section className="chart-corruption-types">
-          <h3 className="page-header">Risk of Fraud, Collusion and Process Rigging Over Time</h3>
+          <h3 className="page-header">{this.t('crd:overview:title')}</h3>
           <CorruptionType
             filters={filters}
             requestNewData={(_, corruptionType) => this.setState({corruptionType})}
-            translations={translations}
+            t={t}
             data={corruptionType}
             years={years}
             monthly={monthly}
@@ -169,11 +170,11 @@ class OverviewPage extends CRDPage{
           />
         </section>
         <section>
-          <h3 className="page-header">The Procurement Processes with the Most Flags</h3>
+          <h3 className="page-header"></h3>
           <TopFlaggedContracts
             filters={filters}
             data={topFlaggedContracts}
-            translations={translations}
+            t={t}
             years={years}
             monthly={monthly}
             months={months}
