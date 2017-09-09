@@ -229,5 +229,11 @@
   "crd:corruptionType:indicatorTile:percentProcurementsEligible": "% Procurements Eligible",
   "crd:corruptionType:crosstab:popup:percents": "$#$% of procurements flagged for \"$#$\" are also flagged for \"$#$\"",
   "crd:corruptionType:crosstab:popup:count": "$#$ Procurements flagged with both;",
-  "crd:corruptionType:crosstab:popup:and": "and"
+  "crd:corruptionType:crosstab:popup:and": "and",
+  "crd:indicatorPage:individualIndicatorChart:popup:procurementsFlagged": "Procurements Flagged",
+  "crd:indicatorPage:individualIndicatorChart:popup:eligibleProcurements": "Eligible Procurements",
+  "crd:indicatorPage:individualIndicatorChart:popup:percentOfEligibleFlagged": "% Eligible Procurements Flagged",
+  "crd:indicatorPage:individualIndicatorChart:popup:percentEligible": "% Procurements Eligible",
+  "crd:indicatorPage:individualIndicatorChart:title": "Eligible Procurements and Flagged Procurements for $#$",
+  "crd:indicatorPage:projectTable:title": "List of Procurements Flagged for $#$"
 }

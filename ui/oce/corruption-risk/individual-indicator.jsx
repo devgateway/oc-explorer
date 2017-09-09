@@ -103,13 +103,13 @@ class IndividualIndicatorChart extends CustomPopupChart{
           <div className="col-sm-12">
             <hr/>
           </div>
-          <div className="col-sm-8 text-right title">Procurements Flagged</div>
+          <div className="col-sm-8 text-right title">{this.t('crd:indicatorPage:individualIndicatorChart:popup:procurementsFlagged')}</div>
           <div className="col-sm-4 text-left info">{datum.get('totalTrue')}</div>
-          <div className="col-sm-8 text-right title">Eligible Procurements</div>
+          <div className="col-sm-8 text-right title">{this.t('crd:indicatorPage:individualIndicatorChart:popup:eligibleProcurements')}</div>
           <div className="col-sm-4 text-left info">{datum.get('totalPrecondMet')}</div>
-          <div className="col-sm-8 text-right title">% Eligible Procurements Flagged</div>
+          <div className="col-sm-8 text-right title">{this.t('crd:indicatorPage:individualIndicatorChart:popup:percentOfEligibleFlagged')}</div>
           <div className="col-sm-4 text-left info">{datum.get('percentTruePrecondMet').toFixed(2)} %</div>
-          <div className="col-sm-8 text-right title">% Procurements Eligible</div>
+          <div className="col-sm-8 text-right title">{this.t('crd:indicatorPage:individualIndicatorChart:popup:percentEligible')}</div>
           <div className="col-sm-4 text-left info">{datum.get('percentPrecondMet').toFixed(2)} %</div>
         </div>
         <div className="arrow"/>
@@ -167,7 +167,7 @@ class IndividualIndicatorPage extends translatable(CRDPage){
         </p>
         <section>
           <h3 className="page-header">
-            Eligible Procurements and Flagged Procurements for {this.t(`crd:indicators:${indicator}:name`)}
+            {this.t('crd:indicatorPage:individualIndicatorChart:title').replace('$#$', this.t(`crd:indicators:${indicator}:name`))}
           </h3>
           <IndividualIndicatorChart
             indicator={indicator}
@@ -185,7 +185,7 @@ class IndividualIndicatorPage extends translatable(CRDPage){
         </section>
         <section>
           <h3 className="page-header">
-            List of Procurements Flagged for {this.t(`crd:indicators:${indicator}:name`)}
+            {this.t('crd:indicatorPage:projectTable:title').replace('$#$', this.t(`crd:indicators:${indicator}:name`))}
           </h3>
           <ProjectTable
             indicator={indicator}
