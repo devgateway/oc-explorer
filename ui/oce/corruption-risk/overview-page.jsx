@@ -154,7 +154,7 @@ class OverviewPage extends CRDPage{
     return (
       <div className="page-overview">
         <section className="chart-corruption-types">
-          <h3 className="page-header">{this.t('crd:overview:title')}</h3>
+          <h3 className="page-header">{this.t('crd:overview:overTimeChart:title')}</h3>
           <CorruptionType
             filters={filters}
             requestNewData={(_, corruptionType) => this.setState({corruptionType})}
@@ -170,7 +170,7 @@ class OverviewPage extends CRDPage{
           />
         </section>
         <section>
-          <h3 className="page-header"></h3>
+          <h3 className="page-header">{this.t('crd:overview:topFlagged:title')}</h3>
           <TopFlaggedContracts
             filters={filters}
             data={topFlaggedContracts}
