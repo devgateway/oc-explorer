@@ -76,5 +76,16 @@
   "crd:title": "Tablero de riesgo de corrupción",
   "crd:overview": "Resumen del Riesgo de corrupción",
   "crd:description": "Los tableros de Riesgo de corrupción emplean un enfoque de advertencia para que los usuarios entiendan la potencial presencia de fraude, colusión o manipulación en el proceso en las contrataciones públicas. Mientras que las advertencias pueden indicar la presencia de corrupción, también pueden atribuirse a problemas de calidad de los datos, violación de leyes o de buenas prácticas internacionales, o otros problemas.",
-  "crd:corruptionType:crosstab:popup:and": "y"
+  "crd:corruptionType:crosstab:popup:and": "y",
+  "crd:indicators:i002:shortDescription": "El proveedor ganador proporciona un precio de oferta sustancialmente menor que sus competidores",
+  "crd:indicators:i003:shortDescription": "Sólo el licitador ganador era elegible para obtener el contrato de licitación cuando 2+ licitadores aplican",
+  "crd:indicators:i004:shortDescription": "La adjudicación de única fuente se otorga por encima del umbral competitivo a pesar de los requisitos legales",
+  "crd:indicators:i007:shortDescription": "La licitación competitiva otorgada solo cuenta con una oferta",
+  "crd:indicators:i019:shortDescription": "Largos retrasos en las negociaciones del contrato o adjudicación (más de 60 días)",
+  "crd:indicators:i038:shortDescription": "El periodo de oferta es menor a 3 días",
+  "crd:indicators:i077:shortDescription": "Un alto número de contratos competitivos se otorgan a un solo proveedor durante un año natural",
+  "crd:indicators:i085:shortDescription": "La diferencia entre los precios de las ofertas es un porcentaje exacto (numero entero)",
+  "crd:indicators:i171:shortDescription": "La oferta ganadora está dentro del 1% del precio estimado",
+  "crd:indicators:i180:shortDescription": "El proveedor recibe contratos de una sola fuente/no competitvos de una sola entidad contratante durante un año"
+
 }

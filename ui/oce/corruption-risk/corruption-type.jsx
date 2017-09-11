@@ -257,7 +257,7 @@ class CorruptionType extends translatable(CRDPage){
              <div className="row">
                {row.map(indicator => {
                   const indicatorName = this.t(`crd:indicators:${indicator}:name`);
-                  const indicatorDescription = this.t(`crd:indicators:${indicator}:indicator`);
+                  const indicatorDescription = this.t(`crd:indicators:${indicator}:shortDescription`);
                   return (
                     <div className="col-sm-4 indicator-tile-container" key={corruptionType+indicator} onClick={e => onGotoIndicator(indicator)}>
                       <div className="border">
