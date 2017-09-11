@@ -5,8 +5,9 @@ import ProcurementMethodBox from "./procurement-method";
 import ValueAmount from "./value-amount";
 import DateBox from "./date";
 import {fetchJson, range, pluck} from "../../tools";
+import translatable from '../../translatable';
 
-class Filters extends React.Component{
+class Filters extends translatable(React.Component) {
   render(){
     const {onUpdate, translations, currentBoxIndex, requestNewBox, state, allYears, allMonths, onApply, appliedFilters} = this.props;
     const {BOXES} = this.constructor;
@@ -15,23 +16,23 @@ class Filters extends React.Component{
         <div className="col-lg-1 col-md-1 col-sm-1">
         </div>
         <div className="col-lg-9 col-md-9 col-sm-9">
-          <div className="title">Filter your data</div>
+          <div className="title">{this.t('filters:hint')}</div>
           {BOXES.map((Box, index) => {
              return (
                <Box
-                   key={index}
-                   open={currentBoxIndex === index}
-                   onClick={e => requestNewBox(currentBoxIndex === index ? null : index)}
-                   state={state}
-                   onUpdate={(slug, newState) => onUpdate(state.set(slug, newState))}
-                   translations={translations}
-                   onApply={newState => onApply(newState)}
-                   allYears={allYears}
-                   allMonths={allMonths}
-                   appliedFilters={appliedFilters}
+                 key={index}
+                 open={currentBoxIndex === index}
+                 onClick={e => requestNewBox(currentBoxIndex === index ? null : index)}
+                 state={state}
+                 onUpdate={(slug, newState) => onUpdate(state.set(slug, newState))}
+                 translations={translations}
+                 onApply={newState => onApply(newState)}
+                 allYears={allYears}
+                 allMonths={allMonths}
+                 appliedFilters={appliedFilters}
                />
              )
-           })}
+          })}
         </div>
         <div className="col-lg-1 col-md-1 col-sm-1 download">
           <button className="btn btn-default" disabled>

@@ -13,11 +13,7 @@ import { LOGIN_URL } from './constants';
 // eslint-disable-next-line no-unused-vars
 import style from './style.less';
 
-const CORRUPTION_TYPES = {
-  FRAUD: 'Fraud',
-  RIGGING: 'Process rigging',
-  COLLUSION: 'Collusion',
-};
+const CORRUPTION_TYPES = ['FRAUD', 'RIGGING', 'COLLUSION'];
 
 // eslint-disable-next-line no-undef
 class CorruptionRiskDashboard extends React.Component {
@@ -38,6 +34,7 @@ class CorruptionRiskDashboard extends React.Component {
       width: 0,
       data: Map(),
       showLandingPopup: !localStorage.alreadyVisited,
+      locale: localStorage.oceLocale || 'en_US',
     };
     localStorage.alreadyVisited = true;
 
@@ -65,8 +62,39 @@ class CorruptionRiskDashboard extends React.Component {
     }));
   }
 
+  languageSwitcher() {
+    const { TRANSLATIONS } = this.constructor;
+    const { locale: selectedLocale } = this.state;
+    if (Object.keys(TRANSLATIONS).length <= 1) return null;
+    return Object.keys(TRANSLATIONS).map(locale => (
+      <a
+        href="javascript:void(0);"
+        onClick={() => this.setLocale(locale)}
+        className={cn({active: locale === selectedLocale})}
+      >
+        {locale.split('_')[0]}
+      </a>
+    ));
+      /* return Object.keys(TRANSLATIONS).map(locale =>
+       *   (
+       *     <img
+       *     className="icon"
+       *     src={`assets/flags/${locale}.png`}
+       *     alt={`${locale} flag`}
+       *     
+       *     key={locale}
+       *   />),
+       * );*/
+  }
+
+  setLocale(locale) {
+    this.setState({ locale });
+    localStorage.oceLocale = locale;
+  }
+
   getPage() {
-    const { translations, route, navigate } = this.props;
+    const { route, navigate } = this.props;
+    const translations = this.getTranslations();
     const styling = this.constructor.STYLING || this.props.styling;
     const [page] = route;
 
@@ -179,11 +207,24 @@ class CorruptionRiskDashboard extends React.Component {
     });
   }
 
+  t(str) {
+    const { locale } = this.state;
+    const { TRANSLATIONS } = this.constructor;
+    return TRANSLATIONS[locale][str] || TRANSLATIONS.en_US[str] || str;
+  }
+
+  getTranslations(){
+    const { TRANSLATIONS } = this.constructor;
+    const { locale } = this.state;
+    return TRANSLATIONS[locale];
+  }
+
   render() {
     const { dashboardSwitcherOpen, corruptionType, filterBoxIndex, currentFiltersState,
       appliedFilters, data, indicatorTypesMapping, allYears, allMonths, showLandingPopup,
-      disabledApiSecurity } = this.state;
-    const { onSwitch, translations, route, navigate } = this.props;
+      disabledApiSecurity, locale } = this.state;
+    const { onSwitch, route, navigate } = this.props;
+    const translations = this.getTranslations();
     const [page] = route;
 
     const { filters, years, months } = this.destructFilters(appliedFilters);
@@ -198,6 +239,8 @@ class CorruptionRiskDashboard extends React.Component {
           <LandingPopup
             redirectToLogin={!disabledApiSecurity}
             requestClosing={() => this.setState({ showLandingPopup: false })}
+            translations={translations}
+            languageSwitcher={this.languageSwitcher.bind(this)}
           />
         }
         <header className="branding row">
@@ -208,7 +251,7 @@ class CorruptionRiskDashboard extends React.Component {
                 className="corruption-dash-title"
                 onClick={(e) => this.toggleDashboardSwitcher(e)}
               >
-                Corruption Risk Dashboard
+                {this.t('crd:title')}
                 <i className="glyphicon glyphicon-menu-down" />
               </h1>
               {dashboardSwitcherOpen &&
@@ -220,7 +263,10 @@ class CorruptionRiskDashboard extends React.Component {
               }
             </div>
           </div>
-          <div className="col-sm-2 login-wrapper">
+          <div className="col-sm-1 language-switcher">
+            {this.languageSwitcher()}
+          </div>
+          <div className="col-sm-1 login-wrapper">
             {!disabledApiSecurity && this.loginBox()}
           </div>
           <div className="col-sm-1" />
@@ -243,31 +289,30 @@ class CorruptionRiskDashboard extends React.Component {
         <aside className="col-xs-4 col-md-4 col-lg-3" id="crd-sidebar">
           <div className="crd-description-text">
             <h4 className="crd-overview-link" onClick={() => navigate('overview')}>
-              Corruption Risk Overview
+              {this.t('crd:overview')}
               <i className="glyphicon glyphicon-info-sign" />
             </h4>
             <p className="small">
-              The Corruption Risk Dashboard employs a red flagging approach to help users understand the potential presence of fraud, collusion or rigging in public contracting. While flags may indicate the presence of corruption, they may also be attributable to data quality issues, infringements of law or international good practice, or other issues.
+              {this.t('crd:description')}
             </p>
           </div>
           <section role="navigation" className="row">
-            {Object.keys(CORRUPTION_TYPES).map((slug) => {
-              const name = CORRUPTION_TYPES[slug];
-              const count = Object.keys(indicatorTypesMapping)
-                .filter(key => indicatorTypesMapping[key].types.indexOf(slug) > -1)
-                .length;
+            {CORRUPTION_TYPES.map((slug) => {
+               const count = Object.keys(indicatorTypesMapping)
+                 .filter(key => indicatorTypesMapping[key].types.indexOf(slug) > -1)
+                 .length;
 
-              return (
-                <a
-                  href="javascript:void(0);"
-                  onClick={() => navigate('type', slug)}
-                  className={cn({ active: page === 'type' && slug === corruptionType })}
-                  key={slug}
-                >
-                  <img src={`assets/icons/${slug}.png`} alt="Tab icon" />
-                  {name} <span className="count">({count})</span>
-                </a>
-              );
+               return (
+                 <a
+                   href="javascript:void(0);"
+                   onClick={() => navigate('type', slug)}
+                   className={cn({ active: page === 'type' && slug === corruptionType })}
+                   key={slug}
+                   >
+                   <img src={`assets/icons/${slug}.png`} alt="Tab icon" />
+                   {this.t(`crd:corruptionType:${slug}:name`)} <span className="count">({count})</span>
+                 </a>
+               );
             })}
           </section>
           <TotalFlags
@@ -296,5 +341,10 @@ CorruptionRiskDashboard.propTypes = {
   route: PropTypes.array.isRequired,
   navigate: PropTypes.func.isRequired
 };
+
+CorruptionRiskDashboard.TRANSLATIONS = {
+  en_US: require('../../../web/public/languages/en_US.json'),
+  es_ES: require('../../../web/public/languages/es_ES.json'),
+}
 
 export default CorruptionRiskDashboard;

@@ -94,13 +94,13 @@ class IndicatorTile extends CustomPopupChart{
           <div className="col-sm-12">
             <hr/>
           </div>
-          <div className="col-sm-8 text-right title">Procurements Flagged</div>
+          <div className="col-sm-8 text-right title">{this.t('crd:corruptionType:indicatorTile:procurementsFlagged')}</div>
           <div className="col-sm-4 text-left info">{datum.get('totalTrue')}</div>
-          <div className="col-sm-8 text-right title">Eligible Procurements</div>
+          <div className="col-sm-8 text-right title">{this.t('crd:corruptionType:indicatorTile:eligibleProcurements')}</div>
           <div className="col-sm-4 text-left info">{datum.get('totalPrecondMet')}</div>
-          <div className="col-sm-8 text-right title">% Eligible Procurements Flagged</div>
+          <div className="col-sm-8 text-right title">{this.t('crd:corruptionType:indicatorTile:percentEligibleFlagged')}</div>
           <div className="col-sm-4 text-left info">{datum.get('percentTruePrecondMet').toFixed(2)} %</div>
-          <div className="col-sm-8 text-right title">% Procurements Eligible</div>
+          <div className="col-sm-8 text-right title">{this.t('crd:corruptionType:indicatorTile:percentProcurementsEligible')}</div>
           <div className="col-sm-4 text-left info">{datum.get('percentPrecondMet').toFixed(2)} %</div>
         </div>
         <div className="arrow"/>
@@ -152,42 +152,45 @@ class Crosstab extends Table{
     const rowIndicatorDescription = this.t(`crd:indicators:${rowIndicatorID}:indicator`);
     return (
       <tr key={rowIndicatorID}>
-      <td>{rowIndicatorName}</td>
-      <td className="nr-flags">{rowData.getIn([rowIndicatorID, 'count'])}</td>
-      {rowData.map((datum, indicatorID) => {
-        const indicatorName = this.t(`crd:indicators:${indicatorID}:name`);
-        const indicatorDescription = this.t(`crd:indicators:${indicatorID}:indicator`);
-        if(indicatorID == rowIndicatorID){
-          return <td className="not-applicable" key={indicatorID}>&mdash;</td>
-        } else {
-          const percent = datum.get('percent');
-          const count = datum.get('count');
-          const color = Math.round(255 - 255 * (percent/100))
-          const style = {backgroundColor: `rgb(${color}, 255, ${color})`}
-          return (
-            <td key={indicatorID} className="hoverable" style={style}>
-              {percent && percent.toFixed(2)} %
-              <div className="crd-popup text-left">
-                <div className="row">
-                  <div className="col-sm-12 info">
-                    {percent.toFixed(2)}% of procurements flagged for "{rowIndicatorName}" are also flagged for "{indicatorName}"
-                  </div>
-                  <div className="col-sm-12">
-                    <hr/>
-                  </div>
-                  <div className="col-sm-12 info">
-                    <h4>{count} Procurements flagged with both;</h4>
-                    <p><strong>{rowIndicatorName}</strong>: {rowIndicatorDescription}</p>
-                    <p className="and">and</p>
-                    <p><strong>{indicatorName}</strong>: {indicatorDescription}</p>
-                  </div>
-                </div>
-                <div className="arrow"/>
-              </div>
-            </td>
-          )
-        }
-      }).toArray()}
+        <td>{rowIndicatorName}</td>
+        <td className="nr-flags">{rowData.getIn([rowIndicatorID, 'count'])}</td>
+        {rowData.map((datum, indicatorID) => {
+           const indicatorName = this.t(`crd:indicators:${indicatorID}:name`);
+           const indicatorDescription = this.t(`crd:indicators:${indicatorID}:indicator`);
+           if(indicatorID == rowIndicatorID){
+             return <td className="not-applicable" key={indicatorID}>&mdash;</td>
+           } else {
+             const percent = datum.get('percent');
+             const count = datum.get('count');
+             const color = Math.round(255 - 255 * (percent/100))
+             const style = {backgroundColor: `rgb(${color}, 255, ${color})`}
+             return (
+               <td key={indicatorID} className="hoverable" style={style}>
+                 {percent && percent.toFixed(2)} %
+                 <div className="crd-popup text-left">
+                   <div className="row">
+                     <div className="col-sm-12 info">
+                       {this.t('crd:corruptionType:crosstab:popup:percents')
+                         .replace('$#$', percent.toFixed(2))
+                         .replace('$#$', rowIndicatorName)
+                         .replace('$#$', indicatorName)}
+                     </div>
+                     <div className="col-sm-12">
+                       <hr/>
+                     </div>
+                     <div className="col-sm-12 info">
+                       <h4>{this.t('crd:corruptionType:crosstab:popup:count').replace('$#$', count)}</h4>
+                       <p><strong>{rowIndicatorName}</strong>: {rowIndicatorDescription}</p>
+                       <p className="and">{this.t('crd:corruptionType:crosstab:popup:and')}</p>
+                       <p><strong>{indicatorName}</strong>: {indicatorDescription}</p>
+                     </div>
+                   </div>
+                   <div className="arrow"/>
+                 </div>
+               </td>
+             )
+           }
+        }).toArray()}
       </tr>
     )
   }
@@ -254,7 +257,7 @@ class CorruptionType extends translatable(CRDPage){
              <div className="row">
                {row.map(indicator => {
                   const indicatorName = this.t(`crd:indicators:${indicator}:name`);
-                  const indicatorDescription = this.t(`crd:indicators:${indicator}:indicator`);
+                  const indicatorDescription = this.t(`crd:indicators:${indicator}:shortDescription`);
                   return (
                     <div className="col-sm-4 indicator-tile-container" key={corruptionType+indicator} onClick={e => onGotoIndicator(indicator)}>
                       <div className="border">
