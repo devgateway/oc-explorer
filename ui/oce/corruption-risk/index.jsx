@@ -64,16 +64,27 @@ class CorruptionRiskDashboard extends React.Component {
 
   languageSwitcher() {
     const { TRANSLATIONS } = this.constructor;
+    const { locale: selectedLocale } = this.state;
     if (Object.keys(TRANSLATIONS).length <= 1) return null;
-    return Object.keys(TRANSLATIONS).map(locale =>
-      (<img
-        className="icon"
-        src={`assets/flags/${locale}.png`}
-        alt={`${locale} flag`}
+    return Object.keys(TRANSLATIONS).map(locale => (
+      <a
+        href="javascript:void(0);"
         onClick={() => this.setLocale(locale)}
-        key={locale}
-      />),
-    );
+        className={cn({active: locale === selectedLocale})}
+      >
+        {locale.split('_')[0]}
+      </a>
+    ));
+      /* return Object.keys(TRANSLATIONS).map(locale =>
+       *   (
+       *     <img
+       *     className="icon"
+       *     src={`assets/flags/${locale}.png`}
+       *     alt={`${locale} flag`}
+       *     
+       *     key={locale}
+       *   />),
+       * );*/
   }
 
   setLocale(locale) {
