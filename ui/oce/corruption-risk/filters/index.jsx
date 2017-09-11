@@ -9,7 +9,7 @@ import translatable from '../../translatable';
 
 class Filters extends translatable(React.Component) {
   render(){
-    const {onUpdate, t, currentBoxIndex, requestNewBox, state, allYears, allMonths, onApply, appliedFilters} = this.props;
+    const {onUpdate, translations, currentBoxIndex, requestNewBox, state, allYears, allMonths, onApply, appliedFilters} = this.props;
     const {BOXES} = this.constructor;
     return (
       <div className="row filters-bar" onMouseDown={e => e.stopPropagation()}>
@@ -25,7 +25,7 @@ class Filters extends translatable(React.Component) {
                  onClick={e => requestNewBox(currentBoxIndex === index ? null : index)}
                  state={state}
                  onUpdate={(slug, newState) => onUpdate(state.set(slug, newState))}
-                 t={t}
+                 translations={translations}
                  onApply={newState => onApply(newState)}
                  allYears={allYears}
                  allMonths={allMonths}

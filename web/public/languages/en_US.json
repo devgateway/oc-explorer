@@ -260,5 +260,6 @@
   "crd:landing:distinguishing:2": "Furthermore, in some instances, a single flag - such as for the awarding of two contracts to the same supplier by a single procuring entity - may not show any evidence of wrongdoing, though the confluence of multiple indicators suggests greater cause of concern. ",
   "crd:landing:feedback:title": "Your feedback is welcome",
   "crd:landing:feedback:text": "We welcome your feedback on this prototype. Please contact Andrew Mandelbaum at DG if you have any questions or suggestions:&nbsp;<a href=\"mailto:amandelbaum@developmentgateway.org\">amandelbaum@developmentgateway.org</a>",
-  "crd:landing:enter": "Enter!"
+  "crd:landing:enter": "Enter!",
+  "crd:charts:totalFlags:title": "Total Flags:"
 }

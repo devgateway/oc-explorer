@@ -7,16 +7,11 @@ var translatable = Class => class Translatable extends Class {
 
   __n(sg, pl, n) {
     console.warn('__n is deprecated, use t_n');
-    return n + " " + this.__(1 === n ? sg : pl);
+    return n + ' ' + this.__(1 === n ? sg : pl);
   }
 
   t(key) {
-    const { translations, t } = this.props;
-    if (typeof t === 'function') {
-      return t(key);
-    }
-    console.warn('Passing translation objects is deprecated!');
-    if(!translations) return key;
+    const { translations } = this.props;
     if(!translations) console.error('Missing translations', this.constructor.name);
     if(!translations[key]) console.error('Missing translation for key', key);
     return translations[key];

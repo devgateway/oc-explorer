@@ -83,8 +83,8 @@ class CorruptionRiskDashboard extends React.Component {
 
   getPage() {
     const { route, navigate } = this.props;
+    const translations = this.getTranslations();
     const styling = this.constructor.STYLING || this.props.styling;
-    const t = this.t.bind(this);
     const [page] = route;
 
     const { appliedFilters, indicatorTypesMapping, width } = this.state;
@@ -104,7 +104,7 @@ class CorruptionRiskDashboard extends React.Component {
           indicators={indicators}
           onGotoIndicator={individualIndicator => navigate('indicator', corruptionType, individualIndicator)}
           filters={filters}
-          t={t}
+          translations={translations}
           corruptionType={corruptionType}
           years={years}
           monthly={monthly}
@@ -120,7 +120,7 @@ class CorruptionRiskDashboard extends React.Component {
           indicator={individualIndicator}
           corruptionType={corruptionType}
           filters={filters}
-          t={t}
+          translations={translations}
           years={years}
           monthly={monthly}
           months={months}
@@ -132,7 +132,7 @@ class CorruptionRiskDashboard extends React.Component {
       return (
         <OverviewPage
           filters={filters}
-          t={t}
+          translations={translations}
           years={years}
           monthly={monthly}
           months={months}
@@ -196,18 +196,24 @@ class CorruptionRiskDashboard extends React.Component {
     });
   }
 
-  t(str){
+  t(str) {
     const { locale } = this.state;
     const { TRANSLATIONS } = this.constructor;
-    return TRANSLATIONS[locale][str] || TRANSLATIONS['en_US'][str] || str;
+    return TRANSLATIONS[locale][str] || TRANSLATIONS.en_US[str] || str;
+  }
+
+  getTranslations(){
+    const { TRANSLATIONS } = this.constructor;
+    const { locale } = this.state;
+    return TRANSLATIONS[locale];
   }
 
   render() {
     const { dashboardSwitcherOpen, corruptionType, filterBoxIndex, currentFiltersState,
       appliedFilters, data, indicatorTypesMapping, allYears, allMonths, showLandingPopup,
-      disabledApiSecurity } = this.state;
+      disabledApiSecurity, locale } = this.state;
     const { onSwitch, route, navigate } = this.props;
-    const t = this.t.bind(this);
+    const translations = this.getTranslations();
     const [page] = route;
 
     const { filters, years, months } = this.destructFilters(appliedFilters);
@@ -222,7 +228,7 @@ class CorruptionRiskDashboard extends React.Component {
           <LandingPopup
             redirectToLogin={!disabledApiSecurity}
             requestClosing={() => this.setState({ showLandingPopup: false })}
-            t={t}
+            translations={translations}
           />
         }
         <header className="branding row">
@@ -260,7 +266,7 @@ class CorruptionRiskDashboard extends React.Component {
             appliedFilters: filtersToApply,
             currentFiltersState: filtersToApply,
           })}
-          t={t}
+          translations={translations}
           currentBoxIndex={filterBoxIndex}
           requestNewBox={index => this.setState({ filterBoxIndex: index })}
           state={currentFiltersState}
@@ -301,7 +307,7 @@ class CorruptionRiskDashboard extends React.Component {
             filters={filters}
             requestNewData={(path, newData) =>
               this.setState({ data: this.state.data.setIn(['totalFlags'].concat(path), newData) })}
-            t={t}
+            translations={translations}
             data={data.get('totalFlags', Map())}
             years={years}
             months={months}

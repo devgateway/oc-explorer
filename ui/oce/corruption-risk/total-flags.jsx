@@ -52,7 +52,7 @@ class Counter extends backendYearFilterable(Visualization){
     if(!data) return null;
     return (
       <div className="total-flags-counter">
-        <div className="text text-left">Total Flags:</div>
+        <div className="text text-left">{this.t('crd:charts:totalFlags:title')}</div>
         <div className="count text-right">
           {data.getIn([0, 'flaggedCount'], 0)}
         </div>

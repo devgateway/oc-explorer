@@ -244,7 +244,7 @@ class CorruptionType extends translatable(CRDPage){
 
   render(){
     const {indicators, onGotoIndicator, corruptionType, filters, years, monthly, months,
-           t, width, styling} = this.props;
+           translations, width, styling} = this.props;
     const {crosstab, indicatorTiles} = this.state;
     if(!indicators || !indicators.length) return null;
 
@@ -265,7 +265,7 @@ class CorruptionType extends translatable(CRDPage){
                         <p>{indicatorDescription}</p>
                         <IndicatorTile
                           indicator={indicator}
-                          t={t}
+                          translations={translations}
                           filters={filters}
                           requestNewData={(_, data) => this.updateIndicatorTile(indicator, data)}
                           data={indicatorTiles[indicator]}
@@ -297,7 +297,7 @@ class CorruptionType extends translatable(CRDPage){
             indicators={indicators}
             data={crosstab}
             requestNewData={(_, data) => this.setState({crosstab: data})}
-            t={t}
+            translations={translations}
           />
         </section>
       </div>

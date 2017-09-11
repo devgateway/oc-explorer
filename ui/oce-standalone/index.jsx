@@ -181,7 +181,7 @@ class OCEChild extends OCApp{
 
 const translations = {
   en_US: require('../../web/public/languages/en_US.json'),
-  es_ES: require('../../web/public/languages/en_US.json')
+  es_ES: require('../../web/public/languages/es_ES.json')
 };
 
 const BILLION = 1000000000;

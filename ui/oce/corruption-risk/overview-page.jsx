@@ -149,8 +149,7 @@ class OverviewPage extends CRDPage{
 
   render(){
     const {corruptionType, topFlaggedContracts} = this.state;
-    const {filters, t, years, monthly, months, indicatorTypesMapping, styling, width} = this.props;
-
+    const {filters, translations, years, monthly, months, indicatorTypesMapping, styling, width} = this.props;
     return (
       <div className="page-overview">
         <section className="chart-corruption-types">
@@ -158,7 +157,7 @@ class OverviewPage extends CRDPage{
           <CorruptionType
             filters={filters}
             requestNewData={(_, corruptionType) => this.setState({corruptionType})}
-            t={t}
+            translations={translations}
             data={corruptionType}
             years={years}
             monthly={monthly}
@@ -174,7 +173,7 @@ class OverviewPage extends CRDPage{
           <TopFlaggedContracts
             filters={filters}
             data={topFlaggedContracts}
-            t={t}
+            translations={translations}
             years={years}
             monthly={monthly}
             months={months}
