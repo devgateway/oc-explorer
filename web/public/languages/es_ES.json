@@ -86,6 +86,17 @@
   "crd:indicators:i077:shortDescription": "Un alto número de contratos competitivos se otorgan a un solo proveedor durante un año natural",
   "crd:indicators:i085:shortDescription": "La diferencia entre los precios de las ofertas es un porcentaje exacto (numero entero)",
   "crd:indicators:i171:shortDescription": "La oferta ganadora está dentro del 1% del precio estimado",
-  "crd:indicators:i180:shortDescription": "El proveedor recibe contratos de una sola fuente/no competitvos de una sola entidad contratante durante un año"
-
+  "crd:indicators:i180:shortDescription": "El proveedor recibe contratos de una sola fuente/no competitvos de una sola entidad contratante durante un año",
+  "crd:landing:introduction:1": "El tablero de Riesgo de Corrupción (CRD por sus siglas en inglés) es una herramienta de fuente abierta que ayuda a  que los usuarios entiendas la potencial presencia de corrupción en la contratación pública. Utilizando un enfoque de advertencias (resaltando las actividades de contratación que tienen algunos factores de riesgo), este prototipo examina el riesgo de corrupción a través de la visualización de 10 indicadores que se presentan bajo tres formas diferentes de corrupción: fraude, colusión, y manipulación en el proceso. Los usuarios pueden explorar los datos, los cuales se han convertido al Estándar de Datos para la Contratación Abierta (OCDS por sus siglas en inglés), utilizando una variedad de filtros. Una tabla de cruce  permite a los usuarios cruzar dos indicadores asignados al mismo tipo de riesgo.",
+  "crd:landing:introduction:2": "El enfoque metodológico que genera información para los CRD, los cuales fueron creados por Development Gateway con la colaboración y apoyo de La Alianza para las Contrataciones Abierta (OCP por sus siglas en inglés), se encuentra plasmado en un <a href=\"http://www.open-contracting.org/resources/red-flags-integrity-giving-green-light-open-data-solutions/\">trabajo de investigación</a> escrito conjuntamente. Las explicaciones de los conceptos e indicadores principales se encuentran disponibles dentro del tablero",
+  "crd:landing:intendedUse:title": "Uso previsto",
+  "crd:landing:intendedUse:introduction": "El Tablero de riesgo de corrupción fue diseñado con objetivo de permitir dos tipos de uso:",
+  "crd:landing:intendedUse:introduction:1": "1. Facilitar los esfuerzos de regulación de compras y de observadores informados para identificar contratos individuales que puedan requerir una investigación, y;",
+  "crd:landing:intendedUse:introduction:2": "2. Ayudar a monitorear el riesgo de corrupción en los mercados de contratación a través del tiempo.",
+  "crd:landing:distinguishing:title": "Distinguir entre \"Corrupción\" y \"Riesgo de corrupción\"",
+  "crd:landing:distinguishing:1": "Mientras que las advertencias asociadas con el proceso de contratación puedan indicar la posibilidad de que la corrupción ya haya tenido lugar, también puede ser atribuida por la falta de datos de calidad, debilidad sistémica, o prácticas que pueden ser apropiadas cuando han sido especificamente autorizadas por la autoridad de contratación o la institución que la regula. Por esta razón, esta herramienta debe verse como un mecanismo para identificar el \"riesgo\" de corrupción, y no como \"corrupción\" misma.",
+  "crd:landing:distinguishing:2": "Además, en algunos casos, una advertencia - como para la adjudicación de dos contratos a el mismo proveedor por  una entidad contratadora - podría no morstrar evidencia de una anomalía, aunque la confluencia de indicadores mútiples sugiere una causa de preocupación.",
+  "crd:landing:feedback:title": "Sus comentarios son bienvenidos",
+  "crd:landing:feedback:text": "Agradecemos sus comentarios para este prototipo. Por favorcontacte a Andrew Mandelbaum de DG si tiene preguntas o sugerencias:&nbsp;<a href=\"mailto:amandelbaum@developmentgateway.org\">amandelbaum@developmentgateway.org</a>",
+  "crd:landing:enter": "¡Ingresar!"
 }
