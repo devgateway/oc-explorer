@@ -34,6 +34,7 @@
   "export:exporting": "Exporting...",
   "export:export": "Export",
   "filters:awardValue:title": "Award value",
+  "filters:hint": "Filter your data",
   "filters:title": "Filter the data",
   "filters:apply": "Apply",
   "filters:reset": "Reset",
