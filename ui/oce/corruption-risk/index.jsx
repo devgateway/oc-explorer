@@ -240,6 +240,7 @@ class CorruptionRiskDashboard extends React.Component {
             redirectToLogin={!disabledApiSecurity}
             requestClosing={() => this.setState({ showLandingPopup: false })}
             translations={translations}
+            languageSwitcher={this.languageSwitcher.bind(this)}
           />
         }
         <header className="branding row">

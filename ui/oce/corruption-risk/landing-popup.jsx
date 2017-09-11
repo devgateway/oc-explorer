@@ -36,7 +36,8 @@ class LandingPopup extends translatable(React.Component) {
   }
 
   render(){
-    const {top} = this.state;
+    const { top } = this.state;
+    const { languageSwitcher } = this.props;
     return (
       <div>
         <div className="crd-landing-popup-overlay" onClick={this.onClose.bind(this)}/>
@@ -47,10 +48,13 @@ class LandingPopup extends translatable(React.Component) {
               <div className="col-sm-1 text-right">
                 <img src="assets/logo.png"/>
               </div>
-              <div className="col-sm-10">
+              <div className="col-sm-9">
                 <h4 className="popup-title">{this.t('crd:title')}</h4>
               </div>
-              <div className="col-ms-1 text-right">
+              <div className="col-sm-1 language-switcher">
+                {languageSwitcher()}
+              </div>
+              <div className="col-sm-1 text-right">
                 <i className="glyphicon glyphicon-remove-circle close-button" onClick={this.onClose.bind(this)}></i>
               </div>
             </div>
