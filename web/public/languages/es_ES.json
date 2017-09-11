@@ -1,4 +1,9 @@
 {
+  "filters:hint": "Filtro de datos",
+  "filters:tabs:organizations:title": "Organizaciones",
+  "filters:tabs:procurementMethod:title": "Método de contratación",
+  "filters:tabs:valueAmount:title": "Cantidad de valor",
+  "filters:tabs:date:title": "Fecha",
   "crd:corruptionType:FRAUD:pageTitle": "Riesgo de fraude",
   "crd:corruptionType:FRAUD:name": "Fraude",
   "crd:corruptionType:FRAUD:introduction": "Según las <a href=\"https://siteresources.worldbank.org/INTDOII/Resources/FinalIFITaskForceFramework&Gdlines.pdf\">Directrices del grupo de tareas contra la corrupción</a> de las instituciones financieras internacionales (IFI por sus siglas en inglés), el fraude es \" Cuaquier acto u omisión, incluyendo una falsa representación, que de manera consciente o negligentemente engaña o intenta engañar a una parte para obtener un beneficio financiero o de otro tipo o para evitar una obligación \". Los proveedores pueden involucrarse en una variedad de actividades fraudulentas para aumentar sus probabilidades de ganar contratos o para demostrar progresos en la implementción. Algunos de estos esquemas de fraude incluyen: facturas falsas, ofertas falsas, sustitución de productos, contrataciones ficticias, y ofertas sombra. Las advertencias representadas en los cuadro siguientes indican la posibilidad de que exista un fraude en el proceso de contratación. Para saber más sobre cada advertencia, haga clic en el cuadro asociado.",
@@ -98,5 +103,8 @@
   "crd:landing:distinguishing:2": "Además, en algunos casos, una advertencia - como para la adjudicación de dos contratos a el mismo proveedor por  una entidad contratadora - podría no morstrar evidencia de una anomalía, aunque la confluencia de indicadores mútiples sugiere una causa de preocupación.",
   "crd:landing:feedback:title": "Sus comentarios son bienvenidos",
   "crd:landing:feedback:text": "Agradecemos sus comentarios para este prototipo. Por favorcontacte a Andrew Mandelbaum de DG si tiene preguntas o sugerencias:&nbsp;<a href=\"mailto:amandelbaum@developmentgateway.org\">amandelbaum@developmentgateway.org</a>",
-  "crd:landing:enter": "¡Ingresar!"
+  "crd:landing:enter": "¡Ingresar!",
+  "crd:overview:overTimeChart:title": "Riesgo de fraude, colusión y manipulación del proceso a tavés del tiempo",
+  "crd:overview:topFlagged:title": "Los procesos de contratación con más advertencias"
+
 }

@@ -14,7 +14,7 @@ class ProcurementMethodBox extends FilterBox{
   }
 
   getTitle(){
-    return 'Procurement Method';
+    return this.t('filters:tabs:procurementMethod:title');
   }
 
   getBox(){

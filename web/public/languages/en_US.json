@@ -59,6 +59,8 @@
   "filters:tabs:amounts:title": "Amounts",
   "filters:tabs:organizations:title": "Organizations",
   "filters:tabs:procurementMethod:title": "Procurement method",
+  "filters:tabs:valueAmount:title": "Value amount",
+  "filters:tabs:date:title": "Date",
   "tabs:competitiveness:title": "Competitiveness",
   "tabs:eProcurement:title": "E-Procurement",
   "tabs:efficiency:title": "Efficiency",

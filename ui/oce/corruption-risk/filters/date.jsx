@@ -11,7 +11,7 @@ class DateBox extends FilterBox{
   }
 
   getTitle(){
-    return 'Date';
+    return this.t('filters:tabs:date:title');
   }
 
   reset(){

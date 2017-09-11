@@ -16,7 +16,7 @@ class Organizations extends FilterBox{
   }
 
   getTitle(){
-    return 'Organizations';
+    return this.t('filters:tabs:organizations:title');
   }
 
   getBox(){

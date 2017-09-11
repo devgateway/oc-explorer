@@ -3,7 +3,7 @@ import {Set} from "immutable";
 
 class Tab extends translatable(React.Component){
   renderChild(Component, slug){
-    let {onUpdate, translations, state} = this.props;
+    let {onUpdate, t, state} = this.props;
     let selected = state.get(slug, Set());
     return <Component
         key={slug}
@@ -13,7 +13,7 @@ class Tab extends translatable(React.Component){
             selected.add(id))
         }
         onUpdateAll={onUpdate.bind(null, slug)}
-        translations={translations}
+        t={t}
     />
   }
 }
