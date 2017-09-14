@@ -261,5 +261,14 @@
   "crd:landing:feedback:title": "Your feedback is welcome",
   "crd:landing:feedback:text": "We welcome your feedback on this prototype. Please contact Andrew Mandelbaum at DG if you have any questions or suggestions:&nbsp;<a href=\"mailto:amandelbaum@developmentgateway.org\">amandelbaum@developmentgateway.org</a>",
   "crd:landing:enter": "Enter!",
-  "crd:charts:totalFlags:title": "Total Flags:"
+  "crd:charts:totalFlags:title": "Total Flags:",
+  "crd:procurementsTable:status": "Status",
+  "crd:procurementsTable:contractID": "Contract ID",
+  "crd:procurementsTable:title": "Title",
+  "crd:procurementsTable:procuringEntity": "Procuring Entity",
+  "crd:procurementsTable:tenderAmount": "Tender Amount",
+  "crd:procurementsTable:awardsAmount": "Awards Amount",
+  "crd:procurementsTable:tenderDate": "Tender Date",
+  "crd:procurementsTable:flagType": "Flag Type",
+  "crd:procurementsTable:noOfFlags": "No. of Flags"
 }

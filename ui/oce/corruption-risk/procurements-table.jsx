@@ -112,15 +112,15 @@ class ProcurementsTable extends Table{
       <table className={`table table-striped table-hover ${this.getClassName()}`}>
         <thead>
           <tr>
-            <th>Status</th>
-            <th>Contract ID</th>
-            <th>Title</th>
-            <th>Procuring Entity</th>
-            <th>Tender Amount</th>
-            <th>Awards Amount</th>
-            <th>Tender Date</th>
-            <th className="flag-type">Flag Type</th>
-            <th>No. of Flags</th>
+            <th>{this.t('crd:procurementsTable:status')}</th>
+            <th>{this.t('crd:procurementsTable:contractID')}</th>
+            <th>{this.t('crd:procurementsTable:title')}</th>
+            <th>{this.t('crd:procurementsTable:procuringEntity')}</th>
+            <th>{this.t('crd:procurementsTable:tenderAmount')}</th>
+            <th>{this.t('crd:procurementsTable:awardsAmount')}</th>
+            <th>{this.t('crd:procurementsTable:tenderDate')}</th>
+            <th className="flag-type">{this.t('crd:procurementsTable:flagType')}</th>
+            <th>{this.t('crd:procurementsTable:noOfFlags')}</th>
           </tr>
         </thead>
         <tbody>

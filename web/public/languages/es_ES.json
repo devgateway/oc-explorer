@@ -142,7 +142,7 @@
   "tables:top10suppliers:nrPE": "Number of PEs from which an award has been received",
   "tables:top10suppliers:totalAwardedValue": "Total awarded value",
   "tables:top10suppliers:title": "Top 10 suppliers",
-  "yearsBar:ctrlClickHint": "Para seleccionar un solo año y poder seleccionar varios meses, presione "shift" mientras hace clic en el año.",
+  "yearsBar:ctrlClickHint": "Para seleccionar un solo año y poder seleccionar varios meses, presione \"shift\" mientras hace clic en el año.",
   "crd:corruptionType:FRAUD:pageTitle": "Riesgo de fraude",
   "crd:corruptionType:FRAUD:name": "Fraude",
   "crd:corruptionType:FRAUD:introduction": "Según las <a href=\"https://siteresources.worldbank.org/INTDOII/Resources/FinalIFITaskForceFramework&Gdlines.pdf\">Directrices del grupo de tareas contra la corrupción</a> de las instituciones financieras internacionales (IFI por sus siglas en inglés), el fraude es \" Cuaquier acto u omisión, incluyendo una falsa representación, que de manera consciente o negligentemente engaña o intenta engañar a una parte para obtener un beneficio financiero o de otro tipo o para evitar una obligación \". Los proveedores pueden involucrarse en una variedad de actividades fraudulentas para aumentar sus probabilidades de ganar contratos o para demostrar progresos en la implementción. Algunos de estos esquemas de fraude incluyen: facturas falsas, ofertas falsas, sustitución de productos, contrataciones ficticias, y ofertas sombra. Las advertencias representadas en los cuadro siguientes indican la posibilidad de que exista un fraude en el proceso de contratación. Para saber más sobre cada advertencia, haga clic en el cuadro asociado.",
@@ -261,5 +261,14 @@
   "crd:landing:feedback:title": "Sus comentarios son bienvenidos",
   "crd:landing:feedback:text": "Agradecemos sus comentarios para este prototipo. Por favorcontacte a Andrew Mandelbaum de DG si tiene preguntas o sugerencias:&nbsp;<a href=\"mailto:amandelbaum@developmentgateway.org\">amandelbaum@developmentgateway.org</a>",
   "crd:landing:enter": "¡Ingresar!",
-  "crd:charts:totalFlags:title": "Advertencias totales:"
+  "crd:charts:totalFlags:title": "Advertencias totales:",
+  "crd:procurementsTable:status": "Estado",
+  "crd:procurementsTable:contractID": "Identificación del contrato",
+  "crd:procurementsTable:title": "Título",
+  "crd:procurementsTable:procuringEntity": "Entidad contratante",
+  "crd:procurementsTable:tenderAmount": "Cantidad de la licitación",
+  "crd:procurementsTable:awardsAmount": "Cantidad de adjudicaciones",
+  "crd:procurementsTable:tenderDate": "Fecha de licitación",
+  "crd:procurementsTable:flagType": "Tipo de advertencia",
+  "crd:procurementsTable:noOfFlags": "No. de advertencias"
 }
