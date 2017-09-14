@@ -270,5 +270,6 @@
   "crd:procurementsTable:awardsAmount": "Cantidad de adjudicaciones",
   "crd:procurementsTable:tenderDate": "Fecha de licitación",
   "crd:procurementsTable:flagType": "Tipo de advertencia",
-  "crd:procurementsTable:noOfFlags": "No. de advertencias"
+  "crd:procurementsTable:noOfFlags": "No. de advertencias",
+  "crd:procurementsTable:associatedFlags": "Advertencias $#$ asociadas"
 }

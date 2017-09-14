@@ -19,7 +19,7 @@ class Popup extends translatable(React.Component){
       <div className="crd-popup text-center" style={{top: popupTop}}>
         <div className="row">
           <div className="col-sm-12 info">
-            <h5>Associated {type[0] + type.substr(1).toLowerCase()} Flags</h5>
+            <h5>{this.t('crd:procurementsTable:associatedFlags').replace('$#$', this.t(`crd:corruptionType:${type}:name`))}</h5>
           </div>
           <div className="col-sm-12">
             <hr/>

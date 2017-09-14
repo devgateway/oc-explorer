@@ -270,5 +270,6 @@
   "crd:procurementsTable:awardsAmount": "Awards Amount",
   "crd:procurementsTable:tenderDate": "Tender Date",
   "crd:procurementsTable:flagType": "Flag Type",
-  "crd:procurementsTable:noOfFlags": "No. of Flags"
+  "crd:procurementsTable:noOfFlags": "No. of Flags",
+  "crd:procurementsTable:associatedFlags": "Associated $#$ flags"
 }
