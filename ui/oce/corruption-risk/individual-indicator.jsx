@@ -41,7 +41,7 @@ class IndividualIndicatorChart extends CustomPopupChart{
       y: totalTrueValues,
       type: 'scatter',
       fill: 'tonexty',
-      name: 'Flagged Procurements',
+      name: this.t('crd:individualIndicatorChart:flaggedProcurements'),
       hoverinfo: 'none',
       fillcolor: traceColors[0],
       line: {
@@ -52,7 +52,7 @@ class IndividualIndicatorChart extends CustomPopupChart{
       y: totalPrecondMetValues,
       type: 'scatter',
       fill: 'tonexty',
-      name: 'Eligible Procurements',
+      name: this.t('crd:individualIndicatorChart:eligibleProcurements'),
       hoverinfo: 'none',
       fillcolor: traceColors[1],
       line: {
