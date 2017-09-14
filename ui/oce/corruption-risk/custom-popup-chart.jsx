@@ -26,6 +26,7 @@ class CustomPopupChart extends Chart {
     const point = data.points[0];
     const year = point.x;
     const traceName = point.data.name;
+    const traceIndex = point.fullData.index;
     const POPUP_ARROW_SIZE = 8;
 
     const { xaxis, yaxis } = point;
@@ -52,6 +53,7 @@ class CustomPopupChart extends Chart {
         left,
         year,
         traceName,
+        traceIndex
       },
     });
   }

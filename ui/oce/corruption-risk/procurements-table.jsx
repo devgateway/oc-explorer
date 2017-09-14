@@ -19,7 +19,7 @@ class Popup extends translatable(React.Component){
       <div className="crd-popup text-center" style={{top: popupTop}}>
         <div className="row">
           <div className="col-sm-12 info">
-            <h5>Associated {type[0] + type.substr(1).toLowerCase()} Flags</h5>
+            <h5>{this.t('crd:procurementsTable:associatedFlags').replace('$#$', this.t(`crd:corruptionType:${type}:name`))}</h5>
           </div>
           <div className="col-sm-12">
             <hr/>
@@ -112,15 +112,15 @@ class ProcurementsTable extends Table{
       <table className={`table table-striped table-hover ${this.getClassName()}`}>
         <thead>
           <tr>
-            <th>Status</th>
-            <th>Contract ID</th>
-            <th>Title</th>
-            <th>Procuring Entity</th>
-            <th>Tender Amount</th>
-            <th>Awards Amount</th>
-            <th>Tender Date</th>
-            <th className="flag-type">Flag Type</th>
-            <th>No. of Flags</th>
+            <th>{this.t('crd:procurementsTable:status')}</th>
+            <th>{this.t('crd:procurementsTable:contractID')}</th>
+            <th>{this.t('crd:procurementsTable:title')}</th>
+            <th>{this.t('crd:procurementsTable:procuringEntity')}</th>
+            <th>{this.t('crd:procurementsTable:tenderAmount')}</th>
+            <th>{this.t('crd:procurementsTable:awardsAmount')}</th>
+            <th>{this.t('crd:procurementsTable:tenderDate')}</th>
+            <th className="flag-type">{this.t('crd:procurementsTable:flagType')}</th>
+            <th>{this.t('crd:procurementsTable:noOfFlags')}</th>
           </tr>
         </thead>
         <tbody>

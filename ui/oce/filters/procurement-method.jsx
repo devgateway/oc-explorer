@@ -2,7 +2,7 @@ import MultipleSelect from './inputs/multiple-select';
 
 export default class ProcurementMethod extends MultipleSelect{
   getTitle() {
-    return 'Procurement method';
+    return this.t('filters:tabs:procurementMethod:title');
   }
 
   getId(option) {

@@ -8,13 +8,15 @@ import {colorLuminance} from "./tools";
 
 const pluckObj = (field, obj) => Object.keys(obj).map(key => obj[key][field]);
 
+const TRACES = ['COLLUSION', 'FRAUD', 'RIGGING'];
+
 class CorruptionType extends CustomPopupChart{
   groupData(data){
-    let grouped = {
-      COLLUSION: {},
-      FRAUD: {},
-      RIGGING: {}
-    };
+    let grouped = {};
+    TRACES.forEach(trace => {
+      grouped[trace] = {};
+    });
+
     const {monthly} = this.props;
     data.forEach(datum => {
       const type = datum.get('type');
@@ -63,7 +65,7 @@ class CorruptionType extends CustomPopupChart{
         y: values,
         type: 'scatter',
         fill: 'tonexty',
-        name: type,
+        name: this.t(`crd:corruptionType:${type}:name`),
         fillcolor: styling.charts.traceColors[index],
         line: {
           color: colorLuminance(styling.charts.traceColors[index], -.3)
@@ -91,7 +93,8 @@ class CorruptionType extends CustomPopupChart{
 
   getPopup(){
     const {popup} = this.state;
-    const {year, traceName: corruptionType} = popup;
+    const { year, traceIndex } = popup;
+    const corruptionType = TRACES[traceIndex];
     const {indicatorTypesMapping} = this.props;
     const data = this.groupData(super.getData());
     if(!data[corruptionType]) return null;
