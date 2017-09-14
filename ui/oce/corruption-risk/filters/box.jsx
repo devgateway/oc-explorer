@@ -22,9 +22,9 @@ class FilterBox extends FilterTab{
          <div className="dropdown" onClick={e => e.stopPropagation()}>
            {this.getBox()}
            <div className="controls">
-             <button className="btn btn-primary" onClick={e => onApply(state)}>Apply</button>
+             <button className="btn btn-primary" onClick={e => onApply(state)}>{this.t('filters:apply')}</button>
              &nbsp;
-             <button className="btn btn-default" onClick={this.reset.bind(this)}>Reset</button>
+             <button className="btn btn-default" onClick={this.reset.bind(this)}>{this.t('filters:reset')}</button>
            </div>
          </div>
         }
