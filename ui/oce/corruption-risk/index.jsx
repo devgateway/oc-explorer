@@ -159,12 +159,16 @@ class CorruptionRiskDashboard extends React.Component {
     if (this.state.user.loggedIn) {
       return (
         <a href="/preLogout?referrer=/ui/index.html?corruption-risk-dashboard">
-          <button className="btn btn-success">Logout</button>
+          <button className="btn btn-success">
+            {this.t('general:logout')}
+          </button>
         </a>
       );
     }
     return (<a href={LOGIN_URL}>
-      <button className="btn btn-success">Login</button>
+      <button className="btn btn-success">
+        {this.t('general:login')}
+      </button>
     </a>);
   }
 

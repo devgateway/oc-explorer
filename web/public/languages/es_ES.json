@@ -53,7 +53,7 @@
   "filters:tenderPrice:title": "Precio de la licitación",
   "filters:multipleSelect:selectAll": "Seleccionar todo",
   "filters:multipleSelect:selectNone": "No seleccionar",
-  "filters:typeAhead:inputPlaceholder": "type search query",
+  "filters:typeAhead:inputPlaceholder": "Escriba el texto a buscar",
   "filters:typeAhead:result:sg": "result",
   "filters:typeAhead:result:pl": "results",
   "filters:tabs:amounts:title": "Amounts",
