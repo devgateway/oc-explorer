@@ -34,8 +34,14 @@ class CorruptionRiskDashboard extends React.Component {
       width: 0,
       data: Map(),
       showLandingPopup: !localStorage.alreadyVisited,
-      locale: localStorage.oceLocale || 'en_US',
     };
+    const { oceLocale } = localStorage;
+    if (oceLocale && this.constructor.TRANSLATIONS[oceLocale]) {
+      this.state.locale = oceLocale;
+    } else {
+      this.state.locale = 'en_US';
+    }
+
     localStorage.alreadyVisited = true;
 
     this.destructFilters = cacheFn(filters => ({

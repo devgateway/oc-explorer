@@ -19,7 +19,6 @@ class OCApp extends React.Component {
     this.state = {
       dashboardSwitcherOpen: false,
       exporting: false,
-      locale: localStorage.oceLocale || 'en_US',
       width: 0,
       currentTab: 0,
       menuBox: '',
@@ -37,6 +36,12 @@ class OCApp extends React.Component {
         isAdmin: false,
       },
     };
+    const { oceLocale } = localStorage;
+    if (oceLocale && this.constructor.TRANSLATIONS[oceLocale]) {
+      this.state.locale = oceLocale;
+    } else {
+      this.state.locale = 'en_US';
+    }
   }
 
   componentDidMount() {
