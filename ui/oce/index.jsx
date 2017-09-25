@@ -354,7 +354,7 @@ class OCApp extends React.Component {
     const { onSwitch } = this.props;
     return (
       <div className={cn('dash-switcher-wrapper', { open: dashboardSwitcherOpen })}>
-        <h1 onClick={() => this.toggleDashboardSwitcher()}>
+        <h1 onClick={e => this.toggleDashboardSwitcher(e)}>
           {this.t('general:title')}
           <i className="glyphicon glyphicon-menu-down" />
           <small>{this.t('general:subtitle')}</small>
