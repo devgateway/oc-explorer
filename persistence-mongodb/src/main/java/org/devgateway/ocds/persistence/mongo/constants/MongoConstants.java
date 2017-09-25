@@ -21,6 +21,8 @@ public final class MongoConstants {
 
     public static final int IMPORT_ROW_BATCH = 1000;
 
+    public static final String MONGO_LANGUAGE = "english";
+
     public static final class FieldNames {
         public static final String TENDER_PERIOD_START_DATE = "tender.tenderPeriod.startDate";
         public static final String TENDER_PERIOD_END_DATE = "tender.tenderPeriod.endDate";

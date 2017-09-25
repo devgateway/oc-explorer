@@ -5,8 +5,20 @@ package org.devgateway.ocds.web.rest.controller;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.ArrayUtils;
 import org.devgateway.ocds.persistence.mongo.Tender;
+import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
@@ -20,18 +32,9 @@ import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.CriteriaDefinition;
+import org.springframework.data.mongodb.core.query.TextCriteria;
 
-import javax.annotation.PostConstruct;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
@@ -331,6 +334,10 @@ public abstract class GenericOCDSController {
      */
     protected Criteria getProcuringEntityIdCriteria(final DefaultFilterPagingRequest filter) {
         return createFilterCriteria("tender.procuringEntity._id", filter.getProcuringEntityId(), filter);
+    }
+
+    protected CriteriaDefinition getTextCriteria(DefaultFilterPagingRequest filter) {
+        return TextCriteria.forLanguage(MongoConstants.MONGO_LANGUAGE).matchingAny(filter.getText());
     }
 
     /**

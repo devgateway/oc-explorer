@@ -14,6 +14,9 @@ import java.util.TreeSet;
  */
 public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
+    @ApiModelProperty(value = "Full text search of of release entities")
+    private String text;
+
     @EachPattern(regexp = "^[a-zA-Z0-9]*$")
     @ApiModelProperty(value = "This corresponds to the tender.items.classification._id")
     private TreeSet<String> bidTypeId;
@@ -72,6 +75,14 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
     @ApiModelProperty(value = "Only show the releases that were flagged by at least one indicator")
     private Boolean flagged;
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
 
     public TreeSet<String> getFlagType() {
         return flagType;
