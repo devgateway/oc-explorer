@@ -11,6 +11,10 @@ const MENU_BOX_COMPARISON = 'menu-box';
 const MENU_BOX_FILTERS = 'filters';
 const ROLE_ADMIN = 'ROLE_ADMIN';
 
+if (location.search === '?corruption-risk-dashboard') {
+  location = '/ui/index.html#!/crd'
+}
+
 // eslint-disable-next-line no-undef
 class OCApp extends React.Component {
   constructor(props) {
