@@ -1,8 +1,9 @@
 import CRDPage from './page';
 import Visualization from '../visualization';
 import { Map } from 'immutable';
+import translatable from '../translatable';
 
-class Info extends Visualization {
+class Info extends translatable(Visualization) {
   getCustomEP(){
     const { id } = this.props;
     return `ocds/release/ocid/${id}`;
@@ -23,9 +24,9 @@ class Info extends Visualization {
     return (
       <section>
         <dl>
-          <dt>Contract ID</dt>
+          <dt>{this.t('crd:procurementsTable:contractID')}</dt>
           <dd>{data.get('ocid')}</dd>
-          {title && <dt>Contract Title</dt>}
+          {title && <dt>{this.t('crd:general:contract:title')}</dt>}
           {title && <dd>{title}</dd>}
         </dl>
       </section>
@@ -43,7 +44,7 @@ export default class Contract extends CRDPage {
 
   render() {
     const { contract } = this.state;
-    const { id } = this.props;
+    const { id, translations } = this.props;
     return (
       <div>
         <Info
@@ -51,6 +52,7 @@ export default class Contract extends CRDPage {
           data={contract}
           filters={Map()}
           requestNewData={(_, contract) => this.setState({contract})}
+          translations={translations}
         />
       </div>
     );
