@@ -7,6 +7,7 @@ import OverviewPage from './overview-page';
 import CorruptionTypePage from './corruption-type';
 import IndividualIndicatorPage from './individual-indicator';
 import ContractsPage from './contracts';
+import ContractPage from './contract';
 import Filters from './filters';
 import TotalFlags from './total-flags';
 import LandingPopup from './landing-popup';
@@ -153,6 +154,13 @@ class CorruptionRiskDashboard extends React.Component {
           navigate={navigate}
         />
       );
+    } else if (page === 'contract') {
+      const [, contractId] = route;
+      return (
+        <ContractPage
+          id={contractId}
+        />
+      )
     } else {
       return (
         <OverviewPage
