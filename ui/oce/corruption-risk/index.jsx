@@ -6,6 +6,7 @@ import { fetchJson, debounce, cacheFn, range, pluck, callFunc } from '../tools';
 import OverviewPage from './overview-page';
 import CorruptionTypePage from './corruption-type';
 import IndividualIndicatorPage from './individual-indicator';
+import ContractsPage from './contracts';
 import Filters from './filters';
 import TotalFlags from './total-flags';
 import LandingPopup from './landing-popup';
@@ -143,6 +144,13 @@ class CorruptionRiskDashboard extends React.Component {
           months={months}
           width={width}
           styling={styling}
+        />
+      );
+    } else if (page === 'contracts') {
+      return (
+        <ContractsPage
+          filters={filters}
+          navigate={navigate}
         />
       );
     } else {
