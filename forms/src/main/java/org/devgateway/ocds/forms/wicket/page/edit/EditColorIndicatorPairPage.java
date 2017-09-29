@@ -12,17 +12,20 @@
 package org.devgateway.ocds.forms.wicket.page.edit;
 
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.validation.AbstractFormValidator;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.devgateway.ocds.forms.wicket.page.list.ListAllDashboardsPage;
-import org.devgateway.ocds.forms.wicket.providers.LabelPersistableJpaRepositoryTextChoiceProvider;
+import org.devgateway.ocds.forms.wicket.page.list.ListAllColorIndicatorPage;
 import org.devgateway.ocds.persistence.dao.ColorIndicatorPair;
+import org.devgateway.ocds.persistence.mongo.flags.FlagsConstants;
 import org.devgateway.ocds.persistence.repository.ColorIndicatorPairRepository;
-import org.devgateway.toolkit.forms.wicket.components.form.Select2MultiChoiceBootstrapFormComponent;
-import org.devgateway.toolkit.forms.wicket.components.form.TextAreaFieldBootstrapFormComponent;
-import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.ColorPickerBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.Select2ChoiceBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
-import org.devgateway.toolkit.persistence.dao.Person;
+import org.devgateway.toolkit.forms.wicket.providers.GenericChoiceProvider;
 import org.devgateway.toolkit.persistence.repository.PersonRepository;
 import org.devgateway.toolkit.web.security.SecurityConstants;
 import org.wicketstuff.annotation.mount.MountPath;
@@ -39,43 +42,93 @@ public class EditColorIndicatorPairPage extends AbstractEditPage<ColorIndicatorP
     }
 
     @SpringBean
-    private ColorIndicatorPairRepository userDashboardRepository;
+    private ColorIndicatorPairRepository colorIndicatorPairRepository;
 
     @SpringBean
     private PersonRepository personRepository;
 
+    private Select2ChoiceBootstrapFormComponent<String> firstIndicator;
+
+    private Select2ChoiceBootstrapFormComponent<String> secondIndicator;
+
     public EditColorIndicatorPairPage(final PageParameters parameters) {
         super(parameters);
-        this.jpaRepository = userDashboardRepository;
-        this.listPageClass = ListAllDashboardsPage.class;
+        this.jpaRepository = colorIndicatorPairRepository;
+        this.listPageClass = ListAllColorIndicatorPage.class;
 
     }
+
 
     @Override
     protected void onInitialize() {
         super.onInitialize();
 
-        TextFieldBootstrapFormComponent<String> name = new TextFieldBootstrapFormComponent<>("name");
-        name.required();
-        editForm.add(name);
+        firstIndicator =
+                new Select2ChoiceBootstrapFormComponent<String>("firstIndicator",
+                        new GenericChoiceProvider<String>(FlagsConstants.FLAGS_LIST));
+        firstIndicator.required();
+        editForm.add(firstIndicator);
 
-        TextAreaFieldBootstrapFormComponent<String> formUrlEncodedBody =
-                new TextAreaFieldBootstrapFormComponent<>("formUrlEncodedBody");
-        formUrlEncodedBody.required();
-        formUrlEncodedBody.getField().setEnabled(false);
-        editForm.add(formUrlEncodedBody);
+        secondIndicator =
+                new Select2ChoiceBootstrapFormComponent<String>("secondIndicator",
+                        new GenericChoiceProvider<String>(FlagsConstants.FLAGS_LIST));
+        secondIndicator.required();
+        editForm.add(secondIndicator);
 
-        Select2MultiChoiceBootstrapFormComponent<Person> defaultDashboardUsers =
-                new Select2MultiChoiceBootstrapFormComponent<>("defaultDashboardUsers",
-                        new LabelPersistableJpaRepositoryTextChoiceProvider<>(personRepository));
-        defaultDashboardUsers.setEnabled(false);
-        editForm.add(defaultDashboardUsers);
+        ColorPickerBootstrapFormComponent color = new ColorPickerBootstrapFormComponent("color");
+        color.required();
+        editForm.add(color);
+        editForm.add(new ColorIndicatorDistinctFormValidator());
+        editForm.add(new ColorIndicatorUniquePairFormValidator(compoundModel));
 
-        Select2MultiChoiceBootstrapFormComponent<Person> users =
-                new Select2MultiChoiceBootstrapFormComponent<>("users",
-                        new LabelPersistableJpaRepositoryTextChoiceProvider<>(personRepository));
-        editForm.add(users);
+    }
 
-        
+
+    private class ColorIndicatorDistinctFormValidator extends AbstractFormValidator {
+
+        @Override
+        public FormComponent<?>[] getDependentFormComponents() {
+            return new FormComponent[]{firstIndicator.getField(), secondIndicator.getField()};
+        }
+
+        @Override
+        public void validate(Form<?> form) {
+            if (firstIndicator.getField().getValue() != null && secondIndicator.getField().getValue() != null
+                    && firstIndicator.getField().getValue().equals(secondIndicator.getField().getValue())) {
+                error(firstIndicator.getField());
+                error(secondIndicator.getField());
+            }
+        }
+    }
+
+
+    private class ColorIndicatorUniquePairFormValidator extends AbstractFormValidator {
+
+        private final IModel<ColorIndicatorPair> masterModel;
+
+        ColorIndicatorUniquePairFormValidator(IModel<ColorIndicatorPair> masterModel) {
+            this.masterModel = masterModel;
+        }
+
+        @Override
+        public FormComponent<?>[] getDependentFormComponents() {
+            return new FormComponent[]{firstIndicator.getField(), secondIndicator.getField()};
+        }
+
+        @Override
+        public void validate(Form<?> form) {
+            if (firstIndicator.getField().getValue() != null && secondIndicator.getField().getValue() != null) {
+                ColorIndicatorPair indicator = colorIndicatorPairRepository.
+                        findByFirstIndicatorAndSecondIndicator(firstIndicator.getField().getValue(),
+                                secondIndicator.getField().getValue());
+
+                if ((masterModel.getObject().isNew() && indicator != null)
+                        || (!masterModel.getObject().isNew() && indicator != null
+                        && !indicator.getId().equals(masterModel.getObject().getId()))) {
+                    error(firstIndicator.getField());
+                    error(secondIndicator.getField());
+                }
+            }
+        }
     }
 }
