@@ -7,6 +7,7 @@ import OverviewPage from './overview-page';
 import CorruptionTypePage from './corruption-type';
 import IndividualIndicatorPage from './individual-indicator';
 import ContractsPage from './contracts';
+import ContractPage from './contract';
 import Filters from './filters';
 import TotalFlags from './total-flags';
 import LandingPopup from './landing-popup';
@@ -153,6 +154,14 @@ class CorruptionRiskDashboard extends React.Component {
           navigate={navigate}
         />
       );
+    } else if (page === 'contract') {
+      const [, contractId] = route;
+      return (
+        <ContractPage
+          id={contractId}
+          translations={translations}
+        />
+      )
     } else {
       return (
         <OverviewPage
@@ -326,12 +335,21 @@ class CorruptionRiskDashboard extends React.Component {
                    onClick={() => navigate('type', slug)}
                    className={cn({ active: page === 'type' && slug === corruptionType })}
                    key={slug}
-                   >
+                 >
                    <img src={`assets/icons/${slug}.png`} alt="Tab icon" />
                    {this.t(`crd:corruptionType:${slug}:name`)} <span className="count">({count})</span>
                  </a>
                );
             })}
+            <a
+              href="javascript:void(0);"
+              onClick={() => navigate('contracts')}
+              className={cn({ active: page === 'contracts' })}
+              key="contracts"
+            >
+              <img src={`assets/icons/overview.svg`} alt="Contracts icon" />
+              {this.t('crd:general:contracts')} <span className="count">(0)</span>
+            </a>
           </section>
           <TotalFlags
             filters={filters}

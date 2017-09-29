@@ -273,5 +273,7 @@
   "crd:procurementsTable:noOfFlags": "No. of Flags",
   "crd:procurementsTable:associatedFlags": "Associated $#$ flags",
   "crd:individualIndicatorChart:flaggedProcurements": "Flagged Procurements",
-  "crd:individualIndicatorChart:eligibleProcurements": "Eligible Procurements"
+  "crd:individualIndicatorChart:eligibleProcurements": "Eligible Procurements",
+  "crd:general:contracts": "Contracts",
+  "crd:general:contract:title": "Contract title"
 }
