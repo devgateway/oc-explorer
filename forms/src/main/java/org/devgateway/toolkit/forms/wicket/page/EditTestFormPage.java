@@ -1,16 +1,16 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2015 Development Gateway, Inc and others.
- *
+ * <p>
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the MIT License (MIT)
  * which accompanies this distribution, and is available at
  * https://opensource.org/licenses/MIT
- *
+ * <p>
  * Contributors:
  * Development Gateway - initial API and implementation
- *******************************************************************************/
+ */
 /**
- * 
+ *
  */
 package org.devgateway.toolkit.forms.wicket.page;
 
@@ -21,6 +21,7 @@ import org.devgateway.toolkit.web.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxPickerBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxToggleBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.ColorPickerBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.DateFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.DateTimeFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.FileInputBootstrapFormComponent;
@@ -133,6 +134,10 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
                 "preloadedEntitySelect", new GenericChoiceProvider<>(groupRepository.findAll()));
         preloadedEntitySelect.required();
         editForm.add(preloadedEntitySelect);
+
+        ColorPickerBootstrapFormComponent colorPicker = new ColorPickerBootstrapFormComponent("colorPicker");
+        colorPicker.required();
+        editForm.add(colorPicker);
     }
 
 }
