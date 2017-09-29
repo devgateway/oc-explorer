@@ -1,7 +1,8 @@
-import CRDPage from './page';
-import Visualization from '../visualization';
+import CRDPage from '../page';
+import Visualization from '../../visualization';
 import { Map } from 'immutable';
-import translatable from '../translatable';
+import translatable from '../../translatable';
+import styles from './style.less';
 
 class Info extends translatable(Visualization) {
   getCustomEP(){
@@ -46,7 +47,7 @@ export default class Contract extends CRDPage {
     const { contract } = this.state;
     const { id, translations } = this.props;
     return (
-      <div>
+      <div className="contract-page">
         <Info
           id={id}
           data={contract}
