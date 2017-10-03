@@ -58,6 +58,8 @@ public class TestForm extends AbstractAuditableEntity implements Serializable {
 
     private Boolean checkboxToggle;
 
+    private String colorPicker;
+
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @ManyToOne
     private Group entitySelect;
@@ -181,5 +183,13 @@ public class TestForm extends AbstractAuditableEntity implements Serializable {
 
     public void setPreloadedEntitySelect(final Group preloadedEntitySelect) {
         this.preloadedEntitySelect = preloadedEntitySelect;
+    }
+
+    public String getColorPicker() {
+        return colorPicker;
+    }
+
+    public void setColorPicker(final String colorPicker) {
+        this.colorPicker = colorPicker;
     }
 }
