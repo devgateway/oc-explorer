@@ -5,9 +5,23 @@ import translatable from '../../translatable';
 import styles from './style.less';
 
 class Info extends translatable(Visualization) {
+  constructor(...args){
+    super(...args);
+    this.state.showAllSuppliers = false;
+  }
+
   getCustomEP(){
     const { id } = this.props;
     return `ocds/release/ocid/${id}`;
+  }
+
+  getSuppliers(){
+    const { data } = this.props;
+    const { showAllSuppliers } = this.state;
+    const suppliers = data.get('awards', List()).flatMap(award => award.get('suppliers'));
+    return showAllSuppliers ?
+      suppliers :
+      suppliers.slice(0, 2);
   }
 
   render() {
@@ -44,10 +58,11 @@ class Info extends translatable(Visualization) {
                   <dt>Suppliers</dt>
                   <dd>
                     {suppliers.count() ?
-                      suppliers.map(supplier => <p>{supplier.get('name')}</p>) :
+                      this.getSuppliers().map(supplier => <p>{supplier.get('name')}</p>) :
                       this.t('general:undefined')
                     }
                   </dd>
+                  <a href="javascript:void(0);" onClick={() => this.setState({showAllSuppliers: true})}></a>
                 </dl>
               </td>
             </tr>
