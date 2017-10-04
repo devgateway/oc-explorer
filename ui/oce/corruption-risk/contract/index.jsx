@@ -1,6 +1,6 @@
 import CRDPage from '../page';
 import Visualization from '../../visualization';
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 import translatable from '../../translatable';
 import styles from './style.less';
 
@@ -13,15 +13,10 @@ class Info extends translatable(Visualization) {
   render() {
     const { data } = this.props;
     const title = data.getIn(['tender', 'title']);
-    /*
-       Contract Description //where do I find it?
-       Procuring Entity
-       Buyer
-       Supplier
-       Status
-       Amounts
-       Dates
-     */
+    const suppliers = data.get('awards', List()).flatMap(award => award.get('suppliers'));
+    const startDate = data.getIn(['tender', 'tenderPeriod', 'startDate']);
+    const endDate = data.getIn(['tender', 'tenderPeriod', 'endDate']);
+    console.log(data.toJS());
     return (
       <section>
         <dl>
@@ -30,6 +25,67 @@ class Info extends translatable(Visualization) {
           {title && <dt>{this.t('crd:general:contract:title')}</dt>}
           {title && <dd>{title}</dd>}
         </dl>
+        <table className="table table-bordered">
+          <tbody>
+            <tr>
+              <td>
+                <dl>
+                  <dt>Procuring entity name</dt>
+                  <dd>{data.getIn(['tender', 'procuringEntity', 'name'], this.t('general:undefined'))}</dd>
+                </dl>
+              </td>
+              <td>
+                <dl>
+                  <dt>Buyer</dt>
+                  <dd>{data.getIn(['buyer', 'name'], this.t('general:undefined'))}</dd>
+                </dl>
+              </td>
+              <td>
+                <dl>
+                  <dt>Suppliers</dt>
+                  <dd>
+                    {suppliers.count() ?
+                      suppliers.map(supplier => <p>{supplier.get('name')}</p>) :
+                      this.t('general:undefined')
+                    }
+                  </dd>
+                </dl>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <dl>
+                  <dt>Status</dt>
+                  <dd>{data.getIn(['tender', 'status'], this.t('general:undefined'))}</dd>
+                </dl>
+              </td>
+              <td>
+                <dl>
+                  <dt>Amounts</dt>
+                  <dd>
+                    {data.getIn(['tender', 'value', 'amount'], this.t('general:undefined'))}
+                    &nbsp;
+                    {data.getIn(['tender', 'value', 'currency'])}
+                  </dd>
+                </dl>
+              </td>
+              <td>
+                <dl>
+                  <dt>Dates</dt>
+                  <dd>
+                    {startDate &&
+                      new Date(startDate).toLocaleDateString()
+                    }
+                    {startDate && endDate ? <span>&ndash;</span> : this.t('general:undefined')}
+                    {startDate &&
+                      new Date(endDate).toLocaleDateString()
+                    }
+                  </dd>
+                </dl>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </section>
     );
   }

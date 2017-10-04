@@ -275,5 +275,6 @@
   "crd:individualIndicatorChart:flaggedProcurements": "Flagged Procurements",
   "crd:individualIndicatorChart:eligibleProcurements": "Eligible Procurements",
   "crd:general:contracts": "Contracts",
-  "crd:general:contract:title": "Contract title"
+  "crd:general:contract:title": "Contract title",
+  "general:undefined": "Undefined"
 }
