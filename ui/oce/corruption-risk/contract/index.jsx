@@ -16,7 +16,6 @@ class Info extends translatable(Visualization) {
     const suppliers = data.get('awards', List()).flatMap(award => award.get('suppliers'));
     const startDate = data.getIn(['tender', 'tenderPeriod', 'startDate']);
     const endDate = data.getIn(['tender', 'tenderPeriod', 'endDate']);
-    console.log(data.toJS());
     return (
       <section>
         <dl>
