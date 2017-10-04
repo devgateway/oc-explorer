@@ -43,19 +43,19 @@ class Info extends translatable(Visualization) {
             <tr>
               <td>
                 <dl>
-                  <dt>Procuring entity name</dt>
+                  <dt>{this.t('crd:contracts:baseInfo:procuringEntityName')}</dt>
                   <dd>{data.getIn(['tender', 'procuringEntity', 'name'], this.t('general:undefined'))}</dd>
                 </dl>
               </td>
               <td>
                 <dl>
-                  <dt>Buyer</dt>
+                  <dt>{this.t('crd:contracts:baseInfo:buyer')}</dt>
                   <dd>{data.getIn(['buyer', 'name'], this.t('general:undefined'))}</dd>
                 </dl>
               </td>
               <td>
                 <dl>
-                  <dt>Suppliers</dt>
+                  <dt>{this.t('crd:contracts:baseInfo:suppliers')}</dt>
                   <dd>
                     {suppliers.count() ?
                       this.getSuppliers().map(supplier => <p>{supplier.get('name')}</p>) :
@@ -69,13 +69,13 @@ class Info extends translatable(Visualization) {
             <tr>
               <td>
                 <dl>
-                  <dt>Status</dt>
+                  <dt>{this.t('crd:contracts:baseInfo:status')}</dt>
                   <dd>{data.getIn(['tender', 'status'], this.t('general:undefined'))}</dd>
                 </dl>
               </td>
               <td>
                 <dl>
-                  <dt>Amounts</dt>
+                  <dt>{this.t('crd:contracts:baseInfo:amounts')}</dt>
                   <dd>
                     {data.getIn(['tender', 'value', 'amount'], this.t('general:undefined'))}
                     &nbsp;
@@ -85,7 +85,7 @@ class Info extends translatable(Visualization) {
               </td>
               <td>
                 <dl>
-                  <dt>Dates</dt>
+                  <dt>{this.t('crd:contracts:baseInfo:dates')}</dt>
                   <dd>
                     {startDate &&
                       new Date(startDate).toLocaleDateString()
@@ -111,6 +111,15 @@ export default class Contract extends CRDPage {
     this.state = {
       contract: Map()
     }
+  }
+
+  getSuppliers(){
+    const { data } = this.props;
+    const { showAllSuppliers } = this.state;
+    const suppliers = data.get('awards', List()).flatMap(award => award.get('suppliers'));
+    return showAllSuppliers ?
+      suppliers :
+      suppliers.slice(0, 2);
   }
 
   render() {

@@ -276,5 +276,11 @@
   "crd:individualIndicatorChart:eligibleProcurements": "Eligible Procurements",
   "crd:general:contracts": "Contracts",
   "crd:general:contract:title": "Contract title",
-  "general:undefined": "Undefined"
+  "general:undefined": "Undefined",
+  "crd:contracts:baseInfo:procuringEntityName": "Procuring entity name",
+  "crd:contracts:baseInfo:buyer": "Buyer",
+  "crd:contracts:baseInfo:suppliers": "Suppliers",
+  "crd:contracts:baseInfo:status": "Status",
+  "crd:contracts:baseInfo:amounts": "Amounts",
+  "crd:contracts:baseInfo:dates": "Dates"
 }
