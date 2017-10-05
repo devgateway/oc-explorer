@@ -273,6 +273,7 @@
   "crd:procurementsTable:noOfFlags": "No. de advertencias",
   "crd:procurementsTable:associatedFlags": "Advertencias $#$ asociadas",
   "crd:individualIndicatorChart:flaggedProcurements": "Contrataciones con advertencias",
-  "crd:individualIndicatorChart:eligibleProcurements": "Contrataciones elegibles"
-
+  "crd:individualIndicatorChart:eligibleProcurements": "Contrataciones elegibles",
+  "crd:general:contracts": "Contratos",
+  "crd:general:contract:title": "Título del contrato"
 }

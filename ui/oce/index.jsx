@@ -11,6 +11,10 @@ const MENU_BOX_COMPARISON = 'menu-box';
 const MENU_BOX_FILTERS = 'filters';
 const ROLE_ADMIN = 'ROLE_ADMIN';
 
+if (location.search === '?corruption-risk-dashboard') {
+  location = '/ui/index.html#!/crd'
+}
+
 // eslint-disable-next-line no-undef
 class OCApp extends React.Component {
   constructor(props) {
@@ -19,7 +23,6 @@ class OCApp extends React.Component {
     this.state = {
       dashboardSwitcherOpen: false,
       exporting: false,
-      locale: localStorage.oceLocale || 'en_US',
       width: 0,
       currentTab: 0,
       menuBox: '',
@@ -37,6 +40,12 @@ class OCApp extends React.Component {
         isAdmin: false,
       },
     };
+    const { oceLocale } = localStorage;
+    if (oceLocale && this.constructor.TRANSLATIONS[oceLocale]) {
+      this.state.locale = oceLocale;
+    } else {
+      this.state.locale = 'en_US';
+    }
   }
 
   componentDidMount() {
@@ -354,7 +363,7 @@ class OCApp extends React.Component {
     const { onSwitch } = this.props;
     return (
       <div className={cn('dash-switcher-wrapper', { open: dashboardSwitcherOpen })}>
-        <h1 onClick={() => this.toggleDashboardSwitcher()}>
+        <h1 onClick={e => this.toggleDashboardSwitcher(e)}>
           {this.t('general:title')}
           <i className="glyphicon glyphicon-menu-down" />
           <small>{this.t('general:subtitle')}</small>

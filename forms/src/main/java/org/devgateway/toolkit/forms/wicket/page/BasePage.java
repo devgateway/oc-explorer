@@ -47,6 +47,7 @@ import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.resource.JQueryResourceReference;
 import org.apache.wicket.util.string.StringValue;
+import org.devgateway.ocds.forms.wicket.page.list.ListAllColorIndicatorPage;
 import org.devgateway.ocds.forms.wicket.page.list.ListAllDashboardsPage;
 import org.devgateway.ocds.forms.wicket.page.list.ListMyDashboardsPage;
 import org.devgateway.toolkit.forms.WebConstants;
@@ -283,6 +284,11 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
                 list.add(new MenuBookmarkablePageLink<ListUserPage>(ListUserPage.class, null,
                         new StringResourceModel("navbar.users", this, null)).setIconType(FontAwesomeIconType.users));
+
+                list.add(new MenuBookmarkablePageLink<ListUserPage>(ListAllColorIndicatorPage.class, null,
+                        new StringResourceModel("navbar.colorindicators", this, null))
+                        .setIconType(FontAwesomeIconType.paint_brush));
+
 
                 list.add(new MenuBookmarkablePageLink<SpringEndpointsPage>(SpringEndpointsPage.class, null,
                         new StringResourceModel("navbar.springendpoints", this, null))
