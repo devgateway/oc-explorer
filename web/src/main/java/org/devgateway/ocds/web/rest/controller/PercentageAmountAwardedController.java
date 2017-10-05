@@ -15,7 +15,6 @@ import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import javax.validation.Valid;
-import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -72,14 +71,16 @@ public class PercentageAmountAwardedController extends GenericOCDSController {
 
 
         Aggregation agg = newAggregation(
-                match(where("tender.procuringEntity").exists(true).and("awards.suppliers.0").exists(true)
-                        .andOperator(getYearDefaultFilterCriteria(filter,
-                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
-                unwind("awards"),
-                match(where("awards.status").is("active")),
-                facet().and(group().sum("awards.value.amount").as("sum")).as("totalAwarded"),
-                facet().and(match(where(("awards.suppliers._id")).is("0304504425")),
-                        group().sum("awards.value.amount").as("sum")).as("totalAwardedTo")
+               match(where("tender.procuringEntity").exists(true).and("awards.suppliers.0").exists(true)
+                        .andOperator(getProcuringEntityIdCriteria(filter))),
+               unwind("awards"),
+               match(where("awards.status").is("active")),
+               facet().and(
+               //         project("awards.suppliers._id").and("awards.value.amount").as("awards.value.amount")
+                        match(getSupplierIdCriteria(filter))
+//                        group().sum("awards.value.amount").as("sum")
+               ).as("totalAwardedTo"),
+               facet().and(group().sum("awards.value.amount").as("sum")).as("totalAwarded")
         );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
