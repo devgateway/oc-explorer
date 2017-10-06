@@ -11,15 +11,18 @@
  *******************************************************************************/
 package org.devgateway.ocds.web.rest.controller;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import javax.validation.Valid;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
+import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,9 +37,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwi
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
- *
  * @author mpostelnicu
- *
  */
 @RestController
 @CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
@@ -49,45 +50,31 @@ public class PercentageAmountAwardedController extends GenericOCDSController {
 
     @ApiOperation("")
     @RequestMapping(value = "/api/percentageAmountAwarded",
-            method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
+            method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
     public List<DBObject> percentTendersCancelled(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
-
-//        DBObject project1 = new BasicDBObject();
-//        addYearlyMonthlyProjection(filter, project1, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
-//        project1.put("tender.status", 1);
-//
-//        DBObject group = new BasicDBObject();
-//        addYearlyMonthlyReferenceToGroup(filter, group);
-//        group.put(Keys.TOTAL_TENDERS, new BasicDBObject("$sum", 1));
-//        group.put(Keys.TOTAL_CANCELLED, new BasicDBObject("$sum", new BasicDBObject("$cond",
-//                Arrays.asList(new BasicDBObject("$eq", Arrays.asList("$tender.status", "cancelled")), 1, 0))));
-//
-//        DBObject project2 = new BasicDBObject();
-//        project2.put(Keys.TOTAL_TENDERS, 1);
-//        project2.put(Keys.TOTAL_CANCELLED, 1);
-//        project2.put(Keys.PERCENT_CANCELLED, new BasicDBObject("$multiply",
-//                Arrays.asList(new BasicDBObject("$divide", Arrays.asList("$totalCancelled", "$totalTenders")), 100)));
-
-
-
+        Assert.notEmpty(filter.getProcuringEntityId(), "Must provide at least one procuringEntity!");
+        Assert.notEmpty(filter.getSupplierId(), "Must provide at least one supplierId!");
         Aggregation agg = newAggregation(
-               match(where("tender.procuringEntity").exists(true).and("awards.suppliers.0").exists(true)
+                match(where("tender.procuringEntity").exists(true).and("awards.suppliers.0").exists(true)
                         .andOperator(getProcuringEntityIdCriteria(filter))),
-               unwind("awards"),
-               match(where("awards.status").is("active")),
-               facet().and(
-               //         project("awards.suppliers._id").and("awards.value.amount").as("awards.value.amount")
-                        match(getSupplierIdCriteria(filter))
-//                        group().sum("awards.value.amount").as("sum")
-               ).as("totalAwardedTo"),
-               facet().and(group().sum("awards.value.amount").as("sum")).as("totalAwarded")
+                unwind("awards"),
+                match(where("awards.status").is("active")),
+                facet().and(match(getSupplierIdCriteria(filter)),
+                        group().sum("awards.value.amount").as("sum")
+                ).as("totalAwardedToSuppliers")
+                        .and(group().sum("awards.value.amount").as("sum")).as("totalAwarded"),
+                unwind("totalAwardedToSuppliers"),
+                unwind("totalAwarded"),
+                new CustomProjectionOperation(new BasicDBObject("percentage",
+                        getPercentageMongoOp("totalAwardedToSuppliers.sum",
+                                "totalAwarded.sum")).append("totalAwardedToSuppliers.sum", 1)
+                        .append("totalAwarded.sum", 1))
         );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> list = results.getMappedResults();
         return list;
     }
-
 
 
 }
