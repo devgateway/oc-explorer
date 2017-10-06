@@ -72,6 +72,25 @@ public abstract class GenericOCDSController {
     }
 
     /**
+     * Creates a mongo $cond that calculates percentage of expression1/expression2.
+     * Checks for division by zero.
+     *
+     * @param expression1
+     * @param expression2
+     * @return
+     */
+    protected DBObject getPercentageMongoOp(String expression1, String expression2) {
+      return new BasicDBObject("$cond",
+                Arrays.asList(new BasicDBObject("$eq", Arrays.asList(ref(expression2),
+                        0)), new BasicDBObject("$literal", 0),
+                        new BasicDBObject("$multiply",
+                                Arrays.asList(new BasicDBObject("$divide",
+                                        Arrays.asList(ref(expression1),
+                                                ref(expression2))), 100))));
+
+    }
+
+    /**
      * This is used to build the start date filter query when a monthly filter is used.
      *
      * @param year
