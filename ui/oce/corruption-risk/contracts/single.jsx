@@ -91,7 +91,7 @@ class Info extends translatable(Visualization) {
                       new Date(startDate).toLocaleDateString()
                     }
                     {startDate && endDate ? <span>&ndash;</span> : this.t('general:undefined')}
-                    {startDate &&
+                    {endDate &&
                       new Date(endDate).toLocaleDateString()
                     }
                   </dd>

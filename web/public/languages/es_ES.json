@@ -282,5 +282,7 @@
   "crd:contracts:baseInfo:suppliers": "Proveedores",
   "crd:contracts:baseInfo:status": "Estado",
   "crd:contracts:baseInfo:amounts": "Amounts",
-  "crd:contracts:baseInfo:dates": "Fechas"
+  "crd:contracts:baseInfo:dates": "Fechas",
+  "crd:contracts:list:procuringEntity": "Entidad contratante",
+  "crd:contracts:list:awardAmount": "Cantidad de adjudicaciones"
 }
