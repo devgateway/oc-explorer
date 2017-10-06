@@ -17,6 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
+import java.util.ArrayList;
+import java.util.List;
+import javax.validation.Valid;
+import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.Publisher;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.ReleasePackage;
@@ -135,6 +139,30 @@ public class OcdsController extends GenericOCDSController {
         }
 
         List<Release> find = mongoTemplate.find(query, Release.class);
+
+        return find;
+
+    }
+
+
+
+    /**
+     * Returns a list of OCDS FlaggedReleases, order by Id, using pagination
+     *
+     * @return the release data
+     */
+    @ApiOperation(value = "Resturns all available releases with flags, filtered by the given criteria.")
+    @RequestMapping(value = "/api/flaggedRelease/all", method = { RequestMethod.POST, RequestMethod.GET },
+            produces = "application/json")
+    @JsonView(Views.Internal.class)
+    public List<FlaggedRelease> flaggedOcdsReleases(@ModelAttribute @Valid
+                                                        final YearFilterPagingRequest releaseRequest) {
+
+        Pageable pageRequest = new PageRequest(releaseRequest.getPageNumber(), releaseRequest.getPageSize(),
+                Direction.ASC, "id");
+
+        List<FlaggedRelease> find = mongoTemplate
+                .find(query(getDefaultFilterCriteria(releaseRequest)).with(pageRequest), FlaggedRelease.class);
 
         return find;
 

@@ -7,7 +7,7 @@ import OverviewPage from './overview-page';
 import CorruptionTypePage from './corruption-type';
 import IndividualIndicatorPage from './individual-indicator';
 import ContractsPage from './contracts';
-import ContractPage from './contract';
+import ContractPage from './contracts/single';
 import Filters from './filters';
 import TotalFlags from './total-flags';
 import LandingPopup from './landing-popup';
@@ -152,6 +152,7 @@ class CorruptionRiskDashboard extends React.Component {
         <ContractsPage
           filters={filters}
           navigate={navigate}
+          translations={translations}
         />
       );
     } else if (page === 'contract') {
@@ -348,7 +349,7 @@ class CorruptionRiskDashboard extends React.Component {
               key="contracts"
             >
               <img src={`assets/icons/overview.svg`} alt="Contracts icon" />
-              {this.t('crd:general:contracts')} <span className="count">(0)</span>
+              {this.t('crd:general:contracts')}
             </a>
           </section>
           <TotalFlags
