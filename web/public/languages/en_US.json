@@ -282,5 +282,7 @@
   "crd:contracts:baseInfo:suppliers": "Suppliers",
   "crd:contracts:baseInfo:status": "Status",
   "crd:contracts:baseInfo:amounts": "Amounts",
-  "crd:contracts:baseInfo:dates": "Dates"
+  "crd:contracts:baseInfo:dates": "Dates",
+  "crd:contracts:list:procuringEntity": "Procuring entity",
+  "crd:contracts:list:awardAmount": "Award Amount"
 }

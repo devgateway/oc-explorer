@@ -7,7 +7,7 @@ import OverviewPage from './overview-page';
 import CorruptionTypePage from './corruption-type';
 import IndividualIndicatorPage from './individual-indicator';
 import ContractsPage from './contracts';
-import ContractPage from './contract';
+import ContractPage from './contracts/single';
 import Filters from './filters';
 import TotalFlags from './total-flags';
 import LandingPopup from './landing-popup';
@@ -152,6 +152,7 @@ class CorruptionRiskDashboard extends React.Component {
         <ContractsPage
           filters={filters}
           navigate={navigate}
+          translations={translations}
         />
       );
     } else if (page === 'contract') {
