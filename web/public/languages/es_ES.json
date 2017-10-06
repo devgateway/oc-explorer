@@ -284,5 +284,5 @@
   "crd:contracts:baseInfo:amounts": "Amounts",
   "crd:contracts:baseInfo:dates": "Fechas",
   "crd:contracts:list:procuringEntity": "Entidad contratante",
-  "crd:procurementsTable:awardAmount": "Cantidad de adjudicaciones"
+  "crd:contracts:list:awardAmount": "Cantidad de adjudicaciones"
 }
