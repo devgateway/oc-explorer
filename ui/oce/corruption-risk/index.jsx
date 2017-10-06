@@ -348,7 +348,7 @@ class CorruptionRiskDashboard extends React.Component {
               key="contracts"
             >
               <img src={`assets/icons/overview.svg`} alt="Contracts icon" />
-              {this.t('crd:general:contracts')} <span className="count">(0)</span>
+              {this.t('crd:general:contracts')}
             </a>
           </section>
           <TotalFlags
