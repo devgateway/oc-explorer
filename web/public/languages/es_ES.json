@@ -285,5 +285,7 @@
   "crd:contracts:baseInfo:dates": "Fechas",
   "crd:contracts:list:procuringEntity": "Entidad contratante",
   "crd:contracts:list:awardAmount": "Cantidad de adjudicaciones",
-  "crd:contracts:top-search": "Search within contracts"
+  "crd:contracts:top-search": "Search within contracts",
+  "crd:contracts:top-search:resultsFor": "Search results for \"$#$\"",
+  "crd:contracts:top-search:nothingFound": "Nothing found"
 }
