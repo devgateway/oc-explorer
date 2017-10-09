@@ -1,8 +1,28 @@
 import { List } from 'immutable';
+import cn from 'classnames';
+import URI from 'urijs';
 import CRDPage from '../page';
 import Visualization from '../../visualization';
+import TopSearch from './top-search';
+
+const API_ROOT = '/api';
 
 class CList extends Visualization {
+  buildUrl(ep) {
+    let { filters, searchQuery } = this.props;
+    let uri = new URI(API_ROOT + '/' + ep).addSearch(filters.toJS());
+    return searchQuery ?
+      uri.addSearch('text', searchQuery) :
+      uri;
+  }
+
+  componentDidUpdate(prevProps){
+    const { filters, searchQuery } = this.props;
+    if (filters != prevProps.filters || searchQuery != prevProps.searchQuery) {
+      this.fetch();
+    }
+  }
+
   render() {
     const { data, navigate } = this.props;
     return (
@@ -74,18 +94,20 @@ export default class Contracts extends CRDPage {
 
   render() {
     const { list } = this.state;
-    const { filters, navigate, translations } = this.props;
+    const { filters, navigate, translations, searchQuery, doSearch } = this.props;
     return (
       <div className="contracts-page">
-        <div className="row">
-          <div className="input-group col-sm-4 top-search">
-            <input type="text" className="form-control" placeholder={this.t('crd:contracts:top-search')}/>
-            <div className="input-group-addon">
-              <i className="glyphicon glyphicon-search"/>
-            </div>
-          </div>
-        </div>
-        <table className="table table-striped">
+        <TopSearch
+          translations={translations}
+          searchQuery={searchQuery}
+          doSearch={doSearch}
+        />
+
+        {searchQuery && <h3 className="page-header">
+          {this.t('crd:contracts:top-search:resultsFor').replace('$#$', searchQuery)}
+        </h3>}
+
+        <table className={cn('table', 'table-striped', {hide: !list.count()})}>
           <thead>
             <tr>
               <th>{this.t('crd:contracts:baseInfo:status')}</th>
@@ -104,9 +126,12 @@ export default class Contracts extends CRDPage {
             requestNewData={(_, newList) => this.setState({ list: newList })}
             navigate={navigate}
             translations={translations}
+            searchQuery={searchQuery}
           />
         </table>
+
+        {searchQuery && !list.count() ? <strong>{this.t('crd:contracts:top-search:nothingFound')}</strong> : null}
       </div>
-    );
+          );
   }
 }

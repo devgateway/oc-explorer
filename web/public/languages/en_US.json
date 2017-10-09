@@ -285,5 +285,7 @@
   "crd:contracts:baseInfo:dates": "Dates",
   "crd:contracts:list:procuringEntity": "Procuring entity",
   "crd:contracts:list:awardAmount": "Award Amount",
-  "crd:contracts:top-search": "Search within contracts"
+  "crd:contracts:top-search": "Search within contracts",
+  "crd:contracts:top-search:resultsFor": "Search results for \"$#$\"",
+  "crd:contracts:top-search:nothingFound": "Nothing found"
 }
