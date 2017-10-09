@@ -164,6 +164,7 @@ class CorruptionRiskDashboard extends React.Component {
         <ContractPage
           id={contractId}
           translations={translations}
+          doSearch={query => navigate('contracts', query)}
         />
       )
     } else {

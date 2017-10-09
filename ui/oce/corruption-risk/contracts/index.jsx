@@ -37,7 +37,7 @@ class CList extends Visualization {
                <td>
                  <a
                    href="javascript:void(0);"
-                   onClick={() => navigate('contract', this.t('general:undefined'))}
+                   onClick={() => navigate('contract', id)}
                  >
                    {id}
                  </a>
@@ -132,6 +132,6 @@ export default class Contracts extends CRDPage {
 
         {searchQuery && !list.count() ? <strong>{this.t('crd:contracts:top-search:nothingFound')}</strong> : null}
       </div>
-          );
+    );
   }
 }

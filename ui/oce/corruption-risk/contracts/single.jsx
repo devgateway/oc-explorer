@@ -3,6 +3,7 @@ import Visualization from '../../visualization';
 import { Map, List } from 'immutable';
 import translatable from '../../translatable';
 import styles from './style.less';
+import TopSearch from './top-search';
 
 class Info extends translatable(Visualization) {
   constructor(...args){
@@ -124,9 +125,13 @@ export default class Contract extends CRDPage {
 
   render() {
     const { contract } = this.state;
-    const { id, translations } = this.props;
+    const { id, translations, doSearch } = this.props;
     return (
       <div className="contract-page">
+        <TopSearch
+          doSearch={doSearch}
+          translations={translations}
+        />
         <Info
           id={id}
           data={contract}
