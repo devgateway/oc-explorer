@@ -10,6 +10,7 @@ class CList extends Visualization {
         {data.map((contract) => {
            const id = contract.get('ocid');
            const startDate = contract.getIn(['tender', 'tenderPeriod', 'startDate']);
+           const flagType = contract.get('flags').toList().getIn([0, 'types', 0]);
            return (
              <tr key={id}>
                <td>{contract.getIn(['tender', 'status'], this.t('general:undefined'))}</td>
@@ -48,7 +49,9 @@ class CList extends Visualization {
                    this.t('general:undefined')
                  }
                </td>
-               <td />
+               <td>
+                 {this.t(`crd:corruptionType:${flagType}:name`)}
+               </td>
              </tr>
            );
         })}
@@ -57,7 +60,7 @@ class CList extends Visualization {
   }
 }
 
-CList.endpoint = 'ocds/release/all';
+CList.endpoint = 'flaggedRelease/all';
 
 export default class Contracts extends CRDPage {
   constructor(...args) {
