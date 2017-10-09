@@ -10,7 +10,7 @@ class CList extends Visualization {
         {data.map((contract) => {
            const id = contract.get('ocid');
            const startDate = contract.getIn(['tender', 'tenderPeriod', 'startDate']);
-           const flagType = contract.get('flags').toList().getIn([0, 'types', 0]);
+           const flagType = contract.getIn(['flags', 'flaggedStats', 0, 'type']);
            return (
              <tr key={id}>
                <td>{contract.getIn(['tender', 'status'], this.t('general:undefined'))}</td>
@@ -50,7 +50,9 @@ class CList extends Visualization {
                  }
                </td>
                <td>
-                 {this.t(`crd:corruptionType:${flagType}:name`)}
+                 {flagType ?
+                   this.t(`crd:corruptionType:${flagType}:name`) :
+                   this.t('general:undefined')}
                </td>
              </tr>
            );
@@ -75,6 +77,14 @@ export default class Contracts extends CRDPage {
     const { filters, navigate, translations } = this.props;
     return (
       <div className="contracts-page">
+        <div className="row">
+          <div className="input-group col-sm-4 top-search">
+            <input type="text" className="form-control" placeholder={this.t('crd:contracts:top-search')}/>
+            <div className="input-group-addon">
+              <i className="glyphicon glyphicon-search"/>
+            </div>
+          </div>
+        </div>
         <table className="table table-striped">
           <thead>
             <tr>
