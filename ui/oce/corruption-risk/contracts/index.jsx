@@ -1,8 +1,28 @@
 import { List } from 'immutable';
+import cn from 'classnames';
+import URI from 'urijs';
 import CRDPage from '../page';
 import Visualization from '../../visualization';
+import TopSearch from './top-search';
+
+const API_ROOT = '/api';
 
 class CList extends Visualization {
+  buildUrl(ep) {
+    let { filters, searchQuery } = this.props;
+    let uri = new URI(API_ROOT + '/' + ep).addSearch(filters.toJS());
+    return searchQuery ?
+      uri.addSearch('text', searchQuery) :
+      uri;
+  }
+
+  componentDidUpdate(prevProps){
+    const { filters, searchQuery } = this.props;
+    if (filters != prevProps.filters || searchQuery != prevProps.searchQuery) {
+      this.fetch();
+    }
+  }
+
   render() {
     const { data, navigate } = this.props;
     return (
@@ -10,13 +30,14 @@ class CList extends Visualization {
         {data.map((contract) => {
            const id = contract.get('ocid');
            const startDate = contract.getIn(['tender', 'tenderPeriod', 'startDate']);
+           const flagType = contract.getIn(['flags', 'flaggedStats', 0, 'type']);
            return (
              <tr key={id}>
                <td>{contract.getIn(['tender', 'status'], this.t('general:undefined'))}</td>
                <td>
                  <a
                    href="javascript:void(0);"
-                   onClick={() => navigate('contract', this.t('general:undefined'))}
+                   onClick={() => navigate('contract', id)}
                  >
                    {id}
                  </a>
@@ -48,7 +69,11 @@ class CList extends Visualization {
                    this.t('general:undefined')
                  }
                </td>
-               <td />
+               <td>
+                 {flagType ?
+                   this.t(`crd:corruptionType:${flagType}:name`) :
+                   this.t('general:undefined')}
+               </td>
              </tr>
            );
         })}
@@ -57,7 +82,7 @@ class CList extends Visualization {
   }
 }
 
-CList.endpoint = 'ocds/release/all';
+CList.endpoint = 'flaggedRelease/all';
 
 export default class Contracts extends CRDPage {
   constructor(...args) {
@@ -69,10 +94,20 @@ export default class Contracts extends CRDPage {
 
   render() {
     const { list } = this.state;
-    const { filters, navigate, translations } = this.props;
+    const { filters, navigate, translations, searchQuery, doSearch } = this.props;
     return (
       <div className="contracts-page">
-        <table className="table table-striped">
+        <TopSearch
+          translations={translations}
+          searchQuery={searchQuery}
+          doSearch={doSearch}
+        />
+
+        {searchQuery && <h3 className="page-header">
+          {this.t('crd:contracts:top-search:resultsFor').replace('$#$', searchQuery)}
+        </h3>}
+
+        <table className={cn('table', 'table-striped', {hide: !list.count()})}>
           <thead>
             <tr>
               <th>{this.t('crd:contracts:baseInfo:status')}</th>
@@ -91,8 +126,11 @@ export default class Contracts extends CRDPage {
             requestNewData={(_, newList) => this.setState({ list: newList })}
             navigate={navigate}
             translations={translations}
+            searchQuery={searchQuery}
           />
         </table>
+
+        {searchQuery && !list.count() ? <strong>{this.t('crd:contracts:top-search:nothingFound')}</strong> : null}
       </div>
     );
   }

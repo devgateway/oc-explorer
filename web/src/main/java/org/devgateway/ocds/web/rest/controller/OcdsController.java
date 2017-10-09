@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
+import org.apache.commons.lang3.StringUtils;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.Publisher;
 import org.devgateway.ocds.persistence.mongo.Release;
@@ -27,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -119,7 +121,7 @@ public class OcdsController extends GenericOCDSController {
      * @return the release data
      */
     @ApiOperation(value = "Resturns all available releases, filtered by the given criteria.")
-    @RequestMapping(value = "/api/ocds/release/all", method = { RequestMethod.POST, RequestMethod.GET },
+    @RequestMapping(value = "/api/ocds/release/all", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
     @JsonView(Views.Public.class)
     public List<Release> ocdsReleases(@ModelAttribute @Valid final YearFilterPagingRequest releaseRequest) {
@@ -127,13 +129,17 @@ public class OcdsController extends GenericOCDSController {
         Pageable pageRequest = new PageRequest(releaseRequest.getPageNumber(), releaseRequest.getPageSize(),
                 Direction.ASC, "id");
 
-        List<Release> find = mongoTemplate
-                .find(query(getDefaultFilterCriteria(releaseRequest)).with(pageRequest), Release.class);
+        Query query = query(getDefaultFilterCriteria(releaseRequest)).with(pageRequest);
+
+        if (StringUtils.isNotEmpty(releaseRequest.getText())) {
+            query.addCriteria(getTextCriteria(releaseRequest));
+        }
+
+        List<Release> find = mongoTemplate.find(query, Release.class);
 
         return find;
 
     }
-
 
 
     /**
@@ -142,7 +148,7 @@ public class OcdsController extends GenericOCDSController {
      * @return the release data
      */
     @ApiOperation(value = "Resturns all available releases with flags, filtered by the given criteria.")
-    @RequestMapping(value = "/api/flaggedRelease/all", method = { RequestMethod.POST, RequestMethod.GET },
+    @RequestMapping(value = "/api/flaggedRelease/all", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
     @JsonView(Views.Internal.class)
     public List<FlaggedRelease> flaggedOcdsReleases(@ModelAttribute @Valid
@@ -151,11 +157,15 @@ public class OcdsController extends GenericOCDSController {
         Pageable pageRequest = new PageRequest(releaseRequest.getPageNumber(), releaseRequest.getPageSize(),
                 Direction.ASC, "id");
 
-        List<FlaggedRelease> find = mongoTemplate
-                .find(query(getDefaultFilterCriteria(releaseRequest)).with(pageRequest), FlaggedRelease.class);
+        Query query = query(getDefaultFilterCriteria(releaseRequest)).with(pageRequest);
+
+        if (StringUtils.isNotEmpty(releaseRequest.getText())) {
+            query.addCriteria(getTextCriteria(releaseRequest));
+        }
+
+        List<FlaggedRelease> find = mongoTemplate.find(query, FlaggedRelease.class);
 
         return find;
-
     }
 
     @ApiOperation(value = "Returns all available packages, filtered by the given criteria."

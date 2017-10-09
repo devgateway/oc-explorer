@@ -148,11 +148,14 @@ class CorruptionRiskDashboard extends React.Component {
         />
       );
     } else if (page === 'contracts') {
+      const [, searchQuery] = route;
       return (
         <ContractsPage
           filters={filters}
           navigate={navigate}
           translations={translations}
+          searchQuery={searchQuery}
+          doSearch={query => navigate('contracts', query)}
         />
       );
     } else if (page === 'contract') {
@@ -161,6 +164,7 @@ class CorruptionRiskDashboard extends React.Component {
         <ContractPage
           id={contractId}
           translations={translations}
+          doSearch={query => navigate('contracts', query)}
         />
       )
     } else {

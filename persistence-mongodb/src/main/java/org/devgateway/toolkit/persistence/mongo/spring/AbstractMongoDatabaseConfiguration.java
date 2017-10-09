@@ -68,6 +68,8 @@ public abstract class AbstractMongoDatabaseConfiguration {
 
         createCorruptionFlagsIndexes();
 
+
+
         // initialize some extra indexes
         getTemplate().indexOps(Release.class).ensureIndex(new Index().on("ocid", Direction.ASC).unique());
 
@@ -94,8 +96,19 @@ public abstract class AbstractMongoDatabaseConfiguration {
         getTemplate().indexOps(Release.class).ensureIndex(new Index().
                 on("tender.items.deliveryLocation.geometry.coordinates", Direction.ASC));
 
-        getTemplate().indexOps(Organization.class).ensureIndex(new TextIndexDefinitionBuilder().onField("name")
+        getTemplate().indexOps(Organization.class).ensureIndex(new TextIndexDefinitionBuilder()
+                .withDefaultLanguage(MongoConstants.MONGO_LANGUAGE)
+                .onField("name")
                 .onField("id").onField("additionalIdentifiers._id").build());
+
+        getTemplate().indexOps(Release.class).ensureIndex(new TextIndexDefinitionBuilder()
+                .named("text_search")
+                .withDefaultLanguage(MongoConstants.MONGO_LANGUAGE)
+                .onFields("tender.title", "tender.description",
+                        "tender.procuringEntity.name", "tender.id", "tender.procuringEntity.description",
+                        "awards.id", "awards.description", "awards.suppliers.name", "awards.suppliers.description",
+                        "ocid", "buyer.name", "buyer.id"
+                ).build());
 
         getLogger().info("Added extra Mongo indexes");
 
