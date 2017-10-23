@@ -281,11 +281,14 @@
   "crd:contracts:baseInfo:buyer": "Buyer",
   "crd:contracts:baseInfo:suppliers": "Suppliers",
   "crd:contracts:baseInfo:status": "Status",
-  "crd:contracts:baseInfo:amounts": "Amounts",
-  "crd:contracts:baseInfo:dates": "Dates",
   "crd:contracts:list:procuringEntity": "Procuring entity",
   "crd:contracts:list:awardAmount": "Award Amount",
   "crd:contracts:top-search": "Search within contracts",
   "crd:contracts:top-search:resultsFor": "Search results for \"$#$\"",
-  "crd:contracts:top-search:nothingFound": "Nothing found"
+  "crd:contracts:top-search:nothingFound": "Nothing found",
+  "crd:contracts:baseInfo:tenderAmount": "Tender Amount",
+  "crd:contracts:baseInfo:tenderDates": "Tender Open/Close Dates",
+  "crd:contracts:baseInfo:awardDate": "Award Date",
+  "crd:contracts:baseInfo:contractAmount": "Contract Amount",
+  "crd:contracts:baseInfo:contractDates": "Contract Open/Close Dates"
 }
