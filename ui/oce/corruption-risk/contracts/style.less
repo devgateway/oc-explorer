@@ -9,7 +9,14 @@
     }
   }
 
-  table{
+  table {
+    &.join-bottom {
+      margin-bottom: 0;
+      &, td {
+        border-bottom: none;
+      }
+    }
+
     th, td{
       width: 33%;
     }
@@ -17,7 +24,7 @@
 }
 
 .contracts-page{
-  table{
+  table {
     th, td{
       width: 12.5%;
     }
