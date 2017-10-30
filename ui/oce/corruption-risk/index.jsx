@@ -252,9 +252,9 @@ class CorruptionRiskDashboard extends React.Component {
   }
 
   render() {
-    const { dashboardSwitcherOpen, corruptionType, filterBoxIndex, currentFiltersState,
+    const { dashboardSwitcherOpen, filterBoxIndex, currentFiltersState,
       appliedFilters, data, indicatorTypesMapping, allYears, allMonths, showLandingPopup,
-      disabledApiSecurity, locale } = this.state;
+      disabledApiSecurity } = this.state;
     const { onSwitch, route, navigate } = this.props;
     const translations = this.getTranslations();
     const [page] = route;
@@ -306,9 +306,9 @@ class CorruptionRiskDashboard extends React.Component {
         <Filters
           onUpdate={currentFiltersState => this.setState({ currentFiltersState })}
           onApply={filtersToApply => this.setState({
-            filterBoxIndex: null,
-            appliedFilters: filtersToApply,
-            currentFiltersState: filtersToApply,
+              filterBoxIndex: null,
+              appliedFilters: filtersToApply,
+              currentFiltersState: filtersToApply,
           })}
           translations={translations}
           currentBoxIndex={filterBoxIndex}
@@ -334,13 +334,18 @@ class CorruptionRiskDashboard extends React.Component {
                  .filter(key => indicatorTypesMapping[key].types.indexOf(slug) > -1)
                  .length;
 
+               let corruptionType;
+               if (page === 'type') {
+                 [, corruptionType] = route;
+               }
+
                return (
                  <a
                    href="javascript:void(0);"
                    onClick={() => navigate('type', slug)}
-                   className={cn({ active: page === 'type' && slug === corruptionType })}
+                   className={cn({ active: slug === corruptionType })}
                    key={slug}
-                 >
+                   >
                    <img src={`assets/icons/${slug}.png`} alt="Tab icon" />
                    {this.t(`crd:corruptionType:${slug}:name`)} <span className="count">({count})</span>
                  </a>
@@ -349,7 +354,7 @@ class CorruptionRiskDashboard extends React.Component {
             <a
               href="javascript:void(0);"
               onClick={() => navigate('suppliers')}
-              className={cn({ active: page === 'suppliers' })}
+              className={cn('archive-link', { active: page === 'suppliers' })}
               key="suppliers"
             >
               <img src={`assets/icons/overview.svg`} alt="Suppliers icon" />
@@ -358,7 +363,7 @@ class CorruptionRiskDashboard extends React.Component {
             <a
               href="javascript:void(0);"
               onClick={() => navigate('procuring-entities')}
-              className={cn({ active: page === 'procuring-entities' })}
+              className={cn('archive-link', { active: page === 'procuring-entities' })}
               key="procuring-entities"
             >
               <img src={`assets/icons/overview.svg`} alt="Procuring entities icon" />
@@ -367,7 +372,7 @@ class CorruptionRiskDashboard extends React.Component {
             <a
               href="javascript:void(0);"
               onClick={() => navigate('contracts')}
-              className={cn({ active: page === 'contracts' })}
+              className={cn('archive-link', 'contracts-link', { active: page === 'contracts' })}
               key="contracts"
             >
               <img src={`assets/icons/overview.svg`} alt="Contracts icon" />
