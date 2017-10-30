@@ -83,16 +83,16 @@ class CorruptionRiskDashboard extends React.Component {
         {locale.split('_')[0]}
       </a>
     ));
-      /* return Object.keys(TRANSLATIONS).map(locale =>
-       *   (
-       *     <img
-       *     className="icon"
-       *     src={`assets/flags/${locale}.png`}
-       *     alt={`${locale} flag`}
-       *     
-       *     key={locale}
-       *   />),
-       * );*/
+    /* return Object.keys(TRANSLATIONS).map(locale =>
+     *   (
+     *     <img
+     *     className="icon"
+     *     src={`assets/flags/${locale}.png`}
+     *     alt={`${locale} flag`}
+     *     
+     *     key={locale}
+     *   />),
+     * );*/
   }
 
   setLocale(locale) {
@@ -319,26 +319,21 @@ class CorruptionRiskDashboard extends React.Component {
           allMonths={allMonths}
         />
         <aside className="col-xs-4 col-md-4 col-lg-3" id="crd-sidebar">
-          <div className="crd-description-text">
-            <h4 className="crd-overview-link" onClick={() => navigate('overview')}>
-              {this.t('crd:overview')}
-              <i className="glyphicon glyphicon-info-sign" />
-            </h4>
-            <p className="small">
-              {this.t('crd:description')}
-            </p>
-          </div>
           <section role="navigation" className="row">
             <a
               href="javascript:void(0);"
               onClick={() => navigate()}
-              className={cn({ active: !page })}
+              className={cn('crd-description-link', { active: !page })}
             >
               <img className="blue" src={`assets/icons/blue/overview.svg`} alt="Overview icon" />
               <img className="white" src={`assets/icons/white/overview.svg`} alt="Overview icon" />
               {this.t('tabs:overview:title')}
               <i className="glyphicon glyphicon-info-sign" />
             </a>
+
+            <p className="crd-description small">
+              {this.t('crd:description')}
+            </p>
 
             {CORRUPTION_TYPES.map((slug) => {
                const count = Object.keys(indicatorTypesMapping)
