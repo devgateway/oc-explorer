@@ -83,16 +83,16 @@ class CorruptionRiskDashboard extends React.Component {
         {locale.split('_')[0]}
       </a>
     ));
-      /* return Object.keys(TRANSLATIONS).map(locale =>
-       *   (
-       *     <img
-       *     className="icon"
-       *     src={`assets/flags/${locale}.png`}
-       *     alt={`${locale} flag`}
-       *     
-       *     key={locale}
-       *   />),
-       * );*/
+    /* return Object.keys(TRANSLATIONS).map(locale =>
+     *   (
+     *     <img
+     *     className="icon"
+     *     src={`assets/flags/${locale}.png`}
+     *     alt={`${locale} flag`}
+     *     
+     *     key={locale}
+     *   />),
+     * );*/
   }
 
   setLocale(locale) {
@@ -319,16 +319,22 @@ class CorruptionRiskDashboard extends React.Component {
           allMonths={allMonths}
         />
         <aside className="col-xs-4 col-md-4 col-lg-3" id="crd-sidebar">
-          <div className="crd-description-text">
-            <h4 className="crd-overview-link" onClick={() => navigate('overview')}>
-              {this.t('crd:overview')}
+          <section role="navigation" className="row">
+            <a
+              href="javascript:void(0);"
+              onClick={() => navigate()}
+              className={cn('crd-description-link', { active: !page })}
+            >
+              <img className="blue" src={`assets/icons/blue/overview.svg`} alt="Overview icon" />
+              <img className="white" src={`assets/icons/white/overview.svg`} alt="Overview icon" />
+              {this.t('tabs:overview:title')}
               <i className="glyphicon glyphicon-info-sign" />
-            </h4>
-            <p className="small">
+            </a>
+
+            <p className="crd-description small">
               {this.t('crd:description')}
             </p>
-          </div>
-          <section role="navigation" className="row">
+
             {CORRUPTION_TYPES.map((slug) => {
                const count = Object.keys(indicatorTypesMapping)
                  .filter(key => indicatorTypesMapping[key].types.indexOf(slug) > -1)
@@ -346,7 +352,8 @@ class CorruptionRiskDashboard extends React.Component {
                    className={cn({ active: slug === corruptionType })}
                    key={slug}
                    >
-                   <img src={`assets/icons/${slug}.png`} alt="Tab icon" />
+                   <img className="blue" src={`assets/icons/blue/${slug}.svg`} alt="Tab icon" />
+                   <img className="white" src={`assets/icons/white/${slug}.svg`} alt="Tab icon" />
                    {this.t(`crd:corruptionType:${slug}:name`)} <span className="count">({count})</span>
                  </a>
                );
@@ -357,7 +364,8 @@ class CorruptionRiskDashboard extends React.Component {
               className={cn('archive-link', { active: page === 'suppliers' })}
               key="suppliers"
             >
-              <img src={`assets/icons/overview.svg`} alt="Suppliers icon" />
+              <img className="blue" src={`assets/icons/blue/suppliers.svg`} alt="Suppliers icon" />
+              <img className="white" src={`assets/icons/white/suppliers.svg`} alt="Suppliers icon" />
               {this.t('crd:contracts:baseInfo:suppliers')}
             </a>
             <a
@@ -366,7 +374,8 @@ class CorruptionRiskDashboard extends React.Component {
               className={cn('archive-link', { active: page === 'procuring-entities' })}
               key="procuring-entities"
             >
-              <img src={`assets/icons/overview.svg`} alt="Procuring entities icon" />
+              <img className="blue" src={`assets/icons/blue/procuring-entities.svg`} alt="Procuring entities icon" />
+              <img className="white" src={`assets/icons/white/procuring-entities.svg`} alt="Procuring entities icon" />
               {this.t('crd:contracts:menu:procuringEntities')}
             </a>
             <a
@@ -375,7 +384,8 @@ class CorruptionRiskDashboard extends React.Component {
               className={cn('archive-link', 'contracts-link', { active: page === 'contracts' })}
               key="contracts"
             >
-              <img src={`assets/icons/overview.svg`} alt="Contracts icon" />
+              <img className="blue" src={`assets/icons/blue/contracts.svg`} alt="Contracts icon" />
+              <img className="white" src={`assets/icons/white/contracts.svg`} alt="Contracts icon" />
               {this.t('crd:general:contracts')}
             </a>
           </section>
