@@ -303,17 +303,29 @@
           background: #d9e3eb;
         }
 
+        img{
+          display: inline-block;
+          margin-right: 10px;
+          width: 32px;
+          &.white {
+            display: none;
+          }
+        }
+
         &.active, &:hover{
           background: #35ae46;
           color: white;
           .count {
             color: white;
           }
-        }
-        img{
-          display: inline-block;
-          margin-right: 10px;
-          width: 32px;
+
+          img.white {
+            display: inline-block;
+          }
+
+          img.blue {
+            display: none;
+          }
         }
       }
     }

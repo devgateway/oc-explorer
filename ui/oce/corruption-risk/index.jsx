@@ -329,6 +329,17 @@ class CorruptionRiskDashboard extends React.Component {
             </p>
           </div>
           <section role="navigation" className="row">
+            <a
+              href="javascript:void(0);"
+              onClick={() => navigate()}
+              className={cn({ active: !page })}
+            >
+              <img className="blue" src={`assets/icons/blue/overview.svg`} alt="Overview icon" />
+              <img className="white" src={`assets/icons/white/overview.svg`} alt="Overview icon" />
+              {this.t('tabs:overview:title')}
+              <i className="glyphicon glyphicon-info-sign" />
+            </a>
+
             {CORRUPTION_TYPES.map((slug) => {
                const count = Object.keys(indicatorTypesMapping)
                  .filter(key => indicatorTypesMapping[key].types.indexOf(slug) > -1)
@@ -339,18 +350,15 @@ class CorruptionRiskDashboard extends React.Component {
                  [, corruptionType] = route;
                }
 
-               const active = slug === corruptionType;
-               let icon = `${active ? 'white' : 'blue'}/${slug}.svg`;
-
-
                return (
                  <a
                    href="javascript:void(0);"
                    onClick={() => navigate('type', slug)}
-                   className={cn({ active })}
+                   className={cn({ active: slug === corruptionType })}
                    key={slug}
-                  >
-                   <img src={`assets/icons/${icon}`} alt="Tab icon" />
+                   >
+                   <img className="blue" src={`assets/icons/blue/${slug}.svg`} alt="Tab icon" />
+                   <img className="white" src={`assets/icons/white/${slug}.svg`} alt="Tab icon" />
                    {this.t(`crd:corruptionType:${slug}:name`)} <span className="count">({count})</span>
                  </a>
                );
@@ -361,7 +369,8 @@ class CorruptionRiskDashboard extends React.Component {
               className={cn('archive-link', { active: page === 'suppliers' })}
               key="suppliers"
             >
-              <img src={`assets/icons/blue/suppliers.svg`} alt="Suppliers icon" />
+              <img className="blue" src={`assets/icons/blue/suppliers.svg`} alt="Suppliers icon" />
+              <img className="white" src={`assets/icons/white/suppliers.svg`} alt="Suppliers icon" />
               {this.t('crd:contracts:baseInfo:suppliers')}
             </a>
             <a
@@ -370,7 +379,8 @@ class CorruptionRiskDashboard extends React.Component {
               className={cn('archive-link', { active: page === 'procuring-entities' })}
               key="procuring-entities"
             >
-              <img src={`assets/icons/blue/procuring-entities.svg`} alt="Procuring entities icon" />
+              <img className="blue" src={`assets/icons/blue/procuring-entities.svg`} alt="Procuring entities icon" />
+              <img className="white" src={`assets/icons/white/procuring-entities.svg`} alt="Procuring entities icon" />
               {this.t('crd:contracts:menu:procuringEntities')}
             </a>
             <a
@@ -379,7 +389,8 @@ class CorruptionRiskDashboard extends React.Component {
               className={cn('archive-link', 'contracts-link', { active: page === 'contracts' })}
               key="contracts"
             >
-              <img src={`assets/icons/blue/contracts.svg`} alt="Contracts icon" />
+              <img className="blue" src={`assets/icons/blue/contracts.svg`} alt="Contracts icon" />
+              <img className="white" src={`assets/icons/white/contracts.svg`} alt="Contracts icon" />
               {this.t('crd:general:contracts')}
             </a>
           </section>
