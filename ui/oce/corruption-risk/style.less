@@ -260,8 +260,14 @@
     }
     .crd-overview-link{
       cursor: pointer;
+      &+p {
+        display: none;
+      }
       &:hover {
         color: #35ae46;
+        &+p {
+          display: block;
+        }
       }
     }
     [role=navigation]{
