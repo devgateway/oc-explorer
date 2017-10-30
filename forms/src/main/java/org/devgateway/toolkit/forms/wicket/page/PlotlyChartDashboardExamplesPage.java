@@ -7,6 +7,7 @@ import org.devgateway.toolkit.forms.wicket.components.charts.Annotation;
 import org.devgateway.toolkit.forms.wicket.components.charts.Data;
 import org.devgateway.toolkit.forms.wicket.components.charts.Font;
 import org.devgateway.toolkit.forms.wicket.components.charts.Layout;
+import org.devgateway.toolkit.forms.wicket.components.charts.Legend;
 import org.devgateway.toolkit.forms.wicket.components.charts.Line;
 import org.devgateway.toolkit.forms.wicket.components.charts.Marker;
 import org.devgateway.toolkit.forms.wicket.components.charts.PlotlyChart;
@@ -113,6 +114,9 @@ public class PlotlyChartDashboardExamplesPage extends BasePage {
                 .setWidth(WIDTH)
                 .setHeight(HEIGHT)
                 .setTitle("Global Emissions 1990-2011")
+                .setLegend(new Legend.LegendBuilder()
+                        .setOrientation(PlotlyChart.LEGEND_ORIENTATION_H)
+                        .build())
                 .setAnnotations(
                         new ArrayList<>(Arrays.asList(
                                 new Annotation.AnnotationBuilder()

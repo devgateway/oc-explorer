@@ -22,6 +22,8 @@ public final class Layout implements Serializable {
 
     private final Boolean showlegend;
 
+    private final Legend legend;
+
     private final Xaxis xaxis;
 
     private final Yaxis yaxis;
@@ -36,6 +38,7 @@ public final class Layout implements Serializable {
         this.annotations = layoutBuilder.annotations;
         this.font = layoutBuilder.font;
         this.showlegend = layoutBuilder.showlegend;
+        this.legend = layoutBuilder.legend;
         this.xaxis = layoutBuilder.xaxis;
         this.yaxis = layoutBuilder.yaxis;
         this.bargap = layoutBuilder.bargap;
@@ -55,6 +58,8 @@ public final class Layout implements Serializable {
         private Font font;
 
         private Boolean showlegend;
+
+        private Legend legend;
 
         private Xaxis xaxis;
 
@@ -94,6 +99,11 @@ public final class Layout implements Serializable {
 
         public LayoutBuilder setShowlegend(final Boolean showlegend) {
             this.showlegend = showlegend;
+            return this;
+        }
+
+        public LayoutBuilder setLegend(final Legend legend) {
+            this.legend = legend;
             return this;
         }
 
