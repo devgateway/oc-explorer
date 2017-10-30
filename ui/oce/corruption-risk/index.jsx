@@ -348,6 +348,24 @@ class CorruptionRiskDashboard extends React.Component {
             })}
             <a
               href="javascript:void(0);"
+              onClick={() => navigate('suppliers')}
+              className={cn({ active: page === 'suppliers' })}
+              key="suppliers"
+            >
+              <img src={`assets/icons/overview.svg`} alt="Suppliers icon" />
+              {this.t('crd:contracts:baseInfo:suppliers')}
+            </a>
+            <a
+              href="javascript:void(0);"
+              onClick={() => navigate('procuring-entities')}
+              className={cn({ active: page === 'procuring-entities' })}
+              key="procuring-entities"
+            >
+              <img src={`assets/icons/overview.svg`} alt="Procuring entities icon" />
+              {this.t('crd:contracts:menu:procuringEntities')}
+            </a>
+            <a
+              href="javascript:void(0);"
               onClick={() => navigate('contracts')}
               className={cn({ active: page === 'contracts' })}
               key="contracts"
