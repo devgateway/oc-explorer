@@ -114,7 +114,13 @@ public class LoginPage extends BasePage {
             add(usernameField);
 
 
-            passwordField = new PasswordFieldBootstrapFormComponent("password", new PropertyModel<>(this, "password"));
+            passwordField = new PasswordFieldBootstrapFormComponent("password",
+                    new PropertyModel<>(this, "password")) {
+                @Override
+                public String getUpdateEvent() {
+                    return null;
+                }
+            };
             passwordField.getField().setResetPassword(false);
             add(passwordField);
 
