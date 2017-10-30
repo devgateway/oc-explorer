@@ -1,9 +1,12 @@
-import CRDPage from '../page';
-import Visualization from '../../visualization';
 import { Map, List } from 'immutable';
-import translatable from '../../translatable';
-import styles from './style.less';
-import TopSearch from './top-search';
+import CRDPage from '../../page';
+import Visualization from '../../../visualization';
+import translatable from '../../../translatable';
+import styles from '../style.less';
+import TopSearch from '../top-search';
+import NrOfBidders from './donuts/nr-of-bidders';
+import NrOfContractsWithThisPE from './donuts/nr-contract-with-pe';
+import PercentPESpending from './donuts/percent-pe-spending';
 
 class Info extends translatable(Visualization) {
   constructor(...args){
@@ -90,7 +93,7 @@ class Info extends translatable(Visualization) {
                 <strong>
                   {startDate ?
                     <span>
-                      new Date(startDate).toLocaleDateString()
+                      {new Date(startDate).toLocaleDateString()}
                       &ndash;
                     </span> :
                     this.t('general:undefined')}
@@ -148,7 +151,7 @@ export default class Contract extends CRDPage {
   }
 
   render() {
-    const { contract } = this.state;
+    const { contract, nrOfBidders, nrContracts, percentPESpending } = this.state;
     const { id, translations, doSearch } = this.props;
     return (
       <div className="contract-page">
@@ -163,6 +166,36 @@ export default class Contract extends CRDPage {
           requestNewData={(_, contract) => this.setState({contract})}
           translations={translations}
         />
+        <section>
+          <h2>6 Flags</h2>
+          <div className="col-md-4">
+            <NrOfBidders
+              data={nrOfBidders}
+              filters={Map()}
+              years={Map()}
+              requestNewData={(_, nrOfBidders) => this.setState({ nrOfBidders })}
+              translations={translations}
+            />
+          </div>
+          <div className="col-md-4">
+            <NrOfContractsWithThisPE
+              data={nrContracts}
+              filters={Map()}
+              years={Map()}
+              requestNewData={(_, nrContracts) => this.setState({ nrContracts })}
+              translations={translations}
+            />
+          </div>
+          <div className="col-md-4">
+            <PercentPESpending
+              data={percentPESpending}
+              filters={Map()}
+              years={Map()}
+              requestNewData={(_, percentPESpending) => this.setState({ percentPESpending })}
+              translations={translations}
+            />
+          </div>
+        </section>
       </div>
     );
   }
