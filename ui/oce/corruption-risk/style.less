@@ -260,8 +260,14 @@
     }
     .crd-overview-link{
       cursor: pointer;
+      &+p {
+        display: none;
+      }
       &:hover {
         color: #35ae46;
+        &+p {
+          display: block;
+        }
       }
     }
     [role=navigation]{
@@ -282,14 +288,27 @@
         &:first-child{
           border-top: 1px solid #e6eaee;
         }
-        &.active, &:hover{
-          background: #ffffff;
-          color: #2b9ff6;
-        }
+
         .count{
           color: #a9b2c0;
           display: inline-block;
           margin-left: 10px;
+        }
+
+        &.archive-link {
+          background: #ecf7ff;
+        }
+
+        &.contracts-link{
+          background: #d9e3eb;
+        }
+
+        &.active, &:hover{
+          background: #35ae46;
+          color: white;
+          .count {
+            color: white;
+          }
         }
         img{
           display: inline-block;
