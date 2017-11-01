@@ -1,7 +1,11 @@
 import CenterTextDonut from './index.jsx';
 
 class PercentPESpending extends CenterTextDonut {
-  getTitle(){
+  getCenterText() {
+    return '12%';
+  }
+
+  getTitle() {
     return '% of procuring entity spending to this supplier';
   }
 }

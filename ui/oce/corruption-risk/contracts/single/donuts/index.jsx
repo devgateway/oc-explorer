@@ -3,7 +3,7 @@ import Chart from '../../../../visualizations/charts/index.jsx';
 import style from './style.less';
 
 class CenterTextDonut extends React.PureComponent {
-  getCenterText(){
+  getCenterText() {
     return 'Sample text';
   }
 
