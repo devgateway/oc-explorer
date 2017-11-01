@@ -1,7 +1,12 @@
-import backendYearFilterable from '../../../../backend-year-filterable';
-import Chart from '../../../../visualizations/charts/index.jsx';
+import CenterTextDonut from './index.jsx';
 
-class PercentPESpending extends backendYearFilterable(Chart) {
+class PercentPESpending extends CenterTextDonut {
+  getTitle(){
+    return '% of procuring entity spending to this supplier';
+  }
+}
+
+PercentPESpending.Donut = class extends CenterTextDonut.Donut {
   getData() {
     const data = super.getData();
     if (!data || !data.count()) return [];
@@ -9,7 +14,8 @@ class PercentPESpending extends backendYearFilterable(Chart) {
       values: [5, 10],
       labels: ['this', 'total'],
       textinfo: 'value',
-      hole: 0.85,
+      textposition: 'none',
+      hole: 0.8,
       type: 'pie',
       marker: {
         colors: ['#40557d', '#289df5'],
@@ -19,13 +25,12 @@ class PercentPESpending extends backendYearFilterable(Chart) {
 
   getLayout() {
     return {
-      title: '% of procuring entity spending to this supplier',
       showlegend: false,
       paper_bgcolor: 'rgba(0,0,0,0)',
     };
   }
 }
 
-PercentPESpending.endpoint = 'totalFlags';
+PercentPESpending.Donut.endpoint = 'totalFlags';
 
 export default PercentPESpending;

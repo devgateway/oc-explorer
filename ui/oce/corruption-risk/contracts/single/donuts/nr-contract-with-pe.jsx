@@ -1,7 +1,24 @@
-import backendYearFilterable from '../../../../backend-year-filterable';
-import Chart from '../../../../visualizations/charts/index.jsx';
+import CenterTextDonut from './index.jsx';
 
-class NrOfContractsWithPE extends backendYearFilterable(Chart) {
+class NrOfContractsWithPE extends CenterTextDonut {
+  getCenterText(){
+    const { contract } = this.props;
+    if (!contract) return '';
+    return (
+      <div>
+        10
+        <small>
+          of 14
+        </small>
+      </div>)
+  }
+
+  getTitle(){
+    return 'Number of contracts with this procuring entity';
+  }
+}
+
+NrOfContractsWithPE.Donut = class extends CenterTextDonut.Donut {
   getData() {
     const data = super.getData();
     if (!data || !data.count()) return [];
@@ -9,7 +26,8 @@ class NrOfContractsWithPE extends backendYearFilterable(Chart) {
       values: [5, 10],
       labels: ['this', 'total'],
       textinfo: 'value',
-      hole: 0.85,
+      textposition: 'none',
+      hole: 0.8,
       type: 'pie',
       marker: {
         colors: ['#72c47e', '#2e833a'],
@@ -19,13 +37,12 @@ class NrOfContractsWithPE extends backendYearFilterable(Chart) {
 
   getLayout() {
     return {
-      title: 'Number of contracts with this procuring entity',
       showlegend: false,
       paper_bgcolor: 'rgba(0,0,0,0)',
     };
   }
 }
 
-NrOfContractsWithPE.endpoint = 'totalFlags';
+NrOfContractsWithPE.Donut.endpoint = 'totalFlags';
 
 export default NrOfContractsWithPE;

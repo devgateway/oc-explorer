@@ -170,6 +170,7 @@ export default class Contract extends CRDPage {
           <h2>6 Flags</h2>
           <div className="col-md-4">
             <NrOfBidders
+              contract={contract}
               data={nrOfBidders}
               filters={Map()}
               years={Map()}
@@ -179,6 +180,7 @@ export default class Contract extends CRDPage {
           </div>
           <div className="col-md-4">
             <NrOfContractsWithThisPE
+              contract={contract}
               data={nrContracts}
               filters={Map()}
               years={Map()}
