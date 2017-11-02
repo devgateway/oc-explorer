@@ -4,14 +4,23 @@ import CenterTextDonut from './index.jsx';
 const AVG_MOCK = 10;
 
 class NrOfBidders extends CenterTextDonut {
-  getCenterText(){
+  getClassnames() {
+    return super.getClassnames().concat('nr-of-bidders');
+  }
+
+  getCenterText() {
     const { contract } = this.props;
     if (!contract) return '';
     const count = contract.getIn(['tender', 'tenderers'], List()).count();
-    return `${count}/${AVG_MOCK}`;
+    return (
+      <div>
+        {count}
+        <span className="secondary">/{AVG_MOCK}</span>
+      </div>
+    );
   }
 
-  getTitle(){
+  getTitle() {
     return 'Number of bidders vs average';
   }
 }
@@ -19,10 +28,11 @@ class NrOfBidders extends CenterTextDonut {
 NrOfBidders.Donut = class extends CenterTextDonut.Donut {
   getData() {
     const data = super.getData();
-    if (!data || !data.count()) return [];
+    const { contract } = this.props;
+    if (!data || !data.count() || !contract) return [];
+    const count = contract.getIn(['tender', 'tenderers'], List()).count();
     return [{
-      values: [5, 10],
-      labels: ['this', 'total'],
+      values: [count, AVG_MOCK - count],
       textinfo: 'value',
       textposition: 'none',
       hole: 0.8,
