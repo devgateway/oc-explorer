@@ -1,30 +1,45 @@
 import CenterTextDonut from './index.jsx';
 
 class NrOfContractsWithPE extends CenterTextDonut {
-  getCenterText(){
-    const { contract } = this.props;
-    if (!contract) return '';
-    return (
-      <div>
-        10
-        <small>
-          of 14
-        </small>
-      </div>)
+  getClassnames() {
+    return super.getClassnames().concat('nr-contracts');
   }
 
-  getTitle(){
+  getCenterText() {
+    const { contract, data } = this.props;
+    if (!contract || !data) return '';
+    const peID = contract.getIn(['tender', 'procuringEntity', 'id']);
+    const withThisPE = data.filter(c =>
+      c.getIn(['tender', 'procuringEntity', 'id']) === peID)
+      .count();
+    const total = data.count();
+    return (
+      <div>
+        {withThisPE}
+        <div className="secondary">
+          of {total}
+        </div>
+      </div>
+    );
+  }
+
+  getTitle() {
     return 'Number of contracts with this procuring entity';
   }
 }
 
 NrOfContractsWithPE.Donut = class extends CenterTextDonut.Donut {
   getData() {
+    const { contract } = this.props;
     const data = super.getData();
-    if (!data || !data.count()) return [];
+    if (!data || !data.count() || !contract) return [];
+    const peID = contract.getIn(['tender', 'procuringEntity', 'id']);
+    const withThisPE = data.filter(c =>
+      c.getIn(['tender', 'procuringEntity', 'id']) === peID)
+      .count();
+    const total = data.count();
     return [{
-      values: [5, 10],
-      labels: ['this', 'total'],
+      values: [withThisPE, total],
       textinfo: 'value',
       textposition: 'none',
       hole: 0.8,
@@ -41,8 +56,8 @@ NrOfContractsWithPE.Donut = class extends CenterTextDonut.Donut {
       paper_bgcolor: 'rgba(0,0,0,0)',
     };
   }
-}
+};
 
-NrOfContractsWithPE.Donut.endpoint = 'totalFlags';
+NrOfContractsWithPE.Donut.endpoint = 'ocds/release/all';
 
 export default NrOfContractsWithPE;
