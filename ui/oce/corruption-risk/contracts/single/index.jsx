@@ -7,6 +7,14 @@ import TopSearch from '../top-search';
 import NrOfBidders from './donuts/nr-of-bidders';
 import NrOfContractsWithThisPE from './donuts/nr-contract-with-pe';
 import PercentPESpending from './donuts/percent-pe-spending';
+import Crosstab from '../../crosstab';
+import { CORRUPTION_TYPES } from '../../constants';
+
+const indicators = {
+  FRAUD: ["i002", "i085", "i171"],
+  RIGGING: ["i038", "i007", "i077", "i019", "i180", "i002", "i171"],
+  COLLUSION: ["i085"]
+};
 
 class Info extends translatable(Visualization) {
   constructor(...args){
@@ -30,6 +38,7 @@ class Info extends translatable(Visualization) {
 
   render() {
     const { data } = this.props;
+
     const title = data.getIn(['tender', 'title']);
     const suppliers = data.get('awards', List()).flatMap(award => award.get('suppliers'));
     const startDate = data.getIn(['tender', 'tenderPeriod', 'startDate']);
@@ -137,7 +146,8 @@ export default class Contract extends CRDPage {
   constructor(...args){
     super(...args);
     this.state = {
-      contract: Map()
+      contract: Map(),
+      crosstab: Map()
     }
   }
 
@@ -150,9 +160,14 @@ export default class Contract extends CRDPage {
       suppliers.slice(0, 2);
   }
 
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
+  }
+
   render() {
-    const { contract, nrOfBidders, nrContracts, percentPESpending } = this.state;
-    const { id, translations, doSearch } = this.props;
+    const { contract, nrOfBidders, nrContracts, percentPESpending, crosstab } = this.state;
+    const { id, translations, doSearch, indicatorTypesMapping } = this.props;
+    console.log(indicatorTypesMapping);
     return (
       <div className="contract-page">
         <TopSearch
@@ -197,6 +212,22 @@ export default class Contract extends CRDPage {
               translations={translations}
             />
           </div>
+        </section>
+        <section>
+          {CORRUPTION_TYPES.map(corruptionType => {
+             return (
+               <Crosstab
+                 filters={Map()}
+                 translations={translations}
+                 years={Map()}
+                 data={crosstab.get(corruptionType)}
+                 indicators={indicators[corruptionType]}
+                 requestNewData={(_, data) => {
+                     const { crosstab } = this.state;
+                     this.setState({ crosstab: crosstab.set(corruptionType, data)})
+                 }}
+               />
+             )})}
         </section>
       </div>
     );
