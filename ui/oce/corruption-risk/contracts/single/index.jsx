@@ -182,6 +182,49 @@ export default class Contract extends CRDPage {
     }
   }
 
+  maybeGetFlagAnalysis() {
+    const { filters, translations, years } = this.props;
+    const { indicators, crosstab } = this.state;
+    const noIndicators = Object.keys(indicators)
+      .every(corruptionType =>
+        !indicators[corruptionType] || !indicators[corruptionType].length);
+
+    if (noIndicators) return (
+      <section className="flag-analysis">
+        <h2>{this.t('crd:contracts:flagAnalysis')}</h2>
+        <h4>{this.t('crd:contracts:noFlags')}</h4>
+      </section>
+    );
+
+    return (
+      <section className="flag-analysis">
+        <h2>
+          {this.t('crd:contracts:flagAnalysis')}
+          &nbsp;
+          <small>({this.t('crd:contracts:clickCrosstabHint')})</small>
+        </h2>
+        {Object.keys(indicators).map(corruptionType => (
+          <div>
+            <h3>
+              {this.t(`crd:corruptionType:${corruptionType}:pageTitle`)}
+            </h3>
+            <Crosstab
+              filters={filters}
+              translations={translations}
+              years={years}
+              data={crosstab.get(corruptionType)}
+              indicators={indicators[corruptionType]}
+              requestNewData={(_, data) => {
+                  const { crosstab } = this.state;
+                  this.setState({ crosstab: crosstab.set(corruptionType, data)})
+              }}
+            />
+          </div>
+        ))}
+      </section>
+    );
+  }
+
   render() {
     const { contract, nrOfBidders, nrContracts, percentPESpending, crosstab,
       indicators } = this.state;
@@ -232,31 +275,7 @@ export default class Contract extends CRDPage {
             />
           </div>
         </section>
-        <section className="flag-analysis">
-          <h2>
-            Flag analysis
-            &nbsp;
-            <small>(Click a cell on the charts below to release detailed information)</small>
-          </h2>
-          {Object.keys(indicators).map(corruptionType => (
-            <div>
-              <h3>
-                {this.t(`crd:corruptionType:${corruptionType}:pageTitle`)}
-              </h3>
-              <Crosstab
-                filters={filters}
-                translations={translations}
-                years={years}
-                data={crosstab.get(corruptionType)}
-                indicators={indicators[corruptionType]}
-                requestNewData={(_, data) => {
-                    const { crosstab } = this.state;
-                    this.setState({ crosstab: crosstab.set(corruptionType, data)})
-                }}
-              />
-            </div>
-          ))}
-        </section>
+        {this.maybeGetFlagAnalysis()}
       </div>
     );
   }
