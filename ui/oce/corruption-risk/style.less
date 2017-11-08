@@ -340,14 +340,22 @@
     margin-bottom: auto;
     padding: 20px 40px 0 30px;
 
-    .crd-popup{
-      @popupColor: #222c3c;
+
+    .crd-popup {
       @popupWidth: 400px;//if you're changing this you need to also change POPUP_WIDTH in constants.es6
       position: absolute;
       top: 0;
       left: 0;
       width: @popupWidth;
       height: 150px;
+
+      hr {
+        width: 50%;
+      }
+    }
+
+    .crosstab-box, .crd-popup{
+      @popupColor: #222c3c;
       z-index: 1;
       background: @popupColor;
       padding: 15px 5px;
@@ -361,11 +369,12 @@
       .info{
         color: white;
       }
-      hr{
-        width: 50%;
+
+      hr {
         opacity: .1;
         margin: 5px auto;
       }
+
       .arrow{
         background: @popupColor;
         position: absolute;
@@ -377,6 +386,14 @@
         transform: rotate(45deg);
       }
     }
+
+    .crosstab-box {
+      padding: 15px;
+      hr {
+        width: 100%;
+      }
+    }
+
 
     .chart-corruption-types{
       position: relative;
@@ -458,6 +475,10 @@
       }
     }
 
+    td.hoverable:hover, td.selectable.selected {
+      box-shadow: inset 0px 0px 0px 5px #ffd307;
+    }
+
     td.hoverable{
       position: relative;
       .crd-popup{
@@ -477,7 +498,6 @@
       }
 
       &:hover {
-        box-shadow: inset 0px 0px 0px 5px #ffd307;
         .crd-popup{
           display: block;
           top: auto;
