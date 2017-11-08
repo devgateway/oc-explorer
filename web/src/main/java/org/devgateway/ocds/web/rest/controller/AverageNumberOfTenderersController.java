@@ -55,9 +55,9 @@ public class AverageNumberOfTenderersController extends GenericOCDSController {
             + "by year read from tender.tenderPeriod.startDate. "
             + "The number of tenderers are read from tender.numberOfTenderers")
 
-    @RequestMapping(value = "/api/averageNumberOfTenderers",
+    @RequestMapping(value = "/api/averageNumberOfTenderersYearly",
             method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
-    public List<DBObject> averageNumberOfTenderers(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<DBObject> averageNumberOfTenderersYearly(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
         addYearlyMonthlyProjection(filter, project, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
@@ -79,5 +79,33 @@ public class AverageNumberOfTenderersController extends GenericOCDSController {
         List<DBObject> list = results.getMappedResults();
         return list;
     }
+
+    @ApiOperation(value = "Calculate average number of tenderers. The endpoint can be filtered"
+            + "by year read from tender.tenderPeriod.startDate. "
+            + "The number of tenderers are read from tender.numberOfTenderers")
+
+    @RequestMapping(value = "/api/averageNumberOfTenderers",
+            method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
+    public List<DBObject> averageNumberOfTenderers(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+
+        DBObject project = new BasicDBObject();
+        addYearlyMonthlyProjection(filter, project, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
+        project.put("tender.numberOfTenderers", 1);
+
+        Aggregation agg = newAggregation(
+                match(where("tender.numberOfTenderers").gt(0)
+                        .and(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
+                new CustomProjectionOperation(project),
+                group().avg("tender.numberOfTenderers")
+                        .as(Keys.AVERAGE_NO_OF_TENDERERS));
+
+
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+        List<DBObject> list = results.getMappedResults();
+        return list;
+    }
+
 
 }
