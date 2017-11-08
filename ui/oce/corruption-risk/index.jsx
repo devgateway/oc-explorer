@@ -165,6 +165,8 @@ class CorruptionRiskDashboard extends React.Component {
           translations={translations}
           doSearch={query => navigate('contracts', query)}
           indicatorTypesMapping={indicatorTypesMapping}
+          filters={filters}
+          years={years}
         />
       )
     } else {
