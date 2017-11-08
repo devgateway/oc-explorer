@@ -14,8 +14,7 @@ import LandingPopup from './landing-popup';
 import { LOGIN_URL } from './constants';
 // eslint-disable-next-line no-unused-vars
 import style from './style.less';
-
-const CORRUPTION_TYPES = ['FRAUD', 'RIGGING', 'COLLUSION'];
+import { CORRUPTION_TYPES } from './constants';
 
 // eslint-disable-next-line no-undef
 class CorruptionRiskDashboard extends React.Component {
@@ -165,6 +164,9 @@ class CorruptionRiskDashboard extends React.Component {
           id={contractId}
           translations={translations}
           doSearch={query => navigate('contracts', query)}
+          indicatorTypesMapping={indicatorTypesMapping}
+          filters={filters}
+          years={years}
         />
       )
     } else {

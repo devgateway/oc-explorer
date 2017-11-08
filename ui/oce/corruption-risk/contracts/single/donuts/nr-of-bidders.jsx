@@ -1,15 +1,41 @@
-import backendYearFilterable from '../../../../backend-year-filterable';
-import Chart from '../../../../visualizations/charts/index.jsx';
+import { List } from 'immutable';
+import CenterTextDonut from './index.jsx';
 
-class NrOfBidders extends backendYearFilterable(Chart) {
+const AVG_MOCK = 10;
+
+class NrOfBidders extends CenterTextDonut {
+  getClassnames() {
+    return super.getClassnames().concat('nr-of-bidders');
+  }
+
+  getCenterText() {
+    const { contract } = this.props;
+    if (!contract) return '';
+    const count = contract.getIn(['tender', 'tenderers'], List()).count();
+    return (
+      <div>
+        {count}
+        <span className="secondary">/{AVG_MOCK}</span>
+      </div>
+    );
+  }
+
+  getTitle() {
+    return 'Number of bidders vs average';
+  }
+}
+
+NrOfBidders.Donut = class extends CenterTextDonut.Donut {
   getData() {
     const data = super.getData();
-    if (!data || !data.count()) return [];
+    const { contract } = this.props;
+    if (!data || !data.count() || !contract) return [];
+    const count = contract.getIn(['tender', 'tenderers'], List()).count();
     return [{
-      values: [5, 10],
-      labels: ['this', 'total'],
+      values: [count, AVG_MOCK - count],
       textinfo: 'value',
-      hole: 0.85,
+      textposition: 'none',
+      hole: 0.8,
       type: 'pie',
       marker: {
         colors: ['#289df5', '#fac329'],
@@ -19,13 +45,12 @@ class NrOfBidders extends backendYearFilterable(Chart) {
 
   getLayout() {
     return {
-      title: 'Number of bidders vs average',
       showlegend: false,
       paper_bgcolor: 'rgba(0,0,0,0)',
     };
   }
 }
 
-NrOfBidders.endpoint = 'totalFlags';
+NrOfBidders.Donut.endpoint = 'totalFlags';
 
 export default NrOfBidders;

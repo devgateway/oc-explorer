@@ -1,15 +1,48 @@
-import backendYearFilterable from '../../../../backend-year-filterable';
-import Chart from '../../../../visualizations/charts/index.jsx';
+import CenterTextDonut from './index.jsx';
 
-class NrOfContractsWithPE extends backendYearFilterable(Chart) {
+class NrOfContractsWithPE extends CenterTextDonut {
+  getClassnames() {
+    return super.getClassnames().concat('nr-contracts');
+  }
+
+  getCenterText() {
+    const { contract, data } = this.props;
+    if (!contract || !data) return '';
+    const peID = contract.getIn(['tender', 'procuringEntity', 'id']);
+    const withThisPE = data.filter(c =>
+      c.getIn(['tender', 'procuringEntity', 'id']) === peID)
+      .count();
+    const total = data.count();
+    return (
+      <div>
+        {withThisPE}
+        <div className="secondary">
+          of {total}
+        </div>
+      </div>
+    );
+  }
+
+  getTitle() {
+    return 'Number of contracts with this procuring entity';
+  }
+}
+
+NrOfContractsWithPE.Donut = class extends CenterTextDonut.Donut {
   getData() {
+    const { contract } = this.props;
     const data = super.getData();
-    if (!data || !data.count()) return [];
+    if (!data || !data.count() || !contract) return [];
+    const peID = contract.getIn(['tender', 'procuringEntity', 'id']);
+    const withThisPE = data.filter(c =>
+      c.getIn(['tender', 'procuringEntity', 'id']) === peID)
+      .count();
+    const total = data.count();
     return [{
-      values: [5, 10],
-      labels: ['this', 'total'],
+      values: [withThisPE, total - withThisPE],
       textinfo: 'value',
-      hole: 0.85,
+      textposition: 'none',
+      hole: 0.8,
       type: 'pie',
       marker: {
         colors: ['#72c47e', '#2e833a'],
@@ -19,13 +52,12 @@ class NrOfContractsWithPE extends backendYearFilterable(Chart) {
 
   getLayout() {
     return {
-      title: 'Number of contracts with this procuring entity',
       showlegend: false,
       paper_bgcolor: 'rgba(0,0,0,0)',
     };
   }
-}
+};
 
-NrOfContractsWithPE.endpoint = 'totalFlags';
+NrOfContractsWithPE.Donut.endpoint = 'ocds/release/all';
 
 export default NrOfContractsWithPE;
