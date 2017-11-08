@@ -38,7 +38,7 @@ class AvgNrBids extends FrontendDateFilterableChart{
   }
 }
 
-AvgNrBids.endpoint = 'averageNumberOfTenderers';
+AvgNrBids.endpoint = 'averageNumberOfTenderersYearly';
 AvgNrBids.excelEP = 'averageNumberBidsExcelChart';
 AvgNrBids.getName = t => t('charts:avgNrBids:title');
 AvgNrBids.getFillerDatum = seed => Map(seed).set('averageNoTenderers', 0);
