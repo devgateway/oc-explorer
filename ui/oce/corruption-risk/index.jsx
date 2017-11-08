@@ -144,6 +144,7 @@ class CorruptionRiskDashboard extends React.Component {
           months={months}
           width={width}
           styling={styling}
+          navigate={navigate}
         />
       );
     } else if (page === 'contracts') {
@@ -180,6 +181,7 @@ class CorruptionRiskDashboard extends React.Component {
           indicatorTypesMapping={indicatorTypesMapping}
           styling={styling}
           width={width}
+          navigate={navigate}
         />
       );
     }
