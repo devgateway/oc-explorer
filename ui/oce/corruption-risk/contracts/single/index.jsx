@@ -245,9 +245,10 @@ export default class Contract extends CRDPage {
         />
         <section>
           <h2>
-            {contract.get('flags', List()).filter(flag => flag.get && flag.get('value')).count()}
+            <img src="assets/icons/flag.svg" alt="Flag icon" className="flag-icon"/>
             &nbsp;
-            Flags
+            {contract.get('flags', List()).filter(flag => flag.get && flag.get('value')).count()}
+            &nbsp;Flags
           </h2>
           <div className="col-md-4">
             <NrOfBidders
