@@ -251,6 +251,7 @@ export default class Contract extends CRDPage {
           </h2>
           <div className="col-md-4">
             <NrOfBidders
+              count={contract.getIn(['tender', 'tenderers'], List()).count()}
               contract={contract}
               data={nrOfBidders}
               filters={Map()}
