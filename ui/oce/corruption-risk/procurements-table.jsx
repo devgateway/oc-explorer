@@ -59,7 +59,7 @@ class Popup extends translatable(React.Component){
 
 class ProcurementsTable extends Table{
   row(entry, index){
-    const {translations} = this.props;
+    const { translations, navigate } = this.props;
     const tenderValue = entry.getIn(['tender', 'value']);
     const awardValue = entry.getIn(['awards', 0, 'value']);
     const tenderPeriod = entry.get('tenderPeriod');
@@ -77,14 +77,27 @@ class ProcurementsTable extends Table{
 
     const procuringEntityName = entry.getIn(['procuringEntity', 'name']);
     const title = entry.get('title');
+    const id = entry.get('ocid');
 
     return (
       <tr key={index}>
         <td>{entry.get('tag', []).join(', ')}</td>
-        <td>{entry.get('ocid')}</td>
+        <td>
+          <a
+            href="javascript:void(0);"
+            onClick={() => navigate('contract', id)}
+          >
+            {id}
+          </a>
+        </td>
         <td>
           <div className="oce-3-line-text" title={title}>
-            {title}
+            <a
+              href="javascript:void(0);"
+              onClick={() => navigate('contract', id)}
+            >
+              {title}
+            </a>
           </div>
         </td>
         <td>
@@ -107,7 +120,7 @@ class ProcurementsTable extends Table{
   }
 
   render(){
-    const {data} = this.props;
+    const { data } = this.props;
     return (
       <table className={`table table-striped table-hover ${this.getClassName()}`}>
         <thead>

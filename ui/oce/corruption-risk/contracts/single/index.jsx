@@ -7,6 +7,8 @@ import TopSearch from '../top-search';
 import NrOfBidders from './donuts/nr-of-bidders';
 import NrOfContractsWithThisPE from './donuts/nr-contract-with-pe';
 import PercentPESpending from './donuts/percent-pe-spending';
+import Crosstab from '../../clickable-crosstab';
+import { CORRUPTION_TYPES } from '../../constants';
 
 class Info extends translatable(Visualization) {
   constructor(...args){
@@ -16,7 +18,7 @@ class Info extends translatable(Visualization) {
 
   getCustomEP(){
     const { id } = this.props;
-    return `ocds/release/ocid/${id}`;
+    return `flaggedRelease/ocid/${id}`;
   }
 
   getSuppliers(){
@@ -30,6 +32,7 @@ class Info extends translatable(Visualization) {
 
   render() {
     const { data } = this.props;
+
     const title = data.getIn(['tender', 'title']);
     const suppliers = data.get('awards', List()).flatMap(award => award.get('suppliers'));
     const startDate = data.getIn(['tender', 'tenderPeriod', 'startDate']);
@@ -45,7 +48,7 @@ class Info extends translatable(Visualization) {
           {title && <dt>{this.t('crd:general:contract:title')}</dt>}
           {title && <dd>{title}</dd>}
         </dl>
-        <table className="table table-bordered join-bottom">
+        <table className="table table-bordered join-bottom info-table">
           <tbody>
             <tr>
               <td>
@@ -137,7 +140,9 @@ export default class Contract extends CRDPage {
   constructor(...args){
     super(...args);
     this.state = {
-      contract: Map()
+      contract: Map(),
+      crosstab: Map(),
+      indicators: {}
     }
   }
 
@@ -150,9 +155,81 @@ export default class Contract extends CRDPage {
       suppliers.slice(0, 2);
   }
 
+  groupIndicators({ indicatorTypesMapping }, { contract }) {
+    if (!indicatorTypesMapping || !Object.keys(indicatorTypesMapping).length || !contract) return;
+    const newIndicators = {};
+    contract.get('flags', List()) .forEach((flag, name) => {
+      if(flag.get && flag.get('value')) {
+        indicatorTypesMapping[name].types.forEach(type => {
+          newIndicators[type] = newIndicators[type] || [];
+          newIndicators[type].push(name);
+        })
+      }
+    });
+    this.setState({ indicators: newIndicators });
+  }
+
+  componentDidMount() {
+    super.componentDidMount();
+    this.groupIndicators(this.props, this.state);
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    const indicatorsChanged = this.props.indicatorTypesMapping != nextProps.indicatorTypesMapping;
+    const contractChanged = this.state.contract != nextState.contract;
+    if (indicatorsChanged || contractChanged) {
+      this.groupIndicators(nextProps, nextState);
+    }
+  }
+
+  maybeGetFlagAnalysis() {
+    const { filters, translations, years } = this.props;
+    const { indicators, crosstab } = this.state;
+    const noIndicators = Object.keys(indicators)
+      .every(corruptionType =>
+        !indicators[corruptionType] || !indicators[corruptionType].length);
+
+    if (noIndicators) return (
+      <section className="flag-analysis">
+        <h2>{this.t('crd:contracts:flagAnalysis')}</h2>
+        <h4>{this.t('crd:contracts:noFlags')}</h4>
+      </section>
+    );
+
+    return (
+      <section className="flag-analysis">
+        <h2>
+          {this.t('crd:contracts:flagAnalysis')}
+          &nbsp;
+          <small>({this.t('crd:contracts:clickCrosstabHint')})</small>
+        </h2>
+        {Object.keys(indicators).map(corruptionType => (
+          <div>
+            <h3>
+              {this.t(`crd:corruptionType:${corruptionType}:pageTitle`)}
+            </h3>
+            <Crosstab
+              filters={filters}
+              translations={translations}
+              years={years}
+              data={crosstab.get(corruptionType)}
+              indicators={indicators[corruptionType]}
+              requestNewData={(_, data) => {
+                  const { crosstab } = this.state;
+                  this.setState({ crosstab: crosstab.set(corruptionType, data)})
+              }}
+            />
+          </div>
+        ))}
+      </section>
+    );
+  }
+
   render() {
-    const { contract, nrOfBidders, nrContracts, percentPESpending } = this.state;
-    const { id, translations, doSearch } = this.props;
+    const { contract, nrOfBidders, nrContracts, percentPESpending, crosstab,
+      indicators } = this.state;
+
+    const { id, translations, doSearch, indicatorTypesMapping, filters, years } = this.props;
     return (
       <div className="contract-page">
         <TopSearch
@@ -167,7 +244,11 @@ export default class Contract extends CRDPage {
           translations={translations}
         />
         <section>
-          <h2>6 Flags</h2>
+          <h2>
+            {contract.get('flags', List()).filter(flag => flag.get && flag.get('value')).count()}
+            &nbsp;
+            Flags
+          </h2>
           <div className="col-md-4">
             <NrOfBidders
               contract={contract}
@@ -198,6 +279,7 @@ export default class Contract extends CRDPage {
             />
           </div>
         </section>
+        {this.maybeGetFlagAnalysis()}
       </div>
     );
   }

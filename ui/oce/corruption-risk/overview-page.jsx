@@ -152,7 +152,7 @@ class OverviewPage extends CRDPage{
 
   render(){
     const {corruptionType, topFlaggedContracts} = this.state;
-    const {filters, translations, years, monthly, months, indicatorTypesMapping, styling, width} = this.props;
+    const { filters, translations, years, monthly, months, indicatorTypesMapping, styling, width, navigate } = this.props;
     return (
       <div className="page-overview">
         <section className="chart-corruption-types">
@@ -181,6 +181,7 @@ class OverviewPage extends CRDPage{
             monthly={monthly}
             months={months}
             requestNewData={(_, topFlaggedContracts) => this.setState({topFlaggedContracts})}
+            navigate={navigate}
           />
         </section>
       </div>

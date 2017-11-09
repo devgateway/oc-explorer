@@ -21,6 +21,7 @@ import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.Publisher;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.ReleasePackage;
+import org.devgateway.ocds.persistence.mongo.repository.main.FlaggedReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.json.Views;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
@@ -50,6 +51,9 @@ public class OcdsController extends GenericOCDSController {
 
     @Autowired
     private ReleaseRepository releaseRepository;
+
+    @Autowired
+    private FlaggedReleaseRepository flaggedReleaseRepository;
 
     @ApiOperation(value = "Returns a release entity for the given project id. "
             + "The project id is read from planning.budget.projectID")
@@ -166,6 +170,17 @@ public class OcdsController extends GenericOCDSController {
         List<FlaggedRelease> find = mongoTemplate.find(query, FlaggedRelease.class);
 
         return find;
+    }
+
+    @ApiOperation(value = "Returns a release entity for the given open contracting id (OCID).")
+    @RequestMapping(value = "/api/flaggedRelease/ocid/{ocid}",
+            method = { RequestMethod.POST, RequestMethod.GET },
+            produces = "application/json")
+    @JsonView(Views.Internal.class)
+    public FlaggedRelease flaggedReleaseByOcid(@PathVariable final String ocid) {
+
+        FlaggedRelease release = flaggedReleaseRepository.findByOcid(ocid);
+        return release;
     }
 
     @ApiOperation(value = "Returns all available packages, filtered by the given criteria."

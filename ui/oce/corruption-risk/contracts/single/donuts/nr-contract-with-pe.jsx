@@ -39,7 +39,7 @@ NrOfContractsWithPE.Donut = class extends CenterTextDonut.Donut {
       .count();
     const total = data.count();
     return [{
-      values: [withThisPE, total],
+      values: [withThisPE, total - withThisPE],
       textinfo: 'value',
       textposition: 'none',
       hole: 0.8,
