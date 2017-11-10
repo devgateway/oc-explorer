@@ -31,11 +31,9 @@ NrOfBidders.Donut = class extends CenterTextDonut.Donut {
     const avg = super.getData();
     const { count } = this.props;
     if (isNaN(avg) || isNaN(count)) return [];
+
     return [{
-      values: [
-        count,
-        avg - count
-      ],
+      values: [count * avg, avg],
       textinfo: 'value',
       textposition: 'none',
       hole: 0.8,
