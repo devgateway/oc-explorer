@@ -16,17 +16,19 @@ class CenterTextDonut extends React.PureComponent {
     const { Donut } = this.constructor;
     return (
       <div className={cn(this.getClassnames())}>
-        <Donut
-          margin={{ b: 0, t: 0 }}
-          height={300}
-          {...this.props}
-        />
+        <div>
+          <Donut
+            margin={{ b: 0, t: 0, r: 0, l: 0, pad: 0 }}
+            height={300}
+            {...this.props}
+          />
+          <div className="center-text">
+            {this.getCenterText()}
+          </div>
+        </div>
         <h4 className="title">
           {this.getTitle()}
         </h4>
-        <div className="center-text">
-          {this.getCenterText()}
-        </div>
       </div>
     );
   }

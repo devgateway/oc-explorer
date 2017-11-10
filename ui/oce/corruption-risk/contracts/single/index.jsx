@@ -11,27 +11,13 @@ import Crosstab from '../../clickable-crosstab';
 import { CORRUPTION_TYPES } from '../../constants';
 
 class Info extends translatable(Visualization) {
-  constructor(...args){
-    super(...args);
-    this.state.showAllSuppliers = false;
-  }
-
   getCustomEP(){
     const { id } = this.props;
     return `flaggedRelease/ocid/${id}`;
   }
 
-  getSuppliers(){
-    const { data } = this.props;
-    const { showAllSuppliers } = this.state;
-    const suppliers = data.get('awards', List()).flatMap(award => award.get('suppliers'));
-    return showAllSuppliers ?
-      suppliers :
-      suppliers.slice(0, 2);
-  }
-
   render() {
-    const { data } = this.props;
+    const { data, supplier } = this.props;
 
     const title = data.getIn(['tender', 'title']);
     const suppliers = data.get('awards', List()).flatMap(award => award.get('suppliers'));
@@ -42,9 +28,17 @@ class Info extends translatable(Visualization) {
 
     return (
       <section>
+        <div className="row">
+          <dl className="col-md-4">
+            <dt>{this.t('crd:procurementsTable:contractID')}</dt>
+            <dd>{data.get('ocid')}</dd>
+          </dl>
+          <dl className="col-md-offset-4 col-md-4">
+            <dt>Status</dt>
+            <dd>{data.get('tag', []).join(', ')}</dd>
+          </dl>
+        </div>
         <dl>
-          <dt>{this.t('crd:procurementsTable:contractID')}</dt>
-          <dd>{data.get('ocid')}</dd>
           {title && <dt>{this.t('crd:general:contract:title')}</dt>}
           {title && <dd>{title}</dd>}
         </dl>
@@ -67,8 +61,8 @@ class Info extends translatable(Visualization) {
                 <dl>
                   <dt>{this.t('crd:contracts:baseInfo:suppliers')}</dt>
                   <dd>
-                    {suppliers.count() ?
-                      this.getSuppliers().map(supplier => <p>{supplier.get('name')}</p>) :
+                    {supplier ?
+                      supplier.get('name') :
                       this.t('general:undefined')
                     }
                   </dd>
@@ -146,15 +140,6 @@ export default class Contract extends CRDPage {
     }
   }
 
-  getSuppliers(){
-    const { data } = this.props;
-    const { showAllSuppliers } = this.state;
-    const suppliers = data.get('awards', List()).flatMap(award => award.get('suppliers'));
-    return showAllSuppliers ?
-      suppliers :
-      suppliers.slice(0, 2);
-  }
-
   groupIndicators({ indicatorTypesMapping }, { contract }) {
     if (!indicatorTypesMapping || !Object.keys(indicatorTypesMapping).length || !contract) return;
     const newIndicators = {};
@@ -229,7 +214,20 @@ export default class Contract extends CRDPage {
     const { contract, nrOfBidders, nrContracts, percentPESpending, crosstab,
       indicators } = this.state;
 
-    const { id, translations, doSearch, indicatorTypesMapping, filters, years } = this.props;
+    const { id, translations, doSearch, indicatorTypesMapping, filters, years,
+      width } = this.props;
+
+    if (!contract) return null;
+
+    const supplier = contract.get('awards', List())
+      .find(award => award.get('status') === 'active', undefined, Map())
+      .getIn(['suppliers', 0]);
+
+    const procuringEntityId = contract.getIn(['tender', 'procuringEntity', 'id']) ||
+      contract.getIn(['tender', 'procuringEntity', 'identifier', 'id']);
+
+    const donutSize = width / 3 - 30; 
+
     return (
       <div className="contract-page">
         <TopSearch
@@ -239,44 +237,54 @@ export default class Contract extends CRDPage {
         <Info
           id={id}
           data={contract}
-          filters={Map()}
+          supplier={supplier}
+          filters={filters}
           requestNewData={(_, contract) => this.setState({contract})}
           translations={translations}
         />
         <section>
           <h2>
-            {contract.get('flags', List()).filter(flag => flag.get && flag.get('value')).count()}
+            <img src="assets/icons/flag.svg" alt="Flag icon" className="flag-icon"/>
             &nbsp;
-            Flags
+            {contract.get('flags', List()).filter(flag => flag.get && flag.get('value')).count()}
+            &nbsp;Flags
           </h2>
-          <div className="col-md-4">
+          <div className="col-sm-4">
             <NrOfBidders
+              count={contract.getIn(['tender', 'tenderers'], List()).count()}
               contract={contract}
               data={nrOfBidders}
-              filters={Map()}
-              years={Map()}
+              filters={filters}
+              years={years}
               requestNewData={(_, nrOfBidders) => this.setState({ nrOfBidders })}
               translations={translations}
+              width={donutSize}
             />
           </div>
-          <div className="col-md-4">
+          <div className="col-sm-4">
             <NrOfContractsWithThisPE
-              contract={contract}
+              procuringEntityId={procuringEntityId}
               data={nrContracts}
-              filters={Map()}
-              years={Map()}
+              filters={filters}
+              years={years}
               requestNewData={(_, nrContracts) => this.setState({ nrContracts })}
               translations={translations}
+              width={donutSize}
             />
           </div>
-          <div className="col-md-4">
-            <PercentPESpending
-              data={percentPESpending}
-              filters={Map()}
-              years={Map()}
-              requestNewData={(_, percentPESpending) => this.setState({ percentPESpending })}
-              translations={translations}
-            />
+          <div className="col-sm-4">
+            {procuringEntityId && supplier &&
+              <PercentPESpending
+                data={percentPESpending}
+                filters={filters}
+                procuringEntityId={procuringEntityId}
+                supplierId={supplier.get('id')}
+                years={years}
+                requestNewData={(_, percentPESpending) => this.setState({ percentPESpending })}
+                translations={translations}
+                width={donutSize}
+              />
+            }
           </div>
         </section>
         {this.maybeGetFlagAnalysis()}

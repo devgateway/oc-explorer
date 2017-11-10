@@ -1,21 +1,18 @@
 import { List } from 'immutable';
 import CenterTextDonut from './index.jsx';
 
-const AVG_MOCK = 10;
-
 class NrOfBidders extends CenterTextDonut {
   getClassnames() {
     return super.getClassnames().concat('nr-of-bidders');
   }
 
   getCenterText() {
-    const { contract } = this.props;
-    if (!contract) return '';
-    const count = contract.getIn(['tender', 'tenderers'], List()).count();
+    const { count, data: avg } = this.props;
+    if (isNaN(avg) || isNaN(count)) return '';
     return (
       <div>
         {count}
-        <span className="secondary">/{AVG_MOCK}</span>
+        <span className="secondary">/{avg.toFixed(2)}</span>
       </div>
     );
   }
@@ -26,13 +23,21 @@ class NrOfBidders extends CenterTextDonut {
 }
 
 NrOfBidders.Donut = class extends CenterTextDonut.Donut {
+  transform(data) {
+    try {
+      return data[0].averageNoTenderers;
+    } catch(_) {
+      return 0;
+    }
+  }
+
   getData() {
-    const data = super.getData();
-    const { contract } = this.props;
-    if (!data || !data.count() || !contract) return [];
-    const count = contract.getIn(['tender', 'tenderers'], List()).count();
+    const avg = super.getData();
+    const { count } = this.props;
+    if (isNaN(avg) || isNaN(count)) return [];
+
     return [{
-      values: [count, AVG_MOCK - count],
+      values: [count * avg, avg],
       textinfo: 'value',
       textposition: 'none',
       hole: 0.8,
@@ -51,6 +56,7 @@ NrOfBidders.Donut = class extends CenterTextDonut.Donut {
   }
 }
 
-NrOfBidders.Donut.endpoint = 'totalFlags';
+NrOfBidders.Donut.endpoint = 'averageNumberOfTenderers';
+NrOfBidders.Donut.UPDATABLE_FIELDS = CenterTextDonut.Donut.UPDATABLE_FIELDS.concat('count');
 
 export default NrOfBidders;
