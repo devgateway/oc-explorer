@@ -40,9 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
 /**
- *
  * @author mpostelnicu
- *
  */
 @RestController
 public class OcdsController extends GenericOCDSController {
@@ -58,7 +56,7 @@ public class OcdsController extends GenericOCDSController {
     @ApiOperation(value = "Returns a release entity for the given project id. "
             + "The project id is read from planning.budget.projectID")
     @RequestMapping(value = "/api/ocds/release/budgetProjectId/{projectId:^[a-zA-Z0-9]*$}",
-            method = { RequestMethod.POST, RequestMethod.GET },
+            method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
     @JsonView(Views.Public.class)
     public Release ocdsByProjectId(@PathVariable final String projectId) {
@@ -69,7 +67,7 @@ public class OcdsController extends GenericOCDSController {
 
     @ApiOperation(value = "Returns a release entity for the given open contracting id (OCID).")
     @RequestMapping(value = "/api/ocds/release/ocid/{ocid}",
-            method = { RequestMethod.POST, RequestMethod.GET },
+            method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
     @JsonView(Views.Public.class)
     public Release ocdsByOcid(@PathVariable final String ocid) {
@@ -80,7 +78,7 @@ public class OcdsController extends GenericOCDSController {
 
     @ApiOperation(value = "Returns a release package for the given open contracting id (OCID)."
             + "This will contain the OCDS package information (metadata about publisher) plus the release itself.")
-    @RequestMapping(value = "/api/ocds/package/ocid/{ocid}", method = { RequestMethod.POST, RequestMethod.GET },
+    @RequestMapping(value = "/api/ocds/package/ocid/{ocid}", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
     @JsonView(Views.Public.class)
     public ReleasePackage ocdsPackageByOcid(@PathVariable final String ocid) {
@@ -110,7 +108,7 @@ public class OcdsController extends GenericOCDSController {
             + "The project id is read from planning.budget.projectID."
             + "This will contain the OCDS package information (metadata about publisher) plus the release itself.")
     @RequestMapping(value = "/api/ocds/package/budgetProjectId/{projectId:^[a-zA-Z0-9]*$}",
-            method = { RequestMethod.POST, RequestMethod.GET },
+            method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
     @JsonView(Views.Public.class)
     public ReleasePackage packagedReleaseByProjectId(@PathVariable final String projectId) {
@@ -147,6 +145,33 @@ public class OcdsController extends GenericOCDSController {
 
 
     /**
+     * Returns a list of OCDS Releases, order by Id, using pagination
+     *
+     * @return the release data
+     */
+    @ApiOperation(value = "Counts releases, filter by given criteria")
+    @RequestMapping(value = "/api/ocds/release/count", method = {RequestMethod.POST, RequestMethod.GET},
+            produces = "application/json")
+    @JsonView(Views.Public.class)
+    public Long ocdsReleasesCount(@ModelAttribute @Valid final YearFilterPagingRequest releaseRequest) {
+
+        Pageable pageRequest = new PageRequest(releaseRequest.getPageNumber(), releaseRequest.getPageSize(),
+                Direction.ASC, "id");
+
+        Query query = query(getDefaultFilterCriteria(releaseRequest)).with(pageRequest);
+
+        if (StringUtils.isNotEmpty(releaseRequest.getText())) {
+            query.addCriteria(getTextCriteria(releaseRequest));
+        }
+
+        Long count = mongoTemplate.count(query, Release.class);
+
+        return count;
+
+    }
+
+
+    /**
      * Returns a list of OCDS FlaggedReleases, order by Id, using pagination
      *
      * @return the release data
@@ -155,8 +180,8 @@ public class OcdsController extends GenericOCDSController {
     @RequestMapping(value = "/api/flaggedRelease/all", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
     @JsonView(Views.Internal.class)
-    public List<FlaggedRelease> flaggedOcdsReleases(@ModelAttribute @Valid
-                                                        final YearFilterPagingRequest releaseRequest) {
+    public List<FlaggedRelease> flaggedOcdsReleases(
+            @ModelAttribute @Valid final YearFilterPagingRequest releaseRequest) {
 
         Pageable pageRequest = new PageRequest(releaseRequest.getPageNumber(), releaseRequest.getPageSize(),
                 Direction.ASC, "id");
@@ -174,7 +199,7 @@ public class OcdsController extends GenericOCDSController {
 
     @ApiOperation(value = "Returns a release entity for the given open contracting id (OCID).")
     @RequestMapping(value = "/api/flaggedRelease/ocid/{ocid}",
-            method = { RequestMethod.POST, RequestMethod.GET },
+            method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
     @JsonView(Views.Internal.class)
     public FlaggedRelease flaggedReleaseByOcid(@PathVariable final String ocid) {
@@ -185,7 +210,7 @@ public class OcdsController extends GenericOCDSController {
 
     @ApiOperation(value = "Returns all available packages, filtered by the given criteria."
             + "This will contain the OCDS package information (metadata about publisher) plus the release itself.")
-    @RequestMapping(value = "/api/ocds/package/all", method = { RequestMethod.POST, RequestMethod.GET },
+    @RequestMapping(value = "/api/ocds/package/all", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
     @JsonView(Views.Public.class)
     public List<ReleasePackage> ocdsPackages(@ModelAttribute @Valid final YearFilterPagingRequest releaseRequest) {
