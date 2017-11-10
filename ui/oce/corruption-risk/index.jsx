@@ -168,6 +168,7 @@ class CorruptionRiskDashboard extends React.Component {
           indicatorTypesMapping={indicatorTypesMapping}
           filters={filters}
           years={years}
+          width={width}
         />
       )
     } else {
