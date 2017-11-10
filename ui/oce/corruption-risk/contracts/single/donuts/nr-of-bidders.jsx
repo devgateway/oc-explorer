@@ -24,7 +24,11 @@ class NrOfBidders extends CenterTextDonut {
 
 NrOfBidders.Donut = class extends CenterTextDonut.Donut {
   transform(data) {
-    return data[0].averageNoTenderers;
+    try {
+      return data[0].averageNoTenderers;
+    } catch(_) {
+      return 0;
+    }
   }
 
   getData() {
