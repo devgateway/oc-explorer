@@ -263,7 +263,7 @@ export default class Contract extends CRDPage {
           </div>
           <div className="col-md-4">
             <NrOfContractsWithThisPE
-              contract={contract}
+              procuringEntityId={contract.getIn(['tender', 'procuringEntity', 'identifier', 'id'])}
               data={nrContracts}
               filters={Map()}
               years={Map()}

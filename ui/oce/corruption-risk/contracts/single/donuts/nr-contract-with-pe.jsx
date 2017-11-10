@@ -6,18 +6,13 @@ class NrOfContractsWithPE extends CenterTextDonut {
   }
 
   getCenterText() {
-    const { contract, data } = this.props;
-    if (!contract || !data) return '';
-    const peID = contract.getIn(['tender', 'procuringEntity', 'id']);
-    const withThisPE = data.filter(c =>
-      c.getIn(['tender', 'procuringEntity', 'id']) === peID)
-      .count();
-    const total = data.count();
+    const { data } = this.props;
+    if (!data) return null;
     return (
       <div>
-        {withThisPE}
+        {data.get('thisPE')}
         <div className="secondary">
-          of {total}
+          of {data.get('total')}
         </div>
       </div>
     );
@@ -29,17 +24,36 @@ class NrOfContractsWithPE extends CenterTextDonut {
 }
 
 NrOfContractsWithPE.Donut = class extends CenterTextDonut.Donut {
+  getCustomEP() {
+    const eps = ['ocds/release/count'];
+    const { procuringEntityId } = this.props;
+    if (procuringEntityId) {
+      eps.push(`ocds/release/count/?procuringEntityId=${procuringEntityId}`)
+    }
+    return eps;
+  }
+
+  transform([total, thisPE]){
+    return {
+      thisPE,
+      total
+    }
+  }
+
+  componentDidUpdate(prevProps, ...rest) {
+    if (this.props.procuringEntityId != prevProps.procuringEntityId) {
+      this.fetch();
+    } else {
+      super.componentDidUpdate(prevProps, ...rest);
+    }
+  }
+
   getData() {
     const { contract } = this.props;
     const data = super.getData();
-    if (!data || !data.count() || !contract) return [];
-    const peID = contract.getIn(['tender', 'procuringEntity', 'id']);
-    const withThisPE = data.filter(c =>
-      c.getIn(['tender', 'procuringEntity', 'id']) === peID)
-      .count();
-    const total = data.count();
+    if (!data) return [];
     return [{
-      values: [withThisPE, total - withThisPE],
+      values: [data.get('thisPE'), data.get('total')],
       textinfo: 'value',
       textposition: 'none',
       hole: 0.8,
@@ -57,7 +71,5 @@ NrOfContractsWithPE.Donut = class extends CenterTextDonut.Donut {
     };
   }
 };
-
-NrOfContractsWithPE.Donut.endpoint = 'ocds/release/all';
 
 export default NrOfContractsWithPE;
