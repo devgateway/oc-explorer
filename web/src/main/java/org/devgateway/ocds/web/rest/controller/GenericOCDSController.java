@@ -165,6 +165,11 @@ public abstract class GenericOCDSController {
         return createFilterCriteria("flags.flaggedStats.type", filter.getFlagType(), filter);
     }
 
+    protected Criteria getAwardStatusFilterCriteria(final DefaultFilterPagingRequest filter) {
+        return createFilterCriteria("awards.status", filter.getAwardStatus(), filter);
+    }
+
+
     /**
      * Adds monthly projection operation, when needed, if the
      * {@link YearFilterPagingRequest#getMonthly()}
@@ -478,7 +483,8 @@ public abstract class GenericOCDSController {
                 getByAwardAmountIntervalCriteria(filter),
                 getFlaggedCriteria(filter),
                 getFlagTypeFilterCriteria(filter),
-                getElectronicSubmissionCriteria(filter));
+                getElectronicSubmissionCriteria(filter),
+                getAwardStatusFilterCriteria(filter));
     }
 
     protected Criteria getYearDefaultFilterCriteria(final YearFilterPagingRequest filter, final String dateProperty) {
@@ -495,7 +501,8 @@ public abstract class GenericOCDSController {
                 getElectronicSubmissionCriteria(filter),
                 getFlaggedCriteria(filter),
                 getFlagTypeFilterCriteria(filter),
-                getYearFilterCriteria(filter, dateProperty));
+                getYearFilterCriteria(filter, dateProperty),
+                getAwardStatusFilterCriteria(filter));
     }
 
     protected MatchOperation getMatchDefaultFilterOperation(final DefaultFilterPagingRequest filter) {

@@ -17,6 +17,10 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
     @ApiModelProperty(value = "Full text search of of release entities")
     private String text;
 
+    @ApiModelProperty(value = "Filter by award.status, possible values are available from the OCDS standard page"
+            + "http://standard.open-contracting.org/latest/en/schema/codelists/#award-status")
+    private TreeSet<String> awardStatus;
+
     @EachPattern(regexp = "^[a-zA-Z0-9]*$")
     @ApiModelProperty(value = "This corresponds to the tender.items.classification._id")
     private TreeSet<String> bidTypeId;
@@ -198,5 +202,14 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
     public void setFlagged(Boolean flagged) {
         this.flagged = flagged;
+    }
+
+
+    public TreeSet<String> getAwardStatus() {
+        return awardStatus;
+    }
+
+    public void setAwardStatus(TreeSet<String> awardStatus) {
+        this.awardStatus = awardStatus;
     }
 }
