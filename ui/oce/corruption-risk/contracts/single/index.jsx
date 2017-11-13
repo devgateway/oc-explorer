@@ -38,10 +38,12 @@ class Info extends translatable(Visualization) {
             <dd>{data.get('tag', []).join(', ')}</dd>
           </dl>
         </div>
-        <dl>
-          {title && <dt>{this.t('crd:general:contract:title')}</dt>}
-          {title && <dd>{title}</dd>}
-        </dl>
+        {title &&
+          <dl>
+            {title && <dt>{this.t('crd:general:contract:title')}</dt>}
+            {title && <dd>{title}</dd>}
+          </dl>
+        }
         <table className="table table-bordered join-bottom info-table">
           <tbody>
             <tr>
