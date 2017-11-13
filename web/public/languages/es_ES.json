@@ -294,6 +294,6 @@
   "crd:contracts:menu:procuringEntities": "Procuring entities",
   "crd:contracts:flagAnalysis": "Flag analysis",
   "crd:contracts:noFlags": "This procurement has no flags",
-  "crd:contracts:clickCrosstabHint": "Click a cell on the charts below to release detailed information"
-
+  "crd:contracts:clickCrosstabHint": "Click a cell on the charts below to release detailed information",
+  "crd:sidebar:totalContracts:title": "Total Procurements"
 }
