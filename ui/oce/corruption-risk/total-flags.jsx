@@ -52,11 +52,11 @@ class Counter extends backendYearFilterable(Visualization) {
     if(!data) return null;
     return (
       <div className="counter">
-        <div className="text text-left">
-          {this.getTitle()}
-        </div>
         <div className="count text-right">
           {this.getCount()}
+        </div>
+        <div className="text text-left">
+          {this.getTitle()}
         </div>
       </div>
     );

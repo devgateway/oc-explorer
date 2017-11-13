@@ -174,8 +174,8 @@
   aside{
     @leftPadding: 30px;
     bottom:0;
-    background: #fafafa;
-    border-right: 1px solid #e6eaee;
+    background: transparent;
+    border-right: none;
     height: 100%;
     padding-left: @leftPadding;
     padding-top: 10px;
@@ -194,17 +194,27 @@
       margin-left: -30px;
       position: absolute;
       width: 100%;
-      height: 100%;
+      margin-top: 15px;
+      padding-bottom: 15px;
       @infoWidth: 250px;
+      border-radius: 5px;
+      border: 1px solid #e7ebef;
+      border-left-style: none;
       .counter{
-        margin: 20px;
+        padding: 10px 20px 15px 20px;
+        &:first-child {
+          border-bottom: 1px solid #e7ebef;
+        }
         .text{
-          float: left;
           font-size: 1.3em;
-          padding-top: (2em - 1.5em) / 2;
+          padding-top: .5em;
         }
         .count{
-          font-size: 1.5em;
+          float: right;
+          font-size: 2em;
+          font-weight: bold;
+          color: #2b9ff6;
+          border-bottom: 1px dotted #2b9ff6;
         }
       }
       .crd-legend{
@@ -246,9 +256,12 @@
     [role=navigation]{
       margin-left: -@leftPadding;
       margin-top: -1px;
+      border-right: 1px solid #e7ebef;
+      border-bottom-right-radius: 5px;
       a{
         border-bottom: 1px solid #e6eaee;
         color: #000000;
+        background: #fafafa;
         cursor: pointer;
         display: block;
         font-size: 0.9em;
