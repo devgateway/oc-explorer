@@ -214,7 +214,7 @@ export default class Contract extends CRDPage {
 
   render() {
     const { contract, nrOfBidders, nrContracts, percentPESpending, crosstab,
-      indicators } = this.state;
+      indicators, months, monthly } = this.state;
 
     const { id, translations, doSearch, indicatorTypesMapping, filters, years,
       width } = this.props;
@@ -258,21 +258,28 @@ export default class Contract extends CRDPage {
               data={nrOfBidders}
               filters={filters}
               years={years}
+              monthly={monthly}
+              months={months}
               requestNewData={(_, nrOfBidders) => this.setState({ nrOfBidders })}
               translations={translations}
               width={donutSize}
             />
           </div>
           <div className="col-sm-4">
-            <NrOfContractsWithThisPE
-              procuringEntityId={procuringEntityId}
-              data={nrContracts}
-              filters={filters}
-              years={years}
-              requestNewData={(_, nrContracts) => this.setState({ nrContracts })}
-              translations={translations}
-              width={donutSize}
-            />
+            {procuringEntityId && supplier &&
+              <NrOfContractsWithThisPE
+                procuringEntityId={procuringEntityId}
+                supplierId={supplier.get('id')}
+                data={nrContracts}
+                filters={filters}
+                years={years}
+                monthly={monthly}
+                months={months}
+                requestNewData={(_, nrContracts) => this.setState({ nrContracts })}
+                translations={translations}
+                width={donutSize}
+              />
+            }
           </div>
           <div className="col-sm-4">
             {procuringEntityId && supplier &&
@@ -282,6 +289,8 @@ export default class Contract extends CRDPage {
                 procuringEntityId={procuringEntityId}
                 supplierId={supplier.get('id')}
                 years={years}
+                monthly={monthly}
+                months={months}
                 requestNewData={(_, percentPESpending) => this.setState({ percentPESpending })}
                 translations={translations}
                 width={donutSize}

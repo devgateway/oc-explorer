@@ -33,6 +33,16 @@ PercentPESpending.Donut = class extends CenterTextDonut.Donut {
     }
   }
 
+  componentDidUpdate(prevProps, ...rest) {
+    const peChanged = this.props.procuringEntityId != prevProps.procuringEntityId;
+    const supplierChanged = this.props.supplierId != prevProps.supplierId;
+    if (peChanged || supplierChanged) {
+      this.fetch();
+    } else {
+      super.componentDidUpdate(prevProps, ...rest);
+    }
+  }
+
   getData() {
     const data = super.getData();
     if (!data || !data.count()) return [];
