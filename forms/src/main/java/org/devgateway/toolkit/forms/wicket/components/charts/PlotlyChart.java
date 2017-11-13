@@ -13,10 +13,12 @@ import java.util.List;
 /**
  * @author idobre
  * @since 4/19/17
+ *
+ * Component that renders a chart using Plot.ly JS library.
  */
 public final class PlotlyChart extends Panel {
     private static final String JS_FILE = "plotlyChart.js";
-    private static final String INIT_FUNCTION = "init";
+    private static final String INIT_FUNCTION = "initChart";
 
     public static final String CHART_TYPE_PIE = "pie";
     public static final String CHART_TYPE_BAR = "bar";
@@ -36,6 +38,9 @@ public final class PlotlyChart extends Panel {
     public static final String FILL_TONEXTY = "tonexty";
 
     public static final String AXIS_TYPE_CATEGORY = "category";
+
+    public static final String LEGEND_ORIENTATION_H = "h";
+    public static final String LEGEND_ORIENTATION_V = "v";
 
     private final WebMarkupContainer chart;
 
