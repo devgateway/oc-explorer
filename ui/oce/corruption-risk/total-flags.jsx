@@ -46,24 +46,47 @@ class TotalFlagsChart extends backendYearFilterable(Chart){
 
 TotalFlagsChart.endpoint = 'totalFlaggedIndicatorsByIndicatorType';
 
-class Counter extends backendYearFilterable(Visualization) {};
-
-class FlagsCounter extends Counter {
-  render(){
+class Counter extends backendYearFilterable(Visualization) {
+  render() {
     const {data} = this.props;
     if(!data) return null;
     return (
-      <div className="total-flags-counter">
-        <div className="text text-left">{this.t('crd:charts:totalFlags:title')}</div>
+      <div className="counter">
+        <div className="text text-left">
+          {this.getTitle()}
+        </div>
         <div className="count text-right">
-          {data.getIn([0, 'flaggedCount'], 0)}
+          {this.getCount()}
         </div>
       </div>
-    )
+    );
+  }
+};
+
+class FlagsCounter extends Counter {
+  getTitle() {
+    return this.t('crd:charts:totalFlags:title');
+  }
+
+  getCount() {
+    const { data } = this.props;
+    return data.getIn([0, 'flaggedCount'], 0);
   }
 }
 
 FlagsCounter.endpoint = 'totalFlags';
+
+class ContractCounter extends Counter {
+  getTitle() {
+    return this.t('crd:sidebar:totalContracts:title');
+  }
+
+  getCount() {
+    return this.props.data;
+  }
+}
+
+ContractCounter.endpoint = 'ocds/release/count';
 
 class TotalFlags extends translatable(React.Component){
   constructor(...args){
@@ -93,9 +116,18 @@ class TotalFlags extends translatable(React.Component){
     if(!width) return null;
     return (
       <div className="total-flags">
+        <ContractCounter
+          data={data.get('contractCounter')}
+          requestNewData={(_, data) => requestNewData(['contractCounter'], data)}
+          translations={translations}
+          filters={filters}
+          years={years}
+          months={months}
+          monthly={monthly}
+        />
         <FlagsCounter
-          data={data.get('counter')}
-          requestNewData={(_, data) => requestNewData(['counter'], data)}
+          data={data.get('flagsCounter')}
+          requestNewData={(_, data) => requestNewData(['flagsCounter'], data)}
           translations={translations}
           filters={filters}
           years={years}
