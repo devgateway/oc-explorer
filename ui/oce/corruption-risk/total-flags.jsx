@@ -46,7 +46,9 @@ class TotalFlagsChart extends backendYearFilterable(Chart){
 
 TotalFlagsChart.endpoint = 'totalFlaggedIndicatorsByIndicatorType';
 
-class Counter extends backendYearFilterable(Visualization){
+class Counter extends backendYearFilterable(Visualization) {};
+
+class FlagsCounter extends Counter {
   render(){
     const {data} = this.props;
     if(!data) return null;
@@ -61,7 +63,7 @@ class Counter extends backendYearFilterable(Visualization){
   }
 }
 
-Counter.endpoint = 'totalFlags';
+FlagsCounter.endpoint = 'totalFlags';
 
 class TotalFlags extends translatable(React.Component){
   constructor(...args){
@@ -91,7 +93,7 @@ class TotalFlags extends translatable(React.Component){
     if(!width) return null;
     return (
       <div className="total-flags">
-        <Counter
+        <FlagsCounter
           data={data.get('counter')}
           requestNewData={(_, data) => requestNewData(['counter'], data)}
           translations={translations}
