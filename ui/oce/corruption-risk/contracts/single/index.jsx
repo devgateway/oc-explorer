@@ -226,7 +226,7 @@ export default class Contract extends CRDPage {
     const procuringEntityId = contract.getIn(['tender', 'procuringEntity', 'id']) ||
       contract.getIn(['tender', 'procuringEntity', 'identifier', 'id']);
 
-    const donutSize = width / 3 - 30; 
+    const donutSize = width / 3 - 100; 
 
     return (
       <div className="contract-page">
