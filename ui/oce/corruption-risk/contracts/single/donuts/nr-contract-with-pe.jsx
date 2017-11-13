@@ -25,12 +25,13 @@ class NrOfContractsWithPE extends CenterTextDonut {
 
 NrOfContractsWithPE.Donut = class extends CenterTextDonut.Donut {
   getCustomEP() {
-    const eps = ['ocds/release/count'];
-    const { procuringEntityId } = this.props;
-    if (procuringEntityId) {
-      eps.push(`ocds/release/count/?procuringEntityId=${procuringEntityId}`)
-    }
-    return eps;
+    const { procuringEntityId, supplierId } = this.props;
+    if (!procuringEntityId || !supplierId) return [];
+    return [
+      `ocds/release/count/?procuringEntityId=${procuringEntityId}`,
+      `ocds/release/count/?procuringEntityId=${procuringEntityId}` +
+        `&supplierId=${supplierId}&awardStatus=active`
+    ];
   }
 
   transform([total, thisPE]){
@@ -41,7 +42,9 @@ NrOfContractsWithPE.Donut = class extends CenterTextDonut.Donut {
   }
 
   componentDidUpdate(prevProps, ...rest) {
-    if (this.props.procuringEntityId != prevProps.procuringEntityId) {
+    const peChanged = this.props.procuringEntityId != prevProps.procuringEntityId;
+    const supplierChanged = this.props.supplierId != prevProps.supplierId;
+    if (peChanged || supplierChanged) {
       this.fetch();
     } else {
       super.componentDidUpdate(prevProps, ...rest);
