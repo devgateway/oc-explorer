@@ -25,11 +25,19 @@ PercentPESpending.Donut = class extends CenterTextDonut.Donut {
   }
 
   transform(data){
-    const { percentage, totalAwarded, totalAwardedToSuppliers } = data[0];
-    return {
-      percentage,
-      total: totalAwarded.sum,
-      toSuppliers: totalAwardedToSuppliers.sum
+    try {
+      const { percentage, totalAwarded, totalAwardedToSuppliers } = data[0];
+      return {
+        percentage,
+        total: totalAwarded.sum,
+        toSuppliers: totalAwardedToSuppliers.sum
+      }
+    } catch(e) {
+      return {
+        percentage: 0,
+        total: 0,
+        toSuppliers: 0
+      }
     }
   }
 
