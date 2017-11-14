@@ -21,6 +21,7 @@ import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.Publisher;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.ReleasePackage;
+import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.persistence.mongo.repository.main.FlaggedReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.json.Views;
@@ -131,7 +132,8 @@ public class OcdsController extends GenericOCDSController {
         Pageable pageRequest = new PageRequest(releaseRequest.getPageNumber(), releaseRequest.getPageSize(),
                 Direction.ASC, "id");
 
-        Query query = query(getDefaultFilterCriteria(releaseRequest)).with(pageRequest);
+        Query query = query(getYearFilterCriteria(releaseRequest, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))
+                .with(pageRequest);
 
         if (StringUtils.isNotEmpty(releaseRequest.getText())) {
             query.addCriteria(getTextCriteria(releaseRequest));
@@ -158,7 +160,8 @@ public class OcdsController extends GenericOCDSController {
         Pageable pageRequest = new PageRequest(releaseRequest.getPageNumber(), releaseRequest.getPageSize(),
                 Direction.ASC, "id");
 
-        Query query = query(getDefaultFilterCriteria(releaseRequest)).with(pageRequest);
+        Query query = query(getYearDefaultFilterCriteria(releaseRequest,
+                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE)).with(pageRequest);
 
         if (StringUtils.isNotEmpty(releaseRequest.getText())) {
             query.addCriteria(getTextCriteria(releaseRequest));
@@ -186,7 +189,8 @@ public class OcdsController extends GenericOCDSController {
         Pageable pageRequest = new PageRequest(releaseRequest.getPageNumber(), releaseRequest.getPageSize(),
                 Direction.ASC, "id");
 
-        Query query = query(getDefaultFilterCriteria(releaseRequest)).with(pageRequest);
+        Query query = query(getYearDefaultFilterCriteria(releaseRequest,
+                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE)).with(pageRequest);
 
         if (StringUtils.isNotEmpty(releaseRequest.getText())) {
             query.addCriteria(getTextCriteria(releaseRequest));

@@ -16,12 +16,14 @@ import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import javax.validation.Valid;
+import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,13 +50,33 @@ public class PercentageAmountAwardedController extends GenericOCDSController {
 
     }
 
-    @ApiOperation("")
+    @Override
+    protected Criteria getYearDefaultFilterCriteria(final YearFilterPagingRequest filter, final String dateProperty) {
+        return new Criteria().andOperator(
+                getBidTypeIdFilterCriteria(filter),
+                getNotBidTypeIdFilterCriteria(filter),
+                getNotProcuringEntityIdCriteria(filter),
+                getProcurementMethodCriteria(filter),
+                getByTenderDeliveryLocationIdentifier(filter),
+                getByTenderAmountIntervalCriteria(filter),
+                getByAwardAmountIntervalCriteria(filter),
+                getElectronicSubmissionCriteria(filter),
+                getFlaggedCriteria(filter),
+                getFlagTypeFilterCriteria(filter),
+                getYearFilterCriteria(filter, dateProperty),
+                getAwardStatusFilterCriteria(filter));
+    }
+
+    @ApiOperation("Calculate percentage of awards awarded to a list of suppliers vs total awards. Filters by all"
+            + " filters. Careful using supplierId filter here!"
+            + " It has a different signification than for other endpoints.")
     @RequestMapping(value = "/api/percentageAmountAwarded",
             method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
     public List<DBObject> percentTendersCancelled(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
         Assert.notEmpty(filter.getProcuringEntityId(), "Must provide at least one procuringEntity!");
         Assert.notEmpty(filter.getSupplierId(), "Must provide at least one supplierId!");
         Aggregation agg = newAggregation(
+                getMatchYearDefaultFilterOperation(filter, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE),
                 match(where("tender.procuringEntity").exists(true).and("awards.suppliers.0").exists(true)
                         .andOperator(getProcuringEntityIdCriteria(filter))),
                 unwind("awards"),
