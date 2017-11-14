@@ -83,7 +83,7 @@ public abstract class GenericOCDSController {
      * @return
      */
     protected DBObject getPercentageMongoOp(String expression1, String expression2) {
-      return new BasicDBObject("$cond",
+        return new BasicDBObject("$cond",
                 Arrays.asList(new BasicDBObject("$eq", Arrays.asList(ref(expression2),
                         0)), new BasicDBObject("$literal", 0),
                         new BasicDBObject("$multiply",
@@ -159,7 +159,6 @@ public abstract class GenericOCDSController {
 
     /**
      * Appends flags.flaggedStats.type filter
-     *
      */
     protected Criteria getFlagTypeFilterCriteria(final DefaultFilterPagingRequest filter) {
         return createFilterCriteria("flags.flaggedStats.type", filter.getFlagType(), filter);
@@ -296,7 +295,7 @@ public abstract class GenericOCDSController {
      * @param filter
      * @return
      */
-    private Criteria getByTenderAmountIntervalCriteria(final DefaultFilterPagingRequest filter) {
+    protected Criteria getByTenderAmountIntervalCriteria(final DefaultFilterPagingRequest filter) {
         if (filter.getMaxTenderValue() == null && filter.getMinTenderValue() == null) {
             return new Criteria();
         }
@@ -319,7 +318,7 @@ public abstract class GenericOCDSController {
      * @param filter
      * @return
      */
-    private Criteria getByAwardAmountIntervalCriteria(final DefaultFilterPagingRequest filter) {
+    protected Criteria getByAwardAmountIntervalCriteria(final DefaultFilterPagingRequest filter) {
         if (filter.getMaxAwardValue() == null && filter.getMinAwardValue() == null) {
             return new Criteria();
         }
@@ -507,6 +506,12 @@ public abstract class GenericOCDSController {
 
     protected MatchOperation getMatchDefaultFilterOperation(final DefaultFilterPagingRequest filter) {
         return match(getDefaultFilterCriteria(filter));
+    }
+
+
+    protected MatchOperation getMatchYearDefaultFilterOperation(final YearFilterPagingRequest filter,
+                                                                final String dateProperty) {
+        return match(getYearDefaultFilterCriteria(filter, dateProperty));
     }
 
     /**
