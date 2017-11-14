@@ -56,9 +56,13 @@ NrOfContractsWithPE.Donut = class extends CenterTextDonut.Donut {
     const data = super.getData();
     if (!data) return [];
     return [{
+      labels: ['Won by this supplier', 'Contracts with this PE'],
       values: [data.get('thisPE'), data.get('total')],
-      textinfo: 'value',
-      textposition: 'none',
+      hoverlabel: {
+        bgcolor: '#144361'
+      },
+      hoverinfo: 'label',
+      textinfo: 'none',
       hole: 0.8,
       type: 'pie',
       marker: {
