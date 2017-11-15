@@ -1,15 +1,15 @@
-import cn from "classnames";
-import Table from "../visualizations/tables";
-import translatable from "../translatable";
-import ReactDOM from "react-dom";
-import {POPUP_HEIGHT} from './constants';
+import ReactDOM from 'react-dom';
+import Table from '../visualizations/tables';
+import translatable from '../translatable';
+import { POPUP_HEIGHT } from './constants';
 
+// eslint-disable-next-line no-undef
 class Popup extends translatable(React.Component){
-  constructor(...args){
+  constructor(...args) {
     super(...args);
     this.state = {
-      showPopup: false
-    }
+      showPopup: false,
+    };
   }
 
   getPopup(){
@@ -22,18 +22,18 @@ class Popup extends translatable(React.Component){
             <h5>{this.t('crd:procurementsTable:associatedFlags').replace('$#$', this.t(`crd:corruptionType:${type}:name`))}</h5>
           </div>
           <div className="col-sm-12">
-            <hr/>
+            <hr />
           </div>
           <div className="col-sm-12 info">
             {flagIds.map(flagId => <p key={flagId}>{this.t(`crd:indicators:${flagId}:name`)}</p>)}
           </div>
         </div>
-        <div className="arrow"/>
+        <div className="arrow" />
       </div>
-    )
+    );
   }
 
-  showPopup(){
+  showPopup() {
     const el = ReactDOM.findDOMNode(this);
     this.setState({
       showPopup: true,
@@ -48,7 +48,7 @@ class Popup extends translatable(React.Component){
       <td
         className="hoverable popup-left"
         onMouseEnter={this.showPopup.bind(this)}
-        onMouseLeave={e => this.setState({showPopup: false})}
+        onMouseLeave={() => this.setState({ showPopup: false })}
       >
         {flaggedStats.get('count')}
         {showPopup && this.getPopup()}
@@ -61,7 +61,13 @@ class ProcurementsTable extends Table{
   row(entry, index){
     const { translations, navigate } = this.props;
     const tenderValue = entry.getIn(['tender', 'value']);
-    const awardValue = entry.getIn(['awards', 0, 'value']);
+    let awardValue;
+
+    const winningAward = entry.get('awards').find(award => award.get('status') == 'active');
+    if (winningAward) {
+      awardValue = winningAward.get('value');
+    }
+
     const tenderPeriod = entry.get('tenderPeriod');
     const startDate = new Date(tenderPeriod.get('startDate'));
     const endDate = new Date(tenderPeriod.get('endDate'));
@@ -106,7 +112,12 @@ class ProcurementsTable extends Table{
           </div>
         </td>
         <td>{tenderValue && tenderValue.get('amount')} {tenderValue && tenderValue.get('currency')}</td>
-        <td>{awardValue.get('amount')} {awardValue.get('currency')}</td>
+        <td>
+          {awardValue ?
+            awardValue.get('amount') + ' ' + awardValue.get('currency') :
+            'N/A'
+          }
+        </td>
         <td>{startDate.toLocaleDateString()}&mdash;{endDate.toLocaleDateString()}</td>
         <td>{this.t(`crd:corruptionType:${type}:name`)}</td>
         <Popup
@@ -116,10 +127,10 @@ class ProcurementsTable extends Table{
           translations={translations}
         />
       </tr>
-    )
+    );
   }
 
-  render(){
+  render() {
     const { data } = this.props;
     return (
       <table className={`table table-striped table-hover ${this.getClassName()}`}>
@@ -140,7 +151,7 @@ class ProcurementsTable extends Table{
           {data && data.map(this.row.bind(this))}
         </tbody>
       </table>
-    )
+    );
   }
 }
 
