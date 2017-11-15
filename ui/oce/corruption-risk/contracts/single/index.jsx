@@ -220,10 +220,10 @@ export default class Contract extends CRDPage {
 
   render() {
     const { contract, nrOfBidders, nrContracts, percentPESpending, crosstab,
-      indicators, months, monthly } = this.state;
+      indicators } = this.state;
 
     const { id, translations, doSearch, indicatorTypesMapping, filters, years,
-      width } = this.props;
+      width, months, monthly } = this.props;
 
     if (!contract) return null;
 
