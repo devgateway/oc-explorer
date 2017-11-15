@@ -27,16 +27,22 @@ class Info extends translatable(Visualization) {
       award.get('status') != 'unsuccessful') || Map();
 
     return (
-      <section>
+      <section className="info">
         <div className="row">
           <dl className="col-md-4">
             <dt>{this.t('crd:procurementsTable:contractID')}</dt>
             <dd>{data.get('ocid')}</dd>
           </dl>
-          <dl className="col-md-offset-4 col-md-4">
+          <dl className="col-md-4">
             <dt>Status</dt>
             <dd>{data.get('tag', []).join(', ')}</dd>
           </dl>
+          <div className="col-md-4 flags">
+            <img src="assets/icons/flag.svg" alt="Flag icon" className="flag-icon"/>
+            &nbsp;
+            {data.get('flags', List()).filter(flag => flag.get && flag.get('value')).count()}
+            &nbsp;Flags
+          </div>
         </div>
         {title &&
           <dl>
@@ -246,10 +252,6 @@ export default class Contract extends CRDPage {
         />
         <section>
           <h2>
-            <img src="assets/icons/flag.svg" alt="Flag icon" className="flag-icon"/>
-            &nbsp;
-            {contract.get('flags', List()).filter(flag => flag.get && flag.get('value')).count()}
-            &nbsp;Flags
           </h2>
           <div className="col-sm-4">
             <NrOfBidders
