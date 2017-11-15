@@ -191,11 +191,8 @@
     }
     .total-flags{
       background: #fafafa;
-      margin-left: -30px;
-      position: absolute;
-      width: 100%;
-      margin-top: 15px;
-      padding-bottom: 15px;
+      margin: 15px -15px 0 -30px;
+      padding-bottom: 50px;
       @infoWidth: 250px;
       border-radius: 5px;
       border: 1px solid #e7ebef;
@@ -213,8 +210,7 @@
           float: right;
           font-size: 2em;
           font-weight: bold;
-          color: #2b9ff6;
-          border-bottom: 1px dotted #2b9ff6;
+          color: #144361;
         }
       }
       .crd-legend{
@@ -286,7 +282,7 @@
         }
 
         &.contracts-link{
-          background: #d9e3eb;
+          background: #c2dcef;
         }
 
         img{
@@ -321,18 +317,21 @@
       }
 
       .crd-description-link {
-        &:hover {
+        &.active {
           &+.crd-description {
             display: block;
           }
 
+        }
+
+        &:hover, &.active{
           .glyphicon {
             color: white;
           }
         }
 
         .glyphicon {
-          color: #ecf7ff;
+          color: #34ac45;
           padding: 5px 15px;
           font-size: 1.5em;
         }
@@ -351,7 +350,6 @@
     margin-top: 89px;
     margin-bottom: auto;
     padding: 20px 40px 0 30px;
-
 
     .crd-popup {
       @popupWidth: 400px;//if you're changing this you need to also change POPUP_WIDTH in constants.es6

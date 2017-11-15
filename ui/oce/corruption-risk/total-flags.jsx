@@ -19,8 +19,11 @@ class TotalFlagsChart extends backendYearFilterable(Chart){
       values: data.map(pluckImm('indicatorCount')).toJS(),
       labels: labels,
       textinfo: 'value',
-      hole: .85,
+      hole: .8,
       type: 'pie',
+      hoverlabel: {
+        bgcolor: '#144361'
+      },
       marker: {
         colors: ['#fac329', '#289df5', '#3372b1']//if you change this colors you'll have to also change it for the custom legend in ./style.less
       },

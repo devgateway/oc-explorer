@@ -9,12 +9,11 @@ import IndividualIndicatorPage from './individual-indicator';
 import ContractsPage from './contracts';
 import ContractPage from './contracts/single';
 import Filters from './filters';
-import TotalFlags from './total-flags';
 import LandingPopup from './landing-popup';
 import { LOGIN_URL } from './constants';
 // eslint-disable-next-line no-unused-vars
 import style from './style.less';
-import { CORRUPTION_TYPES } from './constants';
+import Sidebar from './sidebar';
 
 // eslint-disable-next-line no-undef
 class CorruptionRiskDashboard extends React.Component {
@@ -172,7 +171,7 @@ class CorruptionRiskDashboard extends React.Component {
           months={months}
           width={width}
         />
-      )
+      );
     } else {
       return (
         <OverviewPage
@@ -325,88 +324,20 @@ class CorruptionRiskDashboard extends React.Component {
           allYears={allYears}
           allMonths={allMonths}
         />
-        <aside className="col-xs-4 col-md-4 col-lg-3" id="crd-sidebar">
-          <section role="navigation" className="row">
-            <a
-              href="javascript:void(0);"
-              onClick={() => navigate()}
-              className={cn('crd-description-link', { active: !page })}
-            >
-              <img className="blue" src={`assets/icons/blue/overview.svg`} alt="Overview icon" />
-              <img className="white" src={`assets/icons/white/overview.svg`} alt="Overview icon" />
-              {this.t('tabs:overview:title')}
-              <i className="glyphicon glyphicon-info-sign" />
-            </a>
-
-            <p className="crd-description small">
-              {this.t('crd:description')}
-            </p>
-
-            {CORRUPTION_TYPES.map((slug) => {
-               const count = Object.keys(indicatorTypesMapping)
-                 .filter(key => indicatorTypesMapping[key].types.indexOf(slug) > -1)
-                 .length;
-
-               let corruptionType;
-               if (page === 'type') {
-                 [, corruptionType] = route;
-               }
-
-               return (
-                 <a
-                   href="javascript:void(0);"
-                   onClick={() => navigate('type', slug)}
-                   className={cn({ active: slug === corruptionType })}
-                   key={slug}
-                   >
-                   <img className="blue" src={`assets/icons/blue/${slug}.svg`} alt="Tab icon" />
-                   <img className="white" src={`assets/icons/white/${slug}.svg`} alt="Tab icon" />
-                   {this.t(`crd:corruptionType:${slug}:name`)} <span className="count">({count})</span>
-                 </a>
-               );
-            })}
-            <a
-              href="javascript:void(0);"
-              onClick={() => navigate('suppliers')}
-              className={cn('archive-link', { active: page === 'suppliers' })}
-              key="suppliers"
-            >
-              <img className="blue" src={`assets/icons/blue/suppliers.svg`} alt="Suppliers icon" />
-              <img className="white" src={`assets/icons/white/suppliers.svg`} alt="Suppliers icon" />
-              {this.t('crd:contracts:baseInfo:suppliers')}
-            </a>
-            <a
-              href="javascript:void(0);"
-              onClick={() => navigate('procuring-entities')}
-              className={cn('archive-link', { active: page === 'procuring-entities' })}
-              key="procuring-entities"
-            >
-              <img className="blue" src={`assets/icons/blue/procuring-entities.svg`} alt="Procuring entities icon" />
-              <img className="white" src={`assets/icons/white/procuring-entities.svg`} alt="Procuring entities icon" />
-              {this.t('crd:contracts:menu:procuringEntities')}
-            </a>
-            <a
-              href="javascript:void(0);"
-              onClick={() => navigate('contracts')}
-              className={cn('archive-link', 'contracts-link', { active: page === 'contracts' })}
-              key="contracts"
-            >
-              <img className="blue" src={`assets/icons/blue/contracts.svg`} alt="Contracts icon" />
-              <img className="white" src={`assets/icons/white/contracts.svg`} alt="Contracts icon" />
-              {this.t('crd:general:contracts')}
-            </a>
-          </section>
-          <TotalFlags
-            filters={filters}
-            requestNewData={(path, newData) =>
-              this.setState({ data: this.state.data.setIn(['totalFlags'].concat(path), newData) })}
-            translations={translations}
-            data={data.get('totalFlags', Map())}
-            years={years}
-            months={months}
-            monthly={monthly}
-          />
-        </aside>
+        <Sidebar
+          page={page}
+          translations={translations}
+          indicatorTypesMapping={indicatorTypesMapping}
+          route={route}
+          navigate={navigate}
+          data={data}
+          requestNewData={(path, newData) =>
+            this.setState({ data: this.state.data.setIn(path, newData) })}
+          filters={filters}
+          years={years}
+          monthly={monthly}
+          months={months}
+        />
         <div className="col-xs-offset-4 col-md-offset-4 col-lg-offset-3 col-xs-8 col-md-8 col-lg-9 content">
           {this.getPage()}
         </div>
