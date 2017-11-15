@@ -82,7 +82,16 @@
 
   section.info {
     margin-bottom: 60px;
-    .flags{
+
+    &>.row{
+      margin-left: 0;
+      margin-right: 0;
+      &>*{
+        padding-left: 0;
+      }
+    }
+
+    .flags {
       font-size: 2em;
     }
   }
