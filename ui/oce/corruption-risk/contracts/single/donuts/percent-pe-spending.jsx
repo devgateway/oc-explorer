@@ -25,11 +25,29 @@ PercentPESpending.Donut = class extends CenterTextDonut.Donut {
   }
 
   transform(data){
-    const { percentage, totalAwarded, totalAwardedToSuppliers } = data[0];
-    return {
-      percentage,
-      total: totalAwarded.sum,
-      toSuppliers: totalAwardedToSuppliers.sum
+    try {
+      const { percentage, totalAwarded, totalAwardedToSuppliers } = data[0];
+      return {
+        percentage,
+        total: totalAwarded.sum,
+        toSuppliers: totalAwardedToSuppliers.sum
+      }
+    } catch(e) {
+      return {
+        percentage: 0,
+        total: 0,
+        toSuppliers: 0
+      }
+    }
+  }
+
+  componentDidUpdate(prevProps, ...rest) {
+    const peChanged = this.props.procuringEntityId != prevProps.procuringEntityId;
+    const supplierChanged = this.props.supplierId != prevProps.supplierId;
+    if (peChanged || supplierChanged) {
+      this.fetch();
+    } else {
+      super.componentDidUpdate(prevProps, ...rest);
     }
   }
 
@@ -37,10 +55,13 @@ PercentPESpending.Donut = class extends CenterTextDonut.Donut {
     const data = super.getData();
     if (!data || !data.count()) return [];
     return [{
+      labels: ['Awarded to this supplier', 'Awarded by this PE'],
       values: [data.get('toSuppliers'), data.get('total')],
-      labels: ['this', 'total'],
-      textinfo: 'value',
-      textposition: 'none',
+      hoverlabel: {
+        bgcolor: '#144361'
+      },
+      hoverinfo: 'label',
+      textinfo: 'none',
       hole: 0.8,
       type: 'pie',
       marker: {

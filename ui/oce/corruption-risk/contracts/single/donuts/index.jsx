@@ -8,10 +8,6 @@ class CenterTextDonut extends React.PureComponent {
     return ['center-text-donut'];
   }
 
-  getCenterText() {
-    return 'Sample text';
-  }
-
   render() {
     const { Donut } = this.constructor;
     return (
