@@ -1,15 +1,15 @@
-import cn from "classnames";
-import Table from "../visualizations/tables";
-import translatable from "../translatable";
-import ReactDOM from "react-dom";
-import {POPUP_HEIGHT} from './constants';
+import ReactDOM from 'react-dom';
+import Table from '../visualizations/tables';
+import translatable from '../translatable';
+import { POPUP_HEIGHT } from './constants';
 
+// eslint-disable-next-line no-undef
 class Popup extends translatable(React.Component){
-  constructor(...args){
+  constructor(...args) {
     super(...args);
     this.state = {
-      showPopup: false
-    }
+      showPopup: false,
+    };
   }
 
   getPopup(){
@@ -22,18 +22,18 @@ class Popup extends translatable(React.Component){
             <h5>{this.t('crd:procurementsTable:associatedFlags').replace('$#$', this.t(`crd:corruptionType:${type}:name`))}</h5>
           </div>
           <div className="col-sm-12">
-            <hr/>
+            <hr />
           </div>
           <div className="col-sm-12 info">
             {flagIds.map(flagId => <p key={flagId}>{this.t(`crd:indicators:${flagId}:name`)}</p>)}
           </div>
         </div>
-        <div className="arrow"/>
+        <div className="arrow" />
       </div>
-    )
+    );
   }
 
-  showPopup(){
+  showPopup() {
     const el = ReactDOM.findDOMNode(this);
     this.setState({
       showPopup: true,
@@ -48,7 +48,7 @@ class Popup extends translatable(React.Component){
       <td
         className="hoverable popup-left"
         onMouseEnter={this.showPopup.bind(this)}
-        onMouseLeave={e => this.setState({showPopup: false})}
+        onMouseLeave={() => this.setState({ showPopup: false })}
       >
         {flaggedStats.get('count')}
         {showPopup && this.getPopup()}
@@ -59,7 +59,7 @@ class Popup extends translatable(React.Component){
 
 class ProcurementsTable extends Table{
   row(entry, index){
-    const {translations} = this.props;
+    const { translations, navigate } = this.props;
     const tenderValue = entry.getIn(['tender', 'value']);
     let awardValue;
 
@@ -83,14 +83,27 @@ class ProcurementsTable extends Table{
 
     const procuringEntityName = entry.getIn(['procuringEntity', 'name']);
     const title = entry.get('title');
+    const id = entry.get('ocid');
 
     return (
       <tr key={index}>
         <td>{entry.get('tag', []).join(', ')}</td>
-        <td>{entry.get('ocid')}</td>
+        <td>
+          <a
+            href="javascript:void(0);"
+            onClick={() => navigate('contract', id)}
+          >
+            {id}
+          </a>
+        </td>
         <td>
           <div className="oce-3-line-text" title={title}>
-            {title}
+            <a
+              href="javascript:void(0);"
+              onClick={() => navigate('contract', id)}
+            >
+              {title}
+            </a>
           </div>
         </td>
         <td>
@@ -114,11 +127,11 @@ class ProcurementsTable extends Table{
           translations={translations}
         />
       </tr>
-    )
+    );
   }
 
-  render(){
-    const {data} = this.props;
+  render() {
+    const { data } = this.props;
     return (
       <table className={`table table-striped table-hover ${this.getClassName()}`}>
         <thead>
@@ -138,7 +151,7 @@ class ProcurementsTable extends Table{
           {data && data.map(this.row.bind(this))}
         </tbody>
       </table>
-    )
+    );
   }
 }
 
