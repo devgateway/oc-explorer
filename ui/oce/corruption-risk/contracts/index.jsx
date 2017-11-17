@@ -14,15 +14,18 @@ class CList extends Visualization {
   constructor(...args){
     super(...args);
     this.state = {
-      pageSize: 20
+      pageSize: 20,
+      page: 1
     }
   }
 
   buildUrl(ep) {
     const { filters, searchQuery } = this.props;
-    const { pageSize } = this.state;
+    const { pageSize, page } = this.state;
+    const skip = pageSize * (page - 1);
     const uri = new URI(`${API_ROOT}/${ep}`)
       .addSearch('pageSize', pageSize)
+      .addSearch('pageNumber', page - 1)
       .addSearch(filters.toJS());
     return searchQuery ?
       uri.addSearch('text', searchQuery) :
@@ -31,7 +34,7 @@ class CList extends Visualization {
 
   componentDidUpdate(prevProps, prevState) {
     const propsChanged = ['filters', 'searchQuery'].some(key => this.props[key] != prevProps[key]);
-    const stateChanged = ['pageSize'].some(key => this.state[key] != prevState[key]);
+    const stateChanged = ['pageSize', 'page'].some(key => this.state[key] != prevState[key]);
     if (propsChanged || stateChanged) {
       this.fetch();
     }
@@ -49,25 +52,12 @@ class CList extends Visualization {
     );
   }
 
-  renderPaginationPanel(props) {
-    console.log(props);
-    delete props.totalPages;
-    return (
-      <div className="oce-pagination">
-        <PaginationList
-          {...props}
-          dataSize={100}
-        />
-      </div>
-    )
-  }
-
   render() {
     const { data, count } = this.props;
 
     if (!data || !data.count()) return null;
 
-    const { pageSize } = this.state;
+    const { pageSize, page } = this.state;
 
     const jsData = data.map((contract) => {
       const tenderAmount = contract.getIn(['tender', 'value', 'amount'], 'N/A') +
@@ -111,8 +101,8 @@ class CList extends Visualization {
           dataTotalSize: count
         }}
         options={{
-          page: 1,
-          dataSize: 100,
+          page,
+          onPageChange: page => this.setState({ page }),
           sizePerPage: pageSize,
           sizePerPageList: [20, 50, 100, 200].map(value => ({text: value, value})),
           onSizePerPageList: pageSize => this.setState({ pageSize }),
