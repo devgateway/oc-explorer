@@ -1,4 +1,5 @@
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import PaginationList from 'react-bootstrap-table/lib/pagination/PaginationList';
 import { List } from 'immutable';
 import URI from 'urijs';
 // eslint-disable-next-line no-unused-vars
@@ -10,19 +11,28 @@ import TopSearch from './top-search';
 const API_ROOT = '/api';
 
 class CList extends Visualization {
+  constructor(...args){
+    super(...args);
+    this.state = {
+      pageSize: 20
+    }
+  }
+
   buildUrl(ep) {
     const { filters, searchQuery } = this.props;
+    const { pageSize } = this.state;
     const uri = new URI(`${API_ROOT}/${ep}`)
-      .addSearch('pageSize', 20)
+      .addSearch('pageSize', pageSize)
       .addSearch(filters.toJS());
     return searchQuery ?
       uri.addSearch('text', searchQuery) :
       uri;
   }
 
-  componentDidUpdate(prevProps) {
-    const { filters, searchQuery } = this.props;
-    if (filters !== prevProps.filters || searchQuery !== prevProps.searchQuery) {
+  componentDidUpdate(prevProps, prevState) {
+    const propsChanged = ['filters', 'searchQuery'].some(key => this.props[key] != prevProps[key]);
+    const stateChanged = ['pageSize'].some(key => this.state[key] != prevState[key]);
+    if (propsChanged || stateChanged) {
       this.fetch();
     }
   }
@@ -39,9 +49,26 @@ class CList extends Visualization {
     );
   }
 
+  renderPaginationPanel(props) {
+    console.log(props);
+    delete props.totalPages;
+    return (
+      <div className="oce-pagination">
+        <PaginationList
+          {...props}
+          dataSize={100}
+        />
+      </div>
+    )
+  }
+
   render() {
-    const { data } = this.props;
+    const { data, count } = this.props;
+
     if (!data || !data.count()) return null;
+
+    const { pageSize } = this.state;
+
     const jsData = data.map((contract) => {
       const tenderAmount = contract.getIn(['tender', 'value', 'amount'], 'N/A') +
           ' ' +
@@ -79,8 +106,17 @@ class CList extends Visualization {
         striped
         bordered={false}
         pagination
+        remote
+        fetchInfo = {{
+          dataTotalSize: count
+        }}
         options={{
           page: 1,
+          dataSize: 100,
+          sizePerPage: pageSize,
+          sizePerPageList: [20, 50, 100, 200].map(value => ({text: value, value})),
+          onSizePerPageList: pageSize => this.setState({ pageSize }),
+          paginationPosition: 'both',
         }}
       >
         <TableHeaderColumn dataField="status">
@@ -131,7 +167,7 @@ export default class Contracts extends CRDPage {
 
   render() {
     const { list } = this.state;
-    const { filters, navigate, translations, searchQuery, doSearch } = this.props;
+    const { filters, navigate, translations, searchQuery, doSearch, count } = this.props;
     return (
       <div className="contracts-page">
         <TopSearch
@@ -151,6 +187,7 @@ export default class Contracts extends CRDPage {
           navigate={navigate}
           translations={translations}
           searchQuery={searchQuery}
+          count={count}
         />
 
         {searchQuery && !list.count() ? <strong>{this.t('crd:contracts:top-search:nothingFound')}</strong> : null}
