@@ -104,7 +104,7 @@ class CorruptionRiskDashboard extends React.Component {
     const styling = this.constructor.STYLING || this.props.styling;
     const [page] = route;
 
-    const { appliedFilters, indicatorTypesMapping, width } = this.state;
+    const { appliedFilters, indicatorTypesMapping, width, data } = this.state;
 
     const { filters, years, months } = this.destructFilters(appliedFilters);
     const monthly = years.count() === 1;
@@ -155,6 +155,7 @@ class CorruptionRiskDashboard extends React.Component {
           translations={translations}
           searchQuery={searchQuery}
           doSearch={query => navigate('contracts', query)}
+          count={data.getIn(['totalFlags', 'contractCounter'])}
         />
       );
     } else if (page === 'contract') {
