@@ -3,6 +3,17 @@
 <body>
 <wicket:extend>
     <div class="row">
+        <div class="col-md-1 col-md-offset-10">
+            <form wicket:id="excelForm">
+                <button wicket:id="excelButton" type="button" id="excelButton" class="pull-right btn btn-lg btn-warning">
+                    <i class="fa fa-file-excel-o"></i>
+                    Excel export
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <form wicket:id="filterForm">
                 <button type="submit" style="display: none;">Submit</button>
