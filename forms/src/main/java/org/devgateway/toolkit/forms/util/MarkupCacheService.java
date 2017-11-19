@@ -153,6 +153,13 @@ public class MarkupCacheService {
         if (cache != null) {
             cache.removeAll();
         }
+
+        // get the reports cache "excelExportCache", declared in ehcache.xml
+        Cache excelExportCache = cm.getCache("excelExportCache");
+
+        if (excelExportCache != null) {
+            excelExportCache.removeAll();
+        }
     }
 
     private String createCacheKey(final String outputType, final String reportName, final String parameters) {
