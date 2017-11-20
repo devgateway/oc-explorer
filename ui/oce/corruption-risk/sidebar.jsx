@@ -7,23 +7,18 @@ import { CORRUPTION_TYPES } from './constants';
 
 // eslint-disable-next-line no-undef
 class Sidebar extends translatable(React.PureComponent) {
-  constructor(...args){
-    super(...args);
-    this.prevScrollY = 0;
-  }
-
   componentDidMount() {
     const el = ReactDOM.findDOMNode(this);
     const scrollTarget = el.querySelector('div');
     const offsetTop = el.getBoundingClientRect().top;
 
     window.addEventListener('wheel', e => {
-      const { deltaY: diff } = e;
-      this.prevScrollY = window.scrollY;
       let margin = parseInt(scrollTarget.style.marginTop);
       if (isNaN(margin)) margin = 0;
-      if (diff > 0 || window.scrollY === 0) {
-        margin -= diff;
+      if (e.deltaY > 0) {
+        margin -= 40;
+      } else if (window.scrollY === 0) {
+        margin += 40;
       }
 
       const newMargin = Math.min(
@@ -42,7 +37,7 @@ class Sidebar extends translatable(React.PureComponent) {
       data, requestNewData, route } = this.props;
 
     return (
-      <aside className="col-xs-4 col-md-4 col-lg-3" id="crd-sidebar">
+      <aside className="col-sm-3" id="crd-sidebar">
         <div>
           <section role="navigation" className="row">
             <a

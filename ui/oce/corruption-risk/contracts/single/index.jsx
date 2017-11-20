@@ -26,6 +26,7 @@ class Info extends translatable(Visualization) {
     const award = data.get('awards', List()).find(award =>
       award.get('status') != 'unsuccessful') || Map();
 
+    const flagCount = data.get('flags', List()).filter(flag => flag.get && flag.get('value')).count();
     return (
       <section className="info">
         <div className="row">
@@ -40,8 +41,8 @@ class Info extends translatable(Visualization) {
           <div className="col-md-4 flags">
             <img src="assets/icons/flag.svg" alt="Flag icon" className="flag-icon"/>
             &nbsp;
-            {data.get('flags', List()).filter(flag => flag.get && flag.get('value')).count()}
-            &nbsp;Flags
+            {flagCount}
+            &nbsp;{flagCount === 1 ? 'Flag' : 'Flags'}
           </div>
         </div>
         {title &&

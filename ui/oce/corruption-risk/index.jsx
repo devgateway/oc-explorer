@@ -339,7 +339,7 @@ class CorruptionRiskDashboard extends React.Component {
           monthly={monthly}
           months={months}
         />
-        <div className="col-xs-offset-4 col-md-offset-4 col-lg-offset-3 col-xs-8 col-md-8 col-lg-9 content">
+        <div className="col-sm-offset-3 col-sm-9 content">
           {this.getPage()}
         </div>
       </div>
