@@ -54,9 +54,11 @@ PercentPESpending.Donut = class extends CenterTextDonut.Donut {
   getData() {
     const data = super.getData();
     if (!data || !data.count()) return [];
+    const toSuppliers = data.get('toSuppliers');
+    const total = data.get('total');
     return [{
       labels: ['Awarded to this supplier', 'Awarded by this PE'],
-      values: [data.get('toSuppliers'), data.get('total')],
+      values: [toSuppliers, total - toSuppliers],
       hoverlabel: {
         bgcolor: '#144361'
       },

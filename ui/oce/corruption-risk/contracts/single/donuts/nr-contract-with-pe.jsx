@@ -55,9 +55,11 @@ NrOfContractsWithPE.Donut = class extends CenterTextDonut.Donut {
     const { contract } = this.props;
     const data = super.getData();
     if (!data) return [];
+    const thisPE = data.get('thisPE');
+    const total = data.get('total');
     return [{
       labels: ['Won by this supplier', 'Contracts with this PE'],
-      values: [data.get('thisPE'), data.get('total')],
+      values: [thisPE, total - thisPE],
       hoverlabel: {
         bgcolor: '#144361'
       },
