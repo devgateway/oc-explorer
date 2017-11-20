@@ -17,12 +17,15 @@ class Sidebar extends translatable(React.PureComponent) {
     const scrollTarget = el.querySelector('div');
     const offsetTop = el.getBoundingClientRect().top;
 
-    window.addEventListener('scroll', e => {
-      const diff = window.scrollY - this.prevScrollY;
+    window.addEventListener('wheel', e => {
+      const { deltaY: diff } = e;
       this.prevScrollY = window.scrollY;
       let margin = parseInt(scrollTarget.style.marginTop);
       if (isNaN(margin)) margin = 0;
-      margin -= diff;
+      if (diff > 0 || window.scrollY === 0) {
+        margin -= diff;
+      }
+
       const newMargin = Math.min(
         0,
         Math.max(
