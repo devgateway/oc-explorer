@@ -57,19 +57,15 @@ class ClickableCrosstab extends Crosstab {
     return (
       <div className="crosstab-box text-left">
         <div className="row">
-          <div className="col-sm-12 info">
+          <div className="col-sm-12 title">
             {this.t('crd:corruptionType:crosstab:popup:percents')
               .replace('$#$', percent.toFixed(2))
               .replace('$#$', rowIndicatorName)
               .replace('$#$', indicatorName)}
           </div>
           <div className="col-sm-12">
-            <hr/>
-          </div>
-          <div className="col-sm-12 info">
-            <h4>{this.t('crd:corruptionType:crosstab:popup:count').replace('$#$', count)}</h4>
+            <h5>{this.t('crd:corruptionType:crosstab:popup:count').replace('$#$', count)}</h5>
             <p><strong>{rowIndicatorName}</strong>: {rowIndicatorDescription}</p>
-            <p className="and">{this.t('crd:corruptionType:crosstab:popup:and')}</p>
             <p><strong>{indicatorName}</strong>: {indicatorDescription}</p>
           </div>
         </div>
