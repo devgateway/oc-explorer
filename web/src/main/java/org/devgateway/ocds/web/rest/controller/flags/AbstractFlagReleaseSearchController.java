@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import javax.validation.Valid;
 import java.util.List;
 
+
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
@@ -46,6 +48,25 @@ public abstract class AbstractFlagReleaseSearchController extends AbstractFlagCo
                 sort(Sort.Direction.DESC, "flags.flaggedStats.count"),
                 skip(filter.getSkip()),
                 limit(filter.getPageSize())
+        );
+
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release",
+                DBObject.class);
+        List<DBObject> list = results.getMappedResults();
+        return list;
+    }
+
+
+    @JsonView(Views.Internal.class)
+    public List<DBObject> releaseFlagCount(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+
+        Aggregation agg = newAggregation(
+                match(where("flags.flaggedStats.0").exists(true).and(getFlagProperty()).is(true)
+                        .andOperator(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
+                unwind("flags.flaggedStats"),
+                match(where(getFlagProperty()).is(true).andOperator(getFlagTypeFilterCriteria(filter))),
+                group().count().as("count")
         );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release",
