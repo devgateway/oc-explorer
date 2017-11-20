@@ -42,7 +42,7 @@ class Sidebar extends translatable(React.PureComponent) {
       data, requestNewData, route } = this.props;
 
     return (
-      <aside className="col-xs-4 col-md-4 col-lg-3" id="crd-sidebar">
+      <aside className="col-sm-3" id="crd-sidebar">
         <div>
           <section role="navigation" className="row">
             <a
