@@ -13,6 +13,8 @@ package org.devgateway.ocds.web.rest.controller;
 
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import java.util.List;
+import javax.validation.Valid;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.cache.annotation.CacheConfig;
@@ -26,9 +28,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.util.List;
 
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
@@ -69,6 +70,27 @@ public class CorruptionRiskDashboardTablesController extends GenericOCDSControll
                 sort(Sort.Direction.DESC, "flags.flaggedStats.count"),
                 skip(filter.getSkip()),
                 limit(filter.getPageSize())
+        );
+
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release",
+                DBObject.class);
+        List<DBObject> list = results.getMappedResults();
+        return list;
+    }
+
+    @ApiOperation(value = "Counts data to show in the table on corruption risk overview page.")
+    @RequestMapping(value = "/api/corruptionRiskOverviewTable/count",
+            method = {RequestMethod.POST, RequestMethod.GET},
+            produces = "application/json")
+    public List<DBObject> corruptionRiskOverviewTableCount(
+            @ModelAttribute @Valid final YearFilterPagingRequest filter) {
+
+        Aggregation agg = newAggregation(
+                match(where("flags.flaggedStats.0").exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
+                unwind("flags.flaggedStats"),
+                group().count().as("count")
         );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release",
