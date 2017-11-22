@@ -6,7 +6,7 @@ import org.devgateway.toolkit.persistence.excel.annotation.ExcelExport;
 import java.util.List;
 
 /**
- * Create an Excel Sheet representation of an Object of type <T>.
+ * Create an Excel Sheet representation of an Object of type T.
  * In this process it's possible to create a new Excel Sheet if
  * some fields are annotated with {@link ExcelExport#separateSheet = true}
  *

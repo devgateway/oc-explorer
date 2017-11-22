@@ -47,7 +47,7 @@ public class ExcelSheetDefault extends AbstractExcelSheet {
      * The sheet will be created based on object name that is exported.
      *
      * {@link #excelSheetName} would be the name of the excel
-     * and the recommended value is {@link Class#getSimpleName().toLowerCase();}
+     * and the recommended value is {@link Class#getSimpleName} toLowerCase.
      *
      * @param workbook
      * @param excelSheetName

@@ -121,7 +121,7 @@ public final class ExcelFieldService {
      * The fields are filtered with the {@link ClassFieldsExcelExport} class.
      *
      * @param clazz
-     * @return {@link Iterator<Field>}
+     * @return {@link Iterator}
      */
     public static Iterator<Field> getFields(final Class clazz) {
         final Iterator<Field> fields;
