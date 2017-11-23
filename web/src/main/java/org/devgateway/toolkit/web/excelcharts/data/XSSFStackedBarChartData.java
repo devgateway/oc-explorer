@@ -44,7 +44,7 @@ public class XSSFStackedBarChartData extends XSSFBarChartData {
         // set bars orientation
         barChart.addNewBarDir().setVal(barDir);
 
-        xssfChart.setTitle(this.title);
+        xssfChart.setTitleText(this.title);
 
         CTValAx[] ctValAx = plotArea.getValAxArray();
         if (ctValAx.length != 0) {
