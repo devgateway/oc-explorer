@@ -19,11 +19,14 @@ import java.util.Set;
 
 /**
  * @author mpostelnicu
- *         <p>
- *         i085 Bids are an exact percentage apart
+ * <p>
+ * i085 Bids are an exact percentage apart
  */
 @Component
 public class ReleaseFlagI085Processor extends AbstractFlaggedReleaseFlagProcessor {
+
+    public static final BigDecimal I085_LOW_THRESH = BigDecimal.valueOf(0.2);
+    public static final BigDecimal I085_HI_THRESH = BigDecimal.valueOf(0.8);
 
     @PostConstruct
     @Override
@@ -33,7 +36,6 @@ public class ReleaseFlagI085Processor extends AbstractFlaggedReleaseFlagProcesso
                 FlaggedReleasePredicates.ELECTRONIC_SUBMISSION
         ));
     }
-
 
     @Override
     protected void setFlag(Flag flag, FlaggedRelease flaggable) {
@@ -57,21 +59,31 @@ public class ReleaseFlagI085Processor extends AbstractFlaggedReleaseFlagProcesso
                         || award.getValue().getAmount().equals(bid.getValue().getAmount())) {
                     continue;
                 }
+
+                BigDecimal d = award.getValue().getAmount().subtract(bid.getValue().getAmount())
+                        .abs().divide(award.getValue().getAmount().max(bid.getValue().getAmount()),
+                                5, BigDecimal.ROUND_HALF_UP);
+                if (d.compareTo(I085_HI_THRESH) > 0 || d.compareTo(I085_LOW_THRESH) < 0) {
+                    continue;
+                }
+
+
                 BigDecimal dLeft = relativeDistanceLeft(bid.getValue().getAmount(), award.getValue().getAmount()).
                         multiply(GenericOCDSController.ONE_HUNDRED);
 
                 BigDecimal dRight = relativeDistanceRight(bid.getValue().getAmount(), award.getValue().getAmount()).
                         multiply(GenericOCDSController.ONE_HUNDRED);
 
-
                 //using the same logic as owen here...
                 if (dLeft.doubleValue() % 1 == 0 || dRight.doubleValue() % 1 == 0) {
                     result = true;
-                    rationale.append("Award=").append(award.getValue().getAmount())
-                            .append(" with bid=").append(bid.getValue().getAmount()).append("; ");
+                    rationale.append("Award=").append(award.getValue().getAmount().setScale(
+                            5, BigDecimal.ROUND_HALF_UP))
+                            .append(" with bid=").append(bid.getValue().getAmount().setScale(
+                            5, BigDecimal.ROUND_HALF_UP))
+                            .append("; ");
                     break;
                 }
-
             }
         }
         return result;
