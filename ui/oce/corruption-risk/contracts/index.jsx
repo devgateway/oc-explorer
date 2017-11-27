@@ -171,7 +171,10 @@ export default class Contracts extends CRDPage {
 
   render() {
     const { list } = this.state;
-    const { filters, navigate, translations, searchQuery, doSearch, count } = this.props;
+    const { filters, navigate, translations, searchQuery, doSearch } = this.props;
+
+    const count = list.get('count');
+
     return (
       <div className="contracts-page">
         <TopSearch
@@ -181,7 +184,11 @@ export default class Contracts extends CRDPage {
         />
 
         {searchQuery && <h3 className="page-header">
-          {this.t('crd:contracts:top-search:resultsFor').replace('$#$', searchQuery)}
+          {
+            (count === 1 ?
+              this.t('crd:contracts:top-search:resultsFor:sg') :
+              this.t('crd:contracts:top-search:resultsFor:pl')
+            ).replace('$#$', count).replace('$#$', searchQuery)}
         </h3>}
 
         <CList
@@ -193,7 +200,6 @@ export default class Contracts extends CRDPage {
           searchQuery={searchQuery}
         />
 
-        {searchQuery && !list.count() ? <strong>{this.t('crd:contracts:top-search:nothingFound')}</strong> : null}
       </div>
     );
   }
