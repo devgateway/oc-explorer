@@ -19,17 +19,32 @@ class CList extends Visualization {
     }
   }
 
-  buildUrl(ep) {
-    const { filters, searchQuery } = this.props;
+  getCustomEP() {
     const { pageSize, page } = this.state;
-    const skip = pageSize * (page - 1);
-    const uri = new URI(`${API_ROOT}/${ep}`)
+    const { searchQuery } = this.props;
+
+    let contracts = new URI('flaggedRelease/all')
       .addSearch('pageSize', pageSize)
-      .addSearch('pageNumber', page - 1)
-      .addSearch(filters.toJS());
-    return searchQuery ?
-      uri.addSearch('text', searchQuery) :
-      uri;
+      .addSearch('pageNumber', page - 1);
+
+    let count = new URI('ocds/release/count');
+
+    if (searchQuery) {
+      contracts = contracts.addSearch('text', searchQuery);
+      count = count.addSearch('text', searchQuery);
+    }
+
+    return [
+      contracts,
+      count
+    ];
+  }
+
+  transform([contracts, count]) {
+    return {
+      contracts,
+      count
+    };
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -53,13 +68,14 @@ class CList extends Visualization {
   }
 
   render() {
-    const { data, count } = this.props;
+    const { data } = this.props;
 
-    if (!data || !data.count()) return null;
+    const contracts = data.get('contracts', List());
+    const count = data.get('count', 0);
 
     const { pageSize, page } = this.state;
 
-    const jsData = data.map((contract) => {
+    const jsData = contracts.map((contract) => {
       const tenderAmount = contract.getIn(['tender', 'value', 'amount'], 'N/A') +
           ' ' +
           contract.getIn(['tender', 'value', 'currency'], '');
@@ -145,8 +161,6 @@ class CList extends Visualization {
   }
 }
 
-CList.endpoint = 'flaggedRelease/all';
-
 export default class Contracts extends CRDPage {
   constructor(...args) {
     super(...args);
@@ -157,7 +171,10 @@ export default class Contracts extends CRDPage {
 
   render() {
     const { list } = this.state;
-    const { filters, navigate, translations, searchQuery, doSearch, count } = this.props;
+    const { filters, navigate, translations, searchQuery, doSearch } = this.props;
+
+    const count = list.get('count');
+
     return (
       <div className="contracts-page">
         <TopSearch
@@ -167,20 +184,22 @@ export default class Contracts extends CRDPage {
         />
 
         {searchQuery && <h3 className="page-header">
-          {this.t('crd:contracts:top-search:resultsFor').replace('$#$', searchQuery)}
+          {
+            (count === 1 ?
+              this.t('crd:contracts:top-search:resultsFor:sg') :
+              this.t('crd:contracts:top-search:resultsFor:pl')
+            ).replace('$#$', count).replace('$#$', searchQuery)}
         </h3>}
 
         <CList
           data={list}
           filters={filters}
-          requestNewData={(_, newList) => this.setState({ list: newList })}
+          requestNewData={(_, newData) => this.setState({ list: newData })}
           navigate={navigate}
           translations={translations}
           searchQuery={searchQuery}
-          count={count}
         />
 
-        {searchQuery && !list.count() ? <strong>{this.t('crd:contracts:top-search:nothingFound')}</strong> : null}
       </div>
     );
   }
