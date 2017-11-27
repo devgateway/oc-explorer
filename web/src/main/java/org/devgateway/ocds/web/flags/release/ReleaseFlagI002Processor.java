@@ -19,8 +19,8 @@ import java.util.Set;
 
 /**
  * @author mpostelnicu
- *         <p>
- *         i002 Winning supplier provides a substantially lower bid price than competitors
+ * <p>
+ * i002 Winning supplier provides a substantially lower bid price than competitors
  */
 @Component
 public class ReleaseFlagI002Processor extends AbstractFlaggedReleaseFlagProcessor {
@@ -53,15 +53,20 @@ public class ReleaseFlagI002Processor extends AbstractFlaggedReleaseFlagProcesso
     @Override
     protected Boolean calculateFlag(FlaggedRelease flaggable, StringBuffer rationale) {
 
-        //get smallest bid
-        Optional<Detail> smallestBid = flaggable.getBids().getDetails().stream()
-                .min((o1, o2) -> o1.getValue().getAmount().compareTo(o2.getValue().getAmount()));
-
         //get the award
         Optional<Award> award = flaggable.getAwards().stream().filter(a ->
                 Award.Status.active.equals(a.getStatus())).findFirst();
 
-        boolean result = smallestBid.isPresent() && award.isPresent()
+        if (!award.isPresent()) {
+            return false;
+        }
+
+        //get the second smallest bid
+        Optional<Detail> smallestBid = flaggable.getBids().getDetails().stream()
+                .filter(b -> b.getValue().getAmount().compareTo(award.get().getValue().getAmount()) > 0)
+                .min((o1, o2) -> o1.getValue().getAmount().compareTo(o2.getValue().getAmount()));
+
+        boolean result = smallestBid.isPresent()
                 && (relativeDistanceLeft(award.get().getValue().getAmount(),
                 smallestBid.get().getValue().getAmount()).compareTo(MAX_ALLOWED_PERCENT_BID_AWARD_AMOUNT)
                 > 0 || relativeDistanceRight(award.get().getValue().getAmount(),
