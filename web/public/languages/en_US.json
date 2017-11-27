@@ -239,7 +239,7 @@
   "crd:indicatorPage:individualIndicatorChart:popup:percentEligible": "% Procurements Eligible",
   "crd:indicatorPage:individualIndicatorChart:title": "Eligible Procurements and Flagged Procurements for $#$",
   "crd:indicatorPage:projectTable:title": "List of Procurements Flagged for $#$",
-  "crd:indicators:i002:shortDescription": "Winning supplier provides a substantially lower bid price than competitors",
+  "crd:indicators:i002:shortDescription": "Winning supplier provides a substantially higher bid price than competitors.",
   "crd:indicators:i003:shortDescription": "Only the winning bidder was eligible to have received the contract for a tender when 2+ bidders apply",
   "crd:indicators:i004:shortDescription": "Sole source award is awarded above the competitive threshold despite legal requirements",
   "crd:indicators:i007:shortDescription": "This awarded competitive tender only featured a single bid ",

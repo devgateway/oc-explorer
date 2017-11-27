@@ -239,7 +239,7 @@
   "crd:indicatorPage:individualIndicatorChart:popup:percentEligible": "% Procurements Eligible",
   "crd:indicatorPage:individualIndicatorChart:title": "Contrataciones eligibles y contrataciones con advertencias para $#$",
   "crd:indicatorPage:projectTable:title": "Lista de contratación con advertencias para $#$",
-  "crd:indicators:i002:shortDescription": "El proveedor ganador proporciona un precio de oferta sustancialmente menor que sus competidores",
+  "crd:indicators:i002:shortDescription": "Winning supplier provides a substantially higher bid price than competitors.",
   "crd:indicators:i003:shortDescription": "Sólo el licitador ganador era elegible para obtener el contrato de licitación cuando 2+ licitadores aplican",
   "crd:indicators:i004:shortDescription": "La adjudicación de única fuente se otorga por encima del umbral competitivo a pesar de los requisitos legales",
   "crd:indicators:i007:shortDescription": "La licitación competitiva otorgada solo cuenta con una oferta",
