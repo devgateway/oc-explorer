@@ -1,4 +1,4 @@
-import { Map, List } from 'immutable';
+import { Map, List, Set } from 'immutable';
 import CRDPage from '../../page';
 import Visualization from '../../../visualization';
 import translatable from '../../../translatable';
@@ -9,6 +9,8 @@ import NrOfContractsWithThisPE from './donuts/nr-contract-with-pe';
 import PercentPESpending from './donuts/percent-pe-spending';
 import Crosstab from '../../clickable-crosstab';
 import { CORRUPTION_TYPES } from '../../constants';
+
+const EMPTY_SET = Set();
 
 class Info extends translatable(Visualization) {
   getCustomEP(){
@@ -223,8 +225,12 @@ export default class Contract extends CRDPage {
     const { contract, nrOfBidders, nrContracts, percentPESpending, crosstab,
       indicators } = this.state;
 
-    const { id, translations, doSearch, indicatorTypesMapping, filters, years,
-      width, months, monthly } = this.props;
+    const { id, translations, doSearch, indicatorTypesMapping, filters, allYears,
+      years: selectedYears, width, months, monthly } = this.props;
+
+    const years = Set(allYears).equals(selectedYears) ?
+      EMPTY_SET :
+      selectedYears;
 
     if (!contract) return null;
 

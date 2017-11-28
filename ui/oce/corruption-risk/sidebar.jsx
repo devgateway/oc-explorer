@@ -34,7 +34,7 @@ class Sidebar extends translatable(React.PureComponent) {
 
   render() {
     const { page, indicatorTypesMapping, filters, years, monthly, months, navigate, translations,
-      data, requestNewData, route } = this.props;
+      data, requestNewData, route, allYears } = this.props;
 
     return (
       <aside className="col-sm-3" id="crd-sidebar">
@@ -115,6 +115,7 @@ class Sidebar extends translatable(React.PureComponent) {
             translations={translations}
             data={data.get('totalFlags', Map())}
             years={years}
+            allYears={allYears}
             months={months}
             monthly={monthly}
           />
