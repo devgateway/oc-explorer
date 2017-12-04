@@ -47,72 +47,27 @@ class Popup extends translatable(React.Component){
     const {flaggedStats} = this.props;
     const {showPopup} = this.state;
     return (
-      <td
-        className="hoverable popup-left"
+      <div
         onMouseEnter={this.showPopup.bind(this)}
         onMouseLeave={() => this.setState({ showPopup: false })}
       >
         {flaggedStats.get('count')}
         {showPopup && this.getPopup()}
-      </td>
+      </div>
     )
   }
 }
 
 class ProcurementsTable extends Table{
-  row(entry, index){
-    const { translations, navigate } = this.props;
-
-    const flags = entry.get('flags');
-    const flaggedStats = flags.get('flaggedStats');
-    const type = flaggedStats.get('type');
-    const flagIds =
-      flags
-        .filter(
-          flag => flag.has && flag.has('types') && flag.get('types').includes(type) && flag.get('value')
-        )
-        .keySeq();
-
+  renderPopup({ flaggedStats, flagType: type, flagIds }) {
+    const { translations } = this.props;
     return (
-      <tr key={index}>
-        <td>{entry.get('tag', []).join(', ')}</td>
-        <td>
-          <a
-            href="javascript:void(0);"
-            onClick={() => navigate('contract', id)}
-          >
-            {id}
-          </a>
-        </td>
-        <td>
-          <div className="oce-3-line-text" title={title}>
-            <a
-              href="javascript:void(0);"
-              onClick={() => navigate('contract', id)}
-            >
-              {title}
-            </a>
-          </div>
-        </td>
-        <td>
-          <div title={procuringEntityName} className="oce-3-line-text">
-            {procuringEntityName}
-          </div>
-        </td>
-        <td>{tenderValue && tenderValue.get('amount')} {tenderValue && tenderValue.get('currency')}</td>
-        <td>
-          {awardValue ?
-            awardValue.get('amount') + ' ' + awardValue.get('currency') :
-            'N/A'
-          }
-        </td>
-        <Popup
-          flaggedStats={flaggedStats}
-          type={type}
-          flagIds={flagIds}
-          translations={translations}
-        />
-      </tr>
+      <Popup
+        flaggedStats={flaggedStats}
+        type={type}
+        flagIds={flagIds}
+        translations={translations}
+      />
     );
   }
 
@@ -130,7 +85,15 @@ class ProcurementsTable extends Table{
       const startDate = new Date(tenderPeriod.get('startDate')).toLocaleDateString();
       const endDate = new Date(tenderPeriod.get('endDate')).toLocaleDateString();
 
-      const flagType = contract.getIn(['flags', 'flaggedStats', 'type']);
+      const flags = contract.get('flags');
+      const flaggedStats = flags.get('flaggedStats');
+      const flagType = flaggedStats.get('type');
+      const flagIds =
+        flags
+          .filter(
+            flag => flag.has && flag.has('types') && flag.get('types').includes(flagType) && flag.get('value')
+          )
+          .keySeq();
 
       return {
         status: contract.getIn(['tender', 'status'], 'N/A'),
@@ -140,7 +103,11 @@ class ProcurementsTable extends Table{
         tenderAmount,
         awardsAmount: getAwardAmount(contract),
         tenderDate: `${startDate}—${endDate}`,
-        flagType: this.t(`crd:corruptionType:${flagType}:name`)
+        flagTypeName: this.t(`crd:corruptionType:${flagType}:name`),
+        // needed for the popup:
+        flaggedStats,
+        flagType,
+        flagIds
       }
     })
 
@@ -178,27 +145,17 @@ class ProcurementsTable extends Table{
           {this.t('crd:procurementsTable:tenderDate')}
         </TableHeaderColumn>
 
-        <TableHeaderColumn dataField="flagType">
+        <TableHeaderColumn dataField="flagTypeName">
           {this.t('crd:procurementsTable:flagType')}
         </TableHeaderColumn>
 
-        <TableHeaderColumn>
-
+        <TableHeaderColumn
+          dataFormat={(_, data) => this.renderPopup(data)}
+          columnClassName="hoverable popup-left"
+        >
+          {this.t('crd:procurementsTable:noOfFlags')}
         </TableHeaderColumn>
       </BootstrapTable>
-    );
-
-    return (
-      <table className={`table table-striped table-hover ${this.getClassName()}`}>
-        <thead>
-        <tr>
-          <th>{this.t('crd:procurementsTable:noOfFlags')}</th>
-        </tr>
-        </thead>
-        <tbody>
-        {data && data.map(this.row.bind(this))}
-        </tbody>
-      </table>
     );
   }
 }
