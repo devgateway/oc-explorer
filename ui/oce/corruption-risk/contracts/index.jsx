@@ -59,7 +59,7 @@ class CList extends Visualization {
     const { navigate } = this.props;
     return (
       <a
-        href="javascript:void(0);"
+        href={`#!/crd/contract/${id}`}
         onClick={() => navigate('contract', id)}
       >
         {content}
