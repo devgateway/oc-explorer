@@ -6,6 +6,7 @@ import rbtStyles from 'react-bootstrap-table/dist/react-bootstrap-table-all.min.
 import CRDPage from '../page';
 import Visualization from '../../visualization';
 import TopSearch from './top-search';
+import { getAwardAmount } from '../tools';
 
 class CList extends Visualization {
   constructor(...args) {
@@ -77,14 +78,6 @@ class CList extends Visualization {
           ' ' +
           contract.getIn(['tender', 'value', 'currency'], '');
 
-      const winningAward = contract.get('awards', List()).find(award => award.get('status') === 'active');
-      let awardAmount = 'N/A';
-      if (winningAward) {
-        awardAmount = winningAward.getIn(['value', 'amount'], 'N/A') +
-          ' ' +
-          winningAward.getIn(['value', 'currency'], '');
-      }
-
       const startDate = contract.getIn(['tender', 'tenderPeriod', 'startDate']);
 
       const flagTypes = contract.getIn(['flags', 'flaggedStats'], List())
@@ -97,7 +90,7 @@ class CList extends Visualization {
         title: contract.getIn(['tender', 'title'], 'N/A'),
         PEName: contract.getIn(['tender', 'procuringEntity', 'name'], 'N/A'),
         tenderAmount,
-        awardAmount,
+        awardAmount: getAwardAmount(contract),
         startDate: startDate ? new Date(startDate).toLocaleDateString() : 'N/A',
         flagTypes,
       };

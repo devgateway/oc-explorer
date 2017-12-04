@@ -1,4 +1,6 @@
-//copypasted from https://www.sitepoint.com/javascript-generate-lighter-darker-color/
+import { List } from 'immutable';
+
+// copypasted from https://www.sitepoint.com/javascript-generate-lighter-darker-color/
 export function colorLuminance(hex, lum) {
 
   // validate hex string
@@ -18,3 +20,14 @@ export function colorLuminance(hex, lum) {
 
   return rgb;
 }
+
+export const getAwardAmount = (contract) => {
+  const winningAward = contract.get('awards', List()).find(award => award.get('status') === 'active');
+  if (winningAward) {
+    const amount = winningAward.getIn(['value', 'amount'], 'N/A');
+    const currency = winningAward.getIn(['value', 'currency'], '');
+    return `${amount} ${currency}`;
+  }
+  return 'N/A';
+};
+
