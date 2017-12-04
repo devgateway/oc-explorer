@@ -6,7 +6,7 @@ import rbtStyles from 'react-bootstrap-table/dist/react-bootstrap-table-all.min.
 import CRDPage from '../page';
 import Visualization from '../../visualization';
 import TopSearch from './top-search';
-import { getAwardAmount } from '../tools';
+import { getAwardAmount, mkContractLink } from '../tools';
 
 class CList extends Visualization {
   constructor(...args) {
@@ -53,20 +53,9 @@ class CList extends Visualization {
     }
   }
 
-  mkLink(content, { id }) {
-    const { navigate } = this.props;
-    return (
-      <a
-        href={`#!/crd/contract/${id}`}
-        onClick={() => navigate('contract', id)}
-      >
-        {content}
-      </a>
-    );
-  }
 
   render() {
-    const { data } = this.props;
+    const { data, navigate } = this.props;
 
     const contracts = data.get('contracts', List());
     const count = data.get('count', 0);
@@ -119,11 +108,11 @@ class CList extends Visualization {
           {this.t('crd:contracts:baseInfo:status')}
         </TableHeaderColumn>
 
-        <TableHeaderColumn isKey dataField="id" dataFormat={this.mkLink.bind(this)}>
+        <TableHeaderColumn isKey dataField="id" dataFormat={mkContractLink(navigate)}>
           {this.t('crd:procurementsTable:contractID')}
         </TableHeaderColumn>
 
-        <TableHeaderColumn dataField="title" dataFormat={this.mkLink.bind(this)}>
+        <TableHeaderColumn dataField="title" dataFormat={mkContractLink(navigate)}>
           {this.t('crd:general:contract:title')}
         </TableHeaderColumn>
 

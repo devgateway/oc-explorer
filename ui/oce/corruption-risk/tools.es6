@@ -31,3 +31,11 @@ export const getAwardAmount = (contract) => {
   return 'N/A';
 };
 
+export const mkContractLink = navigate => (content, { id }) => (
+  <a
+    href={`#!/crd/contract/${id}`}
+    onClick={() => navigate('contract', id)}
+  >
+    {content}
+  </a>
+);
