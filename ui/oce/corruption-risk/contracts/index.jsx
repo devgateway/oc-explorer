@@ -1,5 +1,4 @@
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import PaginationList from 'react-bootstrap-table/lib/pagination/PaginationList';
 import { List } from 'immutable';
 import URI from 'urijs';
 // eslint-disable-next-line no-unused-vars
@@ -8,15 +7,13 @@ import CRDPage from '../page';
 import Visualization from '../../visualization';
 import TopSearch from './top-search';
 
-const API_ROOT = '/api';
-
 class CList extends Visualization {
-  constructor(...args){
+  constructor(...args) {
     super(...args);
     this.state = {
       pageSize: 20,
-      page: 1
-    }
+      page: 1,
+    };
   }
 
   getCustomEP() {
@@ -36,20 +33,20 @@ class CList extends Visualization {
 
     return [
       contracts,
-      count
+      count,
     ];
   }
 
   transform([contracts, count]) {
     return {
       contracts,
-      count
+      count,
     };
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const propsChanged = ['filters', 'searchQuery'].some(key => this.props[key] != prevProps[key]);
-    const stateChanged = ['pageSize', 'page'].some(key => this.state[key] != prevState[key]);
+    const propsChanged = ['filters', 'searchQuery'].some(key => this.props[key] !== prevProps[key]);
+    const stateChanged = ['pageSize', 'page'].some(key => this.state[key] !== prevState[key]);
     if (propsChanged || stateChanged) {
       this.fetch();
     }
@@ -85,7 +82,7 @@ class CList extends Visualization {
       if (winningAward) {
         awardAmount = winningAward.getIn(['value', 'amount'], 'N/A') +
           ' ' +
-          winningAward.getIn(['value', 'currency'], '')
+          winningAward.getIn(['value', 'currency'], '');
       }
 
       const startDate = contract.getIn(['tender', 'tenderPeriod', 'startDate']);
@@ -113,15 +110,15 @@ class CList extends Visualization {
         bordered={false}
         pagination
         remote
-        fetchInfo = {{
-          dataTotalSize: count
+        fetchInfo={{
+          dataTotalSize: count,
         }}
         options={{
           page,
-          onPageChange: page => this.setState({ page }),
+          onPageChange: newPage => this.setState({ page: newPage }),
           sizePerPage: pageSize,
-          sizePerPageList: [20, 50, 100, 200].map(value => ({text: value, value})),
-          onSizePerPageList: pageSize => this.setState({ pageSize }),
+          sizePerPageList: [20, 50, 100, 200].map(value => ({ text: value, value })),
+          onSizePerPageList: newPageSize => this.setState({ pageSize: newPageSize }),
           paginationPosition: 'both',
         }}
       >
@@ -157,7 +154,7 @@ class CList extends Visualization {
           {this.t('crd:procurementsTable:flagType')}
         </TableHeaderColumn>
       </BootstrapTable>
-    )
+    );
   }
 }
 
