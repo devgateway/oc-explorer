@@ -3,7 +3,7 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import Table from '../visualizations/tables';
 import translatable from '../translatable';
 import { POPUP_HEIGHT } from './constants';
-import { getAwardAmount } from './tools';
+import { getAwardAmount, mkContractLink } from './tools';
 
 // eslint-disable-next-line no-undef
 class Popup extends translatable(React.Component){
@@ -117,7 +117,7 @@ class ProcurementsTable extends Table{
   }
 
   render() {
-    const { data } = this.props;
+    const { data, navigate } = this.props;
 
     if (!data) return null;
 
@@ -154,11 +154,11 @@ class ProcurementsTable extends Table{
           {this.t('crd:procurementsTable:status')}
         </TableHeaderColumn>
 
-        <TableHeaderColumn isKey dataField="id">
+        <TableHeaderColumn isKey dataField="id" dataFormat={mkContractLink(navigate)}>
           {this.t('crd:procurementsTable:contractID')}
         </TableHeaderColumn>
 
-        <TableHeaderColumn dataField="title">
+        <TableHeaderColumn dataField="title" dataFormat={mkContractLink(navigate)}>
           {this.t('crd:procurementsTable:title')}
         </TableHeaderColumn>
 
