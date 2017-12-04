@@ -1,7 +1,9 @@
 import ReactDOM from 'react-dom';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import Table from '../visualizations/tables';
 import translatable from '../translatable';
 import { POPUP_HEIGHT } from './constants';
+import { getAwardAmount } from './tools';
 
 // eslint-disable-next-line no-undef
 class Popup extends translatable(React.Component){
@@ -60,17 +62,7 @@ class Popup extends translatable(React.Component){
 class ProcurementsTable extends Table{
   row(entry, index){
     const { translations, navigate } = this.props;
-    const tenderValue = entry.getIn(['tender', 'value']);
-    let awardValue;
 
-    const winningAward = entry.get('awards').find(award => award.get('status') == 'active');
-    if (winningAward) {
-      awardValue = winningAward.get('value');
-    }
-
-    const tenderPeriod = entry.get('tenderPeriod');
-    const startDate = new Date(tenderPeriod.get('startDate'));
-    const endDate = new Date(tenderPeriod.get('endDate'));
     const flags = entry.get('flags');
     const flaggedStats = flags.get('flaggedStats');
     const type = flaggedStats.get('type');
@@ -80,10 +72,6 @@ class ProcurementsTable extends Table{
           flag => flag.has && flag.has('types') && flag.get('types').includes(type) && flag.get('value')
         )
         .keySeq();
-
-    const procuringEntityName = entry.getIn(['procuringEntity', 'name']);
-    const title = entry.get('title');
-    const id = entry.get('ocid');
 
     return (
       <tr key={index}>
@@ -118,8 +106,6 @@ class ProcurementsTable extends Table{
             'N/A'
           }
         </td>
-        <td>{startDate.toLocaleDateString()}&mdash;{endDate.toLocaleDateString()}</td>
-        <td>{this.t(`crd:corruptionType:${type}:name`)}</td>
         <Popup
           flaggedStats={flaggedStats}
           type={type}
@@ -132,27 +118,91 @@ class ProcurementsTable extends Table{
 
   render() {
     const { data } = this.props;
+
+    if (!data) return null;
+
+    const jsData = data.map((contract) => {
+      const tenderAmount = contract.getIn(['tender', 'value', 'amount'], 'N/A') +
+          ' ' +
+          contract.getIn(['tender', 'value', 'currency'], '');
+
+      const tenderPeriod = contract.get('tenderPeriod');
+      const startDate = new Date(tenderPeriod.get('startDate')).toLocaleDateString();
+      const endDate = new Date(tenderPeriod.get('endDate')).toLocaleDateString();
+
+      const flagType = contract.getIn(['flags', 'flaggedStats', 'type']);
+
+      return {
+        status: contract.getIn(['tender', 'status'], 'N/A'),
+        id: contract.get('ocid'),
+        title: contract.get('title', 'N/A'),
+        PEName: contract.getIn(['procuringEntity', 'name'], 'N/A'),
+        tenderAmount,
+        awardsAmount: getAwardAmount(contract),
+        tenderDate: `${startDate}—${endDate}`,
+        flagType: this.t(`crd:corruptionType:${flagType}:name`)
+      }
+    })
+
+    return (
+      <BootstrapTable
+        data={jsData}
+        striped
+        bordered={false}
+      >
+        <TableHeaderColumn dataField="status">
+          {this.t('crd:procurementsTable:status')}
+        </TableHeaderColumn>
+
+        <TableHeaderColumn isKey dataField="id">
+          {this.t('crd:procurementsTable:contractID')}
+        </TableHeaderColumn>
+
+        <TableHeaderColumn dataField="title">
+          {this.t('crd:procurementsTable:title')}
+        </TableHeaderColumn>
+
+        <TableHeaderColumn dataField="PEName">
+          {this.t('crd:procurementsTable:procuringEntity')}
+        </TableHeaderColumn>
+
+        <TableHeaderColumn dataField="tenderAmount">
+          {this.t('crd:procurementsTable:tenderAmount')}
+        </TableHeaderColumn>
+
+        <TableHeaderColumn dataField="awardsAmount">
+          {this.t('crd:procurementsTable:awardsAmount')}
+        </TableHeaderColumn>
+
+        <TableHeaderColumn dataField="tenderDate">
+          {this.t('crd:procurementsTable:tenderDate')}
+        </TableHeaderColumn>
+
+        <TableHeaderColumn dataField="flagType">
+          {this.t('crd:procurementsTable:flagType')}
+        </TableHeaderColumn>
+
+        <TableHeaderColumn>
+
+        </TableHeaderColumn>
+      </BootstrapTable>
+    );
+
     return (
       <table className={`table table-striped table-hover ${this.getClassName()}`}>
         <thead>
-          <tr>
-            <th>{this.t('crd:procurementsTable:status')}</th>
-            <th>{this.t('crd:procurementsTable:contractID')}</th>
-            <th>{this.t('crd:procurementsTable:title')}</th>
-            <th>{this.t('crd:procurementsTable:procuringEntity')}</th>
-            <th>{this.t('crd:procurementsTable:tenderAmount')}</th>
-            <th>{this.t('crd:procurementsTable:awardsAmount')}</th>
-            <th>{this.t('crd:procurementsTable:tenderDate')}</th>
-            <th className="flag-type">{this.t('crd:procurementsTable:flagType')}</th>
-            <th>{this.t('crd:procurementsTable:noOfFlags')}</th>
-          </tr>
+        <tr>
+          <th>{this.t('crd:procurementsTable:noOfFlags')}</th>
+        </tr>
         </thead>
         <tbody>
-          {data && data.map(this.row.bind(this))}
+        {data && data.map(this.row.bind(this))}
         </tbody>
       </table>
     );
   }
 }
+
+
 
 export default ProcurementsTable;
