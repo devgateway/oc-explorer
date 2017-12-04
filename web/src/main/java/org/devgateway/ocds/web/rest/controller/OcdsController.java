@@ -13,9 +13,6 @@ package org.devgateway.ocds.web.rest.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.ApiOperation;
-import java.util.ArrayList;
-import java.util.List;
-import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.Publisher;
@@ -37,6 +34,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.data.mongodb.core.query.Query.query;
 
@@ -132,7 +132,8 @@ public class OcdsController extends GenericOCDSController {
         Pageable pageRequest = new PageRequest(releaseRequest.getPageNumber(), releaseRequest.getPageSize(),
                 Direction.ASC, "id");
 
-        Query query = query(getYearFilterCriteria(releaseRequest, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))
+        Query query = query(getYearDefaultFilterCriteria(releaseRequest,
+                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))
                 .with(pageRequest);
 
         if (StringUtils.isNotEmpty(releaseRequest.getText())) {

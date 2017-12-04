@@ -5,17 +5,6 @@ package org.devgateway.ocds.web.rest.controller;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.ArrayUtils;
 import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
@@ -35,6 +24,17 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 
+import javax.annotation.PostConstruct;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
@@ -322,14 +322,15 @@ public abstract class GenericOCDSController {
         if (filter.getMaxAwardValue() == null && filter.getMinAwardValue() == null) {
             return new Criteria();
         }
-        Criteria criteria = where("awards.value.amount");
+        Criteria elem = where("value.amount");
+
         if (filter.getMinAwardValue() != null) {
-            criteria = criteria.gte(filter.getMinAwardValue().doubleValue());
+            elem = elem.gte(filter.getMinAwardValue().doubleValue());
         }
         if (filter.getMaxAwardValue() != null) {
-            criteria = criteria.lte(filter.getMaxAwardValue().doubleValue());
+            elem = elem.lte(filter.getMaxAwardValue().doubleValue());
         }
-        return criteria;
+        return where("awards").elemMatch(elem);
     }
 
     private <S> Criteria createFilterCriteria(final String filterName, final Set<S> filterValues,
