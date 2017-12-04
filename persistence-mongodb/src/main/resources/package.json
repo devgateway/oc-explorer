@@ -1,0 +1,15 @@
+{
+  "name": "ocds-merge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "ocds-merge.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ocds-merge.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "json-merge-patch": "^0.2.3"
+  }
+}
