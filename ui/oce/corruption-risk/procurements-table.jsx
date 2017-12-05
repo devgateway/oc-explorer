@@ -79,7 +79,7 @@ class ProcurementsTable extends PaginatedTable {
     if (!data) return null;
 
     const contracts = data.get('data', List());
-    const count = data.get('count', 0);
+    const count = data.getIn(['count', 0, 'count'], 0);
 
     const { pageSize, page } = this.state;
 
