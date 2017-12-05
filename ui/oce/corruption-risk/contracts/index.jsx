@@ -1,63 +1,35 @@
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { List } from 'immutable';
-import URI from 'urijs';
 // eslint-disable-next-line no-unused-vars
 import rbtStyles from 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import CRDPage from '../page';
 import Visualization from '../../visualization';
 import TopSearch from './top-search';
 import { getAwardAmount, mkContractLink } from '../tools';
+import PaginatedTable from '../paginated-table';
 
-class CList extends Visualization {
-  constructor(...args) {
-    super(...args);
-    this.state = {
-      pageSize: 20,
-      page: 1,
-    };
-  }
-
+class CList extends PaginatedTable {
   getCustomEP() {
-    const { pageSize, page } = this.state;
     const { searchQuery } = this.props;
-
-    let contracts = new URI('flaggedRelease/all')
-      .addSearch('pageSize', pageSize)
-      .addSearch('pageNumber', page - 1);
-
-    let count = new URI('ocds/release/count');
-
-    if (searchQuery) {
-      contracts = contracts.addSearch('text', searchQuery);
-      count = count.addSearch('text', searchQuery);
-    }
-
-    return [
-      contracts,
-      count,
-    ];
-  }
-
-  transform([contracts, count]) {
-    return {
-      contracts,
-      count,
-    };
+    const eps = super.getCustomEP();
+    return searchQuery ?
+      eps.map(ep => ep.addSearch('text', searchQuery)) :
+      eps;
   }
 
   componentDidUpdate(prevProps, prevState) {
     const propsChanged = ['filters', 'searchQuery'].some(key => this.props[key] !== prevProps[key]);
-    const stateChanged = ['pageSize', 'page'].some(key => this.state[key] !== prevState[key]);
-    if (propsChanged || stateChanged) {
+    if (propsChanged) {
       this.fetch();
+    } else {
+      super.componentDidUpdate(prevProps, prevState);
     }
   }
-
 
   render() {
     const { data, navigate } = this.props;
 
-    const contracts = data.get('contracts', List());
+    const contracts = data.get('data', List());
     const count = data.get('count', 0);
 
     const { pageSize, page } = this.state;
@@ -171,6 +143,8 @@ export default class Contracts extends CRDPage {
         </h3>}
 
         <CList
+          dataEP="flaggedRelease/all"
+          countEP="ocds/release/count"
           data={list}
           filters={filters}
           requestNewData={(_, newData) => this.setState({ list: newData })}
@@ -178,7 +152,6 @@ export default class Contracts extends CRDPage {
           translations={translations}
           searchQuery={searchQuery}
         />
-
       </div>
     );
   }
