@@ -3,6 +3,7 @@ import { pluckImm } from '../tools';
 import translatable from '../translatable';
 import CRDPage from './page';
 import { colorLuminance } from './tools';
+import ProcurementsTable from './procurements-table';
 
 class IndividualIndicatorChart extends CustomPopupChart {
   getCustomEP() {
@@ -116,19 +117,6 @@ class IndividualIndicatorChart extends CustomPopupChart {
   }
 }
 
-import ProcurementsTable from "./procurements-table";
-
-class ProjectTable extends ProcurementsTable {
-  getCustomEP() {
-    const {corruptionType, indicator} = this.props;
-    return `flags/${indicator}/releases?pageSize=10&flagType=${corruptionType}`;
-  }
-
-  getClassName(){
-    return "table-project-table";
-  }
-}
-
 class IndividualIndicatorPage extends translatable(CRDPage) {
   constructor(...args) {
     super(...args);
@@ -184,7 +172,9 @@ class IndividualIndicatorPage extends translatable(CRDPage) {
           <h3 className="page-header">
             {this.t('crd:indicatorPage:projectTable:title').replace('$#$', this.t(`crd:indicators:${indicator}:name`))}
           </h3>
-          <ProjectTable
+          <ProcurementsTable
+            dataEP={`flags/${indicator}/releases?flagType=${corruptionType}`}
+            countEP={`flags/${indicator}/count?flagType=${corruptionType}`}
             indicator={indicator}
             corruptionType={corruptionType}
             requestNewData={(_, data) => this.setState({ table: data })}
