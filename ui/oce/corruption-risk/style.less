@@ -350,7 +350,7 @@
   .content{
     @arrowSize: 8px;
     margin-top: 89px;
-    margin-bottom: auto;
+    margin-bottom: 80px;
     padding: 20px 40px 0 30px;
 
     .crd-popup {
@@ -414,29 +414,6 @@
       }
     }
 
-    .table-top-flagged-contracts{
-      margin-top: 20px;
-      th, td{
-        font-weight: normal;
-        padding: 8px;
-      }
-      th{
-        border-bottom: none;
-        color: #7f8fa4;
-      }
-      td{
-        border-bottom: 1px solid #e7e9ed;
-        border-top: none;
-      }
-    }
-
-    .table-project-table, .table-top-flagged-contracts{
-      font-size: 12px;
-      td{
-        width: 11%;
-      }
-    }
-
     .indicator-tile-container{
       padding: 10px;
       .border{
@@ -489,6 +466,29 @@
 
     td.hoverable:hover, td.selectable.selected {
       box-shadow: inset 0px 0px 0px 5px #ffd307;
+    }
+
+    .react-bs-table {
+      th{
+        color: #a1adbc;
+      }
+      td{
+        font-weight: 600;
+        font-size: .9em;
+      }
+    }
+
+    .react-bs-container-body {
+      &, td.hoverable {
+        overflow: visible;
+      }
+
+      td.hoverable {
+        padding: 0;
+        &>div {
+          padding: 8px;
+        }
+      }
     }
 
     td.hoverable{

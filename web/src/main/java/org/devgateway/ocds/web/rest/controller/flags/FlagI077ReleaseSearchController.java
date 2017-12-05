@@ -33,4 +33,12 @@ public class FlagI077ReleaseSearchController extends AbstractFlagReleaseSearchCo
     public List<DBObject> releaseFlagSearch(@ModelAttribute @Valid YearFilterPagingRequest filter) {
         return super.releaseFlagSearch(filter);
     }
+
+    @Override
+    @ApiOperation(value = "Counts releases by flag i077")
+    @RequestMapping(value = "/api/flags/i077/count",
+            method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
+    public List<DBObject> releaseFlagCount(@ModelAttribute @Valid YearFilterPagingRequest filter) {
+        return super.releaseFlagCount(filter);
+    }
 }
