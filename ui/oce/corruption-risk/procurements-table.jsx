@@ -59,6 +59,11 @@ class Popup extends translatable(React.Component) {
 }
 
 class ProcurementsTable extends Table {
+  getCustomEP() {
+    const { dataEP } = this.props;
+    return dataEP;
+  }
+
   renderPopup({ flaggedStats, flagType: type, flagIds }) {
     const { translations } = this.props;
     return (
