@@ -1,9 +1,11 @@
 import ReactDOM from 'react-dom';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import { List } from 'immutable';
 import Table from '../visualizations/tables';
 import translatable from '../translatable';
 import { POPUP_HEIGHT } from './constants';
 import { getAwardAmount, mkContractLink } from './tools';
+import PaginatedTable from './paginated-table';
 
 // eslint-disable-next-line no-undef
 class Popup extends translatable(React.Component) {
@@ -58,12 +60,7 @@ class Popup extends translatable(React.Component) {
   }
 }
 
-class ProcurementsTable extends Table {
-  getCustomEP() {
-    const { dataEP } = this.props;
-    return dataEP;
-  }
-
+class ProcurementsTable extends PaginatedTable {
   renderPopup({ flaggedStats, flagType: type, flagIds }) {
     const { translations } = this.props;
     return (
@@ -81,7 +78,12 @@ class ProcurementsTable extends Table {
 
     if (!data) return null;
 
-    const jsData = data.map((contract) => {
+    const contracts = data.get('data', List());
+    const count = data.get('count', 0);
+
+    const { pageSize, page } = this.state;
+
+    const jsData = contracts.map((contract) => {
       const tenderAmount = contract.getIn(['tender', 'value', 'amount'], 'N/A') +
           ' ' +
           contract.getIn(['tender', 'value', 'currency'], '');
@@ -121,6 +123,19 @@ class ProcurementsTable extends Table {
         data={jsData}
         striped
         bordered={false}
+        pagination
+        remote
+        fetchInfo={{
+          dataTotalSize: count,
+        }}
+        options={{
+          page,
+          onPageChange: newPage => this.setState({ page: newPage }),
+          sizePerPage: pageSize,
+          sizePerPageList: [20, 50, 100, 200].map(value => ({ text: value, value })),
+          onSizePerPageList: newPageSize => this.setState({ pageSize: newPageSize }),
+          paginationPosition: 'both',
+        }}
       >
         <TableHeaderColumn dataField="status">
           {this.t('crd:procurementsTable:status')}

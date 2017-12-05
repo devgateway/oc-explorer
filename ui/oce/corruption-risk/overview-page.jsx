@@ -128,17 +128,6 @@ class CorruptionType extends CustomPopupChart {
 
 CorruptionType.endpoint = 'percentTotalProjectsFlaggedByYear';
 
-class TopFlaggedContracts extends ProcurementsTable {
-  render() {
-    return (
-      <ProcurementsTable
-        dataEP="corruptionRiskOverviewTable"
-        {...this.props}
-      />
-    );
-  }
-}
-
 class OverviewPage extends CRDPage {
   constructor(...args) {
     super(...args);
@@ -173,7 +162,9 @@ class OverviewPage extends CRDPage {
         </section>
         <section>
           <h3 className="page-header">{this.t('crd:overview:topFlagged:title')}</h3>
-          <TopFlaggedContracts
+          <ProcurementsTable
+            dataEP="corruptionRiskOverviewTable"
+            countEP="corruptionRiskOverviewTable/count"
             filters={filters}
             data={topFlaggedContracts}
             translations={translations}
