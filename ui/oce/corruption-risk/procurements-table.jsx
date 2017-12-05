@@ -6,7 +6,7 @@ import { POPUP_HEIGHT } from './constants';
 import { getAwardAmount, mkContractLink } from './tools';
 
 // eslint-disable-next-line no-undef
-class Popup extends translatable(React.Component){
+class Popup extends translatable(React.Component) {
   constructor(...args) {
     super(...args);
     this.state = {
@@ -14,11 +14,11 @@ class Popup extends translatable(React.Component){
     };
   }
 
-  getPopup(){
-    const {type, flagIds} = this.props;
-    const {popupTop} = this.state;
+  getPopup() {
+    const { type, flagIds } = this.props;
+    const { popupTop } = this.state;
     return (
-      <div className="crd-popup text-center" style={{top: popupTop}}>
+      <div className="crd-popup text-center" style={{ top: popupTop }}>
         <div className="row">
           <div className="col-sm-12 info">
             <h5>{this.t('crd:procurementsTable:associatedFlags').replace('$#$', this.t(`crd:corruptionType:${type}:name`))}</h5>
@@ -39,26 +39,26 @@ class Popup extends translatable(React.Component){
     const el = ReactDOM.findDOMNode(this);
     this.setState({
       showPopup: true,
-      popupTop: -(POPUP_HEIGHT / 2) + (el.offsetHeight / 4)
+      popupTop: -(POPUP_HEIGHT / 2) + (el.offsetHeight / 4),
     });
   }
 
-  render(){
-    const {flaggedStats} = this.props;
-    const {showPopup} = this.state;
+  render() {
+    const { flaggedStats } = this.props;
+    const { showPopup } = this.state;
     return (
       <div
-        onMouseEnter={this.showPopup.bind(this)}
+        onMouseEnter={() => this.showPopup()}
         onMouseLeave={() => this.setState({ showPopup: false })}
       >
         {flaggedStats.get('count')}
         {showPopup && this.getPopup()}
       </div>
-    )
+    );
   }
 }
 
-class ProcurementsTable extends Table{
+class ProcurementsTable extends Table {
   renderPopup({ flaggedStats, flagType: type, flagIds }) {
     const { translations } = this.props;
     return (
@@ -107,9 +107,9 @@ class ProcurementsTable extends Table{
         // needed for the popup:
         flaggedStats,
         flagType,
-        flagIds
-      }
-    })
+        flagIds,
+      };
+    });
 
     return (
       <BootstrapTable
@@ -150,7 +150,7 @@ class ProcurementsTable extends Table{
         </TableHeaderColumn>
 
         <TableHeaderColumn
-          dataFormat={(_, data) => this.renderPopup(data)}
+          dataFormat={(_, popupData) => this.renderPopup(popupData)}
           columnClassName="hoverable popup-left"
         >
           {this.t('crd:procurementsTable:noOfFlags')}
@@ -159,7 +159,5 @@ class ProcurementsTable extends Table{
     );
   }
 }
-
-
 
 export default ProcurementsTable;
