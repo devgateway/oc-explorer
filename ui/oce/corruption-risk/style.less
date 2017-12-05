@@ -491,8 +491,17 @@
       box-shadow: inset 0px 0px 0px 5px #ffd307;
     }
 
-    .react-bs-container-body, td.hoverable {
-      overflow: visible;
+    .react-bs-container-body {
+      &, td.hoverable {
+        overflow: visible;
+      }
+
+      td.hoverable {
+        padding: 0;
+        &>div {
+          padding: 8px;
+        }
+      }
     }
 
     td.hoverable{
