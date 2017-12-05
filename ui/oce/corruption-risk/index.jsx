@@ -104,7 +104,7 @@ class CorruptionRiskDashboard extends React.Component {
     const styling = this.constructor.STYLING || this.props.styling;
     const [page] = route;
 
-    const { appliedFilters, indicatorTypesMapping, width, data } = this.state;
+    const { appliedFilters, indicatorTypesMapping, width, data, allYears } = this.state;
 
     const { filters, years, months } = this.destructFilters(appliedFilters);
     const monthly = years.count() === 1;
@@ -168,6 +168,7 @@ class CorruptionRiskDashboard extends React.Component {
           indicatorTypesMapping={indicatorTypesMapping}
           filters={filters}
           years={years}
+          allYears={allYears}
           monthly={monthly}
           months={months}
           width={width}
@@ -262,6 +263,7 @@ class CorruptionRiskDashboard extends React.Component {
     const { dashboardSwitcherOpen, filterBoxIndex, currentFiltersState,
       appliedFilters, data, indicatorTypesMapping, allYears, allMonths, showLandingPopup,
       disabledApiSecurity } = this.state;
+
     const { onSwitch, route, navigate } = this.props;
     const translations = this.getTranslations();
     const [page] = route;
@@ -336,10 +338,11 @@ class CorruptionRiskDashboard extends React.Component {
             this.setState({ data: this.state.data.setIn(path, newData) })}
           filters={filters}
           years={years}
+          allYears={allYears}
           monthly={monthly}
           months={months}
         />
-        <div className="col-xs-offset-4 col-md-offset-4 col-lg-offset-3 col-xs-8 col-md-8 col-lg-9 content">
+        <div className="col-sm-offset-3 col-sm-9 content">
           {this.getPage()}
         </div>
       </div>

@@ -7,22 +7,20 @@ import { CORRUPTION_TYPES } from './constants';
 
 // eslint-disable-next-line no-undef
 class Sidebar extends translatable(React.PureComponent) {
-  constructor(...args){
-    super(...args);
-    this.prevScrollY = 0;
-  }
-
   componentDidMount() {
     const el = ReactDOM.findDOMNode(this);
     const scrollTarget = el.querySelector('div');
     const offsetTop = el.getBoundingClientRect().top;
 
-    window.addEventListener('scroll', e => {
-      const diff = window.scrollY - this.prevScrollY;
-      this.prevScrollY = window.scrollY;
+    window.addEventListener('wheel', e => {
       let margin = parseInt(scrollTarget.style.marginTop);
       if (isNaN(margin)) margin = 0;
-      margin -= diff;
+      if (e.deltaY > 0) {
+        margin -= 40;
+      } else if (window.scrollY === 0) {
+        margin += 40;
+      }
+
       const newMargin = Math.min(
         0,
         Math.max(
@@ -36,10 +34,10 @@ class Sidebar extends translatable(React.PureComponent) {
 
   render() {
     const { page, indicatorTypesMapping, filters, years, monthly, months, navigate, translations,
-      data, requestNewData, route } = this.props;
+      data, requestNewData, route, allYears } = this.props;
 
     return (
-      <aside className="col-xs-4 col-md-4 col-lg-3" id="crd-sidebar">
+      <aside className="col-sm-3" id="crd-sidebar">
         <div>
           <section role="navigation" className="row">
             <a
@@ -117,6 +115,7 @@ class Sidebar extends translatable(React.PureComponent) {
             translations={translations}
             data={data.get('totalFlags', Map())}
             years={years}
+            allYears={allYears}
             months={months}
             monthly={monthly}
           />

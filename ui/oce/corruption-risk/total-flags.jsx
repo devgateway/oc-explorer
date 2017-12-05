@@ -3,12 +3,14 @@ import Chart from "../visualizations/charts/index.jsx";
 import {pluckImm, debounce} from "../tools";
 import backendYearFilterable from "../backend-year-filterable";
 import Visualization from "../visualization";
-import {fromJS} from "immutable";
+import { fromJS, Set } from "immutable";
 import translatable from "../translatable";
 
 Plotly.register([
   require('plotly.js/lib/pie')
 ]);
+
+const EMPTY_SET = Set();
 
 class TotalFlagsChart extends backendYearFilterable(Chart){
   getData(){
@@ -113,9 +115,9 @@ class TotalFlags extends translatable(React.Component){
     window.removeEventListener("resize", this.updateSidebarWidth)
   }
 
-  render(){
-    const {data, requestNewData, translations, filters, years, months, monthly} = this.props;
-    const {width} = this.state;
+  render() {
+    const { data, requestNewData, translations, filters, years, months, monthly, allYears } = this.props;
+    const { width } = this.state;
     if(!width) return null;
     return (
       <div className="total-flags">
@@ -124,7 +126,7 @@ class TotalFlags extends translatable(React.Component){
           requestNewData={(_, data) => requestNewData(['contractCounter'], data)}
           translations={translations}
           filters={filters}
-          years={years}
+          years={Set(allYears).equals(years) ? EMPTY_SET : years}
           months={months}
           monthly={monthly}
         />

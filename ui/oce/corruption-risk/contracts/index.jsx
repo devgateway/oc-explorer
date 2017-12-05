@@ -1,76 +1,43 @@
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import PaginationList from 'react-bootstrap-table/lib/pagination/PaginationList';
 import { List } from 'immutable';
-import URI from 'urijs';
 // eslint-disable-next-line no-unused-vars
 import rbtStyles from 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import CRDPage from '../page';
 import Visualization from '../../visualization';
 import TopSearch from './top-search';
+import { getAwardAmount, mkContractLink } from '../tools';
+import PaginatedTable from '../paginated-table';
 
-const API_ROOT = '/api';
-
-class CList extends Visualization {
-  constructor(...args){
-    super(...args);
-    this.state = {
-      pageSize: 20,
-      page: 1
-    }
-  }
-
-  buildUrl(ep) {
-    const { filters, searchQuery } = this.props;
-    const { pageSize, page } = this.state;
-    const skip = pageSize * (page - 1);
-    const uri = new URI(`${API_ROOT}/${ep}`)
-      .addSearch('pageSize', pageSize)
-      .addSearch('pageNumber', page - 1)
-      .addSearch(filters.toJS());
+class CList extends PaginatedTable {
+  getCustomEP() {
+    const { searchQuery } = this.props;
+    const eps = super.getCustomEP();
     return searchQuery ?
-      uri.addSearch('text', searchQuery) :
-      uri;
+      eps.map(ep => ep.addSearch('text', searchQuery)) :
+      eps;
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const propsChanged = ['filters', 'searchQuery'].some(key => this.props[key] != prevProps[key]);
-    const stateChanged = ['pageSize', 'page'].some(key => this.state[key] != prevState[key]);
-    if (propsChanged || stateChanged) {
+    const propsChanged = ['filters', 'searchQuery'].some(key => this.props[key] !== prevProps[key]);
+    if (propsChanged) {
       this.fetch();
+    } else {
+      super.componentDidUpdate(prevProps, prevState);
     }
   }
 
-  mkLink(content, { id }) {
-    const { navigate } = this.props;
-    return (
-      <a
-        href="javascript:void(0);"
-        onClick={() => navigate('contract', id)}
-      >
-        {content}
-      </a>
-    );
-  }
-
   render() {
-    const { data, count } = this.props;
+    const { data, navigate } = this.props;
 
-    if (!data || !data.count()) return null;
+    const contracts = data.get('data', List());
+    const count = data.get('count', 0);
 
     const { pageSize, page } = this.state;
 
-    const jsData = data.map((contract) => {
+    const jsData = contracts.map((contract) => {
       const tenderAmount = contract.getIn(['tender', 'value', 'amount'], 'N/A') +
           ' ' +
           contract.getIn(['tender', 'value', 'currency'], '');
-
-      const winningAward = contract.get('awards', List()).find(award => award.get('status') === 'active');
-      let awardAmount = 'N/A';
-      if (winningAward) {
-        awardAmount = winningAward.getIn(['value', 'amount'], 'N/A') +
-          ' ' +
-          winningAward.getIn(['value', 'currency'], '')
-      }
 
       const startDate = contract.getIn(['tender', 'tenderPeriod', 'startDate']);
 
@@ -84,7 +51,7 @@ class CList extends Visualization {
         title: contract.getIn(['tender', 'title'], 'N/A'),
         PEName: contract.getIn(['tender', 'procuringEntity', 'name'], 'N/A'),
         tenderAmount,
-        awardAmount,
+        awardAmount: getAwardAmount(contract),
         startDate: startDate ? new Date(startDate).toLocaleDateString() : 'N/A',
         flagTypes,
       };
@@ -97,15 +64,15 @@ class CList extends Visualization {
         bordered={false}
         pagination
         remote
-        fetchInfo = {{
-          dataTotalSize: count
+        fetchInfo={{
+          dataTotalSize: count,
         }}
         options={{
           page,
-          onPageChange: page => this.setState({ page }),
+          onPageChange: newPage => this.setState({ page: newPage }),
           sizePerPage: pageSize,
-          sizePerPageList: [20, 50, 100, 200].map(value => ({text: value, value})),
-          onSizePerPageList: pageSize => this.setState({ pageSize }),
+          sizePerPageList: [20, 50, 100, 200].map(value => ({ text: value, value })),
+          onSizePerPageList: newPageSize => this.setState({ pageSize: newPageSize }),
           paginationPosition: 'both',
         }}
       >
@@ -113,11 +80,11 @@ class CList extends Visualization {
           {this.t('crd:contracts:baseInfo:status')}
         </TableHeaderColumn>
 
-        <TableHeaderColumn isKey dataField="id" dataFormat={this.mkLink.bind(this)}>
+        <TableHeaderColumn isKey dataField="id" dataFormat={mkContractLink(navigate)}>
           {this.t('crd:procurementsTable:contractID')}
         </TableHeaderColumn>
 
-        <TableHeaderColumn dataField="title" dataFormat={this.mkLink.bind(this)}>
+        <TableHeaderColumn dataField="title" dataFormat={mkContractLink(navigate)}>
           {this.t('crd:general:contract:title')}
         </TableHeaderColumn>
 
@@ -141,11 +108,9 @@ class CList extends Visualization {
           {this.t('crd:procurementsTable:flagType')}
         </TableHeaderColumn>
       </BootstrapTable>
-    )
+    );
   }
 }
-
-CList.endpoint = 'flaggedRelease/all';
 
 export default class Contracts extends CRDPage {
   constructor(...args) {
@@ -157,7 +122,10 @@ export default class Contracts extends CRDPage {
 
   render() {
     const { list } = this.state;
-    const { filters, navigate, translations, searchQuery, doSearch, count } = this.props;
+    const { filters, navigate, translations, searchQuery, doSearch } = this.props;
+
+    const count = list.get('count');
+
     return (
       <div className="contracts-page">
         <TopSearch
@@ -167,20 +135,23 @@ export default class Contracts extends CRDPage {
         />
 
         {searchQuery && <h3 className="page-header">
-          {this.t('crd:contracts:top-search:resultsFor').replace('$#$', searchQuery)}
+          {
+            (count === 1 ?
+              this.t('crd:contracts:top-search:resultsFor:sg') :
+              this.t('crd:contracts:top-search:resultsFor:pl')
+            ).replace('$#$', count).replace('$#$', searchQuery)}
         </h3>}
 
         <CList
+          dataEP="flaggedRelease/all"
+          countEP="ocds/release/count"
           data={list}
           filters={filters}
-          requestNewData={(_, newList) => this.setState({ list: newList })}
+          requestNewData={(_, newData) => this.setState({ list: newData })}
           navigate={navigate}
           translations={translations}
           searchQuery={searchQuery}
-          count={count}
         />
-
-        {searchQuery && !list.count() ? <strong>{this.t('crd:contracts:top-search:nothingFound')}</strong> : null}
       </div>
     );
   }
