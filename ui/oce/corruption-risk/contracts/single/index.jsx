@@ -259,6 +259,7 @@ export default class Contract extends CRDPage {
         />
         <section>
           <h2>
+            {this.t('crd:contracts:contractStatistics')}
           </h2>
           <div className="col-sm-4">
             <NrOfBidders
