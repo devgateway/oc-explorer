@@ -58,7 +58,7 @@ class Counter extends backendYearFilterable(Visualization) {
     return (
       <div className="counter">
         <div className="count text-right">
-          {this.getCount()}
+          {this.getCount().toLocaleString()}
         </div>
         <div className="text text-left">
           {this.getTitle()}
