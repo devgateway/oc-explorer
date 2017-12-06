@@ -257,8 +257,9 @@ export default class Contract extends CRDPage {
           requestNewData={(_, contract) => this.setState({contract})}
           translations={translations}
         />
-        <section>
+        <section className="contract-statistics">
           <h2>
+            {this.t('crd:contracts:contractStatistics')}
           </h2>
           <div className="col-sm-4">
             <NrOfBidders
