@@ -2,18 +2,18 @@ import { Map, List, Set } from 'immutable';
 import CRDPage from '../../page';
 import Visualization from '../../../visualization';
 import translatable from '../../../translatable';
-import styles from '../style.less';
 import TopSearch from '../top-search';
 import NrOfBidders from './donuts/nr-of-bidders';
 import NrOfContractsWithThisPE from './donuts/nr-contract-with-pe';
 import PercentPESpending from './donuts/percent-pe-spending';
 import Crosstab from '../../clickable-crosstab';
-import { CORRUPTION_TYPES } from '../../constants';
+// eslint-disable-next-line no-unused-vars
+import styles from '../style.less';
 
 const EMPTY_SET = Set();
 
 class Info extends translatable(Visualization) {
-  getCustomEP(){
+  getCustomEP() {
     const { id } = this.props;
     return `flaggedRelease/ocid/${id}`;
   }
@@ -22,11 +22,10 @@ class Info extends translatable(Visualization) {
     const { data, supplier } = this.props;
 
     const title = data.getIn(['tender', 'title']);
-    const suppliers = data.get('awards', List()).flatMap(award => award.get('suppliers'));
     const startDate = data.getIn(['tender', 'tenderPeriod', 'startDate']);
     const endDate = data.getIn(['tender', 'tenderPeriod', 'endDate']);
-    const award = data.get('awards', List()).find(award =>
-      award.get('status') != 'unsuccessful') || Map();
+    const award = data.get('awards', List()).find(a =>
+      a.get('status') !== 'unsuccessful') || Map();
 
     const flagCount = data.get('flags', List()).filter(flag => flag.get && flag.get('value')).count();
     return (
@@ -41,7 +40,7 @@ class Info extends translatable(Visualization) {
             <dd>{data.get('tag', []).join(', ')}</dd>
           </dl>
           <div className="col-md-4 flags">
-            <img src="assets/icons/flag.svg" alt="Flag icon" className="flag-icon"/>
+            <img src="assets/icons/flag.svg" alt="Flag icon" className="flag-icon" />
             &nbsp;
             {flagCount}
             &nbsp;{flagCount === 1 ? 'Flag' : 'Flags'}
@@ -77,7 +76,6 @@ class Info extends translatable(Visualization) {
                       this.t('general:undefined')
                     }
                   </dd>
-                  <a href="javascript:void(0);" onClick={() => this.setState({showAllSuppliers: true})}></a>
                 </dl>
               </td>
             </tr>
@@ -142,24 +140,24 @@ class Info extends translatable(Visualization) {
 }
 
 export default class Contract extends CRDPage {
-  constructor(...args){
+  constructor(...args) {
     super(...args);
     this.state = {
       contract: Map(),
       crosstab: Map(),
-      indicators: {}
-    }
+      indicators: {},
+    };
   }
 
   groupIndicators({ indicatorTypesMapping }, { contract }) {
     if (!indicatorTypesMapping || !Object.keys(indicatorTypesMapping).length || !contract) return;
     const newIndicators = {};
-    contract.get('flags', List()) .forEach((flag, name) => {
-      if(flag.get && flag.get('value')) {
-        indicatorTypesMapping[name].types.forEach(type => {
+    contract.get('flags', List()).forEach((flag, name) => {
+      if (flag.get && flag.get('value')) {
+        indicatorTypesMapping[name].types.forEach((type) => {
           newIndicators[type] = newIndicators[type] || [];
           newIndicators[type].push(name);
-        })
+        });
       }
     });
     this.setState({ indicators: newIndicators });
@@ -171,8 +169,8 @@ export default class Contract extends CRDPage {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    const indicatorsChanged = this.props.indicatorTypesMapping != nextProps.indicatorTypesMapping;
-    const contractChanged = this.state.contract != nextState.contract;
+    const indicatorsChanged = this.props.indicatorTypesMapping !== nextProps.indicatorTypesMapping;
+    const contractChanged = this.state.contract !== nextState.contract;
     if (indicatorsChanged || contractChanged) {
       this.groupIndicators(nextProps, nextState);
     }
@@ -211,8 +209,8 @@ export default class Contract extends CRDPage {
               data={crosstab.get(corruptionType)}
               indicators={indicators[corruptionType]}
               requestNewData={(_, data) => {
-                  const { crosstab } = this.state;
-                  this.setState({ crosstab: crosstab.set(corruptionType, data)})
+                const { crosstab } = this.state;
+                this.setState({ crosstab: crosstab.set(corruptionType, data)})
               }}
             />
           </div>
@@ -222,10 +220,9 @@ export default class Contract extends CRDPage {
   }
 
   render() {
-    const { contract, nrOfBidders, nrContracts, percentPESpending, crosstab,
-      indicators } = this.state;
+    const { contract, nrOfBidders, nrContracts, percentPESpending } = this.state;
 
-    const { id, translations, doSearch, indicatorTypesMapping, filters, allYears,
+    const { id, translations, doSearch, filters, allYears,
       years: selectedYears, width, months, monthly } = this.props;
 
     const years = Set(allYears).equals(selectedYears) ?
@@ -241,7 +238,7 @@ export default class Contract extends CRDPage {
     const procuringEntityId = contract.getIn(['tender', 'procuringEntity', 'id']) ||
       contract.getIn(['tender', 'procuringEntity', 'identifier', 'id']);
 
-    const donutSize = width / 3 - 100; 
+    const donutSize = width / 3 - 100;
 
     return (
       <div className="contract-page">
@@ -254,7 +251,7 @@ export default class Contract extends CRDPage {
           data={contract}
           supplier={supplier}
           filters={filters}
-          requestNewData={(_, contract) => this.setState({contract})}
+          requestNewData={(_, contract) => this.setState({ contract })}
           translations={translations}
         />
         <section className="contract-statistics">
