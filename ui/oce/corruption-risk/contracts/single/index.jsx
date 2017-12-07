@@ -7,6 +7,7 @@ import NrOfBidders from './donuts/nr-of-bidders';
 import NrOfContractsWithThisPE from './donuts/nr-contract-with-pe';
 import PercentPESpending from './donuts/percent-pe-spending';
 import Crosstab from '../../clickable-crosstab';
+import CustomPopup from '../../custom-popup';
 import { wireProps } from '../../tools';
 // eslint-disable-next-line no-unused-vars
 import styles from '../style.less';
@@ -261,10 +262,11 @@ export default class Contract extends CRDPage {
             {this.t('crd:contracts:contractStatistics')}
           </h2>
           <div className="col-sm-4">
-            <NrOfBidders
+            <CustomPopup
               count={contract.getIn(['tender', 'tenderers'], List()).count()}
               contract={contract}
               {...wireProps(this, 'nrOfBidders')}
+              Chart={NrOfBidders}
             />
           </div>
           <div className="col-sm-4">
