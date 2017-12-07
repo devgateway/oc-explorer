@@ -7,25 +7,11 @@ import NrOfBidders from './donuts/nr-of-bidders';
 import NrOfContractsWithThisPE from './donuts/nr-contract-with-pe';
 import PercentPESpending from './donuts/percent-pe-spending';
 import Crosstab from '../../clickable-crosstab';
+import { wireProps } from '../../tools';
 // eslint-disable-next-line no-unused-vars
 import styles from '../style.less';
 
 const EMPTY_SET = Set();
-
-const ROUTINE_PROPS = ['filters', 'years', 'months', 'monthly', 'translations', 'width']
-
-function cherrypickProps(source, keys) {
-  const target = {};
-  keys.forEach(key => target[key] = source[key]);
-  return target;
-}
-
-function wireProps(parent, prefix) {
-  const props = cherrypickProps(parent.props, ROUTINE_PROPS);
-  props.data = parent.state[prefix];
-  props.requestNewData = (_, data) => parent.setState({ [prefix]: data });
-  return props;
-}
 
 class Info extends translatable(Visualization) {
   getCustomEP() {
