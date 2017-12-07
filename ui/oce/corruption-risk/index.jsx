@@ -147,6 +147,9 @@ class CorruptionRiskDashboard extends React.Component {
           monthly={monthly}
           months={months}
           width={width}
+          data={data.get('contract', Map())}
+          requestNewData={(path, newData) =>
+            this.setState({ data: this.state.data.setIn(['contract'].concat(path), newData) })}
         />
       );
     }
