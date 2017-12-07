@@ -12,6 +12,21 @@ import styles from '../style.less';
 
 const EMPTY_SET = Set();
 
+const ROUTINE_PROPS = ['filters', 'years', 'months', 'monthly', 'translations', 'width']
+
+function cherrypickProps(source, keys) {
+  const target = {};
+  keys.forEach(key => target[key] = source[key]);
+  return target;
+}
+
+function wireProps(parent, prefix) {
+  const props = cherrypickProps(parent.props, ROUTINE_PROPS);
+  props.data = parent.state[prefix];
+  props.requestNewData = (_, data) => parent.setState({ [prefix]: data });
+  return props;
+}
+
 class Info extends translatable(Visualization) {
   getCustomEP() {
     const { id } = this.props;
@@ -254,6 +269,7 @@ export default class Contract extends CRDPage {
           requestNewData={(_, contract) => this.setState({ contract })}
           translations={translations}
         />
+
         <section className="contract-statistics">
           <h2>
             {this.t('crd:contracts:contractStatistics')}
@@ -262,14 +278,7 @@ export default class Contract extends CRDPage {
             <NrOfBidders
               count={contract.getIn(['tender', 'tenderers'], List()).count()}
               contract={contract}
-              data={nrOfBidders}
-              filters={filters}
-              years={years}
-              monthly={monthly}
-              months={months}
-              requestNewData={(_, nrOfBidders) => this.setState({ nrOfBidders })}
-              translations={translations}
-              width={donutSize}
+              {...wireProps(this, 'nrOfBidders')}
             />
           </div>
           <div className="col-sm-4">
@@ -310,3 +319,4 @@ export default class Contract extends CRDPage {
     );
   }
 }
+
