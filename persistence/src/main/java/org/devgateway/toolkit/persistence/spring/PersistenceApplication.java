@@ -49,9 +49,8 @@ public class PersistenceApplication {
     }
 
     @Bean
-    public TomcatEmbeddedServletContainerFactory tomcatFactory(final
-                                                               @Qualifier("liquibaseAfterJPA") SpringLiquibaseRunner
-                                                               liquibaseAfterJPA) {
+    public TomcatEmbeddedServletContainerFactory tomcatFactory(@Qualifier("liquibaseAfterJPA") final
+                                                                   SpringLiquibaseRunner liquibaseAfterJPA) {
         logger.info("Instantiating tomcat after initialization of " + liquibaseAfterJPA);
         return new TomcatEmbeddedServletContainerFactory() {
             @Override
