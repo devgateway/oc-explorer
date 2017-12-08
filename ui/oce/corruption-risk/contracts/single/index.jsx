@@ -223,7 +223,7 @@ export default class Contract extends CRDPage {
   }
 
   render() {
-    const { contract, nrContracts, percentPESpending } = this.state;
+    const { contract, percentPESpending } = this.state;
 
     const { id, translations, doSearch, filters, allYears,
       years: selectedYears, width, months, monthly } = this.props;
@@ -274,16 +274,12 @@ export default class Contract extends CRDPage {
           </div>
           <div className="col-sm-4">
             {procuringEntityId && supplier &&
-              <NrOfContractsWithThisPE
+              <CustomPopup
                 procuringEntityId={procuringEntityId}
                 supplierId={supplier.get('id')}
-                data={nrContracts}
-                filters={filters}
-                years={years}
-                monthly={monthly}
-                months={months}
-                requestNewData={(_, nrContracts) => this.setState({ nrContracts })}
-                translations={translations}
+                {...wireProps(this, 'nrContracts')}
+                Popup={DonutPopup}
+                Chart={NrOfContractsWithThisPE}
                 width={donutSize}
               />
             }
