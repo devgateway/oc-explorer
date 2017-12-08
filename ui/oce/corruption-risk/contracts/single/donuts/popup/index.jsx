@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import style from './style.less';
 
-const POPUP_WIDTH = 250;
+const POPUP_WIDTH = 300;
 const POPUP_HEIGHT = 75;
 
 class DonutPopup extends React.Component {
@@ -12,7 +12,7 @@ class DonutPopup extends React.Component {
     const top = y - POPUP_HEIGHT - 12;
     return (
       <div
-        className="crd-popup donut-popup"
+        className="crd-popup donut-popup text-center"
         style={{
           width: POPUP_WIDTH,
           height: POPUP_HEIGHT,
@@ -21,7 +21,7 @@ class DonutPopup extends React.Component {
           color: 'white'
         }}
       >
-        {label}
+        {label.replace('$#$', value.toFixed(2))}
         <div className="arrow" />
       </div>
     )

@@ -8,6 +8,7 @@ import NrOfContractsWithThisPE from './donuts/nr-contract-with-pe';
 import PercentPESpending from './donuts/percent-pe-spending';
 import Crosstab from '../../clickable-crosstab';
 import CustomPopup from '../../custom-popup';
+import DonutPopup from './donuts/popup';
 import { wireProps } from '../../tools';
 // eslint-disable-next-line no-unused-vars
 import styles from '../style.less';
@@ -222,7 +223,7 @@ export default class Contract extends CRDPage {
   }
 
   render() {
-    const { contract, nrOfBidders, nrContracts, percentPESpending } = this.state;
+    const { contract, nrContracts, percentPESpending } = this.state;
 
     const { id, translations, doSearch, filters, allYears,
       years: selectedYears, width, months, monthly } = this.props;
@@ -266,7 +267,9 @@ export default class Contract extends CRDPage {
               count={contract.getIn(['tender', 'tenderers'], List()).count()}
               contract={contract}
               {...wireProps(this, 'nrOfBidders')}
+              Popup={DonutPopup}
               Chart={NrOfBidders}
+              width={donutSize}
             />
           </div>
           <div className="col-sm-4">
