@@ -6,6 +6,7 @@ import TopSearch from '../top-search';
 import NrOfBidders from './donuts/nr-of-bidders';
 import NrOfContractsWithThisPE from './donuts/nr-contract-with-pe';
 import PercentPESpending from './donuts/percent-pe-spending';
+import PercentPESpendingPopup from './donuts/percent-pe-spending/popup';
 import Crosstab from '../../clickable-crosstab';
 import CustomPopup from '../../custom-popup';
 import DonutPopup from './donuts/popup';
@@ -286,16 +287,12 @@ export default class Contract extends CRDPage {
           </div>
           <div className="col-sm-4">
             {procuringEntityId && supplier &&
-              <PercentPESpending
-                data={percentPESpending}
-                filters={filters}
+              <CustomPopup
                 procuringEntityId={procuringEntityId}
                 supplierId={supplier.get('id')}
-                years={years}
-                monthly={monthly}
-                months={months}
-                requestNewData={(_, percentPESpending) => this.setState({ percentPESpending })}
-                translations={translations}
+                {...wireProps(this, 'percentPESpending')}
+                Popup={PercentPESpendingPopup}
+                Chart={PercentPESpending}
                 width={donutSize}
               />
             }
