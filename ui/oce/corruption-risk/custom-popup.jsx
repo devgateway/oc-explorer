@@ -5,10 +5,10 @@ class CustomPopup extends React.Component {
     super(...args);
     this.state = this.state || {};
     this.state = {
-      show: true,
+      show: false,
       x: 0,
-      y: 0
-    }
+      y: 0,
+    };
   }
 
   componentDidMount() {
@@ -16,9 +16,16 @@ class CustomPopup extends React.Component {
     const chartContainer = ReactDOM.findDOMNode(this)
       .querySelector('.js-plotly-plot');
 
-    chartContainer.on('plotly_hover', e => this.setState({ show: true }));
-    chartContainer.on('plotly_unhover', e => this.setState({ show: false }));
+    chartContainer.on('plotly_hover', e => this.showPopup(e));
+    chartContainer.on('plotly_unhover', () => this.setState({ show: false }));
     chartContainer.addEventListener('mousemove', this.movePopup.bind(this));
+  }
+
+  showPopup({ points }) {
+    this.setState({
+      show: true,
+      points,
+    });
   }
 
   movePopup({ offsetX: x, offsetY: y }) {
@@ -27,7 +34,7 @@ class CustomPopup extends React.Component {
 
   render() {
     const { Popup, Chart } = this.props;
-    const { show, x, y } = this.state;
+    const { show, x, y, points } = this.state;
     return (
       <div style={{ position: 'relative' }}>
         {show &&
@@ -35,6 +42,7 @@ class CustomPopup extends React.Component {
             {...this.props}
             y={y}
             x={x}
+            points={points}
           />
         }
         <Chart
