@@ -10,6 +10,9 @@ class DonutPopup extends React.Component {
     const { v: value, label } = points[0];
     const left = x - (POPUP_WIDTH / 2) + 30;
     const top = y - POPUP_HEIGHT - 12;
+    const formattedValue = Math.round(value) === value ?
+      value :
+      value.toFixed(2);
     return (
       <div
         className="crd-popup donut-popup text-center"
@@ -21,7 +24,7 @@ class DonutPopup extends React.Component {
           color: 'white'
         }}
       >
-        {label.replace('$#$', value.toFixed(2))}
+        {label.replace(/\$\#\$/g, formattedValue)}
         <div className="arrow" />
       </div>
     )
