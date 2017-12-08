@@ -39,3 +39,27 @@ export const mkContractLink = navigate => (content, { id }) => (
     {content}
   </a>
 );
+
+const ROUTINE_PROPS = ['filters', 'years', 'months', 'monthly', 'translations', 'width']
+
+export const copyProps = (keys, source, target) =>
+  keys.forEach(key => target[key] = source[key]);
+
+export function cherrypickProps(keys, source) {
+  const target = {};
+  copyProps(keys, source, target);
+  return target;
+}
+
+export function wireProps(parent, prefix) {
+  const { props: parentProps } = parent;
+  const props = cherrypickProps(ROUTINE_PROPS, parentProps);
+  if (prefix) {
+    props.data = parentProps.data.get(prefix);
+    props.requestNewData = (path, data) =>
+      parentProps.requestNewData(path.concat(prefix), data);
+  } else {
+    copyProps(['data', 'requestNewData'], parentProps, props);
+  }
+  return props;
+}

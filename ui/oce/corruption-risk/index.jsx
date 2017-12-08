@@ -68,31 +68,6 @@ class CorruptionRiskDashboard extends React.Component {
     }));
   }
 
-  languageSwitcher() {
-    const { TRANSLATIONS } = this.constructor;
-    const { locale: selectedLocale } = this.state;
-    if (Object.keys(TRANSLATIONS).length <= 1) return null;
-    return Object.keys(TRANSLATIONS).map(locale => (
-      <a
-        href="javascript:void(0);"
-        onClick={() => this.setLocale(locale)}
-        className={cn({active: locale === selectedLocale})}
-      >
-        {locale.split('_')[0]}
-      </a>
-    ));
-    /* return Object.keys(TRANSLATIONS).map(locale =>
-     *   (
-     *     <img
-     *     className="icon"
-     *     src={`assets/flags/${locale}.png`}
-     *     alt={`${locale} flag`}
-     *     
-     *     key={locale}
-     *   />),
-     * );*/
-  }
-
   setLocale(locale) {
     this.setState({ locale });
     localStorage.oceLocale = locale;
@@ -172,23 +147,76 @@ class CorruptionRiskDashboard extends React.Component {
           monthly={monthly}
           months={months}
           width={width}
-        />
-      );
-    } else {
-      return (
-        <OverviewPage
-          filters={filters}
-          translations={translations}
-          years={years}
-          monthly={monthly}
-          months={months}
-          indicatorTypesMapping={indicatorTypesMapping}
-          styling={styling}
-          width={width}
-          navigate={navigate}
+          data={data.get('contract', Map())}
+          requestNewData={(path, newData) =>
+            this.setState({ data: this.state.data.setIn(['contract'].concat(path), newData) })}
         />
       );
     }
+    return (
+      <OverviewPage
+        filters={filters}
+        translations={translations}
+        years={years}
+        monthly={monthly}
+        months={months}
+        indicatorTypesMapping={indicatorTypesMapping}
+        styling={styling}
+        width={width}
+        navigate={navigate}
+      />
+    );
+  }
+
+  getTranslations() {
+    const { TRANSLATIONS } = this.constructor;
+    const { locale } = this.state;
+    return TRANSLATIONS[locale];
+  }
+
+  t(str) {
+    const { locale } = this.state;
+    const { TRANSLATIONS } = this.constructor;
+    return TRANSLATIONS[locale][str] || TRANSLATIONS.en_US[str] || str;
+  }
+
+  fetchUserInfo() {
+    const noCacheUrl = new URI('/isAuthenticated').addSearch('time', Date.now());
+    fetchJson(noCacheUrl).then(({ authenticated, disabledApiSecurity }) => {
+      this.setState({
+        user: {
+          loggedIn: authenticated,
+        },
+        showLandingPopup: !authenticated || disabledApiSecurity,
+        disabledApiSecurity,
+      });
+    });
+  }
+
+  fetchIndicatorTypesMapping() {
+    fetchJson('/api/indicatorTypesMapping').then(data => this.setState({ indicatorTypesMapping: data }));
+  }
+
+  fetchYears() {
+    fetchJson('/api/tendersAwardsYears').then((data) => {
+      const years = data.map(pluck('_id'));
+      const { allMonths, currentFiltersState, appliedFilters } = this.state;
+      this.setState({
+        currentFiltersState: currentFiltersState
+          .set('years', Set(years))
+          .set('months', Set(allMonths)),
+        appliedFilters: appliedFilters
+          .set('years', Set(years))
+          .set('months', Set(allMonths)),
+        allYears: years,
+      });
+    });
+  }
+
+  toggleDashboardSwitcher(e) {
+    e.stopPropagation();
+    const { dashboardSwitcherOpen } = this.state;
+    this.setState({ dashboardSwitcherOpen: !dashboardSwitcherOpen });
   }
 
   loginBox() {
@@ -208,60 +236,24 @@ class CorruptionRiskDashboard extends React.Component {
     </a>);
   }
 
-  toggleDashboardSwitcher(e) {
-    e.stopPropagation();
-    const { dashboardSwitcherOpen } = this.state;
-    this.setState({ dashboardSwitcherOpen: !dashboardSwitcherOpen });
-  }
-
-  fetchYears() {
-    fetchJson('/api/tendersAwardsYears').then((data) => {
-      const years = data.map(pluck('_id'));
-      const { allMonths, currentFiltersState, appliedFilters } = this.state;
-      this.setState({
-        currentFiltersState: currentFiltersState
-          .set('years', Set(years))
-          .set('months', Set(allMonths)),
-        appliedFilters: appliedFilters
-          .set('years', Set(years))
-          .set('months', Set(allMonths)),
-        allYears: years,
-      });
-    });
-  }
-
-  fetchIndicatorTypesMapping() {
-    fetchJson('/api/indicatorTypesMapping').then(data => this.setState({ indicatorTypesMapping: data }));
-  }
-
-  fetchUserInfo() {
-    const noCacheUrl = new URI('/isAuthenticated').addSearch('time', Date.now());
-    fetchJson(noCacheUrl).then(({ authenticated, disabledApiSecurity }) => {
-      this.setState({
-        user: {
-          loggedIn: authenticated,
-        },
-        showLandingPopup: !authenticated || disabledApiSecurity,
-        disabledApiSecurity,
-      });
-    });
-  }
-
-  t(str) {
-    const { locale } = this.state;
+  languageSwitcher() {
     const { TRANSLATIONS } = this.constructor;
-    return TRANSLATIONS[locale][str] || TRANSLATIONS.en_US[str] || str;
-  }
-
-  getTranslations(){
-    const { TRANSLATIONS } = this.constructor;
-    const { locale } = this.state;
-    return TRANSLATIONS[locale];
+    const { locale: selectedLocale } = this.state;
+    if (Object.keys(TRANSLATIONS).length <= 1) return null;
+    return Object.keys(TRANSLATIONS).map(locale => (
+      <a
+        href="javascript:void(0);"
+        onClick={() => this.setLocale(locale)}
+        className={cn({ active: locale === selectedLocale })}
+      >
+        {locale.split('_')[0]}
+      </a>
+    ));
   }
 
   render() {
-    const { dashboardSwitcherOpen, filterBoxIndex, currentFiltersState,
-      appliedFilters, data, indicatorTypesMapping, allYears, allMonths, showLandingPopup,
+    const { dashboardSwitcherOpen, filterBoxIndex, currentFiltersState, appliedFilters, data,
+      indicatorTypesMapping, allYears, allMonths, showLandingPopup,
       disabledApiSecurity } = this.state;
 
     const { onSwitch, route, navigate } = this.props;
@@ -281,7 +273,7 @@ class CorruptionRiskDashboard extends React.Component {
             redirectToLogin={!disabledApiSecurity}
             requestClosing={() => this.setState({ showLandingPopup: false })}
             translations={translations}
-            languageSwitcher={this.languageSwitcher.bind(this)}
+            languageSwitcher={(...args) => this.languageSwitcher(...args)}
           />
         }
         <header className="branding row">
@@ -290,14 +282,18 @@ class CorruptionRiskDashboard extends React.Component {
             <div className={cn('dash-switcher-wrapper', { open: dashboardSwitcherOpen })}>
               <h1
                 className="corruption-dash-title"
-                onClick={(e) => this.toggleDashboardSwitcher(e)}
+                onClick={e => this.toggleDashboardSwitcher(e)}
               >
                 {this.t('crd:title')}
                 <i className="glyphicon glyphicon-menu-down" />
               </h1>
               {dashboardSwitcherOpen &&
                 <div className="dashboard-switcher">
-                  <a href="javascript:void(0);" onClick={() => onSwitch('m-and-e')} onMouseDown={callFunc('stopPropagation')}>
+                  <a
+                    href="javascript:void(0);"
+                    onClick={() => onSwitch('m-and-e')}
+                    onMouseDown={callFunc('stopPropagation')}
+                  >
                     M&E Toolkit
                   </a>
                 </div>
@@ -313,11 +309,11 @@ class CorruptionRiskDashboard extends React.Component {
           <div className="col-sm-1" />
         </header>
         <Filters
-          onUpdate={currentFiltersState => this.setState({ currentFiltersState })}
+          onUpdate={newState => this.setState({ currentFiltersState: newState })}
           onApply={filtersToApply => this.setState({
-              filterBoxIndex: null,
-              appliedFilters: filtersToApply,
-              currentFiltersState: filtersToApply,
+            filterBoxIndex: null,
+            appliedFilters: filtersToApply,
+            currentFiltersState: filtersToApply,
           })}
           translations={translations}
           currentBoxIndex={filterBoxIndex}
@@ -361,6 +357,6 @@ CorruptionRiskDashboard.propTypes = {
 CorruptionRiskDashboard.TRANSLATIONS = {
   en_US: require('../../../web/public/languages/en_US.json'),
   es_ES: require('../../../web/public/languages/es_ES.json'),
-}
+};
 
 export default CorruptionRiskDashboard;

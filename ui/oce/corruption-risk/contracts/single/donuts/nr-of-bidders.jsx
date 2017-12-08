@@ -37,12 +37,15 @@ NrOfBidders.Donut = class extends CenterTextDonut.Donut {
     if (isNaN(avg) || isNaN(count)) return [];
 
     return [{
-      labels: ['This contract', 'Average'],
+      labels: [
+        this.t('crd:contract:nrBiddersVsAvg:thisLabel'),
+        this.t('crd:contract:nrBiddersVsAvg:avgLabel')
+      ],
       values: [count == 1 ? count : count * avg, avg],
       hoverlabel: {
         bgcolor: '#144361'
       },
-      hoverinfo: 'label',
+      hoverinfo: 'none',
       textinfo: 'none',
       hole: 0.8,
       type: 'pie',
