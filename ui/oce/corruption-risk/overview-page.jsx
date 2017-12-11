@@ -137,9 +137,7 @@ class OverviewPage extends CRDPage {
   }
 
   render() {
-    const { topFlaggedContracts } = this.state;
-    const { filters, translations, years, monthly, months, indicatorTypesMapping, styling, width,
-      navigate } = this.props;
+    const { indicatorTypesMapping, styling, width, navigate } = this.props;
     return (
       <div className="page-overview">
         <section className="chart-corruption-types">
