@@ -1,7 +1,7 @@
 import { range } from '../tools';
 import CustomPopupChart from './custom-popup-chart';
 import CRDPage from './page';
-import { colorLuminance } from './tools';
+import { colorLuminance, wireProps } from './tools';
 import ProcurementsTable from './procurements-table';
 
 const TRACES = ['COLLUSION', 'FRAUD', 'RIGGING'];
@@ -132,13 +132,12 @@ class OverviewPage extends CRDPage {
   constructor(...args) {
     super(...args);
     this.state = {
-      corruptionType: null,
       topFlaggedContracts: null,
     };
   }
 
   render() {
-    const { corruptionType, topFlaggedContracts } = this.state;
+    const { topFlaggedContracts } = this.state;
     const { filters, translations, years, monthly, months, indicatorTypesMapping, styling, width,
       navigate } = this.props;
     return (
@@ -146,14 +145,7 @@ class OverviewPage extends CRDPage {
         <section className="chart-corruption-types">
           <h3 className="page-header">{this.t('crd:overview:overTimeChart:title')}</h3>
           <CorruptionType
-            filters={filters}
-            requestNewData={(_, newCorruptionType) =>
-              this.setState({ corruptionType: newCorruptionType })}
-            translations={translations}
-            data={corruptionType}
-            years={years}
-            monthly={monthly}
-            months={months}
+            {...wireProps(this, 'corruptionType')}
             styling={styling}
             indicatorTypesMapping={indicatorTypesMapping}
             width={width - 20}

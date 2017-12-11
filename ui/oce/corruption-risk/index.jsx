@@ -160,6 +160,9 @@ class CorruptionRiskDashboard extends React.Component {
         years={years}
         monthly={monthly}
         months={months}
+        data={data.get('overview', Map())}
+        requestNewData={(path, newData) =>
+          this.setState({ data: this.state.data.setIn(['overview'].concat(path), newData) })}
         indicatorTypesMapping={indicatorTypesMapping}
         styling={styling}
         width={width}
