@@ -155,16 +155,9 @@ class OverviewPage extends CRDPage {
         <section>
           <h3 className="page-header">{this.t('crd:overview:topFlagged:title')}</h3>
           <ProcurementsTable
+            {...wireProps(this, 'topFlaggedContracts')}
             dataEP="corruptionRiskOverviewTable"
             countEP="corruptionRiskOverviewTable/count"
-            filters={filters}
-            data={topFlaggedContracts}
-            translations={translations}
-            years={years}
-            monthly={monthly}
-            months={months}
-            requestNewData={(_, newTopFlaggedContracts) =>
-              this.setState({ topFlaggedContracts: newTopFlaggedContracts })}
             navigate={navigate}
           />
         </section>
