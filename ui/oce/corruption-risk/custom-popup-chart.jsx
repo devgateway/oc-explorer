@@ -53,7 +53,7 @@ class CustomPopupChart extends Chart {
         left,
         year,
         traceName,
-        traceIndex
+        traceIndex,
       },
     });
   }

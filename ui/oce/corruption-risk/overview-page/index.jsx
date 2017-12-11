@@ -1,8 +1,9 @@
-import { range } from '../tools';
-import CustomPopupChart from './custom-popup-chart';
-import CRDPage from './page';
-import { colorLuminance } from './tools';
-import ProcurementsTable from './procurements-table';
+import { range } from '../../tools';
+import CustomPopupChart from '../custom-popup-chart';
+import CRDPage from '../page';
+import { colorLuminance, wireProps } from '../tools';
+import ProcurementsTable from '../procurements-table';
+import { POPUP_HEIGHT } from '../constants';
 
 const TRACES = ['COLLUSION', 'FRAUD', 'RIGGING'];
 
@@ -102,8 +103,21 @@ class CorruptionType extends CustomPopupChart {
         indicatorTypesMapping[indicatorId].types.indexOf(dataForPoint.type) > -1
       ).length;
 
+    const percentFlaggedLabel = this.t('crd:overview:overTimeChart:percentFlagged');
+
+    let height = POPUP_HEIGHT;
+    let { top } = popup;
+    if (percentFlaggedLabel.length > 30) {
+      const delta = 30;
+      height += delta;
+      if (popup.toTheLeft) {
+        top += delta / 2;
+      }
+      top -= delta;
+    }
+
     return (
-      <div className="crd-popup" style={{ top: popup.top, left: popup.left }}>
+      <div className="crd-popup" style={{ top, left: popup.left, height }}>
         <div className="row">
           <div className="col-sm-12 info text-center">
             {year}
@@ -117,7 +131,7 @@ class CorruptionType extends CustomPopupChart {
           <div className="col-sm-5 text-left info">{dataForPoint.flaggedCount}</div>
           <div className="col-sm-7 text-right title">{this.t('crd:overview:overTimeChart:totalProcurementsFlagged')}</div>
           <div className="col-sm-5 text-left info">{dataForPoint.flaggedProjectCount}</div>
-          <div className="col-sm-7 text-right title">{this.t('crd:overview:overTimeChart:percentFlagged')}</div>
+          <div className="col-sm-7 text-right title">{percentFlaggedLabel}</div>
           <div className="col-sm-5 text-left info">{dataForPoint.percent.toFixed(2)}%</div>
         </div>
         <div className="arrow" />
@@ -132,28 +146,18 @@ class OverviewPage extends CRDPage {
   constructor(...args) {
     super(...args);
     this.state = {
-      corruptionType: null,
       topFlaggedContracts: null,
     };
   }
 
   render() {
-    const { corruptionType, topFlaggedContracts } = this.state;
-    const { filters, translations, years, monthly, months, indicatorTypesMapping, styling, width,
-      navigate } = this.props;
+    const { indicatorTypesMapping, styling, width, navigate } = this.props;
     return (
       <div className="page-overview">
         <section className="chart-corruption-types">
           <h3 className="page-header">{this.t('crd:overview:overTimeChart:title')}</h3>
           <CorruptionType
-            filters={filters}
-            requestNewData={(_, newCorruptionType) =>
-              this.setState({ corruptionType: newCorruptionType })}
-            translations={translations}
-            data={corruptionType}
-            years={years}
-            monthly={monthly}
-            months={months}
+            {...wireProps(this, 'corruptionType')}
             styling={styling}
             indicatorTypesMapping={indicatorTypesMapping}
             width={width - 20}
@@ -163,16 +167,9 @@ class OverviewPage extends CRDPage {
         <section>
           <h3 className="page-header">{this.t('crd:overview:topFlagged:title')}</h3>
           <ProcurementsTable
+            {...wireProps(this, 'topFlaggedContracts')}
             dataEP="corruptionRiskOverviewTable"
             countEP="corruptionRiskOverviewTable/count"
-            filters={filters}
-            data={topFlaggedContracts}
-            translations={translations}
-            years={years}
-            monthly={monthly}
-            months={months}
-            requestNewData={(_, newTopFlaggedContracts) =>
-              this.setState({ topFlaggedContracts: newTopFlaggedContracts })}
             navigate={navigate}
           />
         </section>
