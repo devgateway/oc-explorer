@@ -8,6 +8,7 @@ import CorruptionTypePage from './corruption-type';
 import IndividualIndicatorPage from './individual-indicator';
 import ContractsPage from './contracts';
 import ContractPage from './contracts/single';
+import SuppliersPage from './suppliers';
 import Filters from './filters';
 import LandingPopup from './landing-popup';
 import { LOGIN_URL } from './constants';
@@ -150,6 +151,17 @@ class CorruptionRiskDashboard extends React.Component {
           data={data.get('contract', Map())}
           requestNewData={(path, newData) =>
             this.setState({ data: this.state.data.setIn(['contract'].concat(path), newData) })}
+        />
+      );
+    } else if (page === 'suppliers') {
+      const [, searchQuery] = route;
+      return (
+        <SuppliersPage
+          filters={filters}
+          navigate={navigate}
+          translations={translations}
+          searchQuery={searchQuery}
+          doSearch={query => navigate('suppliers', query)}
         />
       );
     }
