@@ -14,7 +14,6 @@ import { wireProps } from '../../tools';
 // eslint-disable-next-line no-unused-vars
 import styles from '../style.less';
 
-const EMPTY_SET = Set();
 
 class Info extends translatable(Visualization) {
   getCustomEP() {
@@ -23,7 +22,7 @@ class Info extends translatable(Visualization) {
   }
 
   render() {
-    const { data, supplier } = this.props;
+    const { data, supplier, gotoSupplier } = this.props;
 
     const title = data.getIn(['tender', 'title']);
     const startDate = data.getIn(['tender', 'tenderPeriod', 'startDate']);
@@ -76,7 +75,12 @@ class Info extends translatable(Visualization) {
                   <dt>{this.t('crd:contracts:baseInfo:suppliers')}</dt>
                   <dd>
                     {supplier ?
-                      supplier.get('name') :
+                      <a
+                        href={`#!/crd/supplier/${supplier.get('id')}`}
+                        onClick={gotoSupplier}
+                      >
+                        {supplier.get('name')}
+                      </a> :
                       this.t('general:undefined')
                     }
                   </dd>
@@ -224,14 +228,9 @@ export default class Contract extends CRDPage {
   }
 
   render() {
-    const { contract, percentPESpending } = this.state;
+    const { contract } = this.state;
 
-    const { id, translations, doSearch, filters, allYears,
-      years: selectedYears, width, months, monthly } = this.props;
-
-    const years = Set(allYears).equals(selectedYears) ?
-      EMPTY_SET :
-      selectedYears;
+    const { id, translations, doSearch, filters, width, gotoSupplier } = this.props;
 
     if (!contract) return null;
 
@@ -257,6 +256,7 @@ export default class Contract extends CRDPage {
           filters={filters}
           requestNewData={(_, contract) => this.setState({ contract })}
           translations={translations}
+          gotoSupplier={gotoSupplier}
         />
 
         <section className="contract-statistics">
