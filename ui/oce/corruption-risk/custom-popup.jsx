@@ -36,7 +36,7 @@ class CustomPopup extends React.Component {
     const { Popup, Chart } = this.props;
     const { show, x, y, points } = this.state;
     return (
-      <div style={{ position: 'relative' }}>
+      <div className="custom-popup-container">
         {show &&
           <Popup
             {...this.props}
