@@ -1,8 +1,6 @@
 package org.devgateway.ocds.web.rest.controller.selector;
 
 import io.swagger.annotations.ApiOperation;
-import java.util.List;
-import javax.validation.Valid;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.web.rest.controller.request.OrganizationIdWrapper;
 import org.devgateway.ocds.web.rest.controller.request.OrganizationSearchRequest;
@@ -11,6 +9,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import java.util.List;
 
 /**
  *
@@ -49,6 +50,13 @@ public class OrganizationSearchController extends AbstractOrganizationSearchCont
         return organizationSearchTextByType(request, null);
     }
 
-
+    @RequestMapping(value = "/api/ocds/organization/count",
+            method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
+    @ApiOperation(value = "Counts all organizations in the database. "
+            + "Allows full text search using the text parameter.")
+    @Override
+    public Long count(OrganizationSearchRequest request) {
+        return organizationCountTextByType(request, null);
+    }
 
 }
