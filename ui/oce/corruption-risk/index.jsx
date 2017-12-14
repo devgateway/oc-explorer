@@ -146,16 +146,7 @@ class CorruptionRiskDashboard extends React.Component {
         />
       );
     } else if (page === 'suppliers') {
-      const [, searchQuery] = route;
-      return (
-        <SuppliersPage
-          filters={filters}
-          navigate={navigate}
-          translations={translations}
-          searchQuery={searchQuery}
-          doSearch={query => navigate('suppliers', query)}
-        />
-      );
+      return this.renderArchive(SuppliersPage, 'suppliers');
     } else if (page === 'supplier') {
       return (
         <SupplierPage
