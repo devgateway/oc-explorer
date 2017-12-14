@@ -1,7 +1,18 @@
-class Suppliers extends React.Component {
+import TopSearch from '../top-search';
+import translatable from '../../translatable';
+
+class Suppliers extends translatable(React.Component) {
   render() {
+    const { translations, searchQuery, doSearch } = this.props;
     return (
-      <h1>here be suppliers</h1>
+      <div className="suppliers-page">
+        <TopSearch
+          translations={translations}
+          searchQuery={searchQuery}
+          doSearch={doSearch}
+          placeholder={this.t('crd:suppliers:top-search')}
+        />
+      </div>
     );
   }
 }

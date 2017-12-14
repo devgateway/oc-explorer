@@ -3,8 +3,7 @@ import { List } from 'immutable';
 // eslint-disable-next-line no-unused-vars
 import rbtStyles from 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import CRDPage from '../page';
-import Visualization from '../../visualization';
-import TopSearch from './top-search';
+import TopSearch from '../top-search';
 import { getAwardAmount, mkContractLink } from '../tools';
 import PaginatedTable from '../paginated-table';
 
@@ -132,6 +131,7 @@ export default class Contracts extends CRDPage {
           translations={translations}
           searchQuery={searchQuery}
           doSearch={doSearch}
+          placeholder={this.t('crd:contracts:top-search')}
         />
 
         {searchQuery && <h3 className="page-header">

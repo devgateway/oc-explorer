@@ -1,4 +1,4 @@
-import translatable from '../../../translatable';
+import translatable from '../../translatable';
 // eslint-disable-next-line no-unused-vars
 import style from './style.less';
 
@@ -28,7 +28,7 @@ class TopSearch extends translatable(React.Component) {
   }
 
   render() {
-    const { doSearch } = this.props;
+    const { doSearch, placeholder } = this.props;
     const { inputValue } = this.state;
     const hasSpecialChars = inputValue.indexOf('-') > -1;
     const exactMatch = isExactMatch(inputValue);
@@ -41,7 +41,7 @@ class TopSearch extends translatable(React.Component) {
               <input
                 type="text"
                 className="form-control"
-                placeholder={this.t('crd:contracts:top-search')}
+                placeholder={placeholder}
                 value={inputValue}
                 onChange={e => this.setState({ inputValue: e.target.value })}
               />

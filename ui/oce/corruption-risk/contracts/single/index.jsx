@@ -2,7 +2,7 @@ import { Map, List, Set } from 'immutable';
 import CRDPage from '../../page';
 import Visualization from '../../../visualization';
 import translatable from '../../../translatable';
-import TopSearch from '../top-search';
+import TopSearch from '../../top-search';
 import NrOfBidders from './donuts/nr-of-bidders';
 import NrOfContractsWithThisPE from './donuts/nr-contract-with-pe';
 import PercentPESpending from './donuts/percent-pe-spending';
@@ -248,6 +248,7 @@ export default class Contract extends CRDPage {
         <TopSearch
           doSearch={doSearch}
           translations={translations}
+          placeholder={this.t('crd:contracts:top-search')}
         />
         <Info
           id={id}
