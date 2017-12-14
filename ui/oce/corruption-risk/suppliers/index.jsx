@@ -1,6 +1,7 @@
 import TopSearch from '../top-search';
+import translatable from '../../translatable';
 
-class Suppliers extends React.Component {
+class Suppliers extends translatable(React.Component) {
   render() {
     const { translations, searchQuery, doSearch } = this.props;
     return (
@@ -9,6 +10,7 @@ class Suppliers extends React.Component {
           translations={translations}
           searchQuery={searchQuery}
           doSearch={doSearch}
+          placeholder={this.t('crd:suppliers:top-search')}
         />
       </div>
     );

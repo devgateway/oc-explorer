@@ -170,6 +170,8 @@ class CorruptionRiskDashboard extends React.Component {
       const [, supplierId] = route;
       return (
         <SupplierPage
+          translations={translations}
+          doSearch={query => navigate('suppliers', query)}
         />
       );
     }
