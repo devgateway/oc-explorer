@@ -248,6 +248,7 @@ export default class Contract extends CRDPage {
         <TopSearch
           doSearch={doSearch}
           translations={translations}
+          placeholder={this.t('crd:contracts:top-search')}
         />
         <Info
           id={id}

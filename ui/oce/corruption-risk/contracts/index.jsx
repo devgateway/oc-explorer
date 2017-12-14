@@ -131,6 +131,7 @@ export default class Contracts extends CRDPage {
           translations={translations}
           searchQuery={searchQuery}
           doSearch={doSearch}
+          placeholder={this.t('crd:contracts:top-search')}
         />
 
         {searchQuery && <h3 className="page-header">
