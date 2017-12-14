@@ -1,4 +1,4 @@
-import translatable from '../../../translatable';
+import translatable from '../../translatable';
 // eslint-disable-next-line no-unused-vars
 import style from './style.less';
 
