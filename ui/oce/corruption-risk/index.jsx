@@ -124,17 +124,7 @@ class CorruptionRiskDashboard extends React.Component {
         />
       );
     } else if (page === 'contracts') {
-      const [, searchQuery] = route;
-      return (
-        <ContractsPage
-          filters={filters}
-          navigate={navigate}
-          translations={translations}
-          searchQuery={searchQuery}
-          doSearch={query => navigate('contracts', query)}
-          count={data.getIn(['totalFlags', 'contractCounter'])}
-        />
-      );
+      return this.renderArchive(ContractsPage, 'contracts');
     } else if (page === 'contract') {
       const [, contractId] = route;
       return (
@@ -156,18 +146,8 @@ class CorruptionRiskDashboard extends React.Component {
         />
       );
     } else if (page === 'suppliers') {
-      const [, searchQuery] = route;
-      return (
-        <SuppliersPage
-          filters={filters}
-          navigate={navigate}
-          translations={translations}
-          searchQuery={searchQuery}
-          doSearch={query => navigate('suppliers', query)}
-        />
-      );
+      return this.renderArchive(SuppliersPage, 'suppliers');
     } else if (page === 'supplier') {
-      const [, supplierId] = route;
       return (
         <SupplierPage
           translations={translations}
@@ -197,6 +177,22 @@ class CorruptionRiskDashboard extends React.Component {
     const { TRANSLATIONS } = this.constructor;
     const { locale } = this.state;
     return TRANSLATIONS[locale];
+  }
+
+  wireProps(slug) {
+    const translations = this.getTranslations();
+    const { appliedFilters } = this.state;
+    const { filters, years, months } = this.destructFilters(appliedFilters);
+    return {
+      translations,
+      data: this.state.data.get(slug, Map()),
+      requestNewData: (path, newData) =>
+        this.setState({ data: this.state.data.setIn([slug].concat(path), newData) }),
+      filters,
+      years,
+      monthly: years.count() === 1,
+      months,
+    };
   }
 
   t(str) {
@@ -274,6 +270,19 @@ class CorruptionRiskDashboard extends React.Component {
         {locale.split('_')[0]}
       </a>
     ));
+  }
+
+  renderArchive(Component, slug) {
+    const { navigate, route } = this.props;
+    const [, searchQuery] = route;
+    return (
+      <Component
+        {...this.wireProps(slug)}
+        searchQuery={searchQuery}
+        doSearch={query => navigate(slug, query)}
+        navigate={navigate}
+      />
+    );
   }
 
   render() {
