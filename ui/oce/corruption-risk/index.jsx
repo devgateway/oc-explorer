@@ -10,6 +10,8 @@ import ContractsPage from './contracts';
 import ContractPage from './contracts/single';
 import SuppliersPage from './suppliers';
 import SupplierPage from './suppliers/single';
+import ProcuringEntitiesPage from './procuring-entities';
+import ProcuringEntityPage from './procuring-entities/single';
 import Filters from './filters';
 import LandingPopup from './landing-popup';
 import { LOGIN_URL } from './constants';
@@ -154,6 +156,15 @@ class CorruptionRiskDashboard extends React.Component {
           doSearch={query => navigate('suppliers', query)}
         />
       );
+    } else if (page === 'procuring-entities') {
+      return this.renderArchive(ProcuringEntitiesPage, 'procuring-entities');
+    } else if (page === 'procuring-entity') {
+      return (
+        <ProcuringEntityPage
+          translations={translations}
+          doSearch={query => navigate('procuring-entities', query)}
+        />
+      )
     }
     return (
       <OverviewPage
