@@ -304,5 +304,7 @@
   "crd:contract:nrContractWithPE:match": "$#$: This procurement is 1 of $#$ between this supplier and this procuring entity",
   "crd:contract:percentPEspending:this": "$#$%: Percentage of this procuring entity's spending that has been won by this supplier",
   "crd:contract:percentPEspending:match": "$#$%: Percentage of this procuring entity's spending that has been won by other suppliers",
-  "crd:suppliers:top-search": "Search within suppliers"
+  "crd:suppliers:top-search": "Search within suppliers",
+  "crd:procuringEntities:top-search": "Search within procuring entities"
+
 }
