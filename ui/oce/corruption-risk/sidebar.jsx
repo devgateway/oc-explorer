@@ -99,7 +99,7 @@ class Sidebar extends translatable(React.PureComponent) {
               {this.t('crd:contracts:menu:procuringEntities')}
             </a>
             <a
-              href="javascript:void(0);"
+              href="#!/crd/contracts"
               onClick={() => navigate('contracts')}
               className={cn('archive-link', 'contracts-link', { active: page === 'contracts' })}
               key="contracts"
