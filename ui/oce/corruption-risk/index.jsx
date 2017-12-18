@@ -150,10 +150,15 @@ class CorruptionRiskDashboard extends React.Component {
     } else if (page === 'suppliers') {
       return this.renderArchive(SuppliersPage, 'suppliers');
     } else if (page === 'supplier') {
+      const [, supplierId] = route;
       return (
         <SupplierPage
+          id={supplierId}
           translations={translations}
           doSearch={query => navigate('suppliers', query)}
+          data={data.get('supplier', Map())}
+          requestNewData={(path, newData) =>
+            this.setState({ data: this.state.data.setIn(['supplier'].concat(path), newData) })}
         />
       );
     } else if (page === 'procuring-entities') {

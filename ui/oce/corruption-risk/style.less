@@ -634,3 +634,55 @@
     display: block;
   }
 }
+
+.contract-page, .supplier-page {
+  dl{
+    dt{
+      font-size: .8em;
+      font-weight: normal;
+    }
+    dd{
+      font-size: 1.5em;
+    }
+  }
+
+  table {
+    &.join-bottom {
+      margin-bottom: 0;
+      &, td {
+        border-bottom: none;
+      }
+    }
+
+    &.info-table {
+      th, td{
+        width: 33%;
+      }
+    }
+  }
+
+  section h2 {
+    color: #ce4747;
+  }
+
+  .flag-icon {
+    width: 32px;
+    margin-top: -5px;
+  }
+
+  section.info {
+    margin-bottom: 40px;
+
+    &>.row{
+      margin-left: 0;
+      margin-right: 0;
+      &>*{
+        padding-left: 0;
+      }
+    }
+
+    .flags {
+      font-size: 2em;
+    }
+  }
+}
