@@ -14,8 +14,9 @@ class Info extends translatable(Visualization) {
   render() {
     const { data } = this.props;
     if(!data) return null;
-    console.log(data.toJS());
+
     const address = data.get('address');
+    const contact = data.get('contactPoint');
     const flagCount = -1;
     return (
       <section className="info">
@@ -36,9 +37,9 @@ class Info extends translatable(Visualization) {
               </td>
               <td className="flags">
                 <img src="assets/icons/flag.svg" alt="Flag icon" className="flag-icon" />
-        &nbsp;
-      {flagCount}
-        &nbsp;{flagCount === 1 ? 'Flag' : 'Flags'}
+                &nbsp;
+                {flagCount}
+                &nbsp;{flagCount === 1 ? 'Flag' : 'Flags'}
               </td>
             </tr>
           </tbody>
@@ -55,8 +56,6 @@ class Info extends translatable(Visualization) {
                     &nbsp;
                     {address.get('postalCode')} /
                     &nbsp;
-                    {address.get('region')} /
-                    &nbsp;
                     {address.get('countryName')}
                   </dd>
                 </dl>
@@ -64,7 +63,11 @@ class Info extends translatable(Visualization) {
               <td>
                 <dl>
                   <dt>Supplier Contact Information</dt>
-                  <dd>{data.get('id')}</dd>
+                  <dd>
+                    {contact.get('name')}<br/>
+                    {contact.get('email')}<br/>
+                    {contact.get('telephone')}
+                  </dd>
                 </dl>
               </td>
             </tr>
