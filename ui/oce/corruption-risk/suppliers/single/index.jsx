@@ -15,6 +15,7 @@ class Info extends translatable(Visualization) {
     const { data } = this.props;
     if(!data) return null;
     console.log(data.toJS());
+    const address = data.get('address');
     const flagCount = -1;
     return (
       <section className="info">
@@ -45,8 +46,27 @@ class Info extends translatable(Visualization) {
         <table className="table table-bordered info-table">
           <tbody>
             <tr>
-              <td>asa</td>
-              <td>asdfa</td>
+              <td>
+                <dl>
+                  <dt>Supplier address</dt>
+                  <dd>
+                    {address.get('streetAddress')}<br />
+                    {address.get('locality')} /
+                    &nbsp;
+                    {address.get('postalCode')} /
+                    &nbsp;
+                    {address.get('region')} /
+                    &nbsp;
+                    {address.get('countryName')}
+                  </dd>
+                </dl>
+              </td>
+              <td>
+                <dl>
+                  <dt>Supplier Contact Information</dt>
+                  <dd>{data.get('id')}</dd>
+                </dl>
+              </td>
             </tr>
           </tbody>
         </table>
