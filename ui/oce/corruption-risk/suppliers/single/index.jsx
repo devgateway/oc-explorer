@@ -4,6 +4,9 @@ import translatable from '../../../translatable';
 import Visualization from '../../../visualization';
 import CRDPage from '../../page';
 import { wireProps } from '../../tools';
+import Donut from '../../donut';
+import NrLostVsWon from './donuts/nr-lost-vs-won';
+import TwoRowsCenterText from '../../donut/two-rows-center-text';
 
 class Info extends translatable(Visualization) {
   getCustomEP() {
@@ -80,7 +83,9 @@ class Info extends translatable(Visualization) {
 
 class Supplier extends CRDPage {
   render() {
-    const { translations, doSearch, id } = this.props;
+    const { translations, width, doSearch, id } = this.props;
+    const donutSize = width / 3 - 100;
+
     return (
       <div className="supplier-page">
         <TopSearch
@@ -93,6 +98,49 @@ class Supplier extends CRDPage {
           id={id}
           filters={Map()}
         />
+
+        <section className="supplier-general-statistics">
+          <h2>Supplier General Statistics</h2>
+          <div className="col-sm-4">
+            <NrLostVsWon
+              {...wireProps(this, 'nr-lost-vs-won')}
+              width={donutSize}
+              data={[1, 2]}
+              />
+          </div>
+          <div className="col-sm-4">
+            <Donut
+              {...wireProps(this, 'amount-lost-vs-won')}
+              CenterText={TwoRowsCenterText}
+              width={donutSize}
+              title="$ Amount"
+              subtitle="Won vs Lost"
+              data={[1, 2]}
+              values={[{
+                  color: '#72c47e',
+              }, {
+                  color: '#2e833a',
+              }]}
+            />
+          </div>
+          <div className="col-sm-4">
+            <Donut
+              {...wireProps(this, 'flags')}
+              CenterText={TwoRowsCenterText}
+              width={donutSize}
+              title="Total Flags"
+              subtitle="by Risk Type"
+              data={[1, 2, 3]}
+              values={[{
+                  color: '#fbc42c',
+              }, {
+                  color: '#3372b2',
+              }, {
+                  color: '#30a0f5',
+              }]}
+            />
+          </div>
+        </section>
       </div>
     );
   }
