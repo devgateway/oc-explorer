@@ -176,7 +176,7 @@ class CorruptionRiskDashboard extends React.Component {
 
   wireProps(slug) {
     const translations = this.getTranslations();
-    const { appliedFilters } = this.state;
+    const { appliedFilters, width } = this.state;
     const { filters, years, months } = this.destructFilters(appliedFilters);
     return {
       translations,
@@ -187,6 +187,7 @@ class CorruptionRiskDashboard extends React.Component {
       years,
       monthly: years.count() === 1,
       months,
+      width,
     };
   }
 
