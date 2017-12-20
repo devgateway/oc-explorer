@@ -37,16 +37,14 @@ class Donut extends backendYearFilterable(Chart) {
   }
 }
 
-class CenterTextDonut extends React.PureComponent {
+class DonutWrapper extends React.PureComponent {
   render() {
     const { title, subtitle, className, values, data, CenterText } = this.props;
     return (
       <div className={cn(className, 'center-text-donut')}>
         <div>
-          <CustomPopup
+          <Donut
             {...wireProps(this)}
-            Popup={DonutPopup}
-            Chart={Donut}
             margin={{ b: 0, t: 0, r: 0, l: 0, pad: 0 }}
             height={300}
             data={data}
@@ -55,14 +53,24 @@ class CenterTextDonut extends React.PureComponent {
           <CenterText
             data={data}
           />
-          <div className="center-text">
-          </div>
         </div>
         <h4 className="title">
           {title}
           {subtitle && [<br />, <small>{subtitle}</small>]}
         </h4>
       </div>
+    );
+  }
+}
+
+class CenterTextDonut extends React.Component {
+  render() {
+    return (
+      <CustomPopup
+        {...this.props}
+        Popup={DonutPopup}
+        Chart={DonutWrapper}
+      />
     );
   }
 }
