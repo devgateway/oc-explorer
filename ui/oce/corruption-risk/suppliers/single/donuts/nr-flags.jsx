@@ -4,7 +4,6 @@ import { pluck } from '../../../../tools';
 class CenterText extends React.PureComponent {
   render() {
     const { data, values } = this.props;
-    console.log(values);
     const [fst, snd, thrd] = data;
     const [fstColor, sndColor, thrdColor] = values.map(pluck('color'));
     return (
@@ -27,10 +26,13 @@ class TotalFlags extends React.Component {
         subtitle="by Risk Type"
         values={[{
             color: '#fbc42c',
+            label: 'Fraud',
         }, {
             color: '#3372b2',
+            label: 'Process Rigging'
         }, {
             color: '#30a0f5',
+            label: 'Collusion',
         }]}
       />
     );

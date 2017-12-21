@@ -28,8 +28,10 @@ class AmountWonVsLost extends React.Component {
         subtitle="Won vs Lost"
         values={[{
             color: '#72c47e',
+            label: 'Won',
         }, {
             color: '#2e833a',
+            label: 'Lost',
         }]}
       />
     );

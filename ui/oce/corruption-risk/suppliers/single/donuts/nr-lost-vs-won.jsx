@@ -29,8 +29,10 @@ class NrWonVsLost extends React.PureComponent {
         subtitle="Won vs Lost"
         values={[{
             color: '#165781',
+            label: 'Won',
         }, {
             color: '#5fa0c9',
+            label: 'Lost',
         }]}
       />
     );
