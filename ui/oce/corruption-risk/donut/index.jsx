@@ -52,6 +52,7 @@ class DonutWrapper extends React.PureComponent {
           />
           <CenterText
             data={data}
+            values={values}
           />
         </div>
         <h4 className="title">

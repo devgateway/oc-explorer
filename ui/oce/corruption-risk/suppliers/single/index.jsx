@@ -6,7 +6,9 @@ import CRDPage from '../../page';
 import { wireProps } from '../../tools';
 import Donut from '../../donut';
 import NrLostVsWon from './donuts/nr-lost-vs-won';
-import TwoRowsCenterText from '../../donut/two-rows-center-text';
+import AmountLostVsWon from './donuts/amount-lost-vs-won';
+import NrFlags from './donuts/nr-flags';
+import styles from './style.less';
 
 class Info extends translatable(Visualization) {
   getCustomEP() {
@@ -109,35 +111,17 @@ class Supplier extends CRDPage {
               />
           </div>
           <div className="col-sm-4">
-            <Donut
+            <AmountLostVsWon
               {...wireProps(this, 'amount-lost-vs-won')}
-              CenterText={TwoRowsCenterText}
               width={donutSize}
-              title="$ Amount"
-              subtitle="Won vs Lost"
-              data={[1, 2]}
-              values={[{
-                  color: '#72c47e',
-              }, {
-                  color: '#2e833a',
-              }]}
+              data={[1000000, 2000000]}
             />
           </div>
           <div className="col-sm-4">
-            <Donut
+            <NrFlags
               {...wireProps(this, 'flags')}
-              CenterText={TwoRowsCenterText}
               width={donutSize}
-              title="Total Flags"
-              subtitle="by Risk Type"
-              data={[1, 2, 3]}
-              values={[{
-                  color: '#fbc42c',
-              }, {
-                  color: '#3372b2',
-              }, {
-                  color: '#30a0f5',
-              }]}
+              data={[6,2,1]}
             />
           </div>
         </section>
