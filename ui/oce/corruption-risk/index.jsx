@@ -128,48 +128,27 @@ class CorruptionRiskDashboard extends React.Component {
     } else if (page === 'contracts') {
       return this.renderArchive(ContractsPage, 'contracts');
     } else if (page === 'contract') {
-      const [, contractId] = route;
-      return (
-        <ContractPage
-          id={contractId}
-          translations={translations}
-          doSearch={query => navigate('contracts', query)}
-          indicatorTypesMapping={indicatorTypesMapping}
-          filters={filters}
-          years={years}
-          allYears={allYears}
-          monthly={monthly}
-          months={months}
-          width={width}
-          data={data.get('contract', Map())}
-          gotoSupplier={id => navigate('supplier', id)}
-          requestNewData={(path, newData) =>
-            this.setState({ data: this.state.data.setIn(['contract'].concat(path), newData) })}
-        />
-      );
+      return this.renderSingle({
+        Component: ContractPage,
+        sgSlug: 'contract',
+        plSlug: 'contracts',
+      });
     } else if (page === 'suppliers') {
       return this.renderArchive(SuppliersPage, 'suppliers');
     } else if (page === 'supplier') {
-      const [, supplierId] = route;
-      return (
-        <SupplierPage
-          id={supplierId}
-          translations={translations}
-          doSearch={query => navigate('suppliers', query)}
-          data={data.get('supplier', Map())}
-          requestNewData={(path, newData) =>
-            this.setState({ data: this.state.data.setIn(['supplier'].concat(path), newData) })}
-        />
-      );
+      return this.renderSingle({
+        Component: SupplierPage,
+        sgSlug: 'supplier',
+        plSlug: 'suppliers',
+      });
     } else if (page === 'procuring-entities') {
       return this.renderArchive(ProcuringEntitiesPage, 'procuring-entities');
     } else if (page === 'procuring-entity') {
-      return (
-        <ProcuringEntityPage
-          translations={translations}
-          doSearch={query => navigate('procuring-entities', query)}
-        />
-      )
+      return this.renderSingle({
+        Component: ProcuringEntityPage,
+        sgSlug: 'procuring-entity',
+        plSlug: 'procuring-entities',
+      });
     }
     return (
       <OverviewPage
@@ -197,7 +176,7 @@ class CorruptionRiskDashboard extends React.Component {
 
   wireProps(slug) {
     const translations = this.getTranslations();
-    const { appliedFilters } = this.state;
+    const { appliedFilters, width } = this.state;
     const { filters, years, months } = this.destructFilters(appliedFilters);
     return {
       translations,
@@ -208,6 +187,7 @@ class CorruptionRiskDashboard extends React.Component {
       years,
       monthly: years.count() === 1,
       months,
+      width,
     };
   }
 
@@ -297,6 +277,18 @@ class CorruptionRiskDashboard extends React.Component {
         searchQuery={searchQuery}
         doSearch={query => navigate(slug, query)}
         navigate={navigate}
+      />
+    );
+  }
+
+  renderSingle({ Component, sgSlug, plSlug }) {
+    const { route, navigate } = this.props;
+    const [, id] = route;
+    return (
+      <Component
+        {...this.wireProps(sgSlug)}
+        id={id}
+        doSearch={query => navigate(plSlug, query)}
       />
     );
   }

@@ -4,6 +4,11 @@ import translatable from '../../../translatable';
 import Visualization from '../../../visualization';
 import CRDPage from '../../page';
 import { wireProps } from '../../tools';
+import Donut from '../../donut';
+import NrLostVsWon from './donuts/nr-lost-vs-won';
+import AmountLostVsWon from './donuts/amount-lost-vs-won';
+import NrFlags from './donuts/nr-flags';
+import styles from './style.less';
 
 class Info extends translatable(Visualization) {
   getCustomEP() {
@@ -80,7 +85,9 @@ class Info extends translatable(Visualization) {
 
 class Supplier extends CRDPage {
   render() {
-    const { translations, doSearch, id } = this.props;
+    const { translations, width, doSearch, id } = this.props;
+    const donutSize = width / 3 - 100;
+
     return (
       <div className="supplier-page">
         <TopSearch
@@ -93,6 +100,31 @@ class Supplier extends CRDPage {
           id={id}
           filters={Map()}
         />
+
+        <section className="supplier-general-statistics">
+          <h2>Supplier General Statistics</h2>
+          <div className="col-sm-4">
+            <NrLostVsWon
+              {...wireProps(this, 'nr-lost-vs-won')}
+              width={donutSize}
+              data={[1, 2]}
+              />
+          </div>
+          <div className="col-sm-4">
+            <AmountLostVsWon
+              {...wireProps(this, 'amount-lost-vs-won')}
+              width={donutSize}
+              data={[1000000, 2000000]}
+            />
+          </div>
+          <div className="col-sm-4">
+            <NrFlags
+              {...wireProps(this, 'flags')}
+              width={donutSize}
+              data={[6,2,1]}
+            />
+          </div>
+        </section>
       </div>
     );
   }

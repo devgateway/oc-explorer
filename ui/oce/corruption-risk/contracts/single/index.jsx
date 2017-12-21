@@ -9,11 +9,10 @@ import PercentPESpending from './donuts/percent-pe-spending';
 import PercentPESpendingPopup from './donuts/percent-pe-spending/popup';
 import Crosstab from '../../clickable-crosstab';
 import CustomPopup from '../../custom-popup';
-import DonutPopup from './donuts/popup';
+import DonutPopup from '../../donut/popup';
 import { wireProps } from '../../tools';
 // eslint-disable-next-line no-unused-vars
 import styles from '../style.less';
-
 
 class Info extends translatable(Visualization) {
   getCustomEP() {
