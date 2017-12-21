@@ -14,7 +14,7 @@ class Donut extends backendYearFilterable(Chart) {
   getData() {
     const { data, values } = this.props;
     return [{
-      labels: ['a', 'b'],
+      labels: values.map(pluck('label')),
       values: data,
       hoverlabel: {
         bgcolor: '#144361',
