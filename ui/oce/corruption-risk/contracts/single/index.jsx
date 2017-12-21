@@ -2,19 +2,17 @@ import { Map, List, Set } from 'immutable';
 import CRDPage from '../../page';
 import Visualization from '../../../visualization';
 import translatable from '../../../translatable';
-import TopSearch from '../top-search';
+import TopSearch from '../../top-search';
 import NrOfBidders from './donuts/nr-of-bidders';
 import NrOfContractsWithThisPE from './donuts/nr-contract-with-pe';
 import PercentPESpending from './donuts/percent-pe-spending';
 import PercentPESpendingPopup from './donuts/percent-pe-spending/popup';
 import Crosstab from '../../clickable-crosstab';
 import CustomPopup from '../../custom-popup';
-import DonutPopup from './donuts/popup';
+import DonutPopup from '../../donut/popup';
 import { wireProps } from '../../tools';
 // eslint-disable-next-line no-unused-vars
 import styles from '../style.less';
-
-const EMPTY_SET = Set();
 
 class Info extends translatable(Visualization) {
   getCustomEP() {
@@ -23,7 +21,7 @@ class Info extends translatable(Visualization) {
   }
 
   render() {
-    const { data, supplier } = this.props;
+    const { data, supplier, gotoSupplier } = this.props;
 
     const title = data.getIn(['tender', 'title']);
     const startDate = data.getIn(['tender', 'tenderPeriod', 'startDate']);
@@ -76,7 +74,12 @@ class Info extends translatable(Visualization) {
                   <dt>{this.t('crd:contracts:baseInfo:suppliers')}</dt>
                   <dd>
                     {supplier ?
-                      supplier.get('name') :
+                      <a
+                        href={`#!/crd/supplier/${supplier.get('id')}`}
+                        onClick={gotoSupplier}
+                      >
+                        {supplier.get('name')}
+                      </a> :
                       this.t('general:undefined')
                     }
                   </dd>
@@ -224,14 +227,9 @@ export default class Contract extends CRDPage {
   }
 
   render() {
-    const { contract, percentPESpending } = this.state;
+    const { contract } = this.state;
 
-    const { id, translations, doSearch, filters, allYears,
-      years: selectedYears, width, months, monthly } = this.props;
-
-    const years = Set(allYears).equals(selectedYears) ?
-      EMPTY_SET :
-      selectedYears;
+    const { id, translations, doSearch, filters, width, gotoSupplier } = this.props;
 
     if (!contract) return null;
 
@@ -249,6 +247,7 @@ export default class Contract extends CRDPage {
         <TopSearch
           doSearch={doSearch}
           translations={translations}
+          placeholder={this.t('crd:contracts:top-search')}
         />
         <Info
           id={id}
@@ -257,6 +256,7 @@ export default class Contract extends CRDPage {
           filters={filters}
           requestNewData={(_, contract) => this.setState({ contract })}
           translations={translations}
+          gotoSupplier={gotoSupplier}
         />
 
         <section className="contract-statistics">

@@ -8,6 +8,10 @@ import CorruptionTypePage from './corruption-type';
 import IndividualIndicatorPage from './individual-indicator';
 import ContractsPage from './contracts';
 import ContractPage from './contracts/single';
+import SuppliersPage from './suppliers';
+import SupplierPage from './suppliers/single';
+import ProcuringEntitiesPage from './procuring-entities';
+import ProcuringEntityPage from './procuring-entities/single';
 import Filters from './filters';
 import LandingPopup from './landing-popup';
 import { LOGIN_URL } from './constants';
@@ -122,36 +126,29 @@ class CorruptionRiskDashboard extends React.Component {
         />
       );
     } else if (page === 'contracts') {
-      const [, searchQuery] = route;
-      return (
-        <ContractsPage
-          filters={filters}
-          navigate={navigate}
-          translations={translations}
-          searchQuery={searchQuery}
-          doSearch={query => navigate('contracts', query)}
-          count={data.getIn(['totalFlags', 'contractCounter'])}
-        />
-      );
+      return this.renderArchive(ContractsPage, 'contracts');
     } else if (page === 'contract') {
-      const [, contractId] = route;
-      return (
-        <ContractPage
-          id={contractId}
-          translations={translations}
-          doSearch={query => navigate('contracts', query)}
-          indicatorTypesMapping={indicatorTypesMapping}
-          filters={filters}
-          years={years}
-          allYears={allYears}
-          monthly={monthly}
-          months={months}
-          width={width}
-          data={data.get('contract', Map())}
-          requestNewData={(path, newData) =>
-            this.setState({ data: this.state.data.setIn(['contract'].concat(path), newData) })}
-        />
-      );
+      return this.renderSingle({
+        Component: ContractPage,
+        sgSlug: 'contract',
+        plSlug: 'contracts',
+      });
+    } else if (page === 'suppliers') {
+      return this.renderArchive(SuppliersPage, 'suppliers');
+    } else if (page === 'supplier') {
+      return this.renderSingle({
+        Component: SupplierPage,
+        sgSlug: 'supplier',
+        plSlug: 'suppliers',
+      });
+    } else if (page === 'procuring-entities') {
+      return this.renderArchive(ProcuringEntitiesPage, 'procuring-entities');
+    } else if (page === 'procuring-entity') {
+      return this.renderSingle({
+        Component: ProcuringEntityPage,
+        sgSlug: 'procuring-entity',
+        plSlug: 'procuring-entities',
+      });
     }
     return (
       <OverviewPage
@@ -175,6 +172,23 @@ class CorruptionRiskDashboard extends React.Component {
     const { TRANSLATIONS } = this.constructor;
     const { locale } = this.state;
     return TRANSLATIONS[locale];
+  }
+
+  wireProps(slug) {
+    const translations = this.getTranslations();
+    const { appliedFilters, width } = this.state;
+    const { filters, years, months } = this.destructFilters(appliedFilters);
+    return {
+      translations,
+      data: this.state.data.get(slug, Map()),
+      requestNewData: (path, newData) =>
+        this.setState({ data: this.state.data.setIn([slug].concat(path), newData) }),
+      filters,
+      years,
+      monthly: years.count() === 1,
+      months,
+      width,
+    };
   }
 
   t(str) {
@@ -252,6 +266,31 @@ class CorruptionRiskDashboard extends React.Component {
         {locale.split('_')[0]}
       </a>
     ));
+  }
+
+  renderArchive(Component, slug) {
+    const { navigate, route } = this.props;
+    const [, searchQuery] = route;
+    return (
+      <Component
+        {...this.wireProps(slug)}
+        searchQuery={searchQuery}
+        doSearch={query => navigate(slug, query)}
+        navigate={navigate}
+      />
+    );
+  }
+
+  renderSingle({ Component, sgSlug, plSlug }) {
+    const { route, navigate } = this.props;
+    const [, id] = route;
+    return (
+      <Component
+        {...this.wireProps(sgSlug)}
+        id={id}
+        doSearch={query => navigate(plSlug, query)}
+      />
+    );
   }
 
   render() {
