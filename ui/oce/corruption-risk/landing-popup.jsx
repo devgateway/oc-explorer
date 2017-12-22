@@ -13,7 +13,8 @@ class LandingPopup extends translatable(React.Component) {
   onClose(){
     const {redirectToLogin, requestClosing} = this.props;
     if(redirectToLogin){
-      location.href = LOGIN_URL;
+      const hash = encodeURIComponent(location.hash);
+      location.href = `${LOGIN_URL}${hash}`;
     } else {
       requestClosing();
     }
