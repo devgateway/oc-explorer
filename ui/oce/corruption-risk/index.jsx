@@ -246,11 +246,14 @@ class CorruptionRiskDashboard extends React.Component {
         </a>
       );
     }
-    return (<a href={LOGIN_URL}>
-      <button className="btn btn-success">
-        {this.t('general:login')}
-      </button>
-    </a>);
+    const hash = encodeURIComponent(location.hash);
+    return (
+      <a href={`${LOGIN_URL}${hash}`}>
+        <button className="btn btn-success">
+          {this.t('general:login')}
+        </button>
+      </a>
+    );
   }
 
   languageSwitcher() {
