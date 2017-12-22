@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
@@ -72,6 +73,10 @@ public abstract class GenericOCDSController {
         cal.set(Calendar.DAY_OF_YEAR, 1);
         Date start = cal.getTime();
         return start;
+    }
+
+    protected List<DBObject> releaseAgg(Aggregation agg) {
+        return mongoTemplate.aggregate(agg, "release", DBObject.class).getMappedResults();
     }
 
     /**
@@ -408,6 +413,10 @@ public abstract class GenericOCDSController {
         return createFilterCriteria("awards.suppliers._id", filter.getSupplierId(), filter);
     }
 
+    protected Criteria getBidderIdCriteria(final DefaultFilterPagingRequest filter) {
+        return createFilterCriteria("bids.details.tenderers._id", filter.getBidderId(), filter);
+    }
+
     /**
      * Appends the procurement method for this filter, this will fitler based
      * on tender.procurementMethod
@@ -484,7 +493,8 @@ public abstract class GenericOCDSController {
                 getFlaggedCriteria(filter),
                 getFlagTypeFilterCriteria(filter),
                 getElectronicSubmissionCriteria(filter),
-                getAwardStatusFilterCriteria(filter));
+                getAwardStatusFilterCriteria(filter),
+                getBidderIdCriteria(filter));
     }
 
     protected Criteria getYearDefaultFilterCriteria(final YearFilterPagingRequest filter, final String dateProperty) {
@@ -502,7 +512,8 @@ public abstract class GenericOCDSController {
                 getFlaggedCriteria(filter),
                 getFlagTypeFilterCriteria(filter),
                 getYearFilterCriteria(filter, dateProperty),
-                getAwardStatusFilterCriteria(filter));
+                getAwardStatusFilterCriteria(filter),
+                getBidderIdCriteria(filter));
     }
 
     protected MatchOperation getMatchDefaultFilterOperation(final DefaultFilterPagingRequest filter) {

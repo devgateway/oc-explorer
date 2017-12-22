@@ -40,10 +40,12 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
             + " matches elements that are NOT in the TreeSet of Ids")
     private TreeSet<String> notProcuringEntityId;
 
-    // @EachPattern(regexp = "^[\\p{L}0-9]*$")
     @ApiModelProperty(value = "This is the id of the organization/supplier entity. "
             + "Corresponds to the OCDS Organization.identifier")
     private TreeSet<String> supplierId;
+
+    @ApiModelProperty(value = "This is the new bidder format bids.details.tenderers._id")
+    private TreeSet<String> bidderId;
 
     @ApiModelProperty(value = "This will filter after tender.items.deliveryLocation._id")
     private TreeSet<String> tenderLoc;
@@ -211,5 +213,13 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
     public void setAwardStatus(TreeSet<String> awardStatus) {
         this.awardStatus = awardStatus;
+    }
+
+    public TreeSet<String> getBidderId() {
+        return bidderId;
+    }
+
+    public void setBidderId(TreeSet<String> bidderId) {
+        this.bidderId = bidderId;
     }
 }
