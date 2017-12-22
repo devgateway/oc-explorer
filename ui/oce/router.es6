@@ -13,6 +13,9 @@ export const getRoute = () => {
 
 export const navigate = (...params) => {
   location.hash = `${PREFIX}/${params.join('/')}`;
+};
+
+window.addEventListener('popstate', () => {
   const route = getRoute();
   listeners.forEach(listener => listener(route));
-};
+});
