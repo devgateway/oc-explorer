@@ -7,6 +7,8 @@ import { getAwardAmount, mkContractLink, wireProps } from '../tools';
 import PaginatedTable from '../paginated-table';
 import Archive from '../archive';
 
+const _3LineText = content => <div className="oce-3-line-text">{content}</div>
+
 class CList extends PaginatedTable {
   getCustomEP() {
     const { searchQuery } = this.props;
@@ -89,7 +91,7 @@ class CList extends PaginatedTable {
           {this.t('crd:general:contract:title')}
         </TableHeaderColumn>
 
-        <TableHeaderColumn dataField="PEName">
+        <TableHeaderColumn dataField="PEName" dataFormat={_3LineText}>
           {this.t('crd:contracts:list:procuringEntity')}
         </TableHeaderColumn>
 

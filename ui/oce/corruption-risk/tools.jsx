@@ -35,6 +35,7 @@ export const mkContractLink = navigate => (content, { id }) => (
   <a
     href={`#!/crd/contract/${id}`}
     onClick={() => navigate('contract', id)}
+    className="oce-3-line-text"
   >
     {content}
   </a>
