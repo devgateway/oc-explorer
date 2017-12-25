@@ -81,7 +81,13 @@ class CList extends PaginatedTable {
           {this.t('crd:contracts:baseInfo:status')}
         </TableHeaderColumn>
 
-        <TableHeaderColumn isKey dataField="id" dataFormat={mkContractLink(navigate)}>
+        <TableHeaderColumn
+          isKey
+          dataField="id"
+          dataFormat={mkContractLink(navigate)}
+          className="ocid"
+          columnClassName="ocid"
+        >
           {this.t('crd:procurementsTable:contractID')}
         </TableHeaderColumn>
 
@@ -101,7 +107,7 @@ class CList extends PaginatedTable {
           {this.t('crd:contracts:list:awardAmount')}
         </TableHeaderColumn>
 
-        <TableHeaderColumn dataField="startDate">
+        <TableHeaderColumn dataField="startDate" className="date" columnClassName="date">
           {this.t('crd:procurementsTable:tenderDate')}
         </TableHeaderColumn>
 
