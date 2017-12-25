@@ -542,7 +542,12 @@
 
   .oce-3-line-text{
     overflow: hidden;
-    max-height: 3.9em;
+    max-height: 4em;
+    display: block;
+    &:hover {
+      overflow: visible;
+      max-height: none;
+    }
   }
 
   .crd-landing-popup{
