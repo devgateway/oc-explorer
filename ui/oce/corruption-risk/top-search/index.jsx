@@ -51,23 +51,8 @@ class TopSearch extends translatable(React.Component) {
             </div>
           </form>
         </div>
-        {hasSpecialChars && <div className="row">
+        <div className="row">
           <div className="col-sm-12">
-            <div className="help-block">
-              &bdquo;-&ldquo; is a special character meaning &bdquo;without&ldquo;.
-              <br />
-              For example
-              &bdquo;
-              <span className="foo">foo</span>
-              &nbsp;-
-              <span className="bar">bar</span>
-              &ldquo;
-              will look for contracts containing
-              &nbsp;
-              <span className="foo">foo</span> but not <span className="bar">bar</span>.
-              <br />
-              Use quotes or enable literal search if this is not the desired behavior.
-            </div>
             <input
               id="exactMatch"
               type="checkbox"
@@ -76,10 +61,10 @@ class TopSearch extends translatable(React.Component) {
             />
             &nbsp;
             <label htmlFor="exactMatch">
-              Search literally
+              Click box to search OCIDs
             </label>
           </div>
-        </div>}
+        </div>
       </div>
     );
   }
