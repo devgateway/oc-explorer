@@ -83,7 +83,7 @@ class CorruptionRiskDashboard extends React.Component {
     const styling = this.constructor.STYLING || this.props.styling;
     const [page] = route;
 
-    const { appliedFilters, indicatorTypesMapping, width, data, allYears } = this.state;
+    const { appliedFilters, indicatorTypesMapping, width, data } = this.state;
 
     const { filters, years, months } = this.destructFilters(appliedFilters);
     const monthly = years.count() === 1;
@@ -132,6 +132,9 @@ class CorruptionRiskDashboard extends React.Component {
         Component: ContractPage,
         sgSlug: 'contract',
         plSlug: 'contracts',
+        additionalProps: {
+          indicatorTypesMapping,
+        },
       });
     } else if (page === 'suppliers') {
       return this.renderArchive(SuppliersPage, 'suppliers');
@@ -284,7 +287,7 @@ class CorruptionRiskDashboard extends React.Component {
     );
   }
 
-  renderSingle({ Component, sgSlug, plSlug }) {
+  renderSingle({ Component, sgSlug, plSlug, additionalProps }) {
     const { route, navigate } = this.props;
     const [, id] = route;
     return (
@@ -292,6 +295,7 @@ class CorruptionRiskDashboard extends React.Component {
         {...this.wireProps(sgSlug)}
         id={id}
         doSearch={query => navigate(plSlug, query)}
+        {...additionalProps}
       />
     );
   }
