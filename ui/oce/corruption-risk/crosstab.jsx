@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import Table from '../visualizations/tables/index';
 
 class Crosstab extends Table {
@@ -42,6 +43,7 @@ class Crosstab extends Table {
   row(rowData, rowIndicatorID){
     const rowIndicatorName = this.t(`crd:indicators:${rowIndicatorID}:name`);
     const rowIndicatorDescription = this.t(`crd:indicators:${rowIndicatorID}:indicator`);
+    const lastKey = rowData.lastKeyOf(rowData.last());
     return (
       <tr key={rowIndicatorID}>
         <td>{rowIndicatorName}</td>
@@ -51,37 +53,37 @@ class Crosstab extends Table {
           const indicatorDescription = this.t(`crd:indicators:${indicatorID}:indicator`);
           if (indicatorID === rowIndicatorID) {
             return <td className="not-applicable" key={indicatorID}>&mdash;</td>;
-          } else {
-            const percent = datum.get('percent');
-            const count = datum.get('count');
-            const color = Math.round(255 - 255 * (percent / 100));
-            const style = { backgroundColor: `rgb(${color}, 255, ${color})` };
-            return (
-              <td key={indicatorID} className="hoverable" style={style}>
-                {percent && percent.toFixed(2)} %
-                <div className="crd-popup text-left">
-                  <div className="row">
-                    <div className="col-sm-12 info">
-                      {this.t('crd:corruptionType:crosstab:popup:percents')
-                        .replace('$#$', percent.toFixed(2))
-                        .replace('$#$', rowIndicatorName)
-                        .replace('$#$', indicatorName)}
-                    </div>
-                    <div className="col-sm-12">
-                      <hr />
-                    </div>
-                    <div className="col-sm-12 info">
-                      <h4>{this.t('crd:corruptionType:crosstab:popup:count').replace('$#$', count)}</h4>
-                      <p><strong>{rowIndicatorName}</strong>: {rowIndicatorDescription}</p>
-                      <p className="and">{this.t('crd:corruptionType:crosstab:popup:and')}</p>
-                      <p><strong>{indicatorName}</strong>: {indicatorDescription}</p>
-                    </div>
-                  </div>
-                  <div className="arrow" />
-                </div>
-              </td>
-            );
           }
+          const percent = datum.get('percent');
+          const count = datum.get('count');
+          const color = Math.round(255 - 255 * (percent / 100));
+          const style = { backgroundColor: `rgb(${color}, 255, ${color})` };
+          const isLast = indicatorID === lastKey;
+          return (
+            <td key={indicatorID} className={cn('hoverable', {"popup-left": isLast})} style={style}>
+              {percent && percent.toFixed(2)} %
+              <div className="crd-popup text-left">
+                <div className="row">
+                  <div className="col-sm-12 info">
+                    {this.t('crd:corruptionType:crosstab:popup:percents')
+                      .replace('$#$', percent.toFixed(2))
+                      .replace('$#$', rowIndicatorName)
+                      .replace('$#$', indicatorName)}
+                  </div>
+                  <div className="col-sm-12">
+                    <hr />
+                  </div>
+                  <div className="col-sm-12 info">
+                    <h4>{this.t('crd:corruptionType:crosstab:popup:count').replace('$#$', count)}</h4>
+                    <p><strong>{rowIndicatorName}</strong>: {rowIndicatorDescription}</p>
+                    <p className="and">{this.t('crd:corruptionType:crosstab:popup:and')}</p>
+                    <p><strong>{indicatorName}</strong>: {indicatorDescription}</p>
+                  </div>
+                </div>
+                <div className="arrow" />
+              </div>
+            </td>
+          );
         }).toArray()}
       </tr>
     )
