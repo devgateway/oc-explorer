@@ -64,3 +64,5 @@ export function wireProps(parent, prefix) {
   }
   return props;
 }
+
+export const _3LineText = content => <div className="oce-3-line-text">{content}</div>

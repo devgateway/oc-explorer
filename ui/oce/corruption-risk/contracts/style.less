@@ -2,7 +2,15 @@
   margin-bottom: 40px;
   table {
     th, td{
-      width: 12.5%;
+      @width: 12.5%;
+      @ocidDateDelta: 3%;
+      width: @width;
+      &.ocid {
+        width: @width + @ocidDateDelta;
+      }
+      &.date {
+        width: @width - @ocidDateDelta;
+      }
     }
     th{
       color: #a1adbc;
@@ -14,10 +22,8 @@
   }
 }
 
-.contract-page, .contracts-page {
-  .react-bs-table table td, .react-bs-table table th{
-    white-space: normal;
-  }
+.react-bs-table table td, .react-bs-table table th{
+  white-space: normal;
 }
 
 .contract-page {

@@ -1,10 +1,9 @@
 import ReactDOM from 'react-dom';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { List } from 'immutable';
-import Table from '../visualizations/tables';
 import translatable from '../translatable';
 import { POPUP_HEIGHT } from './constants';
-import { getAwardAmount, mkContractLink } from './tools';
+import { getAwardAmount, mkContractLink, _3LineText } from './tools';
 import PaginatedTable from './paginated-table';
 
 // eslint-disable-next-line no-undef
@@ -149,7 +148,7 @@ class ProcurementsTable extends PaginatedTable {
           {this.t('crd:procurementsTable:title')}
         </TableHeaderColumn>
 
-        <TableHeaderColumn dataField="PEName">
+        <TableHeaderColumn dataField="PEName" dataFormat={_3LineText}>
           {this.t('crd:procurementsTable:procuringEntity')}
         </TableHeaderColumn>
 
