@@ -3,11 +3,9 @@ import { List } from 'immutable';
 // eslint-disable-next-line no-unused-vars
 import rbtStyles from 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import CRDPage from '../page';
-import { getAwardAmount, mkContractLink, wireProps } from '../tools';
+import { getAwardAmount, mkContractLink, wireProps, _3LineText } from '../tools';
 import PaginatedTable from '../paginated-table';
 import Archive from '../archive';
-
-const _3LineText = content => <div className="oce-3-line-text">{content}</div>
 
 class CList extends PaginatedTable {
   getCustomEP() {
