@@ -178,14 +178,16 @@ class CorruptionRiskDashboard extends React.Component {
   }
 
   wireProps(slug) {
+  wireProps(_slug) {
+    const slug = Array.isArray(_slug) ? _slug : [_slug];
     const translations = this.getTranslations();
     const { appliedFilters, width } = this.state;
     const { filters, years, months } = this.destructFilters(appliedFilters);
     return {
       translations,
-      data: this.state.data.get(slug, Map()),
+      data: this.state.data.getIn(slug, Map()),
       requestNewData: (path, newData) =>
-        this.setState({ data: this.state.data.setIn([slug].concat(path), newData) }),
+        this.setState({ data: this.state.data.setIn(slug.concat(path), newData) }),
       filters,
       years,
       monthly: years.count() === 1,
