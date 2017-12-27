@@ -363,19 +363,15 @@ class CorruptionRiskDashboard extends React.Component {
           allMonths={allMonths}
         />
         <Sidebar
+          {...this.wireProps('sidebar')}
           page={page}
-          translations={translations}
           indicatorTypesMapping={indicatorTypesMapping}
           route={route}
           navigate={navigate}
           data={data}
           requestNewData={(path, newData) =>
             this.setState({ data: this.state.data.setIn(path, newData) })}
-          filters={filters}
-          years={years}
           allYears={allYears}
-          monthly={monthly}
-          months={months}
         />
         <div className="col-sm-offset-3 col-sm-9 content">
           {this.getPage()}
