@@ -42,7 +42,11 @@ class SList extends PaginatedTable {
     const jsData = data.get('data', List()).map((supplier) => {
       return {
         id: supplier.get('id'),
-        name: supplier.get('name')
+        name: supplier.get('name'),
+        wins: -Math.round(Math.random() * 4),
+        winAmount: -Math.round(Math.random() * 1000000),
+        lost: -Math.round(Math.random() * 4),
+        flags: -Math.round(Math.random() * 4),
       }
     }).toJS();
 
@@ -65,11 +69,23 @@ class SList extends PaginatedTable {
           paginationPosition: 'both',
         }}
       >
+        <TableHeaderColumn dataField='name' dataFormat={mkLink(navigate)}>
+          Name
+        </TableHeaderColumn>
         <TableHeaderColumn dataField='id' isKey dataFormat={mkLink(navigate)}>
           ID
         </TableHeaderColumn>
-        <TableHeaderColumn dataField='name' dataFormat={mkLink(navigate)}>
-          Name
+        <TableHeaderColumn dataField='wins'>
+          Wins
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField='winAmount'>
+          Total won
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField='lost'>
+          Losses
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField='flags'>
+          Total No. Flags
         </TableHeaderColumn>
       </BootstrapTable>
     );
