@@ -97,14 +97,10 @@ class CorruptionRiskDashboard extends React.Component {
 
       return (
         <CorruptionTypePage
+          {...this.wireProps(['corruptionType', corruptionType])}
           indicators={indicators}
           onGotoIndicator={individualIndicator => navigate('indicator', corruptionType, individualIndicator)}
-          filters={filters}
-          translations={translations}
           corruptionType={corruptionType}
-          years={years}
-          monthly={monthly}
-          months={months}
           width={width}
           styling={styling}
         />
@@ -113,13 +109,9 @@ class CorruptionRiskDashboard extends React.Component {
       const [, corruptionType, individualIndicator] = route;
       return (
         <IndividualIndicatorPage
+          {...this.wireProps(['indicator', individualIndicator])}
           indicator={individualIndicator}
           corruptionType={corruptionType}
-          filters={filters}
-          translations={translations}
-          years={years}
-          monthly={monthly}
-          months={months}
           width={width}
           styling={styling}
           navigate={navigate}
@@ -155,14 +147,7 @@ class CorruptionRiskDashboard extends React.Component {
     }
     return (
       <OverviewPage
-        filters={filters}
-        translations={translations}
-        years={years}
-        monthly={monthly}
-        months={months}
-        data={data.get('overview', Map())}
-        requestNewData={(path, newData) =>
-          this.setState({ data: this.state.data.setIn(['overview'].concat(path), newData) })}
+        {...this.wireProps('overview')}
         indicatorTypesMapping={indicatorTypesMapping}
         styling={styling}
         width={width}
@@ -177,12 +162,15 @@ class CorruptionRiskDashboard extends React.Component {
     return TRANSLATIONS[locale];
   }
 
-  wireProps(slug) {
   wireProps(_slug) {
     const slug = Array.isArray(_slug) ? _slug : [_slug];
     const translations = this.getTranslations();
-    const { appliedFilters, width } = this.state;
-    const { filters, years, months } = this.destructFilters(appliedFilters);
+    const { appliedFilters, allYears, width } = this.state;
+    const { filters, years: selectedYears, months } = this.destructFilters(appliedFilters);
+    const years = Set(allYears).equals(selectedYears) ?
+      Set() :
+      selectedYears;
+
     return {
       translations,
       data: this.state.data.getIn(slug, Map()),
