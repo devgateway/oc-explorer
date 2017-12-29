@@ -1,4 +1,5 @@
 import { Map, Set } from 'immutable';
+import { List } from 'immutable';
 import TopSearch from '../../top-search';
 import translatable from '../../../translatable';
 import Visualization from '../../../visualization';
@@ -9,7 +10,9 @@ import NrLostVsWon from './donuts/nr-lost-vs-won';
 import AmountLostVsWon from './donuts/amount-lost-vs-won';
 import NrFlags from './donuts/nr-flags';
 import styles from './style.less';
-import { cacheFn } from '../../../tools';
+import { cacheFn, pluckImm } from '../../../tools';
+
+const add = (a, b) => a + b;
 
 class Info extends translatable(Visualization) {
   getCustomEP() {
@@ -18,12 +21,14 @@ class Info extends translatable(Visualization) {
   }
 
   render() {
-    const { data } = this.props;
+    const { data, flagCount: _flagCount } = this.props;
+    const flagCount = (_flagCount || List())
+      .map(pluckImm('indicatorCount')).reduce(add, 0);
+
     if(!data) return null;
 
     const address = data.get('address');
     const contact = data.get('contactPoint');
-    const flagCount = -1;
     return (
       <section className="info">
         <table className="table table-bordered join-bottom info-table">
@@ -93,7 +98,7 @@ class Supplier extends CRDPage {
   }
 
   render() {
-    const { translations, width, doSearch, id, filters } = this.props;
+    const { translations, width, doSearch, id, filters, data } = this.props;
     const donutSize = width / 3 - 100;
 
     return (
@@ -107,6 +112,7 @@ class Supplier extends CRDPage {
           {...wireProps(this, 'info')}
           id={id}
           filters={Map()}
+          flagCount={data.get('nr-flags')}
         />
 
         <section className="supplier-general-statistics">

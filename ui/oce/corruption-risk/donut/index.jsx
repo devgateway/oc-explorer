@@ -11,8 +11,13 @@ class Donut extends backendYearFilterable(Chart) {
     return this.props.endpoint || 'ocds/release/count';
   }
 
+  hasNoData() {
+    return this.props.data && !this.props.data.length;
+  }
+
   getData() {
     const { data } = this.props;
+    if (!data.length) return [];
     return [{
       labels: data.map(pluck('label')),
       values: data.map(pluck('value')),
@@ -39,7 +44,7 @@ class Donut extends backendYearFilterable(Chart) {
 
 class DonutWrapper extends React.PureComponent {
   render() {
-    const { title, subtitle, className, values, data, CenterText } = this.props;
+    const { title, subtitle, className, data, CenterText } = this.props;
     return (
       <div className={cn(className, 'center-text-donut')}>
         <div>
@@ -48,12 +53,9 @@ class DonutWrapper extends React.PureComponent {
             endpoint={this.props.endpoint}
             margin={{ b: 0, t: 0, r: 0, l: 0, pad: 0 }}
             height={300}
-            data={data}
-            values={values}
           />
           <CenterText
             data={data}
-            values={values}
           />
         </div>
         <h4 className="title">
