@@ -1,9 +1,10 @@
+import { pluck } from '../../../../tools';
 import Donut from '../../../donut';
 
 class CenterText extends React.Component {
   render() {
     const { data } = this.props;
-    const [fst, snd] = data;
+    const [fst, snd] = data.map(pluck('value'));
     const sum = fst + snd;
     const percent = (fst / sum) * 100;
     return (
@@ -27,12 +28,14 @@ class NrWonVsLost extends React.PureComponent {
         CenterText={CenterText}
         title="# and % Contracts"
         subtitle="Won vs Lost"
-        values={[{
+        data={[{
             color: '#165781',
             label: 'Won',
+            value: 1,
         }, {
             color: '#5fa0c9',
             label: 'Lost',
+            value: 2,
         }]}
       />
     );

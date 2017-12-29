@@ -1,9 +1,10 @@
+import { pluck } from '../../../../tools';
 import Donut from '../../../donut';
 
 class CenterText extends React.PureComponent {
   render() {
     const { data } = this.props;
-    const [fst, snd] = data;
+    const [fst, snd] = data.map(pluck('value'));
     return (
       <div className="center-text two-rows">
         <div>
@@ -26,12 +27,14 @@ class AmountWonVsLost extends React.Component {
         CenterText={CenterText}
         title="$ Amount"
         subtitle="Won vs Lost"
-        values={[{
+        data={[{
             color: '#72c47e',
             label: 'Won',
+            value: 1000000,
         }, {
             color: '#2e833a',
             label: 'Lost',
+            value: 2000000,
         }]}
       />
     );

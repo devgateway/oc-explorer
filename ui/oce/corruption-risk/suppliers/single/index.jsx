@@ -114,14 +114,12 @@ class Supplier extends CRDPage {
             <AmountLostVsWon
               {...wireProps(this, 'amount-lost-vs-won')}
               width={donutSize}
-              data={[1000000, 2000000]}
             />
           </div>
           <div className="col-sm-4">
             <NrFlags
-              {...wireProps(this, 'flags')}
+              {...wireProps(this, 'nr-flags')}
               width={donutSize}
-              data={[6,2,1]}
             />
           </div>
         </section>
