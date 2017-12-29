@@ -8,14 +8,14 @@ import DonutPopup from './popup';
 
 class Donut extends backendYearFilterable(Chart) {
   getCustomEP() {
-    return 'ocds/release/count';
+    return this.props.endpoint || 'ocds/release/count';
   }
 
   getData() {
-    const { data, values } = this.props;
+    const { data } = this.props;
     return [{
-      labels: values.map(pluck('label')),
-      values: data,
+      labels: data.map(pluck('label')),
+      values: data.map(pluck('value')),
       hoverlabel: {
         bgcolor: '#144361',
       },
@@ -24,7 +24,7 @@ class Donut extends backendYearFilterable(Chart) {
       hole: 0.8,
       type: 'pie',
       marker: {
-        colors: values.map(pluck('color')),
+        colors: data.map(pluck('color')),
       },
     }];
   }
@@ -45,6 +45,7 @@ class DonutWrapper extends React.PureComponent {
         <div>
           <Donut
             {...wireProps(this)}
+            endpoint={this.props.endpoint}
             margin={{ b: 0, t: 0, r: 0, l: 0, pad: 0 }}
             height={300}
             data={data}

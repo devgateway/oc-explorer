@@ -52,11 +52,12 @@ export function cherrypickProps(keys, source) {
   return target;
 }
 
-export function wireProps(parent, prefix) {
+export function wireProps(parent, _prefix) {
   const { props: parentProps } = parent;
   const props = cherrypickProps(ROUTINE_PROPS, parentProps);
-  if (prefix) {
-    props.data = parentProps.data.get(prefix);
+  if (_prefix) {
+    const prefix = Array.isArray(_prefix) ? _prefix : [_prefix];
+    props.data = parentProps.data.getIn(prefix);
     props.requestNewData = (path, data) =>
       parentProps.requestNewData(path.concat(prefix), data);
   } else {
