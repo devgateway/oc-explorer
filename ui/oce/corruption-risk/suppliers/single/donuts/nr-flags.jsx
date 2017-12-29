@@ -1,17 +1,16 @@
 import { List } from 'immutable';
 import Donut from '../../../donut';
 import { pluck } from '../../../../tools';
+import translatable from '../../../../translatable';
 
 class CenterText extends React.PureComponent {
   render() {
     const { data } = this.props;
-    const [fst, snd, thrd] = data.map(pluck('value'));
-    const [fstColor, sndColor, thrdColor] = data.map(pluck('color'));
     return (
-      <div className="center-text two-rows">
-        <span style={{ color: fstColor }}>{fst}</span>/
-        <span style={{ color: sndColor }}>{snd}</span>/
-        <span style={{ color: thrdColor }}>{thrd}</span>
+      <div className="center-text two-rows total-flags-center-text">
+        {data.map(({ color, value }) =>
+          <span key={color} style={{ color }}>{value}</span>
+        )}
       </div>
     );
   }
@@ -19,11 +18,11 @@ class CenterText extends React.PureComponent {
 
 const COLORS = ['#fbc42c', '#3372b2', '#30a0f5']
 
-class TotalFlags extends React.Component {
+class TotalFlags extends translatable(React.PureComponent) {
   render() {
     const data = (this.props.data || List()) .map((datum, index) => ({
       color: COLORS[index],
-      label: datum.get('type'),
+      label: this.t(`crd:corruptionType:${datum.get('type')}:name`),
       value: datum.get('indicatorCount'),
     })).toJS();
     return (

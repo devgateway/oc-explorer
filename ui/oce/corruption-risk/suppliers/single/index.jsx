@@ -1,4 +1,4 @@
-import { Map } from 'immutable';
+import { Map, Set } from 'immutable';
 import TopSearch from '../../top-search';
 import translatable from '../../../translatable';
 import Visualization from '../../../visualization';
@@ -9,6 +9,7 @@ import NrLostVsWon from './donuts/nr-lost-vs-won';
 import AmountLostVsWon from './donuts/amount-lost-vs-won';
 import NrFlags from './donuts/nr-flags';
 import styles from './style.less';
+import { cacheFn } from '../../../tools';
 
 class Info extends translatable(Visualization) {
   getCustomEP() {
@@ -84,8 +85,15 @@ class Info extends translatable(Visualization) {
 }
 
 class Supplier extends CRDPage {
+  constructor(...args) {
+    super(...args);
+    this.injectSupplierFilter = cacheFn((filters, supplierId) => {
+      return filters.update('supplierId', Set(), supplierIds => supplierIds.add(supplierId));
+    });
+  }
+
   render() {
-    const { translations, width, doSearch, id } = this.props;
+    const { translations, width, doSearch, id, filters } = this.props;
     const donutSize = width / 3 - 100;
 
     return (
@@ -108,7 +116,7 @@ class Supplier extends CRDPage {
               {...wireProps(this, 'nr-lost-vs-won')}
               width={donutSize}
               data={[1, 2]}
-              />
+            />
           </div>
           <div className="col-sm-4">
             <AmountLostVsWon
@@ -119,6 +127,7 @@ class Supplier extends CRDPage {
           <div className="col-sm-4">
             <NrFlags
               {...wireProps(this, 'nr-flags')}
+              filters={this.injectSupplierFilter(filters, id)}
               width={donutSize}
             />
           </div>
