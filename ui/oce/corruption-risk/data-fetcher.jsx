@@ -1,4 +1,5 @@
 import URI from 'urijs';
+import { cloneChild } from './tools';
 import { callFunc } from '../tools';
 
 const API_ROOT = '/api';
@@ -11,12 +12,6 @@ const fetchEP = url => fetch(url.clone().query(''), {
   credentials: 'same-origin',
   body: url.query(),
 }).then(callFunc('json'));
-
-const cloneChild = (component, props) =>
-  React.cloneElement(
-    React.Children.only(component.props.children),
-    props
-  );
 
 class DataFetcher extends React.PureComponent {
   fetch() {

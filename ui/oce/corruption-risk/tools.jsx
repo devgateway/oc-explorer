@@ -67,3 +67,9 @@ export function wireProps(parent, _prefix) {
 }
 
 export const _3LineText = content => <div className="oce-3-line-text">{content}</div>
+
+export const cloneChild = (component, props) =>
+  React.cloneElement(
+    React.Children.only(component.props.children),
+    props
+  );
