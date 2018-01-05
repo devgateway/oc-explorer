@@ -1,4 +1,5 @@
 import URI from 'urijs';
+import { Map } from 'immutable';
 import { cloneChild } from './tools';
 import { callFunc } from '../tools';
 
@@ -38,6 +39,11 @@ class DataFetcher extends React.PureComponent {
       data
     });
   }
+}
+
+DataFetcher.defaultProps = {
+  filters: Map(),
+  requestNewData: () => null,
 }
 
 export default DataFetcher;
