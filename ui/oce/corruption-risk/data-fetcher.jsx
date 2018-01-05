@@ -18,7 +18,7 @@ const cloneChild = (component, props) =>
     props
   );
 
-class Visualization extends React.PureComponent {
+class DataFetcher extends React.PureComponent {
   fetch() {
     const { filters, endpoint, requestNewData } = this.props;
     const uri = new URI(`${API_ROOT}/${endpoint}`).addSearch(filters.toJS());
@@ -31,6 +31,7 @@ class Visualization extends React.PureComponent {
 
   componentDidUpdate(prevProps) {
     if (['filters', 'endpoint'].some(prop => this.props[prop] != prevProps[prop])) {
+      this.props.requestNewData([], null);
       this.fetch();
     }
   }
@@ -44,4 +45,4 @@ class Visualization extends React.PureComponent {
   }
 }
 
-export default Visualization;
+export default DataFetcher;
