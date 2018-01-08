@@ -11,6 +11,8 @@ import AmountLostVsWon from './donuts/amount-lost-vs-won';
 import NrFlags from './donuts/nr-flags';
 import styles from './style.less';
 import { cacheFn, pluckImm } from '../../../tools';
+import PlotlyChart from '../../plotly-chart';
+import TaggedBarChart from '../../tagged-bar-chart';
 
 const add = (a, b) => a + b;
 
@@ -100,6 +102,7 @@ class Supplier extends CRDPage {
   render() {
     const { translations, width, doSearch, id, filters, data } = this.props;
     const donutSize = width / 3 - 100;
+    const barChartWidth = width / 2 - 100;
 
     return (
       <div className="supplier-page">
@@ -135,6 +138,81 @@ class Supplier extends CRDPage {
               {...wireProps(this, 'nr-flags')}
               filters={this.injectSupplierFilter(filters, id)}
               width={donutSize}
+            />
+          </div>
+        </section>
+        <section className="flag-analysis">
+          <h2>
+            {this.t('crd:contracts:flagAnalysis')}
+            &nbsp;
+            <small>({this.t('crd:contracts:clickCrosstabHint')})</small>
+          </h2>
+          <div className="col-sm-6">
+            <PlotlyChart
+              data={[{
+                  x: ['Supplier 1', 'Supplier 2', 'Supplier 3', 'Supplier 4', 'Supplier 5'],
+                  y: [1, 2, 3, 4, 5],
+                  name: 'Wins',
+                  type: 'bar',
+              }, {
+                  x: ['Supplier 1', 'Supplier 2', 'Supplier 3', 'Supplier 4', 'Supplier 5'],
+                  y: [5, 4, 3, 2, 1],
+                  name: 'Flags',
+                  type: 'bar',
+              }]}
+              layout={{
+                width: barChartWidth,
+                height: 250,
+                barmode: 'group',
+                margin: {t: 0, r: 0, b: 30, l: 20, pad: 0},
+                legend: {
+                  xanchor: 'right',
+                  yanchor: 'top',
+                  x: .9,
+                  y: 1.5,
+                  orientation: 'h',
+                }
+              }}
+            />
+          </div>
+          <div className="col-sm-6">
+            <TaggedBarChart
+              width={barChartWidth}
+              tags={{
+                FRAUD: {
+                  name: 'Fraud',
+                  color: '#299df4',
+                },
+                RIGGING: {
+                  name: 'Process rigging',
+                  color: '#3372b2',
+                },
+                COLLUSION: {
+                  name: 'Collusion',
+                  color: '#fbc42c',
+                },
+              }}
+              data={[{
+                  x: 'Indicator 1',
+                  y: 5,
+                  tags: ['RIGGING'],
+              }, {
+                  x: 'Indicator 2',
+                  y: 4,
+                  tags: ['COLLUSION', 'FRAUD'],
+              }, {
+                  x: 'Indicator 3',
+                  y: 3,
+                  tags: ['COLLUSION', 'RIGGING'],
+              }, {
+                  x: 'Indicator 4',
+                  y: 2,
+                  tags: ['FRAUD', 'RIGGING'],
+              }, {
+                  x: 'Indicator 5',
+                  y: 1,
+                  tags: ['COLLUSION', 'FRAUD', 'RIGGING'],
+              }]}
             />
           </div>
         </section>
