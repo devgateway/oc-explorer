@@ -13,6 +13,18 @@ import styles from './style.less';
 import { cacheFn, pluckImm } from '../../../tools';
 import PlotlyChart from '../../plotly-chart';
 import TaggedBarChart from '../../tagged-bar-chart';
+import Zoomable from '../../zoomable';
+
+const TitleBelow = ({ title, children, ...props }) => (
+  <div>
+    {React.cloneElement(
+       React.Children.only(children)
+    , props)}
+    <h4 className="title text-center">
+      {title}
+    </h4>
+  </div>
+);
 
 const add = (a, b) => a + b;
 
@@ -148,78 +160,80 @@ class Supplier extends CRDPage {
             <small>({this.t('crd:contracts:clickCrosstabHint')})</small>
           </h2>
           <div className="col-sm-6">
-            <PlotlyChart
-              data={[{
-                  x: ['Supplier 1', 'Supplier 2', 'Supplier 3', 'Supplier 4', 'Supplier 5'],
-                  y: [1, 2, 3, 4, 5],
-                  name: 'Wins',
-                  type: 'bar',
-              }, {
-                  x: ['Supplier 1', 'Supplier 2', 'Supplier 3', 'Supplier 4', 'Supplier 5'],
-                  y: [5, 4, 3, 2, 1],
-                  name: 'Flags',
-                  type: 'bar',
-              }]}
-              layout={{
-                width: barChartWidth,
-                height: 250,
-                barmode: 'group',
-                margin: {t: 0, r: 0, b: 30, l: 20, pad: 0},
-                legend: {
-                  xanchor: 'right',
-                  yanchor: 'top',
-                  x: .9,
-                  y: 1.5,
-                  orientation: 'h',
-                }
-              }}
-            />
-            <h4 className="title text-center">
-              Wins & Flags by Procuring Entity
-            </h4>
+            <Zoomable>
+              <TitleBelow title="Wins & Flags by Procuring Entity">
+                <PlotlyChart
+                  data={[{
+                      x: ['Supplier 1', 'Supplier 2', 'Supplier 3', 'Supplier 4', 'Supplier 5'],
+                      y: [1, 2, 3, 4, 5],
+                      name: 'Wins',
+                      type: 'bar',
+                  }, {
+                      x: ['Supplier 1', 'Supplier 2', 'Supplier 3', 'Supplier 4', 'Supplier 5'],
+                      y: [5, 4, 3, 2, 1],
+                      name: 'Flags',
+                      type: 'bar',
+                  }]}
+                  layout={{
+                    width: barChartWidth,
+                    height: 250,
+                    barmode: 'group',
+                    margin: {t: 0, r: 0, b: 30, l: 20, pad: 0},
+                    legend: {
+                      xanchor: 'right',
+                      yanchor: 'top',
+                      x: .9,
+                      y: 1.5,
+                      orientation: 'h',
+                    }
+                  }}
+                />
+              </TitleBelow>
+            </Zoomable>
           </div>
           <div className="col-sm-6">
-            <TaggedBarChart
-              width={barChartWidth}
-              tags={{
-                FRAUD: {
-                  name: 'Fraud',
-                  color: '#299df4',
-                },
-                RIGGING: {
-                  name: 'Process rigging',
-                  color: '#3372b2',
-                },
-                COLLUSION: {
-                  name: 'Collusion',
-                  color: '#fbc42c',
-                },
-              }}
-              data={[{
-                  x: 'Indicator 1',
-                  y: 5,
-                  tags: ['RIGGING'],
-              }, {
-                  x: 'Indicator 2',
-                  y: 4,
-                  tags: ['COLLUSION', 'FRAUD'],
-              }, {
-                  x: 'Indicator 3',
-                  y: 3,
-                  tags: ['COLLUSION', 'RIGGING'],
-              }, {
-                  x: 'Indicator 4',
-                  y: 2,
-                  tags: ['FRAUD', 'RIGGING'],
-              }, {
-                  x: 'Indicator 5',
-                  y: 1,
-                  tags: ['COLLUSION', 'FRAUD', 'RIGGING'],
-              }]}
-            />
-            <h4 className="title text-center">
-              No. Times Each Indicator is Flagged in Procurements Won by Supplier
-            </h4>
+            <Zoomable>
+              <TitleBelow title="No. Times Each Indicator is Flagged in Procurements Won by Supplier">
+                <TaggedBarChart
+                  width={barChartWidth}
+                  tags={{
+                    FRAUD: {
+                      name: 'Fraud',
+                      color: '#299df4',
+                    },
+                    RIGGING: {
+                      name: 'Process rigging',
+                      color: '#3372b2',
+                    },
+                    COLLUSION: {
+                      name: 'Collusion',
+                      color: '#fbc42c',
+                    },
+                  }}
+                  data={[{
+                      x: 'Indicator 1',
+                      y: 5,
+                      tags: ['RIGGING'],
+                  }, {
+                      x: 'Indicator 2',
+                      y: 4,
+                      tags: ['COLLUSION', 'FRAUD'],
+                  }, {
+                      x: 'Indicator 3',
+                      y: 3,
+                      tags: ['COLLUSION', 'RIGGING'],
+                  }, {
+                      x: 'Indicator 4',
+                      y: 2,
+                      tags: ['FRAUD', 'RIGGING'],
+                  }, {
+                      x: 'Indicator 5',
+                      y: 1,
+                      tags: ['COLLUSION', 'FRAUD', 'RIGGING'],
+                  }]}
+                />
+              </TitleBelow>
+            </Zoomable>
           </div>
         </section>
       </div>
