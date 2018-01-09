@@ -174,6 +174,9 @@ class Supplier extends CRDPage {
                 }
               }}
             />
+            <h4 className="title text-center">
+              Wins & Flags by Procuring Entity
+            </h4>
           </div>
           <div className="col-sm-6">
             <TaggedBarChart
@@ -214,6 +217,9 @@ class Supplier extends CRDPage {
                   tags: ['COLLUSION', 'FRAUD', 'RIGGING'],
               }]}
             />
+            <h4 className="title text-center">
+              No. Times Each Indicator is Flagged in Procurements Won by Supplier
+            </h4>
           </div>
         </section>
       </div>

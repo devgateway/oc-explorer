@@ -53,6 +53,8 @@ class TaggedBarChart extends React.PureComponent {
       }
     });
 
+    plotlyData[fstTag].width = Array(dataSize).fill(.5);
+
     data.forEach((datum, index) => {
       plotlyData[fstTag].y[index] = datum.y;
       if (datum.tags.length > 1) {
