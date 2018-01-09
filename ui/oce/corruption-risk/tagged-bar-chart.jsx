@@ -50,6 +50,7 @@ class TaggedBarChart extends React.PureComponent {
         marker: {
           color,
         },
+        hoverinfo: 'none',
       }
     });
 
