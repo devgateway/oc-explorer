@@ -16,7 +16,7 @@ function mkGradient(id, colors) {
   });
 
   return (
-    <linearGradient id={id} x1="0%" y1="0%" x2="100%" y2="0%">
+    <linearGradient id={id} x1="0%" y1="0%" x2="100%" y2="100%">
       {stops.map(({color, offset}) =>
         <stop
           offset={offset+'%'}
