@@ -157,6 +157,10 @@ public abstract class GenericOCDSController {
         return createFilterCriteria("tender.items.classification._id", filter.getBidTypeId(), filter);
     }
 
+    protected Criteria getTotalFlaggedCriteria(final DefaultFilterPagingRequest filter) {
+        return createFilterCriteria("flags.totalFlagged", filter.getTotalFlagged(), filter);
+    }
+
     /**
      * Appends flags.flaggedStats.type filter
      */
@@ -484,7 +488,8 @@ public abstract class GenericOCDSController {
                 getFlaggedCriteria(filter),
                 getFlagTypeFilterCriteria(filter),
                 getElectronicSubmissionCriteria(filter),
-                getAwardStatusFilterCriteria(filter));
+                getAwardStatusFilterCriteria(filter),
+                getTotalFlaggedCriteria(filter));
     }
 
     protected Criteria getYearDefaultFilterCriteria(final YearFilterPagingRequest filter, final String dateProperty) {
@@ -502,7 +507,8 @@ public abstract class GenericOCDSController {
                 getFlaggedCriteria(filter),
                 getFlagTypeFilterCriteria(filter),
                 getYearFilterCriteria(filter, dateProperty),
-                getAwardStatusFilterCriteria(filter));
+                getAwardStatusFilterCriteria(filter),
+                getTotalFlaggedCriteria(filter));
     }
 
     protected MatchOperation getMatchDefaultFilterOperation(final DefaultFilterPagingRequest filter) {
