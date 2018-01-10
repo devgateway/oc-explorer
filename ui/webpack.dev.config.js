@@ -17,7 +17,7 @@ module.exports = {
         test: /\.(jsx|es6)$/,
         loaders: [
           'react-hot',
-          'babel-loader?babelrc=false,presets[]=react,presets[]=es2015,presets[]=flow,cacheDirectory'
+          'babel-loader?babelrc=false,presets[]=react,presets[]=es2015,presets[]=flow,plugins[]=transform-object-rest-spread,cacheDirectory'
         ],
         exclude: /node_modules/
       },

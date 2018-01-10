@@ -11,6 +11,20 @@ import AmountLostVsWon from './donuts/amount-lost-vs-won';
 import NrFlags from './donuts/nr-flags';
 import styles from './style.less';
 import { cacheFn, pluckImm } from '../../../tools';
+import TaggedBarChart from '../../tagged-bar-chart';
+import Zoomable from '../../zoomable';
+import WinsAndLosses from './bars/wins-and-losses';
+
+const TitleBelow = ({ title, children, ...props }) => (
+  <div>
+    {React.cloneElement(
+       React.Children.only(children)
+    , props)}
+    <h4 className="title text-center">
+      {title}
+    </h4>
+  </div>
+);
 
 const add = (a, b) => a + b;
 
@@ -100,6 +114,7 @@ class Supplier extends CRDPage {
   render() {
     const { translations, width, doSearch, id, filters, data } = this.props;
     const donutSize = width / 3 - 100;
+    const barChartWidth = width / 2 - 100;
 
     return (
       <div className="supplier-page">
@@ -136,6 +151,69 @@ class Supplier extends CRDPage {
               filters={this.injectSupplierFilter(filters, id)}
               width={donutSize}
             />
+          </div>
+        </section>
+        <section className="flag-analysis">
+          <h2>
+            {this.t('crd:contracts:flagAnalysis')}
+            &nbsp;
+            <small>({this.t('crd:contracts:clickCrosstabHint')})</small>
+          </h2>
+          <div className="col-sm-6">
+            <Zoomable
+              width={barChartWidth}
+              zoomedWidth={width}
+            >
+              <TitleBelow title="Wins & Flags by Procuring Entity">
+                <WinsAndLosses/>
+              </TitleBelow>
+            </Zoomable>
+          </div>
+          <div className="col-sm-6">
+            <Zoomable
+              width={barChartWidth}
+              zoomedWidth={width}
+            >
+              <TitleBelow title="No. Times Each Indicator is Flagged in Procurements Won by Supplier">
+                <TaggedBarChart
+                  tags={{
+                    FRAUD: {
+                      name: 'Fraud',
+                      color: '#299df4',
+                    },
+                    RIGGING: {
+                      name: 'Process rigging',
+                      color: '#3372b2',
+                    },
+                    COLLUSION: {
+                      name: 'Collusion',
+                      color: '#fbc42c',
+                    },
+                  }}
+                  data={[{
+                      x: 'Indicator 1',
+                      y: 5,
+                      tags: ['RIGGING'],
+                  }, {
+                      x: 'Indicator 2',
+                      y: 4,
+                      tags: ['COLLUSION', 'FRAUD'],
+                  }, {
+                      x: 'Indicator 3',
+                      y: 3,
+                      tags: ['COLLUSION', 'RIGGING'],
+                  }, {
+                      x: 'Indicator 4',
+                      y: 2,
+                      tags: ['FRAUD', 'RIGGING'],
+                  }, {
+                      x: 'Indicator 5',
+                      y: 1,
+                      tags: ['COLLUSION', 'FRAUD', 'RIGGING'],
+                  }]}
+                />
+              </TitleBelow>
+            </Zoomable>
           </div>
         </section>
       </div>

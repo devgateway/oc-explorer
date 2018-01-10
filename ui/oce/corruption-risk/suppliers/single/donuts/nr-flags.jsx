@@ -1,6 +1,5 @@
 import { List } from 'immutable';
 import Donut from '../../../donut';
-import { pluck } from '../../../../tools';
 import translatable from '../../../../translatable';
 
 class CenterText extends React.PureComponent {
@@ -20,7 +19,7 @@ const COLORS = ['#fbc42c', '#3372b2', '#30a0f5']
 
 class TotalFlags extends translatable(React.PureComponent) {
   render() {
-    const data = (this.props.data || List()) .map((datum, index) => ({
+    const data = (this.props.data || List()).map((datum, index) => ({
       color: COLORS[index],
       label: this.t(`crd:corruptionType:${datum.get('type')}:name`),
       value: datum.get('indicatorCount'),
@@ -30,7 +29,7 @@ class TotalFlags extends translatable(React.PureComponent) {
         {...this.props}
         data={data}
         CenterText={CenterText}
-        endpoint='totalFlaggedIndicatorsByIndicatorType'
+        endpoint="totalFlaggedIndicatorsByIndicatorType"
         title="Total Flags"
         subtitle="by Risk Type"
       />
