@@ -12,7 +12,7 @@ class PlotlyChart extends React.PureComponent {
   }
 
   componentWillUnmount() {
-    Plotly.Plots.purge(this.container);
+    Plotly.Plots.purge(this.chartContainer);
   }
 
   componentDidUpdate(prevProps) {
