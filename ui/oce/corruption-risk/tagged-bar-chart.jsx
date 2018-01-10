@@ -81,7 +81,7 @@ class TaggedBarChart extends React.PureComponent {
             width,
             height: 250,
             barmode: 'stack',
-            margin: {t: 0, r: 0, b: 30, l: 20, pad: 0},
+            margin: {t: 0, r: 20, b: 30, l: 20, pad: 0},
             legend: {
               xanchor: 'right',
               yanchor: 'top',

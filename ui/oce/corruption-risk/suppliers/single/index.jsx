@@ -11,9 +11,9 @@ import AmountLostVsWon from './donuts/amount-lost-vs-won';
 import NrFlags from './donuts/nr-flags';
 import styles from './style.less';
 import { cacheFn, pluckImm } from '../../../tools';
-import PlotlyChart from '../../plotly-chart';
 import TaggedBarChart from '../../tagged-bar-chart';
 import Zoomable from '../../zoomable';
+import WinsAndLosses from './bars/wins-and-losses';
 
 const TitleBelow = ({ title, children, ...props }) => (
   <div>
@@ -160,34 +160,12 @@ class Supplier extends CRDPage {
             <small>({this.t('crd:contracts:clickCrosstabHint')})</small>
           </h2>
           <div className="col-sm-6">
-            <Zoomable>
+            <Zoomable
+              width={barChartWidth}
+              zoomedWidth={width}
+            >
               <TitleBelow title="Wins & Flags by Procuring Entity">
-                <PlotlyChart
-                  data={[{
-                      x: ['Supplier 1', 'Supplier 2', 'Supplier 3', 'Supplier 4', 'Supplier 5'],
-                      y: [1, 2, 3, 4, 5],
-                      name: 'Wins',
-                      type: 'bar',
-                  }, {
-                      x: ['Supplier 1', 'Supplier 2', 'Supplier 3', 'Supplier 4', 'Supplier 5'],
-                      y: [5, 4, 3, 2, 1],
-                      name: 'Flags',
-                      type: 'bar',
-                  }]}
-                  layout={{
-                    width: barChartWidth,
-                    height: 250,
-                    barmode: 'group',
-                    margin: {t: 0, r: 0, b: 30, l: 20, pad: 0},
-                    legend: {
-                      xanchor: 'right',
-                      yanchor: 'top',
-                      x: .9,
-                      y: 1.5,
-                      orientation: 'h',
-                    }
-                  }}
-                />
+                <WinsAndLosses/>
               </TitleBelow>
             </Zoomable>
           </div>
