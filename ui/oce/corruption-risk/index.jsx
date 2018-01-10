@@ -122,6 +122,7 @@ class CorruptionRiskDashboard extends React.Component {
         plSlug: 'contracts',
         additionalProps: {
           indicatorTypesMapping,
+          totalContracts: this.state.data.getIn(['totalFlags', 'contractCounter'], 0),
         },
       });
     } else if (page === 'suppliers') {

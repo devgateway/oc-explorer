@@ -13,6 +13,16 @@ import DonutPopup from '../../donut/popup';
 import { wireProps } from '../../tools';
 // eslint-disable-next-line no-unused-vars
 import styles from '../style.less';
+import DataFetcher from '../../data-fetcher';
+
+const pluralize = (nr, sg, pl) => nr === 1 ? sg : pl;
+
+const CrosstabExplanation = ({ data, totalContracts, nrFlags }) => (
+  <p>
+    This is 1 of {data} procurements ({(data / totalContracts * 100).toFixed(2)}%
+    of all procurements) with {nrFlags} {pluralize(nrFlags, 'flag', 'flags')}.
+  </p>
+);
 
 class Info extends translatable(Visualization) {
   getCustomEP() {
@@ -184,7 +194,7 @@ export default class Contract extends CRDPage {
   }
 
   maybeGetFlagAnalysis() {
-    const { filters, translations, years } = this.props;
+    const { filters, translations, years, totalContracts } = this.props;
     const { indicators, crosstab } = this.state;
     const noIndicators = Object.keys(indicators)
       .every(corruptionType =>
@@ -204,24 +214,35 @@ export default class Contract extends CRDPage {
           &nbsp;
           <small>({this.t('crd:contracts:clickCrosstabHint')})</small>
         </h2>
-        {Object.keys(indicators).map(corruptionType => (
-          <div>
-            <h3>
-              {this.t(`crd:corruptionType:${corruptionType}:pageTitle`)}
-            </h3>
-            <Crosstab
-              filters={filters}
-              translations={translations}
-              years={years}
-              data={crosstab.get(corruptionType)}
-              indicators={indicators[corruptionType]}
-              requestNewData={(_, data) => {
-                const { crosstab } = this.state;
-                this.setState({ crosstab: crosstab.set(corruptionType, data)})
-              }}
-            />
-          </div>
-        ))}
+        {Object.keys(indicators).map(corruptionType => {
+           const nrFlags = indicators[corruptionType].length;
+           return (
+             <div>
+               <h3>
+                 {this.t(`crd:corruptionType:${corruptionType}:pageTitle`)}
+               </h3>
+               <DataFetcher
+                 {...wireProps(this, [corruptionType, 'explanation'])}
+                 endpoint={`ocds/release/count?totalFlagged=${nrFlags}`}
+               >
+                 <CrosstabExplanation
+                   totalContracts={totalContracts}
+                   nrFlags={nrFlags}
+                 />
+               </DataFetcher>
+               <Crosstab
+                 filters={filters}
+                 translations={translations}
+                 years={years}
+                 data={crosstab.get(corruptionType)}
+                 indicators={indicators[corruptionType]}
+                 requestNewData={(_, data) => {
+                     const { crosstab } = this.state;
+                     this.setState({ crosstab: crosstab.set(corruptionType, data)})
+                 }}
+               />
+             </div>
+           )})}
       </section>
     );
   }
