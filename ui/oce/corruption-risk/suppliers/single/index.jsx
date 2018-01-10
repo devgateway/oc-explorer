@@ -192,10 +192,12 @@ class Supplier extends CRDPage {
             </Zoomable>
           </div>
           <div className="col-sm-6">
-            <Zoomable>
+            <Zoomable
+              width={barChartWidth}
+              zoomedWidth={width}
+            >
               <TitleBelow title="No. Times Each Indicator is Flagged in Procurements Won by Supplier">
                 <TaggedBarChart
-                  width={barChartWidth}
                   tags={{
                     FRAUD: {
                       name: 'Fraud',
