@@ -82,13 +82,15 @@ class TaggedBarChart extends React.PureComponent {
             height: 250,
             barmode: 'stack',
             margin: {t: 0, r: 20, b: 30, l: 20, pad: 0},
+            paper_bgcolor: 'rgba(0, 0, 0, 0)',
+            plot_bgcolor: 'rgba(0, 0, 0, 0)',
             legend: {
               xanchor: 'right',
               yanchor: 'top',
               x: .9,
               y: 1.5,
               orientation: 'h',
-            }
+            },
           }}
         />
       </div>
