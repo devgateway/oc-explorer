@@ -38,23 +38,35 @@ class CrosstabExplanation extends translatable(React.PureComponent) {
   }
 }
 
-const add = (a, b) => a + b;
-
 class Info extends translatable(Visualization) {
   getCustomEP() {
     const { id } = this.props;
-    return `ocds/organization/supplier/id/${id}`;
+    return [
+      `ocds/organization/supplier/id/${id}`,
+      `totalFlags?supplierId=${id}`,
+      `ocds/release/count?supplierId=${id}`,
+    ];
+  }
+
+  transform([info, totalFlags, totalContracts]) {
+    return {
+      info,
+      totalFlags: totalFlags[0].flaggedCount,
+      totalContracts,
+    };
   }
 
   render() {
-    const { data, flagCount: _flagCount } = this.props;
-    const flagCount = (_flagCount || List())
-      .map(pluckImm('indicatorCount')).reduce(add, 0);
+    const { data } = this.props;
 
     if (!data) return null;
 
-    const address = data.get('address');
-    const contact = data.get('contactPoint');
+    const info = data.get('info');
+    const flagCount = data.get('totalFlags');
+    const contractCount = data.get('totalContracts');
+
+    const address = info.get('address');
+    const contact = info.get('contactPoint');
     return (
       <section className="info">
         <table className="table table-bordered join-bottom info-table">
@@ -63,13 +75,13 @@ class Info extends translatable(Visualization) {
               <td>
                 <dl>
                   <dt>Supplier ID</dt>
-                  <dd>{data.get('id')}</dd>
+                  <dd>{info.get('id')}</dd>
                 </dl>
               </td>
               <td>
                 <dl>
                   <dt>Supplier Name</dt>
-                  <dd>{data.get('name')}</dd>
+                  <dd>{info.get('name')}</dd>
                 </dl>
               </td>
               <td className="flags">
@@ -77,6 +89,11 @@ class Info extends translatable(Visualization) {
                 &nbsp;
                 {flagCount}
                 &nbsp;{flagCount === 1 ? 'Flag' : 'Flags'}
+                <br />
+                <small>
+                  {contractCount}
+                  &nbsp;{contractCount === 1 ? 'Contract' : 'Contracts'}
+                </small>
               </td>
             </tr>
           </tbody>
@@ -197,7 +214,7 @@ class Supplier extends CRDPage {
   }
 
   render() {
-    const { translations, width, doSearch, id, filters, data } = this.props;
+    const { translations, width, doSearch, id, filters } = this.props;
     const donutSize = width / 3 - 100;
     const barChartWidth = width / 2 - 100;
 
@@ -211,8 +228,6 @@ class Supplier extends CRDPage {
         <Info
           {...wireProps(this, 'info')}
           id={id}
-          filters={Map()}
-          flagCount={data.get('nr-flags')}
         />
 
         <section className="supplier-general-statistics">
