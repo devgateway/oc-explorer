@@ -1,11 +1,9 @@
-import { Map, Set } from 'immutable';
-import { List } from 'immutable';
+import { Map, Set, List } from 'immutable';
 import TopSearch from '../../top-search';
 import translatable from '../../../translatable';
 import Visualization from '../../../visualization';
 import CRDPage from '../../page';
 import { wireProps } from '../../tools';
-import Donut from '../../donut';
 import NrLostVsWon from './donuts/nr-lost-vs-won';
 import AmountLostVsWon from './donuts/amount-lost-vs-won';
 import NrFlags from './donuts/nr-flags';
@@ -14,6 +12,8 @@ import { cacheFn, pluckImm } from '../../../tools';
 import TaggedBarChart from '../../tagged-bar-chart';
 import Zoomable from '../../zoomable';
 import WinsAndLosses from './bars/wins-and-losses';
+import Crosstab from '../../clickable-crosstab';
+import { CORRUPTION_TYPES } from '../../constants';
 
 const TitleBelow = ({ title, children, ...props }) => (
   <div>
@@ -26,23 +26,47 @@ const TitleBelow = ({ title, children, ...props }) => (
   </div>
 );
 
-const add = (a, b) => a + b;
+class CrosstabExplanation extends translatable(React.PureComponent) {
+  render() {
+    const { nrFlags, corruptionType } = this.props;
+    return (
+      <p>
+        This supplier has been involved in procurements that have been flagged {nrFlags} times
+        in relation to {this.t(`crd:corruptionType:${corruptionType}:pageTitle`)}
+      </p>
+    );
+  }
+}
 
 class Info extends translatable(Visualization) {
   getCustomEP() {
     const { id } = this.props;
-    return `ocds/organization/supplier/id/${id}`;
+    return [
+      `ocds/organization/supplier/id/${id}`,
+      `totalFlags?supplierId=${id}`,
+      `ocds/release/count?supplierId=${id}`,
+    ];
+  }
+
+  transform([info, totalFlags, totalContracts]) {
+    return {
+      info,
+      totalFlags: totalFlags[0].flaggedCount,
+      totalContracts,
+    };
   }
 
   render() {
-    const { data, flagCount: _flagCount } = this.props;
-    const flagCount = (_flagCount || List())
-      .map(pluckImm('indicatorCount')).reduce(add, 0);
+    const { data } = this.props;
 
-    if(!data) return null;
+    if (!data) return null;
 
-    const address = data.get('address');
-    const contact = data.get('contactPoint');
+    const info = data.get('info');
+    const flagCount = data.get('totalFlags');
+    const contractCount = data.get('totalContracts');
+
+    const address = info.get('address');
+    const contact = info.get('contactPoint');
     return (
       <section className="info">
         <table className="table table-bordered join-bottom info-table">
@@ -51,13 +75,13 @@ class Info extends translatable(Visualization) {
               <td>
                 <dl>
                   <dt>Supplier ID</dt>
-                  <dd>{data.get('id')}</dd>
+                  <dd>{info.get('id')}</dd>
                 </dl>
               </td>
               <td>
                 <dl>
                   <dt>Supplier Name</dt>
-                  <dd>{data.get('name')}</dd>
+                  <dd>{info.get('name')}</dd>
                 </dl>
               </td>
               <td className="flags">
@@ -65,6 +89,11 @@ class Info extends translatable(Visualization) {
                 &nbsp;
                 {flagCount}
                 &nbsp;{flagCount === 1 ? 'Flag' : 'Flags'}
+                <br />
+                <small>
+                  {contractCount}
+                  &nbsp;{contractCount === 1 ? 'Contract' : 'Contracts'}
+                </small>
               </td>
             </tr>
           </tbody>
@@ -89,8 +118,8 @@ class Info extends translatable(Visualization) {
                 <dl>
                   <dt>Supplier Contact Information</dt>
                   <dd>
-                    {contact.get('name')}<br/>
-                    {contact.get('email')}<br/>
+                    {contact.get('name')}<br />
+                    {contact.get('email')}<br />
                     {contact.get('telephone')}
                   </dd>
                 </dl>
@@ -99,20 +128,93 @@ class Info extends translatable(Visualization) {
           </tbody>
         </table>
       </section>
-    )
+    );
   }
 }
 
 class Supplier extends CRDPage {
   constructor(...args) {
     super(...args);
+    this.state = this.state || {};
+
     this.injectSupplierFilter = cacheFn((filters, supplierId) => {
       return filters.update('supplierId', Set(), supplierIds => supplierIds.add(supplierId));
     });
+
+    this.groupIndicators = cacheFn((indicatorTypesMapping) => {
+      const result = {};
+      CORRUPTION_TYPES.forEach((corruptionType) => { result[corruptionType] = []; });
+      if (indicatorTypesMapping) {
+        Object.keys(indicatorTypesMapping).forEach((indicatorName) => {
+          const indicator = indicatorTypesMapping[indicatorName];
+          indicator.types.forEach(type => result[type].push(indicatorName));
+        });
+      }
+      return result;
+    });
+  }
+
+  maybeGetFlagAnalysis() {
+    const { indicatorTypesMapping, id, data, filters, translations, requestNewData } = this.props;
+
+    const nrFlagsByCorruptionType = {};
+    CORRUPTION_TYPES.forEach((corruptionType) => { nrFlagsByCorruptionType[corruptionType] = 0; });
+    data.get('nr-flags', List()).forEach((corruptionType) => {
+      nrFlagsByCorruptionType[corruptionType.get('type')] = corruptionType.get('indicatorCount');
+    });
+
+    const indicators = this.groupIndicators(indicatorTypesMapping);
+    const noIndicators = Object
+      .keys(nrFlagsByCorruptionType)
+      .every(key => nrFlagsByCorruptionType[key] === 0);
+
+    if (noIndicators) {
+      return (
+        <section className="flag-analysis">
+          <h2>{this.t('crd:contracts:flagAnalysis')}</h2>
+          <h4>This supplier has no flags</h4>
+        </section>
+      );
+    }
+
+    return (
+      <section className="flag-analysis">
+        <h2>Flag analysis</h2>
+        {CORRUPTION_TYPES
+          .filter(corruptionType => nrFlagsByCorruptionType[corruptionType])
+          .map((corruptionType) => {
+            return (
+              <div>
+                <h3>
+                  {this.t(`crd:corruptionType:${corruptionType}:pageTitle`)}
+                </h3>
+                <CrosstabExplanation
+                  translations={translations}
+                  corruptionType={corruptionType}
+                  nrFlags={nrFlagsByCorruptionType[corruptionType]}
+                />
+                <Crosstab
+                  {...wireProps(this, ['crosstab', corruptionType])}
+                  filters={this.injectSupplierFilter(filters, id)}
+                  requestNewData={(path, newData) => {
+                    requestNewData(path.concat(['crosstab', corruptionType]),
+                      newData
+                        .map(x =>
+                          x.filter(y => y.get('count') > 0)
+                        ).filter(datum => datum.count() > 0)
+                    );
+                  }}
+                  indicators={indicators[corruptionType]}
+                />
+              </div>
+            );
+          })};
+      </section>
+    );
   }
 
   render() {
-    const { translations, width, doSearch, id, filters, data } = this.props;
+    const { translations, width, doSearch, id, filters } = this.props;
     const donutSize = width / 3 - 100;
     const barChartWidth = width / 2 - 100;
 
@@ -126,8 +228,6 @@ class Supplier extends CRDPage {
         <Info
           {...wireProps(this, 'info')}
           id={id}
-          filters={Map()}
-          flagCount={data.get('nr-flags')}
         />
 
         <section className="supplier-general-statistics">
@@ -165,7 +265,7 @@ class Supplier extends CRDPage {
               zoomedWidth={width}
             >
               <TitleBelow title="Wins & Flags by Procuring Entity">
-                <WinsAndLosses/>
+                <WinsAndLosses />
               </TitleBelow>
             </Zoomable>
           </div>
@@ -174,7 +274,9 @@ class Supplier extends CRDPage {
               width={barChartWidth}
               zoomedWidth={width}
             >
-              <TitleBelow title="No. Times Each Indicator is Flagged in Procurements Won by Supplier">
+              <TitleBelow
+                title="No. Times Each Indicator is Flagged in Procurements Won by Supplier"
+              >
                 <TaggedBarChart
                   tags={{
                     FRAUD: {
@@ -191,31 +293,32 @@ class Supplier extends CRDPage {
                     },
                   }}
                   data={[{
-                      x: 'Indicator 1',
-                      y: 5,
-                      tags: ['RIGGING'],
+                    x: 'Indicator 1',
+                    y: 5,
+                    tags: ['RIGGING'],
                   }, {
-                      x: 'Indicator 2',
-                      y: 4,
-                      tags: ['COLLUSION', 'FRAUD'],
+                    x: 'Indicator 2',
+                    y: 4,
+                    tags: ['COLLUSION', 'FRAUD'],
                   }, {
-                      x: 'Indicator 3',
-                      y: 3,
-                      tags: ['COLLUSION', 'RIGGING'],
+                    x: 'Indicator 3',
+                    y: 3,
+                    tags: ['COLLUSION', 'RIGGING'],
                   }, {
-                      x: 'Indicator 4',
-                      y: 2,
-                      tags: ['FRAUD', 'RIGGING'],
+                    x: 'Indicator 4',
+                    y: 2,
+                    tags: ['FRAUD', 'RIGGING'],
                   }, {
-                      x: 'Indicator 5',
-                      y: 1,
-                      tags: ['COLLUSION', 'FRAUD', 'RIGGING'],
+                    x: 'Indicator 5',
+                    y: 1,
+                    tags: ['COLLUSION', 'FRAUD', 'RIGGING'],
                   }]}
                 />
               </TitleBelow>
             </Zoomable>
           </div>
         </section>
+        {this.maybeGetFlagAnalysis()}
       </div>
     );
   }
