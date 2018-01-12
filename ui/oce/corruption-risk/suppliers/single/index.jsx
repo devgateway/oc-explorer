@@ -203,11 +203,16 @@ class Supplier extends CRDPage {
                   {...wireProps(this, ['crosstab', corruptionType])}
                   filters={this.injectSupplierFilter(filters, id)}
                   requestNewData={(path, newData) => {
+                    const toRemove = newData.filter(row => row.every(cell => cell.get('count') === 0)).keySeq();
                     requestNewData(path.concat(['crosstab', corruptionType]),
-                      newData
-                        .map(x =>
-                          x.filter(y => y.get('count') > 0)
-                        ).filter(datum => datum.count() > 0)
+                      newData.withMutations(data => {
+                        toRemove.forEach(indicator => {
+                          data.delete(indicator);
+                          data.keySeq().forEach(key => {
+                            data.deleteIn([key, indicator]);
+                          })
+                        })
+                      })
                     );
                   }}
                   indicators={indicators[corruptionType]}
