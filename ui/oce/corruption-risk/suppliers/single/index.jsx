@@ -148,6 +148,14 @@ class Supplier extends CRDPage {
       nrFlagsByCorruptionType[corruptionType.get('type')] = corruptionType.get('indicatorCount'));
 
     const indicators = this.groupIndicators(indicatorTypesMapping);
+    const noIndicators = Object.keys(nrFlagsByCorruptionType).every(key => nrFlagsByCorruptionType[key] === 0);
+
+    if (noIndicators) return (
+      <section className="flag-analysis">
+        <h2>{this.t('crd:contracts:flagAnalysis')}</h2>
+        <h4>This supplier has no flags</h4>
+      </section>
+    );
 
     return (
       <section className="flag-analysis">
