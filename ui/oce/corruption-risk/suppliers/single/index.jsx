@@ -14,6 +14,8 @@ import { cacheFn, pluckImm } from '../../../tools';
 import TaggedBarChart from '../../tagged-bar-chart';
 import Zoomable from '../../zoomable';
 import WinsAndLosses from './bars/wins-and-losses';
+import Crosstab from '../../clickable-crosstab';
+import { CORRUPTION_TYPES } from '../../constants';
 
 const TitleBelow = ({ title, children, ...props }) => (
   <div>
@@ -25,6 +27,18 @@ const TitleBelow = ({ title, children, ...props }) => (
     </h4>
   </div>
 );
+
+class CrosstabExplanation extends translatable(React.PureComponent) {
+  render() {
+    const { nrFlags, corruptionType } = this.props;
+    return (
+      <p>
+        This supplier has been involved in procurements that have been flagged {nrFlags} times
+        in relation to {this.t(`crd:corruptionType:${corruptionType}:pageTitle`)}
+      </p>
+    );
+  }
+}
 
 const add = (a, b) => a + b;
 
@@ -109,6 +123,35 @@ class Supplier extends CRDPage {
     this.injectSupplierFilter = cacheFn((filters, supplierId) => {
       return filters.update('supplierId', Set(), supplierIds => supplierIds.add(supplierId));
     });
+  }
+
+  maybeGetFlagAnalysis() {
+    const { indicatorTypesMapping, id, data, translations } = this.props;
+
+    return (
+      <section className="flag-analysis">
+        <h2>Flag analysis</h2>
+        {CORRUPTION_TYPES.map(corruptionType => {
+           const nrFlags = data
+             .get('nr-flags', List())
+             .find(group => group.get('type'), undefined, Map())
+             .get('indicatorCount');
+
+          return (
+            <div>
+              <h3>
+                 {this.t(`crd:corruptionType:${corruptionType}:pageTitle`)}
+              </h3>
+              <CrosstabExplanation
+                translations={translations}
+                corruptionType={corruptionType}
+                nrFlags={nrFlags}
+              />
+            </div>
+          );
+        })};
+      </section>
+    )
   }
 
   render() {
@@ -216,6 +259,7 @@ class Supplier extends CRDPage {
             </Zoomable>
           </div>
         </section>
+        {this.maybeGetFlagAnalysis()}
       </div>
     );
   }
