@@ -120,36 +120,59 @@ class Info extends translatable(Visualization) {
 class Supplier extends CRDPage {
   constructor(...args) {
     super(...args);
+    this.state = this.state || {};
+
     this.injectSupplierFilter = cacheFn((filters, supplierId) => {
       return filters.update('supplierId', Set(), supplierIds => supplierIds.add(supplierId));
+    });
+
+    this.groupIndicators = cacheFn(indicatorTypesMapping => {
+      const result = {};
+      CORRUPTION_TYPES.forEach(corruptionType => result[corruptionType] = []);
+      if (indicatorTypesMapping) {
+        Object.keys(indicatorTypesMapping).forEach(indicatorName => {
+          const indicator = indicatorTypesMapping[indicatorName];
+          indicator.types.forEach(type => result[type].push(indicatorName));
+        });
+        return result;
+      }
     });
   }
 
   maybeGetFlagAnalysis() {
-    const { indicatorTypesMapping, id, data, translations } = this.props;
+    const { indicatorTypesMapping, id, data, filters, translations } = this.props;
+
+    const nrFlagsByCorruptionType = {};
+    CORRUPTION_TYPES.forEach(corruptionType => nrFlagsByCorruptionType[corruptionType] = 0);
+    data.get('nr-flags', List()).forEach(corruptionType =>
+      nrFlagsByCorruptionType[corruptionType.get('type')] = corruptionType.get('indicatorCount'));
+
+    const indicators = this.groupIndicators(indicatorTypesMapping);
 
     return (
       <section className="flag-analysis">
         <h2>Flag analysis</h2>
-        {CORRUPTION_TYPES.map(corruptionType => {
-           const nrFlags = data
-             .get('nr-flags', List())
-             .find(group => group.get('type'), undefined, Map())
-             .get('indicatorCount');
-
-          return (
-            <div>
-              <h3>
-                 {this.t(`crd:corruptionType:${corruptionType}:pageTitle`)}
-              </h3>
-              <CrosstabExplanation
-                translations={translations}
-                corruptionType={corruptionType}
-                nrFlags={nrFlags}
-              />
-            </div>
-          );
-        })};
+        {CORRUPTION_TYPES
+          .filter(corruptionType => nrFlagsByCorruptionType[corruptionType])
+          .map(corruptionType => {
+            return (
+              <div>
+                <h3>
+                  {this.t(`crd:corruptionType:${corruptionType}:pageTitle`)}
+                </h3>
+                <CrosstabExplanation
+                  translations={translations}
+                  corruptionType={corruptionType}
+                  nrFlags={nrFlagsByCorruptionType[corruptionType]}
+                />
+                <Crosstab
+                  {...wireProps(this, ['crosstab', corruptionType])}
+                  filters={this.injectSupplierFilter(filters, id)}
+                  indicators={indicators[corruptionType]}
+                />
+              </div>
+            );
+          })};
       </section>
     )
   }
