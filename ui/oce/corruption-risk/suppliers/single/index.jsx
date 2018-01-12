@@ -1,11 +1,9 @@
-import { Map, Set } from 'immutable';
-import { List } from 'immutable';
+import { Map, Set, List } from 'immutable';
 import TopSearch from '../../top-search';
 import translatable from '../../../translatable';
 import Visualization from '../../../visualization';
 import CRDPage from '../../page';
 import { wireProps } from '../../tools';
-import Donut from '../../donut';
 import NrLostVsWon from './donuts/nr-lost-vs-won';
 import AmountLostVsWon from './donuts/amount-lost-vs-won';
 import NrFlags from './donuts/nr-flags';
@@ -53,7 +51,7 @@ class Info extends translatable(Visualization) {
     const flagCount = (_flagCount || List())
       .map(pluckImm('indicatorCount')).reduce(add, 0);
 
-    if(!data) return null;
+    if (!data) return null;
 
     const address = data.get('address');
     const contact = data.get('contactPoint');
@@ -103,8 +101,8 @@ class Info extends translatable(Visualization) {
                 <dl>
                   <dt>Supplier Contact Information</dt>
                   <dd>
-                    {contact.get('name')}<br/>
-                    {contact.get('email')}<br/>
+                    {contact.get('name')}<br />
+                    {contact.get('email')}<br />
                     {contact.get('telephone')}
                   </dd>
                 </dl>
@@ -113,7 +111,7 @@ class Info extends translatable(Visualization) {
           </tbody>
         </table>
       </section>
-    )
+    );
   }
 }
 
@@ -126,16 +124,16 @@ class Supplier extends CRDPage {
       return filters.update('supplierId', Set(), supplierIds => supplierIds.add(supplierId));
     });
 
-    this.groupIndicators = cacheFn(indicatorTypesMapping => {
+    this.groupIndicators = cacheFn((indicatorTypesMapping) => {
       const result = {};
-      CORRUPTION_TYPES.forEach(corruptionType => result[corruptionType] = []);
+      CORRUPTION_TYPES.forEach((corruptionType) => { result[corruptionType] = []; });
       if (indicatorTypesMapping) {
-        Object.keys(indicatorTypesMapping).forEach(indicatorName => {
+        Object.keys(indicatorTypesMapping).forEach((indicatorName) => {
           const indicator = indicatorTypesMapping[indicatorName];
           indicator.types.forEach(type => result[type].push(indicatorName));
         });
-        return result;
       }
+      return result;
     });
   }
 
@@ -143,26 +141,31 @@ class Supplier extends CRDPage {
     const { indicatorTypesMapping, id, data, filters, translations, requestNewData } = this.props;
 
     const nrFlagsByCorruptionType = {};
-    CORRUPTION_TYPES.forEach(corruptionType => nrFlagsByCorruptionType[corruptionType] = 0);
-    data.get('nr-flags', List()).forEach(corruptionType =>
-      nrFlagsByCorruptionType[corruptionType.get('type')] = corruptionType.get('indicatorCount'));
+    CORRUPTION_TYPES.forEach((corruptionType) => { nrFlagsByCorruptionType[corruptionType] = 0; });
+    data.get('nr-flags', List()).forEach((corruptionType) => {
+      nrFlagsByCorruptionType[corruptionType.get('type')] = corruptionType.get('indicatorCount');
+    });
 
     const indicators = this.groupIndicators(indicatorTypesMapping);
-    const noIndicators = Object.keys(nrFlagsByCorruptionType).every(key => nrFlagsByCorruptionType[key] === 0);
+    const noIndicators = Object
+      .keys(nrFlagsByCorruptionType)
+      .every(key => nrFlagsByCorruptionType[key] === 0);
 
-    if (noIndicators) return (
-      <section className="flag-analysis">
-        <h2>{this.t('crd:contracts:flagAnalysis')}</h2>
-        <h4>This supplier has no flags</h4>
-      </section>
-    );
+    if (noIndicators) {
+      return (
+        <section className="flag-analysis">
+          <h2>{this.t('crd:contracts:flagAnalysis')}</h2>
+          <h4>This supplier has no flags</h4>
+        </section>
+      );
+    }
 
     return (
       <section className="flag-analysis">
         <h2>Flag analysis</h2>
         {CORRUPTION_TYPES
           .filter(corruptionType => nrFlagsByCorruptionType[corruptionType])
-          .map(corruptionType => {
+          .map((corruptionType) => {
             return (
               <div>
                 <h3>
@@ -176,13 +179,13 @@ class Supplier extends CRDPage {
                 <Crosstab
                   {...wireProps(this, ['crosstab', corruptionType])}
                   filters={this.injectSupplierFilter(filters, id)}
-                  requestNewData={(path, data) => {
-                      requestNewData(path.concat(['crosstab', corruptionType]),
-                        data
-                          .map(x =>
-                            x.filter(y => y.get('count') > 0)
-                          ).filter(datum => datum.count() > 0)
-                      )
+                  requestNewData={(path, newData) => {
+                    requestNewData(path.concat(['crosstab', corruptionType]),
+                      newData
+                        .map(x =>
+                          x.filter(y => y.get('count') > 0)
+                        ).filter(datum => datum.count() > 0)
+                    );
                   }}
                   indicators={indicators[corruptionType]}
                 />
@@ -190,7 +193,7 @@ class Supplier extends CRDPage {
             );
           })};
       </section>
-    )
+    );
   }
 
   render() {
@@ -247,7 +250,7 @@ class Supplier extends CRDPage {
               zoomedWidth={width}
             >
               <TitleBelow title="Wins & Flags by Procuring Entity">
-                <WinsAndLosses/>
+                <WinsAndLosses />
               </TitleBelow>
             </Zoomable>
           </div>
@@ -256,7 +259,9 @@ class Supplier extends CRDPage {
               width={barChartWidth}
               zoomedWidth={width}
             >
-              <TitleBelow title="No. Times Each Indicator is Flagged in Procurements Won by Supplier">
+              <TitleBelow
+                title="No. Times Each Indicator is Flagged in Procurements Won by Supplier"
+              >
                 <TaggedBarChart
                   tags={{
                     FRAUD: {
@@ -273,25 +278,25 @@ class Supplier extends CRDPage {
                     },
                   }}
                   data={[{
-                      x: 'Indicator 1',
-                      y: 5,
-                      tags: ['RIGGING'],
+                    x: 'Indicator 1',
+                    y: 5,
+                    tags: ['RIGGING'],
                   }, {
-                      x: 'Indicator 2',
-                      y: 4,
-                      tags: ['COLLUSION', 'FRAUD'],
+                    x: 'Indicator 2',
+                    y: 4,
+                    tags: ['COLLUSION', 'FRAUD'],
                   }, {
-                      x: 'Indicator 3',
-                      y: 3,
-                      tags: ['COLLUSION', 'RIGGING'],
+                    x: 'Indicator 3',
+                    y: 3,
+                    tags: ['COLLUSION', 'RIGGING'],
                   }, {
-                      x: 'Indicator 4',
-                      y: 2,
-                      tags: ['FRAUD', 'RIGGING'],
+                    x: 'Indicator 4',
+                    y: 2,
+                    tags: ['FRAUD', 'RIGGING'],
                   }, {
-                      x: 'Indicator 5',
-                      y: 1,
-                      tags: ['COLLUSION', 'FRAUD', 'RIGGING'],
+                    x: 'Indicator 5',
+                    y: 1,
+                    tags: ['COLLUSION', 'FRAUD', 'RIGGING'],
                   }]}
                 />
               </TitleBelow>

@@ -297,9 +297,6 @@ class CorruptionRiskDashboard extends React.Component {
     const translations = this.getTranslations();
     const [page] = route;
 
-    const { filters, years, months } = this.destructFilters(appliedFilters);
-    const monthly = years.count() === 1;
-
     return (
       <div
         className="container-fluid dashboard-corruption-risk"
