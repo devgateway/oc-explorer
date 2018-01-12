@@ -140,7 +140,7 @@ class Supplier extends CRDPage {
   }
 
   maybeGetFlagAnalysis() {
-    const { indicatorTypesMapping, id, data, filters, translations } = this.props;
+    const { indicatorTypesMapping, id, data, filters, translations, requestNewData } = this.props;
 
     const nrFlagsByCorruptionType = {};
     CORRUPTION_TYPES.forEach(corruptionType => nrFlagsByCorruptionType[corruptionType] = 0);
@@ -176,6 +176,14 @@ class Supplier extends CRDPage {
                 <Crosstab
                   {...wireProps(this, ['crosstab', corruptionType])}
                   filters={this.injectSupplierFilter(filters, id)}
+                  requestNewData={(path, data) => {
+                      requestNewData(path.concat(['crosstab', corruptionType]),
+                        data
+                          .map(x =>
+                            x.filter(y => y.get('count') > 0)
+                          ).filter(datum => datum.count() > 0)
+                      )
+                  }}
                   indicators={indicators[corruptionType]}
                 />
               </div>
