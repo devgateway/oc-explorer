@@ -48,10 +48,16 @@ class Info extends translatable(Visualization) {
     ];
   }
 
-  transform([info, totalFlags, totalContracts]) {
+  transform([info, _totalFlags, totalContracts]) {
+    let totalFlags = 0;
+    try {
+      totalFlags = _totalFlags[0].flaggedCount;
+    } catch(e) {
+      console.log('Total flags fetching failed', e);
+    }
     return {
       info,
-      totalFlags: totalFlags[0].flaggedCount,
+      totalFlags,
       totalContracts,
     };
   }
