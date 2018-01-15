@@ -497,6 +497,7 @@
         padding: 15px;
         height: auto;
         display: none;
+        z-index: 10;
         .and{
           text-transform: uppercase;
           color: #387ab2;
@@ -522,10 +523,11 @@
       &.popup-left:hover .crd-popup{
         left: auto;
         right: 100%;
-        top: -100%;
+        top: 50%;
         bottom: auto;
         margin-left: 0;
         margin-right: @arrowSize;
+        transform: translateY(-50%);
       }
     }
 
@@ -542,10 +544,15 @@
 
   .oce-3-line-text{
     overflow: hidden;
-    max-height: 3.9em;
+    max-height: 4em;
+    display: block;
+    &:hover {
+      overflow: visible;
+      max-height: none;
+    }
   }
 
-  .crd-landing-popup{
+  .crd-fullscreen-popup{
     @popupWidth: 75%;
     position: fixed;
     background: #f9fff6;
@@ -600,7 +607,7 @@
     }
   }
 
-  .crd-landing-popup-overlay{
+  .crd-fullscreen-popup-overlay{
     position: fixed;
     top: 0;
     right: 0;
@@ -632,5 +639,62 @@
   }
   &:hover .crd-popup {
     display: block;
+  }
+}
+
+.contract-page, .supplier-page {
+  dl{
+    dt{
+      font-size: .8em;
+      font-weight: normal;
+    }
+    dd{
+      font-size: 1.5em;
+    }
+  }
+
+  table {
+    &.join-bottom {
+      margin-bottom: 0;
+      &, td {
+        border-bottom: none;
+      }
+    }
+
+    &.info-table {
+      th, td{
+        width: 33%;
+      }
+    }
+  }
+
+  section h2 {
+    color: #ce4747;
+  }
+
+  .flag-icon {
+    width: 32px;
+    margin-top: -5px;
+  }
+
+  section.info {
+    margin-bottom: 40px;
+
+    &>.row{
+      margin-left: 0;
+      margin-right: 0;
+      &>*{
+        padding-left: 0;
+      }
+    }
+
+    .flags {
+      font-size: 2em;
+      small {
+        margin-left: 45px;
+        font-size: .6em;
+        display: block;
+      }
+    }
   }
 }

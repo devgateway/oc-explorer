@@ -1,10 +1,9 @@
 import ReactDOM from 'react-dom';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { List } from 'immutable';
-import Table from '../visualizations/tables';
 import translatable from '../translatable';
 import { POPUP_HEIGHT } from './constants';
-import { getAwardAmount, mkContractLink } from './tools';
+import { getAwardAmount, mkContractLink, _3LineText } from './tools';
 import PaginatedTable from './paginated-table';
 
 // eslint-disable-next-line no-undef
@@ -20,7 +19,7 @@ class Popup extends translatable(React.Component) {
     const { type, flagIds } = this.props;
     const { popupTop } = this.state;
     return (
-      <div className="crd-popup text-center" style={{ top: popupTop }}>
+      <div className="crd-popup text-center" style={{ top: popupTop, transform: 'none' }}>
         <div className="row">
           <div className="col-sm-12 info">
             <h5>{this.t('crd:procurementsTable:associatedFlags').replace('$#$', this.t(`crd:corruptionType:${type}:name`))}</h5>
@@ -149,7 +148,7 @@ class ProcurementsTable extends PaginatedTable {
           {this.t('crd:procurementsTable:title')}
         </TableHeaderColumn>
 
-        <TableHeaderColumn dataField="PEName">
+        <TableHeaderColumn dataField="PEName" dataFormat={_3LineText}>
           {this.t('crd:procurementsTable:procuringEntity')}
         </TableHeaderColumn>
 

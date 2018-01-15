@@ -3,10 +3,9 @@ import { List } from 'immutable';
 // eslint-disable-next-line no-unused-vars
 import rbtStyles from 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import CRDPage from '../page';
-import Visualization from '../../visualization';
-import TopSearch from './top-search';
-import { getAwardAmount, mkContractLink } from '../tools';
+import { getAwardAmount, mkContractLink, wireProps, _3LineText } from '../tools';
 import PaginatedTable from '../paginated-table';
+import Archive from '../archive';
 
 class CList extends PaginatedTable {
   getCustomEP() {
@@ -28,6 +27,8 @@ class CList extends PaginatedTable {
 
   render() {
     const { data, navigate } = this.props;
+
+    if (!data) return null;
 
     const contracts = data.get('data', List());
     const count = data.get('count', 0);
@@ -80,7 +81,13 @@ class CList extends PaginatedTable {
           {this.t('crd:contracts:baseInfo:status')}
         </TableHeaderColumn>
 
-        <TableHeaderColumn isKey dataField="id" dataFormat={mkContractLink(navigate)}>
+        <TableHeaderColumn
+          isKey
+          dataField="id"
+          dataFormat={mkContractLink(navigate)}
+          className="ocid"
+          columnClassName="ocid"
+        >
           {this.t('crd:procurementsTable:contractID')}
         </TableHeaderColumn>
 
@@ -88,7 +95,7 @@ class CList extends PaginatedTable {
           {this.t('crd:general:contract:title')}
         </TableHeaderColumn>
 
-        <TableHeaderColumn dataField="PEName">
+        <TableHeaderColumn dataField="PEName" dataFormat={_3LineText}>
           {this.t('crd:contracts:list:procuringEntity')}
         </TableHeaderColumn>
 
@@ -100,7 +107,7 @@ class CList extends PaginatedTable {
           {this.t('crd:contracts:list:awardAmount')}
         </TableHeaderColumn>
 
-        <TableHeaderColumn dataField="startDate">
+        <TableHeaderColumn dataField="startDate" className="date" columnClassName="date">
           {this.t('crd:procurementsTable:tenderDate')}
         </TableHeaderColumn>
 
@@ -113,46 +120,20 @@ class CList extends PaginatedTable {
 }
 
 export default class Contracts extends CRDPage {
-  constructor(...args) {
-    super(...args);
-    this.state = {
-      list: List(),
-    };
-  }
-
   render() {
-    const { list } = this.state;
-    const { filters, navigate, translations, searchQuery, doSearch } = this.props;
-
-    const count = list.get('count');
-
+    const { searchQuery, doSearch, navigate } = this.props;
     return (
-      <div className="contracts-page">
-        <TopSearch
-          translations={translations}
-          searchQuery={searchQuery}
-          doSearch={doSearch}
-        />
-
-        {searchQuery && <h3 className="page-header">
-          {
-            (count === 1 ?
-              this.t('crd:contracts:top-search:resultsFor:sg') :
-              this.t('crd:contracts:top-search:resultsFor:pl')
-            ).replace('$#$', count).replace('$#$', searchQuery)}
-        </h3>}
-
-        <CList
-          dataEP="flaggedRelease/all"
-          countEP="ocds/release/count"
-          data={list}
-          filters={filters}
-          requestNewData={(_, newData) => this.setState({ list: newData })}
-          navigate={navigate}
-          translations={translations}
-          searchQuery={searchQuery}
-        />
-      </div>
+      <Archive
+        {...wireProps(this)}
+        searchQuery={searchQuery}
+        doSearch={doSearch}
+        navigate={navigate}
+        className="contracts-page"
+        topSearchPlaceholder={this.t('crd:contracts:top-search')}
+        List={CList}
+        dataEP="flaggedRelease/all"
+        countEP="ocds/release/count"
+      />
     );
   }
 }

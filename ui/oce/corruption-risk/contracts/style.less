@@ -1,39 +1,16 @@
-.contract-page{
-  dl{
-    dt{
-      font-size: .8em;
-      font-weight: normal;
-    }
-    dd{
-      font-size: 1.5em;
-    }
-  }
-
-  table {
-    &.join-bottom {
-      margin-bottom: 0;
-      &, td {
-        border-bottom: none;
-      }
-    }
-
-    &.info-table {
-      th, td{
-        width: 33%;
-      }
-    }
-  }
-
-  section h2 {
-    color: #ce4747;
-  }
-}
-
 .contracts-page{
   margin-bottom: 40px;
   table {
     th, td{
-      width: 12.5%;
+      @width: 12.5%;
+      @ocidDateDelta: 3%;
+      width: @width;
+      &.ocid {
+        width: @width + @ocidDateDelta;
+      }
+      &.date {
+        width: @width - @ocidDateDelta;
+      }
     }
     th{
       color: #a1adbc;
@@ -45,26 +22,8 @@
   }
 }
 
-.contract-page, .contracts-page {
-  .top-search {
-    z-index: 0;
-    margin: 10px 5px;
-    input.form-control {
-      border-radius: 4px;
-    }
-    .input-group-addon {
-      background: transparent;
-      border: none;
-      .glyphicon {
-        margin-left: -60px;
-        z-index: 3;
-      }
-    }
-  }
-
-  .react-bs-table table td, .react-bs-table table th{
-    white-space: normal;
-  }
+.react-bs-table table td, .react-bs-table table th{
+  white-space: normal;
 }
 
 .contract-page {
@@ -73,52 +32,6 @@
 
     h2 {
       padding-top: 50px;
-    }
-
-    h3 {
-      margin-top: 70px;
-    }
-
-    div.crosstab-box {
-      background: #f0f0f0;
-      font-size: .9em;
-      .title {
-        color: #144361;
-        font-size: 1.3em;
-      }
-      h5 {
-        color: green;
-        font-weight: bold;
-        margin-bottom: 5px;
-      }
-      p {
-        color: #999999;
-        margin-bottom: 0;
-        strong {
-          color: #333;
-        }
-      }
-    }
-  }
-
-  .flag-icon {
-    width: 32px;
-    margin-top: -5px;
-  }
-
-  section.info {
-    margin-bottom: 40px;
-
-    &>.row{
-      margin-left: 0;
-      margin-right: 0;
-      &>*{
-        padding-left: 0;
-      }
-    }
-
-    .flags {
-      font-size: 2em;
     }
   }
 

@@ -13,7 +13,8 @@ class LandingPopup extends translatable(React.Component) {
   onClose(){
     const {redirectToLogin, requestClosing} = this.props;
     if(redirectToLogin){
-      location.href = LOGIN_URL;
+      const hash = encodeURIComponent(location.hash);
+      location.href = `${LOGIN_URL}${hash}`;
     } else {
       requestClosing();
     }
@@ -40,9 +41,9 @@ class LandingPopup extends translatable(React.Component) {
     const { languageSwitcher } = this.props;
     return (
       <div>
-        <div className="crd-landing-popup-overlay" onClick={this.onClose.bind(this)}/>
+        <div className="crd-fullscreen-popup-overlay" onClick={this.onClose.bind(this)}/>
 
-        <div className="crd-landing-popup" ref="thePopup" style={{top}}>
+        <div className="crd-fullscreen-popup" ref="thePopup" style={{top}}>
           <div className="container-fluid">
             <div className="row">
               <div className="col-sm-1 text-right">

@@ -173,6 +173,10 @@ public abstract class GenericOCDSController {
         return createFilterCriteria("tender.items.classification._id", filter.getBidTypeId(), filter);
     }
 
+    protected Criteria getTotalFlaggedCriteria(final DefaultFilterPagingRequest filter) {
+        return createFilterCriteria("flags.totalFlagged", filter.getTotalFlagged(), filter);
+    }
+
     /**
      * Appends flags.flaggedStats.type filter
      */

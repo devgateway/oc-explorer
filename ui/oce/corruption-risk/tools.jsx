@@ -35,6 +35,7 @@ export const mkContractLink = navigate => (content, { id }) => (
   <a
     href={`#!/crd/contract/${id}`}
     onClick={() => navigate('contract', id)}
+    className="oce-3-line-text"
   >
     {content}
   </a>
@@ -51,11 +52,12 @@ export function cherrypickProps(keys, source) {
   return target;
 }
 
-export function wireProps(parent, prefix) {
+export function wireProps(parent, _prefix) {
   const { props: parentProps } = parent;
   const props = cherrypickProps(ROUTINE_PROPS, parentProps);
-  if (prefix) {
-    props.data = parentProps.data.get(prefix);
+  if (_prefix) {
+    const prefix = Array.isArray(_prefix) ? _prefix : [_prefix];
+    props.data = parentProps.data.getIn(prefix);
     props.requestNewData = (path, data) =>
       parentProps.requestNewData(path.concat(prefix), data);
   } else {
@@ -63,3 +65,11 @@ export function wireProps(parent, prefix) {
   }
   return props;
 }
+
+export const _3LineText = content => <div className="oce-3-line-text">{content}</div>
+
+export const cloneChild = (component, props) =>
+  React.cloneElement(
+    React.Children.only(component.props.children),
+    props
+  );

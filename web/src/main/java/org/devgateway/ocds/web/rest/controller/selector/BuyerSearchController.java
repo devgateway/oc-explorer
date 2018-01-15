@@ -1,9 +1,6 @@
 package org.devgateway.ocds.web.rest.controller.selector;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
+import io.swagger.annotations.ApiOperation;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Organization.OrganizationType;
 import org.devgateway.ocds.web.rest.controller.request.OrganizationSearchRequest;
@@ -12,7 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.annotations.ApiOperation;
+import javax.validation.Valid;
+import java.util.List;
 
 /**
  *
@@ -46,6 +44,16 @@ public class BuyerSearchController extends AbstractOrganizationSearchController 
 
         return organizationSearchTextByType(request, OrganizationType.buyer);
 
+    }
+
+    @RequestMapping(value = "/api/ocds/organization/buyer/count",
+            method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
+    @ApiOperation(value = "Counts all buyers in the database. "
+            + "Buyers are organizations that have the label 'buyer' assigned to organization.types array"
+            + "Allows full text search using the text parameter.")
+    @Override
+    public Long count(OrganizationSearchRequest request) {
+        return organizationCountTextByType(request, OrganizationType.buyer);
     }
 
 }
