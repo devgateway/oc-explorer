@@ -29,4 +29,38 @@ public final class MongoConstants {
         public static final String TENDER_PERIOD_START_DATE_REF = "$" + TENDER_PERIOD_START_DATE;
         public static final String TENDER_PERIOD_END_DATE_REF = "$" + TENDER_PERIOD_END_DATE;
     }
+
+    public static final class Filters {
+        public static final String YEAR = "year";
+
+        public static final String TEXT = "text";
+
+        public static final String AWARD_STATUS = "awardStatus";
+
+        public static final String BID_TYPE_ID = "bidTypeId";
+
+        public static final String NOT_BID_TYPE_ID = "notBidTypeId";
+
+        public static final String PROCURING_ENTITY_ID = "procuringEntityId";
+
+        public static final String NOT_PROCURING_ENTITY_ID = "notProcuringEntityId";
+
+        public static final String SUPPLIER_ID = "supplierId";
+
+        public static final String BIDDER_ID = "bidderId";
+
+        public static final String TENDER_LOC = "tenderLoc";
+
+        public static final String PROCUREMENT_METHOD = "procurementMethod";
+
+        public static final String TENDER_VALUE = "tenderValue";
+
+        public static final String AWARD_VALUE = "awardValue";
+
+        public static final String FLAG_TYPE = "flagType";
+
+        public static final String ELECTRONIC_SUBMISSION = "electronicSubmission";
+
+        public static final String FLAGGED = "flagged";
+    }
 }
