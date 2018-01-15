@@ -21,6 +21,7 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -54,10 +55,8 @@ public class AwardsWonLostController extends GenericOCDSController {
     public List<DBObject> procurementsWonLost(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         Assert.notEmpty(filter.getBidderId(), "BidderId must not be empty!");
-        Assert.isTrue(
-                filter.getSupplierId() == null && filter.getSupplierId().size() == 0,
-                "SupplierId is not allowed here! user bidderId to show results."
-        );
+        Assert.isTrue(CollectionUtils.isEmpty(filter.getSupplierId()),
+                "SupplierId is not allowed here! Use bidderId to show results!");
 
         //supplier is the same thing as bidder for this particular query
         filter.setSupplierId(filter.getBidderId());
@@ -96,7 +95,7 @@ public class AwardsWonLostController extends GenericOCDSController {
                 ).as("won"),
                 unwind("won"),
                 unwind("applied"),
-                project("won", "applied").and("applied.cnt").minus("won.cnt").as("lost")
+                project("won", "applied").and("applied.cnt").minus("won.cnt").as("lostCnt")
         );
         return releaseAgg(agg);
     }

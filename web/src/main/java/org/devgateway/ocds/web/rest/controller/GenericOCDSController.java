@@ -515,6 +515,7 @@ public abstract class GenericOCDSController {
         map.put(MongoConstants.Filters.ELECTRONIC_SUBMISSION, getElectronicSubmissionCriteria(filter));
         map.put(MongoConstants.Filters.AWARD_STATUS, getAwardStatusFilterCriteria(filter));
         map.put(MongoConstants.Filters.BIDDER_ID, getBidderIdCriteria(filter));
+        map.put(MongoConstants.Filters.TOTAL_FLAGGED,  getTotalFlaggedCriteria(filter));
         //map.put(MongoConstants.Filters.TEXT, getTextCriteria(filter));
         return map;
     }

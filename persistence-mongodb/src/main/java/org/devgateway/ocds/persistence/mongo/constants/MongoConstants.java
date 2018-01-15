@@ -62,5 +62,7 @@ public final class MongoConstants {
         public static final String ELECTRONIC_SUBMISSION = "electronicSubmission";
 
         public static final String FLAGGED = "flagged";
+
+        public static final String TOTAL_FLAGGED = "totalFlagged";
     }
 }
