@@ -19,4 +19,11 @@ public class RestErrorHandler {
     public List<FieldError> processValidationError(BindException ex) {
         return ex.getBindingResult().getFieldErrors();
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public String processValidationError(IllegalArgumentException ex) {
+        return ex.getMessage();
+    }
 }
