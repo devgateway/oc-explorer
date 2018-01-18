@@ -18,7 +18,6 @@ import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
@@ -47,71 +46,18 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @Cacheable
 public class AwardsWonLostController extends GenericOCDSController {
 
-    @ApiOperation(value = "Counts the won, lost procurements, receives any filters, but most important here"
-            + " is the supplierId and bidderId. Requires bid extension. Use bidderId")
+    @ApiOperation(value = "Counts the won, lost procurements, flags and amounts. Receives any filters, "
+            + "but most important here is the supplierId and bidderId. Requires bid extension. Use bidderId instead "
+            + "of supplierId.")
     @RequestMapping(value = "/api/procurementsWonLost",
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
     public List<DBObject> procurementsWonLost(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
-        Assert.notEmpty(filter.getBidderId(), "BidderId must not be empty!");
+        Assert.notEmpty(filter.getBidderId(), "bidderId must not be empty!");
         Assert.isTrue(
                 CollectionUtils.isEmpty(filter.getSupplierId()),
-                "SupplierId is not allowed here! Use bidderId to show results!"
-        );
-
-        //supplier is the same thing as bidder for this particular query
-        filter.setSupplierId(filter.getBidderId());
-
-        Map<String, CriteriaDefinition> noSupplierCriteria =
-                createDefaultFilterCriteriaMap(
-                        filter);
-        noSupplierCriteria.remove(MongoConstants.Filters.SUPPLIER_ID);
-
-        Aggregation agg = newAggregation(
-                facet().and(
-                        match(getYearDefaultFilterCriteria(
-                                filter,
-                                noSupplierCriteria,
-                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
-                        )),
-                        group().count().as("cnt"),
-                        project("cnt").andExclude(Fields.UNDERSCORE_ID)
-
-                ).as("applied").and(
-                        match(where("awards.status").is("active")
-                                .andOperator(getYearDefaultFilterCriteria(
-                                        filter,
-                                        MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
-                                ))),
-                        unwind("awards"),
-                        match(where("awards.status").is("active")
-                                .andOperator(getYearDefaultFilterCriteria(
-                                        filter,
-                                        MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
-                                ))),
-                        group().count().as("cnt"),
-                        project("cnt").andExclude(Fields.UNDERSCORE_ID)
-                ).as("won"),
-                unwind("won"),
-                unwind("applied"),
-                project("won", "applied").and("applied.cnt").minus("won.cnt").as("lostCnt")
-        );
-        return releaseAgg(agg);
-    }
-
-
-    @ApiOperation(value = "Sums the amounts of awards won, vs bids applied, receives any filters, but most important "
-            + "here is the supplierId and bidderId. Requires bid extension. Use bidderId")
-    @RequestMapping(value = "/api/procurementsWonLostAmount",
-            method = {RequestMethod.POST, RequestMethod.GET},
-            produces = "application/json")
-    public List<DBObject> procurementsWonLostAmount(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
-
-        Assert.notEmpty(filter.getBidderId(), "BidderId must not be empty!");
-        Assert.isTrue(
-                CollectionUtils.isEmpty(filter.getSupplierId()),
-                "SupplierId is not allowed here! Use bidderId to show results!"
+                "supplierId is not allowed here! Use bidderId to show results!"
         );
 
         //supplier is the same thing as bidder for this particular query
@@ -135,9 +81,10 @@ public class AwardsWonLostController extends GenericOCDSController {
                                 noSupplierCriteria,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
                         )),
-                        group().sum("bids.details.value.amount").as("sum"),
-                        project("sum").andExclude(Fields.UNDERSCORE_ID)
-
+                        group("bids.details.tenderers._id").count().as("count")
+                                .sum("bids.details.value.amount").as("totalAmount")
+                                .sum("flags.totalFlagged").as("countFlags"),
+                        project("count", "totalAmount", "countFlags")
                 ).as("applied").and(
                         match(where("awards.status").is("active")
                                 .andOperator(getYearDefaultFilterCriteria(
@@ -150,14 +97,18 @@ public class AwardsWonLostController extends GenericOCDSController {
                                         filter,
                                         MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
                                 ))),
-                        group().sum("awards.value.amount").as("sum"),
-                        project("sum").andExclude(Fields.UNDERSCORE_ID)
+                        group("awards.suppliers._id").count().as("count")
+                                .sum("awards.value.amount").as("totalAmount")
+                                .sum("flags.totalFlagged").as("countFlags"),
+                        project("count", "totalAmount", "countFlags")
                 ).as("won"),
                 unwind("won"),
                 unwind("applied"),
-                project("won", "applied").and("applied.sum").minus("won.sum").as("lostSum")
+                project("won", "applied").and("applied._id").cmp("$won._id").as("comp")
+                        .and("applied.count").minus("won.count").as("lostCount"),
+                match(where("comp").is(0)),
+                project("won", "applied", "lostCount")
         );
-
         return releaseAgg(agg);
     }
 
