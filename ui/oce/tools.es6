@@ -121,3 +121,12 @@ export const arrReplace = (a, b, [head, ...tail]) => typeof head === 'undefined'
   [a === head ? b : head].concat(arrReplace(a, b, tail));
 
 export const range = (from, to) => from > to ? [] : [from].concat(range(from + 1, to));
+
+export const fetchEP = url => fetch(url.clone().query(''), {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded',
+  },
+  credentials: 'same-origin',
+  body: url.query(),
+}).then(callFunc('json'));
