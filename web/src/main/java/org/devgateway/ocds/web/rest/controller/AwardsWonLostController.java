@@ -18,6 +18,7 @@ import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
@@ -76,6 +77,7 @@ public class AwardsWonLostController extends GenericOCDSController {
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
                         )),
                         unwind("bids.details"),
+                        unwind("bids.details.tenderers"),
                         match(getYearDefaultFilterCriteria(
                                 filter,
                                 noSupplierCriteria,
@@ -92,6 +94,7 @@ public class AwardsWonLostController extends GenericOCDSController {
                                         MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
                                 ))),
                         unwind("awards"),
+                        unwind("awards.suppliers"),
                         match(where("awards.status").is("active")
                                 .andOperator(getYearDefaultFilterCriteria(
                                         filter,
@@ -111,5 +114,40 @@ public class AwardsWonLostController extends GenericOCDSController {
         );
         return releaseAgg(agg);
     }
+
+    @ApiOperation(value = "Counts the number of wins per supplierId per procuringEntityId, plus shows the flags"
+            + " and the awarded total. You must provide supplierId parameter. Any other filter can be used as well.")
+    @RequestMapping(value = "/api/supplierWinsPerProcuringEntity",
+            method = {RequestMethod.POST, RequestMethod.GET},
+            produces = "application/json")
+    public List<DBObject> procurementsWonLostPerProcuringEntity(@ModelAttribute @Valid final YearFilterPagingRequest
+                                                                        filter) {
+
+        Assert.notEmpty(filter.getSupplierId(), "supplierId must not be empty!");
+
+        Aggregation agg = newAggregation(
+                match(where("awards.status").is("active")
+                        .andOperator(getYearDefaultFilterCriteria(
+                                filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
+                        )).and("tender.procuringEntity._id").exists(true)),
+                unwind("awards"),
+                unwind("awards.suppliers"),
+                match(where("awards.status").is("active")
+                        .andOperator(getYearDefaultFilterCriteria(
+                                filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
+                        ))),
+                group(Fields.from(
+                        Fields.field("supplierId", "awards.suppliers._id"),
+                        Fields.field("procuringEntityId", "tender.procuringEntity._id")
+                ))
+                        .count().as("count")
+                        .sum("awards.value.amount").as("totalAmountAwarded")
+                        .sum("flags.totalFlagged").as("countFlags")
+        );
+        return releaseAgg(agg);
+    }
+
 
 }
