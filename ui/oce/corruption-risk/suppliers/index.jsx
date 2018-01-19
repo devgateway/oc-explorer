@@ -45,10 +45,10 @@ class SList extends PaginatedTable {
       return {
         id: supplier.get('id'),
         name: supplier.get('name'),
-        wins: supplier.get('wins', 'n/a'),
-        winAmount: supplier.get('winAmount', 'n/a'),
-        losses: supplier.get('losses', 'n/a'),
-        flags: supplier.get('flags', 'n/a'),
+        wins: supplier.get('wins'),
+        winAmount: supplier.get('winAmount'),
+        losses: supplier.get('losses'),
+        flags: supplier.get('flags'),
       }
     }).toJS();
 
