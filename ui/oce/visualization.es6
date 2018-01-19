@@ -2,18 +2,9 @@ import URI from 'urijs';
 import { fromJS } from 'immutable';
 import translatable from './translatable';
 import Component from './pure-render-component';
-import { callFunc } from './tools';
+import { callFunc, fetchEP } from './tools';
 
 const API_ROOT = '/api';
-
-const fetchEP = url => fetch(url.clone().query(''), {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded',
-  },
-  credentials: 'same-origin',
-  body: url.query(),
-}).then(callFunc('json'));
 
 class Visualization extends translatable(Component) {
   constructor(...args) {

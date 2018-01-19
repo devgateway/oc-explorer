@@ -1,9 +1,11 @@
-import { List } from 'immutable';
+import URI from 'urijs';
+import { List, Map } from 'immutable';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import CRDPage from '../page';
 import PaginatedTable from '../paginated-table';
 import Archive from '../archive';
 import { wireProps } from '../tools';
+import { fetchEP, pluckImm, cacheFn } from '../../tools';
 
 export const mkLink = navigate => (content, { id }) => (
   <a
@@ -43,10 +45,10 @@ class SList extends PaginatedTable {
       return {
         id: supplier.get('id'),
         name: supplier.get('name'),
-        wins: -Math.round(Math.random() * 4),
-        winAmount: -Math.round(Math.random() * 1000000),
-        lost: -Math.round(Math.random() * 4),
-        flags: -Math.round(Math.random() * 4),
+        wins: supplier.get('wins', 'n/a'),
+        winAmount: supplier.get('winAmount', 'n/a'),
+        losses: supplier.get('losses', 'n/a'),
+        flags: supplier.get('flags', 'n/a'),
       }
     }).toJS();
 
@@ -81,7 +83,7 @@ class SList extends PaginatedTable {
         <TableHeaderColumn dataField='winAmount'>
           Total won
         </TableHeaderColumn>
-        <TableHeaderColumn dataField='lost'>
+        <TableHeaderColumn dataField='losses'>
           Losses
         </TableHeaderColumn>
         <TableHeaderColumn dataField='flags'>
@@ -93,11 +95,45 @@ class SList extends PaginatedTable {
 }
 
 class Suppliers extends CRDPage {
+  constructor(...args){
+    super(...args);
+    this.state = this.state || {};
+    this.state.winLossFlagInfo = Map();
+    this.injectWinLossData = cacheFn((data, winLossFlagInfo) => {
+      return data.update('data', List(), list => list.map(supplier => {
+        const id = supplier.get('id');
+        if (!winLossFlagInfo.has(id)) return supplier;
+        const info = winLossFlagInfo.get(id);
+        return supplier
+          .set('wins', info.won.count)
+          .set('winAmount', info.won.totalAmount)
+          .set('losses', info.lostCount)
+          .set('flags', info.applied.countFlags)
+      }))
+    });
+  }
+
+  onNewDataRequested(path, newData) {
+    const supplierIds = newData.get('data').map(pluckImm('id'));
+    this.setState({ winLossFlagInfo: Map() });
+    fetchEP(new URI('/api/procurementsWonLost').addSearch({
+      bidderId: supplierIds.toJS(),
+    })).then(result => {
+      this.setState({
+        winLossFlagInfo: Map(supplierIds.zip(result))
+      });
+    });
+    this.props.requestNewData(path, newData);
+  }
+
   render() {
-    const { navigate, searchQuery, doSearch } = this.props;
+    const { navigate, searchQuery, doSearch, data } = this.props;
+    const { winLossFlagInfo } = this.state;
     return (
       <Archive
         {...wireProps(this)}
+        data={this.injectWinLossData(data, winLossFlagInfo)}
+        requestNewData={this.onNewDataRequested.bind(this)}
         searchQuery={searchQuery}
         doSearch={doSearch}
         navigate={navigate}
