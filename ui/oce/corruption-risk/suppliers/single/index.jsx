@@ -147,6 +147,10 @@ class Supplier extends CRDPage {
       return filters.update('supplierId', Set(), supplierIds => supplierIds.add(supplierId));
     });
 
+    this.injectBidderFilter = cacheFn((filters, supplierId) => {
+      return filters.update('bidderId', Set(), supplierIds => supplierIds.add(supplierId));
+    });
+
     this.groupIndicators = cacheFn((indicatorTypesMapping) => {
       const result = {};
       CORRUPTION_TYPES.forEach((corruptionType) => { result[corruptionType] = []; });
@@ -246,13 +250,14 @@ class Supplier extends CRDPage {
           <div className="col-sm-4">
             <NrLostVsWon
               {...wireProps(this, 'nr-lost-vs-won')}
+              filters={this.injectBidderFilter(filters, id)}
               width={donutSize}
-              data={[1, 2]}
             />
           </div>
           <div className="col-sm-4">
             <AmountLostVsWon
               {...wireProps(this, 'amount-lost-vs-won')}
+              filters={this.injectBidderFilter(filters, id)}
               width={donutSize}
             />
           </div>
