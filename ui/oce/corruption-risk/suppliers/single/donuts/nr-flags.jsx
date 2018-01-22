@@ -19,19 +19,23 @@ const COLORS = ['#fbc42c', '#3372b2', '#30a0f5']
 
 class TotalFlags extends translatable(React.PureComponent) {
   render() {
-    const data = (this.props.data || List()).map((datum, index) => ({
-      color: COLORS[index],
-      label: this.t(`crd:corruptionType:${datum.get('type')}:name`),
-      value: datum.get('indicatorCount'),
-    })).toJS();
+    const data = (this.props.data || List()).map((datum, index) => {
+      const value = datum.get('indicatorCount');
+      const indicatorName = this.t(`crd:corruptionType:${datum.get('type')}:name`);
+        return {
+        color: COLORS[index],
+        label: `${value} ${indicatorName} ${value === 1 ? 'flag' : 'flags'}`,
+        value: datum.get('indicatorCount'),
+      }
+    }).toJS();
     return (
       <Donut
         {...this.props}
         data={data}
         CenterText={CenterText}
         endpoint="totalFlaggedIndicatorsByIndicatorType"
-        title="Total Flags"
-        subtitle="by Risk Type"
+        title="Total Flags by Risk Type"
+        subtitle="on All Procurements Won"
       />
     );
   }

@@ -1,16 +1,18 @@
+import { fromJS } from 'immutable';
 import { pluck } from '../../../../tools';
 import Donut from '../../../donut';
 
 class CenterText extends React.Component {
   render() {
     const { data } = this.props;
-    const [fst, snd] = data.map(pluck('value'));
-    const sum = fst + snd;
-    const percent = (fst / sum) * 100;
+    if (!data) return null;
+    const [won, lost] = data.map(pluck('value'));
+    const sum = won + lost;
+    const percent = (won / sum) * 100;
     return (
       <div className="center-text two-rows">
         <div>
-          {fst}
+          {won}
           <div className="secondary">
             of {sum} ({Math.trunc(percent)}%)
           </div>
@@ -21,22 +23,33 @@ class CenterText extends React.Component {
 }
 
 class NrWonVsLost extends React.PureComponent {
+  transformNewData(path, data) {
+    const won = data.getIn([0, 'won', 'count']);
+    const lost = data.getIn([0, 'lostCount']);
+    const sum = won + lost;
+    const wonPercent = (won / sum * 100).toFixed(2);
+    const lostPercent = (lost / sum * 100).toFixed(2);
+    this.props.requestNewData(path, [{
+      color: '#165781',
+      label: `${won} (${wonPercent}%) contracts won`,
+      value: won
+    }, {
+      color: '#5fa0c9',
+      label: `${lost} (${lostPercent}%) contracts lost`,
+      value: lost
+    }]);
+  }
+
   render() {
     return (
       <Donut
         {...this.props}
+        requestNewData={this.transformNewData.bind(this)}
+        data={this.props.data || []}
         CenterText={CenterText}
-        title="# and % Contracts"
-        subtitle="Won vs Lost"
-        data={[{
-            color: '#165781',
-            label: 'Won',
-            value: 1,
-        }, {
-            color: '#5fa0c9',
-            label: 'Lost',
-            value: 2,
-        }]}
+        title="No. & Percent of Procurements"
+        subtitle="Won vs. Lost"
+        endpoint="procurementsWonLost"
       />
     );
   }
