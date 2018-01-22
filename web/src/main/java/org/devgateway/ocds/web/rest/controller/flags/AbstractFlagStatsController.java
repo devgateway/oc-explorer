@@ -6,7 +6,6 @@ import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomGroupingOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -95,12 +94,8 @@ public abstract class AbstractFlagStatsController extends AbstractFlagController
     }
 
     public List<DBObject> flagStats(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
-
-
         DBObject projectPrepare = getProjectPrepare(filter);
-
         DBObject group = getGroup(filter);
-
         DBObject projectPercentage = getProjectPercentage(filter);
 
         Aggregation agg = newAggregation(
@@ -113,8 +108,6 @@ public abstract class AbstractFlagStatsController extends AbstractFlagController
                         GenericKeys.PERCENT_FALSE_PRECOND_MET, GenericKeys.PERCENT_PRECOND_MET)
         );
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> list = results.getMappedResults();
-        return list;
+        return releaseAgg(agg);
     }
 }
