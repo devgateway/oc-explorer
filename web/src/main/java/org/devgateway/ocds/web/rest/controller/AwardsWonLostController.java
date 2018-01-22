@@ -108,9 +108,10 @@ public class AwardsWonLostController extends GenericOCDSController {
                 unwind("won"),
                 unwind("applied"),
                 project("won", "applied").and("applied._id").cmp("$won._id").as("comp")
-                        .and("applied.count").minus("won.count").as("lostCount"),
+                        .and("applied.count").minus("won.count").as("lostCount")
+                        .and("applied.totalAmount").minus("won.totalAmount").as("lostAmount"),
                 match(where("comp").is(0)),
-                project("won", "applied", "lostCount")
+                project("won", "applied", "lostCount", "lostAmount")
         );
         return releaseAgg(agg);
     }
