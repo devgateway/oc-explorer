@@ -30,6 +30,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -52,6 +53,7 @@ public abstract class GenericOCDSController {
     public static final int DAY_MS = 86400000;
 
     public static final BigDecimal ONE_HUNDRED = new BigDecimal(100);
+    private static final Criteria EMPTY_CRITERIA = new Criteria();
 
 
     protected Map<String, Object> filterProjectMap;
@@ -426,7 +428,10 @@ public abstract class GenericOCDSController {
      * @return the {@link Criteria} for this filter
      */
     protected Criteria getSupplierIdCriteria(final DefaultFilterPagingRequest filter) {
-        return createFilterCriteria("awards.suppliers._id", filter.getSupplierId(), filter);
+        if (filter.getSupplierId() == null) {
+            return new Criteria();
+        }
+        return where("awards").elemMatch(where("status").is("active").and("suppliers._id").in(filter.getSupplierId()));
     }
 
     protected Criteria getBidderIdCriteria(final DefaultFilterPagingRequest filter) {
@@ -515,14 +520,25 @@ public abstract class GenericOCDSController {
         map.put(MongoConstants.Filters.ELECTRONIC_SUBMISSION, getElectronicSubmissionCriteria(filter));
         map.put(MongoConstants.Filters.AWARD_STATUS, getAwardStatusFilterCriteria(filter));
         map.put(MongoConstants.Filters.BIDDER_ID, getBidderIdCriteria(filter));
-        map.put(MongoConstants.Filters.TOTAL_FLAGGED,  getTotalFlaggedCriteria(filter));
+        map.put(MongoConstants.Filters.TOTAL_FLAGGED, getTotalFlaggedCriteria(filter));
         //map.put(MongoConstants.Filters.TEXT, getTextCriteria(filter));
         return map;
     }
 
+    /**
+     * Removes {@link Criteria} objects that were generated empty because they are not needed and they seem to slow
+     * down the mongodb query engine by a lot.
+     *
+     * @param values
+     * @return
+     */
+    protected Criteria[] getEmptyFilteredCriteria(Collection<CriteriaDefinition> values) {
+        return values.stream().filter(c -> !c.equals(EMPTY_CRITERIA)).toArray(Criteria[]::new);
+    }
+
     protected Criteria getDefaultFilterCriteria(final DefaultFilterPagingRequest filter,
                                                 Map<String, CriteriaDefinition> map) {
-        return new Criteria().andOperator(map.values().toArray(new Criteria[0]));
+        return new Criteria().andOperator(getEmptyFilteredCriteria(map.values()));
     }
 
     protected Criteria getDefaultFilterCriteria(final DefaultFilterPagingRequest filter) {
@@ -537,7 +553,7 @@ public abstract class GenericOCDSController {
                                                     Map<String, CriteriaDefinition> map,
                                                     final String dateProperty) {
         map.put(MongoConstants.Filters.YEAR, getYearFilterCriteria(filter, dateProperty));
-        return new Criteria().andOperator(map.values().toArray(new Criteria[0]));
+        return new Criteria().andOperator(getEmptyFilteredCriteria(map.values()));
     }
 
     protected MatchOperation getMatchDefaultFilterOperation(final DefaultFilterPagingRequest filter) {
