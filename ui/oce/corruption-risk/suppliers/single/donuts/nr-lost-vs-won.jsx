@@ -42,8 +42,8 @@ class NrWonVsLost extends React.PureComponent {
         requestNewData={this.transformNewData.bind(this)}
         data={this.props.data || []}
         CenterText={CenterText}
-        title="# and % Contracts"
-        subtitle="Won vs Lost"
+        title="No. & Percent of Procurements"
+        subtitle="Won vs. Lost"
         endpoint="procurementsWonLost"
       />
     );

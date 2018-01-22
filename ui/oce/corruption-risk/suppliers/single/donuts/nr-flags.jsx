@@ -30,8 +30,8 @@ class TotalFlags extends translatable(React.PureComponent) {
         data={data}
         CenterText={CenterText}
         endpoint="totalFlaggedIndicatorsByIndicatorType"
-        title="Total Flags"
-        subtitle="by Risk Type"
+        title="Total Flags by Risk Type"
+        subtitle="on All Procurements Won"
       />
     );
   }

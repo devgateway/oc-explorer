@@ -53,8 +53,8 @@ class AmountWonVsLost extends React.Component {
         requestNewData={this.transformNewData.bind(this)}
         data={this.props.data || []}
         CenterText={CenterText}
-        title="$ Amount"
-        subtitle="Won vs Lost"
+        title="Amount ($)"
+        subtitle="Won vs. Lost"
         endpoint="procurementsWonLost"
       />
     );
