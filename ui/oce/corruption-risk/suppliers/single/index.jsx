@@ -230,7 +230,7 @@ class Supplier extends CRDPage {
 
   render() {
     const { translations, width, doSearch, id, filters, styling } = this.props;
-    const donutSize = width / 3 - 100;
+    const donutSize = width / 3 - window.innerWidth / 20;
     const barChartWidth = width / 2 - 100;
 
     return (
