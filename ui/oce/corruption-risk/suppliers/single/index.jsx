@@ -229,7 +229,7 @@ class Supplier extends CRDPage {
   }
 
   render() {
-    const { translations, width, doSearch, id, filters } = this.props;
+    const { translations, width, doSearch, id, filters, styling } = this.props;
     const donutSize = width / 3 - 100;
     const barChartWidth = width / 2 - 100;
 
@@ -259,6 +259,7 @@ class Supplier extends CRDPage {
               {...wireProps(this, 'amount-lost-vs-won')}
               filters={this.injectBidderFilter(filters, id)}
               width={donutSize}
+              styling={styling}
             />
           </div>
           <div className="col-sm-4">

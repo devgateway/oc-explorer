@@ -44,7 +44,7 @@ class Donut extends backendYearFilterable(Chart) {
 
 class DonutWrapper extends React.PureComponent {
   render() {
-    const { title, subtitle, className, data, CenterText } = this.props;
+    const { title, subtitle, className, data, CenterText, styling } = this.props;
     return (
       <div className={cn(className, 'center-text-donut')}>
         <div>
@@ -56,6 +56,7 @@ class DonutWrapper extends React.PureComponent {
           />
           <CenterText
             data={data}
+            styling={styling}
           />
         </div>
         <h4 className="title">

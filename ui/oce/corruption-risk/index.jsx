@@ -274,13 +274,14 @@ class CorruptionRiskDashboard extends React.Component {
   }
 
   renderSingle({ Component, sgSlug, plSlug, additionalProps }) {
-    const { route, navigate } = this.props;
+    const { route, navigate, styling } = this.props;
     const { indicatorTypesMapping } = this.state;
     const [, id] = route;
     return (
       <Component
         {...this.wireProps(sgSlug)}
         id={id}
+        styling={styling}
         doSearch={query => navigate(plSlug, query)}
         indicatorTypesMapping={indicatorTypesMapping}
         {...additionalProps}
