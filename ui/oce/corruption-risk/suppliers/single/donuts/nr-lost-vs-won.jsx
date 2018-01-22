@@ -24,14 +24,19 @@ class CenterText extends React.Component {
 
 class NrWonVsLost extends React.PureComponent {
   transformNewData(path, data) {
+    const won = data.getIn([0, 'won', 'count']);
+    const lost = data.getIn([0, 'lostCount']);
+    const sum = won + lost;
+    const wonPercent = (won / sum * 100).toFixed(2);
+    const lostPercent = (lost / sum * 100).toFixed(2);
     this.props.requestNewData(path, [{
       color: '#165781',
-      label: 'Won',
-      value: data.getIn([0, 'won', 'count']),
+      label: `${won} (${wonPercent}%) contracts won`,
+      value: won
     }, {
       color: '#5fa0c9',
-      label: 'Lost',
-      value: data.getIn([0, 'lostCount'])
+      label: `${lost} (${lostPercent}%) contracts lost`,
+      value: lost
     }]);
   }
 
