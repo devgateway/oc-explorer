@@ -13,6 +13,7 @@ package org.devgateway.ocds.web.rest.controller;
 
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.cache.annotation.CacheConfig;
@@ -33,11 +34,11 @@ import java.util.List;
 import java.util.Map;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.facet;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -90,14 +91,14 @@ public class AwardsWonLostController extends GenericOCDSController {
                                 .sum("flags.totalFlagged").as("countFlags"),
                         project("count", "totalAmount", "countFlags")
                 ).as("applied").and(
-                        match(where(MongoConstants.FieldNames.AWARDS_STATUS).is("active")
+                        match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
                                 .andOperator(getYearDefaultFilterCriteria(
                                         filter,
                                         MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
                                 ))),
                         unwind("awards"),
                         unwind("awards.suppliers"),
-                        match(where(MongoConstants.FieldNames.AWARDS_STATUS).is("active")
+                        match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
                                 .andOperator(getYearDefaultFilterCriteria(
                                         filter.awardFiltering(),
                                         MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
@@ -129,14 +130,14 @@ public class AwardsWonLostController extends GenericOCDSController {
         Assert.notEmpty(filter.getSupplierId(), "supplierId must not be empty!");
 
         Aggregation agg = newAggregation(
-                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is("active")
+                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
                         .andOperator(getYearDefaultFilterCriteria(
                                 filter,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
                         )).and("tender.procuringEntity._id").exists(true)),
                 unwind("awards"),
                 unwind("awards.suppliers"),
-                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is("active")
+                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
                         .andOperator(getYearDefaultFilterCriteria(
                                 filter.awardFiltering(),
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE

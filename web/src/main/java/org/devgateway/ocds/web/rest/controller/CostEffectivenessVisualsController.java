@@ -171,13 +171,15 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
         project.put(
                 "tenderWithAwards",
                 new BasicDBObject("$cond", Arrays.asList(
-                        new BasicDBObject("$eq", Arrays.asList("$awards.status", Award.Status.active.toString())), 1,
+                        new BasicDBObject(
+                                "$eq", Arrays.asList("$awards.status", Award.Status.active.toString())), 1,
                         0
                 ))
         );
         project.put("tenderWithAwardsValue", new BasicDBObject(
                 "$cond",
-                Arrays.asList(new BasicDBObject("$eq", Arrays.asList("$awards.status", Award.Status.active.toString())),
+                Arrays.asList(new BasicDBObject(
+                                "$eq", Arrays.asList("$awards.status", Award.Status.active.toString())),
                         "$tender.value.amount", 0
                 )
         ));

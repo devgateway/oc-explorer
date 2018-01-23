@@ -6,6 +6,7 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.apache.commons.lang3.ArrayUtils;
+import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
@@ -437,7 +438,8 @@ public abstract class GenericOCDSController {
         if (filter.getSupplierId() == null) {
             return new Criteria();
         }
-        return where("awards").elemMatch(where("status").is("active").and("suppliers._id").in(filter.getSupplierId()));
+        return where("awards").elemMatch(
+                where("status").is(Award.Status.active.toString()).and("suppliers._id").in(filter.getSupplierId()));
     }
 
 

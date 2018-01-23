@@ -14,6 +14,7 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
@@ -187,12 +188,12 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                 // unwind
                 match(where(MongoConstants.FieldNames.TENDER_PERIOD_END_DATE)
                         .exists(true).and(MongoConstants.FieldNames.AWARDS_DATE).exists(true)
-                        .and(MongoConstants.FieldNames.AWARDS_STATUS).is("active")),
+                        .and(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())),
                 unwind("awards"),
                 // we need to filter the awards again after unwind
                 match(where(MongoConstants.FieldNames.AWARDS_DATE).exists(true)
                         .and(MongoConstants.FieldNames.AWARDS_STATUS)
-                        .is("active")
+                        .is(Award.Status.active.toString())
                         .andOperator(getYearDefaultFilterCriteria(
                                 filter.awardFiltering(),
                                 MongoConstants.FieldNames.AWARDS_DATE

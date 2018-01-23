@@ -53,7 +53,7 @@ public class ReleaseFlagI085Processor extends AbstractFlaggedReleaseFlagProcesso
 
         for (Detail bid : flaggable.getBids().getDetails()) {
             for (Award award : flaggable.getAwards()) {
-                if (!Award.Status.active.equals(award.getStatus()) || bid.getValue() == null
+                if (!Award.Status.active.toString().equals(award.getStatus()) || bid.getValue() == null
                         || bid.getValue().getAmount() == null || award.getValue() == null || award.getValue()
                         .getAmount() == null || !award.getValue().getCurrency().equals(bid.getValue().getCurrency())
                         || award.getValue().getAmount().equals(bid.getValue().getAmount())) {

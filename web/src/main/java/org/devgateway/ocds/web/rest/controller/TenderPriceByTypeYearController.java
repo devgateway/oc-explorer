@@ -3,6 +3,7 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
@@ -27,9 +28,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
- *
  * @author mpostelnicu
- *
  */
 @RestController
 @CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
@@ -45,8 +44,8 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
     @ApiOperation(value = "Returns the tender price by OCDS type (procurementMethod), by year. "
             + "The OCDS type is read from tender.procurementMethod. The tender price is read from "
             + "tender.value.amount")
-    @RequestMapping(value = "/api/tenderPriceByProcurementMethod", method = { RequestMethod.POST,
-            RequestMethod.GET }, produces = "application/json")
+    @RequestMapping(value = "/api/tenderPriceByProcurementMethod", method = {RequestMethod.POST,
+            RequestMethod.GET}, produces = "application/json")
     public List<DBObject> tenderPriceByProcurementMethod(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
@@ -55,14 +54,19 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
         project.put("tender.value", 1);
 
         Aggregation agg = newAggregation(
-                match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)
-                        .andOperator(getYearDefaultFilterCriteria(filter,
-                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
+                match(where("awards").elemMatch(where("status").is(Award.Status.active.toString()))
+                        .and("tender.value")
+                        .exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(
+                                filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
+                        ))),
                 new CustomProjectionOperation(project), group("tender." + Keys.PROCUREMENT_METHOD)
                         .sum("$tender.value.amount").as(Keys.TOTAL_TENDER_AMOUNT),
                 project().and(Fields.UNDERSCORE_ID).as(Keys.PROCUREMENT_METHOD).andInclude(Keys.TOTAL_TENDER_AMOUNT)
                         .andExclude(Fields.UNDERSCORE_ID),
-                sort(Direction.DESC, Keys.TOTAL_TENDER_AMOUNT));
+                sort(Direction.DESC, Keys.TOTAL_TENDER_AMOUNT)
+        );
 
         return releaseAgg(agg);
     }

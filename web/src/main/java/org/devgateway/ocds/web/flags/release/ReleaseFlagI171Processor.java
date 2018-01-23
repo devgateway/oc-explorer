@@ -54,7 +54,7 @@ public class ReleaseFlagI171Processor extends AbstractFlaggedReleaseFlagProcesso
 
         boolean result = false;
         for (Award award : flaggable.getAwards()) {
-            if (!Award.Status.active.equals(award.getStatus())) {
+            if (!Award.Status.active.toString().equals(award.getStatus())) {
                 continue;
             }
 

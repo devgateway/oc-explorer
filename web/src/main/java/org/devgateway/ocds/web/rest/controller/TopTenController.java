@@ -14,6 +14,7 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomGroupingOperation;
@@ -94,7 +95,7 @@ public class TopTenController extends GenericOCDSController {
         Aggregation agg = newAggregation(
                 match(where("awards.value.amount").exists(true)
                         .and(MongoConstants.FieldNames.AWARDS_STATUS)
-                        .is("active")
+                        .is(Award.Status.active.toString())
                         .andOperator(getDefaultFilterCriteria(filter))),
                 unwind("awards"),
                 match(getYearFilterCriteria(filter.awardFiltering(), MongoConstants.FieldNames.AWARDS_DATE)),
@@ -166,10 +167,10 @@ public class TopTenController extends GenericOCDSController {
         Aggregation agg = newAggregation(
                 match(where("awards.value.amount").exists(true)
                         .and(MongoConstants.FieldNames.AWARDS_STATUS)
-                        .is("active")
+                        .is(Award.Status.active.toString())
                         .andOperator(getDefaultFilterCriteria(filter))),
                 unwind("awards"),
-                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is("active")),
+                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())),
                 unwind("awards.suppliers"),
                 match(getYearFilterCriteria(filter.awardFiltering(), MongoConstants.FieldNames.AWARDS_DATE)),
                 new CustomProjectionOperation(project),
