@@ -17,6 +17,7 @@ import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.facet;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
@@ -145,7 +147,8 @@ public class AwardsWonLostController extends GenericOCDSController {
                 ))
                         .count().as("count")
                         .sum("awards.value.amount").as("totalAmountAwarded")
-                        .sum("flags.totalFlagged").as("countFlags")
+                        .sum("flags.totalFlagged").as("countFlags"),
+                sort(Sort.Direction.DESC, "count")
         );
         return releaseAgg(agg);
     }
