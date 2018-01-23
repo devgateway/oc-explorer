@@ -14,15 +14,12 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
-import java.util.List;
-import javax.validation.Valid;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -30,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import java.util.List;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.facet;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
@@ -81,7 +80,7 @@ public class PercentageAmountAwardedController extends GenericOCDSController {
                         .andOperator(getProcuringEntityIdCriteria(filter))),
                 unwind("awards"),
                 match(where("awards.status").is("active")),
-                facet().and(match(getSupplierIdCriteria(filter)),
+                facet().and(match(getSupplierIdCriteria(filter.awardFiltering())),
                         group().sum("awards.value.amount").as("sum")
                 ).as("totalAwardedToSuppliers")
                         .and(group().sum("awards.value.amount").as("sum")).as("totalAwarded"),
@@ -93,9 +92,7 @@ public class PercentageAmountAwardedController extends GenericOCDSController {
                         .append("totalAwarded.sum", 1))
         );
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> list = results.getMappedResults();
-        return list;
+       return releaseAgg(agg);
     }
 
 

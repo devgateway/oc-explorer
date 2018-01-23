@@ -23,7 +23,6 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -97,14 +96,11 @@ public class TopTenController extends GenericOCDSController {
         Aggregation agg = newAggregation(
                 match(where("awards.value.amount").exists(true).and("awards.status").is("active")
                         .andOperator(getDefaultFilterCriteria(filter))),
-                unwind("$awards"), match(getYearFilterCriteria(filter, "awards.date")),
+                unwind("awards"), match(getYearFilterCriteria(filter.awardFiltering(), "awards.date")),
                 new CustomOperation(new BasicDBObject("$project", project)),
                 sort(Direction.DESC, "awards.value.amount"), limit(10));
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> tagCount = results.getMappedResults();
-        return tagCount;
-
+      return releaseAgg(agg);
     }
 
     /**
@@ -136,10 +132,7 @@ public class TopTenController extends GenericOCDSController {
                 new CustomOperation(new BasicDBObject("$project", project)),
                 sort(Direction.DESC, "tender.value.amount"), limit(10));
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> tagCount = results.getMappedResults();
-        return tagCount;
-
+        return releaseAgg(agg);
     }
 
 
@@ -168,10 +161,10 @@ public class TopTenController extends GenericOCDSController {
         Aggregation agg = newAggregation(
                 match(where("awards.value.amount").exists(true).and("awards.status").is("active")
                         .andOperator(getDefaultFilterCriteria(filter))),
-                unwind("$awards"),
+                unwind("awards"),
                 match(where("awards.status").is("active")),
-                unwind("$awards.suppliers"),
-                match(getYearFilterCriteria(filter, "awards.date")),
+                unwind("awards.suppliers"),
+                match(getYearFilterCriteria(filter.awardFiltering(), "awards.date")),
                 new CustomProjectionOperation(project),
                 new CustomGroupingOperation(group),
                 sort(Direction.DESC, Keys.TOTAL_AWARD_AMOUNT),
@@ -183,11 +176,7 @@ public class TopTenController extends GenericOCDSController {
                         .and(Keys.PROCURING_ENTITY_IDS).size().as(Keys.PROCURING_ENTITY_IDS_COUNT)
         );
 
-
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> tagCount = results.getMappedResults();
-        return tagCount;
-
+        return releaseAgg(agg);
     }
 
 }

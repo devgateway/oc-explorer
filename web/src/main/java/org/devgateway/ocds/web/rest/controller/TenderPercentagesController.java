@@ -22,7 +22,6 @@ import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperat
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -98,9 +97,7 @@ public class TenderPercentagesController extends GenericOCDSController {
                 skip(filter.getSkip()), limit(filter.getPageSize())
         );
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> list = results.getMappedResults();
-        return list;
+        return releaseAgg(agg);
     }
 
     @ApiOperation("Percentage of tenders with >1 tenderer/bidder): "
@@ -140,9 +137,7 @@ public class TenderPercentagesController extends GenericOCDSController {
                 skip(filter.getSkip()), limit(filter.getPageSize())
         );
                
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> list = results.getMappedResults();
-        return list;
+        return releaseAgg(agg);
     }
 
     @ApiOperation("Percent of awarded tenders with >1 tenderer/bidder"
@@ -185,9 +180,7 @@ public class TenderPercentagesController extends GenericOCDSController {
                 getSortByYearMonth(filter), skip(filter.getSkip()), limit(filter.getPageSize())
         );
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> list = results.getMappedResults();
-        return list;
+        return releaseAgg(agg);
     }
 
 
@@ -239,9 +232,7 @@ public class TenderPercentagesController extends GenericOCDSController {
                 getSortByYearMonth(filter), skip(filter.getSkip()), limit(filter.getPageSize())
         );
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> list = results.getMappedResults();
-        return list;
+        return releaseAgg(agg);
     }
 
 
@@ -286,9 +277,7 @@ public class TenderPercentagesController extends GenericOCDSController {
                 getSortByYearMonth(filter), skip(filter.getSkip()), limit(filter.getPageSize())
         );
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> list = results.getMappedResults();
-        return list;
+        return releaseAgg(agg);
     }
 
 

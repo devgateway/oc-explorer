@@ -97,7 +97,7 @@ public class AwardsWonLostController extends GenericOCDSController {
                         unwind("awards.suppliers"),
                         match(where("awards.status").is("active")
                                 .andOperator(getYearDefaultFilterCriteria(
-                                        filter,
+                                        filter.awardFiltering(),
                                         MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
                                 ))),
                         group("awards.suppliers._id").count().as("count")
@@ -136,7 +136,7 @@ public class AwardsWonLostController extends GenericOCDSController {
                 unwind("awards.suppliers"),
                 match(where("awards.status").is("active")
                         .andOperator(getYearDefaultFilterCriteria(
-                                filter,
+                                filter.awardFiltering(),
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
                         ))),
                 group(Fields.from(

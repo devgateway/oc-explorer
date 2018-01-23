@@ -64,4 +64,9 @@ public class YearFilterPagingRequest extends DefaultFilterPagingRequest {
     public void setMonth(TreeSet<Integer> month) {
         this.month = month;
     }
+
+    @Override
+    public YearFilterPagingRequest awardFiltering() {
+        return (YearFilterPagingRequest) super.awardFiltering();
+    }
 }

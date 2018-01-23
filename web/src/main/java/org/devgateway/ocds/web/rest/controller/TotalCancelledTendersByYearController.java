@@ -20,7 +20,6 @@ import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -70,9 +69,7 @@ public class TotalCancelledTendersByYearController extends GenericOCDSController
                 transformYearlyGrouping(filter).andInclude(Keys.TOTAL_CANCELLED_TENDERS_AMOUNT),
                 getSortByYearMonth(filter));
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> list = results.getMappedResults();
-        return list;
+       return releaseAgg(agg);
     }
 
 }

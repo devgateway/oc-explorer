@@ -13,21 +13,20 @@ package org.devgateway.ocds.web.rest.controller;
 
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
-import java.util.List;
-import javax.validation.Valid;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import java.util.List;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
@@ -72,10 +71,7 @@ public class CorruptionRiskDashboardTablesController extends GenericOCDSControll
                 limit(filter.getPageSize())
         );
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release",
-                DBObject.class);
-        List<DBObject> list = results.getMappedResults();
-        return list;
+        return releaseAgg(agg);
     }
 
     @ApiOperation(value = "Counts data to show in the table on corruption risk overview page.")
@@ -93,10 +89,7 @@ public class CorruptionRiskDashboardTablesController extends GenericOCDSControll
                 group().count().as("count")
         );
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release",
-                DBObject.class);
-        List<DBObject> list = results.getMappedResults();
-        return list;
+       return releaseAgg(agg);
     }
 
 }

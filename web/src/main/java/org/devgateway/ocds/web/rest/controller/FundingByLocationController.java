@@ -20,7 +20,6 @@ import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperat
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -89,9 +88,7 @@ public class FundingByLocationController extends GenericOCDSController {
         // ,skip(filter.getSkip()), limit(filter.getPageSize())
         );
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> tagCount = results.getMappedResults();
-        return tagCount;
+        return releaseAgg(agg);
     }
 
 
@@ -134,9 +131,7 @@ public class FundingByLocationController extends GenericOCDSController {
         // ,skip(filter.getSkip()),limit(filter.getPageSize())
         );
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> tagCount = results.getMappedResults();
-        return tagCount;
+        return releaseAgg(agg);
     }
 
 
