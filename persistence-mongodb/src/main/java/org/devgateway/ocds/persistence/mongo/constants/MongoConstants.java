@@ -24,12 +24,18 @@ public final class MongoConstants {
     public static final String MONGO_LANGUAGE = "english";
 
     public static final class FieldNames {
-        public static final String TENDER_PERIOD_START_DATE = "tender.tenderPeriod.startDate";
         public static final String AWARDS_DATE = "awards.date";
         public static final String AWARDS_STATUS = "awards.status";
+        public static final String AWARDS_SUPPLIERS_ID = "awards.suppliers._id";
+        public static final String AWARDS_VALUE_AMOUNT = "awards.value.amount";
+        public static final String TENDER_PERIOD_START_DATE = "tender.tenderPeriod.startDate";
+        public static final String TENDER_PROCURING_ENTITY_ID = "tender.procuringEntity._id";
         public static final String TENDER_PERIOD_END_DATE = "tender.tenderPeriod.endDate";
-        public static final String TENDER_PERIOD_START_DATE_REF = "$" + TENDER_PERIOD_START_DATE;
-        public static final String TENDER_PERIOD_END_DATE_REF = "$" + TENDER_PERIOD_END_DATE;
+        public static final String TENDER_VALUE_AMOUNT = "tender.value.amount";
+        public static final String TENDER_NO_TENDERERS = "tender.numberOfTenderers";
+        public static final String TENDER_PROC_METHOD = "tender.procurementMethod";
+        public static final String TENDER_STATUS = "tender.status";
+        public static final String TENDER_SUBMISSION_METHOD = "tender.submissionMethod";
     }
 
     public static final class Filters {

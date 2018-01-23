@@ -284,7 +284,9 @@ public abstract class GenericOCDSController {
         if (filter.getMonthly()) {
             return project();
         } else {
-            return project(Fields.from(Fields.field("year", Fields.UNDERSCORE_ID_REF)))
+            return project(Fields.from(
+                    Fields.field("year", org.springframework.data
+                            .mongodb.core.aggregation.Fields.UNDERSCORE_ID_REF)))
                     .andExclude(Fields.UNDERSCORE_ID);
         }
     }
@@ -326,7 +328,7 @@ public abstract class GenericOCDSController {
         if (filter.getMaxTenderValue() == null && filter.getMinTenderValue() == null) {
             return new Criteria();
         }
-        Criteria criteria = where("tender.value.amount");
+        Criteria criteria = where(MongoConstants.FieldNames.TENDER_VALUE_AMOUNT);
         if (filter.getMinTenderValue() != null) {
             criteria = criteria.gte(filter.getMinTenderValue().doubleValue());
         }
@@ -384,7 +386,8 @@ public abstract class GenericOCDSController {
      * @return the {@link Criteria} for this filter
      */
     protected Criteria getProcuringEntityIdCriteria(final DefaultFilterPagingRequest filter) {
-        return createFilterCriteria("tender.procuringEntity._id", filter.getProcuringEntityId(), filter);
+        return createFilterCriteria(
+                MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_ID, filter.getProcuringEntityId(), filter);
     }
 
     protected CriteriaDefinition getTextCriteria(DefaultFilterPagingRequest filter) {
@@ -399,7 +402,8 @@ public abstract class GenericOCDSController {
      */
     protected Criteria getElectronicSubmissionCriteria(final DefaultFilterPagingRequest filter) {
         if (filter.getElectronicSubmission() != null && filter.getElectronicSubmission()) {
-            return where("tender.submissionMethod").is(Tender.SubmissionMethod.electronicSubmission.toString());
+            return where(MongoConstants.FieldNames.TENDER_SUBMISSION_METHOD).is(
+                    Tender.SubmissionMethod.electronicSubmission.toString());
         }
 
         return new Criteria();
@@ -420,7 +424,8 @@ public abstract class GenericOCDSController {
     }
 
     protected Criteria getNotProcuringEntityIdCriteria(final DefaultFilterPagingRequest filter) {
-        return createNotFilterCriteria("tender.procuringEntity._id", filter.getNotProcuringEntityId(), filter);
+        return createNotFilterCriteria(
+                MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_ID, filter.getNotProcuringEntityId(), filter);
     }
 
 
@@ -433,7 +438,7 @@ public abstract class GenericOCDSController {
      */
     protected Criteria getSupplierIdCriteria(final DefaultFilterPagingRequest filter) {
         if (filter.getAwardFiltering()) {
-            return createFilterCriteria("awards.suppliers._id", filter.getSupplierId(), filter);
+            return createFilterCriteria(MongoConstants.FieldNames.AWARDS_SUPPLIERS_ID, filter.getSupplierId(), filter);
         }
         if (filter.getSupplierId() == null) {
             return new Criteria();
@@ -455,20 +460,21 @@ public abstract class GenericOCDSController {
      * @return the {@link Criteria} for this filter
      */
     protected Criteria getProcurementMethodCriteria(final DefaultFilterPagingRequest filter) {
-        return createFilterCriteria("tender.procurementMethod", filter.getProcurementMethod(), filter);
+        return createFilterCriteria(
+                MongoConstants.FieldNames.TENDER_PROC_METHOD, filter.getProcurementMethod(), filter);
     }
 
     @PostConstruct
     protected void init() {
         Map<String, Object> tmpMap = new HashMap<>();
-        tmpMap.put("tender.procuringEntity._id", 1);
-        tmpMap.put("tender.procurementMethod", 1);
-        tmpMap.put("tender.submissionMethod", 1);
-        tmpMap.put("awards.suppliers._id", 1);
+        tmpMap.put(MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_ID, 1);
+        tmpMap.put(MongoConstants.FieldNames.TENDER_PROC_METHOD, 1);
+        tmpMap.put(MongoConstants.FieldNames.TENDER_SUBMISSION_METHOD, 1);
+        tmpMap.put(MongoConstants.FieldNames.AWARDS_SUPPLIERS_ID, 1);
         tmpMap.put("tender.items.classification._id", 1);
         tmpMap.put("tender.items.deliveryLocation._id", 1);
-        tmpMap.put("tender.value.amount", 1);
-        tmpMap.put("awards.value.amount", 1);
+        tmpMap.put(MongoConstants.FieldNames.TENDER_VALUE_AMOUNT, 1);
+        tmpMap.put(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT, 1);
 
         filterProjectMap = Collections.unmodifiableMap(tmpMap);
     }
@@ -601,7 +607,7 @@ public abstract class GenericOCDSController {
         if ("bidTypeId".equals(filter.getGroupByCategory())) {
             return "tender.items.classification._id".replace(".", "");
         } else if ("procuringEntityId".equals(filter.getGroupByCategory())) {
-            return "tender.procuringEntity._id".replace(".", "");
+            return MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_ID.replace(".", "");
         }
         return null;
     }

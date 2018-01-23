@@ -62,10 +62,8 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @Cacheable
 public class CostEffectivenessVisualsController extends GenericOCDSController {
 
-
     @Autowired
     private AsyncControllerLookupService controllerLookupService;
-
 
     public static final class Keys {
         public static final String TOTAL_AWARD_AMOUNT = "totalAwardAmount";
@@ -96,13 +94,13 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
-        addYearlyMonthlyProjection(filter, project, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
-        project.put("awards.value.amount", 1);
+        addYearlyMonthlyProjection(filter, project, ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE));
+        project.put(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT, 1);
         project.put("totalAwardsWithTender", new BasicDBObject(
                 "$cond",
                 Arrays.asList(new BasicDBObject(
                         "$gt",
-                        Arrays.asList(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF, null)
+                        Arrays.asList(ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE), null)
                 ), 1, 0)
         ));
         project.put(
@@ -111,7 +109,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                         "$cond",
                         Arrays.asList(new BasicDBObject(
                                         "$gt",
-                                        Arrays.asList(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF, null)
+                                        Arrays.asList(ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE), null)
                                 ),
                                 "$awards.value.amount", 0
                         )
@@ -124,7 +122,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                         .exists(true)
                         .and(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE)
                         .exists(true)),
-                getMatchDefaultFilterOperation(filter), unwind("$awards"),
+                getMatchDefaultFilterOperation(filter), unwind("awards"),
                 match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
                         .and("awards.value")
                         .exists(true)
@@ -140,7 +138,8 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                 project(Fields.UNDERSCORE_ID, Keys.TOTAL_AWARD_AMOUNT, Keys.TOTAL_AWARDS, Keys.TOTAL_AWARDS_WITH_TENDER)
                         .and(Keys.TOTAL_AWARDS_WITH_TENDER).divide(Keys.TOTAL_AWARDS)
                         .as(Keys.FRACTION_AWARDS_WITH_TENDER),
-                project(Fields.UNDERSCORE_ID, Keys.TOTAL_AWARD_AMOUNT, Keys.TOTAL_AWARDS, Keys.TOTAL_AWARDS_WITH_TENDER,
+                project(
+                        Fields.UNDERSCORE_ID, Keys.TOTAL_AWARD_AMOUNT, Keys.TOTAL_AWARDS, Keys.TOTAL_AWARDS_WITH_TENDER,
                         Keys.FRACTION_AWARDS_WITH_TENDER
                 ).and(Keys.FRACTION_AWARDS_WITH_TENDER).multiply(100)
                         .as(Keys.PERCENTAGE_AWARDS_WITH_TENDER),
@@ -164,33 +163,39 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
             @ModelAttribute @Valid final GroupingFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
-        project.put("year", new BasicDBObject("$year", MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF));
-        addYearlyMonthlyProjection(filter, project, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
-        project.put("tender.value.amount", 1);
+        project.put("year", new BasicDBObject("$year", ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE)));
+        addYearlyMonthlyProjection(filter, project, ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE));
+        project.put(MongoConstants.FieldNames.TENDER_VALUE_AMOUNT, 1);
         project.put(Fields.UNDERSCORE_ID, "$tender._id");
         project.put(
                 "tenderWithAwards",
                 new BasicDBObject("$cond", Arrays.asList(
                         new BasicDBObject(
-                                "$eq", Arrays.asList("$awards.status", Award.Status.active.toString())), 1,
+                                "$eq", Arrays.asList(
+                                ref(MongoConstants.FieldNames.AWARDS_STATUS),
+                                Award.Status.active.toString()
+                        )), 1,
                         0
                 ))
         );
         project.put("tenderWithAwardsValue", new BasicDBObject(
                 "$cond",
                 Arrays.asList(new BasicDBObject(
-                                "$eq", Arrays.asList("$awards.status", Award.Status.active.toString())),
-                        "$tender.value.amount", 0
+                                "$eq", Arrays.asList(ref(MongoConstants.FieldNames.AWARDS_STATUS),
+                        Award.Status.active.toString()
+                        )),
+                        ref(MongoConstants.FieldNames.TENDER_VALUE_AMOUNT), 0
                 )
         ));
         project.putAll(filterProjectMap);
 
         DBObject group1 = new BasicDBObject();
-        group1.put(Fields.UNDERSCORE_ID, Fields.UNDERSCORE_ID_REF);
+        group1.put(
+                Fields.UNDERSCORE_ID, Fields.UNDERSCORE_ID_REF);
         addYearlyMonthlyGroupingOperationFirst(filter, group1);
         group1.put("tenderWithAwards", new BasicDBObject("$max", "$tenderWithAwards"));
         group1.put("tenderWithAwardsValue", new BasicDBObject("$max", "$tenderWithAwardsValue"));
-        group1.put("tenderAmount", new BasicDBObject("$first", "$tender.value.amount"));
+        group1.put("tenderAmount", new BasicDBObject("$first", ref(MongoConstants.FieldNames.TENDER_VALUE_AMOUNT)));
         filterProjectMap.forEach((k, v) ->
                 group1.put(
                         k.replace(".", ""),
@@ -204,7 +209,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                 ));
 
         Aggregation agg = Aggregation.newAggregation(
-                match(where("tender.status").is(Tender.Status.active.toString()).
+                match(where(MongoConstants.FieldNames.TENDER_STATUS).is(Tender.Status.active.toString()).
                         and(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE)
                         .exists(true)
                         .andOperator(getYearDefaultFilterCriteria(
@@ -219,7 +224,9 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                         .as(Keys.TOTAL_TENDER_AMOUNT).count().as(Keys.TOTAL_TENDERS).sum("tenderWithAwards")
                         .as(Keys.TOTAL_TENDER_WITH_AWARDS),
                 project(Keys.TOTAL_TENDER_AMOUNT, Keys.TOTAL_TENDERS, Keys.TOTAL_TENDER_WITH_AWARDS)
-                        .andInclude(Fields.from(Fields.field(Fields.UNDERSCORE_ID, Fields.UNDERSCORE_ID_REF)))
+                        .andInclude(Fields.from(
+                                Fields.field(
+                                        Fields.UNDERSCORE_ID, Fields.UNDERSCORE_ID_REF)))
                         .and(Keys.TOTAL_TENDER_WITH_AWARDS).divide(Keys.TOTAL_TENDERS)
                         .as(Keys.FRACTION_TENDERS_WITH_AWARDS),
                 project(Keys.TOTAL_TENDER_AMOUNT, Keys.TOTAL_TENDERS, Keys.TOTAL_TENDER_WITH_AWARDS,

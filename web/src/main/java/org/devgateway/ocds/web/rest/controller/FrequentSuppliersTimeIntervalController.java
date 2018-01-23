@@ -44,7 +44,8 @@ public class FrequentSuppliersTimeIntervalController extends GenericOCDSControll
 
     public static String getFrequentSuppliersResponseKey(FrequentSuppliersResponse response) {
         return getFrequentSuppliersResponseKey(response.getIdentifier().getProcuringEntityId(),
-                response.getIdentifier().getSupplierId(), response.getIdentifier().getTimeInterval());
+                response.getIdentifier().getSupplierId(), response.getIdentifier().getTimeInterval()
+        );
     }
 
     public static String getFrequentSuppliersResponseKey(String procuringEntityId, String supplierId, Integer
@@ -72,13 +73,17 @@ public class FrequentSuppliersTimeIntervalController extends GenericOCDSControll
             now = new Date();
         }
         DBObject project = new BasicDBObject();
-        project.put("tender.procuringEntity._id", 1);
-        project.put("awards.suppliers._id", 1);
+        project.put(MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_ID, 1);
+        project.put(MongoConstants.FieldNames.AWARDS_SUPPLIERS_ID, 1);
         project.put(MongoConstants.FieldNames.AWARDS_DATE, 1);
         project.put(Fields.UNDERSCORE_ID, 0);
-        project.put("timeInterval", new BasicDBObject("$ceil", new BasicDBObject("$divide",
-                Arrays.asList(new BasicDBObject("$divide", Arrays.asList(new BasicDBObject("$subtract",
-                        Arrays.asList(now, "$awards.date")), DAY_MS)), intervalDays))));
+        project.put("timeInterval", new BasicDBObject("$ceil", new BasicDBObject(
+                "$divide",
+                Arrays.asList(new BasicDBObject("$divide", Arrays.asList(new BasicDBObject(
+                        "$subtract",
+                        Arrays.asList(now, ref(MongoConstants.FieldNames.AWARDS_DATE))
+                ), DAY_MS)), intervalDays)
+        )));
 
         Aggregation agg = Aggregation.newAggregation(
                 match(where("tender.procuringEntity").exists(true).and("awards.suppliers.0").exists(true)
@@ -86,8 +91,10 @@ public class FrequentSuppliersTimeIntervalController extends GenericOCDSControll
                 unwind("awards"),
                 unwind("awards.suppliers"),
                 new CustomProjectionOperation(project),
-                group(Fields.from(Fields.field("procuringEntityId", "tender.procuringEntity._id"),
-                        Fields.field("supplierId", "awards.suppliers._id"),
+                group(Fields.from(
+                        Fields.field("procuringEntityId", MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_ID),
+                        Fields.field("supplierId", MongoConstants
+                                .FieldNames.AWARDS_SUPPLIERS_ID),
                         Fields.field("timeInterval", "timeInterval")
                 )).
                         count().as("count"),

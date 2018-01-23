@@ -82,9 +82,9 @@ public class PercentageAmountAwardedController extends GenericOCDSController {
                 unwind("awards"),
                 match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())),
                 facet().and(match(getSupplierIdCriteria(filter.awardFiltering())),
-                        group().sum("awards.value.amount").as("sum")
+                        group().sum(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT).as("sum")
                 ).as("totalAwardedToSuppliers")
-                        .and(group().sum("awards.value.amount").as("sum")).as("totalAwarded"),
+                        .and(group().sum(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT).as("sum")).as("totalAwarded"),
                 unwind("totalAwardedToSuppliers"),
                 unwind("totalAwarded"),
                 new CustomProjectionOperation(new BasicDBObject("percentage",

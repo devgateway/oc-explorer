@@ -64,7 +64,7 @@ public class TendersByItemClassification extends GenericOCDSController {
         DBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
         project.put("tender." + Keys.ITEMS_CLASSIFICATION, 1);
-        project.put("tender.value.amount", 1);
+        project.put(MongoConstants.FieldNames.TENDER_VALUE_AMOUNT, 1);
 
         Aggregation agg = newAggregation(
                 match(where(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true)
@@ -72,7 +72,7 @@ public class TendersByItemClassification extends GenericOCDSController {
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 new CustomProjectionOperation(project), unwind("tender.items"),
                 group("$tender." + Keys.ITEMS_CLASSIFICATION).count().as(Keys.TOTAL_TENDERS)
-                        .sum("tender.value.amount").as(Keys.TOTAL_TENDER_AMOUNT),
+                        .sum(MongoConstants.FieldNames.TENDER_VALUE_AMOUNT).as(Keys.TOTAL_TENDER_AMOUNT),
                 sort(Direction.ASC, Fields.UNDERSCORE_ID));
 
         return releaseAgg(agg);

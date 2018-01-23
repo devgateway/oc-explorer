@@ -76,8 +76,8 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                         new BasicDBObject(
                                 "$subtract",
                                 Arrays.asList(
-                                        MongoConstants.FieldNames.TENDER_PERIOD_END_DATE_REF,
-                                        MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF
+                                        ref(MongoConstants.FieldNames.TENDER_PERIOD_END_DATE),
+                                        ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE)
                                 )
                         ),
                         DAY_MS
@@ -86,7 +86,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 
         DBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
-        addYearlyMonthlyProjection(filter, project, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
+        addYearlyMonthlyProjection(filter, project, ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE));
         project.put("tenderLengthDays", tenderLengthDays);
 
         Aggregation agg = newAggregation(
@@ -123,14 +123,14 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                                         new BasicDBObject(
                                                 "$gt",
                                                 Arrays.asList(
-                                                        MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF,
+                                                        ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE),
                                                         null
                                                 )
                                         ),
                                         new BasicDBObject(
                                                 "$gt",
                                                 Arrays.asList(
-                                                        MongoConstants.FieldNames.TENDER_PERIOD_END_DATE_REF,
+                                                        ref(MongoConstants.FieldNames.TENDER_PERIOD_END_DATE),
                                                         null
                                                 )
                                         )
@@ -171,13 +171,13 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 
         DBObject awardLengthDays = new BasicDBObject("$divide", Arrays.asList(
                 new BasicDBObject("$subtract", Arrays.asList(
-                        "$awards.date",
-                        MongoConstants.FieldNames.TENDER_PERIOD_END_DATE_REF
+                        ref(MongoConstants.FieldNames.AWARDS_DATE),
+                        ref(MongoConstants.FieldNames.TENDER_PERIOD_END_DATE)
                 )), DAY_MS));
 
         DBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
-        addYearlyMonthlyProjection(filter, project, "$awards.date");
+        addYearlyMonthlyProjection(filter, project, ref(MongoConstants.FieldNames.AWARDS_DATE));
         project.put("awardLengthDays", awardLengthDays);
         project.put(MongoConstants.FieldNames.AWARDS_DATE, 1);
         project.put(MongoConstants.FieldNames.AWARDS_STATUS, 1);
@@ -223,11 +223,12 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                         "$cond",
                         Arrays.asList(
                                 new BasicDBObject("$and", Arrays.asList(
-                                        new BasicDBObject("$gt", Arrays.asList("$awards.date", null)),
+                                        new BasicDBObject(
+                                                "$gt", Arrays.asList(ref(MongoConstants.FieldNames.AWARDS_DATE), null)),
                                         new BasicDBObject(
                                                 "$gt",
                                                 Arrays.asList(
-                                                        MongoConstants.FieldNames.TENDER_PERIOD_END_DATE_REF,
+                                                        ref(MongoConstants.FieldNames.TENDER_PERIOD_END_DATE),
                                                         null
                                                 )
                                         )
@@ -249,7 +250,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
         );
 
         Aggregation agg = newAggregation(
-                match(where("awards.0").exists(true).andOperator(getDefaultFilterCriteria(filter))), unwind("$awards"),
+                match(where("awards.0").exists(true).andOperator(getDefaultFilterCriteria(filter))), unwind("awards"),
                 new CustomProjectionOperation(project), group().sum("awardWithStartEndDates")
                         .as(Keys.TOTAL_AWARD_WITH_START_END_DATES).count().as(Keys.TOTAL_AWARDS),
                 new CustomProjectionOperation(project1)

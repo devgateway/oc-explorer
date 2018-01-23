@@ -50,9 +50,9 @@ public class TendersAwardsYears extends GenericOCDSController {
                         Arrays.asList(
                                 new BasicDBObject(
                                         "$gt",
-                                        Arrays.asList(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF, null)
+                                        Arrays.asList(ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE), null)
                                 ),
-                                new BasicDBObject("$year", MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF),
+                                new BasicDBObject("$year", ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE)),
                                 null
                         )
                 )
@@ -60,8 +60,9 @@ public class TendersAwardsYears extends GenericOCDSController {
 
         project1.put(
                 "awardYear",
-                new BasicDBObject("$cond", Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$awards.date", null)),
-                        new BasicDBObject("$year", "$awards.date"), null
+                new BasicDBObject("$cond", Arrays.asList(
+                        new BasicDBObject("$gt", Arrays.asList(ref(MongoConstants.FieldNames.AWARDS_DATE), null)),
+                        new BasicDBObject("$year", ref(MongoConstants.FieldNames.AWARDS_DATE)), null
                 ))
         );
         project1.put(Fields.UNDERSCORE_ID, 0);

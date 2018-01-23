@@ -103,8 +103,8 @@ public class AwardsWonLostController extends GenericOCDSController {
                                         filter.awardFiltering(),
                                         MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
                                 ))),
-                        group("awards.suppliers._id").count().as("count")
-                                .sum("awards.value.amount").as("totalAmount")
+                        group(MongoConstants.FieldNames.AWARDS_SUPPLIERS_ID).count().as("count")
+                                .sum(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT).as("totalAmount")
                                 .sum("flags.totalFlagged").as("countFlags"),
                         project("count", "totalAmount", "countFlags")
                 ).as("won"),
@@ -134,7 +134,7 @@ public class AwardsWonLostController extends GenericOCDSController {
                         .andOperator(getYearDefaultFilterCriteria(
                                 filter,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
-                        )).and("tender.procuringEntity._id").exists(true)),
+                        )).and(MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_ID).exists(true)),
                 unwind("awards"),
                 unwind("awards.suppliers"),
                 match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
@@ -143,11 +143,12 @@ public class AwardsWonLostController extends GenericOCDSController {
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
                         ))),
                 group(Fields.from(
-                        Fields.field("supplierId", "awards.suppliers._id"),
-                        Fields.field("procuringEntityId", "tender.procuringEntity._id")
+                        Fields.field("supplierId", MongoConstants
+                                .FieldNames.AWARDS_SUPPLIERS_ID),
+                        Fields.field("procuringEntityId", MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_ID)
                 ))
                         .count().as("count")
-                        .sum("awards.value.amount").as("totalAmountAwarded")
+                        .sum(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT).as("totalAmountAwarded")
                         .sum("flags.totalFlagged").as("countFlags"),
                 sort(Sort.Direction.DESC, "count")
         );

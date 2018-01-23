@@ -51,7 +51,7 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
     /**
      * db.release.aggregate( [ {$match : { MongoConstants.FieldNames.TENDER_PERIOD_START_DATE: {
      * $exists: true } }}, {$project: { year: {$year :
-     * MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF} } }, {$group: {_id: "$year", count: {
+     * ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE)} } }, {$group: {_id: "$year", count: {
      * $sum:1}}}, {$sort: { _id:1}} ])
      *
      * @return
@@ -63,7 +63,7 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
     public List<DBObject> countTendersByYear(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
-        addYearlyMonthlyProjection(filter, project, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
+        addYearlyMonthlyProjection(filter, project, ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE));
 
         Aggregation agg = Aggregation.newAggregation(match(
                 where(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true).
@@ -83,7 +83,7 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
     /**
      * db.release.aggregate( [ {$match : { "awards.0": { $exists: true } }},
      * {$project: {awards:1}}, {$unwind: "$awards"}, {$match: {MongoConstants.FieldNames.AWARDS_DATE:
-     * {$exists:true}}}, {$project: { year: {$year : "$awards.date"} } },
+     * {$exists:true}}}, {$project: { year: {$year : ref(MongoConstants.FieldNames.AWARDS_DATE)} } },
      * {$group: {_id: "$year", count: { $sum:1}}}, {$sort: { _id:1}} ])
      *
      * @return
@@ -98,7 +98,7 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
         project0.put("awards", 1);
 
         DBObject project = new BasicDBObject();
-        addYearlyMonthlyProjection(filter, project, "$awards.date");
+        addYearlyMonthlyProjection(filter, project, ref(MongoConstants.FieldNames.AWARDS_DATE));
 
         Aggregation agg = Aggregation.newAggregation(match(where("awards.0").exists(true).
                         andOperator(getDefaultFilterCriteria(filter))),

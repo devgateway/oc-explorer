@@ -66,11 +66,11 @@ public class TopTenController extends GenericOCDSController {
     }
 
     /**
-     * db.release.aggregate( [ {$match: {"awards.value.amount": {$exists:
+     * db.release.aggregate( [ {$match: {MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT: {$exists:
      * true}}}, {$unwind:"$awards"},
      * {$project:{_id:0,MongoConstants.FieldNames.AWARDS_DATE:1,
      * "awards.suppliers.name":1,"awards.value":1, "planning.budget":1}},
-     * {$sort: {"awards.value.amount":-1}}, {$limit:10} ] )
+     * {$sort: {MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT:-1}}, {$limit:10} ] )
      *
      * @return
      */
@@ -89,28 +89,28 @@ public class TopTenController extends GenericOCDSController {
         project.put(Fields.UNDERSCORE_ID, 0);
         project.put(MongoConstants.FieldNames.AWARDS_DATE, 1);
         project.put("awards.suppliers.name", 1);
-        project.put("awards.value.amount", 1);
+        project.put(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT, 1);
         project.put("planning.budget", 1);
 
         Aggregation agg = newAggregation(
-                match(where("awards.value.amount").exists(true)
+                match(where(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT).exists(true)
                         .and(MongoConstants.FieldNames.AWARDS_STATUS)
                         .is(Award.Status.active.toString())
                         .andOperator(getDefaultFilterCriteria(filter))),
                 unwind("awards"),
                 match(getYearFilterCriteria(filter.awardFiltering(), MongoConstants.FieldNames.AWARDS_DATE)),
                 new CustomOperation(new BasicDBObject("$project", project)),
-                sort(Direction.DESC, "awards.value.amount"), limit(10)
+                sort(Direction.DESC, MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT), limit(10)
         );
 
         return releaseAgg(agg);
     }
 
     /**
-     * db.release.aggregate( [ {$match: {"tender.value.amount": {$exists:
+     * db.release.aggregate( [ {$match: {MongoConstants.FieldNames.TENDER_VALUE_AMOUNT: {$exists:
      * true}}}, {$project:{_id:0,"tender.value":1,
      * "tender.tenderPeriod":1,"tender.procuringEntity.name":1}}, {$sort:
-     * {"tender.value.amount":-1}}, {$limit:10} ] )
+     * {MongoConstants.FieldNames.TENDER_VALUE_AMOUNT:-1}}, {$limit:10} ] )
      *
      * @return
      */
@@ -124,18 +124,18 @@ public class TopTenController extends GenericOCDSController {
 
         BasicDBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
-        project.put("tender.value.amount", 1);
+        project.put(MongoConstants.FieldNames.TENDER_VALUE_AMOUNT, 1);
         project.put("tender.tenderPeriod", 1);
         project.put("tender.procuringEntity.name", 1);
 
         Aggregation agg = newAggregation(
-                match(where("tender.value.amount").exists(true)
+                match(where(MongoConstants.FieldNames.TENDER_VALUE_AMOUNT).exists(true)
                         .andOperator(getYearDefaultFilterCriteria(
                                 filter,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
                         ))),
                 new CustomOperation(new BasicDBObject("$project", project)),
-                sort(Direction.DESC, "tender.value.amount"), limit(10)
+                sort(Direction.DESC, MongoConstants.FieldNames.TENDER_VALUE_AMOUNT), limit(10)
         );
 
         return releaseAgg(agg);
@@ -153,19 +153,23 @@ public class TopTenController extends GenericOCDSController {
 
         BasicDBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
-        project.put("awards.suppliers._id", 1);
-        project.put("awards.value.amount", 1);
-        project.put("tender.procuringEntity._id", 1);
+        project.put(MongoConstants.FieldNames.AWARDS_SUPPLIERS_ID, 1);
+        project.put(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT, 1);
+        project.put(MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_ID, 1);
 
         BasicDBObject group = new BasicDBObject();
-        group.put(Fields.UNDERSCORE_ID, "$awards.suppliers._id");
-        group.put(Keys.TOTAL_AWARD_AMOUNT, new BasicDBObject("$sum", "$awards.value.amount"));
+        group.put(Fields.UNDERSCORE_ID, ref(MongoConstants.FieldNames.AWARDS_SUPPLIERS_ID));
+        group.put(
+                Keys.TOTAL_AWARD_AMOUNT, new BasicDBObject("$sum", ref(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT)));
         group.put(Keys.TOTAL_CONTRACTS, new BasicDBObject("$sum", 1));
-        group.put(Keys.PROCURING_ENTITY_IDS, new BasicDBObject("$addToSet", "$tender.procuringEntity._id"));
+        group.put(
+                Keys.PROCURING_ENTITY_IDS,
+                new BasicDBObject("$addToSet", ref(MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_ID))
+        );
 
 
         Aggregation agg = newAggregation(
-                match(where("awards.value.amount").exists(true)
+                match(where(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT).exists(true)
                         .and(MongoConstants.FieldNames.AWARDS_STATUS)
                         .is(Award.Status.active.toString())
                         .andOperator(getDefaultFilterCriteria(filter))),
