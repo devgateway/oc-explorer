@@ -22,7 +22,6 @@ import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperat
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -95,9 +94,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                 transformYearlyGrouping(filter).andInclude(Keys.AVERAGE_TENDER_DAYS),
                 getSortByYearMonth(filter), skip(filter.getSkip()), limit(filter.getPageSize()));
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> list = results.getMappedResults();
-        return list;
+       return releaseAgg(agg);
     }
 
 
@@ -136,9 +133,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                         as(Keys.TOTAL_TENDERS),
                 new CustomProjectionOperation(project1));
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> list = results.getMappedResults();
-        return list;
+        return releaseAgg(agg);
     }
 
     @ApiOperation(value = "Calculates the average award period, per each year. The year is taken from "
@@ -166,19 +161,17 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                 match(where(MongoConstants.FieldNames.TENDER_PERIOD_END_DATE)
                         .exists(true).and("awards.date").exists(true)
                         .and("awards.status").is("active")),
-                unwind("$awards"),
+                unwind("awards"),
                 // we need to filter the awards again after unwind
                 match(where("awards.date").exists(true).and("awards.status").is("active")
-                        .andOperator(getYearDefaultFilterCriteria(filter, "awards.date"))),
+                        .andOperator(getYearDefaultFilterCriteria(filter.awardFiltering(), "awards.date"))),
                 new CustomOperation(new BasicDBObject("$project", project)),
                 group(getYearlyMonthlyGroupingFields(filter)).avg("$awardLengthDays").as(Keys.AVERAGE_AWARD_DAYS),
                 transformYearlyGrouping(filter).andInclude(Keys.AVERAGE_AWARD_DAYS),
                 getSortByYearMonth(filter), skip(filter.getSkip()),
                 limit(filter.getPageSize()));
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> list = results.getMappedResults();
-        return list;
+        return releaseAgg(agg);
     }
 
 
@@ -214,9 +207,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                         .as(Keys.TOTAL_AWARD_WITH_START_END_DATES).count().as(Keys.TOTAL_AWARDS),
                 new CustomProjectionOperation(project1));
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> list = results.getMappedResults();
-        return list;
+       return releaseAgg(agg);
     }
 
 

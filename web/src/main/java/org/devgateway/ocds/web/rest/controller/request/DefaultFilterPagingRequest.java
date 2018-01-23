@@ -88,6 +88,18 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
     @ApiModelProperty(value = "Only show the releases that were flagged by at least one indicator")
     private Boolean flagged;
 
+    @ApiModelProperty(hidden = true)
+    private Boolean awardFiltering = false;
+
+    public DefaultFilterPagingRequest awardFiltering() {
+        awardFiltering = true;
+        return this;
+    }
+
+    public Boolean getAwardFiltering() {
+        return awardFiltering;
+    }
+
     public String getText() {
         return text;
     }

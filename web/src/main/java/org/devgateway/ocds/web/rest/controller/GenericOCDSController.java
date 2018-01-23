@@ -53,7 +53,6 @@ public abstract class GenericOCDSController {
     public static final int DAY_MS = 86400000;
 
     public static final BigDecimal ONE_HUNDRED = new BigDecimal(100);
-    private static final Criteria EMPTY_CRITERIA = new Criteria();
 
 
     protected Map<String, Object> filterProjectMap;
@@ -78,7 +77,11 @@ public abstract class GenericOCDSController {
     }
 
     protected List<DBObject> releaseAgg(Aggregation agg) {
-        return mongoTemplate.aggregate(agg, "release", DBObject.class).getMappedResults();
+        return releaseAgg(agg, DBObject.class);
+    }
+
+    protected <Z> List<Z> releaseAgg(Aggregation agg, Class<Z> clazz) {
+        return mongoTemplate.aggregate(agg, "release", clazz).getMappedResults();
     }
 
     /**
@@ -428,11 +431,15 @@ public abstract class GenericOCDSController {
      * @return the {@link Criteria} for this filter
      */
     protected Criteria getSupplierIdCriteria(final DefaultFilterPagingRequest filter) {
+        if (filter.getAwardFiltering()) {
+            return createFilterCriteria("awards.suppliers._id", filter.getSupplierId(), filter);
+        }
         if (filter.getSupplierId() == null) {
             return new Criteria();
         }
         return where("awards").elemMatch(where("status").is("active").and("suppliers._id").in(filter.getSupplierId()));
     }
+
 
     protected Criteria getBidderIdCriteria(final DefaultFilterPagingRequest filter) {
         return createFilterCriteria("bids.details.tenderers._id", filter.getBidderId(), filter);
@@ -533,7 +540,7 @@ public abstract class GenericOCDSController {
      * @return
      */
     protected Criteria[] getEmptyFilteredCriteria(Collection<CriteriaDefinition> values) {
-        return values.stream().filter(c -> !c.equals(EMPTY_CRITERIA)).toArray(Criteria[]::new);
+        return values.stream().distinct().toArray(Criteria[]::new);
     }
 
     protected Criteria getDefaultFilterCriteria(final DefaultFilterPagingRequest filter,

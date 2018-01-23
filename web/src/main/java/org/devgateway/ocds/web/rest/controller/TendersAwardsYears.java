@@ -14,7 +14,6 @@ import org.devgateway.toolkit.persistence.mongo.aggregate.CustomUnwindOperation;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,9 +71,7 @@ public class TendersAwardsYears extends GenericOCDSController {
                 new CustomGroupingOperation(new BasicDBObject(Fields.UNDERSCORE_ID, "$year")),
                 new CustomSortingOperation(new BasicDBObject(Fields.UNDERSCORE_ID, 1)));
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> tagCount = results.getMappedResults();
-        return tagCount;
+        return releaseAgg(agg);
     }
 
 }

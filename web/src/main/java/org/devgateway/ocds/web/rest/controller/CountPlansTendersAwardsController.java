@@ -20,7 +20,6 @@ import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -77,9 +76,7 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
                 getSortByYearMonth(filter),
                 skip(filter.getSkip()), limit(filter.getPageSize()));
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> tagCount = results.getMappedResults();
-        return tagCount;
+        return releaseAgg(agg);
     }
 
     /**
@@ -105,8 +102,8 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
         Aggregation agg = Aggregation.newAggregation(match(where("awards.0").exists(true).
                 andOperator(getDefaultFilterCriteria(filter))),
                 new CustomOperation(new BasicDBObject("$project", project0)),
-                unwind("$awards"), match(where("awards.date").exists(true).
-                        andOperator(getYearFilterCriteria(filter, "awards.date"))),
+                unwind("awards"), match(where("awards.date").exists(true).
+                        andOperator(getYearFilterCriteria(filter.awardFiltering(), "awards.date"))),
                 new CustomOperation(new BasicDBObject("$project", project)),
                 group(getYearlyMonthlyGroupingFields(filter)).count().as(Keys.COUNT),
                 transformYearlyGrouping(filter).andInclude(Keys.COUNT),
@@ -114,8 +111,6 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
                 skip(filter.getSkip()),
                 limit(filter.getPageSize()));
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> tagCount = results.getMappedResults();
-        return tagCount;
+        return releaseAgg(agg);
     }
 }

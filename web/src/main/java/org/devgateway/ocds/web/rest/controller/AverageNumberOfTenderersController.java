@@ -20,7 +20,6 @@ import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperat
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -75,9 +74,7 @@ public class AverageNumberOfTenderersController extends GenericOCDSController {
                 getSortByYearMonth(filter), skip(filter.getSkip()),
                 limit(filter.getPageSize()));               
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> list = results.getMappedResults();
-        return list;
+       return releaseAgg(agg);
     }
 
     @ApiOperation(value = "Calculate average number of tenderers. The endpoint can be filtered"
@@ -102,9 +99,7 @@ public class AverageNumberOfTenderersController extends GenericOCDSController {
                         .as(Keys.AVERAGE_NO_OF_TENDERERS));
 
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> list = results.getMappedResults();
-        return list;
+       return releaseAgg(agg);
     }
 
 

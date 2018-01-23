@@ -17,7 +17,6 @@ import io.swagger.annotations.ApiOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -96,10 +95,7 @@ public class FrequentSuppliersTimeIntervalController extends GenericOCDSControll
                 sort(Sort.Direction.DESC, "count")
         );
 
-        AggregationResults<FrequentSuppliersResponse> results = mongoTemplate.aggregate(agg, "release",
-                FrequentSuppliersResponse.class);
-        List<FrequentSuppliersResponse> list = results.getMappedResults();
-        return list;
+        return releaseAgg(agg, FrequentSuppliersResponse.class);
     }
 
     public static class FrequentSuppliersId {
