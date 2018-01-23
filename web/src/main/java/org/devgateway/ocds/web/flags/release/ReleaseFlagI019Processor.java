@@ -36,7 +36,7 @@ public class ReleaseFlagI019Processor extends AbstractFlaggedReleaseFlagProcesso
     @Override
     protected Boolean calculateFlag(FlaggedRelease flaggable, StringBuffer rationale) {
         Optional<Award> award = flaggable.getAwards().stream().filter(a -> a.getDate() != null
-                && Award.Status.active.equals(a.getStatus())).findFirst();
+                && Award.Status.active.toString().equals(a.getStatus())).findFirst();
         if (!award.isPresent()) {
             return false;
         }

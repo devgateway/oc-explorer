@@ -40,7 +40,7 @@ public abstract class AbstractFlagReleaseSearchController extends AbstractFlagCo
                 project("ocid", "tender.procuringEntity.name", "tender.tenderPeriod", "flags",
                         "tender.title", "tag")
                         .and("tender.value").as("tender.value").and("awards.value").as("awards.value")
-                        .and("awards.status").as("awards.status")
+                        .and(MongoConstants.FieldNames.AWARDS_STATUS).as(MongoConstants.FieldNames.AWARDS_STATUS)
                         .andExclude(Fields.UNDERSCORE_ID),
                 sort(Sort.Direction.DESC, "flags.flaggedStats.count"),
                 skip(filter.getSkip()),

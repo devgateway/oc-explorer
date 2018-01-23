@@ -1,8 +1,5 @@
 package org.devgateway.toolkit.persistence.mongo.spring;
 
-import java.io.IOException;
-import java.net.URL;
-import javax.annotation.PostConstruct;
 import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.DefaultLocation;
 import org.devgateway.ocds.persistence.mongo.Organization;
@@ -17,6 +14,10 @@ import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.index.TextIndexDefinition.TextIndexDefinitionBuilder;
 import org.springframework.data.mongodb.core.script.ExecutableMongoScript;
 import org.springframework.data.mongodb.core.script.NamedMongoScript;
+
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.net.URL;
 
 public abstract class AbstractMongoDatabaseConfiguration {
 
@@ -69,21 +70,29 @@ public abstract class AbstractMongoDatabaseConfiguration {
         createCorruptionFlagsIndexes();
 
 
-
         // initialize some extra indexes
         getTemplate().indexOps(Release.class).ensureIndex(new Index().on("ocid", Direction.ASC).unique());
 
-        getTemplate().indexOps(Release.class).ensureIndex(new Index().on("tender.procurementMethod", Direction.ASC));
+        getTemplate().indexOps(Release.class)
+                .ensureIndex(new Index().on(MongoConstants.FieldNames.TENDER_PROC_METHOD, Direction.ASC));
         getTemplate().indexOps(Release.class)
                 .ensureIndex(new Index().on("tender.procurementMethodRationale", Direction.ASC));
-        getTemplate().indexOps(Release.class).ensureIndex(new Index().on("tender.status", Direction.ASC));
-        getTemplate().indexOps(Release.class).ensureIndex(new Index().on("awards.status", Direction.ASC));
-        getTemplate().indexOps(Release.class).ensureIndex(new Index().on("awards.suppliers._id", Direction.ASC));
-        getTemplate().indexOps(Release.class).ensureIndex(new Index().on("awards.date", Direction.ASC));
-        getTemplate().indexOps(Release.class).ensureIndex(new Index().on("awards.value.amount", Direction.ASC));
-        getTemplate().indexOps(Release.class).ensureIndex(new Index().on("tender.value.amount", Direction.ASC));
-        getTemplate().indexOps(Release.class).ensureIndex(new Index().on("tender.numberOfTenderers", Direction.ASC));
-        getTemplate().indexOps(Release.class).ensureIndex(new Index().on("tender.submissionMethod", Direction.ASC));
+        getTemplate().indexOps(Release.class)
+                .ensureIndex(new Index().on(MongoConstants.FieldNames.TENDER_STATUS, Direction.ASC));
+        getTemplate().indexOps(Release.class)
+                .ensureIndex(new Index().on(MongoConstants.FieldNames.AWARDS_STATUS, Direction.ASC));
+        getTemplate().indexOps(Release.class)
+                .ensureIndex(new Index().on(MongoConstants.FieldNames.AWARDS_SUPPLIERS_ID, Direction.ASC));
+        getTemplate().indexOps(Release.class)
+                .ensureIndex(new Index().on(MongoConstants.FieldNames.AWARDS_DATE, Direction.ASC));
+        getTemplate().indexOps(Release.class)
+                .ensureIndex(new Index().on(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT, Direction.ASC));
+        getTemplate().indexOps(Release.class)
+                .ensureIndex(new Index().on(MongoConstants.FieldNames.TENDER_VALUE_AMOUNT, Direction.ASC));
+        getTemplate().indexOps(Release.class)
+                .ensureIndex(new Index().on(MongoConstants.FieldNames.TENDER_NO_TENDERERS, Direction.ASC));
+        getTemplate().indexOps(Release.class).ensureIndex(new Index().on(
+                MongoConstants.FieldNames.TENDER_SUBMISSION_METHOD, Direction.ASC));
         getTemplate().indexOps(Release.class)
                 .ensureIndex(new Index().on(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE, Direction.ASC));
         getTemplate().indexOps(Release.class).ensureIndex(new Index()

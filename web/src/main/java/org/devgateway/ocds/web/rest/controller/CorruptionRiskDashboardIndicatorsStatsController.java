@@ -117,7 +117,10 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
                 unwind("flags." + statsProperty),
                 project("flags." + statsProperty),
                 group(statsProperty + ".type").sum(statsProperty + ".count").as(Keys.INDICATOR_COUNT),
-                project(Keys.INDICATOR_COUNT).and(Fields.UNDERSCORE_ID).as(Keys.TYPE).andExclude(Fields.UNDERSCORE_ID),
+                project(Keys.INDICATOR_COUNT).and(Fields.UNDERSCORE_ID).as(Keys.TYPE).andExclude(
+
+
+                        Fields.UNDERSCORE_ID),
                 sort(Sort.Direction.ASC,   "type")
         );
 
@@ -151,7 +154,7 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
                                                                 final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
-        addYearlyMonthlyProjection(filter, project1, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
+        addYearlyMonthlyProjection(filter, project1, ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE));
         project1.put("stats", "$flags." + statsProperty);
         project1.put(Fields.UNDERSCORE_ID, 0);
 
@@ -196,7 +199,7 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
                                                               final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
-        addYearlyMonthlyProjection(filter, project1, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
+        addYearlyMonthlyProjection(filter, project1, ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE));
         project1.put("stats", "$flags." + statsProperty);
         project1.put(Fields.UNDERSCORE_ID, 0);
 
@@ -225,7 +228,7 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
     public List<DBObject> totalProjectsByYear(final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
-        addYearlyMonthlyProjection(filter, project1, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
+        addYearlyMonthlyProjection(filter, project1, ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE));
         project1.put(Fields.UNDERSCORE_ID, 0);
 
         Aggregation agg = newAggregation(

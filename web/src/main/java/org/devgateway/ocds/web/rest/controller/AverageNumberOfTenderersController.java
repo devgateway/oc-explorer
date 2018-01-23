@@ -59,16 +59,16 @@ public class AverageNumberOfTenderersController extends GenericOCDSController {
     public List<DBObject> averageNumberOfTenderersYearly(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
-        addYearlyMonthlyProjection(filter, project, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
-        project.put("tender.numberOfTenderers", 1);
+        addYearlyMonthlyProjection(filter, project, ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE));
+        project.put(MongoConstants.FieldNames.TENDER_NO_TENDERERS, 1);
 
         Aggregation agg = newAggregation(
-                match(where("tender.numberOfTenderers").gt(0)
+                match(where(MongoConstants.FieldNames.TENDER_NO_TENDERERS).gt(0)
                         .and(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true)
                         .andOperator(getYearDefaultFilterCriteria(filter,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 new CustomProjectionOperation(project),
-                group(getYearlyMonthlyGroupingFields(filter)).avg("tender.numberOfTenderers")
+                group(getYearlyMonthlyGroupingFields(filter)).avg(MongoConstants.FieldNames.TENDER_NO_TENDERERS)
                         .as(Keys.AVERAGE_NO_OF_TENDERERS),
                 transformYearlyGrouping(filter).andInclude(Keys.AVERAGE_NO_OF_TENDERERS),
                 getSortByYearMonth(filter), skip(filter.getSkip()),
@@ -86,16 +86,16 @@ public class AverageNumberOfTenderersController extends GenericOCDSController {
     public List<DBObject> averageNumberOfTenderers(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
-        addYearlyMonthlyProjection(filter, project, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
-        project.put("tender.numberOfTenderers", 1);
+        addYearlyMonthlyProjection(filter, project, ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE));
+        project.put(MongoConstants.FieldNames.TENDER_NO_TENDERERS, 1);
 
         Aggregation agg = newAggregation(
-                match(where("tender.numberOfTenderers").gt(0)
+                match(where(MongoConstants.FieldNames.TENDER_NO_TENDERERS).gt(0)
                         .and(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true)
                         .andOperator(getYearDefaultFilterCriteria(filter,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 new CustomProjectionOperation(project),
-                group().avg("tender.numberOfTenderers")
+                group().avg(MongoConstants.FieldNames.TENDER_NO_TENDERERS)
                         .as(Keys.AVERAGE_NO_OF_TENDERERS));
 
 

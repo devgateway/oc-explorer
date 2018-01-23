@@ -14,6 +14,7 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
@@ -79,11 +80,11 @@ public class PercentageAmountAwardedController extends GenericOCDSController {
                 match(where("tender.procuringEntity").exists(true).and("awards.suppliers.0").exists(true)
                         .andOperator(getProcuringEntityIdCriteria(filter))),
                 unwind("awards"),
-                match(where("awards.status").is("active")),
+                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())),
                 facet().and(match(getSupplierIdCriteria(filter.awardFiltering())),
-                        group().sum("awards.value.amount").as("sum")
+                        group().sum(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT).as("sum")
                 ).as("totalAwardedToSuppliers")
-                        .and(group().sum("awards.value.amount").as("sum")).as("totalAwarded"),
+                        .and(group().sum(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT).as("sum")).as("totalAwarded"),
                 unwind("totalAwardedToSuppliers"),
                 unwind("totalAwarded"),
                 new CustomProjectionOperation(new BasicDBObject("percentage",

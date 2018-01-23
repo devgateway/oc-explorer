@@ -39,15 +39,17 @@ public class TendersAwardsValueIntervals extends GenericOCDSController {
     public List<DBObject> tenderValueInterval(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         Aggregation agg = Aggregation.newAggregation(
-                match(where("tender.value.amount").exists(true).
+                match(where(MongoConstants.FieldNames.TENDER_VALUE_AMOUNT).exists(true).
                         andOperator(getYearDefaultFilterCriteria(
                                 filter,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
                         ))),
-                project().and("tender.value.amount").as("tender.value.amount"),
-                group().min("tender.value.amount").as("minTenderValue").
-                        max("tender.value.amount").as("maxTenderValue"),
-                project().andInclude("minTenderValue", "maxTenderValue").andExclude(Fields.UNDERSCORE_ID)
+                project().and(MongoConstants.FieldNames.TENDER_VALUE_AMOUNT)
+                        .as(MongoConstants.FieldNames.TENDER_VALUE_AMOUNT),
+                group().min(MongoConstants.FieldNames.TENDER_VALUE_AMOUNT).as("minTenderValue").
+                        max(MongoConstants.FieldNames.TENDER_VALUE_AMOUNT).as("maxTenderValue"),
+                project().andInclude("minTenderValue", "maxTenderValue").andExclude(
+                        Fields.UNDERSCORE_ID)
         );
 
         return releaseAgg(agg);
@@ -61,12 +63,17 @@ public class TendersAwardsValueIntervals extends GenericOCDSController {
 
         Aggregation agg = Aggregation.newAggregation(
                 unwind("awards"),
-                match(where("awards.value.amount").exists(true).
-                        andOperator(getYearDefaultFilterCriteria(filter.awardFiltering(), "awards.date"))),
-                project().and("awards.value.amount").as("awards.value.amount"),
-                group().min("awards.value.amount").as("minAwardValue")
-                        .max("awards.value.amount").as("maxAwardValue"),
-                project().andInclude("minAwardValue", "maxAwardValue").andExclude(Fields.UNDERSCORE_ID)
+                match(where(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT).exists(true).
+                        andOperator(getYearDefaultFilterCriteria(
+                                filter.awardFiltering(),
+                                MongoConstants.FieldNames.AWARDS_DATE
+                        ))),
+                project().and(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT)
+                        .as(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT),
+                group().min(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT).as("minAwardValue")
+                        .max(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT).as("maxAwardValue"),
+                project().andInclude("minAwardValue", "maxAwardValue").andExclude(
+                        Fields.UNDERSCORE_ID)
         );
         return releaseAgg(agg);
     }

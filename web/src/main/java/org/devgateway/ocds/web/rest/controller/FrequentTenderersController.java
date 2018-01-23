@@ -13,6 +13,7 @@ package org.devgateway.ocds.web.rest.controller;
 
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.cache.annotation.CacheConfig;
@@ -60,7 +61,7 @@ public class FrequentTenderersController extends GenericOCDSController {
 
         Aggregation agg = newAggregation(
                 match(where("tender.tenderers.1").exists(true).and("awards.suppliers.0").exists(true)
-                        .and("awards.status").is("active")
+                        .and(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
                         .andOperator(getYearDefaultFilterCriteria(
                                 filter,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
@@ -68,14 +69,15 @@ public class FrequentTenderersController extends GenericOCDSController {
                 unwind("tender.tenderers"),
                 unwind("awards"),
                 unwind("awards.suppliers"),
-                match(where("awards.status").is("active")
+                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
                         .andOperator(getYearFilterCriteria(
                                 filter.awardFiltering(),
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
                         ))),
-                project().and("awards.suppliers._id").as("supplierId")
-                        .and("tender.tenderers._id").as("tendererId").andExclude(Fields.UNDERSCORE_ID)
-                        .and(ComparisonOperators.valueOf("awards.suppliers._id").
+                project().and(MongoConstants.FieldNames.AWARDS_SUPPLIERS_ID).as("supplierId")
+                        .and("tender.tenderers._id").as("tendererId").andExclude(
+                        Fields.UNDERSCORE_ID)
+                        .and(ComparisonOperators.valueOf(MongoConstants.FieldNames.AWARDS_SUPPLIERS_ID).
                                 compareTo("tender.tenderers._id")).as("cmp"),
                 match((where("cmp").ne(0))),
                 project("supplierId", "tendererId", "cmp")
@@ -100,19 +102,19 @@ public class FrequentTenderersController extends GenericOCDSController {
     public List<DBObject> activeAwardsCount(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         Aggregation agg = newAggregation(
-                match(where("awards.status").is("active")
+                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
                         .andOperator(getYearDefaultFilterCriteria(
                                 filter,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
                         ))),
                 unwind("awards"),
-                match(where("awards.status").is("active")
+                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
                         .andOperator(getYearDefaultFilterCriteria(
                                 filter.awardFiltering(),
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
                         ))),
                 unwind("awards.suppliers"),
-                group("awards.suppliers._id").count().as("cnt"),
+                group(MongoConstants.FieldNames.AWARDS_SUPPLIERS_ID).count().as("cnt"),
                 project("cnt").and(Fields.UNDERSCORE_ID).as("supplierId")
                         .andExclude(Fields.UNDERSCORE_ID)
         );
