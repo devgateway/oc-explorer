@@ -73,7 +73,7 @@ public class FrequentSuppliersTimeIntervalController extends GenericOCDSControll
         DBObject project = new BasicDBObject();
         project.put("tender.procuringEntity._id", 1);
         project.put("awards.suppliers._id", 1);
-        project.put("awards.date", 1);
+        project.put(MongoConstants.FieldNames.AWARDS_DATE, 1);
         project.put(Fields.UNDERSCORE_ID, 0);
         project.put("timeInterval", new BasicDBObject("$ceil", new BasicDBObject("$divide",
                 Arrays.asList(new BasicDBObject("$divide", Arrays.asList(new BasicDBObject("$subtract",
@@ -81,7 +81,7 @@ public class FrequentSuppliersTimeIntervalController extends GenericOCDSControll
 
         Aggregation agg = Aggregation.newAggregation(
                 match(where("tender.procuringEntity").exists(true).and("awards.suppliers.0").exists(true)
-                        .and("awards.date").exists(true)),
+                        .and(MongoConstants.FieldNames.AWARDS_DATE).exists(true)),
                 unwind("awards"),
                 unwind("awards.suppliers"),
                 new CustomProjectionOperation(project),

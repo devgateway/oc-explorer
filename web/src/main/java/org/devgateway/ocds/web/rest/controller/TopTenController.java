@@ -41,9 +41,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwi
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
- *
  * @author mpostelnicu
- *
  */
 @RestController
 @CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
@@ -69,7 +67,7 @@ public class TopTenController extends GenericOCDSController {
     /**
      * db.release.aggregate( [ {$match: {"awards.value.amount": {$exists:
      * true}}}, {$unwind:"$awards"},
-     * {$project:{_id:0,"awards.date":1,
+     * {$project:{_id:0,MongoConstants.FieldNames.AWARDS_DATE:1,
      * "awards.suppliers.name":1,"awards.value":1, "planning.budget":1}},
      * {$sort: {"awards.value.amount":-1}}, {$limit:10} ] )
      *
@@ -81,26 +79,30 @@ public class TopTenController extends GenericOCDSController {
             + "the following fields: "
             + "awards.date, awards.suppliers.name, "
             + "awards.value.amount, awards.suppliers.name, planning.budget (if any)")
-    @RequestMapping(value = "/api/topTenLargestAwards", method = { RequestMethod.POST,
-            RequestMethod.GET },
+    @RequestMapping(value = "/api/topTenLargestAwards", method = {RequestMethod.POST,
+            RequestMethod.GET},
             produces = "application/json")
     public List<DBObject> topTenLargestAwards(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         BasicDBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
-        project.put("awards.date", 1);
+        project.put(MongoConstants.FieldNames.AWARDS_DATE, 1);
         project.put("awards.suppliers.name", 1);
         project.put("awards.value.amount", 1);
         project.put("planning.budget", 1);
 
         Aggregation agg = newAggregation(
-                match(where("awards.value.amount").exists(true).and("awards.status").is("active")
+                match(where("awards.value.amount").exists(true)
+                        .and(MongoConstants.FieldNames.AWARDS_STATUS)
+                        .is("active")
                         .andOperator(getDefaultFilterCriteria(filter))),
-                unwind("awards"), match(getYearFilterCriteria(filter.awardFiltering(), "awards.date")),
+                unwind("awards"),
+                match(getYearFilterCriteria(filter.awardFiltering(), MongoConstants.FieldNames.AWARDS_DATE)),
                 new CustomOperation(new BasicDBObject("$project", project)),
-                sort(Direction.DESC, "awards.value.amount"), limit(10));
+                sort(Direction.DESC, "awards.value.amount"), limit(10)
+        );
 
-      return releaseAgg(agg);
+        return releaseAgg(agg);
     }
 
     /**
@@ -115,7 +117,7 @@ public class TopTenController extends GenericOCDSController {
             + " The amount is taken from the tender.value.amount field." + " The returned data will contain"
             + "the following fields: " + "tender.date, tender.value.amount, tender.tenderPeriod, "
             + "tender.procuringEntity.name")
-    @RequestMapping(value = "/api/topTenLargestTenders", method = { RequestMethod.POST, RequestMethod.GET },
+    @RequestMapping(value = "/api/topTenLargestTenders", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
     public List<DBObject> topTenLargestTenders(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
@@ -127,10 +129,13 @@ public class TopTenController extends GenericOCDSController {
 
         Aggregation agg = newAggregation(
                 match(where("tender.value.amount").exists(true)
-                        .andOperator(getYearDefaultFilterCriteria(filter,
-                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
+                        .andOperator(getYearDefaultFilterCriteria(
+                                filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
+                        ))),
                 new CustomOperation(new BasicDBObject("$project", project)),
-                sort(Direction.DESC, "tender.value.amount"), limit(10));
+                sort(Direction.DESC, "tender.value.amount"), limit(10)
+        );
 
         return releaseAgg(agg);
     }
@@ -159,12 +164,14 @@ public class TopTenController extends GenericOCDSController {
 
 
         Aggregation agg = newAggregation(
-                match(where("awards.value.amount").exists(true).and("awards.status").is("active")
+                match(where("awards.value.amount").exists(true)
+                        .and(MongoConstants.FieldNames.AWARDS_STATUS)
+                        .is("active")
                         .andOperator(getDefaultFilterCriteria(filter))),
                 unwind("awards"),
-                match(where("awards.status").is("active")),
+                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is("active")),
                 unwind("awards.suppliers"),
-                match(getYearFilterCriteria(filter.awardFiltering(), "awards.date")),
+                match(getYearFilterCriteria(filter.awardFiltering(), MongoConstants.FieldNames.AWARDS_DATE)),
                 new CustomProjectionOperation(project),
                 new CustomGroupingOperation(group),
                 sort(Direction.DESC, Keys.TOTAL_AWARD_AMOUNT),

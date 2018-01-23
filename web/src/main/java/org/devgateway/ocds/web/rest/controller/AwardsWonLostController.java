@@ -90,14 +90,14 @@ public class AwardsWonLostController extends GenericOCDSController {
                                 .sum("flags.totalFlagged").as("countFlags"),
                         project("count", "totalAmount", "countFlags")
                 ).as("applied").and(
-                        match(where("awards.status").is("active")
+                        match(where(MongoConstants.FieldNames.AWARDS_STATUS).is("active")
                                 .andOperator(getYearDefaultFilterCriteria(
                                         filter,
                                         MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
                                 ))),
                         unwind("awards"),
                         unwind("awards.suppliers"),
-                        match(where("awards.status").is("active")
+                        match(where(MongoConstants.FieldNames.AWARDS_STATUS).is("active")
                                 .andOperator(getYearDefaultFilterCriteria(
                                         filter.awardFiltering(),
                                         MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
@@ -129,14 +129,14 @@ public class AwardsWonLostController extends GenericOCDSController {
         Assert.notEmpty(filter.getSupplierId(), "supplierId must not be empty!");
 
         Aggregation agg = newAggregation(
-                match(where("awards.status").is("active")
+                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is("active")
                         .andOperator(getYearDefaultFilterCriteria(
                                 filter,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
                         )).and("tender.procuringEntity._id").exists(true)),
                 unwind("awards"),
                 unwind("awards.suppliers"),
-                match(where("awards.status").is("active")
+                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is("active")
                         .andOperator(getYearDefaultFilterCriteria(
                                 filter.awardFiltering(),
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE

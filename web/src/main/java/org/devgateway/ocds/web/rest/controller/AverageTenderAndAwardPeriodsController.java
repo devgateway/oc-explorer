@@ -41,15 +41,12 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwi
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
- *
  * @author mpostelnicu
- *
  */
 @RestController
 @CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
 @Cacheable
 public class AverageTenderAndAwardPeriodsController extends GenericOCDSController {
-
 
 
     public static final class Keys {
@@ -68,16 +65,23 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
     @ApiOperation(value = "Calculates the average tender period, per each year. The year is taken from "
             + "tender.tenderPeriod.startDate and the duration is taken by counting the days"
             + "between tender.tenderPeriod.endDate and tender.tenderPeriod.startDate")
-    @RequestMapping(value = "/api/averageTenderPeriod", method = { RequestMethod.POST, RequestMethod.GET },
+    @RequestMapping(value = "/api/averageTenderPeriod", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
     public List<DBObject> averageTenderPeriod(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
-        DBObject tenderLengthDays = new BasicDBObject("$divide",
+        DBObject tenderLengthDays = new BasicDBObject(
+                "$divide",
                 Arrays.asList(
-                        new BasicDBObject("$subtract",
-                                Arrays.asList(MongoConstants.FieldNames.TENDER_PERIOD_END_DATE_REF,
-                                        MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF)),
-                        DAY_MS));
+                        new BasicDBObject(
+                                "$subtract",
+                                Arrays.asList(
+                                        MongoConstants.FieldNames.TENDER_PERIOD_END_DATE_REF,
+                                        MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF
+                                )
+                        ),
+                        DAY_MS
+                )
+        );
 
         DBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
@@ -87,51 +91,72 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
         Aggregation agg = newAggregation(
                 match(where(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE)
                         .exists(true).and(MongoConstants.FieldNames.TENDER_PERIOD_END_DATE)
-                .exists(true).andOperator(getYearDefaultFilterCriteria(filter,
-                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
+                        .exists(true).andOperator(getYearDefaultFilterCriteria(
+                                filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
+                        ))),
                 new CustomProjectionOperation(project),
                 getYearlyMonthlyGroupingOperation(filter).avg("$tenderLengthDays").as(Keys.AVERAGE_TENDER_DAYS),
                 transformYearlyGrouping(filter).andInclude(Keys.AVERAGE_TENDER_DAYS),
-                getSortByYearMonth(filter), skip(filter.getSkip()), limit(filter.getPageSize()));
+                getSortByYearMonth(filter), skip(filter.getSkip()), limit(filter.getPageSize())
+        );
 
-       return releaseAgg(agg);
+        return releaseAgg(agg);
     }
-
 
 
     @ApiOperation(value = "Quality indicator for averageTenderPeriod endpoint, "
             + "showing the percentage of tenders that have start and end dates vs the total tenders in the system")
     @RequestMapping(value = "/api/qualityAverageTenderPeriod",
-            method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
+            method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
     public List<DBObject> qualityAverageTenderPeriod(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
-        project.put("tenderWithStartEndDates",
-                new BasicDBObject("$cond",
+        project.put(
+                "tenderWithStartEndDates",
+                new BasicDBObject(
+                        "$cond",
                         Arrays.asList(
                                 new BasicDBObject("$and", Arrays.asList(
-                                        new BasicDBObject("$gt",
-                                                Arrays.asList(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF,
-                                                        null)),
-                                        new BasicDBObject("$gt",
-                                                Arrays.asList(MongoConstants.FieldNames.TENDER_PERIOD_END_DATE_REF,
-                                                        null)))),
-                                1, 0)));
+                                        new BasicDBObject(
+                                                "$gt",
+                                                Arrays.asList(
+                                                        MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF,
+                                                        null
+                                                )
+                                        ),
+                                        new BasicDBObject(
+                                                "$gt",
+                                                Arrays.asList(
+                                                        MongoConstants.FieldNames.TENDER_PERIOD_END_DATE_REF,
+                                                        null
+                                                )
+                                        )
+                                )),
+                                1, 0
+                        )
+                )
+        );
 
         DBObject project1 = new BasicDBObject();
         project1.put(Keys.TOTAL_TENDER_WITH_START_END_DATES, 1);
         project1.put(Keys.TOTAL_TENDERS, 1);
-        project1.put(Keys.PERCENTAGE_TENDER_WITH_START_END_DATES,
+        project1.put(
+                Keys.PERCENTAGE_TENDER_WITH_START_END_DATES,
                 new BasicDBObject("$multiply", Arrays.asList(
                         new BasicDBObject("$divide", Arrays.asList("$totalTenderWithStartEndDates", "$totalTenders")),
-                        100)));
+                        100
+                ))
+        );
 
-        Aggregation agg = newAggregation(match(getDefaultFilterCriteria(filter)),
+        Aggregation agg = newAggregation(
+                match(getDefaultFilterCriteria(filter)),
                 new CustomProjectionOperation(project),
                 group().sum("tenderWithStartEndDates").as(Keys.TOTAL_TENDER_WITH_START_END_DATES).count().
                         as(Keys.TOTAL_TENDERS),
-                new CustomProjectionOperation(project1));
+                new CustomProjectionOperation(project1)
+        );
 
         return releaseAgg(agg);
     }
@@ -139,37 +164,45 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
     @ApiOperation(value = "Calculates the average award period, per each year. The year is taken from "
             + "awards.date and the duration is taken by counting the days"
             + "between tender.tenderPeriod.endDate and tender.tenderPeriod.startDate. The award has to be active.")
-    @RequestMapping(value = "/api/averageAwardPeriod", method = { RequestMethod.POST, RequestMethod.GET },
+    @RequestMapping(value = "/api/averageAwardPeriod", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
     public List<DBObject> averageAwardPeriod(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject awardLengthDays = new BasicDBObject("$divide", Arrays.asList(
-                new BasicDBObject("$subtract", Arrays.asList("$awards.date",
-                        MongoConstants.FieldNames.TENDER_PERIOD_END_DATE_REF)), DAY_MS));
+                new BasicDBObject("$subtract", Arrays.asList(
+                        "$awards.date",
+                        MongoConstants.FieldNames.TENDER_PERIOD_END_DATE_REF
+                )), DAY_MS));
 
         DBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
         addYearlyMonthlyProjection(filter, project, "$awards.date");
         project.put("awardLengthDays", awardLengthDays);
-        project.put("awards.date", 1);
-        project.put("awards.status", 1);
+        project.put(MongoConstants.FieldNames.AWARDS_DATE, 1);
+        project.put(MongoConstants.FieldNames.AWARDS_STATUS, 1);
         project.put(MongoConstants.FieldNames.TENDER_PERIOD_END_DATE, 1);
 
         Aggregation agg = newAggregation(
                 // this is repeated so we gain speed by filtering items before
                 // unwind
                 match(where(MongoConstants.FieldNames.TENDER_PERIOD_END_DATE)
-                        .exists(true).and("awards.date").exists(true)
-                        .and("awards.status").is("active")),
+                        .exists(true).and(MongoConstants.FieldNames.AWARDS_DATE).exists(true)
+                        .and(MongoConstants.FieldNames.AWARDS_STATUS).is("active")),
                 unwind("awards"),
                 // we need to filter the awards again after unwind
-                match(where("awards.date").exists(true).and("awards.status").is("active")
-                        .andOperator(getYearDefaultFilterCriteria(filter.awardFiltering(), "awards.date"))),
+                match(where(MongoConstants.FieldNames.AWARDS_DATE).exists(true)
+                        .and(MongoConstants.FieldNames.AWARDS_STATUS)
+                        .is("active")
+                        .andOperator(getYearDefaultFilterCriteria(
+                                filter.awardFiltering(),
+                                MongoConstants.FieldNames.AWARDS_DATE
+                        ))),
                 new CustomOperation(new BasicDBObject("$project", project)),
                 group(getYearlyMonthlyGroupingFields(filter)).avg("$awardLengthDays").as(Keys.AVERAGE_AWARD_DAYS),
                 transformYearlyGrouping(filter).andInclude(Keys.AVERAGE_AWARD_DAYS),
                 getSortByYearMonth(filter), skip(filter.getSkip()),
-                limit(filter.getPageSize()));
+                limit(filter.getPageSize())
+        );
 
         return releaseAgg(agg);
     }
@@ -178,36 +211,50 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
     @ApiOperation(value = "Quality indicator for averageAwardPeriod endpoint, "
             + "showing the percentage of awards that have start and end dates vs the total tenders in the system")
     @RequestMapping(value = "/api/qualityAverageAwardPeriod",
-            method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
+            method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
     public List<DBObject> qualityAverageAwardPeriod(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
-        project.put("awardWithStartEndDates",
-                new BasicDBObject("$cond",
+        project.put(
+                "awardWithStartEndDates",
+                new BasicDBObject(
+                        "$cond",
                         Arrays.asList(
                                 new BasicDBObject("$and", Arrays.asList(
                                         new BasicDBObject("$gt", Arrays.asList("$awards.date", null)),
-                                        new BasicDBObject("$gt",
-                                                Arrays.asList(MongoConstants.FieldNames.TENDER_PERIOD_END_DATE_REF,
-                                                        null)))),
-                                1, 0)));
+                                        new BasicDBObject(
+                                                "$gt",
+                                                Arrays.asList(
+                                                        MongoConstants.FieldNames.TENDER_PERIOD_END_DATE_REF,
+                                                        null
+                                                )
+                                        )
+                                )),
+                                1, 0
+                        )
+                )
+        );
 
         DBObject project1 = new BasicDBObject();
         project1.put(Keys.TOTAL_AWARD_WITH_START_END_DATES, 1);
         project1.put(Keys.TOTAL_AWARDS, 1);
-        project1.put(Keys.PERCENTAGE_AWARD_WITH_START_END_DATES,
+        project1.put(
+                Keys.PERCENTAGE_AWARD_WITH_START_END_DATES,
                 new BasicDBObject("$multiply", Arrays.asList(
                         new BasicDBObject("$divide", Arrays.asList("$totalAwardWithStartEndDates", "$totalAwards")),
-                        100)));
+                        100
+                ))
+        );
 
         Aggregation agg = newAggregation(
                 match(where("awards.0").exists(true).andOperator(getDefaultFilterCriteria(filter))), unwind("$awards"),
                 new CustomProjectionOperation(project), group().sum("awardWithStartEndDates")
                         .as(Keys.TOTAL_AWARD_WITH_START_END_DATES).count().as(Keys.TOTAL_AWARDS),
-                new CustomProjectionOperation(project1));
+                new CustomProjectionOperation(project1)
+        );
 
-       return releaseAgg(agg);
+        return releaseAgg(agg);
     }
 
 

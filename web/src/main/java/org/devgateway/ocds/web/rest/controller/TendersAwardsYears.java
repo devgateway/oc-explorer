@@ -29,7 +29,6 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
  * @author mpostelnicu
- *
  */
 
 @Cacheable
@@ -38,22 +37,33 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 public class TendersAwardsYears extends GenericOCDSController {
 
     @ApiOperation(value = "Computes all available years from awards.date, tender.tenderPeriod.startDate")
-    @RequestMapping(value = "/api/tendersAwardsYears", method = { RequestMethod.POST,
-            RequestMethod.GET }, produces = "application/json")
+    @RequestMapping(value = "/api/tendersAwardsYears", method = {RequestMethod.POST,
+            RequestMethod.GET}, produces = "application/json")
     public List<DBObject> tendersAwardsYears() {
 
         BasicDBObject project1 = new BasicDBObject();
 
-        project1.put("tenderYear",
-                new BasicDBObject("$cond",
-                        Arrays.asList(new BasicDBObject("$gt",
-                                        Arrays.asList(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF, null)),
+        project1.put(
+                "tenderYear",
+                new BasicDBObject(
+                        "$cond",
+                        Arrays.asList(
+                                new BasicDBObject(
+                                        "$gt",
+                                        Arrays.asList(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF, null)
+                                ),
                                 new BasicDBObject("$year", MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF),
-                                null)));
+                                null
+                        )
+                )
+        );
 
-        project1.put("awardYear",
+        project1.put(
+                "awardYear",
                 new BasicDBObject("$cond", Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$awards.date", null)),
-                        new BasicDBObject("$year", "$awards.date"), null)));
+                        new BasicDBObject("$year", "$awards.date"), null
+                ))
+        );
         project1.put(Fields.UNDERSCORE_ID, 0);
 
         BasicDBObject project2 = new BasicDBObject();
@@ -61,15 +71,19 @@ public class TendersAwardsYears extends GenericOCDSController {
 
         Aggregation agg = Aggregation.newAggregation(
                 project().and(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE)
-                        .as(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).and("awards.date")
-                        .as("awards.date"),
-                match(new Criteria().orOperator(where(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true),
-                        where("awards.date").exists(true))),
+                        .as(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE)
+                        .and(MongoConstants.FieldNames.AWARDS_DATE)
+                        .as(MongoConstants.FieldNames.AWARDS_DATE),
+                match(new Criteria().orOperator(
+                        where(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true),
+                        where(MongoConstants.FieldNames.AWARDS_DATE).exists(true)
+                )),
                 new CustomUnwindOperation("$awards", true), new CustomProjectionOperation(project1),
                 new CustomProjectionOperation(project2), new CustomUnwindOperation("$year"),
                 match(where("year").ne(null)),
                 new CustomGroupingOperation(new BasicDBObject(Fields.UNDERSCORE_ID, "$year")),
-                new CustomSortingOperation(new BasicDBObject(Fields.UNDERSCORE_ID, 1)));
+                new CustomSortingOperation(new BasicDBObject(Fields.UNDERSCORE_ID, 1))
+        );
 
         return releaseAgg(agg);
     }

@@ -60,7 +60,7 @@ public class FrequentTenderersController extends GenericOCDSController {
 
         Aggregation agg = newAggregation(
                 match(where("tender.tenderers.1").exists(true).and("awards.suppliers.0").exists(true)
-                        .and("awards.status").is("active")
+                        .and(MongoConstants.FieldNames.AWARDS_STATUS).is("active")
                         .andOperator(getYearDefaultFilterCriteria(
                                 filter,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
@@ -68,7 +68,7 @@ public class FrequentTenderersController extends GenericOCDSController {
                 unwind("tender.tenderers"),
                 unwind("awards"),
                 unwind("awards.suppliers"),
-                match(where("awards.status").is("active")
+                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is("active")
                         .andOperator(getYearFilterCriteria(
                                 filter.awardFiltering(),
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
@@ -100,13 +100,13 @@ public class FrequentTenderersController extends GenericOCDSController {
     public List<DBObject> activeAwardsCount(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         Aggregation agg = newAggregation(
-                match(where("awards.status").is("active")
+                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is("active")
                         .andOperator(getYearDefaultFilterCriteria(
                                 filter,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
                         ))),
                 unwind("awards"),
-                match(where("awards.status").is("active")
+                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is("active")
                         .andOperator(getYearDefaultFilterCriteria(
                                 filter.awardFiltering(),
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE

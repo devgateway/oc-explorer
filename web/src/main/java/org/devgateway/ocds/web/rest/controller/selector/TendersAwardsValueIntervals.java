@@ -62,7 +62,9 @@ public class TendersAwardsValueIntervals extends GenericOCDSController {
         Aggregation agg = Aggregation.newAggregation(
                 unwind("awards"),
                 match(where("awards.value.amount").exists(true).
-                        andOperator(getYearDefaultFilterCriteria(filter.awardFiltering(), "awards.date"))),
+                        andOperator(getYearDefaultFilterCriteria(filter.awardFiltering(),
+                                MongoConstants.FieldNames.AWARDS_DATE
+                        ))),
                 project().and("awards.value.amount").as("awards.value.amount"),
                 group().min("awards.value.amount").as("minAwardValue")
                         .max("awards.value.amount").as("maxAwardValue"),

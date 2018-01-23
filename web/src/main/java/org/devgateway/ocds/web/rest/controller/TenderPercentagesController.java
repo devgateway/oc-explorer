@@ -220,7 +220,7 @@ public class TenderPercentagesController extends GenericOCDSController {
         Aggregation agg = newAggregation(
                 match(where(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true)
                         .and("tender.submissionMethod.0").exists(true).
-                        and("awards.status").is("active")
+                        and(MongoConstants.FieldNames.AWARDS_STATUS).is("active")
                         .andOperator(getYearDefaultFilterCriteria(filter,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 unwind("$tender.submissionMethod"),

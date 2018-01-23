@@ -190,7 +190,7 @@ public abstract class GenericOCDSController {
     }
 
     protected Criteria getAwardStatusFilterCriteria(final DefaultFilterPagingRequest filter) {
-        return createFilterCriteria("awards.status", filter.getAwardStatus(), filter);
+        return createFilterCriteria(MongoConstants.FieldNames.AWARDS_STATUS, filter.getAwardStatus(), filter);
     }
 
 

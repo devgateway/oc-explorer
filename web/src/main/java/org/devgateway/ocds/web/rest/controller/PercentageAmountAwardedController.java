@@ -79,7 +79,7 @@ public class PercentageAmountAwardedController extends GenericOCDSController {
                 match(where("tender.procuringEntity").exists(true).and("awards.suppliers.0").exists(true)
                         .andOperator(getProcuringEntityIdCriteria(filter))),
                 unwind("awards"),
-                match(where("awards.status").is("active")),
+                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is("active")),
                 facet().and(match(getSupplierIdCriteria(filter.awardFiltering())),
                         group().sum("awards.value.amount").as("sum")
                 ).as("totalAwardedToSuppliers")

@@ -86,10 +86,10 @@ public class LocationInfowindowController extends GenericOCDSController {
                 match(where("awards.0").exists(true).orOperator(
                         where("tender.items.deliveryLocation._id").exists(true)
                 )
-                        .andOperator(getYearDefaultFilterCriteria(filter, "awards.date"))),
+                        .andOperator(getYearDefaultFilterCriteria(filter, MongoConstants.FieldNames.AWARDS_DATE))),
                 project("awards").andExclude(Fields.UNDERSCORE_ID),
                 unwind("awards"),
-                match(getYearDefaultFilterCriteria(filter.awardFiltering(), "awards.date")),
+                match(getYearDefaultFilterCriteria(filter.awardFiltering(), MongoConstants.FieldNames.AWARDS_DATE)),
                 skip(filter.getSkip()), limit(filter.getPageSize())
         );
 
