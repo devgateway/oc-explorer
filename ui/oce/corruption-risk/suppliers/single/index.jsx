@@ -9,11 +9,11 @@ import AmountLostVsWon from './donuts/amount-lost-vs-won';
 import NrFlags from './donuts/nr-flags';
 import styles from './style.less';
 import { cacheFn, pluckImm } from '../../../tools';
-import TaggedBarChart from '../../tagged-bar-chart';
 import Zoomable from '../../zoomable';
 import WinsAndLosses from './bars/wins-and-losses';
 import Crosstab from '../../clickable-crosstab';
 import { CORRUPTION_TYPES } from '../../constants';
+import FlaggedNr from './bars/flagged-nr';
 
 const TitleBelow = ({ title, children, ...props }) => (
   <div>
@@ -229,7 +229,7 @@ class Supplier extends CRDPage {
   }
 
   render() {
-    const { translations, width, doSearch, id, filters, styling } = this.props;
+    const { translations, width, doSearch, id, filters, styling, indicatorTypesMapping } = this.props;
     const donutSize = width / 3 - window.innerWidth / 20;
     const barChartWidth = width / 2 - 100;
 
@@ -297,42 +297,10 @@ class Supplier extends CRDPage {
               <TitleBelow
                 title="No. Times Each Indicator is Flagged in Procurements Won by Supplier"
               >
-                <TaggedBarChart
-                  tags={{
-                    FRAUD: {
-                      name: 'Fraud',
-                      color: '#299df4',
-                    },
-                    RIGGING: {
-                      name: 'Process rigging',
-                      color: '#3372b2',
-                    },
-                    COLLUSION: {
-                      name: 'Collusion',
-                      color: '#fbc42c',
-                    },
-                  }}
-                  data={[{
-                    x: 'Indicator 1',
-                    y: 5,
-                    tags: ['RIGGING'],
-                  }, {
-                    x: 'Indicator 2',
-                    y: 4,
-                    tags: ['COLLUSION', 'FRAUD'],
-                  }, {
-                    x: 'Indicator 3',
-                    y: 3,
-                    tags: ['COLLUSION', 'RIGGING'],
-                  }, {
-                    x: 'Indicator 4',
-                    y: 2,
-                    tags: ['FRAUD', 'RIGGING'],
-                  }, {
-                    x: 'Indicator 5',
-                    y: 1,
-                    tags: ['COLLUSION', 'FRAUD', 'RIGGING'],
-                  }]}
+                <FlaggedNr
+                  {...wireProps(this, 'nr-flagged')}
+                  filters={this.injectSupplierFilter(filters, id)}
+                  indicatorTypesMapping={indicatorTypesMapping}
                 />
               </TitleBelow>
             </Zoomable>

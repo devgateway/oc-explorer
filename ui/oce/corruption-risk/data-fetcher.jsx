@@ -16,9 +16,19 @@ const fetchEP = url => fetch(url.clone().query(''), {
 
 class DataFetcher extends React.PureComponent {
   fetch() {
-    const { filters, endpoint, requestNewData } = this.props;
-    const uri = new URI(`${API_ROOT}/${endpoint}`).addSearch(filters.toJS());
-    fetchEP(uri).then(requestNewData.bind(null, []));
+    const { filters, endpoint, endpoints, requestNewData } = this.props;
+    if (endpoint) {
+      const uri = new URI(`${API_ROOT}/${endpoint}`).addSearch(filters.toJS());
+      fetchEP(uri).then(requestNewData.bind(null, []));
+    } else if (endpoints) {
+      Promise.all(
+        endpoints.map(endpoint =>
+          fetchEP(
+            new URI(`${API_ROOT}/${endpoint}`).addSearch(filters.toJS())
+          )
+        )
+      ).then(requestNewData.bind(null, []));
+    }
   }
 
   componentDidMount() {
@@ -26,7 +36,7 @@ class DataFetcher extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (['filters', 'endpoint'].some(prop => this.props[prop] != prevProps[prop])) {
+    if (['filters', 'endpoint', 'endpoints'].some(prop => this.props[prop] != prevProps[prop])) {
       this.props.requestNewData([], null);
       this.fetch();
     }
