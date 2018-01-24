@@ -282,7 +282,10 @@ class Supplier extends CRDPage {
               zoomedWidth={width}
             >
               <TitleBelow title="Wins & Flags by Procuring Entity">
-                <WinsAndLosses />
+                <WinsAndLosses
+                  {...wireProps(this, 'wins-and-losses')}
+                  filters={this.injectSupplierFilter(filters, id)}
+                />
               </TitleBelow>
             </Zoomable>
           </div>
