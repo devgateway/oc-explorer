@@ -11,11 +11,17 @@ class WinsBarChart extends React.PureComponent {
       y: data.map(pluck('count')),
       name: 'Wins',
       type: 'bar',
+      marker: {
+        color: '#289df4',
+      },
     }, {
       x: names,
       y: data.map(pluck('countFlags')),
       name: 'Flags',
       type: 'bar',
+      marker: {
+        color: '#ce4747',
+      },
     }]);
   }
 
