@@ -59,7 +59,7 @@ public class ReleaseFlagI002Processor extends AbstractFlaggedReleaseFlagProcesso
 
         //get the award
         Optional<Award> award = flaggable.getAwards().stream().filter(a ->
-                Award.Status.active.toString().equals(a.getStatus())).findFirst();
+                Award.Status.active.equals(a.getStatus())).findFirst();
 
         boolean result = smallestBid.isPresent() && award.isPresent()
                 && (relativeDistanceLeft(award.get().getValue().getAmount(),

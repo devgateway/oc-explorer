@@ -53,25 +53,23 @@ public final class FlaggedReleasePredicates {
 
     public static final NamedPredicate<FlaggedRelease> ACTIVE_AWARD_WITH_DATE =
             new NamedPredicate<>(
-                    "Needs to have at least one active award",
-                    p -> p.getAwards().stream().filter(a -> a.getDate() != null
-                            && Award.Status.active.toString().equals(a.getStatus())).count() > 0
+                    "Needs to have at least one active award with date",
+                    p -> p.getAwards().stream().anyMatch(a -> a.getDate() != null
+                            && Award.Status.active.equals(a.getStatus()))
             );
 
     public static final NamedPredicate<FlaggedRelease> ACTIVE_AWARD =
             new NamedPredicate<>(
                     "Needs to have at least one active award",
                     p -> p.getAwards()
-                            .stream()
-                            .filter(a -> Award.Status.active.toString().equals(a.getStatus()))
-                            .count() > 0
+                            .stream().anyMatch(a -> Award.Status.active.equals(a.getStatus()))
             );
 
     public static final NamedPredicate<FlaggedRelease> AWARDED_AMOUNT =
             new NamedPredicate<>(
                     "Needs to have at least one award with awarded amount",
-                    p -> p.getAwards().stream().filter(a -> a.getValue() != null
-                            && a.getValue().getAmount() != null).count() > 0
+                    p -> p.getAwards().stream().anyMatch(a -> a.getValue() != null
+                            && a.getValue().getAmount() != null)
             );
 
     public static final NamedPredicate<FlaggedRelease> TENDER_ITEMS_CLASSIFICATION =
@@ -84,7 +82,7 @@ public final class FlaggedReleasePredicates {
 
     public static final NamedPredicate<FlaggedRelease> UNSUCCESSFUL_AWARD = new NamedPredicate<>(
             "Needs to have at least one unsuccessful award",
-            p -> p.getAwards().stream().filter(a -> Award.Status.unsuccessful.equals(a.getStatus())).count() > 0
+            p -> p.getAwards().stream().anyMatch(a -> Award.Status.unsuccessful.equals(a.getStatus()))
     );
 
     public static final NamedPredicate<FlaggedRelease> ELECTRONIC_SUBMISSION = new NamedPredicate<>(
