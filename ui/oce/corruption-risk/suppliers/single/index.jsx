@@ -21,6 +21,10 @@ const TitleBelow = ({ title, children, ...props }) => (
        React.Children.only(children)
     , props)}
     <h4 className="title text-center">
+      <button className="btn btn-default btn-sm zoom-button">
+        <i className="glyphicon glyphicon-fullscreen"/>
+      </button>
+      &nbsp;
       {title}
     </h4>
   </div>
