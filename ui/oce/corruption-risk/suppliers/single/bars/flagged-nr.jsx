@@ -31,7 +31,7 @@ class FlaggedNr extends translatable(React.PureComponent) {
   }
 
   render() {
-    const { requestNewData, indicatorTypesMapping } = this.props;
+    const { requestNewData, indicatorTypesMapping, width } = this.props;
     if (!requestNewData) return null;
     const endpoints = this.getEndpoints(indicatorTypesMapping);
     return (
@@ -41,6 +41,7 @@ class FlaggedNr extends translatable(React.PureComponent) {
         endpoints={endpoints}
       >
         <TaggedBarChart
+          width={width}
           tags={{
             FRAUD: {
               name: 'Fraud',
