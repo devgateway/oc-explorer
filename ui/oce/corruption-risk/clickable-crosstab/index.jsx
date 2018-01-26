@@ -21,7 +21,7 @@ class ClickableCrosstab extends Crosstab {
           } else {
             const percent = datum.get('percent');
             const color = Math.round(255 - 255 * (percent/100))
-            const style = { backgroundColor: `rgb(${color}, 255, ${color})` };
+            const style = { backgroundColor: `rgb(${color}, 200, ${color})` };
             const selected = rowIndicatorID === currentlySelected.rowIndicatorID &&
               indicatorID === currentlySelected.indicatorID;
             return (
