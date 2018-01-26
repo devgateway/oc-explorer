@@ -81,7 +81,7 @@ class TaggedBarChart extends React.PureComponent {
             width,
             height: 250,
             barmode: 'stack',
-            margin: {t: 0, r: 20, b: 30, l: 20, pad: 0},
+            margin: {t: 0, r: 20, b: 80, l: 20, pad: 0},
             paper_bgcolor: 'rgba(0, 0, 0, 0)',
             plot_bgcolor: 'rgba(0, 0, 0, 0)',
             legend: {
@@ -91,6 +91,9 @@ class TaggedBarChart extends React.PureComponent {
               y: 1.5,
               orientation: 'h',
             },
+            xaxis: {
+              tickangle: 25
+            }
           }}
         />
       </div>
