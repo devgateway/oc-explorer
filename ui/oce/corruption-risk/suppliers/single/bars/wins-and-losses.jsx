@@ -26,7 +26,8 @@ class WinsBarChart extends React.PureComponent {
   }
 
   render() {
-    const { width } = this.props;
+    const { width, requestNewData } = this.props;
+    if (!requestNewData) return null;
     return (
       <DataFetcher
         {...wireProps(this)}

@@ -31,7 +31,8 @@ class FlaggedNr extends translatable(React.PureComponent) {
   }
 
   render() {
-    const { indicatorTypesMapping } = this.props;
+    const { requestNewData, indicatorTypesMapping } = this.props;
+    if (!requestNewData) return null;
     const endpoints = this.getEndpoints(indicatorTypesMapping);
     return (
       <DataFetcher

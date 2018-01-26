@@ -15,20 +15,35 @@ import Crosstab from '../../clickable-crosstab';
 import { CORRUPTION_TYPES } from '../../constants';
 import FlaggedNr from './bars/flagged-nr';
 
-const TitleBelow = ({ title, children, ...props }) => (
+const TitleBelow = ({ title, children, filters, ...props }) => (
   <div>
     {React.cloneElement(
        React.Children.only(children)
     , props)}
     <h4 className="title text-center">
       <button className="btn btn-default btn-sm zoom-button">
-        <i className="glyphicon glyphicon-fullscreen"/>
+        <i className="glyphicon glyphicon-fullscreen" style={{ pointerEvents: 'none' }}/>
       </button>
       &nbsp;
       {title}
     </h4>
   </div>
 );
+
+function cutWinsAndLosses(data) {
+  if (!data) return data;
+  const cutData = JSON.parse(JSON.stringify(data));
+  cutData.forEach(datum => {
+    datum.x.splice(5);
+    datum.y.splice(5);
+  });
+  return cutData;
+}
+
+function cutNrFlags(data) {
+  if (!data) return data;
+  return data.slice(0, 5);
+}
 
 class CrosstabExplanation extends translatable(React.PureComponent) {
   render() {
@@ -282,12 +297,13 @@ class Supplier extends CRDPage {
           </h2>
           <div className="col-sm-6">
             <Zoomable
+              {...wireProps(this, 'wins-and-losses')}
               width={barChartWidth}
               zoomedWidth={width}
+              cutData={cutWinsAndLosses}
             >
               <TitleBelow title="Wins & Flags by Procuring Entity">
                 <WinsAndLosses
-                  {...wireProps(this, 'wins-and-losses')}
                   filters={this.injectSupplierFilter(filters, id)}
                 />
               </TitleBelow>
@@ -295,14 +311,15 @@ class Supplier extends CRDPage {
           </div>
           <div className="col-sm-6">
             <Zoomable
+              {...wireProps(this, 'nr-flagged')}
               width={barChartWidth}
               zoomedWidth={width}
+              cutData={cutNrFlags}
             >
               <TitleBelow
                 title="No. Times Each Indicator is Flagged in Procurements Won by Supplier"
               >
                 <FlaggedNr
-                  {...wireProps(this, 'nr-flagged')}
                   filters={this.injectSupplierFilter(filters, id)}
                   indicatorTypesMapping={indicatorTypesMapping}
                 />
