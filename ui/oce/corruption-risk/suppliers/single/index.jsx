@@ -129,24 +129,24 @@ class Info extends translatable(Visualization) {
               <td>
                 <dl>
                   <dt>Supplier address</dt>
-                  <dd>
+                  {address && <dd>
                     {address.get('streetAddress')}<br />
                     {address.get('locality')} /
                     &nbsp;
                     {address.get('postalCode')} /
                     &nbsp;
                     {address.get('countryName')}
-                  </dd>
+                  </dd>}
                 </dl>
               </td>
               <td>
                 <dl>
                   <dt>Supplier Contact Information</dt>
-                  <dd>
+                  {contact && <dd>
                     {contact.get('name')}<br />
                     {contact.get('email')}<br />
                     {contact.get('telephone')}
-                  </dd>
+                  </dd>}
                 </dl>
               </td>
             </tr>
@@ -247,9 +247,8 @@ class Supplier extends CRDPage {
   }
 
   render() {
-    const { translations, width, doSearch, id, filters, styling, indicatorTypesMapping } = this.props;
-    const donutSize = width / 3 - window.innerWidth / 20;
-    const barChartWidth = width / 2 - 100;
+    const { translations, doSearch, id, data } = this.props;
+    const totalFlags = data.getIn(['info', 'totalFlags']);
 
     return (
       <div className="supplier-page">
@@ -263,6 +262,22 @@ class Supplier extends CRDPage {
           id={id}
         />
 
+        {totalFlags === 0 && <section className="flag-analysis">
+          <h2>{this.t('crd:contracts:flagAnalysis')}</h2>
+          <h4>This supplier has no flags</h4>
+        </section>}
+
+        {!!totalFlags && this.maybeGetSections()}
+      </div>
+    );
+  }
+
+  maybeGetSections() {
+    const { width, id, filters, styling, indicatorTypesMapping } = this.props;
+    const donutSize = width / 3 - window.innerWidth / 20;
+    const barChartWidth = width / 2 - 100;
+    return (
+      <div>
         <section className="supplier-general-statistics">
           <h2>Supplier General Statistics</h2>
           <div className="col-sm-4">
