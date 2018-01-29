@@ -27,12 +27,14 @@ class Popup extends React.PureComponent {
       height: POPUP_HEIGHT
     };
 
+    const wins = points[0].y
+
     return (
       <div
         className="crd-popup donut-popup text-center"
         style={style}
       >
-        test
+        This supplier has {wins} {wins === 1 ? 'win' : 'wins'} from supplier {points[0].x} with {points[1].y} flags
         <div className="arrow"/>
       </div>
     )
