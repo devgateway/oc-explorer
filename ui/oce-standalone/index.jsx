@@ -1,6 +1,8 @@
 import { Map } from 'immutable';
 import cn from 'classnames';
 import ReactDOM from 'react-dom';
+// eslint-disable-next-line no-unused-vars
+import styles from './style.less';
 import OCApp from '../oce';
 import OverviewTab from '../oce/tabs/overview';
 import LocationTab from '../oce/tabs/location';
@@ -10,8 +12,6 @@ import EProcurementTab from '../oce/tabs/e-procurement';
 import { fetchJson } from '../oce/tools';
 import ViewSwitcher from '../oce/switcher.jsx';
 import CorruptionRickDashboard from '../oce/corruption-risk';
-// eslint-disable-next-line no-unused-vars
-import styles from './style.less';
 
 class OCEDemoLocation extends LocationTab {
   getHeight() {
