@@ -90,9 +90,9 @@ class Sidebar extends translatable(React.PureComponent) {
             </a>
             <a
               href="javascript:void(0);"
-              onClick={() => navigate('procuring-entities')}
               className={cn('archive-link', { active: page === 'procuring-entities' })}
               key="procuring-entities"
+              style={{ opacity: .5, pointerEvents: 'none'}}
             >
               <img className="blue" src={`assets/icons/blue/procuring-entities.svg`} alt="Procuring entities icon" />
               <img className="white" src={`assets/icons/white/procuring-entities.svg`} alt="Procuring entities icon" />

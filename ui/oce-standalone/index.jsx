@@ -1,19 +1,20 @@
-import ReactDOM from "react-dom";
-import OCApp from "../oce";
+import { Map } from 'immutable';
+import cn from 'classnames';
+import ReactDOM from 'react-dom';
+// eslint-disable-next-line no-unused-vars
+import styles from './style.less';
+import OCApp from '../oce';
 import OverviewTab from '../oce/tabs/overview';
 import LocationTab from '../oce/tabs/location';
 import CompetitivenessTab from '../oce/tabs/competitiveness';
 import EfficiencyTab from '../oce/tabs/efficiency';
 import EProcurementTab from '../oce/tabs/e-procurement';
-import {fetchJson} from "../oce/tools";
-import {Map} from "immutable";
-import styles from "./style.less";
-import ViewSwitcher from "../oce/switcher.jsx";
-import CorruptionRickDashboard from "../oce/corruption-risk";
-import cn from "classnames";
+import { fetchJson } from '../oce/tools';
+import ViewSwitcher from '../oce/switcher.jsx';
+import CorruptionRickDashboard from '../oce/corruption-risk';
 
-class OCEDemoLocation extends LocationTab{
-  getHeight(){
+class OCEDemoLocation extends LocationTab {
+  getHeight() {
     const TOP_OFFSET = 128;
     const BOTTOM_OFFSET = 66;
     return window.innerHeight - TOP_OFFSET - BOTTOM_OFFSET;
@@ -21,7 +22,7 @@ class OCEDemoLocation extends LocationTab{
 }
 OCEDemoLocation.CENTER = [37, -100];
 
-class OCEChild extends OCApp{
+class OCEChild extends OCApp {
   constructor(props) {
     super(props);
     this.registerTab(OverviewTab);
@@ -31,7 +32,7 @@ class OCEChild extends OCApp{
     this.registerTab(EProcurementTab);
   }
 
-  fetchBidTypes(){
+  fetchBidTypes() {
     fetchJson('/api/ocds/bidType/all').then(data =>
       this.setState({
         bidTypes: data.reduce((map, datum) =>
@@ -40,93 +41,99 @@ class OCEChild extends OCApp{
     );
   }
 
-  loginBox(){
-    let linkUrl, text;
-    if(this.state.user.loggedIn){
-      linkUrl = "/preLogout?referrer=/ui/index.html"
-      text = this.t("general:logout");
+  loginBox() {
+    let linkUrl;
+    let text;
+    if (this.state.user.loggedIn) {
+      linkUrl = '/preLogout?referrer=/ui/index.html';
+      text = this.t('general:logout');
     } else {
-      linkUrl = "/login?referrer=/ui/index.html";
-      text = this.t("general:login");
+      linkUrl = '/login?referrer=/ui/index.html';
+      text = this.t('general:login');
     }
-    return <a href={linkUrl} className="login-logout">
-      <button className="btn btn-default">
-        {text}
-      </button>
-    </a>
+    return (
+      <a href={linkUrl} className="login-logout">
+        <button className="btn btn-default">
+          {text}
+        </button>
+      </a>
+    );
   }
 
-  dashboardSwitcher(){
-    const {dashboardSwitcherOpen} = this.state;
-    const {onSwitch} = this.props;
+  dashboardSwitcher() {
+    const { dashboardSwitcherOpen } = this.state;
+    const { onSwitch } = this.props;
     return (
-      <div className={cn('dash-switcher-wrapper', {open: dashboardSwitcherOpen})}>
+      <div className={cn('dash-switcher-wrapper', { open: dashboardSwitcherOpen })}>
         <h1 onClick={this.toggleDashboardSwitcher.bind(this)}>
           <strong>Monitoring & Evaluation</strong> Toolkit
-          <i className="glyphicon glyphicon-menu-down"/>
+          <i className="glyphicon glyphicon-menu-down" />
         </h1>
         {dashboardSwitcherOpen &&
           <div className="dashboard-switcher">
-            <a href="javascript:void(0);" onClick={e => onSwitch('crd')}>
+            <a href="javascript:void(0);" onClick={() => onSwitch('crd')}>
               Corruption Risk Dashboard
             </a>
           </div>
         }
       </div>
-    )
+    );
   }
 
-  exportBtn(){
-    if(this.state.exporting){
+  exportBtn() {
+    if(this.state.exporting) {
       return (
         <div className="export-progress">
           <div className="progress">
-            <div className="progress-bar progress-bar-danger" role="progressbar" style={{width: "100%"}}>
+            <div className="progress-bar progress-bar-danger" role="progressbar" style={{ width: "100%" }}>
               {this.t('export:exporting')}
             </div>
           </div>
         </div>
-      )
+      );
     }
     return (
       <div className="export-btn">
         <button className="btn btn-default" disabled>
-          <i className="glyphicon glyphicon-download-alt"></i>
+          <i className="glyphicon glyphicon-download-alt" />
         </button>
       </div>
-    )
+    );
   }
 
   navigationLink(Tab, index){
-    if(OverviewTab != Tab) return super.navigationLink(Tab, index);
-    const {getName, icon} = Tab;
+    if (OverviewTab !== Tab) return super.navigationLink(Tab, index);
+    const { getName, icon } = Tab;
     return (
       <div
-        className={cn('navigation-item-overview', {active: index == this.state.currentTab})}
+        className={cn('navigation-item-overview', { active: index === this.state.currentTab })}
         onClick={_ => this.setState({currentTab: index})}
       >
         <a href="javascript:void(0);" key={index} className="col-sm-12">
           <span className="circle">
-            <img className="nav-icon" src={`assets/icons/${icon}.svg`}/>
-            <i className={`glyphicon glyphicon-${icon}`}/>
+            <img className="nav-icon" src={`assets/icons/${icon}.svg`} />
+            <i className={`glyphicon glyphicon-${icon}`} />
           </span>
-    	  &nbsp;
-		  {getName(this.t.bind(this))}
-      <i className="glyphicon glyphicon-info-sign"/>
+          &nbsp;
+          {getName(this.t.bind(this))}
+          <i className="glyphicon glyphicon-info-sign" />
         </a>
         <div className="description col-sm-12">
-          The Procurement M&E Prototype is an interactive platform for analyzing, monitoring, and evaluating information on public procurement. It is specifically designed to help users understand procurement efficiency, and the competitiveness and cost-effectiveness of public markets.
+          The Procurement M&E Prototype is an interactive platform for analyzing, monitoring,
+          and evaluating information on public procurement. It is specifically designed to help
+          users understand procurement efficiency, and the competitiveness and cost-effectiveness
+          of public markets.
         </div>
       </div>
-    )
+    );
   }
 
   render(){
     return (
-      <div className="container-fluid dashboard-default" onClick={_ => this.setState({menuBox: ""})}>
+      <div className="container-fluid dashboard-default" onClick={() => this.setState({ menuBox: '' })}>
         <header className="branding row">
           <div className="col-sm-9 logo-wrapper">
-            <img src="assets/dg-logo.svg"/>
+            <img src="assets/dg-logo.svg" />
             {this.dashboardSwitcher()}
           </div>
           <div className="col-sm-3">
@@ -167,10 +174,16 @@ class OCEChild extends OCApp{
             {this.content()}
           </div>
         </div>
-        {this.showMonths() && <div className="col-xs-offset-4 col-md-offset-3 col-xs-8 col-md-9 months-bar" role="navigation">
+        {this.showMonths() && <div
+          className="col-xs-offset-4 col-md-offset-3 col-xs-8 col-md-9 months-bar"
+          role="navigation"
+        >
           {this.monthsBar()}
         </div>}
-        <div className="col-xs-offset-4 col-md-offset-3 col-xs-8 col-md-9 years-bar" role="navigation">
+        <div
+          className="col-xs-offset-4 col-md-offset-3 col-xs-8 col-md-9 years-bar"
+          role="navigation"
+        >
           {this.yearsBar()}
         </div>
         <footer className="col-sm-12 main-footer">&nbsp;</footer>
@@ -190,21 +203,21 @@ const formatNumber = number => number.toLocaleString(undefined, {maximumFraction
 
 const styling = {
   charts: {
-    axisLabelColor: "#cc3c3b",
+    axisLabelColor: '#cc3c3b',
     traceColors: ['#324d6e', '#ecac00', '#4b6f33'],
     hoverFormat: ',.2f',
-    hoverFormatter: number => {
-      if(typeof number == "undefined") return number;
+    hoverFormatter: (number) => {
+      if (typeof number === 'undefined') return number;
       let abs = Math.abs(number);
-      if(abs >= BILLION) return formatNumber(number/BILLION) + "B";
-      if(abs >= MILLION) return formatNumber(number/MILLION) + "M";
-      if(abs >= THOUSAND) return formatNumber(number/THOUSAND) + "K";
+      if (abs >= BILLION) return formatNumber(number / BILLION) + 'B';
+      if (abs >= MILLION) return formatNumber(number / MILLION) + 'M';
+      if (abs >= THOUSAND) return formatNumber(number / THOUSAND) + 'K';
       return formatNumber(number);
-    }
+    },
   },
   tables: {
-    currencyFormatter: formatNumber
-  }
+    currencyFormatter: formatNumber,
+  },
 };
 
 OCEChild.STYLING = styling;
@@ -212,23 +225,14 @@ OCEChild.TRANSLATIONS = translations;
 
 CorruptionRickDashboard.STYLING = JSON.parse(JSON.stringify(styling));
 
-CorruptionRickDashboard.STYLING.charts.traceColors = ["#234e6d", "#3f7499", "#80b1d3", "#afd5ee", "#d9effd"];
+CorruptionRickDashboard.STYLING.charts.traceColors = ['#234e6d', '#3f7499', '#80b1d3', '#afd5ee', '#d9effd'];
 
-class OceSwitcher extends ViewSwitcher{}
+class OceSwitcher extends ViewSwitcher {}
 
 OceSwitcher.views['m-and-e'] = OCEChild;
 OceSwitcher.views.crd = CorruptionRickDashboard;
 
 ReactDOM.render(<OceSwitcher
-                  translations={translations['en_US']}
-                  styling={styling}
-                />, document.getElementById('dg-container'));
-
-if("ocvn.developmentgateway.org" == location.hostname){
-  (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-    function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-    e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-    e.src='//www.google-analytics.com/analytics.js';
-    r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-  ga('create','UA-78202947-1');ga('send','pageview');
-}
+  translations={translations.en_US}
+  styling={styling}
+/>, document.getElementById('dg-container'));
