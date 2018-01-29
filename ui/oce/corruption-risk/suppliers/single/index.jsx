@@ -9,22 +9,41 @@ import AmountLostVsWon from './donuts/amount-lost-vs-won';
 import NrFlags from './donuts/nr-flags';
 import styles from './style.less';
 import { cacheFn, pluckImm } from '../../../tools';
-import TaggedBarChart from '../../tagged-bar-chart';
 import Zoomable from '../../zoomable';
 import WinsAndLosses from './bars/wins-and-losses';
 import Crosstab from '../../clickable-crosstab';
 import { CORRUPTION_TYPES } from '../../constants';
+import FlaggedNr from './bars/flagged-nr';
 
-const TitleBelow = ({ title, children, ...props }) => (
+const TitleBelow = ({ title, children, filters, ...props }) => (
   <div>
     {React.cloneElement(
        React.Children.only(children)
     , props)}
     <h4 className="title text-center">
+      <button className="btn btn-default btn-sm zoom-button">
+        <i className="glyphicon glyphicon-fullscreen" style={{ pointerEvents: 'none' }}/>
+      </button>
+      &nbsp;
       {title}
     </h4>
   </div>
 );
+
+function cutWinsAndLosses(data) {
+  if (!data) return data;
+  const cutData = JSON.parse(JSON.stringify(data));
+  cutData.forEach(datum => {
+    datum.x.splice(5);
+    datum.y.splice(5);
+  });
+  return cutData;
+}
+
+function cutNrFlags(data) {
+  if (!data) return data;
+  return data.slice(0, 5);
+}
 
 class CrosstabExplanation extends translatable(React.PureComponent) {
   render() {
@@ -229,7 +248,7 @@ class Supplier extends CRDPage {
   }
 
   render() {
-    const { translations, width, doSearch, id, filters, styling } = this.props;
+    const { translations, width, doSearch, id, filters, styling, indicatorTypesMapping } = this.props;
     const donutSize = width / 3 - window.innerWidth / 20;
     const barChartWidth = width / 2 - 100;
 
@@ -278,58 +297,31 @@ class Supplier extends CRDPage {
           </h2>
           <div className="col-sm-6">
             <Zoomable
+              {...wireProps(this, 'wins-and-losses')}
               width={barChartWidth}
               zoomedWidth={width}
+              cutData={cutWinsAndLosses}
             >
               <TitleBelow title="Wins & Flags by Procuring Entity">
-                <WinsAndLosses />
+                <WinsAndLosses
+                  filters={this.injectSupplierFilter(filters, id)}
+                />
               </TitleBelow>
             </Zoomable>
           </div>
           <div className="col-sm-6">
             <Zoomable
+              {...wireProps(this, 'nr-flagged')}
               width={barChartWidth}
               zoomedWidth={width}
+              cutData={cutNrFlags}
             >
               <TitleBelow
                 title="No. Times Each Indicator is Flagged in Procurements Won by Supplier"
               >
-                <TaggedBarChart
-                  tags={{
-                    FRAUD: {
-                      name: 'Fraud',
-                      color: '#299df4',
-                    },
-                    RIGGING: {
-                      name: 'Process rigging',
-                      color: '#3372b2',
-                    },
-                    COLLUSION: {
-                      name: 'Collusion',
-                      color: '#fbc42c',
-                    },
-                  }}
-                  data={[{
-                    x: 'Indicator 1',
-                    y: 5,
-                    tags: ['RIGGING'],
-                  }, {
-                    x: 'Indicator 2',
-                    y: 4,
-                    tags: ['COLLUSION', 'FRAUD'],
-                  }, {
-                    x: 'Indicator 3',
-                    y: 3,
-                    tags: ['COLLUSION', 'RIGGING'],
-                  }, {
-                    x: 'Indicator 4',
-                    y: 2,
-                    tags: ['FRAUD', 'RIGGING'],
-                  }, {
-                    x: 'Indicator 5',
-                    y: 1,
-                    tags: ['COLLUSION', 'FRAUD', 'RIGGING'],
-                  }]}
+                <FlaggedNr
+                  filters={this.injectSupplierFilter(filters, id)}
+                  indicatorTypesMapping={indicatorTypesMapping}
                 />
               </TitleBelow>
             </Zoomable>

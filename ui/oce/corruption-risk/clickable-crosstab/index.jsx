@@ -1,6 +1,7 @@
 import cn from 'classnames';
 import Crosstab from '../crosstab';
 import styles from './style.less';
+import { colorLuminance } from '../tools';
 
 class ClickableCrosstab extends Crosstab {
   constructor(...args) {
@@ -20,8 +21,8 @@ class ClickableCrosstab extends Crosstab {
             return <td className="not-applicable" key={indicatorID}>&mdash;</td>;
           } else {
             const percent = datum.get('percent');
-            const color = Math.round(255 - 255 * (percent/100))
-            const style = { backgroundColor: `rgb(${color}, 255, ${color})` };
+            const color = colorLuminance('#00ff00', percent / 100 - .5);
+            const style = { backgroundColor: color };
             const selected = rowIndicatorID === currentlySelected.rowIndicatorID &&
               indicatorID === currentlySelected.indicatorID;
             return (

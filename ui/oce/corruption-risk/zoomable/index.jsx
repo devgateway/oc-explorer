@@ -10,34 +10,43 @@ class Zoomable extends React.PureComponent {
   }
 
   maybeGetZoomed() {
-    const { zoomedWidth: width } = this.props;
+    const { zoomedWidth: width, children, ...props } = this.props;
     const { zoomed } = this.state;
     if (zoomed) {
       const style = {
         width,
         marginLeft: -(width / 2),
-      }
+      };
       return (
         <div>
           <div className="crd-fullscreen-popup-overlay" onClick={e => this.setState({ zoomed: false })}/>
           <div className="crd-fullscreen-popup" style={ style }>
-            {cloneChild(this, { width })}
+            {cloneChild(this, {
+               ...props,
+               width
+            })}
           </div>
         </div>
       );
     }
   }
 
+  interceptClicks({ target }) {
+    if (target.className.indexOf('zoom-button') > -1) {
+      this.setState({ zoomed: true });
+    }
+  }
+
   render() {
     const { zoomed } = this.state;
-    const { width } = this.props;
+    const { cutData, data, children, ...props } = this.props;
     return (
-      <div className="zoomable">
+      <div className="zoomable" onClick={this.interceptClicks.bind(this)}>
         {this.maybeGetZoomed()}
-        {!zoomed && cloneChild(this, { width })}
-        <button className="btn btn-default btn-sm zoom-button" onClick={e => this.setState({ zoomed: true })}>
-          <i className="glyphicon glyphicon-fullscreen"/>
-        </button>
+        {!zoomed && cloneChild(this, {
+           ...props,
+           data: cutData(data)
+        })}
       </div>
     )
   }
