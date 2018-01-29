@@ -271,5 +271,5 @@ public class CorruptionRiskDashboardIndicatorsStatsControllerTest extends Abstra
                 result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.FLAGGED_COUNT));
     }
 
-
+    
 }
