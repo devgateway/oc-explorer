@@ -200,7 +200,6 @@ class Supplier extends CRDPage {
     if (noIndicators) {
       return (
         <section className="flag-analysis">
-          <h2>{this.t('crd:contracts:flagAnalysis')}</h2>
           <h4>This supplier has no flags</h4>
         </section>
       );
@@ -208,7 +207,7 @@ class Supplier extends CRDPage {
 
     return (
       <section className="flag-analysis">
-        <h2>Flag analysis</h2>
+        <br />
         {CORRUPTION_TYPES
           .filter(corruptionType => nrFlagsByCorruptionType[corruptionType])
           .map((corruptionType) => {
@@ -292,8 +291,6 @@ class Supplier extends CRDPage {
         <section className="flag-analysis">
           <h2>
             {this.t('crd:contracts:flagAnalysis')}
-            &nbsp;
-            <small>({this.t('crd:contracts:clickCrosstabHint')})</small>
           </h2>
           <div className="col-sm-6">
             <Zoomable
