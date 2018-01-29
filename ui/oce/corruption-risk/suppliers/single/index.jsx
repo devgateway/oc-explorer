@@ -127,27 +127,27 @@ class Info extends translatable(Visualization) {
           <tbody>
             <tr>
               <td>
-                {address && <dl>
+                <dl>
                   <dt>Supplier address</dt>
-                  <dd>
+                  {address && <dd>
                     {address.get('streetAddress')}<br />
                     {address.get('locality')} /
                     &nbsp;
                     {address.get('postalCode')} /
                     &nbsp;
                     {address.get('countryName')}
-                  </dd>
-                </dl>}
+                  </dd>}
+                </dl>
               </td>
               <td>
-                {contact && <dl>
+                <dl>
                   <dt>Supplier Contact Information</dt>
-                  <dd>
+                  {contact && <dd>
                     {contact.get('name')}<br />
                     {contact.get('email')}<br />
                     {contact.get('telephone')}
-                  </dd>
-                </dl>}
+                  </dd>}
+                </dl>
               </td>
             </tr>
           </tbody>
