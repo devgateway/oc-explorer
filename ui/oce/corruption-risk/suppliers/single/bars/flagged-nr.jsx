@@ -27,12 +27,14 @@ class Popup extends React.PureComponent {
       height: POPUP_HEIGHT
     };
 
+    const flags = point.y;
+
     return (
       <div
         className="crd-popup donut-popup text-center"
         style={style}
       >
-        This supplier has been flagged {point.y} times
+        {flags} {flags === 1 ? 'flag' : 'flags'} for "{point.x}"
         <div className="arrow"/>
       </div>
     )

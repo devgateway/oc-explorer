@@ -5,7 +5,7 @@ import { pluck } from '../../../../tools';
 import CustomPopup from '../../../custom-popup';
 
 const POPUP_WIDTH = 300;
-const POPUP_HEIGHT = 75;
+const POPUP_HEIGHT = 55;
 const POPUP_ARROW_SIZE = 8;
 
 class Popup extends React.PureComponent {
@@ -27,14 +27,15 @@ class Popup extends React.PureComponent {
       height: POPUP_HEIGHT
     };
 
-    const wins = points[0].y
+    const wins = points[0].y;
+    const flags = points[1].y;
 
     return (
       <div
         className="crd-popup donut-popup text-center"
         style={style}
       >
-        This supplier has {wins} {wins === 1 ? 'win' : 'wins'} from supplier {points[0].x} with {points[1].y} flags
+        {wins} {wins === 1 ? 'win' : 'wins'}, {flags} {flags === 1 ? 'flag' : 'flags'}
         <div className="arrow"/>
       </div>
     )

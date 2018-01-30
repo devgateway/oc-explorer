@@ -31,11 +31,11 @@ class NrWonVsLost extends React.PureComponent {
     const lostPercent = (lost / sum * 100).toFixed(2);
     this.props.requestNewData(path, [{
       color: '#165781',
-      label: `${won} (${wonPercent}%) contracts won`,
+      label: `${won} (${wonPercent}%) Contracts won`,
       value: won
     }, {
       color: '#5fa0c9',
-      label: `${lost} (${lostPercent}%) contracts lost`,
+      label: `${lost} (${lostPercent}%) Contracts lost`,
       value: lost
     }]);
   }
@@ -47,7 +47,7 @@ class NrWonVsLost extends React.PureComponent {
         requestNewData={this.transformNewData.bind(this)}
         data={this.props.data || []}
         CenterText={CenterText}
-        title="No. & Percent of Procurements"
+        title="Number & percent of procurements"
         subtitle="Won vs. Lost"
         endpoint="procurementsWonLost"
       />
