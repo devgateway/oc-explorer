@@ -240,6 +240,7 @@ class Supplier extends CRDPage {
                     );
                   }}
                   indicators={indicators[corruptionType]}
+                  showRawNumbers
                 />
               </div>
             );
