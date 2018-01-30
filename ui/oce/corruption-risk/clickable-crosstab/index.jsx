@@ -20,11 +20,14 @@ class ClickableCrosstab extends Crosstab {
           if(indicatorID === rowIndicatorID) {
             return <td className="not-applicable" key={indicatorID}>&mdash;</td>;
           } else {
-            const percent = datum.get('percent');
+            const { showRawNumbers } = this.props;
+            const count = datum.get('count', 0);
+            const percent = datum.get('percent', 0);
             const color = colorLuminance('#00ff00', percent / 100 - .5);
             const style = { backgroundColor: color };
             const selected = rowIndicatorID === currentlySelected.rowIndicatorID &&
               indicatorID === currentlySelected.indicatorID;
+
             return (
               <td
                 key={indicatorID}
@@ -32,7 +35,9 @@ class ClickableCrosstab extends Crosstab {
                 style={style}
                 onClick={() => this.setState({ currentlySelected: { rowIndicatorID, indicatorID }})}
               >
-                {percent && percent.toFixed(2)} %
+                { showRawNumbers ?
+                  `${count} (${percent.toFixed(2)} %)` :
+                  `${percent.toFixed(2)} %`}
               </td>
             );
           }
