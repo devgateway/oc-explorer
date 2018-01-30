@@ -116,8 +116,10 @@ class Info extends translatable(Visualization) {
                 &nbsp;{flagCount === 1 ? 'Flag' : 'Flags'}
                 <br />
                 <small>
+                  (
                   {contractCount}
                   &nbsp;{contractCount === 1 ? 'Contract' : 'Contracts'}
+                  )
                 </small>
               </td>
             </tr>
@@ -128,7 +130,7 @@ class Info extends translatable(Visualization) {
             <tr>
               <td>
                 <dl>
-                  <dt>Supplier address</dt>
+                  <dt>Supplier Address</dt>
                   {address && <dd>
                     {address.get('streetAddress')}<br />
                     {address.get('locality')} /
@@ -314,7 +316,7 @@ class Supplier extends CRDPage {
               zoomedWidth={width}
               cutData={cutWinsAndLosses}
             >
-              <TitleBelow title="Wins & Flags by Procuring Entity">
+              <TitleBelow title="Wins & flags by procuring entity">
                 <WinsAndLosses
                   filters={this.injectSupplierFilter(filters, id)}
                 />
@@ -329,7 +331,7 @@ class Supplier extends CRDPage {
               cutData={cutNrFlags}
             >
               <TitleBelow
-                title="No. Times Each Indicator is Flagged in Procurements Won by Supplier"
+                title="No. of flags per indicator in procurements won by supplier"
               >
                 <FlaggedNr
                   filters={this.injectSupplierFilter(filters, id)}
