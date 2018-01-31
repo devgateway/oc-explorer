@@ -52,17 +52,19 @@ class Popup extends React.PureComponent {
 
 class WinsBarChart extends React.PureComponent {
   fixYLabels(...args) {
+    const { data } = this.props;
+    const deltaY = 40 / data[0].x.length;
     const $this = ReactDOM.findDOMNode(this);
     const barHeight = $this.querySelector('.trace.bars .point').getBoundingClientRect().height;
 
     $this.querySelectorAll('.ytick').forEach(label => {
       const { width } = label.getBoundingClientRect();
-      label.setAttribute('transform', `translate(${width}, ${-barHeight * 1.5})`)
+      label.setAttribute('transform', `translate(${width}, ${-barHeight - deltaY})`)
 
       if (navigator.userAgent.indexOf('Firefox') === -1) {
         setTimeout(function() {
-          const { width, height } = label.getBoundingClientRect();
-          label.setAttribute('transform', `translate(${width + 5}, ${-barHeight * 1.5})`)
+          const { width } = label.getBoundingClientRect();
+          label.setAttribute('transform', `translate(${width + 5}, ${-barHeight - deltaY})`)
         })
       }
     });
