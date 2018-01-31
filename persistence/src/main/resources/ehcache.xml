@@ -41,4 +41,13 @@
            maxEntriesLocalHeap="100000"
            statistics="true">
     </cache>
+
+    <cache name="excelExportCache"
+           eternal="true"
+           diskPersistent="false"
+           diskExpiryThreadIntervalSeconds="120"
+           memoryStoreEvictionPolicy="LRU"
+           maxEntriesLocalHeap="100000"
+           statistics="true">
+    </cache>
 </ehcache>

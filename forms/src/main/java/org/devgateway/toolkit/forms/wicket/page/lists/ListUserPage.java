@@ -40,4 +40,11 @@ public class ListUserPage extends AbstractListPage<Person> {
         columns.add(new PropertyColumn<Person, String>(new Model<String>("Roles"), "roles", "roles"));
     }
 
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+
+        // enable excel download
+        excelForm.setVisibilityAllowed(true);
+    }
 }

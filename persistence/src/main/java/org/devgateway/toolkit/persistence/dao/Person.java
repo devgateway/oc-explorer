@@ -11,25 +11,24 @@
  *******************************************************************************/
 package org.devgateway.toolkit.persistence.dao;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
-
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.devgateway.toolkit.persistence.dao.categories.Group;
 import org.devgateway.toolkit.persistence.dao.categories.Role;
+import org.devgateway.toolkit.persistence.excel.annotation.ExcelExport;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.envers.Audited;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
@@ -37,12 +36,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Person extends AbstractAuditableEntity implements Serializable, UserDetails {
     private static final long serialVersionUID = 109780377848343674L;
 
+    @ExcelExport
     private String username;
 
+    @ExcelExport
     private String firstName;
 
+    @ExcelExport
     private String lastName;
 
+    @ExcelExport
     private String email;
 
     @JsonIgnore

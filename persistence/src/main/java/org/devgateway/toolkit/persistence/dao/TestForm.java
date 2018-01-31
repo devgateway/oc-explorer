@@ -10,7 +10,7 @@
  * Development Gateway - initial API and implementation
  *******************************************************************************/
 /**
- * 
+ *
  */
 package org.devgateway.toolkit.persistence.dao;
 
@@ -29,6 +29,7 @@ import javax.persistence.OneToMany;
 
 import org.devgateway.toolkit.persistence.dao.categories.Group;
 import org.devgateway.toolkit.persistence.dao.categories.Role;
+import org.devgateway.toolkit.persistence.excel.annotation.ExcelExport;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.envers.Audited;
@@ -44,14 +45,17 @@ public class TestForm extends AbstractAuditableEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @ExcelExport
     private String textField;
 
+    @ExcelExport
     @Column(length = DBConstants.MAX_DEFAULT_TEXT_LENGTH)
     private String textArea;
 
     @Column(length = DBConstants.MAX_DEFAULT_TEXT_LENGTH)
     private String summernote;
 
+    @ExcelExport
     private Boolean checkbox;
 
     private Boolean checkboxPicker;
