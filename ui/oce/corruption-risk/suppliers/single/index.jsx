@@ -244,7 +244,7 @@ class Supplier extends CRDPage {
                 />
               </div>
             );
-          })};
+          })}
       </section>
     );
   }
