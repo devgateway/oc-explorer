@@ -1,43 +1,143 @@
-
 package org.devgateway.ocds.persistence.mongo;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.devgateway.ocds.persistence.mongo.merge.Merge;
-import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
+
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
- * Description of the unit which the good comes in e.g. hours, kilograms.
- * Made up of a unit name, and the value of a single unit.
- *
- * http://standard.open-contracting.org/latest/en/schema/reference/#unit
+ * Unit
+ * <p>
+ * A description of the unit in which the supplies, services or works are provided (e.g. hours, kilograms) and the
+ * unit-price. For comparability, an established list of units can be used.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+        "scheme",
+        "id",
         "name",
-        "value"
+        "value",
+        "uri"
 })
 public class Unit {
 
     /**
-     * Name of the unit
-     *
+     * Scheme
+     * <p>
+     * The list from which units of measure identifiers are taken. This should be an entry from the options available
+     * in the [unitClassificationScheme](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#unit-classification-scheme) codelist. Use of the scheme 'UNCEFACT' for the
+     * UN/CEFACT Recommendation 20 list of 'Codes for Units of Measure Used in International Trade' is recommended,
+     * although other options are available.
+     */
+    @JsonProperty("scheme")
+    @JsonPropertyDescription("The list from which units of measure identifiers are taken. This should be an entry "
+            + "from the options available in the [unitClassificationScheme](http://standard.open-contracting"
+            + ".org/latest/en/schema/codelists/#unit-classification-scheme) codelist. Use of the scheme 'UNCEFACT' "
+            + "for the UN/CEFACT Recommendation 20 list of 'Codes for Units of Measure Used in International Trade' "
+            + "is recommended, although other options are available.")
+    private String scheme;
+    /**
+     * ID
+     * <p>
+     * The identifier from the codelist referenced in the scheme property. Check the codelist for details of how to
+     * find and use identifiers from the scheme in use.
+     */
+    @JsonProperty("id")
+    @JsonPropertyDescription("The identifier from the codelist referenced in the scheme property. Check the codelist "
+            + "for details of how to find and use identifiers from the scheme in use.")
+    private String id;
+    /**
+     * Name
+     * <p>
+     * Name of the unit.
      */
     @JsonProperty("name")
-    @Merge(MergeStrategy.ocdsVersion)
+    @JsonPropertyDescription("Name of the unit.")
     private String name;
-
+    /**
+     * Value
+     * <p>
+     */
     @JsonProperty("value")
     private Amount value;
+    /**
+     * URI
+     * <p>
+     * If the scheme used provide a machine-readable URI for this unit of measure, this can be given.
+     */
+    @JsonProperty("uri")
+    @JsonPropertyDescription("If the scheme used provide a machine-readable URI for this unit of measure, this can be"
+            + " given.")
+    private URI uri;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
-     * Name of the unit
-     *
-     * @return
-     *     The name
+     * Scheme
+     * <p>
+     * The list from which units of measure identifiers are taken. This should be an entry from the options available
+     * in the [unitClassificationScheme](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#unit-classification-scheme) codelist. Use of the scheme 'UNCEFACT' for the
+     * UN/CEFACT Recommendation 20 list of 'Codes for Units of Measure Used in International Trade' is recommended,
+     * although other options are available.
+     */
+    @JsonProperty("scheme")
+    public String getScheme() {
+        return scheme;
+    }
+
+    /**
+     * Scheme
+     * <p>
+     * The list from which units of measure identifiers are taken. This should be an entry from the options available
+     * in the [unitClassificationScheme](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#unit-classification-scheme) codelist. Use of the scheme 'UNCEFACT' for the
+     * UN/CEFACT Recommendation 20 list of 'Codes for Units of Measure Used in International Trade' is recommended,
+     * although other options are available.
+     */
+    @JsonProperty("scheme")
+    public void setScheme(String scheme) {
+        this.scheme = scheme;
+    }
+
+    /**
+     * ID
+     * <p>
+     * The identifier from the codelist referenced in the scheme property. Check the codelist for details of how to
+     * find and use identifiers from the scheme in use.
+     */
+    @JsonProperty("id")
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * ID
+     * <p>
+     * The identifier from the codelist referenced in the scheme property. Check the codelist for details of how to
+     * find and use identifiers from the scheme in use.
+     */
+    @JsonProperty("id")
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
+     * Name
+     * <p>
+     * Name of the unit.
      */
     @JsonProperty("name")
     public String getName() {
@@ -45,20 +145,18 @@ public class Unit {
     }
 
     /**
-     * Name of the unit
-     *
-     * @param name
-     *     The name
+     * Name
+     * <p>
+     * Name of the unit.
      */
     @JsonProperty("name")
-    public void setName(final String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
     /**
-     *
-     * @return
-     *     The value
+     * Value
+     * <p>
      */
     @JsonProperty("value")
     public Amount getValue() {
@@ -66,30 +164,68 @@ public class Unit {
     }
 
     /**
-     *
-     * @param value
-     *     The value
+     * Value
+     * <p>
      */
     @JsonProperty("value")
-    public void setValue(final Amount value) {
+    public void setValue(Amount value) {
         this.value = value;
+    }
+
+    /**
+     * URI
+     * <p>
+     * If the scheme used provide a machine-readable URI for this unit of measure, this can be given.
+     */
+    @JsonProperty("uri")
+    public URI getUri() {
+        return uri;
+    }
+
+    /**
+     * URI
+     * <p>
+     * If the scheme used provide a machine-readable URI for this unit of measure, this can be given.
+     */
+    @JsonProperty("uri")
+    public void setUri(URI uri) {
+        this.uri = uri;
+    }
+
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
     }
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return new ToStringBuilder(this).append("scheme", scheme)
+                .append("id", id)
+                .append("name", name)
+                .append("value", value)
+                .append("uri", uri)
+                .append("additionalProperties", additionalProperties)
+                .toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().
-                append(name).
-                append(value).
-                toHashCode();
+        return new HashCodeBuilder().append(scheme)
+                .append(name)
+                .append(id)
+                .append(additionalProperties)
+                .append(value)
+                .append(uri)
+                .toHashCode();
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
@@ -97,10 +233,13 @@ public class Unit {
             return false;
         }
         Unit rhs = ((Unit) other);
-        return new EqualsBuilder().
-                append(name, rhs.name).
-                append(value, rhs.value).
-                isEquals();
+        return new EqualsBuilder().append(scheme, rhs.scheme)
+                .append(name, rhs.name)
+                .append(id, rhs.id)
+                .append(additionalProperties, rhs.additionalProperties)
+                .append(value, rhs.value)
+                .append(uri, rhs.uri)
+                .isEquals();
     }
 
 }

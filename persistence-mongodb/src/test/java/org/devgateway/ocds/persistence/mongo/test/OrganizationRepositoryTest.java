@@ -1,7 +1,5 @@
 package org.devgateway.ocds.persistence.mongo.test;
 
-import java.io.IOException;
-
 import org.devgateway.ocds.persistence.mongo.Address;
 import org.devgateway.ocds.persistence.mongo.ContactPoint;
 import org.devgateway.ocds.persistence.mongo.Identifier;
@@ -13,6 +11,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 public class OrganizationRepositoryTest extends AbstractMongoTest {
 
     @Autowired
@@ -21,7 +23,7 @@ public class OrganizationRepositoryTest extends AbstractMongoTest {
     private static final String ORG_ID = "1234";
 
     @Before
-    public void importTestData() throws IOException, InterruptedException {
+    public void importTestData() throws IOException, InterruptedException, URISyntaxException {
         // be sure that the organization collection is empty
         organizationRepository.deleteAll();
 
@@ -42,13 +44,13 @@ public class OrganizationRepositoryTest extends AbstractMongoTest {
         contactPoint.setEmail("mpostelnicu@developmentgateway.org");
         contactPoint.setFaxNumber("01234567");
         contactPoint.setTelephone("01234567");
-        contactPoint.setUrl("http://developmentgateway.org");
+        contactPoint.setUrl(new URI("http://developmentgateway.org"));
         organization.setContactPoint(contactPoint);
 
         final Identifier identifier = new Identifier();
         organization.getAdditionalIdentifiers().add(identifier);
-        organization.getRoles().add(Organization.OrganizationType.procuringEntity);
-        organization.getRoles().add(Organization.OrganizationType.buyer);
+        organization.getRoles().add(Organization.OrganizationType.procuringEntity.toString());
+        organization.getRoles().add(Organization.OrganizationType.buyer.toString());
 
         final Organization savedOrganization = organizationRepository.save(organization);
 

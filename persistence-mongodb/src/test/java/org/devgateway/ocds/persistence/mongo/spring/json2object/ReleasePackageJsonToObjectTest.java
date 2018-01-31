@@ -1,5 +1,6 @@
 package org.devgateway.ocds.persistence.mongo.spring.json2object;
 
+import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.ReleasePackage;
 import org.junit.Assert;
@@ -7,7 +8,6 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.TimeZone;
 
 /**
  * @author idobre
@@ -61,7 +61,7 @@ public class ReleasePackageJsonToObjectTest {
 
         Assert.assertEquals("Check budget amount", new BigDecimal(10000),
                 release.getPlanning().getBudget().getAmount().getAmount());
-        Assert.assertEquals("Check budget currency", "USD",
+        Assert.assertEquals("Check budget currency", Amount.Currency.USD,
                 release.getPlanning().getBudget().getAmount().getCurrency());
     }
 

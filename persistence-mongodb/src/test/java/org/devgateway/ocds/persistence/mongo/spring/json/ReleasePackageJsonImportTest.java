@@ -1,6 +1,12 @@
 package org.devgateway.ocds.persistence.mongo.spring.json;
 
-import org.devgateway.ocds.persistence.mongo.*;
+import org.devgateway.ocds.persistence.mongo.Amount;
+import org.devgateway.ocds.persistence.mongo.Award;
+import org.devgateway.ocds.persistence.mongo.Contract;
+import org.devgateway.ocds.persistence.mongo.Release;
+import org.devgateway.ocds.persistence.mongo.Tag;
+import org.devgateway.ocds.persistence.mongo.Tender;
+import org.devgateway.ocds.persistence.mongo.Transaction;
 import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.toolkit.persistence.mongo.AbstractMongoTest;
 import org.junit.After;
@@ -10,6 +16,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
+import java.net.URI;
 import java.util.Collection;
 import java.util.Set;
 
@@ -45,7 +52,7 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
 
         Assert.assertEquals(1, releases.size());
         Assert.assertNotNull(importedRelease);
-        Assert.assertEquals("GBP", importedRelease.getPlanning().getBudget().getAmount().getCurrency());
+        Assert.assertEquals(Amount.Currency.GBP, importedRelease.getPlanning().getBudget().getAmount().getCurrency());
     }
 
     @Test
@@ -75,7 +82,7 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
 
         Assert.assertEquals(1, releases.size());
         Assert.assertNotNull(importedRelease);
-        Assert.assertArrayEquals(new Tender.SubmissionMethod[] {Tender.SubmissionMethod.electronicSubmission},
+        Assert.assertArrayEquals(new String[] {Tender.SubmissionMethod.electronicSubmission.toString()},
                 importedRelease.getTender().getSubmissionMethod().toArray());
     }
 
@@ -126,6 +133,6 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
         Assert.assertArrayEquals(new Tag[] {Tag.implementation}, importedRelease.getTag().toArray());
         final Set<Contract> contracts = importedRelease.getContracts();
         final Set<Transaction> transactions = contracts.iterator().next().getImplementation().getTransactions();
-        Assert.assertEquals("https://openspending.org/uk-barnet-spending/", transactions.iterator().next().getSource());
+        Assert.assertEquals(new URI("https://openspending.org/uk-barnet-spending/"), transactions.iterator().next().getSource());
     }
 }

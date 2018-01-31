@@ -1,161 +1,151 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
-
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
-import org.devgateway.ocds.persistence.mongo.merge.Merge;
-import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
  * Organization
  * <p>
- * An organization.
- *
- * http://standard.open-contracting.org/latest/en/schema/reference/#organization
- *
+ * A party (organization)
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+        "name",
+        "id",
         "identifier",
         "additionalIdentifiers",
-        "name",
         "address",
         "contactPoint",
-        "roles"
+        "roles",
+        "details"
 })
-@Document
 public class Organization implements Identifiable {
+
+    /**
+     * Common name
+     * <p>
+     * A common name for this organization or other participant in the contracting process. The identifier object
+     * provides an space for the formal legal name, and so this may either repeat that value, or could provide the
+     * common name by which this organization or entity is known. This field may also include details of the
+     * department or sub-unit involved in this contracting process.
+     */
+    @JsonProperty("name")
     @ExcelExport
-    @Id
+    @JsonPropertyDescription("A common name for this organization or other participant in the contracting process. "
+            + "The identifier object provides an space for the formal legal name, and so this may either repeat that "
+            + "value, or could provide the common name by which this organization or entity is known. This field may "
+            + "also include details of the department or sub-unit involved in this contracting process.")
+    private String name;
+    /**
+     * Entity ID
+     * <p>
+     * The ID used for cross-referencing to this party from other sections of the release. This field may be built
+     * with the following structure {identifier.scheme}-{identifier.id}(-{department-identifier}).
+     */
+    @JsonProperty("id")
+    @ExcelExport
+    @JsonPropertyDescription("The ID used for cross-referencing to this party from other sections of the release. "
+            + "This field may be built with the following structure {identifier.scheme}-{identifier.id}"
+            + "(-{department-identifier}).")
     private String id;
-
-    @JsonProperty("roles")
-    @JsonDeserialize(as = java.util.LinkedHashSet.class)
-    private Set<OrganizationType> roles = new LinkedHashSet<OrganizationType>();
-
-    @ExcelExport
+    /**
+     * Identifier
+     * <p>
+     */
     @JsonProperty("identifier")
+    @ExcelExport
     private Identifier identifier;
     /**
-     * A list of additional / supplemental identifiers for the organization, using the
-     * [organization identifier guidance]
-     *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/key_concepts/identifiers/#organization-identifiers).
-     *  This could be used to provide an internally used identifier for
-     *  this organization in addition to the primary legal entity identifier.
-     *
+     * Additional identifiers
+     * <p>
+     * A list of additional / supplemental identifiers for the organization or participant, using the [organization
+     * identifier guidance](http://standard.open-contracting.org/latest/en/schema/identifiers/). This could be used
+     * to provide an internally used identifier for this organization in addition to the primary legal entity
+     * identifier.
      */
     @JsonProperty("additionalIdentifiers")
-    @JsonDeserialize(as = java.util.LinkedHashSet.class)
-    @Merge(MergeStrategy.ocdsVersion)
+    @JsonDeserialize(as = LinkedHashSet.class)
+    @JsonPropertyDescription("A list of additional / supplemental identifiers for the organization or participant, "
+            + "using the [organization identifier guidance](http://standard.open-contracting"
+            + ".org/latest/en/schema/identifiers/). This could be used to provide an internally used identifier for "
+            + "this organization in addition to the primary legal entity identifier.")
     private Set<Identifier> additionalIdentifiers = new LinkedHashSet<Identifier>();
-
     /**
-     * The common name of the organization. The ID property provides an space for the formal legal name,
-     * and so this may either repeat that value, or could provide the common name by which this organization is known.
-     * This field could also include details of the department or sub-unit involved in this contracting process.
-     *
-     */
-    @ExcelExport
-    @JsonProperty("name")
-    private String name;
-
-    /**
+     * Address
+     * <p>
      * An address. This may be the legally registered address of the organization, or may be a correspondence address
      * for this particular contracting process.
-     *
      */
-    @ExcelExport
     @JsonProperty("address")
-    private Address address;
-
-    /**
-     * An person, contact point or department to contact in relation to this contracting process.
-     *
-     */
+    @JsonPropertyDescription("An address. This may be the legally registered address of the organization, or may be a"
+            + " correspondence address for this particular contracting process.")
     @ExcelExport
+    private Address address;
+    /**
+     * Contact point
+     * <p>
+     * An person, contact point or department to contact in relation to this contracting process.
+     */
     @JsonProperty("contactPoint")
+    @JsonPropertyDescription("An person, contact point or department to contact in relation to this contracting "
+            + "process.")
+    @ExcelExport
     private ContactPoint contactPoint;
-
-    public String getId() {
-        return id;
-    }
-
     /**
-     *
-     * @return
-     *     The identifier
+     * Party roles
+     * <p>
+     * The party's role(s) in the contracting process. Role(s) should be taken from the [partyRole codelist]
+     * (http://standard.open-contracting.org/latest/en/schema/codelists/#party-role). Values from the provided
+     * codelist should be used wherever possible, though extended values can be provided if the codelist does not
+     * have a relevant code.
      */
-    @JsonProperty("identifier")
-    public Identifier getIdentifier() {
-        return identifier;
-    }
-
-    public void setId(final String id) {
-        this.id = id;
-    }
-
+    @JsonProperty("roles")
+    @JsonPropertyDescription("The party's role(s) in the contracting process. Role(s) should be taken from the "
+            + "[partyRole codelist](http://standard.open-contracting.org/latest/en/schema/codelists/#party-role). "
+            + "Values from the provided codelist should be used wherever possible, though extended values can be "
+            + "provided if the codelist does not have a relevant code.")
+    private List<String> roles = new ArrayList<String>();
     /**
-     *
-     * @param identifier
-     *     The identifier
+     * Details
+     * <p>
+     * Additional classification information about parties can be provided using partyDetail extensions that define
+     * particular properties and classification schemes.
      */
-    @JsonProperty("identifier")
-    public void setIdentifier(final Identifier identifier) {
-        this.identifier = identifier;
-    }
+    @JsonProperty("details")
+    @JsonPropertyDescription("Additional classification information about parties can be provided using partyDetail "
+            + "extensions that define particular properties and classification schemes. ")
+    private Details details;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
-     * A list of additional / supplemental identifiers for the organization, using the
-     * [organization identifier guidance]
-     *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/key_concepts/identifiers/#organization-identifiers).
-     *  This could be used to provide an internally used identifier for
-     *  this organization in addition to the primary legal entity identifier.
-     *
-     * @return
-     *     The additionalIdentifiers
-     */
-    @JsonProperty("additionalIdentifiers")
-    public Set<Identifier> getAdditionalIdentifiers() {
-        return additionalIdentifiers;
-    }
-
-    /**
-     * A list of additional / supplemental identifiers for the organization, using the
-     * [organization identifier guidance]
-     *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/key_concepts/identifiers/#organization-identifiers).
-     *  This could be used to provide an internally used identifier for
-     *  this organization in addition to the primary legal entity identifier.
-     *
-     * @param additionalIdentifiers
-     *     The additionalIdentifiers
-     */
-    @JsonProperty("additionalIdentifiers")
-    public void setAdditionalIdentifiers(final Set<Identifier> additionalIdentifiers) {
-        this.additionalIdentifiers = additionalIdentifiers;
-    }
-
-    /**
-     * The common name of the organization. The ID property provides an space for the formal legal name,
-     * and so this may either repeat that value, or could provide the common name by which this organization is known.
-     * This field could also include details of the department or sub-unit involved in this contracting process.
-     *
-     * @return
-     *     The name
+     * Common name
+     * <p>
+     * A common name for this organization or other participant in the contracting process. The identifier object
+     * provides an space for the formal legal name, and so this may either repeat that value, or could provide the
+     * common name by which this organization or entity is known. This field may also include details of the
+     * department or sub-unit involved in this contracting process.
      */
     @JsonProperty("name")
     public String getName() {
@@ -163,24 +153,89 @@ public class Organization implements Identifiable {
     }
 
     /**
-     * The common name of the organization. The ID property provides an space for the formal legal name,
-     * and so this may either repeat that value, or could provide the common name by which this organization is known.
-     * This field could also include details of the department or sub-unit involved in this contracting process.
-     *
-     * @param name
-     *     The name
+     * Common name
+     * <p>
+     * A common name for this organization or other participant in the contracting process. The identifier object
+     * provides an space for the formal legal name, and so this may either repeat that value, or could provide the
+     * common name by which this organization or entity is known. This field may also include details of the
+     * department or sub-unit involved in this contracting process.
      */
     @JsonProperty("name")
-    public void setName(final String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * An address. This may be the legally registered address of the organization,
-     * or may be a correspondence address for this particular contracting process.
-     *
-     * @return
-     *     The address
+     * Entity ID
+     * <p>
+     * The ID used for cross-referencing to this party from other sections of the release. This field may be built
+     * with the following structure {identifier.scheme}-{identifier.id}(-{department-identifier}).
+     */
+    @JsonProperty("id")
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Entity ID
+     * <p>
+     * The ID used for cross-referencing to this party from other sections of the release. This field may be built
+     * with the following structure {identifier.scheme}-{identifier.id}(-{department-identifier}).
+     */
+    @JsonProperty("id")
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
+     * Identifier
+     * <p>
+     */
+    @JsonProperty("identifier")
+    public Identifier getIdentifier() {
+        return identifier;
+    }
+
+    /**
+     * Identifier
+     * <p>
+     */
+    @JsonProperty("identifier")
+    public void setIdentifier(Identifier identifier) {
+        this.identifier = identifier;
+    }
+
+    /**
+     * Additional identifiers
+     * <p>
+     * A list of additional / supplemental identifiers for the organization or participant, using the [organization
+     * identifier guidance](http://standard.open-contracting.org/latest/en/schema/identifiers/). This could be used
+     * to provide an internally used identifier for this organization in addition to the primary legal entity
+     * identifier.
+     */
+    @JsonProperty("additionalIdentifiers")
+    public Set<Identifier> getAdditionalIdentifiers() {
+        return additionalIdentifiers;
+    }
+
+    /**
+     * Additional identifiers
+     * <p>
+     * A list of additional / supplemental identifiers for the organization or participant, using the [organization
+     * identifier guidance](http://standard.open-contracting.org/latest/en/schema/identifiers/). This could be used
+     * to provide an internally used identifier for this organization in addition to the primary legal entity
+     * identifier.
+     */
+    @JsonProperty("additionalIdentifiers")
+    public void setAdditionalIdentifiers(Set<Identifier> additionalIdentifiers) {
+        this.additionalIdentifiers = additionalIdentifiers;
+    }
+
+    /**
+     * Address
+     * <p>
+     * An address. This may be the legally registered address of the organization, or may be a correspondence address
+     * for this particular contracting process.
      */
     @JsonProperty("address")
     public Address getAddress() {
@@ -188,57 +243,124 @@ public class Organization implements Identifiable {
     }
 
     /**
-     * An address. This may be the legally registered address of the organization,
-     * or may be a correspondence address for this particular contracting process.
-     *
-     * @param address
-     *     The address
+     * Address
+     * <p>
+     * An address. This may be the legally registered address of the organization, or may be a correspondence address
+     * for this particular contracting process.
      */
     @JsonProperty("address")
-    public void setAddress(final Address address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
     /**
+     * Contact point
+     * <p>
      * An person, contact point or department to contact in relation to this contracting process.
-     *
-     * @return
-     *     The contactPoint
      */
     @JsonProperty("contactPoint")
     public ContactPoint getContactPoint() {
         return contactPoint;
     }
 
+    /**
+     * Contact point
+     * <p>
+     * An person, contact point or department to contact in relation to this contracting process.
+     */
+    @JsonProperty("contactPoint")
+    public void setContactPoint(ContactPoint contactPoint) {
+        this.contactPoint = contactPoint;
+    }
+
+    /**
+     * Party roles
+     * <p>
+     * The party's role(s) in the contracting process. Role(s) should be taken from the [partyRole codelist]
+     * (http://standard.open-contracting.org/latest/en/schema/codelists/#party-role). Values from the provided
+     * codelist should be used wherever possible, though extended values can be provided if the codelist does not
+     * have a relevant code.
+     */
+    @JsonProperty("roles")
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    /**
+     * Party roles
+     * <p>
+     * The party's role(s) in the contracting process. Role(s) should be taken from the [partyRole codelist]
+     * (http://standard.open-contracting.org/latest/en/schema/codelists/#party-role). Values from the provided
+     * codelist should be used wherever possible, though extended values can be provided if the codelist does not
+     * have a relevant code.
+     */
+    @JsonProperty("roles")
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
+
+    /**
+     * Details
+     * <p>
+     * Additional classification information about parties can be provided using partyDetail extensions that define
+     * particular properties and classification schemes.
+     */
+    @JsonProperty("details")
+    public Details getDetails() {
+        return details;
+    }
+
+    /**
+     * Details
+     * <p>
+     * Additional classification information about parties can be provided using partyDetail extensions that define
+     * particular properties and classification schemes.
+     */
+    @JsonProperty("details")
+    public void setDetails(Details details) {
+        this.details = details;
+    }
+
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
+    }
+
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return new ToStringBuilder(this).append("name", name)
+                .append("id", id)
+                .append("identifier", identifier)
+                .append("additionalIdentifiers", additionalIdentifiers)
+                .append("address", address)
+                .append("contactPoint", contactPoint)
+                .append("roles", roles)
+                .append("details", details)
+                .append("additionalProperties", additionalProperties)
+                .toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().
-                append(identifier).
-                append(additionalIdentifiers).
-                append(name).
-                append(address).
-                append(contactPoint).
-                toHashCode();
-    }
-
-    /**
-     * An person, contact point or department to contact in relation to this contracting process.
-     *
-     * @param contactPoint
-     *     The contactPoint
-     */
-    @JsonProperty("contactPoint")
-    public void setContactPoint(final ContactPoint contactPoint) {
-        this.contactPoint = contactPoint;
+        return new HashCodeBuilder().append(identifier)
+                .append(address)
+                .append(contactPoint)
+                .append(roles)
+                .append(name)
+                .append(additionalIdentifiers)
+                .append(details)
+                .append(id)
+                .append(additionalProperties)
+                .toHashCode();
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
@@ -246,16 +368,25 @@ public class Organization implements Identifiable {
             return false;
         }
         Organization rhs = ((Organization) other);
-        return new EqualsBuilder().
-                append(identifier, rhs.identifier).
-                append(additionalIdentifiers, rhs.additionalIdentifiers).
-                append(name, rhs.name).
-                append(address, rhs.address).
-                append(contactPoint, rhs.contactPoint).
-                isEquals();
+        return new EqualsBuilder().append(identifier, rhs.identifier)
+                .append(address, rhs.address)
+                .append(contactPoint, rhs.contactPoint)
+                .append(roles, rhs.roles)
+                .append(name, rhs.name)
+                .append(additionalIdentifiers, rhs.additionalIdentifiers)
+                .append(details, rhs.details)
+                .append(id, rhs.id)
+                .append(additionalProperties, rhs.additionalProperties)
+                .isEquals();
+    }
+
+    @Override
+    public Serializable getIdProperty() {
+        return id;
     }
 
 
+    @Deprecated
     public enum OrganizationType {
         procuringEntity("procuringEntity"),
 
@@ -296,20 +427,4 @@ public class Organization implements Identifiable {
     }
 
 
-    public Set<OrganizationType> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(final Set<OrganizationType> roles) {
-        this.roles = roles;
-    }
-
-    @Override
-    public Serializable getIdProperty() {
-        return id;
-    }
-
-
-
 }
-

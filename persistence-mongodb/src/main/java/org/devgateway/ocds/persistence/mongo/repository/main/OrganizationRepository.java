@@ -3,12 +3,12 @@
  */
 package org.devgateway.ocds.persistence.mongo.repository.main;
 
+import org.devgateway.ocds.persistence.mongo.Organization.OrganizationType;
+import org.devgateway.ocds.persistence.mongo.Organization;
+import org.springframework.data.mongodb.repository.Query;
+
 import java.util.Collection;
 import java.util.List;
-
-import org.devgateway.ocds.persistence.mongo.Organization;
-import org.devgateway.ocds.persistence.mongo.Organization.OrganizationType;
-import org.springframework.data.mongodb.repository.Query;
 
 /**
  * @author mpostelnicu

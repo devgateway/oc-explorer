@@ -15,6 +15,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.Consumer;
@@ -70,7 +72,7 @@ public class OCDSPopulatorService {
     }
 
 
-    public void randomizeOrganization(Organization o) {
+    public void randomizeOrganization(Organization o)  {
         o.setName(getRandomTxt());
         if (o.getAddress() != null) {
             o.getAddress().setCountryName(getRandomTxt());
@@ -84,7 +86,11 @@ public class OCDSPopulatorService {
             o.getContactPoint().setFaxNumber(getRandomTxt());
             o.getContactPoint().setName(getRandomTxt());
             o.getContactPoint().setTelephone(getRandomTxt());
-            o.getContactPoint().setUrl(getRandomTxt());
+            try {
+                o.getContactPoint().setUrl(new URI(getRandomTxt()));
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
         }
         organizationRepository.save(o);
     }

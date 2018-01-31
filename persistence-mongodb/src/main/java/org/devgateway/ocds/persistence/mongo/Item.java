@@ -1,103 +1,108 @@
 package org.devgateway.ocds.persistence.mongo;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
-import org.devgateway.ocds.persistence.mongo.merge.Merge;
-import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
-import java.io.Serializable;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
+
 /**
+ * Item
+ * <p>
  * A good, service, or work to be contracted.
- *
- * http://standard.open-contracting.org/latest/en/schema/reference/#item
- *
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "id",
         "description",
         "classification",
         "additionalClassifications",
         "quantity",
-        "unit",
-        "deliveryLocation"
+        "unit"
 })
-public class Item implements Identifiable {
+public class Item {
 
     /**
-     * This is part of the OCDS location extension. We have decided to plug this
-     * into the OCDS standard since it seems this will be rolled into OCDS 1.1
-     * see https://jira.dgfoundation.org/browse/OCE-35
-     */
-    @SuppressWarnings("rawtypes")
-    private DefaultLocation deliveryLocation;
-
-    /**
+     * ID
+     * <p>
      * A local identifier to reference and merge the items by. Must be unique within a given array of items.
      * (Required)
-     *
      */
-    @ExcelExport
     @JsonProperty("id")
-    @Merge(MergeStrategy.overwrite)
+    @JsonPropertyDescription("A local identifier to reference and merge the items by. Must be unique within a given "
+            + "array of items.")
+    @ExcelExport
     private String id;
-
     /**
+     * Description
+     * <p>
      * A description of the goods, services to be provided.
-     *
      */
-    @ExcelExport
     @JsonProperty("description")
-    @Merge(MergeStrategy.ocdsVersion)
-    private String description;
-
+    @JsonPropertyDescription("A description of the goods, services to be provided.")
     @ExcelExport
-    @JsonProperty("classification")
-    private Classification classification;
-
+    private String description;
     /**
-     * An array of additional classifications for the item. See the
-     * [itemClassificationScheme]
-     *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#item-classification-scheme)
-     *  codelist for common options to use in OCDS.
-     *  This may also be used to present codes from an internal classification scheme.
-     *
+     * Classification
+     * <p>
+     */
+    @JsonProperty("classification")
+    @ExcelExport
+    private Classification classification;
+    /**
+     * Additional classifications
+     * <p>
+     * An array of additional classifications for the item. See the [itemClassificationScheme](http://standard
+     * .open-contracting.org/latest/en/schema/codelists/#item-classification-scheme) codelist for common options to
+     * use in OCDS. This may also be used to present codes from an internal classification scheme.
      */
     @JsonProperty("additionalClassifications")
-    @JsonDeserialize(as = java.util.LinkedHashSet.class)
-    @Merge(MergeStrategy.ocdsVersion)
+    @JsonDeserialize(as = LinkedHashSet.class)
+    @JsonPropertyDescription("An array of additional classifications for the item. See the [itemClassificationScheme]"
+            + "(http://standard.open-contracting.org/latest/en/schema/codelists/#item-classification-scheme) codelist"
+            + " for common options to use in OCDS. This may also be used to present codes from an internal "
+            + "classification scheme.")
     private Set<Classification> additionalClassifications = new LinkedHashSet<Classification>();
-
     /**
+     * Quantity
+     * <p>
      * The number of units required
-     *
      */
-    @ExcelExport
     @JsonProperty("quantity")
-    @Merge(MergeStrategy.ocdsVersion)
+    @ExcelExport
+    @JsonPropertyDescription("The number of units required")
     private Double quantity;
-
     /**
-     * Description of the unit which the good comes in e.g. hours, kilograms.
-     * Made up of a unit name, and the value of a single unit.
-     *
+     * Unit
+     * <p>
+     * A description of the unit in which the supplies, services or works are provided (e.g. hours, kilograms) and
+     * the unit-price. For comparability, an established list of units can be used.
      */
     @JsonProperty("unit")
+    @JsonPropertyDescription("A description of the unit in which the supplies, services or works are provided (e.g. "
+            + "hours, kilograms) and the unit-price. For comparability, an established list of units can be used.  ")
     private Unit unit;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
+     * ID
+     * <p>
      * A local identifier to reference and merge the items by. Must be unique within a given array of items.
      * (Required)
-     *
-     * @return
-     *     The id
      */
     @JsonProperty("id")
     public String getId() {
@@ -105,22 +110,20 @@ public class Item implements Identifiable {
     }
 
     /**
+     * ID
+     * <p>
      * A local identifier to reference and merge the items by. Must be unique within a given array of items.
      * (Required)
-     *
-     * @param id
-     *     The id
      */
     @JsonProperty("id")
-    public void setId(final String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
     /**
+     * Description
+     * <p>
      * A description of the goods, services to be provided.
-     *
-     * @return
-     *     The description
      */
     @JsonProperty("description")
     public String getDescription() {
@@ -128,20 +131,18 @@ public class Item implements Identifiable {
     }
 
     /**
+     * Description
+     * <p>
      * A description of the goods, services to be provided.
-     *
-     * @param description
-     *     The description
      */
     @JsonProperty("description")
-    public void setDescription(final String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
     /**
-     *
-     * @return
-     *     The classification
+     * Classification
+     * <p>
      */
     @JsonProperty("classification")
     public Classification getClassification() {
@@ -149,24 +150,20 @@ public class Item implements Identifiable {
     }
 
     /**
-     *
-     * @param classification
-     *     The classification
+     * Classification
+     * <p>
      */
     @JsonProperty("classification")
-    public void setClassification(final Classification classification) {
+    public void setClassification(Classification classification) {
         this.classification = classification;
     }
 
     /**
-     * An array of additional classifications for the item. See the
-     * [itemClassificationScheme]
-     *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#item-classification-scheme)
-     *  codelist for common options to use in OCDS.
-     *  This may also be used to present codes from an internal classification scheme.
-     *
-     * @return
-     *     The additionalClassifications
+     * Additional classifications
+     * <p>
+     * An array of additional classifications for the item. See the [itemClassificationScheme](http://standard
+     * .open-contracting.org/latest/en/schema/codelists/#item-classification-scheme) codelist for common options to
+     * use in OCDS. This may also be used to present codes from an internal classification scheme.
      */
     @JsonProperty("additionalClassifications")
     public Set<Classification> getAdditionalClassifications() {
@@ -174,25 +171,21 @@ public class Item implements Identifiable {
     }
 
     /**
-     * An array of additional classifications for the item. See the
-     * [itemClassificationScheme]
-     *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#item-classification-scheme)
-     *  codelist for common options to use in OCDS.
-     *  This may also be used to present codes from an internal classification scheme.
-     *
-     * @param additionalClassifications
-     *     The additionalClassifications
+     * Additional classifications
+     * <p>
+     * An array of additional classifications for the item. See the [itemClassificationScheme](http://standard
+     * .open-contracting.org/latest/en/schema/codelists/#item-classification-scheme) codelist for common options to
+     * use in OCDS. This may also be used to present codes from an internal classification scheme.
      */
     @JsonProperty("additionalClassifications")
-    public void setAdditionalClassifications(final Set<Classification> additionalClassifications) {
+    public void setAdditionalClassifications(Set<Classification> additionalClassifications) {
         this.additionalClassifications = additionalClassifications;
     }
 
     /**
+     * Quantity
+     * <p>
      * The number of units required
-     *
-     * @return
-     *     The quantity
      */
     @JsonProperty("quantity")
     public Double getQuantity() {
@@ -200,22 +193,20 @@ public class Item implements Identifiable {
     }
 
     /**
+     * Quantity
+     * <p>
      * The number of units required
-     *
-     * @param quantity
-     *     The quantity
      */
     @JsonProperty("quantity")
-    public void setQuantity(final Double quantity) {
+    public void setQuantity(Double quantity) {
         this.quantity = quantity;
     }
 
     /**
-     * Description of the unit which the good comes in e.g. hours, kilograms.
-     * Made up of a unit name, and the value of a single unit.
-     *
-     * @return
-     *     The unit
+     * Unit
+     * <p>
+     * A description of the unit in which the supplies, services or works are provided (e.g. hours, kilograms) and
+     * the unit-price. For comparability, an established list of units can be used.
      */
     @JsonProperty("unit")
     public Unit getUnit() {
@@ -223,37 +214,52 @@ public class Item implements Identifiable {
     }
 
     /**
-     * Description of the unit which the good comes in e.g. hours, kilograms.
-     * Made up of a unit name, and the value of a single unit.
-     *
-     * @param unit
-     *     The unit
+     * Unit
+     * <p>
+     * A description of the unit in which the supplies, services or works are provided (e.g. hours, kilograms) and
+     * the unit-price. For comparability, an established list of units can be used.
      */
     @JsonProperty("unit")
-    public void setUnit(final Unit unit) {
+    public void setUnit(Unit unit) {
         this.unit = unit;
+    }
+
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
     }
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return new ToStringBuilder(this).append("id", id)
+                .append("description", description)
+                .append("classification", classification)
+                .append("additionalClassifications", additionalClassifications)
+                .append("quantity", quantity)
+                .append("unit", unit)
+                .append("additionalProperties", additionalProperties)
+                .toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().
-                append(id).
-                append(description).
-                append(classification).
-                append(additionalClassifications).
-                append(quantity).
-                append(unit).
-                append(deliveryLocation).
-                toHashCode();
+        return new HashCodeBuilder().append(additionalClassifications)
+                .append(unit)
+                .append(quantity)
+                .append(description)
+                .append(id)
+                .append(additionalProperties)
+                .append(classification)
+                .toHashCode();
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
@@ -261,27 +267,14 @@ public class Item implements Identifiable {
             return false;
         }
         Item rhs = ((Item) other);
-        return new EqualsBuilder().
-                append(id, rhs.id).
-                append(description, rhs.description).
-                append(classification, rhs.classification).
-                append(additionalClassifications, rhs.additionalClassifications).
-                append(quantity, rhs.quantity).
-                append(unit, rhs.unit).
-                append(deliveryLocation, rhs.deliveryLocation).
-                isEquals();
+        return new EqualsBuilder().append(additionalClassifications, rhs.additionalClassifications)
+                .append(unit, rhs.unit)
+                .append(quantity, rhs.quantity)
+                .append(description, rhs.description)
+                .append(id, rhs.id)
+                .append(additionalProperties, rhs.additionalProperties)
+                .append(classification, rhs.classification)
+                .isEquals();
     }
 
-    public DefaultLocation getDeliveryLocation() {
-        return deliveryLocation;
-    }
-
-    public void setDeliveryLocation(final DefaultLocation deliveryLocation) {
-        this.deliveryLocation = deliveryLocation;
-    }
-
-    @Override
-    public Serializable getIdProperty() {
-        return id;
-    }
 }
