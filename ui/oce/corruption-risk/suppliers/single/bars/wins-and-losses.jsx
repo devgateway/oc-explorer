@@ -52,19 +52,20 @@ class Popup extends React.PureComponent {
 
 class WinsBarChart extends React.PureComponent {
   fixYLabels(...args) {
-    ReactDOM
-      .findDOMNode(this)
-      .querySelectorAll('.ytick')
-      .forEach(label => {
-        const { width, height } = label.getBoundingClientRect();
-        label.setAttribute('transform', `translate(${width}, -${height})`)
-        if (navigator.userAgent.indexOf('Firefox') === -1) {
-          setTimeout(function() {
-            const { width, height } = label.getBoundingClientRect();
-            label.setAttribute('transform', `translate(${width + 5}, -${height + 5})`)
-          })
-        }
-      });
+    const $this = ReactDOM.findDOMNode(this);
+    const barHeight = $this.querySelector('.trace.bars .point').getBoundingClientRect().height;
+
+    $this.querySelectorAll('.ytick').forEach(label => {
+      const { width } = label.getBoundingClientRect();
+      label.setAttribute('transform', `translate(${width}, ${-barHeight * 1.5})`)
+
+      if (navigator.userAgent.indexOf('Firefox') === -1) {
+        setTimeout(function() {
+          const { width, height } = label.getBoundingClientRect();
+          label.setAttribute('transform', `translate(${width + 5}, ${-barHeight * 1.5})`)
+        })
+      }
+    });
   }
 
   render() {
