@@ -1,3 +1,4 @@
+import ReactDOM from 'react-dom';
 import { pluck } from '../tools';
 import PlotlyChart from './plotly-chart';
 
@@ -31,6 +32,26 @@ function mkGradient(id, colors) {
 }
 
 class TaggedBarChart extends React.PureComponent {
+  fixYLabels() {
+    const { data } = this.props;
+    if (!data.length) return;
+    const deltaY = 0;
+    const $this = ReactDOM.findDOMNode(this);
+    const barHeight = $this.querySelector('.trace.bars .point').getBoundingClientRect().height;
+
+    $this.querySelectorAll('.ytick').forEach(label => {
+      const { width } = label.getBoundingClientRect();
+      label.setAttribute('transform', `translate(${width}, ${-barHeight - deltaY})`)
+
+      if (navigator.userAgent.indexOf('Firefox') === -1) {
+        setTimeout(function() {
+          const { width } = label.getBoundingClientRect();
+          label.setAttribute('transform', `translate(${width + 5}, ${-barHeight - deltaY})`)
+        })
+      }
+    });
+  }
+
   render() {
     const { width, tags, data } = this.props;
     const fstTag = Object.keys(tags)[0];
@@ -54,8 +75,6 @@ class TaggedBarChart extends React.PureComponent {
         orientation: 'h'
       }
     });
-
-    /* plotlyData[fstTag].width = Array(dataSize).fill(.5);*/
 
     data.forEach((datum, index) => {
       plotlyData[fstTag].x[index] = datum.x;
@@ -94,6 +113,7 @@ class TaggedBarChart extends React.PureComponent {
             barmode: 'stack',
             bargap: .5
           }}
+          onUpdate={this.fixYLabels.bind(this)}
         />
       </div>
     );
