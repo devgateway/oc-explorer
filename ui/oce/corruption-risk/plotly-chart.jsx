@@ -3,12 +3,13 @@ import ReactIgnore from '../react-ignore';
 
 class PlotlyChart extends React.PureComponent {
   componentDidMount() {
-    const { data, layout } = this.props;
+    const { data, layout, onUpdate } = this.props;
     Plotly.newPlot(
       this.chartContainer,
       data,
       layout,
     );
+    if (onUpdate) this.chartContainer.on('plotly_afterplot', onUpdate);
   }
 
   componentWillUnmount() {

@@ -1,3 +1,4 @@
+import ReactDOM from 'react-dom';
 import { pluck } from '../tools';
 import PlotlyChart from './plotly-chart';
 
@@ -31,10 +32,30 @@ function mkGradient(id, colors) {
 }
 
 class TaggedBarChart extends React.PureComponent {
+  fixYLabels() {
+    const { data } = this.props;
+    if (!data.length) return;
+    const deltaY = 0;
+    const $this = ReactDOM.findDOMNode(this);
+    const barHeight = $this.querySelector('.trace.bars .point').getBoundingClientRect().height;
+
+    $this.querySelectorAll('.ytick').forEach(label => {
+      const { width } = label.getBoundingClientRect();
+      label.setAttribute('transform', `translate(${width}, ${-barHeight - deltaY})`)
+
+      if (navigator.userAgent.indexOf('Firefox') === -1) {
+        setTimeout(function() {
+          const { width } = label.getBoundingClientRect();
+          label.setAttribute('transform', `translate(${width + 5}, ${-barHeight - deltaY})`)
+        })
+      }
+    });
+  }
+
   render() {
     const { width, tags, data } = this.props;
     const fstTag = Object.keys(tags)[0];
-    const x = data.map(pluck('x'));
+    const y = data.map(pluck('y'));
     const dataSize = data.length;
     const plotlyData = {};
     const gradients = {};
@@ -43,21 +64,20 @@ class TaggedBarChart extends React.PureComponent {
     Object.keys(tags).map(slug => {
       const { color, name } = tags[slug];
       plotlyData[slug] = {
-        x,
-        y: [0],
+        x: [0],
+        y,
         name,
         type: 'bar',
         marker: {
           color,
         },
         hoverinfo: 'none',
+        orientation: 'h'
       }
     });
 
-    plotlyData[fstTag].width = Array(dataSize).fill(.5);
-
     data.forEach((datum, index) => {
-      plotlyData[fstTag].y[index] = datum.y;
+      plotlyData[fstTag].x[index] = datum.x;
       if (datum.tags.length > 1) {
         const gradientSlug = datum.tags.join('_');
         gradients[gradientSlug] = gradients[gradientSlug] ||
@@ -79,9 +99,8 @@ class TaggedBarChart extends React.PureComponent {
           data={Object.values(plotlyData)}
           layout={{
             width,
-            height: 250,
-            barmode: 'stack',
-            margin: {t: 0, r: 20, b: 80, l: 20, pad: 0},
+            height: 350,
+            margin: {t: 0, r: 20, b: 30, l: 20, pad: 0},
             paper_bgcolor: 'rgba(0, 0, 0, 0)',
             plot_bgcolor: 'rgba(0, 0, 0, 0)',
             legend: {
@@ -91,10 +110,10 @@ class TaggedBarChart extends React.PureComponent {
               y: 1.5,
               orientation: 'h',
             },
-            xaxis: {
-              tickangle: 25
-            }
+            barmode: 'stack',
+            bargap: .5
           }}
+          onUpdate={this.fixYLabels.bind(this)}
         />
       </div>
     );

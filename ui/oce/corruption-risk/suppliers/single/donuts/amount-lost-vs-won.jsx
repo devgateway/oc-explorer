@@ -18,7 +18,7 @@ class CenterText extends React.PureComponent {
         <div>
           ${this.format(fst)}
           <div className="secondary">
-            ${snd} Lost
+            ${this.format(snd)} Lost
           </div>
         </div>
       </div>
