@@ -1,8 +1,5 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -14,8 +11,6 @@ import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 import java.net.URI;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -90,7 +85,6 @@ public class Transaction {
     @JsonProperty("payer")
     @JsonPropertyDescription("The id and name of the party being referenced. Used to cross-reference to the parties "
             + "section")
-    @ExcelExport
     private Organization payer;
     /**
      * Organization reference
@@ -100,7 +94,6 @@ public class Transaction {
     @JsonProperty("payee")
     @JsonPropertyDescription("The id and name of the party being referenced. Used to cross-reference to the parties "
             + "section")
-    @ExcelExport
     private Organization payee;
     /**
      * Linked spending information
@@ -131,8 +124,6 @@ public class Transaction {
     @JsonProperty("receiverOrganization")
     @ExcelExport
     private Identifier receiverOrganization;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * ID
@@ -334,16 +325,6 @@ public class Transaction {
         this.receiverOrganization = receiverOrganization;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("id", id)
@@ -356,7 +337,6 @@ public class Transaction {
                 .append("amount", amount)
                 .append("providerOrganization", providerOrganization)
                 .append("receiverOrganization", receiverOrganization)
-                .append("additionalProperties", additionalProperties)
                 .toString();
     }
 
@@ -369,7 +349,6 @@ public class Transaction {
                 .append(id)
                 .append(source)
                 .append(receiverOrganization)
-                .append(additionalProperties)
                 .append(value)
                 .append(payer)
                 .append(uri)
@@ -392,7 +371,6 @@ public class Transaction {
                 .append(id, rhs.id)
                 .append(source, rhs.source)
                 .append(receiverOrganization, rhs.receiverOrganization)
-                .append(additionalProperties, rhs.additionalProperties)
                 .append(value, rhs.value)
                 .append(payer, rhs.payer)
                 .append(uri, rhs.uri)

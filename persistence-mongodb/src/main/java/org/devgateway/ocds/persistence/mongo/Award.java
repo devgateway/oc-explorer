@@ -1,9 +1,6 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -14,6 +11,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -128,6 +126,7 @@ public class Award {
     @JsonProperty("items")
     @JsonDeserialize(as = LinkedHashSet.class)
     @ExcelExport
+    @ExcelExportSepareteSheet
     @JsonPropertyDescription("The goods and services awarded in this award, broken into line items wherever possible."
             + " Items should not be duplicated, but the quantity specified instead.")
     private Set<Item> items = new LinkedHashSet<Item>();
@@ -168,8 +167,6 @@ public class Award {
     @JsonPropertyDescription("Amendment information")
     @ExcelExport
     private Amendment amendment;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * Award ID
@@ -421,15 +418,6 @@ public class Award {
         this.amendment = amendment;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
 
     @Override
     public String toString() {
@@ -445,7 +433,6 @@ public class Award {
                 .append("documents", documents)
                 .append("amendments", amendments)
                 .append("amendment", amendment)
-                .append("additionalProperties", additionalProperties)
                 .toString();
     }
 
@@ -460,7 +447,6 @@ public class Award {
                 .append(title)
                 .append(contractPeriod)
                 .append(id)
-                .append(additionalProperties)
                 .append(value)
                 .append(items)
                 .append(status)
@@ -485,7 +471,6 @@ public class Award {
                 .append(title, rhs.title)
                 .append(contractPeriod, rhs.contractPeriod)
                 .append(id, rhs.id)
-                .append(additionalProperties, rhs.additionalProperties)
                 .append(value, rhs.value)
                 .append(items, rhs.items)
                 .append(status, rhs.status)

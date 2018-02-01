@@ -1,8 +1,5 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -14,8 +11,6 @@ import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 import java.io.Serializable;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -74,8 +69,6 @@ public class Classification implements Identifiable {
     @JsonPropertyDescription("A URI to identify the code. In the event individual URIs are not available for items in"
             + " the identifier scheme this value should be left blank.")
     private URI uri;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * Scheme
@@ -165,15 +158,6 @@ public class Classification implements Identifiable {
         this.uri = uri;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
 
     @Override
     public String toString() {
@@ -181,7 +165,6 @@ public class Classification implements Identifiable {
                 .append("id", id)
                 .append("description", description)
                 .append("uri", uri)
-                .append("additionalProperties", additionalProperties)
                 .toString();
     }
 
@@ -189,7 +172,6 @@ public class Classification implements Identifiable {
     public int hashCode() {
         return new HashCodeBuilder().append(description)
                 .append(id)
-                .append(additionalProperties)
                 .append(scheme)
                 .append(uri)
                 .toHashCode();
@@ -206,7 +188,6 @@ public class Classification implements Identifiable {
         Classification rhs = ((Classification) other);
         return new EqualsBuilder().append(description, rhs.description)
                 .append(id, rhs.id)
-                .append(additionalProperties, rhs.additionalProperties)
                 .append(scheme, rhs.scheme)
                 .append(uri, rhs.uri)
                 .isEquals();

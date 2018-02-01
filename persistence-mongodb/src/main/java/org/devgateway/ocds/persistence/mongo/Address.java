@@ -1,8 +1,5 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -11,9 +8,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -77,8 +71,6 @@ public class Address {
     @ExcelExport
     @JsonPropertyDescription("The country name. For example, United States.")
     private String countryName;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * Street address
@@ -180,16 +172,6 @@ public class Address {
         this.countryName = countryName;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("streetAddress", streetAddress)
@@ -197,7 +179,6 @@ public class Address {
                 .append("region", region)
                 .append("postalCode", postalCode)
                 .append("countryName", countryName)
-                .append("additionalProperties", additionalProperties)
                 .toString();
     }
 
@@ -207,7 +188,6 @@ public class Address {
                 .append(postalCode)
                 .append(locality)
                 .append(countryName)
-                .append(additionalProperties)
                 .append(region)
                 .toHashCode();
     }
@@ -225,7 +205,6 @@ public class Address {
                 .append(postalCode, rhs.postalCode)
                 .append(locality, rhs.locality)
                 .append(countryName, rhs.countryName)
-                .append(additionalProperties, rhs.additionalProperties)
                 .append(region, rhs.region)
                 .isEquals();
     }

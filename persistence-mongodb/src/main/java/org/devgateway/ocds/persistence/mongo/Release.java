@@ -1,9 +1,6 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -50,20 +47,6 @@ import java.util.Set;
 public class Release implements Identifiable {
 
     /**
-     * Open Contracting ID
-     * <p>
-     * A globally unique identifier for this Open Contracting Process. Composed of a publisher prefix and an
-     * identifier for the contracting process. For more information see the [Open Contracting Identifier guidance]
-     * (http://standard.open-contracting.org/latest/en/schema/identifiers/)
-     * (Required)
-     */
-    @JsonProperty("ocid")
-    @JsonPropertyDescription("A globally unique identifier for this Open Contracting Process. Composed of a publisher"
-            + " prefix and an identifier for the contracting process. For more information see the [Open Contracting "
-            + "Identifier guidance](http://standard.open-contracting.org/latest/en/schema/identifiers/)")
-    @ExcelExport
-    private String ocid;
-    /**
      * Release ID
      * <p>
      * An identifier for this particular release of information. A release identifier must be unique within the scope
@@ -77,6 +60,22 @@ public class Release implements Identifiable {
             + "within any release package it appears in. A release identifier must not contain the # character.")
     @ExcelExport
     private String id;
+
+    /**
+     * Open Contracting ID
+     * <p>
+     * A globally unique identifier for this Open Contracting Process. Composed of a publisher prefix and an
+     * identifier for the contracting process. For more information see the [Open Contracting Identifier guidance]
+     * (http://standard.open-contracting.org/latest/en/schema/identifiers/)
+     * (Required)
+     */
+    @JsonProperty("ocid")
+    @JsonPropertyDescription("A globally unique identifier for this Open Contracting Process. Composed of a publisher"
+            + " prefix and an identifier for the contracting process. For more information see the [Open Contracting "
+            + "Identifier guidance](http://standard.open-contracting.org/latest/en/schema/identifiers/)")
+    @ExcelExport
+    private String ocid;
+
     /**
      * Release Date
      * <p>
@@ -234,8 +233,7 @@ public class Release implements Identifiable {
             + "commonly used to relate mini-competitions to their parent frameworks, full tenders to a "
             + "pre-qualification phase, or individual tenders to a broad planning process.")
     private Set<RelatedProcess> relatedProcesses = new LinkedHashSet<RelatedProcess>();
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
 
     /**
      * Open Contracting ID
@@ -567,16 +565,6 @@ public class Release implements Identifiable {
         this.relatedProcesses = relatedProcesses;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("ocid", ocid)
@@ -592,7 +580,6 @@ public class Release implements Identifiable {
                 .append("contracts", contracts)
                 .append("language", language)
                 .append("relatedProcesses", relatedProcesses)
-                .append("additionalProperties", additionalProperties)
                 .append("bids", bids)
                 .toString();
     }
@@ -611,7 +598,6 @@ public class Release implements Identifiable {
                 .append(parties)
                 .append(id)
                 .append(tag)
-                .append(additionalProperties)
                 .append(ocid)
                 .append(bids)
                 .toHashCode();
@@ -639,7 +625,6 @@ public class Release implements Identifiable {
                 .append(parties, rhs.parties)
                 .append(id, rhs.id)
                 .append(tag, rhs.tag)
-                .append(additionalProperties, rhs.additionalProperties)
                 .append(ocid, rhs.ocid)
                 .isEquals();
     }

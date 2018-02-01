@@ -1,8 +1,5 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -12,8 +9,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -94,8 +89,6 @@ public class Statistic {
             + " the lot identifier here. If left blank, the statistic will be interpreted as applying"
             + " to the whole tender.")
     private String relatedLot;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * ID
@@ -236,24 +229,10 @@ public class Statistic {
         return ToStringBuilder.reflectionToString(this);
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
-    public void setAdditionalProperties(Map<String, Object> additionalProperties) {
-        this.additionalProperties = additionalProperties;
-    }
-
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(id).append(measure).append(date).append(value).append(notes).
-                append(relatedLot).append(additionalProperties).toHashCode();
+                append(relatedLot).toHashCode();
     }
 
     @Override
@@ -266,8 +245,8 @@ public class Statistic {
         }
         Statistic rhs = ((Statistic) other);
         return new EqualsBuilder().append(id, rhs.id).append(measure, rhs.measure).append(date, rhs.date).
-                append(value, rhs.value).append(notes, rhs.notes).append(relatedLot, rhs.relatedLot).
-                append(additionalProperties, rhs.additionalProperties).isEquals();
+                append(value, rhs.value).append(notes, rhs.notes).append(relatedLot, rhs.relatedLot)
+                .isEquals();
     }
 
 }

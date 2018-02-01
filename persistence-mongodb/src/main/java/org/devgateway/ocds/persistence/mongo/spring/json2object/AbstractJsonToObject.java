@@ -35,8 +35,8 @@ public abstract class AbstractJsonToObject<T> implements JsonToObject<T> {
         mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
         mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
 
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.configure(JsonParser.Feature.IGNORE_UNDEFINED, true);
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+        mapper.configure(JsonParser.Feature.IGNORE_UNDEFINED, false);
 
         // Note that enabling this feature will incur performance overhead
         // due to having to store and check additional information: this typically

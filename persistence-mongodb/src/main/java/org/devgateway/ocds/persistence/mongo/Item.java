@@ -31,7 +31,8 @@ import java.util.Set;
         "classification",
         "additionalClassifications",
         "quantity",
-        "unit"
+        "unit",
+        "deliveryLocation"
 })
 public class Item {
 
@@ -46,6 +47,18 @@ public class Item {
             + "array of items.")
     @ExcelExport
     private String id;
+
+
+
+    /**
+     * This is part of the OCDS location extension. We have decided to plug this
+     * into the OCDS standard since it seems this will be rolled into OCDS 1.1
+     * see https://jira.dgfoundation.org/browse/OCE-35
+     */
+    @SuppressWarnings("rawtypes")
+    private DefaultLocation deliveryLocation;
+
+
     /**
      * Description
      * <p>
@@ -224,6 +237,15 @@ public class Item {
         this.unit = unit;
     }
 
+
+    public DefaultLocation getDeliveryLocation() {
+        return deliveryLocation;
+    }
+
+    public void setDeliveryLocation(DefaultLocation deliveryLocation) {
+        this.deliveryLocation = deliveryLocation;
+    }
+
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -243,6 +265,7 @@ public class Item {
                 .append("quantity", quantity)
                 .append("unit", unit)
                 .append("additionalProperties", additionalProperties)
+                .append("deliveryLocation", deliveryLocation)
                 .toString();
     }
 
@@ -255,6 +278,7 @@ public class Item {
                 .append(id)
                 .append(additionalProperties)
                 .append(classification)
+                .append(deliveryLocation)
                 .toHashCode();
     }
 
@@ -274,6 +298,7 @@ public class Item {
                 .append(id, rhs.id)
                 .append(additionalProperties, rhs.additionalProperties)
                 .append(classification, rhs.classification)
+                .append(deliveryLocation, rhs.deliveryLocation)
                 .isEquals();
     }
 

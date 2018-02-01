@@ -156,6 +156,7 @@ public class Contract {
      * Information during the performance / implementation stage of the contract.
      */
     @JsonProperty("implementation")
+    @ExcelExport
     @JsonPropertyDescription("Information during the performance / implementation stage of the contract.")
     private Implementation implementation;
     /**
@@ -200,8 +201,7 @@ public class Contract {
     @JsonProperty("amendment")
     @JsonPropertyDescription("Amendment information")
     private Amendment amendment;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
 
     /**
      * Contract ID

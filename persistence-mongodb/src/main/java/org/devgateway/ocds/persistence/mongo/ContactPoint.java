@@ -1,8 +1,5 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -13,8 +10,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -81,8 +76,6 @@ public class ContactPoint {
     @ExcelExport
     @JsonPropertyDescription("A web address for the contact point/person.")
     private URI url;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * Name
@@ -186,16 +179,6 @@ public class ContactPoint {
         this.url = url;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("name", name)
@@ -203,7 +186,7 @@ public class ContactPoint {
                 .append("telephone", telephone)
                 .append("faxNumber", faxNumber)
                 .append("url", url)
-                .append("additionalProperties", additionalProperties)
+
                 .toString();
     }
 
@@ -212,7 +195,6 @@ public class ContactPoint {
         return new HashCodeBuilder().append(name)
                 .append(faxNumber)
                 .append(telephone)
-                .append(additionalProperties)
                 .append(email)
                 .append(url)
                 .toHashCode();
@@ -230,7 +212,6 @@ public class ContactPoint {
         return new EqualsBuilder().append(name, rhs.name)
                 .append(faxNumber, rhs.faxNumber)
                 .append(telephone, rhs.telephone)
-                .append(additionalProperties, rhs.additionalProperties)
                 .append(email, rhs.email)
                 .append(url, rhs.url)
                 .isEquals();

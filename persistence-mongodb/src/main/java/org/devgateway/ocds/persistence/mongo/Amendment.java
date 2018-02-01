@@ -1,8 +1,5 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -13,9 +10,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -96,8 +91,6 @@ public class Amendment {
     @JsonPropertyDescription("An array change objects describing the fields changed, and their former values. "
             + "(Deprecated in 1.1)")
     private List<Change> changes = new ArrayList<Change>();
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * Amendment date
@@ -243,15 +236,6 @@ public class Amendment {
         this.changes = changes;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
 
     @Override
     public String toString() {
@@ -262,7 +246,6 @@ public class Amendment {
                 .append("amendsReleaseID", amendsReleaseID)
                 .append("releaseID", releaseID)
                 .append("changes", changes)
-                .append("additionalProperties", additionalProperties)
                 .toString();
     }
 
@@ -274,7 +257,6 @@ public class Amendment {
                 .append(description)
                 .append(id)
                 .append(amendsReleaseID)
-                .append(additionalProperties)
                 .append(rationale)
                 .toHashCode();
     }
@@ -294,7 +276,6 @@ public class Amendment {
                 .append(description, rhs.description)
                 .append(id, rhs.id)
                 .append(amendsReleaseID, rhs.amendsReleaseID)
-                .append(additionalProperties, rhs.additionalProperties)
                 .append(rationale, rhs.rationale)
                 .isEquals();
     }

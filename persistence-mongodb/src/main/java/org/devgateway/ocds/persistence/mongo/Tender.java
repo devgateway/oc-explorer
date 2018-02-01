@@ -1,9 +1,6 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -178,7 +175,7 @@ public class Tender {
     @JsonProperty("procurementMethodRationale")
     @JsonPropertyDescription("Rationale for the chosen procurement method. This is especially important to provide a "
             + "justification in the case of limited tenders or direct awards.")
-
+    @ExcelExport
     private String procurementMethodRationale;
     /**
      * Main procurement category
@@ -368,8 +365,6 @@ public class Tender {
     @JsonProperty("amendment")
     @JsonPropertyDescription("Amendment information")
     private Amendment amendment;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * Tender ID
@@ -989,16 +984,6 @@ public class Tender {
         this.amendment = amendment;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("id", id)
@@ -1030,7 +1015,6 @@ public class Tender {
                 .append("milestones", milestones)
                 .append("amendments", amendments)
                 .append("amendment", amendment)
-                .append("additionalProperties", additionalProperties)
                 .toString();
     }
 
@@ -1061,7 +1045,6 @@ public class Tender {
                 .append(numberOfTenderers)
                 .append(submissionMethodDetails)
                 .append(awardCriteriaDetails)
-                .append(additionalProperties)
                 .append(milestones)
                 .append(items)
                 .append(tenderers)
@@ -1103,7 +1086,6 @@ public class Tender {
                 .append(numberOfTenderers, rhs.numberOfTenderers)
                 .append(submissionMethodDetails, rhs.submissionMethodDetails)
                 .append(awardCriteriaDetails, rhs.awardCriteriaDetails)
-                .append(additionalProperties, rhs.additionalProperties)
                 .append(milestones, rhs.milestones)
                 .append(items, rhs.items)
                 .append(tenderers, rhs.tenderers)

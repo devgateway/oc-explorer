@@ -1,10 +1,7 @@
 
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -51,8 +48,6 @@ public class Amount {
     @ExcelExport
     private Currency currency;
 
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * Amount
@@ -94,27 +89,17 @@ public class Amount {
         this.currency = currency;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("amount", amount)
                 .append("currency", currency)
-                .append("additionalProperties", additionalProperties)
                 .toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(amount).append(currency).append(additionalProperties).toHashCode();
+        return new HashCodeBuilder().append(amount).append(currency).toHashCode();
     }
 
     @Override
@@ -128,7 +113,6 @@ public class Amount {
         Amount rhs = ((Amount) other);
         return new EqualsBuilder().append(amount, rhs.amount)
                 .append(currency, rhs.currency)
-                .append(additionalProperties, rhs.additionalProperties)
                 .isEquals();
     }
 

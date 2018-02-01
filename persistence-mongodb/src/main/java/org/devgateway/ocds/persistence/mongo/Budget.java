@@ -1,8 +1,5 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -13,8 +10,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -119,8 +114,7 @@ public class Budget {
             + "a machine or human-readable source where users can find further information on the budget line item "
             + "identifiers, or project identifiers, provided here.")
     private URI source;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
 
     /**
      * ID
@@ -285,17 +279,7 @@ public class Budget {
         this.source = source;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
-    @Override
+   @Override
     public String toString() {
         return new ToStringBuilder(this).append("id", id)
                 .append("description", description)
@@ -304,7 +288,6 @@ public class Budget {
                 .append("projectID", projectID)
                 .append("uri", uri)
                 .append("source", source)
-                .append("additionalProperties", additionalProperties)
                 .toString();
     }
 
@@ -315,7 +298,6 @@ public class Budget {
                 .append(project)
                 .append(id)
                 .append(source)
-                .append(additionalProperties)
                 .append(projectID)
                 .append(uri)
                 .toHashCode();
@@ -333,7 +315,6 @@ public class Budget {
                     .append(project, rhs.project)
                     .append(id, rhs.id)
                     .append(source, rhs.source)
-                    .append(additionalProperties, rhs.additionalProperties)
                     .append(projectID, rhs.projectID)
                     .append(uri, rhs.uri)
                     .isEquals();
