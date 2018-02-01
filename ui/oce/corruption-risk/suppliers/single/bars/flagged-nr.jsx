@@ -5,7 +5,7 @@ import { pluck, cacheFn } from '../../../../tools';
 import translatable from '../../../../translatable';
 import CustomPopup from '../../../custom-popup';
 
-const POPUP_WIDTH = 300;
+const POPUP_WIDTH = 350;
 const POPUP_HEIGHT = 55;
 const POPUP_ARROW_SIZE = 8;
 
@@ -14,10 +14,10 @@ class Popup extends React.PureComponent {
     const { x, y, points } = this.props;
     const point = points[0];
     const { xaxis, yaxis } = point;
-    const markerLeft = xaxis.l2p(point.pointNumber) + xaxis._offset;
-    const markerTop = yaxis.l2p(point.y) + yaxis._offset;
+    const markerLeft = xaxis.l2p(point.x) + xaxis._offset;
+    const markerTop = yaxis.l2p(point.pointNumber) + yaxis._offset;
 
-    const left = markerLeft - (POPUP_WIDTH / 2);
+    const left = (markerLeft / 2) - (POPUP_WIDTH / 2);
     const top = markerTop - POPUP_HEIGHT - (POPUP_ARROW_SIZE * 1.5);
 
     const style = {
@@ -27,14 +27,14 @@ class Popup extends React.PureComponent {
       height: POPUP_HEIGHT
     };
 
-    const flags = point.y;
+    const flags = point.x;
 
     return (
       <div
         className="crd-popup donut-popup text-center"
         style={style}
       >
-        {flags} {flags === 1 ? 'flag' : 'flags'} for "{point.x}"
+        {flags} {flags === 1 ? 'flag' : 'flags'} for "{point.y}"
         <div className="arrow"/>
       </div>
     )
