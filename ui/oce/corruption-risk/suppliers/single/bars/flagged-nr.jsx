@@ -82,13 +82,13 @@ class FlaggedNrWrapper extends translatable(React.PureComponent) {
       Object.keys(indicatorTypesMapping).forEach((id, index) => {
         if(data[index].length) {
           chartData.push({
-            x: this.t(`crd:indicators:${id}:name`),
-            y: data[index][0].count,
+            x: data[index][0].count,
+            y: this.t(`crd:indicators:${id}:name`),
             tags: indicatorTypesMapping[id].types
           });
         }
       });
-      chartData.sort((a, b) => b.y - a.y);
+      chartData.sort((a, b) => b.x - a.x);
     }
     this.props.requestNewData(path, chartData);
   }
