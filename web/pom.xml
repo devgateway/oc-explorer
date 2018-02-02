@@ -136,6 +136,15 @@
 
 
         <dependency>
+            <groupId>org.devgateway.ocds</groupId>
+            <artifactId>persistence-mongodb</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
