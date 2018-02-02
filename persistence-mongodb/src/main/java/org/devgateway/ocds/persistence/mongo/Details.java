@@ -1,16 +1,10 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -25,27 +19,15 @@ import java.util.Map;
 })
 public class Details {
 
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("additionalProperties", additionalProperties).toString();
+        return new ToStringBuilder(this).toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(additionalProperties).toHashCode();
+        return new HashCodeBuilder().toHashCode();
     }
 
     @Override
@@ -57,7 +39,7 @@ public class Details {
             return false;
         }
         Details rhs = ((Details) other);
-        return new EqualsBuilder().append(additionalProperties, rhs.additionalProperties).isEquals();
+        return new EqualsBuilder().isEquals();
     }
 
 }

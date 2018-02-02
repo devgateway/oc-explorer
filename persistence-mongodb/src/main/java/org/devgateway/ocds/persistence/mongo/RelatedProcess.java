@@ -1,8 +1,5 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -13,9 +10,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -96,8 +91,6 @@ public class RelatedProcess {
     @JsonPropertyDescription("A URI pointing to a machine-readable document, release or record package containing the"
             + " identified related process.")
     private URI uri;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * Relationship ID
@@ -231,16 +224,6 @@ public class RelatedProcess {
         this.uri = uri;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("id", id)
@@ -249,7 +232,6 @@ public class RelatedProcess {
                 .append("scheme", scheme)
                 .append("identifier", identifier)
                 .append("uri", uri)
-                .append("additionalProperties", additionalProperties)
                 .toString();
     }
 
@@ -258,7 +240,6 @@ public class RelatedProcess {
         return new HashCodeBuilder().append(identifier)
                 .append(scheme)
                 .append(id)
-                .append(additionalProperties)
                 .append(relationship)
                 .append(title)
                 .append(uri)
@@ -277,7 +258,6 @@ public class RelatedProcess {
         return new EqualsBuilder().append(identifier, rhs.identifier)
                 .append(scheme, rhs.scheme)
                 .append(id, rhs.id)
-                .append(additionalProperties, rhs.additionalProperties)
                 .append(relationship, rhs.relationship)
                 .append(title, rhs.title)
                 .append(uri, rhs.uri)

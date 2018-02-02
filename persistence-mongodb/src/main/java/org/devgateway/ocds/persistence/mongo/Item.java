@@ -1,8 +1,5 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -13,9 +10,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
-import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
 
 
@@ -108,8 +103,6 @@ public class Item {
     @JsonPropertyDescription("A description of the unit in which the supplies, services or works are provided (e.g. "
             + "hours, kilograms) and the unit-price. For comparability, an established list of units can be used.  ")
     private Unit unit;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * ID
@@ -246,15 +239,6 @@ public class Item {
         this.deliveryLocation = deliveryLocation;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
 
     @Override
     public String toString() {
@@ -264,7 +248,6 @@ public class Item {
                 .append("additionalClassifications", additionalClassifications)
                 .append("quantity", quantity)
                 .append("unit", unit)
-                .append("additionalProperties", additionalProperties)
                 .append("deliveryLocation", deliveryLocation)
                 .toString();
     }
@@ -276,7 +259,6 @@ public class Item {
                 .append(quantity)
                 .append(description)
                 .append(id)
-                .append(additionalProperties)
                 .append(classification)
                 .append(deliveryLocation)
                 .toHashCode();
@@ -296,7 +278,6 @@ public class Item {
                 .append(quantity, rhs.quantity)
                 .append(description, rhs.description)
                 .append(id, rhs.id)
-                .append(additionalProperties, rhs.additionalProperties)
                 .append(classification, rhs.classification)
                 .append(deliveryLocation, rhs.deliveryLocation)
                 .isEquals();

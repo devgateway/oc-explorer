@@ -45,8 +45,8 @@ public class ReleaseExportTest extends AbstractWebTest {
     @Autowired
     private OcdsSchemaValidatorService ocdsSchemaValidator;
 
-    @Autowired
-    private OcdsSchemaValidatorService ocdsSchemaAllRequiredValidator;
+//    @Autowired
+//    private OcdsSchemaValidatorService ocdsSchemaAllRequiredValidator;
 
     @Before
     public final void setUp() throws Exception {
@@ -113,7 +113,7 @@ public class ReleaseExportTest extends AbstractWebTest {
 
         final JsonNode jsonNodeResponse = JsonLoader.fromString(content);
         final OcdsSchemaValidatorService.ProcessingReportWithNode processingReport =
-                ocdsSchemaAllRequiredValidator.validate(jsonNodeResponse);
+                ocdsSchemaValidator.validate(jsonNodeResponse);
 
         if (!processingReport.getReport().isSuccess()) {
             for (ProcessingMessage processingMessage : processingReport.getReport()) {

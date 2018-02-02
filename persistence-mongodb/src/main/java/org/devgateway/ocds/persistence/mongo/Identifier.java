@@ -1,8 +1,5 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -13,8 +10,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -76,9 +71,6 @@ public class Identifier {
             + "(http://www.opencorporates.com) or some other relevant URI provider. This is not for listing the "
             + "website of the organization: that can be done through the URL field of the Organization contact point.")
     private URI uri;
-
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * Scheme
@@ -170,15 +162,6 @@ public class Identifier {
         this.uri = uri;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
 
     @Override
     public String toString() {
@@ -186,7 +169,6 @@ public class Identifier {
                 .append("id", id)
                 .append("legalName", legalName)
                 .append("uri", uri)
-                .append("additionalProperties", additionalProperties)
                 .toString();
     }
 
@@ -194,7 +176,6 @@ public class Identifier {
     public int hashCode() {
         return new HashCodeBuilder().append(legalName)
                 .append(id)
-                .append(additionalProperties)
                 .append(scheme)
                 .append(uri)
                 .toHashCode();
@@ -211,7 +192,6 @@ public class Identifier {
         Identifier rhs = ((Identifier) other);
         return new EqualsBuilder().append(legalName, rhs.legalName)
                 .append(id, rhs.id)
-                .append(additionalProperties, rhs.additionalProperties)
                 .append(scheme, rhs.scheme)
                 .append(uri, rhs.uri)
                 .isEquals();

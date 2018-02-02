@@ -1,8 +1,5 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -13,8 +10,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.net.URI;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -140,8 +135,6 @@ public class Document {
             + "(https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) is strongly recommended unless there is a "
             + "clear user need for distinguishing the language subtype.")
     private String language;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * ID
@@ -353,15 +346,6 @@ public class Document {
         this.language = language;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
 
     @Override
     public String toString() {
@@ -374,7 +358,6 @@ public class Document {
                 .append("dateModified", dateModified)
                 .append("format", format)
                 .append("language", language)
-                .append("additionalProperties", additionalProperties)
                 .toString();
     }
 
@@ -387,7 +370,6 @@ public class Document {
                 .append(dateModified)
                 .append(language)
                 .append(id)
-                .append(additionalProperties)
                 .append(title)
                 .append(url)
                 .toHashCode();
@@ -409,7 +391,6 @@ public class Document {
                 .append(dateModified, rhs.dateModified)
                 .append(language, rhs.language)
                 .append(id, rhs.id)
-                .append(additionalProperties, rhs.additionalProperties)
                 .append(title, rhs.title)
                 .append(url, rhs.url)
                 .isEquals();

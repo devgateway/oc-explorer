@@ -1,9 +1,6 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -519,15 +516,7 @@ public class Contract {
         this.amendment = amendment;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
 
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
 
     @Override
     public String toString() {
@@ -546,7 +535,6 @@ public class Contract {
                 .append("milestones", milestones)
                 .append("amendments", amendments)
                 .append("amendment", amendment)
-                .append("additionalProperties", additionalProperties)
                 .toString();
     }
 
@@ -562,7 +550,6 @@ public class Contract {
                 .append(amendments)
                 .append(title)
                 .append(id)
-                .append(additionalProperties)
                 .append(dateSigned)
                 .append(milestones)
                 .append(value)
@@ -590,7 +577,6 @@ public class Contract {
                 .append(amendments, rhs.amendments)
                 .append(title, rhs.title)
                 .append(id, rhs.id)
-                .append(additionalProperties, rhs.additionalProperties)
                 .append(dateSigned, rhs.dateSigned)
                 .append(milestones, rhs.milestones)
                 .append(value, rhs.value)

@@ -35,6 +35,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,11 +92,16 @@ public class OcdsController extends GenericOCDSController {
 
     public ReleasePackage createReleasePackage(final Release release) {
         ReleasePackage releasePackage = new ReleasePackage();
-        releasePackage.setLicense("https://creativecommons.org/licenses/by/2.0/");
-        releasePackage.setPublicationPolicy("https://github.com/open-contracting/sample-data/");
+        try {
+            releasePackage.setLicense(new URI("https://creativecommons.org/licenses/by/2.0/"));
+            releasePackage.setPublicationPolicy(new URI("https://github.com/open-contracting/sample-data/"));
+            releasePackage.setUri(new URI(SERVER_DOMAIN + "/api/ocds/package/ocid/" + release.getOcid()));
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
         releasePackage.setPublishedDate(release.getDate());
         releasePackage.getReleases().add(release);
-        releasePackage.setUri(SERVER_DOMAIN + "/api/ocds/package/ocid/" + release.getOcid());
+
         Publisher publisher = new Publisher();
 
         publisher.setName("Government of Vietnam: Public Procurement Agency");
@@ -130,10 +137,13 @@ public class OcdsController extends GenericOCDSController {
     public List<Release> ocdsReleases(@ModelAttribute @Valid final YearFilterPagingRequest releaseRequest) {
 
         Pageable pageRequest = new PageRequest(releaseRequest.getPageNumber(), releaseRequest.getPageSize(),
-                Direction.ASC, "id");
+                Direction.ASC, "id"
+        );
 
-        Query query = query(getYearDefaultFilterCriteria(releaseRequest,
-                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))
+        Query query = query(getYearDefaultFilterCriteria(
+                releaseRequest,
+                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
+        ))
                 .with(pageRequest);
 
         if (StringUtils.isNotEmpty(releaseRequest.getText())) {
@@ -159,10 +169,13 @@ public class OcdsController extends GenericOCDSController {
     public Long ocdsReleasesCount(@ModelAttribute @Valid final YearFilterPagingRequest releaseRequest) {
 
         Pageable pageRequest = new PageRequest(releaseRequest.getPageNumber(), releaseRequest.getPageSize(),
-                Direction.ASC, "id");
+                Direction.ASC, "id"
+        );
 
-        Query query = query(getYearDefaultFilterCriteria(releaseRequest,
-                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE)).with(pageRequest);
+        Query query = query(getYearDefaultFilterCriteria(
+                releaseRequest,
+                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
+        )).with(pageRequest);
 
         if (StringUtils.isNotEmpty(releaseRequest.getText())) {
             query.addCriteria(getTextCriteria(releaseRequest));
@@ -188,10 +201,13 @@ public class OcdsController extends GenericOCDSController {
             @ModelAttribute @Valid final YearFilterPagingRequest releaseRequest) {
 
         Pageable pageRequest = new PageRequest(releaseRequest.getPageNumber(), releaseRequest.getPageSize(),
-                Direction.ASC, "id");
+                Direction.ASC, "id"
+        );
 
-        Query query = query(getYearDefaultFilterCriteria(releaseRequest,
-                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE)).with(pageRequest);
+        Query query = query(getYearDefaultFilterCriteria(
+                releaseRequest,
+                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
+        )).with(pageRequest);
 
         if (StringUtils.isNotEmpty(releaseRequest.getText())) {
             query.addCriteria(getTextCriteria(releaseRequest));

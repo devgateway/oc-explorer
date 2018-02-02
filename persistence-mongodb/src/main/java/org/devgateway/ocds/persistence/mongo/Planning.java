@@ -1,8 +1,5 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -13,9 +10,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -79,8 +74,6 @@ public class Planning {
     @JsonProperty("milestones")
     @JsonPropertyDescription("A list of milestones associated with the planning stage.")
     private List<Milestone> milestones = new ArrayList<Milestone>();
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * Rationale
@@ -171,30 +164,19 @@ public class Planning {
     public void setMilestones(List<Milestone> milestones) {
         this.milestones = milestones;
     }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
+    
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("rationale", rationale)
                 .append("budget", budget)
                 .append("documents", documents)
                 .append("milestones", milestones)
-                .append("additionalProperties", additionalProperties)
                 .toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(additionalProperties)
+        return new HashCodeBuilder()
                 .append(milestones)
                 .append(rationale)
                 .append(documents)
@@ -211,7 +193,7 @@ public class Planning {
             return false;
         }
         Planning rhs = ((Planning) other);
-        return new EqualsBuilder().append(additionalProperties, rhs.additionalProperties)
+        return new EqualsBuilder()
                 .append(milestones, rhs.milestones)
                 .append(rationale, rhs.rationale)
                 .append(documents, rhs.documents)

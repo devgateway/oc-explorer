@@ -1,9 +1,6 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -138,8 +135,6 @@ public class Milestone {
     @JsonDeserialize(as = LinkedHashSet.class)
     @JsonPropertyDescription("List of documents associated with this milestone (Deprecated in 1.1).")
     private Set<Document> documents = new LinkedHashSet<Document>();
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * ID
@@ -355,16 +350,6 @@ public class Milestone {
         this.documents = documents;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("id", id)
@@ -377,7 +362,6 @@ public class Milestone {
                 .append("dateModified", dateModified)
                 .append("status", status)
                 .append("documents", documents)
-                .append("additionalProperties", additionalProperties)
                 .toString();
     }
 
@@ -390,7 +374,6 @@ public class Milestone {
                 .append(description)
                 .append(dateModified)
                 .append(id)
-                .append(additionalProperties)
                 .append(title)
                 .append(type)
                 .append(status)
@@ -413,7 +396,6 @@ public class Milestone {
                 .append(description, rhs.description)
                 .append(dateModified, rhs.dateModified)
                 .append(id, rhs.id)
-                .append(additionalProperties, rhs.additionalProperties)
                 .append(title, rhs.title)
                 .append(type, rhs.type)
                 .append(status, rhs.status)

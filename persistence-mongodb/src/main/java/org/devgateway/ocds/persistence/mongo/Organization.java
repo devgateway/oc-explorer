@@ -1,9 +1,6 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -136,8 +133,6 @@ public class Organization implements Identifiable {
     @JsonPropertyDescription("Additional classification information about parties can be provided using partyDetail "
             + "extensions that define particular properties and classification schemes. ")
     private Details details;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * Common name
@@ -321,16 +316,6 @@ public class Organization implements Identifiable {
         this.details = details;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("name", name)
@@ -341,7 +326,6 @@ public class Organization implements Identifiable {
                 .append("contactPoint", contactPoint)
                 .append("roles", roles)
                 .append("details", details)
-                .append("additionalProperties", additionalProperties)
                 .toString();
     }
 
@@ -355,7 +339,6 @@ public class Organization implements Identifiable {
                 .append(additionalIdentifiers)
                 .append(details)
                 .append(id)
-                .append(additionalProperties)
                 .toHashCode();
     }
 
@@ -376,7 +359,6 @@ public class Organization implements Identifiable {
                 .append(additionalIdentifiers, rhs.additionalIdentifiers)
                 .append(details, rhs.details)
                 .append(id, rhs.id)
-                .append(additionalProperties, rhs.additionalProperties)
                 .isEquals();
     }
 

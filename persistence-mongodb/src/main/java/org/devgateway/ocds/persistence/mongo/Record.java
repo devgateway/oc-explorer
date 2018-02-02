@@ -1,80 +1,69 @@
-
 package org.devgateway.ocds.persistence.mongo;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.util.ArrayList;
+import java.util.List;
 
+
+/**
+ * Record
+ * <p>
+ */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "ocid",
         "releases",
-        "compiledRelease"
+        "compiledRelease",
+        "versionedRelease"
 })
-@Document
-public class Record implements Identifiable {
+public class Record {
 
     /**
      * Open Contracting ID
      * <p>
-     * A unique identifier that identifies the unique Open Contracting Process.
-     * For more information see:
-     * http://ocds.open-contracting.org/standard/r/1__0__0/en/key_concepts/
-     * definitions/#contracting-process (Required)
-     *
+     * A unique identifier that identifies the unique Open Contracting Process. For more information see:
+     * http://standard.open-contracting.org/latest/en/getting_started/contracting_process/
+     * (Required)
      */
     @JsonProperty("ocid")
-    @Id
+    @JsonPropertyDescription("A unique identifier that identifies the unique Open Contracting Process. For more "
+            + "information see: http://standard.open-contracting.org/latest/en/getting_started/contracting_process/")
     private String ocid;
     /**
-     * Linked releases
+     * Releases
      * <p>
-     * A list of objects that identify the releases associated with this Open
-     * Contracting ID. The releases MUST be sorted into date order in the array,
-     * from oldest (at position 0) to newest (last). (Required)
-     *
+     * An array of linking identifiers or releases
+     * (Required)
      */
     @JsonProperty("releases")
+    @JsonPropertyDescription("An array of linking identifiers or releases")
     private List<Release> releases = new ArrayList<Release>();
-
-    /**
-     * this NOT in the OCDS standard, but the standard uses "oneOf" which is
-     * poorly supported presently
-     *
-     * @see https://github.com/joelittlejohn/jsonschema2pojo/wiki/Proposal-for-
-     *      allOf,-anyOf-and-oneOf
-     */
-
-    private List<ReleaseReference> releaseReferences = new ArrayList<ReleaseReference>();
-
     /**
      * Schema for an Open Contracting Release
      * <p>
-     *
-     *
      */
     @JsonProperty("compiledRelease")
-    @DBRef
     private Release compiledRelease;
+    /**
+     * Schema for a compiled, versioned Open Contracting Release.
+     * <p>
+     */
+    @JsonProperty("versionedRelease")
+    private Release versionedRelease;
 
     /**
      * Open Contracting ID
      * <p>
-     * A unique identifier that identifies the unique Open Contracting Process.
-     * For more information see:
-     * http://ocds.open-contracting.org/standard/r/1__0__0/en/key_concepts/
-     * definitions/#contracting-process (Required)
-     *
-     * @return The ocid
+     * A unique identifier that identifies the unique Open Contracting Process. For more information see:
+     * http://standard.open-contracting.org/latest/en/getting_started/contracting_process/
+     * (Required)
      */
     @JsonProperty("ocid")
     public String getOcid() {
@@ -84,38 +73,20 @@ public class Record implements Identifiable {
     /**
      * Open Contracting ID
      * <p>
-     * A unique identifier that identifies the unique Open Contracting Process.
-     * For more information see:
-     * http://ocds.open-contracting.org/standard/r/1__0__0/en/key_concepts/
-     * definitions/#contracting-process (Required)
-     *
-     * @param ocid
-     *            The ocid
+     * A unique identifier that identifies the unique Open Contracting Process. For more information see:
+     * http://standard.open-contracting.org/latest/en/getting_started/contracting_process/
+     * (Required)
      */
     @JsonProperty("ocid")
-    public void setOcid(final String ocid) {
+    public void setOcid(String ocid) {
         this.ocid = ocid;
     }
 
-
-    @JsonProperty("releaseReferences")
-    public List<ReleaseReference> getReleaseReferences() {
-        return releaseReferences;
-    }
-
-    @JsonProperty("releaseReferences")
-    public void setReleaseReferences(final List<ReleaseReference> releaseReferences) {
-        this.releaseReferences = releaseReferences;
-    }
-
     /**
-     * Linked releases
+     * Releases
      * <p>
-     * A list of objects that identify the releases associated with this Open
-     * Contracting ID. The releases MUST be sorted into date order in the array,
-     * from oldest (at position 0) to newest (last). (Required)
-     *
-     * @return The releases
+     * An array of linking identifiers or releases
+     * (Required)
      */
     @JsonProperty("releases")
     public List<Release> getReleases() {
@@ -123,26 +94,20 @@ public class Record implements Identifiable {
     }
 
     /**
-     * Linked releases
+     * Releases
      * <p>
-     * A list of objects that identify the releases associated with this Open
-     * Contracting ID. The releases MUST be sorted into date order in the array,
-     * from oldest (at position 0) to newest (last). (Required)
-     *
+     * An array of linking identifiers or releases
+     * (Required)
      * @param releases
-     *            The releases
      */
     @JsonProperty("releases")
-    public void setReleases(final List<Release> releases) {
+    public void setReleases(List<Release> releases) {
         this.releases = releases;
     }
 
     /**
      * Schema for an Open Contracting Release
      * <p>
-     *
-     *
-     * @return The compiledRelease
      */
     @JsonProperty("compiledRelease")
     public Release getCompiledRelease() {
@@ -152,31 +117,50 @@ public class Record implements Identifiable {
     /**
      * Schema for an Open Contracting Release
      * <p>
-     *
-     *
-     * @param compiledRelease
-     *            The compiledRelease
      */
     @JsonProperty("compiledRelease")
-    public void setCompiledRelease(final Release compiledRelease) {
+    public void setCompiledRelease(Release compiledRelease) {
         this.compiledRelease = compiledRelease;
+    }
+
+    /**
+     * Schema for a compiled, versioned Open Contracting Release.
+     * <p>
+     */
+    @JsonProperty("versionedRelease")
+    public Release getVersionedRelease() {
+        return versionedRelease;
+    }
+
+    /**
+     * Schema for a compiled, versioned Open Contracting Release.
+     * <p>
+     */
+    @JsonProperty("versionedRelease")
+    public void setVersionedRelease(Release versionedRelease) {
+        this.versionedRelease = versionedRelease;
     }
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return new ToStringBuilder(this).append("ocid", ocid)
+                .append("releases", releases)
+                .append("compiledRelease", compiledRelease)
+                .append("versionedRelease", versionedRelease)
+                .toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().
-                append(ocid).
-                append(releases).
-                append(compiledRelease).toHashCode();
+        return new HashCodeBuilder().append(compiledRelease)
+                .append(versionedRelease)
+                .append(ocid)
+                .append(releases)
+                .toHashCode();
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
@@ -184,15 +168,11 @@ public class Record implements Identifiable {
             return false;
         }
         Record rhs = ((Record) other);
-        return new EqualsBuilder().
-                append(ocid, rhs.ocid).
-                append(releases, rhs.releases).
-                append(compiledRelease, rhs.compiledRelease).isEquals();
-    }
-
-    @Override
-    public Serializable getIdProperty() {
-        return ocid;
+        return new EqualsBuilder().append(compiledRelease, rhs.compiledRelease)
+                .append(versionedRelease, rhs.versionedRelease)
+                .append(ocid, rhs.ocid)
+                .append(releases, rhs.releases)
+                .isEquals();
     }
 
 }

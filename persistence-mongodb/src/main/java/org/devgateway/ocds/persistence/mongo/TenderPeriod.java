@@ -1,8 +1,5 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -12,8 +9,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -72,8 +67,6 @@ public class TenderPeriod {
             + "startDate and maxExtentDate are given, this field is optional, and should reflect the difference "
             + "between startDate and maxExtentDate.")
     private Integer durationInDays;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * Start date
@@ -165,15 +158,6 @@ public class TenderPeriod {
         this.durationInDays = durationInDays;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
 
     @Override
     public String toString() {
@@ -181,14 +165,12 @@ public class TenderPeriod {
                 .append("endDate", endDate)
                 .append("maxExtentDate", maxExtentDate)
                 .append("durationInDays", durationInDays)
-                .append("additionalProperties", additionalProperties)
                 .toString();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(durationInDays)
-                .append(additionalProperties)
                 .append(endDate)
                 .append(startDate)
                 .append(maxExtentDate)
@@ -205,7 +187,6 @@ public class TenderPeriod {
         }
         TenderPeriod rhs = ((TenderPeriod) other);
         return new EqualsBuilder().append(durationInDays, rhs.durationInDays)
-                .append(additionalProperties, rhs.additionalProperties)
                 .append(endDate, rhs.endDate)
                 .append(startDate, rhs.startDate)
                 .append(maxExtentDate, rhs.maxExtentDate)
