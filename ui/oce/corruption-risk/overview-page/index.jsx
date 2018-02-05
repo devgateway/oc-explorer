@@ -80,6 +80,7 @@ class CorruptionType extends CustomPopupChart {
       hovermode: 'closest',
       xaxis: {
         type: 'category',
+        categoryorder: 'category ascending'
       },
       yaxis: {},
       legend: {
