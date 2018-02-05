@@ -4,7 +4,7 @@ import {pluckImm} from "../tools";
 import CustomPopupChart from "./custom-popup-chart";
 import translatable from '../translatable';
 import CRDPage from "./page";
-import { colorLuminance } from './tools';
+import { colorLuminance, sortByField } from './tools';
 import Crosstab from './crosstab';
 
 class IndicatorTile extends CustomPopupChart{
@@ -15,9 +15,11 @@ class IndicatorTile extends CustomPopupChart{
 
   getData(){
     const color = this.props.styling.charts.traceColors[2];
-    const data = super.getData();
+    let data = super.getData();
     if(!data) return [];
-    const {monthly} = this.props;
+    const { monthly } = this.props;
+    data = data.sort(sortByField(monthly ? 'month': 'year'));
+
     let dates = monthly ?
       data.map(datum => {
         const month = datum.get('month');
@@ -57,6 +59,7 @@ class IndicatorTile extends CustomPopupChart{
     return {
       xaxis: {
         type: 'category',
+        categoryorder: 'category ascending',
         showgrid: false,
         showline: false,
         tickangle: -60
@@ -71,7 +74,7 @@ class IndicatorTile extends CustomPopupChart{
   }
 
   getPopup(){
-    const {indicator, monthly} = this.props;
+    const {monthly} = this.props;
     const {popup} = this.state;
     const {year} = popup;
     const data = super.getData();
