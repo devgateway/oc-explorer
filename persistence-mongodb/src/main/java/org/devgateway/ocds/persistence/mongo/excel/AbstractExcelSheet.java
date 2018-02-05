@@ -1,13 +1,16 @@
 package org.devgateway.ocds.persistence.mongo.excel;
 
+import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Hyperlink;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.math.BigDecimal;
@@ -74,20 +77,20 @@ public abstract class AbstractExcelSheet implements ExcelSheet {
             this.linkFont.setUnderline(Font.U_SINGLE);
 
             this.dataStyleCell = this.workbook.createCellStyle();
-            this.dataStyleCell.setAlignment(CellStyle.ALIGN_LEFT);
-            this.dataStyleCell.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+            this.dataStyleCell.setAlignment(HorizontalAlignment.LEFT);
+            this.dataStyleCell.setVerticalAlignment(VerticalAlignment.CENTER);
             this.dataStyleCell.setWrapText(true);
             this.dataStyleCell.setFont(this.dataFont);
 
             this.headerStyleCell = this.workbook.createCellStyle();
-            this.headerStyleCell.setAlignment(CellStyle.ALIGN_CENTER);
-            this.headerStyleCell.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+            this.headerStyleCell.setAlignment(HorizontalAlignment.CENTER);
+            this.headerStyleCell.setVerticalAlignment(VerticalAlignment.CENTER);
             this.headerStyleCell.setWrapText(true);
             this.headerStyleCell.setFont(this.headerFont);
 
             this.linkStyleCell = this.workbook.createCellStyle();
-            this.linkStyleCell.setAlignment(CellStyle.ALIGN_LEFT);
-            this.linkStyleCell.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+            this.linkStyleCell.setAlignment(HorizontalAlignment.LEFT);
+            this.linkStyleCell.setVerticalAlignment(VerticalAlignment.CENTER);
             this.linkStyleCell.setWrapText(true);
             this.linkStyleCell.setFont(this.linkFont);
         }
@@ -154,7 +157,7 @@ public abstract class AbstractExcelSheet implements ExcelSheet {
     }
 
     /**
-     * Creates a cell that is a link to another sheet in the document {@link Hyperlink#LINK_DOCUMENT}.
+     * Creates a cell that is a link to another sheet in the document
      *
      * @param value
      * @param row
@@ -166,7 +169,7 @@ public abstract class AbstractExcelSheet implements ExcelSheet {
                               final String sheetName, final int rowNumber) {
         this.writeCell(value, row, column);
 
-        Hyperlink link = createHelper.createHyperlink(Hyperlink.LINK_DOCUMENT);
+        Hyperlink link = createHelper.createHyperlink(HyperlinkType.DOCUMENT);
         // always point to first column A in excel file
         link.setAddress("'" + sheetName + "'!A" + rowNumber);
         cell.setHyperlink(link);
