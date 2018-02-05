@@ -23,7 +23,7 @@ class Popup extends React.PureComponent {
 
     if (PEname.length > 40 ) POPUP_HEIGHT = 90;
 
-    const left = (markerLeft / 2) - (POPUP_WIDTH / 2);
+    const left = markerLeft - (POPUP_WIDTH / 2);
     const top = markerTop - POPUP_HEIGHT - (POPUP_ARROW_SIZE * 2);
 
     const style = {
@@ -53,7 +53,9 @@ class Popup extends React.PureComponent {
 class WinsBarChart extends React.PureComponent {
   fixYLabels() {
     const { data } = this.props;
-    const deltaY = 40 / data[0].x.length;
+    let deltaY = 40 / data[0].x.length;
+    const isZoomed = data[0].x.length > 5;
+    if (isZoomed) deltaY += 10;
     const $this = ReactDOM.findDOMNode(this);
     const barHeight = $this.querySelector('.trace.bars .point').getBoundingClientRect().height;
 
@@ -72,13 +74,18 @@ class WinsBarChart extends React.PureComponent {
 
   render() {
     const { width, data } = this.props;
+    const isZoomed = data[0].x.length > 5;
+    const height = isZoomed ?
+      100 * data[0].x.length :
+      350;
+
     return (
       <PlotlyChart
         data={data}
         layout={{
           width,
-          height: 350,
-          margin: {t: 0, r: 0, b: 30, l: 20, pad: 0},
+          height: height,
+          margin: {t: 0, r: 0, b: 30, l: 20, pad: 0, autoexpand: !isZoomed},
           paper_bgcolor: 'rgba(0, 0, 0, 0)',
           plot_bgcolor: 'rgba(0, 0, 0, 0)',
           legend: {
