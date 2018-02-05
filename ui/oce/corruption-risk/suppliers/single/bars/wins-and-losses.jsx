@@ -21,7 +21,13 @@ class Popup extends React.PureComponent {
     let POPUP_HEIGHT = 70;
     let POPUP_WIDTH = 300;
 
-    if (PEname.length > 40 ) POPUP_HEIGHT = 90;
+    if (PEname.length > 100) {
+      POPUP_HEIGHT = 140;
+    } else if (PEname.length > 70 ) {
+      POPUP_HEIGHT = 110;
+    } else if (PEname.length > 40 ) {
+      POPUP_HEIGHT = 90;
+    }
 
     const left = markerLeft - (POPUP_WIDTH / 2);
     const top = markerTop - POPUP_HEIGHT - (POPUP_ARROW_SIZE * 2);
