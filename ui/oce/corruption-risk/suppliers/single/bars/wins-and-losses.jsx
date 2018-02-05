@@ -23,7 +23,7 @@ class Popup extends React.PureComponent {
 
     if (PEname.length > 40 ) POPUP_HEIGHT = 90;
 
-    const left = (markerLeft / 2) - (POPUP_WIDTH / 2);
+    const left = markerLeft - (POPUP_WIDTH / 2);
     const top = markerTop - POPUP_HEIGHT - (POPUP_ARROW_SIZE * 2);
 
     const style = {
