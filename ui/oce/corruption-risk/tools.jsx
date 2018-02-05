@@ -73,3 +73,5 @@ export const cloneChild = (component, props) =>
     React.Children.only(component.props.children),
     props
   );
+
+export const sortByField = field => (a, b) => b.get(field) - a.get(field);

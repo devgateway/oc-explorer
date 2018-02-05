@@ -2,7 +2,7 @@ import CustomPopupChart from './custom-popup-chart';
 import { pluckImm } from '../tools';
 import translatable from '../translatable';
 import CRDPage from './page';
-import { colorLuminance } from './tools';
+import { colorLuminance, sortByField } from './tools';
 import ProcurementsTable from './procurements-table';
 
 class IndividualIndicatorChart extends CustomPopupChart {
@@ -12,10 +12,13 @@ class IndividualIndicatorChart extends CustomPopupChart {
   }
 
   getData() {
-    const data = super.getData();
+    let data = super.getData();
     const { traceColors } = this.props.styling.charts;
     if (!data) return [];
     const { monthly } = this.props;
+
+    data = data.sort(sortByField(monthly ? 'month' : 'year'));
+
     const dates = monthly ?
       data.map((datum) => {
         const month = datum.get('month');
@@ -72,6 +75,7 @@ class IndividualIndicatorChart extends CustomPopupChart {
       hovermode: 'closest',
       xaxis: {
         type: 'category',
+        categoryorder: 'category ascending',
         showgrid: false,
       },
       yaxis: {},

@@ -30,7 +30,7 @@ class CustomPopupChart extends Chart {
     const POPUP_ARROW_SIZE = 8;
 
     const { xaxis, yaxis } = point;
-    const markerLeft = xaxis.l2p(point.pointNumber) + xaxis._offset;
+    const markerLeft = xaxis.l2p(xaxis._categories.indexOf(point.x)) + xaxis._offset;
     const markerTop = yaxis.l2p(point.y) + yaxis._offset;
     const { left: parentLeft } = this.chartContainer.getBoundingClientRect();
     const toTheLeft = (markerLeft + parentLeft + POPUP_WIDTH) >= window.innerWidth;
