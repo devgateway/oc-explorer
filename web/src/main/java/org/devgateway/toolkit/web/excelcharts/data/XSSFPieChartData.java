@@ -26,7 +26,7 @@ public class XSSFPieChartData extends AbstractXSSFChartData {
 
     @Override
     protected CustomChartSeries createNewSerie(final int id, final int order, final ChartDataSource<?> categories,
-            final ChartDataSource<? extends Number> values) {
+                                               final ChartDataSource<? extends Number> values) {
         return new AbstractSeries(id, order, categories, values) {
             @Override
             public void addToChart(final XmlObject ctChart) {
@@ -60,7 +60,7 @@ public class XSSFPieChartData extends AbstractXSSFChartData {
         final CTPieChart pieChart = plotArea.addNewPieChart();
         pieChart.addNewVaryColors().setVal(true);
 
-        xssfChart.setTitle(this.title);
+        xssfChart.setTitleText(this.title);
 
         for (CustomChartSeries s : series) {
             s.addToChart(pieChart);

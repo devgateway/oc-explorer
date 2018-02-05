@@ -3,12 +3,15 @@ package org.devgateway.toolkit.web.excelcharts;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Chart;
 import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.charts.ChartDataSource;
 import org.apache.poi.ss.usermodel.charts.ChartLegend;
@@ -57,23 +60,23 @@ public final class ExcelChartSheetDefault implements ExcelChartSheet {
             final Font dataFont = workbook.createFont();
             dataFont.setFontHeightInPoints((short) DATAFONTHEIGHT);
             dataFont.setFontName("Times New Roman");
-            dataFont.setColor(HSSFColor.BLACK.index);
+            dataFont.setColor(HSSFColor.HSSFColorPredefined.BLACK.getIndex());
 
             final Font headerFont = workbook.createFont();
             headerFont.setFontHeightInPoints((short) HEADERFONTHEIGHT);
             headerFont.setFontName("Times New Roman");
-            headerFont.setColor(HSSFColor.BLACK.index);
+            headerFont.setColor(HSSFColor.HSSFColorPredefined.BLACK.getIndex());
             headerFont.setBold(true);
 
             this.dataStyleCell = workbook.createCellStyle();
-            this.dataStyleCell.setAlignment(CellStyle.ALIGN_LEFT);
-            this.dataStyleCell.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+            this.dataStyleCell.setAlignment(HorizontalAlignment.LEFT);
+            this.dataStyleCell.setVerticalAlignment(VerticalAlignment.CENTER);
             this.dataStyleCell.setWrapText(true);
             this.dataStyleCell.setFont(dataFont);
 
             this.headerStyleCell = workbook.createCellStyle();
-            this.headerStyleCell.setAlignment(CellStyle.ALIGN_CENTER);
-            this.headerStyleCell.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+            this.headerStyleCell.setAlignment(HorizontalAlignment.CENTER);
+            this.headerStyleCell.setVerticalAlignment(VerticalAlignment.CENTER);
             this.headerStyleCell.setWrapText(true);
             this.headerStyleCell.setFont(headerFont);
         }
@@ -93,27 +96,27 @@ public final class ExcelChartSheetDefault implements ExcelChartSheet {
         if (value != null && !((value instanceof List || value instanceof Set) && ((Collection) value).isEmpty())) {
             final Cell cell;
             if (value instanceof String) {
-                cell = row.createCell(column, Cell.CELL_TYPE_STRING);
+                cell = row.createCell(column, CellType.STRING);
                 cell.setCellValue((String) value);
             } else {
                 if (value instanceof Integer) {
-                    cell = row.createCell(column, Cell.CELL_TYPE_NUMERIC);
+                    cell = row.createCell(column, CellType.NUMERIC);
                     cell.setCellValue((Integer) value);
                 } else {
                     if (value instanceof Number) {
-                        cell = row.createCell(column, Cell.CELL_TYPE_NUMERIC);
+                        cell = row.createCell(column, CellType.NUMERIC);
                         cell.setCellValue(((Number) value).doubleValue());
                     } else {
                         if (value instanceof Boolean) {
-                            cell = row.createCell(column, Cell.CELL_TYPE_BOOLEAN);
+                            cell = row.createCell(column, CellType.BOOLEAN);
                             cell.setCellValue(((Boolean) value) ? "Yes" : "No");
                         } else {
                             if (value instanceof Date) {
                                 final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-                                cell = row.createCell(column, Cell.CELL_TYPE_STRING);
+                                cell = row.createCell(column, CellType.STRING);
                                 cell.setCellValue(sdf.format((Date) value));
                             } else {
-                                cell = row.createCell(column, Cell.CELL_TYPE_STRING);
+                                cell = row.createCell(column, CellType.STRING);
                                 cell.setCellValue(value.toString());
                             }
                         }
@@ -193,7 +196,7 @@ public final class ExcelChartSheetDefault implements ExcelChartSheet {
             throw new IllegalStateException("It seems that we don't have any category in the excel file");
         }
         return getChartDataSource(0); // categories should always be on the
-                                      // first row
+        // first row
     }
 
     /**
