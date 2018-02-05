@@ -24,6 +24,7 @@ import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletCon
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -49,6 +50,7 @@ public class PersistenceApplication {
     }
 
     @Bean
+    @Profile("!integration")
     public TomcatEmbeddedServletContainerFactory tomcatFactory(@Qualifier("liquibaseAfterJPA") final
                                                                    SpringLiquibaseRunner liquibaseAfterJPA) {
         logger.info("Instantiating tomcat after initialization of " + liquibaseAfterJPA);
