@@ -636,7 +636,7 @@ public class Release implements Identifiable {
 
     public enum InitiationType {
 
-        TENDER("tender");
+        tender("tender");
         private final String value;
         private static final Map<String, InitiationType> CONSTANTS = new HashMap<String, InitiationType>();
 
