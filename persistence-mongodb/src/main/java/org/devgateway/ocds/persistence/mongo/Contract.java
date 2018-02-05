@@ -1,7 +1,9 @@
 package org.devgateway.ocds.persistence.mongo;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -10,13 +12,12 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
-import org.devgateway.ocds.persistence.mongo.merge.Merge;
-import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -25,10 +26,8 @@ import java.util.Set;
  * Contract
  * <p>
  * Information regarding the signed contract between the buyer and supplier(s).
- *
- * http://standard.open-contracting.org/latest/en/schema/reference/#contract
- *
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "id",
         "awardID",
@@ -40,145 +39,174 @@ import java.util.Set;
         "items",
         "dateSigned",
         "documents",
-        "amendment",
-        "implementation"
+        "implementation",
+        "relatedProcesses",
+        "milestones",
+        "amendments",
+        "amendment"
 })
-public class Contract implements Identifiable {
+public class Contract {
 
     /**
      * Contract ID
      * <p>
      * The identifier for this contract. It must be unique and cannot change within its Open Contracting Process
-     * (defined by a single ocid). See the
-     *  [identifier guidance](http://ocds.open-contracting.org/standard/r/1__0__0/en/key_concepts/identifiers/)
-     * for further details.
+     * (defined by a single ocid). See the [identifier guidance](http://standard.open-contracting
+     * .org/latest/en/schema/identifiers/) for further details.
      * (Required)
-     *
      */
-    @ExcelExport
     @JsonProperty("id")
-    @Merge(MergeStrategy.overwrite)
+    @ExcelExport
+    @JsonPropertyDescription("The identifier for this contract. It must be unique and cannot change within its Open "
+            + "Contracting Process (defined by a single ocid). See the [identifier guidance](http://standard"
+            + ".open-contracting.org/latest/en/schema/identifiers/) for further details.")
     private String id;
-
     /**
      * Award ID
      * <p>
      * The award.id against which this contract is being issued.
      * (Required)
-     *
      */
-    @ExcelExport
     @JsonProperty("awardID")
-    @Merge(MergeStrategy.ocdsVersion)
+    @ExcelExport
+    @JsonPropertyDescription("The award.id against which this contract is being issued.")
     private String awardID;
-
     /**
      * Contract title
-     *
+     * <p>
+     * Contract title
      */
-    @ExcelExport
     @JsonProperty("title")
-    @Merge(MergeStrategy.ocdsVersion)
+    @ExcelExport
+    @JsonPropertyDescription("Contract title")
     private String title;
-
     /**
      * Contract description
-     *
-     */
-    @ExcelExport
-    @JsonProperty("description")
-    @Merge(MergeStrategy.ocdsVersion)
-    private String description;
-
-    /**
-     * Contract Status
      * <p>
-     * The current status of the contract. Drawn from the
-     * [contractStatus codelist]
-     *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists/#contract-status)
-     *
+     * Contract description
      */
+    @JsonProperty("description")
     @ExcelExport
+    @JsonPropertyDescription("Contract description")
+    private String description;
+    /**
+     * Contract status
+     * <p>
+     * The current status of the contract. Drawn from the [contractStatus codelist](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#contract-status)
+     */
     @JsonProperty("status")
-    @Merge(MergeStrategy.ocdsVersion)
+    @ExcelExport
+    @JsonPropertyDescription("The current status of the contract. Drawn from the [contractStatus codelist]"
+            + "(http://standard.open-contracting.org/latest/en/schema/codelists/#contract-status)")
     private Status status;
-
     /**
      * Period
      * <p>
-     *
-     *
      */
-    @ExcelExport
     @JsonProperty("period")
-    private Period period;
-
     @ExcelExport
-    @JsonProperty("value")
-    private Amount value;
-
+    @JsonPropertyDescription("    ")
+    private TenderPeriod period;
     /**
-     * Items Contracted
+     * Value
      * <p>
-     * The goods, services, and any intangible outcomes in this contract.
-     * Note: If the items are the same as the award do not repeat.
-     *
      */
+    @JsonProperty("value")
+    @ExcelExport
+    private Amount value;
+    /**
+     * Items contracted
+     * <p>
+     * The goods, services, and any intangible outcomes in this contract. Note: If the items are the same as the
+     * award do not repeat.
+     */
+    @JsonProperty("items")
+    @JsonDeserialize(as = LinkedHashSet.class)
+    @JsonPropertyDescription("The goods, services, and any intangible outcomes in this contract. Note: If the items "
+            + "are the same as the award do not repeat.")
     @ExcelExport
     @ExcelExportSepareteSheet
-    @JsonProperty("items")
-    @JsonDeserialize(as = java.util.LinkedHashSet.class)
-    @Merge(MergeStrategy.arrayMergeById)
     private Set<Item> items = new LinkedHashSet<Item>();
-
     /**
+     * Date signed
+     * <p>
      * The date the contract was signed. In the case of multiple signatures, the date of the last signature.
-     *
      */
-    @ExcelExport
     @JsonProperty("dateSigned")
-    @Merge(MergeStrategy.ocdsVersion)
+    @ExcelExport
+    @JsonPropertyDescription("The date the contract was signed. In the case of multiple signatures, the date of the "
+            + "last signature.")
     private Date dateSigned;
-
     /**
+     * Documents
+     * <p>
      * All documents and attachments related to the contract, including any notices.
-     *
      */
     @JsonProperty("documents")
-    @JsonDeserialize(as = java.util.LinkedHashSet.class)
-    @Merge(MergeStrategy.arrayMergeById)
+    @JsonDeserialize(as = LinkedHashSet.class)
+    @JsonPropertyDescription("All documents and attachments related to the contract, including any notices.")
     private Set<Document> documents = new LinkedHashSet<Document>();
-
-    /**
-     * Amendment information
-     * <p>
-     *
-     *
-     */
-    @JsonProperty("amendment")
-    protected Amendment amendment;
-
     /**
      * Implementation
      * <p>
      * Information during the performance / implementation stage of the contract.
-     *
      */
-    @ExcelExport
     @JsonProperty("implementation")
+    @ExcelExport
+    @JsonPropertyDescription("Information during the performance / implementation stage of the contract.")
     private Implementation implementation;
+    /**
+     * Related processes
+     * <p>
+     * If this process is followed by one or more contracting processes, represented under a separate open
+     * contracting identifier (ocid) then details of the related process can be provided here. This is commonly used
+     * to point to subcontracts, or to renewal and replacement processes for this contract.
+     */
+    @JsonProperty("relatedProcesses")
+    @JsonDeserialize(as = LinkedHashSet.class)
+    @JsonPropertyDescription("If this process is followed by one or more contracting processes, represented under a "
+            + "separate open contracting identifier (ocid) then details of the related process can be provided here. "
+            + "This is commonly used to point to subcontracts, or to renewal and replacement processes for this "
+            + "contract.")
+    private Set<RelatedProcess> relatedProcesses = new LinkedHashSet<RelatedProcess>();
+    /**
+     * Contract milestones
+     * <p>
+     * A list of milestones associated with the finalization of this contract.
+     */
+    @JsonProperty("milestones")
+    @JsonPropertyDescription("A list of milestones associated with the finalization of this contract.")
+    private List<Milestone> milestones = new ArrayList<Milestone>();
+    /**
+     * Amendments
+     * <p>
+     * A contract amendment is a formal change to, or extension of, a contract, and generally involves the
+     * publication of a new contract notice/release, or some other documents detailing the change. The rationale and
+     * a description of the changes made can be provided here.
+     */
+    @JsonProperty("amendments")
+    @JsonPropertyDescription("A contract amendment is a formal change to, or extension of, a contract, and generally "
+            + "involves the publication of a new contract notice/release, or some other documents detailing the "
+            + "change. The rationale and a description of the changes made can be provided here.")
+    private List<Amendment> amendments = new ArrayList<Amendment>();
+    /**
+     * Amendment
+     * <p>
+     * Amendment information
+     */
+    @JsonProperty("amendment")
+    @JsonPropertyDescription("Amendment information")
+    private Amendment amendment;
+
 
     /**
      * Contract ID
      * <p>
      * The identifier for this contract. It must be unique and cannot change within its Open Contracting Process
-     * (defined by a single ocid). See the
-     *  [identifier guidance](http://ocds.open-contracting.org/standard/r/1__0__0/en/key_concepts/identifiers/)
-     * for further details.
+     * (defined by a single ocid). See the [identifier guidance](http://standard.open-contracting
+     * .org/latest/en/schema/identifiers/) for further details.
      * (Required)
-     *
-     * @return
-     *     The id
      */
     @JsonProperty("id")
     public String getId() {
@@ -189,16 +217,12 @@ public class Contract implements Identifiable {
      * Contract ID
      * <p>
      * The identifier for this contract. It must be unique and cannot change within its Open Contracting Process
-     * (defined by a single ocid). See the
-     *  [identifier guidance](http://ocds.open-contracting.org/standard/r/1__0__0/en/key_concepts/identifiers/)
-     * for further details.
+     * (defined by a single ocid). See the [identifier guidance](http://standard.open-contracting
+     * .org/latest/en/schema/identifiers/) for further details.
      * (Required)
-     *
-     * @param id
-     *     The id
      */
     @JsonProperty("id")
-    public void setId(final String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -207,9 +231,6 @@ public class Contract implements Identifiable {
      * <p>
      * The award.id against which this contract is being issued.
      * (Required)
-     *
-     * @return
-     *     The awardID
      */
     @JsonProperty("awardID")
     public String getAwardID() {
@@ -221,20 +242,16 @@ public class Contract implements Identifiable {
      * <p>
      * The award.id against which this contract is being issued.
      * (Required)
-     *
-     * @param awardID
-     *     The awardID
      */
     @JsonProperty("awardID")
-    public void setAwardID(final String awardID) {
+    public void setAwardID(String awardID) {
         this.awardID = awardID;
     }
 
     /**
      * Contract title
-     *
-     * @return
-     *     The title
+     * <p>
+     * Contract title
      */
     @JsonProperty("title")
     public String getTitle() {
@@ -243,20 +260,18 @@ public class Contract implements Identifiable {
 
     /**
      * Contract title
-     *
-     * @param title
-     *     The title
+     * <p>
+     * Contract title
      */
     @JsonProperty("title")
-    public void setTitle(final String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
     /**
      * Contract description
-     *
-     * @return
-     *     The description
+     * <p>
+     * Contract description
      */
     @JsonProperty("description")
     public String getDescription() {
@@ -265,24 +280,19 @@ public class Contract implements Identifiable {
 
     /**
      * Contract description
-     *
-     * @param description
-     *     The description
+     * <p>
+     * Contract description
      */
     @JsonProperty("description")
-    public void setDescription(final String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
     /**
-     * Contract Status
+     * Contract status
      * <p>
-     * The current status of the contract. Drawn from the
-     * [contractStatus codelist]
-     *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists/#contract-status)
-     *
-     * @return
-     *     The status
+     * The current status of the contract. Drawn from the [contractStatus codelist](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#contract-status)
      */
     @JsonProperty("status")
     public Status getStatus() {
@@ -290,50 +300,37 @@ public class Contract implements Identifiable {
     }
 
     /**
-     * Contract Status
+     * Contract status
      * <p>
-     * The current status of the contract. Drawn from the
-     * [contractStatus codelist]
-     *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists/#contract-status)
-     *
-     * @param status
-     *     The status
+     * The current status of the contract. Drawn from the [contractStatus codelist](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#contract-status)
      */
     @JsonProperty("status")
-    public void setStatus(final Status status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
     /**
      * Period
      * <p>
-     *
-     *
-     * @return
-     *     The period
      */
     @JsonProperty("period")
-    public Period getPeriod() {
+    public TenderPeriod getPeriod() {
         return period;
     }
 
     /**
      * Period
      * <p>
-     *
-     *
-     * @param period
-     *     The period
      */
     @JsonProperty("period")
-    public void setPeriod(final Period period) {
+    public void setPeriod(TenderPeriod period) {
         this.period = period;
     }
 
     /**
-     *
-     * @return
-     *     The value
+     * Value
+     * <p>
      */
     @JsonProperty("value")
     public Amount getValue() {
@@ -341,23 +338,19 @@ public class Contract implements Identifiable {
     }
 
     /**
-     *
-     * @param value
-     *     The value
+     * Value
+     * <p>
      */
     @JsonProperty("value")
-    public void setValue(final Amount value) {
+    public void setValue(Amount value) {
         this.value = value;
     }
 
     /**
-     * Items Contracted
+     * Items contracted
      * <p>
-     * The goods, services, and any intangible outcomes in this contract.
-     * Note: If the items are the same as the award do not repeat.
-     *
-     * @return
-     *     The items
+     * The goods, services, and any intangible outcomes in this contract. Note: If the items are the same as the
+     * award do not repeat.
      */
     @JsonProperty("items")
     public Set<Item> getItems() {
@@ -365,24 +358,20 @@ public class Contract implements Identifiable {
     }
 
     /**
-     * Items Contracted
+     * Items contracted
      * <p>
-     * The goods, services, and any intangible outcomes in this contract.
-     * Note: If the items are the same as the award do not repeat.
-     *
-     * @param items
-     *     The items
+     * The goods, services, and any intangible outcomes in this contract. Note: If the items are the same as the
+     * award do not repeat.
      */
     @JsonProperty("items")
-    public void setItems(final Set<Item> items) {
+    public void setItems(Set<Item> items) {
         this.items = items;
     }
 
     /**
+     * Date signed
+     * <p>
      * The date the contract was signed. In the case of multiple signatures, the date of the last signature.
-     *
-     * @return
-     *     The dateSigned
      */
     @JsonProperty("dateSigned")
     public Date getDateSigned() {
@@ -390,21 +379,19 @@ public class Contract implements Identifiable {
     }
 
     /**
+     * Date signed
+     * <p>
      * The date the contract was signed. In the case of multiple signatures, the date of the last signature.
-     *
-     * @param dateSigned
-     *     The dateSigned
      */
     @JsonProperty("dateSigned")
-    public void setDateSigned(final Date dateSigned) {
+    public void setDateSigned(Date dateSigned) {
         this.dateSigned = dateSigned;
     }
 
     /**
+     * Documents
+     * <p>
      * All documents and attachments related to the contract, including any notices.
-     *
-     * @return
-     *     The documents
      */
     @JsonProperty("documents")
     public Set<Document> getDocuments() {
@@ -412,49 +399,19 @@ public class Contract implements Identifiable {
     }
 
     /**
+     * Documents
+     * <p>
      * All documents and attachments related to the contract, including any notices.
-     *
-     * @param documents
-     *     The documents
      */
     @JsonProperty("documents")
-    public void setDocuments(final Set<Document> documents) {
+    public void setDocuments(Set<Document> documents) {
         this.documents = documents;
-    }
-
-    /**
-     * Amendment information
-     * <p>
-     *
-     *
-     * @return
-     *     The amendment
-     */
-    @JsonProperty("amendment")
-    public Amendment getAmendment() {
-        return amendment;
-    }
-
-    /**
-     * Amendment information
-     * <p>
-     *
-     *
-     * @param amendment
-     *     The amendment
-     */
-    @JsonProperty("amendment")
-    public void setAmendment(final Amendment amendment) {
-        this.amendment = amendment;
     }
 
     /**
      * Implementation
      * <p>
      * Information during the performance / implementation stage of the contract.
-     *
-     * @return
-     *     The implementation
      */
     @JsonProperty("implementation")
     public Implementation getImplementation() {
@@ -465,40 +422,144 @@ public class Contract implements Identifiable {
      * Implementation
      * <p>
      * Information during the performance / implementation stage of the contract.
-     *
-     * @param implementation
-     *     The implementation
      */
     @JsonProperty("implementation")
-    public void setImplementation(final Implementation implementation) {
+    public void setImplementation(Implementation implementation) {
         this.implementation = implementation;
     }
 
+    /**
+     * Related processes
+     * <p>
+     * If this process is followed by one or more contracting processes, represented under a separate open
+     * contracting identifier (ocid) then details of the related process can be provided here. This is commonly used
+     * to point to subcontracts, or to renewal and replacement processes for this contract.
+     */
+    @JsonProperty("relatedProcesses")
+    public Set<RelatedProcess> getRelatedProcesses() {
+        return relatedProcesses;
+    }
+
+    /**
+     * Related processes
+     * <p>
+     * If this process is followed by one or more contracting processes, represented under a separate open
+     * contracting identifier (ocid) then details of the related process can be provided here. This is commonly used
+     * to point to subcontracts, or to renewal and replacement processes for this contract.
+     */
+    @JsonProperty("relatedProcesses")
+    public void setRelatedProcesses(Set<RelatedProcess> relatedProcesses) {
+        this.relatedProcesses = relatedProcesses;
+    }
+
+    /**
+     * Contract milestones
+     * <p>
+     * A list of milestones associated with the finalization of this contract.
+     */
+    @JsonProperty("milestones")
+    public List<Milestone> getMilestones() {
+        return milestones;
+    }
+
+    /**
+     * Contract milestones
+     * <p>
+     * A list of milestones associated with the finalization of this contract.
+     */
+    @JsonProperty("milestones")
+    public void setMilestones(List<Milestone> milestones) {
+        this.milestones = milestones;
+    }
+
+    /**
+     * Amendments
+     * <p>
+     * A contract amendment is a formal change to, or extension of, a contract, and generally involves the
+     * publication of a new contract notice/release, or some other documents detailing the change. The rationale and
+     * a description of the changes made can be provided here.
+     */
+    @JsonProperty("amendments")
+    public List<Amendment> getAmendments() {
+        return amendments;
+    }
+
+    /**
+     * Amendments
+     * <p>
+     * A contract amendment is a formal change to, or extension of, a contract, and generally involves the
+     * publication of a new contract notice/release, or some other documents detailing the change. The rationale and
+     * a description of the changes made can be provided here.
+     */
+    @JsonProperty("amendments")
+    public void setAmendments(List<Amendment> amendments) {
+        this.amendments = amendments;
+    }
+
+    /**
+     * Amendment
+     * <p>
+     * Amendment information
+     */
+    @JsonProperty("amendment")
+    public Amendment getAmendment() {
+        return amendment;
+    }
+
+    /**
+     * Amendment
+     * <p>
+     * Amendment information
+     */
+    @JsonProperty("amendment")
+    public void setAmendment(Amendment amendment) {
+        this.amendment = amendment;
+    }
+
+
+
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return new ToStringBuilder(this).append("id", id)
+                .append("awardID", awardID)
+                .append("title", title)
+                .append("description", description)
+                .append("status", status)
+                .append("period", period)
+                .append("value", value)
+                .append("items", items)
+                .append("dateSigned", dateSigned)
+                .append("documents", documents)
+                .append("implementation", implementation)
+                .append("relatedProcesses", relatedProcesses)
+                .append("milestones", milestones)
+                .append("amendments", amendments)
+                .append("amendment", amendment)
+                .toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().
-                append(id).
-                append(awardID).
-                append(title).
-                append(description).
-                append(status).
-                append(period).
-                append(value).
-                append(items).
-                append(dateSigned).
-                append(documents).
-                append(amendment).
-                append(implementation).
-                toHashCode();
+        return new HashCodeBuilder().append(awardID)
+                .append(amendment)
+                .append(period)
+                .append(documents)
+                .append(relatedProcesses)
+                .append(implementation)
+                .append(description)
+                .append(amendments)
+                .append(title)
+                .append(id)
+                .append(dateSigned)
+                .append(milestones)
+                .append(value)
+                .append(items)
+                .append(status)
+                .toHashCode();
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
@@ -506,53 +567,55 @@ public class Contract implements Identifiable {
             return false;
         }
         Contract rhs = ((Contract) other);
-        return new EqualsBuilder().
-                append(id, rhs.id).
-                append(awardID, rhs.awardID).
-                append(title, rhs.title).
-                append(description, rhs.description).
-                append(status, rhs.status).
-                append(period, rhs.period).
-                append(value, rhs.value).
-                append(items, rhs.items).
-                append(dateSigned, rhs.dateSigned).
-                append(documents, rhs.documents).
-                append(amendment, rhs.amendment).
-                append(implementation, rhs.implementation).
-                isEquals();
+        return new EqualsBuilder().append(awardID, rhs.awardID)
+                .append(amendment, rhs.amendment)
+                .append(period, rhs.period)
+                .append(documents, rhs.documents)
+                .append(relatedProcesses, rhs.relatedProcesses)
+                .append(implementation, rhs.implementation)
+                .append(description, rhs.description)
+                .append(amendments, rhs.amendments)
+                .append(title, rhs.title)
+                .append(id, rhs.id)
+                .append(dateSigned, rhs.dateSigned)
+                .append(milestones, rhs.milestones)
+                .append(value, rhs.value)
+                .append(items, rhs.items)
+                .append(status, rhs.status)
+                .isEquals();
     }
 
     public enum Status {
+
         pending("pending"),
-
         active("active"),
-
         cancelled("cancelled"),
-
         terminated("terminated");
-
         private final String value;
-
         private static final Map<String, Status> CONSTANTS = new HashMap<String, Status>();
 
         static {
-            for (Contract.Status c: values()) {
+            for (Status c : values()) {
                 CONSTANTS.put(c.value, c);
             }
         }
 
-        Status(final String value) {
+        Status(String value) {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
+        @JsonValue
+        public String value() {
+            return this.value;
+        }
+
         @JsonCreator
-        public static Status fromValue(final String value) {
+        public static Status fromValue(String value) {
             Status constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
@@ -560,10 +623,7 @@ public class Contract implements Identifiable {
                 return constant;
             }
         }
+
     }
 
-    @Override
-    public Serializable getIdProperty() {
-        return id;
-    }
 }

@@ -12,12 +12,8 @@
 package org.devgateway.toolkit.persistence.mongo.spring;
 
 import com.mongodb.DBObject;
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -28,13 +24,17 @@ import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Run this application only when you need access to Spring Data JPA but without
  * Wicket frontend
  *
  * @author mpostelnicu
  */
-@SpringBootApplication(exclude = { EmbeddedMongoAutoConfiguration.class })
+@SpringBootApplication
 @ComponentScan("org.devgateway")
 @PropertySource("classpath:/org/devgateway/toolkit/persistence/mongo/application.properties")
 @EnableCaching

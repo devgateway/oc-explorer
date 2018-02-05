@@ -1,8 +1,5 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -15,9 +12,7 @@ import org.devgateway.ocds.persistence.mongo.merge.Merge;
 import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
 
 
@@ -85,8 +80,6 @@ public class Detail {
     @JsonDeserialize(as = LinkedHashSet.class)
     @JsonPropertyDescription("All documents and attachments related to the bid and its evaluation.")
     private Set<Document> documents = new LinkedHashSet<Document>();
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * ID
@@ -207,24 +200,12 @@ public class Detail {
         return ToStringBuilder.reflectionToString(this);
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
 
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
-    public void setAdditionalProperties(Map<String, Object> additionalProperties) {
-        this.additionalProperties = additionalProperties;
-    }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(id).append(date).append(status).append(tenderers).append(value)
-                .append(documents).append(additionalProperties).toHashCode();
+                .append(documents).toHashCode();
     }
 
     @Override
@@ -237,8 +218,8 @@ public class Detail {
         }
         Detail rhs = ((Detail) other);
         return new EqualsBuilder().append(id, rhs.id).append(date, rhs.date).append(status, rhs.status)
-                .append(tenderers, rhs.tenderers).append(value, rhs.value).append(documents, rhs.documents)
-                .append(additionalProperties, rhs.additionalProperties).isEquals();
+                .append(tenderers, rhs.tenderers).append(value, rhs.value).append(documents, rhs.documents
+               ).isEquals();
     }
 
 }

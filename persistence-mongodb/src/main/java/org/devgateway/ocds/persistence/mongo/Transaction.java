@@ -1,104 +1,136 @@
 package org.devgateway.ocds.persistence.mongo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
-import org.devgateway.ocds.persistence.mongo.merge.Merge;
-import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
-import java.io.Serializable;
+import java.net.URI;
 import java.util.Date;
 
 
 /**
- * Transaction Information
+ * Transaction information
  * <p>
- * A spending transaction related to the contracting process. Draws upon the data models of the
- * [Budget Data Package](https://github.com/openspending/budget-data-package/blob/master/specification.md) and the
- * [International Aid Transpareny Initiative]
- *  (http://iatistandard.org/activity-standard/iati-activities/iati-activity/transaction/)
- *  and should be used to cross-reference to more detailed information held using a Budget Data Package, IATI file,
- *  or to provide enough information to allow a user to manually or automatically cross-reference with
- *  some other published source of transactional spending data.
- *
- * http://standard.open-contracting.org/latest/en/schema/reference/#transaction
- *
+ * A spending transaction related to the contracting process. Draws upon the data models of the [Fiscal Data Package]
+ * (http://fiscal.dataprotocols.org/) and the [International Aid Transparency Initiative](http://iatistandard
+ * .org/activity-standard/iati-activities/iati-activity/transaction/) and should be used to cross-reference to more
+ * detailed information held using a Fiscal Data Package, IATI file, or to provide enough information to allow a user
+ * to manually or automatically cross-reference with some other published source of transactional spending data.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "id",
         "source",
         "date",
+        "value",
+        "payer",
+        "payee",
+        "uri",
         "amount",
         "providerOrganization",
-        "receiverOrganization",
-        "uri"
+        "receiverOrganization"
 })
-public class Transaction implements Identifiable {
+public class Transaction {
 
     /**
+     * ID
+     * <p>
      * A unique identifier for this transaction. This identifier should be possible to cross-reference against the
-     * provided data source. For the budget data package this is the id, for IATI, the transaction reference.
+     * provided data source. For IATI this is the transaction reference.
      * (Required)
-     *
      */
     @JsonProperty("id")
-    @Merge(MergeStrategy.overwrite)
+    @JsonPropertyDescription("A unique identifier for this transaction. This identifier should be possible to "
+            + "cross-reference against the provided data source. For IATI this is the transaction reference.")
     private String id;
-
     /**
-     * Data Source
+     * Data source
      * <p>
-     * Used to point either to a corresponding Budget Data Package, IATI file, or machine or
-     * human-readable source where users can find further information on the budget line item identifiers,
-     * or project identifiers, provided here.
-     *
+     * Used to point either to a corresponding Fiscal Data Package, IATI file, or machine or human-readable source
+     * where users can find further information on the budget line item identifiers, or project identifiers, provided
+     * here.
      */
-    @ExcelExport
     @JsonProperty("source")
-    @Merge(MergeStrategy.ocdsVersion)
-    private String source;
-
+    @ExcelExport
+    @JsonPropertyDescription("Used to point either to a corresponding Fiscal Data Package, IATI file, or machine or "
+            + "human-readable source where users can find further information on the budget line item identifiers, or"
+            + " project identifiers, provided here.")
+    private URI source;
     /**
+     * Date
+     * <p>
      * The date of the transaction
-     *
      */
-    @ExcelExport
     @JsonProperty("date")
-    @Merge(MergeStrategy.ocdsVersion)
+    @ExcelExport
+    @JsonPropertyDescription("The date of the transaction")
     private Date date;
-
+    /**
+     * Value
+     * <p>
+     */
+    @JsonProperty("value")
     @ExcelExport
-    @JsonProperty("amount")
-    private Amount amount;
-
-    @ExcelExport
-    @JsonProperty("providerOrganization")
-    private Identifier providerOrganization;
-
-    @ExcelExport
-    @JsonProperty("receiverOrganization")
-    private Identifier receiverOrganization;
-
+    private Amount value;
+    /**
+     * Organization reference
+     * <p>
+     * The id and name of the party being referenced. Used to cross-reference to the parties section
+     */
+    @JsonProperty("payer")
+    @JsonPropertyDescription("The id and name of the party being referenced. Used to cross-reference to the parties "
+            + "section")
+    private Organization payer;
+    /**
+     * Organization reference
+     * <p>
+     * The id and name of the party being referenced. Used to cross-reference to the parties section
+     */
+    @JsonProperty("payee")
+    @JsonPropertyDescription("The id and name of the party being referenced. Used to cross-reference to the parties "
+            + "section")
+    private Organization payee;
     /**
      * Linked spending information
      * <p>
      * A URI pointing directly to a machine-readable record about this spending transaction.
-     *
      */
     @JsonProperty("uri")
-    @Merge(MergeStrategy.ocdsVersion)
-    private String uri;
+    @JsonPropertyDescription("A URI pointing directly to a machine-readable record about this spending transaction.")
+    private URI uri;
+    /**
+     * Value
+     * <p>
+     */
+    @JsonProperty("amount")
+    @ExcelExport
+    private Amount amount;
+    /**
+     * Identifier
+     * <p>
+     */
+    @JsonProperty("providerOrganization")
+    @ExcelExport
+    private Identifier providerOrganization;
+    /**
+     * Identifier
+     * <p>
+     */
+    @JsonProperty("receiverOrganization")
+    @ExcelExport
+    private Identifier receiverOrganization;
 
     /**
+     * ID
+     * <p>
      * A unique identifier for this transaction. This identifier should be possible to cross-reference against the
-     * provided data source. For the budget data package this is the id, for IATI, the transaction reference.
+     * provided data source. For IATI this is the transaction reference.
      * (Required)
-     *
-     * @return
-     *     The id
      */
     @JsonProperty("id")
     public String getId() {
@@ -106,53 +138,45 @@ public class Transaction implements Identifiable {
     }
 
     /**
+     * ID
+     * <p>
      * A unique identifier for this transaction. This identifier should be possible to cross-reference against the
-     * provided data source. For the budget data package this is the id, for IATI, the transaction reference.
+     * provided data source. For IATI this is the transaction reference.
      * (Required)
-     *
-     * @param id
-     *     The id
      */
     @JsonProperty("id")
-    public void setId(final String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
     /**
-     * Data Source
+     * Data source
      * <p>
-     * Used to point either to a corresponding Budget Data Package, IATI file, or machine or
-     * human-readable source where users can find further information on the budget line item identifiers,
-     * or project identifiers, provided here.
-     *
-     * @return
-     *     The source
+     * Used to point either to a corresponding Fiscal Data Package, IATI file, or machine or human-readable source
+     * where users can find further information on the budget line item identifiers, or project identifiers, provided
+     * here.
      */
     @JsonProperty("source")
-    public String getSource() {
+    public URI getSource() {
         return source;
     }
 
     /**
-     * Data Source
+     * Data source
      * <p>
-     * Used to point either to a corresponding Budget Data Package, IATI file, or machine or
-     * human-readable source where users can find further information on the budget line item identifiers,
-     * or project identifiers, provided here.
-     *
-     * @param source
-     *     The source
+     * Used to point either to a corresponding Fiscal Data Package, IATI file, or machine or human-readable source
+     * where users can find further information on the budget line item identifiers, or project identifiers, provided
+     * here.
      */
     @JsonProperty("source")
-    public void setSource(final String source) {
+    public void setSource(URI source) {
         this.source = source;
     }
 
     /**
+     * Date
+     * <p>
      * The date of the transaction
-     *
-     * @return
-     *     The date
      */
     @JsonProperty("date")
     public Date getDate() {
@@ -160,86 +184,80 @@ public class Transaction implements Identifiable {
     }
 
     /**
+     * Date
+     * <p>
      * The date of the transaction
-     *
-     * @param date
-     *     The date
      */
     @JsonProperty("date")
-    public void setDate(final Date date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
     /**
-     *
-     * @return
-     *     The amount
+     * Value
+     * <p>
      */
-    @JsonProperty("amount")
-    public Amount getAmount() {
-        return amount;
+    @JsonProperty("value")
+    public Amount getValue() {
+        return value;
     }
 
     /**
-     *
-     * @param amount
-     *     The amount
+     * Value
+     * <p>
      */
-    @JsonProperty("amount")
-    public void setAmount(final Amount amount) {
-        this.amount = amount;
+    @JsonProperty("value")
+    public void setValue(Amount value) {
+        this.value = value;
     }
 
     /**
-     *
-     * @return
-     *     The providerOrganization
+     * Organization reference
+     * <p>
+     * The id and name of the party being referenced. Used to cross-reference to the parties section
      */
-    @JsonProperty("providerOrganization")
-    public Identifier getProviderOrganization() {
-        return providerOrganization;
+    @JsonProperty("payer")
+    public Organization getPayer() {
+        return payer;
     }
 
     /**
-     *
-     * @param providerOrganization
-     *     The providerOrganization
+     * Organization reference
+     * <p>
+     * The id and name of the party being referenced. Used to cross-reference to the parties section
      */
-    @JsonProperty("providerOrganization")
-    public void setProviderOrganization(final Identifier providerOrganization) {
-        this.providerOrganization = providerOrganization;
+    @JsonProperty("payer")
+    public void setPayer(Organization payer) {
+        this.payer = payer;
     }
 
     /**
-     *
-     * @return
-     *     The receiverOrganization
+     * Organization reference
+     * <p>
+     * The id and name of the party being referenced. Used to cross-reference to the parties section
      */
-    @JsonProperty("receiverOrganization")
-    public Identifier getReceiverOrganization() {
-        return receiverOrganization;
+    @JsonProperty("payee")
+    public Organization getPayee() {
+        return payee;
     }
 
     /**
-     *
-     * @param receiverOrganization
-     *     The receiverOrganization
+     * Organization reference
+     * <p>
+     * The id and name of the party being referenced. Used to cross-reference to the parties section
      */
-    @JsonProperty("receiverOrganization")
-    public void setReceiverOrganization(final Identifier receiverOrganization) {
-        this.receiverOrganization = receiverOrganization;
+    @JsonProperty("payee")
+    public void setPayee(Organization payee) {
+        this.payee = payee;
     }
 
     /**
      * Linked spending information
      * <p>
      * A URI pointing directly to a machine-readable record about this spending transaction.
-     *
-     * @return
-     *     The uri
      */
     @JsonProperty("uri")
-    public String getUri() {
+    public URI getUri() {
         return uri;
     }
 
@@ -247,35 +265,98 @@ public class Transaction implements Identifiable {
      * Linked spending information
      * <p>
      * A URI pointing directly to a machine-readable record about this spending transaction.
-     *
-     * @param uri
-     *     The uri
      */
     @JsonProperty("uri")
-    public void setUri(final String uri) {
+    public void setUri(URI uri) {
         this.uri = uri;
+    }
+
+    /**
+     * Value
+     * <p>
+     */
+    @JsonProperty("amount")
+    public Amount getAmount() {
+        return amount;
+    }
+
+    /**
+     * Value
+     * <p>
+     */
+    @JsonProperty("amount")
+    public void setAmount(Amount amount) {
+        this.amount = amount;
+    }
+
+    /**
+     * Identifier
+     * <p>
+     */
+    @JsonProperty("providerOrganization")
+    public Identifier getProviderOrganization() {
+        return providerOrganization;
+    }
+
+    /**
+     * Identifier
+     * <p>
+     */
+    @JsonProperty("providerOrganization")
+    public void setProviderOrganization(Identifier providerOrganization) {
+        this.providerOrganization = providerOrganization;
+    }
+
+    /**
+     * Identifier
+     * <p>
+     */
+    @JsonProperty("receiverOrganization")
+    public Identifier getReceiverOrganization() {
+        return receiverOrganization;
+    }
+
+    /**
+     * Identifier
+     * <p>
+     */
+    @JsonProperty("receiverOrganization")
+    public void setReceiverOrganization(Identifier receiverOrganization) {
+        this.receiverOrganization = receiverOrganization;
     }
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return new ToStringBuilder(this).append("id", id)
+                .append("source", source)
+                .append("date", date)
+                .append("value", value)
+                .append("payer", payer)
+                .append("payee", payee)
+                .append("uri", uri)
+                .append("amount", amount)
+                .append("providerOrganization", providerOrganization)
+                .append("receiverOrganization", receiverOrganization)
+                .toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().
-                append(id).
-                append(source).
-                append(date).
-                append(amount).
-                append(providerOrganization).
-                append(receiverOrganization).
-                append(uri).
-                toHashCode();
+        return new HashCodeBuilder().append(date)
+                .append(payee)
+                .append(amount)
+                .append(providerOrganization)
+                .append(id)
+                .append(source)
+                .append(receiverOrganization)
+                .append(value)
+                .append(payer)
+                .append(uri)
+                .toHashCode();
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
@@ -283,20 +364,17 @@ public class Transaction implements Identifiable {
             return false;
         }
         Transaction rhs = ((Transaction) other);
-        return new EqualsBuilder().
-                append(id, rhs.id).
-                append(source, rhs.source).
-                append(date, rhs.date).
-                append(amount, rhs.amount).
-                append(providerOrganization, rhs.providerOrganization).
-                append(receiverOrganization, rhs.receiverOrganization).
-                append(uri, rhs.uri).
-                isEquals();
-    }
-
-    @Override
-    public Serializable getIdProperty() {
-        return id;
+        return new EqualsBuilder().append(date, rhs.date)
+                .append(payee, rhs.payee)
+                .append(amount, rhs.amount)
+                .append(providerOrganization, rhs.providerOrganization)
+                .append(id, rhs.id)
+                .append(source, rhs.source)
+                .append(receiverOrganization, rhs.receiverOrganization)
+                .append(value, rhs.value)
+                .append(payer, rhs.payer)
+                .append(uri, rhs.uri)
+                .isEquals();
     }
 
 }

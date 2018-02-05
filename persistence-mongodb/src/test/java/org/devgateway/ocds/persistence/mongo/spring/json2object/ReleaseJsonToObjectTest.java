@@ -1,5 +1,6 @@
 package org.devgateway.ocds.persistence.mongo.spring.json2object;
 
+import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.junit.Assert;
 import org.junit.Test;
@@ -38,7 +39,7 @@ public class ReleaseJsonToObjectTest {
         Assert.assertEquals("IDs are the same", "123", release.getId());
         Assert.assertEquals("Check budget amount", new BigDecimal(10000),
                 release.getPlanning().getBudget().getAmount().getAmount());
-        Assert.assertEquals("Check budget currency", "USD",
+        Assert.assertEquals("Check budget currency", Amount.Currency.USD,
                 release.getPlanning().getBudget().getAmount().getCurrency());
     }
 
@@ -69,7 +70,7 @@ public class ReleaseJsonToObjectTest {
         Assert.assertEquals("IDs are the same", "12345", release.getId());
         Assert.assertEquals("Check budget amount", new BigDecimal(10000),
                 release.getPlanning().getBudget().getAmount().getAmount());
-        Assert.assertEquals("Check budget currency", "RON",
+        Assert.assertEquals("Check budget currency", Amount.Currency.RON,
                 release.getPlanning().getBudget().getAmount().getCurrency());
     }
 }

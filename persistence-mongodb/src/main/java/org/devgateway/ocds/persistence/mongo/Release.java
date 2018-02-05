@@ -1,6 +1,7 @@
 package org.devgateway.ocds.persistence.mongo;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -11,11 +12,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
-import org.devgateway.ocds.persistence.mongo.merge.Merge;
-import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,199 +22,226 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+
 /**
  * Schema for an Open Contracting Release
  * <p>
- *
- *  http://standard.open-contracting.org/latest/en/schema/release/
- *
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "id",
         "ocid",
+        "id",
         "date",
         "tag",
         "initiationType",
+        "parties",
+        "buyer",
+        "bids",
         "planning",
         "tender",
-        "bids",
-        "buyer",
         "awards",
         "contracts",
-        "language"
+        "language",
+        "relatedProcesses"
 })
-@Document
 public class Release implements Identifiable {
+
     /**
      * Release ID
      * <p>
-     * A unique identifier that identifies this release. A releaseID must be unique within a release-package
-     * and must not contain the # character.
+     * An identifier for this particular release of information. A release identifier must be unique within the scope
+     * of its related contracting process (defined by a common ocid), and unique within any release package it
+     * appears in. A release identifier must not contain the # character.
      * (Required)
-     *
      */
-    @ExcelExport
     @JsonProperty("id")
-    @Id
-    @Merge(MergeStrategy.ocdsOmit)
+    @JsonPropertyDescription("An identifier for this particular release of information. A release identifier must be "
+            + "unique within the scope of its related contracting process (defined by a common ocid), and unique "
+            + "within any release package it appears in. A release identifier must not contain the # character.")
+    @ExcelExport
     private String id;
 
     /**
      * Open Contracting ID
      * <p>
-     * A globally unique identifier for this Open Contracting Process. Composed of a publisher prefix and
-     * an identifier for the contracting process. For more information see the
-     * [Open Contracting Identifier guidance]
-     *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/key_concepts/identifiers/#ocid)
+     * A globally unique identifier for this Open Contracting Process. Composed of a publisher prefix and an
+     * identifier for the contracting process. For more information see the [Open Contracting Identifier guidance]
+     * (http://standard.open-contracting.org/latest/en/schema/identifiers/)
      * (Required)
-     *
      */
-    @ExcelExport
     @JsonProperty("ocid")
-    @Merge(MergeStrategy.ocdsOmit)
+    @JsonPropertyDescription("A globally unique identifier for this Open Contracting Process. Composed of a publisher"
+            + " prefix and an identifier for the contracting process. For more information see the [Open Contracting "
+            + "Identifier guidance](http://standard.open-contracting.org/latest/en/schema/identifiers/)")
+    @ExcelExport
     private String ocid;
 
     /**
      * Release Date
      * <p>
-     * The date this information is released, it may well be the same as the parent publishedDate,
-     *  it must not be later than the publishedDate from the parent package. It is used to determine merge order.
+     * The date this information was first released, or published.
      * (Required)
-     *
      */
-    @ExcelExport
     @JsonProperty("date")
-    @CreatedDate
-    @Merge(MergeStrategy.ocdsOmit)
+    @JsonPropertyDescription("The date this information was first released, or published.")
+    @ExcelExport
     private Date date;
-
     /**
      * Release Tag
      * <p>
-     * A value from the
-     * [releaseTag codelist](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#release-tag)
-     * that identifies the nature of the release being made. Tags may be used to filter release, or, in future,
-     * for for advanced validation when certain kinds of releases should contain certain fields.
+     * One or more values from the [releaseTag codelist](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#release-tag). Tags may be used to filter release and to understand the kind
+     * of information that a release might contain.
      * (Required)
-     *
      */
-    @ExcelExport
     @JsonProperty("tag")
-    @Merge(MergeStrategy.ocdsOmit)
+    @JsonPropertyDescription("One or more values from the [releaseTag codelist](http://standard.open-contracting"
+            + ".org/latest/en/schema/codelists/#release-tag). Tags may be used to filter release and to understand "
+            + "the kind of information that a release might contain.")
+    @ExcelExport
     private List<Tag> tag = new ArrayList<Tag>();
-
     /**
      * Initiation type
      * <p>
-     * String specifying the type of initiation process used for this contract, taken from the
-     * [initiationType](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#initiation-type)
-     * codelist. Currently only tender is supported.
+     * String specifying the type of initiation process used for this contract, taken from the [initiationType]
+     * (http://standard.open-contracting.org/latest/en/schema/codelists/#initiation-type) codelist. Currently only
+     * tender is supported.
      * (Required)
-     *
      */
-    @ExcelExport
     @JsonProperty("initiationType")
-    @Merge(MergeStrategy.ocdsVersion)
-    private InitiationType initiationType = InitiationType.tender;
-
-    /**
-     * Planning
-     * <p>
-     * Information from the planning phase of the contracting process. Note that many other fields may be filled
-     * in a planning release, in the appropriate fields in other schema sections, these would likely be estimates
-     * at this stage e.g. totalValue in tender
-     *
-     */
+    @JsonPropertyDescription("String specifying the type of initiation process used for this contract, taken from the"
+            + " [initiationType](http://standard.open-contracting.org/latest/en/schema/codelists/#initiation-type) "
+            + "codelist. Currently only tender is supported.")
     @ExcelExport
-    @JsonProperty("planning")
-    private Planning planning;
-
+    private InitiationType initiationType;
     /**
-     * Tender
+     * Parties
      * <p>
-     * Data regarding tender process - publicly inviting prospective contractors to submit bids for evaluation
-     * and selecting a winner or winners.
-     *
+     * Information on the parties (organizations, economic operators and other participants) who are involved in the
+     * contracting process and their roles, e.g. buyer, procuring entity, supplier etc. Organization references
+     * elsewhere in the schema are used to refer back to this entries in this list.
      */
+    @JsonProperty("parties")
+    @JsonDeserialize(as = LinkedHashSet.class)
+    @JsonPropertyDescription("Information on the parties (organizations, economic operators and other participants) "
+            + "who are involved in the contracting process and their roles, e.g. buyer, procuring entity, supplier "
+            + "etc. Organization references elsewhere in the schema are used to refer back to this entries in this "
+            + "list.")
     @ExcelExport
-    @ExcelExportSepareteSheet
-    @JsonProperty("tender")
-    private Tender tender;
+    private Set<Organization> parties = new LinkedHashSet<Organization>();
+
 
     /**
      * Bids
      * <p>
      * Summary and detailed information about bids received and evaluated as part of this contracting process.
-     *
      */
     @JsonProperty("bids")
-    @ExcelExport
-    @ExcelExportSepareteSheet
     @JsonPropertyDescription("Summary and detailed information about bids received and evaluated as part"
             + " of this contracting process.")
+    @ExcelExport
+    @ExcelExportSepareteSheet
     private Bids bids = new Bids();
 
     /**
-     * Organization
+     * Organization reference
      * <p>
-     * An organization.
-     *
+     * The id and name of the party being referenced. Used to cross-reference to the parties section
      */
-    @ExcelExport
     @JsonProperty("buyer")
+    @JsonPropertyDescription("The id and name of the party being referenced. Used to cross-reference to the parties "
+            + "section")
+    @ExcelExport
     private Organization buyer;
-
+    /**
+     * Planning
+     * <p>
+     * Information from the planning phase of the contracting process. Note that many other fields may be filled in a
+     * planning release, in the appropriate fields in other schema sections, these would likely be estimates at this
+     * stage e.g. totalValue in tender
+     */
+    @JsonProperty("planning")
+    @JsonPropertyDescription("Information from the planning phase of the contracting process. Note that many other "
+            + "fields may be filled in a planning release, in the appropriate fields in other schema sections, these "
+            + "would likely be estimates at this stage e.g. totalValue in tender")
+    @ExcelExport
+    private Planning planning;
+    /**
+     * Tender
+     * <p>
+     * Data regarding tender process - publicly inviting prospective contractors to submit bids for evaluation and
+     * selecting a winner or winners.
+     */
+    @JsonProperty("tender")
+    @JsonPropertyDescription("Data regarding tender process - publicly inviting prospective contractors to submit "
+            + "bids for evaluation and selecting a winner or winners.")
+    @ExcelExport
+    @ExcelExportSepareteSheet
+    private Tender tender;
     /**
      * Awards
      * <p>
      * Information from the award phase of the contracting process. There may be more than one award per contracting
-     * process e.g. because the contract is split amongst different providers, or because it is a standing offer.
-     *
+     * process e.g. because the contract is split among different providers, or because it is a standing offer.
      */
-    @ExcelExport
-    @ExcelExportSepareteSheet
     @JsonProperty("awards")
-    @JsonDeserialize(as = java.util.LinkedHashSet.class)
-    @Merge(MergeStrategy.arrayMergeById)
+    @JsonDeserialize(as = LinkedHashSet.class)
+    @JsonPropertyDescription("Information from the award phase of the contracting process. There may be more than one"
+            + " award per contracting process e.g. because the contract is split among different providers, or "
+            + "because it is a standing offer.")
+    @ExcelExportSepareteSheet
+    @ExcelExport
     private Set<Award> awards = new LinkedHashSet<Award>();
-
     /**
      * Contracts
      * <p>
      * Information from the contract creation phase of the procurement process.
-     *
      */
+    @JsonProperty("contracts")
     @ExcelExport
     @ExcelExportSepareteSheet
-    @JsonProperty("contracts")
-    @JsonDeserialize(as = java.util.LinkedHashSet.class)
-    @Merge(MergeStrategy.arrayMergeById)
+    @JsonDeserialize(as = LinkedHashSet.class)
+    @JsonPropertyDescription("Information from the contract creation phase of the procurement process.")
     private Set<Contract> contracts = new LinkedHashSet<Contract>();
-
     /**
      * Release language
      * <p>
-     * Specifies the default language of the data using either two-digit ISO 639-1, or extended BCP47 language tags.
-     * The use of two-letter codes from ISO 639-1 is strongly recommended.
-     *
+     * Specifies the default language of the data using either two-letter [ISO639-1](https://en.wikipedia
+     * .org/wiki/List_of_ISO_639-1_codes), or extended [BCP47 language tags](http://www
+     * .w3.org/International/articles/language-tags/). The use of lowercase two-letter codes from [ISO639-1]
+     * (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) is strongly recommended.
      */
-    @ExcelExport
     @JsonProperty("language")
-    @Merge(MergeStrategy.ocdsVersion)
+    @ExcelExport
+    @JsonPropertyDescription("Specifies the default language of the data using either two-letter [ISO639-1]"
+            + "(https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes), or extended [BCP47 language tags](http://www"
+            + ".w3.org/International/articles/language-tags/). The use of lowercase two-letter codes from [ISO639-1]"
+            + "(https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) is strongly recommended.")
     private String language = "en";
+    /**
+     * Related processes
+     * <p>
+     * If this process follows on from one or more prior process, represented under a separate open contracting
+     * identifier (ocid) then details of the related process can be provided here. This is commonly used to relate
+     * mini-competitions to their parent frameworks, full tenders to a pre-qualification phase, or individual tenders
+     * to a broad planning process.
+     */
+    @JsonProperty("relatedProcesses")
+    @JsonDeserialize(as = LinkedHashSet.class)
+    @JsonPropertyDescription("If this process follows on from one or more prior process, represented under a separate"
+            + " open contracting identifier (ocid) then details of the related process can be provided here. This is "
+            + "commonly used to relate mini-competitions to their parent frameworks, full tenders to a "
+            + "pre-qualification phase, or individual tenders to a broad planning process.")
+    private Set<RelatedProcess> relatedProcesses = new LinkedHashSet<RelatedProcess>();
 
 
     /**
      * Open Contracting ID
      * <p>
-     * A globally unique identifier for this Open Contracting Process. Composed of a publisher prefix and an identifier
-     * for the contracting process. For more information see the
-     * [Open Contracting Identifier guidance]
-     *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/key_concepts/identifiers/#ocid)
+     * A globally unique identifier for this Open Contracting Process. Composed of a publisher prefix and an
+     * identifier for the contracting process. For more information see the [Open Contracting Identifier guidance]
+     * (http://standard.open-contracting.org/latest/en/schema/identifiers/)
      * (Required)
-     *
-     * @return
-     *     The ocid
      */
     @JsonProperty("ocid")
     public String getOcid() {
@@ -228,29 +251,23 @@ public class Release implements Identifiable {
     /**
      * Open Contracting ID
      * <p>
-     * A globally unique identifier for this Open Contracting Process. Composed of a publisher prefix and an identifier
-     * for the contracting process. For more information see the
-     *  [Open Contracting Identifier guidance]
-     *      (http://ocds.open-contracting.org/standard/r/1__0__0/en/key_concepts/identifiers/#ocid)
+     * A globally unique identifier for this Open Contracting Process. Composed of a publisher prefix and an
+     * identifier for the contracting process. For more information see the [Open Contracting Identifier guidance]
+     * (http://standard.open-contracting.org/latest/en/schema/identifiers/)
      * (Required)
-     *
-     * @param ocid
-     *     The ocid
      */
     @JsonProperty("ocid")
-    public void setOcid(final String ocid) {
+    public void setOcid(String ocid) {
         this.ocid = ocid;
     }
 
     /**
      * Release ID
      * <p>
-     * A unique identifier that identifies this release. A releaseID must be unique within a release-package
-     * and must not contain the # character.
+     * An identifier for this particular release of information. A release identifier must be unique within the scope
+     * of its related contracting process (defined by a common ocid), and unique within any release package it
+     * appears in. A release identifier must not contain the # character.
      * (Required)
-     *
-     * @return
-     *     The id
      */
     @JsonProperty("id")
     public String getId() {
@@ -260,27 +277,21 @@ public class Release implements Identifiable {
     /**
      * Release ID
      * <p>
-     * A unique identifier that identifies this release. A releaseID must be unique within a release-package
-     * and must not contain the # character.
+     * An identifier for this particular release of information. A release identifier must be unique within the scope
+     * of its related contracting process (defined by a common ocid), and unique within any release package it
+     * appears in. A release identifier must not contain the # character.
      * (Required)
-     *
-     * @param id
-     *     The id
      */
     @JsonProperty("id")
-    public void setId(final String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
     /**
      * Release Date
      * <p>
-     * The date this information is released, it may well be the same as the parent publishedDate,
-     * it must not be later than the publishedDate from the parent package. It is used to determine merge order.
+     * The date this information was first released, or published.
      * (Required)
-     *
-     * @return
-     *     The date
      */
     @JsonProperty("date")
     public Date getDate() {
@@ -290,29 +301,21 @@ public class Release implements Identifiable {
     /**
      * Release Date
      * <p>
-     * The date this information is released, it may well be the same as the parent publishedDate,
-     * it must not be later than the publishedDate from the parent package. It is used to determine merge order.
+     * The date this information was first released, or published.
      * (Required)
-     *
-     * @param date
-     *     The date
      */
     @JsonProperty("date")
-    public void setDate(final Date date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
     /**
      * Release Tag
      * <p>
-     * A value from the
-     * [releaseTag codelist](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#release-tag)
-     * that identifies the nature of the release being made. Tags may be used to filter release, or, in future,
-     * for for advanced validation when certain kinds of releases should contain certain fields.
+     * One or more values from the [releaseTag codelist](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#release-tag). Tags may be used to filter release and to understand the kind
+     * of information that a release might contain.
      * (Required)
-     *
-     * @return
-     *     The tag
      */
     @JsonProperty("tag")
     public List<Tag> getTag() {
@@ -322,30 +325,23 @@ public class Release implements Identifiable {
     /**
      * Release Tag
      * <p>
-     * A value from the
-     * [releaseTag codelist](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#release-tag)
-     * that identifies the nature of the release being made. Tags may be used to filter release, or, in future,
-     * for for advanced validation when certain kinds of releases should contain certain fields.
+     * One or more values from the [releaseTag codelist](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#release-tag). Tags may be used to filter release and to understand the kind
+     * of information that a release might contain.
      * (Required)
-     *
-     * @param tag
-     *     The tag
      */
     @JsonProperty("tag")
-    public void setTag(final List<Tag> tag) {
+    public void setTag(List<Tag> tag) {
         this.tag = tag;
     }
 
     /**
      * Initiation type
      * <p>
-     * String specifying the type of initiation process used for this contract, taken from the
-     *  [initiationType](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#initiation-type)
-     * codelist. Currently only tender is supported.
+     * String specifying the type of initiation process used for this contract, taken from the [initiationType]
+     * (http://standard.open-contracting.org/latest/en/schema/codelists/#initiation-type) codelist. Currently only
+     * tender is supported.
      * (Required)
-     *
-     * @return
-     *     The initiationType
      */
     @JsonProperty("initiationType")
     public InitiationType getInitiationType() {
@@ -355,28 +351,66 @@ public class Release implements Identifiable {
     /**
      * Initiation type
      * <p>
-     * String specifying the type of initiation process used for this contract, taken from the
-     *  [initiationType](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#initiation-type)
-     * codelist. Currently only tender is supported.
+     * String specifying the type of initiation process used for this contract, taken from the [initiationType]
+     * (http://standard.open-contracting.org/latest/en/schema/codelists/#initiation-type) codelist. Currently only
+     * tender is supported.
      * (Required)
-     *
-     * @param initiationType
-     *     The initiationType
      */
     @JsonProperty("initiationType")
-    public void setInitiationType(final InitiationType initiationType) {
+    public void setInitiationType(InitiationType initiationType) {
         this.initiationType = initiationType;
+    }
+
+    /**
+     * Parties
+     * <p>
+     * Information on the parties (organizations, economic operators and other participants) who are involved in the
+     * contracting process and their roles, e.g. buyer, procuring entity, supplier etc. Organization references
+     * elsewhere in the schema are used to refer back to this entries in this list.
+     */
+    @JsonProperty("parties")
+    public Set<Organization> getParties() {
+        return parties;
+    }
+
+    /**
+     * Parties
+     * <p>
+     * Information on the parties (organizations, economic operators and other participants) who are involved in the
+     * contracting process and their roles, e.g. buyer, procuring entity, supplier etc. Organization references
+     * elsewhere in the schema are used to refer back to this entries in this list.
+     */
+    @JsonProperty("parties")
+    public void setParties(Set<Organization> parties) {
+        this.parties = parties;
+    }
+
+    /**
+     * Organization reference
+     * <p>
+     * The id and name of the party being referenced. Used to cross-reference to the parties section
+     */
+    @JsonProperty("buyer")
+    public Organization getBuyer() {
+        return buyer;
+    }
+
+    /**
+     * Organization reference
+     * <p>
+     * The id and name of the party being referenced. Used to cross-reference to the parties section
+     */
+    @JsonProperty("buyer")
+    public void setBuyer(Organization buyer) {
+        this.buyer = buyer;
     }
 
     /**
      * Planning
      * <p>
-     * Information from the planning phase of the contracting process. Note that many other fields may be filled
-     * in a planning release, in the appropriate fields in other schema sections, these would likely be estimates at
-     * this stage e.g. totalValue in tender
-     *
-     * @return
-     *     The planning
+     * Information from the planning phase of the contracting process. Note that many other fields may be filled in a
+     * planning release, in the appropriate fields in other schema sections, these would likely be estimates at this
+     * stage e.g. totalValue in tender
      */
     @JsonProperty("planning")
     public Planning getPlanning() {
@@ -386,15 +420,12 @@ public class Release implements Identifiable {
     /**
      * Planning
      * <p>
-     * Information from the planning phase of the contracting process. Note that many other fields may be filled
-     * in a planning release, in the appropriate fields in other schema sections, these would likely be estimates at
-     * this stage e.g. totalValue in tender
-     *
-     * @param planning
-     *     The planning
+     * Information from the planning phase of the contracting process. Note that many other fields may be filled in a
+     * planning release, in the appropriate fields in other schema sections, these would likely be estimates at this
+     * stage e.g. totalValue in tender
      */
     @JsonProperty("planning")
-    public void setPlanning(final Planning planning) {
+    public void setPlanning(Planning planning) {
         this.planning = planning;
     }
 
@@ -403,9 +434,6 @@ public class Release implements Identifiable {
      * <p>
      * Data regarding tender process - publicly inviting prospective contractors to submit bids for evaluation and
      * selecting a winner or winners.
-     *
-     * @return
-     *     The tender
      */
     @JsonProperty("tender")
     public Tender getTender() {
@@ -417,71 +445,17 @@ public class Release implements Identifiable {
      * <p>
      * Data regarding tender process - publicly inviting prospective contractors to submit bids for evaluation and
      * selecting a winner or winners.
-     *
-     * @param tender
-     *     The tender
      */
     @JsonProperty("tender")
-    public void setTender(final Tender tender) {
+    public void setTender(Tender tender) {
         this.tender = tender;
-    }
-
-    /**
-     * Bids
-     * <p>
-     * Summary and detailed information about bids received and evaluated as part of this contracting process.
-     *
-     */
-    @JsonProperty("bids")
-    public Bids getBids() {
-        return bids;
-    }
-
-    /**
-     * Bids
-     * <p>
-     * Summary and detailed information about bids received and evaluated as part of this contracting process.
-     *
-     */
-    @JsonProperty("bids")
-    public void setBids(Bids bids) {
-        this.bids = bids;
-    }
-
-    /**
-     * Organization
-     * <p>
-     * An organization.
-     *
-     * @return
-     *     The buyer
-     */
-    @JsonProperty("buyer")
-    public Organization getBuyer() {
-        return buyer;
-    }
-
-    /**
-     * Organization
-     * <p>
-     * An organization.
-     *
-     * @param buyer
-     *     The buyer
-     */
-    @JsonProperty("buyer")
-    public void setBuyer(final Organization buyer) {
-        this.buyer = buyer;
     }
 
     /**
      * Awards
      * <p>
      * Information from the award phase of the contracting process. There may be more than one award per contracting
-     * process e.g. because the contract is split amongst different providers, or because it is a standing offer.
-     *
-     * @return
-     *     The awards
+     * process e.g. because the contract is split among different providers, or because it is a standing offer.
      */
     @JsonProperty("awards")
     public Set<Award> getAwards() {
@@ -492,13 +466,10 @@ public class Release implements Identifiable {
      * Awards
      * <p>
      * Information from the award phase of the contracting process. There may be more than one award per contracting
-     * process e.g. because the contract is split amongst different providers, or because it is a standing offer.
-     *
-     * @param awards
-     *     The awards
+     * process e.g. because the contract is split among different providers, or because it is a standing offer.
      */
     @JsonProperty("awards")
-    public void setAwards(final Set<Award> awards) {
+    public void setAwards(Set<Award> awards) {
         this.awards = awards;
     }
 
@@ -506,9 +477,6 @@ public class Release implements Identifiable {
      * Contracts
      * <p>
      * Information from the contract creation phase of the procurement process.
-     *
-     * @return
-     *     The contracts
      */
     @JsonProperty("contracts")
     public Set<Contract> getContracts() {
@@ -519,23 +487,39 @@ public class Release implements Identifiable {
      * Contracts
      * <p>
      * Information from the contract creation phase of the procurement process.
-     *
-     * @param contracts
-     *     The contracts
      */
     @JsonProperty("contracts")
-    public void setContracts(final Set<Contract> contracts) {
+    public void setContracts(Set<Contract> contracts) {
         this.contracts = contracts;
+    }
+
+    /**
+     * Bids
+     * <p>
+     * Summary and detailed information about bids received and evaluated as part of this contracting process.
+     */
+    @JsonProperty("bids")
+    public Bids getBids() {
+        return bids;
+    }
+
+    /**
+     * Bids
+     * <p>
+     * Summary and detailed information about bids received and evaluated as part of this contracting process.
+     */
+    @JsonProperty("bids")
+    public void setBids(Bids bids) {
+        this.bids = bids;
     }
 
     /**
      * Release language
      * <p>
-     * Specifies the default language of the data using either two-digit ISO 639-1, or extended BCP47 language tags.
-     * The use of two-letter codes from ISO 639-1 is strongly recommended.
-     *
-     * @return
-     *     The language
+     * Specifies the default language of the data using either two-letter [ISO639-1](https://en.wikipedia
+     * .org/wiki/List_of_ISO_639-1_codes), or extended [BCP47 language tags](http://www
+     * .w3.org/International/articles/language-tags/). The use of lowercase two-letter codes from [ISO639-1]
+     * (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) is strongly recommended.
      */
     @JsonProperty("language")
     public String getLanguage() {
@@ -545,41 +529,82 @@ public class Release implements Identifiable {
     /**
      * Release language
      * <p>
-     * Specifies the default language of the data using either two-digit ISO 639-1, or extended BCP47 language tags.
-     * The use of two-letter codes from ISO 639-1 is strongly recommended.
-     *
-     * @param language
-     *     The language
+     * Specifies the default language of the data using either two-letter [ISO639-1](https://en.wikipedia
+     * .org/wiki/List_of_ISO_639-1_codes), or extended [BCP47 language tags](http://www
+     * .w3.org/International/articles/language-tags/). The use of lowercase two-letter codes from [ISO639-1]
+     * (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) is strongly recommended.
      */
     @JsonProperty("language")
-    public void setLanguage(final String language) {
+    public void setLanguage(String language) {
         this.language = language;
+    }
+
+    /**
+     * Related processes
+     * <p>
+     * If this process follows on from one or more prior process, represented under a separate open contracting
+     * identifier (ocid) then details of the related process can be provided here. This is commonly used to relate
+     * mini-competitions to their parent frameworks, full tenders to a pre-qualification phase, or individual tenders
+     * to a broad planning process.
+     */
+    @JsonProperty("relatedProcesses")
+    public Set<RelatedProcess> getRelatedProcesses() {
+        return relatedProcesses;
+    }
+
+    /**
+     * Related processes
+     * <p>
+     * If this process follows on from one or more prior process, represented under a separate open contracting
+     * identifier (ocid) then details of the related process can be provided here. This is commonly used to relate
+     * mini-competitions to their parent frameworks, full tenders to a pre-qualification phase, or individual tenders
+     * to a broad planning process.
+     */
+    @JsonProperty("relatedProcesses")
+    public void setRelatedProcesses(Set<RelatedProcess> relatedProcesses) {
+        this.relatedProcesses = relatedProcesses;
     }
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return new ToStringBuilder(this).append("ocid", ocid)
+                .append("id", id)
+                .append("date", date)
+                .append("tag", tag)
+                .append("initiationType", initiationType)
+                .append("parties", parties)
+                .append("buyer", buyer)
+                .append("planning", planning)
+                .append("tender", tender)
+                .append("awards", awards)
+                .append("contracts", contracts)
+                .append("language", language)
+                .append("relatedProcesses", relatedProcesses)
+                .append("bids", bids)
+                .toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().
-                append(ocid).
-                append(id).
-                append(date).
-                append(tag).
-                append(initiationType).
-                append(planning).
-                append(tender).
-                append(buyer).
-                append(awards).
-                append(contracts).
-                append(language).
-                toHashCode();
+        return new HashCodeBuilder().append(date)
+                .append(tender)
+                .append(relatedProcesses)
+                .append(language)
+                .append(contracts)
+                .append(buyer)
+                .append(initiationType)
+                .append(planning)
+                .append(awards)
+                .append(parties)
+                .append(id)
+                .append(tag)
+                .append(ocid)
+                .append(bids)
+                .toHashCode();
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
@@ -587,47 +612,56 @@ public class Release implements Identifiable {
             return false;
         }
         Release rhs = ((Release) other);
-        return new EqualsBuilder().
-                append(ocid, rhs.ocid).
-                append(id, rhs.id).
-                append(date, rhs.date).
-                append(tag, rhs.tag).
-                append(initiationType, rhs.initiationType).
-                append(planning, rhs.planning).
-                append(tender, rhs.tender).
-                append(buyer, rhs.buyer).
-                append(awards, rhs.awards).
-                append(contracts, rhs.contracts).
-                append(language, rhs.language).
-                append(bids, rhs.bids).
-                isEquals();
+        return new EqualsBuilder().append(date, rhs.date)
+                .append(tender, rhs.tender)
+                .append(relatedProcesses, rhs.relatedProcesses)
+                .append(language, rhs.language)
+                .append(bids, rhs.bids)
+                .append(contracts, rhs.contracts)
+                .append(buyer, rhs.buyer)
+                .append(initiationType, rhs.initiationType)
+                .append(planning, rhs.planning)
+                .append(awards, rhs.awards)
+                .append(parties, rhs.parties)
+                .append(id, rhs.id)
+                .append(tag, rhs.tag)
+                .append(ocid, rhs.ocid)
+                .isEquals();
+    }
+
+    @Override
+    public Serializable getIdProperty() {
+        return id;
     }
 
     public enum InitiationType {
-        tender("tender");
 
+        TENDER("tender");
         private final String value;
-
-        private static final Map<String, InitiationType> CONSTANTS = new HashMap<>();
+        private static final Map<String, InitiationType> CONSTANTS = new HashMap<String, InitiationType>();
 
         static {
-            for (InitiationType c: values()) {
+            for (InitiationType c : values()) {
                 CONSTANTS.put(c.value, c);
             }
         }
 
-        InitiationType(final String value) {
+        InitiationType(String value) {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
+        @JsonValue
+        public String value() {
+            return this.value;
+        }
+
         @JsonCreator
-        public static InitiationType fromValue(final String value) {
+        public static InitiationType fromValue(String value) {
             InitiationType constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
@@ -635,11 +669,7 @@ public class Release implements Identifiable {
                 return constant;
             }
         }
-    }
 
-    @Override
-    public Serializable getIdProperty() {
-        return id;
     }
 
 }

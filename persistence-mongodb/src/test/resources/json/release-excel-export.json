@@ -280,7 +280,7 @@
             },
             "planning": {
                 "budget": {
-                    "source": "Highways and Pavements Budget",
+                    "source": "http://abcdefg.ro",
                     "id": "6801ad388f3a38b7740dde20108c58b35984ee91",
                     "description": "Budget allocation for highway maintenance, aligned with 2015 strategic plan. ",
                     "amount": {

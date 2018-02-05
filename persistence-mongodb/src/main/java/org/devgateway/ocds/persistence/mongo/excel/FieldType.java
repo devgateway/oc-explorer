@@ -9,6 +9,7 @@ import com.google.common.collect.ImmutableSet;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 
 import java.math.BigDecimal;
+import java.net.URI;
 import java.util.Date;
 
 /**
@@ -45,5 +46,6 @@ public final class FieldType {
             .add(long.class)
             .add(Double.class)
             .add(double.class)
+            .add(URI.class)
             .build();
 }

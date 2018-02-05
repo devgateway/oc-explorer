@@ -1,82 +1,82 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import java.io.Serializable;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
-import org.devgateway.ocds.persistence.mongo.merge.Merge;
-import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.io.Serializable;
+import java.net.URI;
+
 
 /**
- * Classification OCDS Entity http://standard.open-contracting.org/latest/en/schema/reference/#classification
+ * Classification
+ * <p>
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "scheme",
         "id",
         "description",
         "uri"
 })
-@Document
 public class Classification implements Identifiable {
+
     /**
-     * An classification should be drawn from an existing scheme or list of codes.
-     * This field is used to indicate the scheme/codelist from which the classification is drawn.
-     * For line item classifications, this value should represent an known
-     * [Item Classification Scheme]
-     *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists/#item-classification-scheme)
-     *  wherever possible.
-     *
+     * Scheme
+     * <p>
+     * An classification should be drawn from an existing scheme or list of codes. This field is used to indicate the
+     * scheme/codelist from which the classification is drawn. For line item classifications, this value should
+     * represent an known [Item Classification Scheme](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#item-classification-scheme) wherever possible.
      */
-    @ExcelExport
     @JsonProperty("scheme")
-    @Merge(MergeStrategy.ocdsVersion)
+    @JsonPropertyDescription("An classification should be drawn from an existing scheme or list of codes. This field "
+            + "is used to indicate the scheme/codelist from which the classification is drawn. For line item "
+            + "classifications, this value should represent an known [Item Classification Scheme](http://standard"
+            + ".open-contracting.org/latest/en/schema/codelists/#item-classification-scheme) wherever possible.")
+    @ExcelExport
     private String scheme;
-
     /**
+     * ID
+     * <p>
      * The classification code drawn from the selected scheme.
-     *
      */
-    @ExcelExport
     @JsonProperty("id")
-    @Id
-    @Merge(MergeStrategy.ocdsVersion)
-    private String id;
-
-    /**
-     * A textual description or title for the code.
-     *
-     */
+    @JsonPropertyDescription("The classification code drawn from the selected scheme.")
     @ExcelExport
-    @JsonProperty("description")
-    @Merge(MergeStrategy.ocdsVersion)
-    private String description;
-
+    private String id;
     /**
+     * Description
+     * <p>
+     * A textual description or title for the code.
+     */
+    @JsonProperty("description")
+    @JsonPropertyDescription("A textual description or title for the code.")
+    @ExcelExport
+    private String description;
+    /**
+     * URI
+     * <p>
      * A URI to identify the code. In the event individual URIs are not available for items in the identifier scheme
      * this value should be left blank.
-     *
      */
     @JsonProperty("uri")
-    @Merge(MergeStrategy.ocdsVersion)
-    private String uri;
+    @JsonPropertyDescription("A URI to identify the code. In the event individual URIs are not available for items in"
+            + " the identifier scheme this value should be left blank.")
+    private URI uri;
 
     /**
-     * An classification should be drawn from an existing scheme or list of codes.
-     * This field is used to indicate the scheme/codelist from which the classification is drawn.
-     * For line item classifications, this value should represent an known
-     * [Item Classification Scheme]
-     *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists/#item-classification-scheme)
-     *  wherever possible.
-     *
-     * @return
-     *     The scheme
+     * Scheme
+     * <p>
+     * An classification should be drawn from an existing scheme or list of codes. This field is used to indicate the
+     * scheme/codelist from which the classification is drawn. For line item classifications, this value should
+     * represent an known [Item Classification Scheme](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#item-classification-scheme) wherever possible.
      */
     @JsonProperty("scheme")
     public String getScheme() {
@@ -84,26 +84,22 @@ public class Classification implements Identifiable {
     }
 
     /**
-     * An classification should be drawn from an existing scheme or list of codes.
-     * This field is used to indicate the scheme/codelist from which the classification is drawn.
-     * For line item classifications, this value should represent an known
-     * [Item Classification Scheme]
-     *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists/#item-classification-scheme)
-     *  wherever possible.
-     *
-     * @param scheme
-     *     The scheme
+     * Scheme
+     * <p>
+     * An classification should be drawn from an existing scheme or list of codes. This field is used to indicate the
+     * scheme/codelist from which the classification is drawn. For line item classifications, this value should
+     * represent an known [Item Classification Scheme](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#item-classification-scheme) wherever possible.
      */
     @JsonProperty("scheme")
-    public void setScheme(final String scheme) {
+    public void setScheme(String scheme) {
         this.scheme = scheme;
     }
 
     /**
+     * ID
+     * <p>
      * The classification code drawn from the selected scheme.
-     *
-     * @return
-     *     The id
      */
     @JsonProperty("id")
     public String getId() {
@@ -111,21 +107,19 @@ public class Classification implements Identifiable {
     }
 
     /**
+     * ID
+     * <p>
      * The classification code drawn from the selected scheme.
-     *
-     * @param id
-     *     The id
      */
     @JsonProperty("id")
-    public void setId(final String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
     /**
+     * Description
+     * <p>
      * A textual description or title for the code.
-     *
-     * @return
-     *     The description
      */
     @JsonProperty("description")
     public String getDescription() {
@@ -133,57 +127,58 @@ public class Classification implements Identifiable {
     }
 
     /**
+     * Description
+     * <p>
      * A textual description or title for the code.
-     *
-     * @param description
-     *     The description
      */
     @JsonProperty("description")
-    public void setDescription(final String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
     /**
+     * URI
+     * <p>
      * A URI to identify the code. In the event individual URIs are not available for items in the identifier scheme
      * this value should be left blank.
-     *
-     * @return
-     *     The uri
      */
     @JsonProperty("uri")
-    public String getUri() {
+    public URI getUri() {
         return uri;
     }
 
     /**
+     * URI
+     * <p>
      * A URI to identify the code. In the event individual URIs are not available for items in the identifier scheme
      * this value should be left blank.
-     *
-     * @param uri
-     *     The uri
      */
     @JsonProperty("uri")
-    public void setUri(final String uri) {
+    public void setUri(URI uri) {
         this.uri = uri;
     }
 
+
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return new ToStringBuilder(this).append("scheme", scheme)
+                .append("id", id)
+                .append("description", description)
+                .append("uri", uri)
+                .toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().
-                append(scheme).
-                append(id).
-                append(description).
-                append(uri).
-                toHashCode();
+        return new HashCodeBuilder().append(description)
+                .append(id)
+                .append(scheme)
+                .append(uri)
+                .toHashCode();
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
@@ -191,11 +186,11 @@ public class Classification implements Identifiable {
             return false;
         }
         Classification rhs = ((Classification) other);
-        return new EqualsBuilder().
-                append(scheme, rhs.scheme).
-                append(id, rhs.id).
-                append(description, rhs.description).
-                append(uri, rhs.uri).isEquals();
+        return new EqualsBuilder().append(description, rhs.description)
+                .append(id, rhs.id)
+                .append(scheme, rhs.scheme)
+                .append(uri, rhs.uri)
+                .isEquals();
     }
 
     @Override

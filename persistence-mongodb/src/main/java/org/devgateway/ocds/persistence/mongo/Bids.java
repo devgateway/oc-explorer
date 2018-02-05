@@ -1,8 +1,5 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -14,9 +11,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.merge.Merge;
 import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
-import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
 
 
@@ -59,8 +54,6 @@ public class Bids {
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
     @Merge(MergeStrategy.ocdsVersion)
     private Set<Detail> details = new LinkedHashSet<>();
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * Statistics
@@ -113,23 +106,10 @@ public class Bids {
         return ToStringBuilder.reflectionToString(this);
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
-    public void setAdditionalProperties(Map<String, Object> additionalProperties) {
-        this.additionalProperties = additionalProperties;
-    }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(statistics).append(details).append(additionalProperties).toHashCode();
+        return new HashCodeBuilder().append(statistics).append(details).toHashCode();
     }
 
     @Override
@@ -142,7 +122,7 @@ public class Bids {
         }
         Bids rhs = ((Bids) other);
         return new EqualsBuilder().append(statistics, rhs.statistics).append(details, rhs.details)
-                .append(additionalProperties, rhs.additionalProperties).isEquals();
+                .isEquals();
     }
 
 }

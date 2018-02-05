@@ -1,48 +1,47 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
-import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
-import org.devgateway.ocds.persistence.mongo.merge.Merge;
-import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 
 /**
  * Tender
  * <p>
- * Data regarding tender process - publicly inviting prospective contractors to submit bids for evaluation
- * and selecting a winner or winners.
- *
- * http://standard.open-contracting.org/latest/en/schema/reference/#tender
- *
+ * Data regarding tender process - publicly inviting prospective contractors to submit bids for evaluation and
+ * selecting a winner or winners.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "id",
         "title",
         "description",
         "status",
+        "procuringEntity",
         "items",
-        "minValue",
         "value",
+        "minValue",
         "procurementMethod",
+        "procurementMethodDetails",
         "procurementMethodRationale",
+        "mainProcurementCategory",
+        "additionalProcurementCategories",
         "awardCriteria",
         "awardCriteriaDetails",
         "submissionMethod",
@@ -52,249 +51,327 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
         "hasEnquiries",
         "eligibilityCriteria",
         "awardPeriod",
+        "contractPeriod",
         "numberOfTenderers",
         "tenderers",
-        "procuringEntity",
         "documents",
         "milestones",
+        "amendments",
         "amendment"
 })
-public class Tender implements Identifiable {
+public class Tender {
 
     /**
      * Tender ID
      * <p>
-     * An identifier for this tender process. This may be the same as the ocid, or may be drawn from
-     * an internally held identifier for this tender.
+     * An identifier for this tender process. This may be the same as the ocid, or may be drawn from an internally
+     * held identifier for this tender.
      * (Required)
-     *
      */
-    @ExcelExport
     @JsonProperty("id")
-    @Merge(MergeStrategy.ocdsVersion)
+    @JsonPropertyDescription("An identifier for this tender process. This may be the same as the ocid, or may be "
+            + "drawn from an internally held identifier for this tender.")
+    @ExcelExport
     private String id;
-
     /**
      * Tender title
-     *
+     * <p>
+     * A title for this tender. This will often be used by applications as a headline to attract interest, and to
+     * help analysts understand the nature of this procurement.
      */
-    @ExcelExport
     @JsonProperty("title")
-    @Merge(MergeStrategy.ocdsVersion)
+    @JsonPropertyDescription("A title for this tender. This will often be used by applications as a headline to "
+            + "attract interest, and to help analysts understand the nature of this procurement.")
+    @ExcelExport
     private String title;
-
     /**
      * Tender description
-     *
-     */
-    @ExcelExport
-    @JsonProperty("description")
-    @Merge(MergeStrategy.ocdsVersion)
-    private String description;
-
-    /**
-     * Tender Status
      * <p>
-     * The current status of the tender based on the
-     * [tenderStatus codelist](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#tender-status)
-     *
+     * A summary description of the tender. This should complement structured information provided using the items
+     * array. Descriptions should be short and easy to read. Avoid using ALL CAPS.
      */
+    @JsonProperty("description")
+    @JsonPropertyDescription("A summary description of the tender. This should complement structured information "
+            + "provided using the items array. Descriptions should be short and easy to read. Avoid using ALL CAPS. ")
     @ExcelExport
+    private String description;
+    /**
+     * Tender status
+     * <p>
+     * The current status of the tender based on the [tenderStatus codelist](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#tender-status)
+     */
     @JsonProperty("status")
-    @Merge(MergeStrategy.ocdsVersion)
+    @JsonPropertyDescription("The current status of the tender based on the [tenderStatus codelist](http://standard"
+            + ".open-contracting.org/latest/en/schema/codelists/#tender-status)")
+    @ExcelExport
     private Status status;
-
+    /**
+     * Organization reference
+     * <p>
+     * The id and name of the party being referenced. Used to cross-reference to the parties section
+     */
+    @JsonProperty("procuringEntity")
+    @JsonPropertyDescription("The id and name of the party being referenced. Used to cross-reference to the parties "
+            + "section")
+    @ExcelExport
+    private Organization procuringEntity;
     /**
      * Items to be procured
      * <p>
-     * The goods and services to be purchased, broken into line items wherever possible.
-     * Items should not be duplicated, but a quantity of 2 specified instead.
-     *
+     * The goods and services to be purchased, broken into line items wherever possible. Items should not be
+     * duplicated, but a quantity of 2 specified instead.
      */
+    @JsonProperty("items")
     @ExcelExport
     @ExcelExportSepareteSheet
-    @JsonProperty("items")
-    @JsonDeserialize(as = java.util.LinkedHashSet.class)
-    @Merge(MergeStrategy.arrayMergeById)
+    @JsonDeserialize(as = LinkedHashSet.class)
+    @JsonPropertyDescription("The goods and services to be purchased, broken into line items wherever possible. Items"
+            + " should not be duplicated, but a quantity of 2 specified instead.")
     private Set<Item> items = new LinkedHashSet<Item>();
-
-    @ExcelExport
-    @JsonProperty("minValue")
-    private Amount minValue;
-
-    @ExcelExport
+    /**
+     * Value
+     * <p>
+     */
     @JsonProperty("value")
+    @ExcelExport
     private Amount value;
-
     /**
-     * Specify tendering method against the
-     * [method codelist](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#method)
-     * as per [GPA definitions](http://www.wto.org/english/docs_e/legal_e/rev-gpr-94_01_e.htm) of
-     * Open, Selective, Limited
-     *
+     * Value
+     * <p>
      */
+    @JsonProperty("minValue")
     @ExcelExport
+    private Amount minValue;
+    /**
+     * Procurement method
+     * <p>
+     * Specify tendering method using the [method codelist](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#method). This is a closed codelist. Local method types should be mapped to
+     * this list.
+     */
     @JsonProperty("procurementMethod")
-    @Merge(MergeStrategy.ocdsVersion)
+    @JsonPropertyDescription("Specify tendering method using the [method codelist](http://standard.open-contracting"
+            + ".org/latest/en/schema/codelists/#method). This is a closed codelist. Local method types should be "
+            + "mapped to this list.")
+    @ExcelExport
     private ProcurementMethod procurementMethod;
-
     /**
-     * Rationale of procurement method, especially in the case of Limited tendering.
-     *
+     * Procurement method details
+     * <p>
+     * Additional detail on the procurement method used. This field may be used to provide the local name of the
+     * particular procurement method used.
      */
-    @ExcelExport
+    @JsonProperty("procurementMethodDetails")
+    @JsonPropertyDescription("Additional detail on the procurement method used. This field may be used to provide the"
+            + " local name of the particular procurement method used.")
+    private String procurementMethodDetails;
+    /**
+     * Procurement method rationale
+     * <p>
+     * Rationale for the chosen procurement method. This is especially important to provide a justification in the
+     * case of limited tenders or direct awards.
+     */
     @JsonProperty("procurementMethodRationale")
-    @Merge(MergeStrategy.ocdsVersion)
+    @JsonPropertyDescription("Rationale for the chosen procurement method. This is especially important to provide a "
+            + "justification in the case of limited tenders or direct awards.")
+    @ExcelExport
     private String procurementMethodRationale;
-
     /**
-     * Specify the award criteria for the procurement, using the
-     * [award criteria codelist](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#award-criteria)
-     *
+     * Main procurement category
+     * <p>
+     * The primary category describing the main object of this contracting process from the [procurementCategory]
+     * (http://standard.open-contracting.org/latest/en/schema/codelists/#procurement-category) codelist. This is a
+     * closed codelist. Local classifications should be mapped to this list.
      */
-    @ExcelExport
+    @JsonProperty("mainProcurementCategory")
+    @JsonPropertyDescription("The primary category describing the main object of this contracting process from the "
+            + "[procurementCategory](http://standard.open-contracting"
+            + ".org/latest/en/schema/codelists/#procurement-category) codelist. This is a closed codelist. Local "
+            + "classifications should be mapped to this list.")
+    private MainProcurementCategory mainProcurementCategory;
+    /**
+     * Additional procurement categories
+     * <p>
+     * Any additional categories which describe the objects of this contracting process, from the
+     * [extendedProcurementCategory](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#extended-procurement-category) codelist. This is an open codelist. Local
+     * categories can be included in this list.
+     */
+    @JsonProperty("additionalProcurementCategories")
+    @JsonPropertyDescription("Any additional categories which describe the objects of this contracting process, from "
+            + "the [extendedProcurementCategory](http://standard.open-contracting"
+            + ".org/latest/en/schema/codelists/#extended-procurement-category) codelist. This is an open codelist. "
+            + "Local categories can be included in this list.")
+
+    private List<String> additionalProcurementCategories = new ArrayList<String>();
+    /**
+     * Award criteria
+     * <p>
+     * Specify the award criteria for the procurement, using the [award criteria codelist](http://standard
+     * .open-contracting.org/latest/en/schema/codelists/#award-criteria)
+     */
     @JsonProperty("awardCriteria")
-    @Merge(MergeStrategy.ocdsVersion)
+    @JsonPropertyDescription("Specify the award criteria for the procurement, using the [award criteria codelist]"
+            + "(http://standard.open-contracting.org/latest/en/schema/codelists/#award-criteria)")
+    @ExcelExport
     private String awardCriteria;
-
     /**
+     * Award criteria details
+     * <p>
      * Any detailed or further information on the award or selection criteria.
-     *
      */
-    @ExcelExport
     @JsonProperty("awardCriteriaDetails")
-    @Merge(MergeStrategy.ocdsVersion)
+    @JsonPropertyDescription("Any detailed or further information on the award or selection criteria.")
     private String awardCriteriaDetails;
-
     /**
-     * Specify the method by which bids must be submitted, in person, written, or electronic auction.
-     * Using the
-     * [submission method codelist]
-     *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#submission-method)
-     *
+     * Submission method
+     * <p>
+     * Specify the method by which bids must be submitted, in person, written, or electronic auction. Using the
+     * [submission method codelist](http://standard.open-contracting.org/latest/en/schema/codelists/#submission-method)
      */
-    @ExcelExport
     @JsonProperty("submissionMethod")
-    @Merge(MergeStrategy.ocdsVersion)
-    private Set<SubmissionMethod> submissionMethod = new TreeSet<SubmissionMethod>();
-
-    /**
-     * Any detailed or further information on the submission method. This may include the address,
-     * e-mail address or online service to which bids should be submitted,
-     * and any special requirements to be followed for submissions.
-     *
-     */
+    @JsonPropertyDescription("Specify the method by which bids must be submitted, in person, written, or electronic "
+            + "auction. Using the [submission method codelist](http://standard.open-contracting"
+            + ".org/latest/en/schema/codelists/#submission-method)")
     @ExcelExport
+    private List<String> submissionMethod = new ArrayList<String>();
+    /**
+     * Submission method details
+     * <p>
+     * Any detailed or further information on the submission method. This may include the address, e-mail address or
+     * online service to which bids should be submitted, and any special requirements to be followed for submissions.
+     */
     @JsonProperty("submissionMethodDetails")
-    @Merge(MergeStrategy.ocdsVersion)
-    private String submissionMethodDetails;
-
-    /**
-     * Period
-     * <p>
-     *
-     *
-     */
+    @JsonPropertyDescription("Any detailed or further information on the submission method. This may include the "
+            + "address, e-mail address or online service to which bids should be submitted, and any special "
+            + "requirements to be followed for submissions.")
     @ExcelExport
-    @JsonProperty("tenderPeriod")
-    private Period tenderPeriod;
-
+    private String submissionMethodDetails;
     /**
      * Period
      * <p>
-     *
-     *
+     */
+    @JsonProperty("tenderPeriod")
+    @JsonPropertyDescription("    ")
+    @ExcelExport
+    private TenderPeriod tenderPeriod;
+    /**
+     * Period
+     * <p>
      */
     @JsonProperty("enquiryPeriod")
-    private Period enquiryPeriod;
-
+    @JsonPropertyDescription("    ")
+    @ExcelExport
+    private TenderPeriod enquiryPeriod;
     /**
-     * A Yes/No field to indicate whether enquiries were part of tender process.
-     *
+     * Has enquiries?
+     * <p>
+     * A true/false field to indicate whether any enquiries were received during the tender process. Structured
+     * information on enquiries that were received, and responses to them, can be provided using the enquiries
+     * extension.
      */
     @JsonProperty("hasEnquiries")
-    @Merge(MergeStrategy.ocdsVersion)
+    @JsonPropertyDescription("A true/false field to indicate whether any enquiries were received during the tender "
+            + "process. Structured information on enquiries that were received, and responses to them, can be "
+            + "provided using the enquiries extension.")
     private Boolean hasEnquiries;
-
     /**
+     * Eligibility criteria
+     * <p>
      * A description of any eligibility criteria for potential suppliers.
-     *
      */
     @JsonProperty("eligibilityCriteria")
-    @Merge(MergeStrategy.ocdsVersion)
+    @JsonPropertyDescription("A description of any eligibility criteria for potential suppliers.")
+    @ExcelExport
     private String eligibilityCriteria;
-
     /**
      * Period
      * <p>
-     *
-     *
      */
     @JsonProperty("awardPeriod")
-    private Period awardPeriod;
-
+    @JsonPropertyDescription("    ")
     @ExcelExport
-    @JsonProperty("numberOfTenderers")
-    @Merge(MergeStrategy.ocdsVersion)
-    private Integer numberOfTenderers;
-
+    private TenderPeriod awardPeriod;
     /**
-     * All entities who submit a tender.
-     *
-     */
-    @ExcelExport
-    @JsonProperty("tenderers")
-    @JsonDeserialize(as = java.util.LinkedHashSet.class)
-    @Merge(MergeStrategy.ocdsVersion)
-    private Set<Organization> tenderers = new LinkedHashSet<Organization>();
-
-    /**
-     * Organization
+     * Period
      * <p>
-     * An organization.
-     *
      */
+    @JsonProperty("contractPeriod")
+    @JsonPropertyDescription("    ")
     @ExcelExport
-    @JsonProperty("procuringEntity")
-    private Organization procuringEntity;
-
+    private TenderPeriod contractPeriod;
     /**
-     * All documents and attachments related to the tender, including any notices. See the
-     * [documentType codelist](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#document-type)
-     * for details of potential documents to include.
-     *
+     * Number of tenderers
+     * <p>
+     * The number of parties who submit a bid.
      */
+    @JsonProperty("numberOfTenderers")
     @ExcelExport
+    @JsonPropertyDescription("The number of parties who submit a bid.")
+    private Integer numberOfTenderers;
+    /**
+     * Tenderers
+     * <p>
+     * All parties who submit a bid on a tender. More detailed information on bids and the bidding organization can
+     * be provided using the optional bid extension.
+     */
+    @JsonProperty("tenderers")
+    @JsonDeserialize(as = LinkedHashSet.class)
+    @JsonPropertyDescription("All parties who submit a bid on a tender. More detailed information on bids and the "
+            + "bidding organization can be provided using the optional bid extension.")
+    @ExcelExport
+    private Set<Organization> tenderers = new LinkedHashSet<Organization>();
+    /**
+     * Documents
+     * <p>
+     * All documents and attachments related to the tender, including any notices. See the [documentType codelist]
+     * (http://standard.open-contracting.org/latest/en/schema/codelists/#document-type) for details of potential
+     * documents to include. Common documents include official legal notices of tender, technical specifications,
+     * evaluation criteria, and, as a tender process progresses, clarifications and replies to queries.
+     */
     @JsonProperty("documents")
-    @Merge(MergeStrategy.arrayMergeById)
+    @JsonPropertyDescription("All documents and attachments related to the tender, including any notices. See the "
+            + "[documentType codelist](http://standard.open-contracting"
+            + ".org/latest/en/schema/codelists/#document-type) for details of potential documents to include. Common "
+            + "documents include official legal notices of tender, technical specifications, evaluation criteria, "
+            + "and, as a tender process progresses, clarifications and replies to queries.")
+    @ExcelExport
     private List<Document> documents = new ArrayList<Document>();
-
     /**
+     * Milestones
+     * <p>
      * A list of milestones associated with the tender.
-     *
      */
     @JsonProperty("milestones")
-    @Merge(MergeStrategy.arrayMergeById)
+    @JsonPropertyDescription("A list of milestones associated with the tender.")
     private List<Milestone> milestones = new ArrayList<Milestone>();
-
     /**
-     * Amendment information
+     * Amendments
      * <p>
-     *
-     *
+     * A tender amendment is a formal change to the tender, and generally involves the publication of a new tender
+     * notice/release. The rationale and a description of the changes made can be provided here.
+     */
+    @JsonProperty("amendments")
+    @JsonPropertyDescription("A tender amendment is a formal change to the tender, and generally involves the "
+            + "publication of a new tender notice/release. The rationale and a description of the changes made can be"
+            + " provided here.")
+    private List<Amendment> amendments = new ArrayList<Amendment>();
+    /**
+     * Amendment
+     * <p>
+     * Amendment information
      */
     @JsonProperty("amendment")
+    @JsonPropertyDescription("Amendment information")
     private Amendment amendment;
 
     /**
      * Tender ID
      * <p>
-     * An identifier for this tender process. This may be the same as the ocid, or may be drawn from an
-     * internally held identifier for this tender.
+     * An identifier for this tender process. This may be the same as the ocid, or may be drawn from an internally
+     * held identifier for this tender.
      * (Required)
-     *
-     * @return
-     *     The id
      */
     @JsonProperty("id")
     public String getId() {
@@ -304,23 +381,20 @@ public class Tender implements Identifiable {
     /**
      * Tender ID
      * <p>
-     * An identifier for this tender process. This may be the same as the ocid, or may be drawn from an
-     * internally held identifier for this tender.
+     * An identifier for this tender process. This may be the same as the ocid, or may be drawn from an internally
+     * held identifier for this tender.
      * (Required)
-     *
-     * @param id
-     *     The id
      */
     @JsonProperty("id")
-    public void setId(final String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
     /**
      * Tender title
-     *
-     * @return
-     *     The title
+     * <p>
+     * A title for this tender. This will often be used by applications as a headline to attract interest, and to
+     * help analysts understand the nature of this procurement.
      */
     @JsonProperty("title")
     public String getTitle() {
@@ -329,20 +403,20 @@ public class Tender implements Identifiable {
 
     /**
      * Tender title
-     *
-     * @param title
-     *     The title
+     * <p>
+     * A title for this tender. This will often be used by applications as a headline to attract interest, and to
+     * help analysts understand the nature of this procurement.
      */
     @JsonProperty("title")
-    public void setTitle(final String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
     /**
      * Tender description
-     *
-     * @return
-     *     The description
+     * <p>
+     * A summary description of the tender. This should complement structured information provided using the items
+     * array. Descriptions should be short and easy to read. Avoid using ALL CAPS.
      */
     @JsonProperty("description")
     public String getDescription() {
@@ -351,23 +425,20 @@ public class Tender implements Identifiable {
 
     /**
      * Tender description
-     *
-     * @param description
-     *     The description
+     * <p>
+     * A summary description of the tender. This should complement structured information provided using the items
+     * array. Descriptions should be short and easy to read. Avoid using ALL CAPS.
      */
     @JsonProperty("description")
-    public void setDescription(final String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
     /**
-     * Tender Status
+     * Tender status
      * <p>
-     * The current status of the tender based on the
-     * [tenderStatus codelist](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#tender-status)
-     *
-     * @return
-     *     The status
+     * The current status of the tender based on the [tenderStatus codelist](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#tender-status)
      */
     @JsonProperty("status")
     public Status getStatus() {
@@ -375,27 +446,41 @@ public class Tender implements Identifiable {
     }
 
     /**
-     * Tender Status
+     * Tender status
      * <p>
-     * The current status of the tender based on the
-     * [tenderStatus codelist](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#tender-status)
-     *
-     * @param status
-     *     The status
+     * The current status of the tender based on the [tenderStatus codelist](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#tender-status)
      */
     @JsonProperty("status")
-    public void setStatus(final Status status) {
+    public void setStatus(Status status) {
         this.status = status;
+    }
+
+    /**
+     * Organization reference
+     * <p>
+     * The id and name of the party being referenced. Used to cross-reference to the parties section
+     */
+    @JsonProperty("procuringEntity")
+    public Organization getProcuringEntity() {
+        return procuringEntity;
+    }
+
+    /**
+     * Organization reference
+     * <p>
+     * The id and name of the party being referenced. Used to cross-reference to the parties section
+     */
+    @JsonProperty("procuringEntity")
+    public void setProcuringEntity(Organization procuringEntity) {
+        this.procuringEntity = procuringEntity;
     }
 
     /**
      * Items to be procured
      * <p>
-     * The goods and services to be purchased, broken into line items wherever possible.
-     * Items should not be duplicated, but a quantity of 2 specified instead.
-     *
-     * @return
-     *     The items
+     * The goods and services to be purchased, broken into line items wherever possible. Items should not be
+     * duplicated, but a quantity of 2 specified instead.
      */
     @JsonProperty("items")
     public Set<Item> getItems() {
@@ -405,41 +490,17 @@ public class Tender implements Identifiable {
     /**
      * Items to be procured
      * <p>
-     * The goods and services to be purchased, broken into line items wherever possible.
-     * Items should not be duplicated, but a quantity of 2 specified instead.
-     *
-     * @param items
-     *     The items
+     * The goods and services to be purchased, broken into line items wherever possible. Items should not be
+     * duplicated, but a quantity of 2 specified instead.
      */
     @JsonProperty("items")
-    public void setItems(final Set<Item> items) {
+    public void setItems(Set<Item> items) {
         this.items = items;
     }
 
     /**
-     *
-     * @return
-     *     The minValue
-     */
-    @JsonProperty("minValue")
-    public Amount getMinValue() {
-        return minValue;
-    }
-
-    /**
-     *
-     * @param minValue
-     *     The minValue
-     */
-    @JsonProperty("minValue")
-    public void setMinValue(final Amount minValue) {
-        this.minValue = minValue;
-    }
-
-    /**
-     *
-     * @return
-     *     The value
+     * Value
+     * <p>
      */
     @JsonProperty("value")
     public Amount getValue() {
@@ -447,22 +508,38 @@ public class Tender implements Identifiable {
     }
 
     /**
-     *
-     * @param value
-     *     The value
+     * Value
+     * <p>
      */
     @JsonProperty("value")
-    public void setValue(final Amount value) {
+    public void setValue(Amount value) {
         this.value = value;
     }
 
     /**
-     * Specify tendering method against the
-     * [method codelist](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#method) as per
-     * [GPA definitions](http://www.wto.org/english/docs_e/legal_e/rev-gpr-94_01_e.htm) of Open, Selective, Limited
-     *
-     * @return
-     *     The procurementMethod
+     * Value
+     * <p>
+     */
+    @JsonProperty("minValue")
+    public Amount getMinValue() {
+        return minValue;
+    }
+
+    /**
+     * Value
+     * <p>
+     */
+    @JsonProperty("minValue")
+    public void setMinValue(Amount minValue) {
+        this.minValue = minValue;
+    }
+
+    /**
+     * Procurement method
+     * <p>
+     * Specify tendering method using the [method codelist](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#method). This is a closed codelist. Local method types should be mapped to
+     * this list.
      */
     @JsonProperty("procurementMethod")
     public ProcurementMethod getProcurementMethod() {
@@ -470,23 +547,44 @@ public class Tender implements Identifiable {
     }
 
     /**
-     * Specify tendering method against the
-     * [method codelist](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#method) as per
-     * [GPA definitions](http://www.wto.org/english/docs_e/legal_e/rev-gpr-94_01_e.htm) of Open, Selective, Limited
-     *
-     * @param procurementMethod
-     *     The procurementMethod
+     * Procurement method
+     * <p>
+     * Specify tendering method using the [method codelist](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#method). This is a closed codelist. Local method types should be mapped to
+     * this list.
      */
     @JsonProperty("procurementMethod")
-    public void setProcurementMethod(final ProcurementMethod procurementMethod) {
+    public void setProcurementMethod(ProcurementMethod procurementMethod) {
         this.procurementMethod = procurementMethod;
     }
 
     /**
-     * Rationale of procurement method, especially in the case of Limited tendering.
-     *
-     * @return
-     *     The procurementMethodRationale
+     * Procurement method details
+     * <p>
+     * Additional detail on the procurement method used. This field may be used to provide the local name of the
+     * particular procurement method used.
+     */
+    @JsonProperty("procurementMethodDetails")
+    public String getProcurementMethodDetails() {
+        return procurementMethodDetails;
+    }
+
+    /**
+     * Procurement method details
+     * <p>
+     * Additional detail on the procurement method used. This field may be used to provide the local name of the
+     * particular procurement method used.
+     */
+    @JsonProperty("procurementMethodDetails")
+    public void setProcurementMethodDetails(String procurementMethodDetails) {
+        this.procurementMethodDetails = procurementMethodDetails;
+    }
+
+    /**
+     * Procurement method rationale
+     * <p>
+     * Rationale for the chosen procurement method. This is especially important to provide a justification in the
+     * case of limited tenders or direct awards.
      */
     @JsonProperty("procurementMethodRationale")
     public String getProcurementMethodRationale() {
@@ -494,22 +592,71 @@ public class Tender implements Identifiable {
     }
 
     /**
-     * Rationale of procurement method, especially in the case of Limited tendering.
-     *
-     * @param procurementMethodRationale
-     *     The procurementMethodRationale
+     * Procurement method rationale
+     * <p>
+     * Rationale for the chosen procurement method. This is especially important to provide a justification in the
+     * case of limited tenders or direct awards.
      */
     @JsonProperty("procurementMethodRationale")
-    public void setProcurementMethodRationale(final String procurementMethodRationale) {
+    public void setProcurementMethodRationale(String procurementMethodRationale) {
         this.procurementMethodRationale = procurementMethodRationale;
     }
 
     /**
-     * Specify the award criteria for the procurement, using the
-     * [award criteria codelist](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#award-criteria)
-     *
-     * @return
-     *     The awardCriteria
+     * Main procurement category
+     * <p>
+     * The primary category describing the main object of this contracting process from the [procurementCategory]
+     * (http://standard.open-contracting.org/latest/en/schema/codelists/#procurement-category) codelist. This is a
+     * closed codelist. Local classifications should be mapped to this list.
+     */
+    @JsonProperty("mainProcurementCategory")
+    public MainProcurementCategory getMainProcurementCategory() {
+        return mainProcurementCategory;
+    }
+
+    /**
+     * Main procurement category
+     * <p>
+     * The primary category describing the main object of this contracting process from the [procurementCategory]
+     * (http://standard.open-contracting.org/latest/en/schema/codelists/#procurement-category) codelist. This is a
+     * closed codelist. Local classifications should be mapped to this list.
+     */
+    @JsonProperty("mainProcurementCategory")
+    public void setMainProcurementCategory(MainProcurementCategory mainProcurementCategory) {
+        this.mainProcurementCategory = mainProcurementCategory;
+    }
+
+    /**
+     * Additional procurement categories
+     * <p>
+     * Any additional categories which describe the objects of this contracting process, from the
+     * [extendedProcurementCategory](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#extended-procurement-category) codelist. This is an open codelist. Local
+     * categories can be included in this list.
+     */
+    @JsonProperty("additionalProcurementCategories")
+    public List<String> getAdditionalProcurementCategories() {
+        return additionalProcurementCategories;
+    }
+
+    /**
+     * Additional procurement categories
+     * <p>
+     * Any additional categories which describe the objects of this contracting process, from the
+     * [extendedProcurementCategory](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#extended-procurement-category) codelist. This is an open codelist. Local
+     * categories can be included in this list.
+     */
+    @JsonProperty("additionalProcurementCategories")
+    public void setAdditionalProcurementCategories(List<String> additionalProcurementCategories) {
+        this.additionalProcurementCategories = additionalProcurementCategories;
+    }
+
+    /**
+     * Award criteria
+     * <p>
+     * Specify the award criteria for the procurement, using the [award criteria codelist](http://standard
+     * .open-contracting.org/latest/en/schema/codelists/#award-criteria)
      */
     @JsonProperty("awardCriteria")
     public String getAwardCriteria() {
@@ -517,22 +664,20 @@ public class Tender implements Identifiable {
     }
 
     /**
-     * Specify the award criteria for the procurement, using the
-     * [award criteria codelist](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#award-criteria)
-     *
-     * @param awardCriteria
-     *     The awardCriteria
+     * Award criteria
+     * <p>
+     * Specify the award criteria for the procurement, using the [award criteria codelist](http://standard
+     * .open-contracting.org/latest/en/schema/codelists/#award-criteria)
      */
     @JsonProperty("awardCriteria")
-    public void setAwardCriteria(final String awardCriteria) {
+    public void setAwardCriteria(String awardCriteria) {
         this.awardCriteria = awardCriteria;
     }
 
     /**
+     * Award criteria details
+     * <p>
      * Any detailed or further information on the award or selection criteria.
-     *
-     * @return
-     *     The awardCriteriaDetails
      */
     @JsonProperty("awardCriteriaDetails")
     public String getAwardCriteriaDetails() {
@@ -540,51 +685,42 @@ public class Tender implements Identifiable {
     }
 
     /**
+     * Award criteria details
+     * <p>
      * Any detailed or further information on the award or selection criteria.
-     *
-     * @param awardCriteriaDetails
-     *     The awardCriteriaDetails
      */
     @JsonProperty("awardCriteriaDetails")
-    public void setAwardCriteriaDetails(final String awardCriteriaDetails) {
+    public void setAwardCriteriaDetails(String awardCriteriaDetails) {
         this.awardCriteriaDetails = awardCriteriaDetails;
     }
 
     /**
-     * Specify the method by which bids must be submitted, in person, written, or electronic auction.
-     * Using the
-     * [submission method codelist]
-     *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#submission-method)
-     *
-     * @return
-     *     The submissionMethod
+     * Submission method
+     * <p>
+     * Specify the method by which bids must be submitted, in person, written, or electronic auction. Using the
+     * [submission method codelist](http://standard.open-contracting.org/latest/en/schema/codelists/#submission-method)
      */
     @JsonProperty("submissionMethod")
-    public Set<SubmissionMethod> getSubmissionMethod() {
+    public List<String> getSubmissionMethod() {
         return submissionMethod;
     }
 
     /**
-     * Specify the method by which bids must be submitted, in person, written, or electronic auction.
-     * Using the
-     * [submission method codelist]
-     *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#submission-method)
-     *
-     * @param submissionMethod
-     *     The submissionMethod
+     * Submission method
+     * <p>
+     * Specify the method by which bids must be submitted, in person, written, or electronic auction. Using the
+     * [submission method codelist](http://standard.open-contracting.org/latest/en/schema/codelists/#submission-method)
      */
     @JsonProperty("submissionMethod")
-    public void setSubmissionMethod(final Set<SubmissionMethod> submissionMethod) {
+    public void setSubmissionMethod(List<String> submissionMethod) {
         this.submissionMethod = submissionMethod;
     }
 
     /**
-     * Any detailed or further information on the submission method. This may include the address,
-     * e-mail address or online service to which bids should be submitted,
-     * and any special requirements to be followed for submissions.
-     *
-     * @return
-     *     The submissionMethodDetails
+     * Submission method details
+     * <p>
+     * Any detailed or further information on the submission method. This may include the address, e-mail address or
+     * online service to which bids should be submitted, and any special requirements to be followed for submissions.
      */
     @JsonProperty("submissionMethodDetails")
     public String getSubmissionMethodDetails() {
@@ -592,75 +728,58 @@ public class Tender implements Identifiable {
     }
 
     /**
-     * Any detailed or further information on the submission method. This may include the address,
-     * e-mail address or online service to which bids should be submitted,
-     * and any special requirements to be followed for submissions.
-     *
-     * @param submissionMethodDetails
-     *     The submissionMethodDetails
+     * Submission method details
+     * <p>
+     * Any detailed or further information on the submission method. This may include the address, e-mail address or
+     * online service to which bids should be submitted, and any special requirements to be followed for submissions.
      */
     @JsonProperty("submissionMethodDetails")
-    public void setSubmissionMethodDetails(final String submissionMethodDetails) {
+    public void setSubmissionMethodDetails(String submissionMethodDetails) {
         this.submissionMethodDetails = submissionMethodDetails;
     }
 
     /**
      * Period
      * <p>
-     *
-     *
-     * @return
-     *     The tenderPeriod
      */
     @JsonProperty("tenderPeriod")
-    public Period getTenderPeriod() {
+    public TenderPeriod getTenderPeriod() {
         return tenderPeriod;
     }
 
     /**
      * Period
      * <p>
-     *
-     *
-     * @param tenderPeriod
-     *     The tenderPeriod
      */
     @JsonProperty("tenderPeriod")
-    public void setTenderPeriod(final Period tenderPeriod) {
+    public void setTenderPeriod(TenderPeriod tenderPeriod) {
         this.tenderPeriod = tenderPeriod;
     }
 
     /**
      * Period
      * <p>
-     *
-     *
-     * @return
-     *     The enquiryPeriod
      */
     @JsonProperty("enquiryPeriod")
-    public Period getEnquiryPeriod() {
+    public TenderPeriod getEnquiryPeriod() {
         return enquiryPeriod;
     }
 
     /**
      * Period
      * <p>
-     *
-     *
-     * @param enquiryPeriod
-     *     The enquiryPeriod
      */
     @JsonProperty("enquiryPeriod")
-    public void setEnquiryPeriod(final Period enquiryPeriod) {
+    public void setEnquiryPeriod(TenderPeriod enquiryPeriod) {
         this.enquiryPeriod = enquiryPeriod;
     }
 
     /**
-     * A Yes/No field to indicate whether enquiries were part of tender process.
-     *
-     * @return
-     *     The hasEnquiries
+     * Has enquiries?
+     * <p>
+     * A true/false field to indicate whether any enquiries were received during the tender process. Structured
+     * information on enquiries that were received, and responses to them, can be provided using the enquiries
+     * extension.
      */
     @JsonProperty("hasEnquiries")
     public Boolean getHasEnquiries() {
@@ -668,21 +787,21 @@ public class Tender implements Identifiable {
     }
 
     /**
-     * A Yes/No field to indicate whether enquiries were part of tender process.
-     *
-     * @param hasEnquiries
-     *     The hasEnquiries
+     * Has enquiries?
+     * <p>
+     * A true/false field to indicate whether any enquiries were received during the tender process. Structured
+     * information on enquiries that were received, and responses to them, can be provided using the enquiries
+     * extension.
      */
     @JsonProperty("hasEnquiries")
-    public void setHasEnquiries(final Boolean hasEnquiries) {
+    public void setHasEnquiries(Boolean hasEnquiries) {
         this.hasEnquiries = hasEnquiries;
     }
 
     /**
+     * Eligibility criteria
+     * <p>
      * A description of any eligibility criteria for potential suppliers.
-     *
-     * @return
-     *     The eligibilityCriteria
      */
     @JsonProperty("eligibilityCriteria")
     public String getEligibilityCriteria() {
@@ -690,46 +809,55 @@ public class Tender implements Identifiable {
     }
 
     /**
+     * Eligibility criteria
+     * <p>
      * A description of any eligibility criteria for potential suppliers.
-     *
-     * @param eligibilityCriteria
-     *     The eligibilityCriteria
      */
     @JsonProperty("eligibilityCriteria")
-    public void setEligibilityCriteria(final String eligibilityCriteria) {
+    public void setEligibilityCriteria(String eligibilityCriteria) {
         this.eligibilityCriteria = eligibilityCriteria;
     }
 
     /**
      * Period
      * <p>
-     *
-     *
-     * @return
-     *     The awardPeriod
      */
     @JsonProperty("awardPeriod")
-    public Period getAwardPeriod() {
+    public TenderPeriod getAwardPeriod() {
         return awardPeriod;
     }
 
     /**
      * Period
      * <p>
-     *
-     *
-     * @param awardPeriod
-     *     The awardPeriod
      */
     @JsonProperty("awardPeriod")
-    public void setAwardPeriod(final Period awardPeriod) {
+    public void setAwardPeriod(TenderPeriod awardPeriod) {
         this.awardPeriod = awardPeriod;
     }
 
     /**
-     *
-     * @return
-     *     The numberOfTenderers
+     * Period
+     * <p>
+     */
+    @JsonProperty("contractPeriod")
+    public TenderPeriod getContractPeriod() {
+        return contractPeriod;
+    }
+
+    /**
+     * Period
+     * <p>
+     */
+    @JsonProperty("contractPeriod")
+    public void setContractPeriod(TenderPeriod contractPeriod) {
+        this.contractPeriod = contractPeriod;
+    }
+
+    /**
+     * Number of tenderers
+     * <p>
+     * The number of parties who submit a bid.
      */
     @JsonProperty("numberOfTenderers")
     public Integer getNumberOfTenderers() {
@@ -737,20 +865,20 @@ public class Tender implements Identifiable {
     }
 
     /**
-     *
-     * @param numberOfTenderers
-     *     The numberOfTenderers
+     * Number of tenderers
+     * <p>
+     * The number of parties who submit a bid.
      */
     @JsonProperty("numberOfTenderers")
-    public void setNumberOfTenderers(final Integer numberOfTenderers) {
+    public void setNumberOfTenderers(Integer numberOfTenderers) {
         this.numberOfTenderers = numberOfTenderers;
     }
 
     /**
-     * All entities who submit a tender.
-     *
-     * @return
-     *     The tenderers
+     * Tenderers
+     * <p>
+     * All parties who submit a bid on a tender. More detailed information on bids and the bidding organization can
+     * be provided using the optional bid extension.
      */
     @JsonProperty("tenderers")
     public Set<Organization> getTenderers() {
@@ -758,49 +886,23 @@ public class Tender implements Identifiable {
     }
 
     /**
-     * All entities who submit a tender.
-     *
-     * @param tenderers
-     *     The tenderers
+     * Tenderers
+     * <p>
+     * All parties who submit a bid on a tender. More detailed information on bids and the bidding organization can
+     * be provided using the optional bid extension.
      */
     @JsonProperty("tenderers")
-    public void setTenderers(final Set<Organization> tenderers) {
+    public void setTenderers(Set<Organization> tenderers) {
         this.tenderers = tenderers;
     }
 
     /**
-     * Organization
+     * Documents
      * <p>
-     * An organization.
-     *
-     * @return
-     *     The procuringEntity
-     */
-    @JsonProperty("procuringEntity")
-    public Organization getProcuringEntity() {
-        return procuringEntity;
-    }
-
-    /**
-     * Organization
-     * <p>
-     * An organization.
-     *
-     * @param procuringEntity
-     *     The procuringEntity
-     */
-    @JsonProperty("procuringEntity")
-    public void setProcuringEntity(final Organization procuringEntity) {
-        this.procuringEntity = procuringEntity;
-    }
-
-    /**
-     * All documents and attachments related to the tender, including any notices. See the
-     * [documentType codelist](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#document-type)
-     * for details of potential documents to include.
-     *
-     * @return
-     *     The documents
+     * All documents and attachments related to the tender, including any notices. See the [documentType codelist]
+     * (http://standard.open-contracting.org/latest/en/schema/codelists/#document-type) for details of potential
+     * documents to include. Common documents include official legal notices of tender, technical specifications,
+     * evaluation criteria, and, as a tender process progresses, clarifications and replies to queries.
      */
     @JsonProperty("documents")
     public List<Document> getDocuments() {
@@ -808,23 +910,22 @@ public class Tender implements Identifiable {
     }
 
     /**
-     * All documents and attachments related to the tender, including any notices. See the
-     * [documentType codelist](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#document-type)
-     * for details of potential documents to include.
-     *
-     * @param documents
-     *     The documents
+     * Documents
+     * <p>
+     * All documents and attachments related to the tender, including any notices. See the [documentType codelist]
+     * (http://standard.open-contracting.org/latest/en/schema/codelists/#document-type) for details of potential
+     * documents to include. Common documents include official legal notices of tender, technical specifications,
+     * evaluation criteria, and, as a tender process progresses, clarifications and replies to queries.
      */
     @JsonProperty("documents")
-    public void setDocuments(final List<Document> documents) {
+    public void setDocuments(List<Document> documents) {
         this.documents = documents;
     }
 
     /**
+     * Milestones
+     * <p>
      * A list of milestones associated with the tender.
-     *
-     * @return
-     *     The milestones
      */
     @JsonProperty("milestones")
     public List<Milestone> getMilestones() {
@@ -832,23 +933,41 @@ public class Tender implements Identifiable {
     }
 
     /**
+     * Milestones
+     * <p>
      * A list of milestones associated with the tender.
-     *
-     * @param milestones
-     *     The milestones
      */
     @JsonProperty("milestones")
-    public void setMilestones(final List<Milestone> milestones) {
+    public void setMilestones(List<Milestone> milestones) {
         this.milestones = milestones;
     }
 
     /**
-     * Amendment information
+     * Amendments
      * <p>
-     *
-     *
-     * @return
-     *     The amendment
+     * A tender amendment is a formal change to the tender, and generally involves the publication of a new tender
+     * notice/release. The rationale and a description of the changes made can be provided here.
+     */
+    @JsonProperty("amendments")
+    public List<Amendment> getAmendments() {
+        return amendments;
+    }
+
+    /**
+     * Amendments
+     * <p>
+     * A tender amendment is a formal change to the tender, and generally involves the publication of a new tender
+     * notice/release. The rationale and a description of the changes made can be provided here.
+     */
+    @JsonProperty("amendments")
+    public void setAmendments(List<Amendment> amendments) {
+        this.amendments = amendments;
+    }
+
+    /**
+     * Amendment
+     * <p>
+     * Amendment information
      */
     @JsonProperty("amendment")
     public Amendment getAmendment() {
@@ -856,54 +975,85 @@ public class Tender implements Identifiable {
     }
 
     /**
-     * Amendment information
+     * Amendment
      * <p>
-     *
-     *
-     * @param amendment
-     *     The amendment
+     * Amendment information
      */
     @JsonProperty("amendment")
-    public void setAmendment(final Amendment amendment) {
+    public void setAmendment(Amendment amendment) {
         this.amendment = amendment;
     }
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return new ToStringBuilder(this).append("id", id)
+                .append("title", title)
+                .append("description", description)
+                .append("status", status)
+                .append("procuringEntity", procuringEntity)
+                .append("items", items)
+                .append("value", value)
+                .append("minValue", minValue)
+                .append("procurementMethod", procurementMethod)
+                .append("procurementMethodDetails", procurementMethodDetails)
+                .append("procurementMethodRationale", procurementMethodRationale)
+                .append("mainProcurementCategory", mainProcurementCategory)
+                .append("additionalProcurementCategories", additionalProcurementCategories)
+                .append("awardCriteria", awardCriteria)
+                .append("awardCriteriaDetails", awardCriteriaDetails)
+                .append("submissionMethod", submissionMethod)
+                .append("submissionMethodDetails", submissionMethodDetails)
+                .append("tenderPeriod", tenderPeriod)
+                .append("enquiryPeriod", enquiryPeriod)
+                .append("hasEnquiries", hasEnquiries)
+                .append("eligibilityCriteria", eligibilityCriteria)
+                .append("awardPeriod", awardPeriod)
+                .append("contractPeriod", contractPeriod)
+                .append("numberOfTenderers", numberOfTenderers)
+                .append("tenderers", tenderers)
+                .append("documents", documents)
+                .append("milestones", milestones)
+                .append("amendments", amendments)
+                .append("amendment", amendment)
+                .toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().
-                append(id).
-                append(title).
-                append(description).
-                append(status).
-                append(items).
-                append(minValue).
-                append(value).
-                append(procurementMethod).
-                append(procurementMethodRationale).
-                append(awardCriteria).
-                append(awardCriteriaDetails).
-                append(submissionMethod).
-                append(submissionMethodDetails).
-                append(tenderPeriod).
-                append(enquiryPeriod).
-                append(hasEnquiries).
-                append(eligibilityCriteria).
-                append(awardPeriod).
-                append(numberOfTenderers).
-                append(tenderers).
-                append(procuringEntity).
-                append(documents).
-                append(milestones).append(amendment).
-                toHashCode();
+        return new HashCodeBuilder().append(amendment)
+                .append(documents)
+                .append(awardPeriod)
+                .append(description)
+                .append(amendments)
+                .append(mainProcurementCategory)
+                .append(title)
+                .append(procurementMethodDetails)
+                .append(additionalProcurementCategories)
+                .append(minValue)
+                .append(procurementMethod)
+                .append(enquiryPeriod)
+                .append(awardCriteria)
+                .append(eligibilityCriteria)
+                .append(id)
+                .append(value)
+                .append(tenderPeriod)
+                .append(procurementMethodRationale)
+                .append(procuringEntity)
+                .append(submissionMethod)
+                .append(hasEnquiries)
+                .append(contractPeriod)
+                .append(numberOfTenderers)
+                .append(submissionMethodDetails)
+                .append(awardCriteriaDetails)
+                .append(milestones)
+                .append(items)
+                .append(tenderers)
+                .append(status)
+                .toHashCode();
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
@@ -911,64 +1061,70 @@ public class Tender implements Identifiable {
             return false;
         }
         Tender rhs = ((Tender) other);
-        return new EqualsBuilder().
-                append(id, rhs.id).
-                append(title, rhs.title).
-                append(description, rhs.description).
-                append(status, rhs.status).
-                append(items, rhs.items).
-                append(minValue, rhs.minValue).
-                append(value, rhs.value).
-                append(procurementMethod, rhs.procurementMethod).
-                append(procurementMethodRationale, rhs.procurementMethodRationale).
-                append(awardCriteria, rhs.awardCriteria).
-                append(awardCriteriaDetails, rhs.awardCriteriaDetails).
-                append(submissionMethod, rhs.submissionMethod).
-                append(submissionMethodDetails, rhs.submissionMethodDetails).
-                append(tenderPeriod, rhs.tenderPeriod).
-                append(enquiryPeriod, rhs.enquiryPeriod).
-                append(hasEnquiries, rhs.hasEnquiries).
-                append(eligibilityCriteria, rhs.eligibilityCriteria).
-                append(awardPeriod, rhs.awardPeriod).
-                append(numberOfTenderers, rhs.numberOfTenderers).
-                append(tenderers, rhs.tenderers).
-                append(procuringEntity, rhs.procuringEntity).
-                append(documents, rhs.documents).
-                append(milestones, rhs.milestones).
-                append(amendment, rhs.amendment).
-                isEquals();
+        return new EqualsBuilder().append(amendment, rhs.amendment)
+                .append(documents, rhs.documents)
+                .append(awardPeriod, rhs.awardPeriod)
+                .append(description, rhs.description)
+                .append(amendments, rhs.amendments)
+                .append(mainProcurementCategory, rhs.mainProcurementCategory)
+                .append(title, rhs.title)
+                .append(procurementMethodDetails, rhs.procurementMethodDetails)
+                .append(additionalProcurementCategories, rhs.additionalProcurementCategories)
+                .append(minValue, rhs.minValue)
+                .append(procurementMethod, rhs.procurementMethod)
+                .append(enquiryPeriod, rhs.enquiryPeriod)
+                .append(awardCriteria, rhs.awardCriteria)
+                .append(eligibilityCriteria, rhs.eligibilityCriteria)
+                .append(id, rhs.id)
+                .append(value, rhs.value)
+                .append(tenderPeriod, rhs.tenderPeriod)
+                .append(procurementMethodRationale, rhs.procurementMethodRationale)
+                .append(procuringEntity, rhs.procuringEntity)
+                .append(submissionMethod, rhs.submissionMethod)
+                .append(hasEnquiries, rhs.hasEnquiries)
+                .append(contractPeriod, rhs.contractPeriod)
+                .append(numberOfTenderers, rhs.numberOfTenderers)
+                .append(submissionMethodDetails, rhs.submissionMethodDetails)
+                .append(awardCriteriaDetails, rhs.awardCriteriaDetails)
+                .append(milestones, rhs.milestones)
+                .append(items, rhs.items)
+                .append(tenderers, rhs.tenderers)
+                .append(status, rhs.status)
+                .isEquals();
     }
 
-    public enum ProcurementMethod {
-        open("open"),
+    public enum MainProcurementCategory {
 
-        selective("selective"),
-
-        limited("limited");
-
+        GOODS("goods"),
+        WORKS("works"),
+        SERVICES("services");
         private final String value;
-
-        private static final Map<String, ProcurementMethod> CONSTANTS = new HashMap<String, ProcurementMethod>();
+        private static final Map<String, MainProcurementCategory> CONSTANTS = new HashMap<String,
+                MainProcurementCategory>();
 
         static {
-            for (ProcurementMethod c: values()) {
+            for (MainProcurementCategory c : values()) {
                 CONSTANTS.put(c.value, c);
             }
         }
 
-        ProcurementMethod(final String value) {
+        MainProcurementCategory(String value) {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
+        @JsonValue
+        public String value() {
+            return this.value;
+        }
+
         @JsonCreator
-        public static ProcurementMethod fromValue(final String value) {
-            ProcurementMethod constant = CONSTANTS.get(value);
+        public static MainProcurementCategory fromValue(String value) {
+            MainProcurementCategory constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
             } else {
@@ -978,15 +1134,10 @@ public class Tender implements Identifiable {
 
     }
 
-
-
     public enum SubmissionMethod {
         electronicAuction("electronicAuction"),
-
         electronicSubmission("electronicSubmission"),
-
         written("written"),
-
         inPerson("inPerson");
 
         private final String value;
@@ -994,7 +1145,7 @@ public class Tender implements Identifiable {
         private static final Map<String, SubmissionMethod> CONSTANTS = new HashMap<String, SubmissionMethod>();
 
         static {
-            for (SubmissionMethod c: values()) {
+            for (SubmissionMethod c : values()) {
                 CONSTANTS.put(c.value, c);
             }
         }
@@ -1008,10 +1159,41 @@ public class Tender implements Identifiable {
         public String toString() {
             return this.value;
         }
+    }
+
+
+    public enum ProcurementMethod {
+
+        open("open"),
+        selective("selective"),
+        limited("limited"),
+        direct("direct");
+        private final String value;
+        private static final Map<String, ProcurementMethod> CONSTANTS = new HashMap<String, ProcurementMethod>();
+
+        static {
+            for (ProcurementMethod c : values()) {
+                CONSTANTS.put(c.value, c);
+            }
+        }
+
+        ProcurementMethod(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+
+        @JsonValue
+        public String value() {
+            return this.value;
+        }
 
         @JsonCreator
-        public static SubmissionMethod fromValue(final String value) {
-            SubmissionMethod constant = CONSTANTS.get(value);
+        public static ProcurementMethod fromValue(String value) {
+            ProcurementMethod constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
             } else {
@@ -1022,38 +1204,39 @@ public class Tender implements Identifiable {
     }
 
     public enum Status {
+
+        planning("planning"),
         planned("planned"),
-
         active("active"),
-
         cancelled("cancelled"),
-
         unsuccessful("unsuccessful"),
-
-        complete("complete");
-
+        complete("complete"),
+        withdrawn("withdrawn");
         private final String value;
-
         private static final Map<String, Status> CONSTANTS = new HashMap<String, Status>();
 
         static {
-            for (Status c: values()) {
+            for (Status c : values()) {
                 CONSTANTS.put(c.value, c);
             }
         }
 
-        Status(final String value) {
+        Status(String value) {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
+        @JsonValue
+        public String value() {
+            return this.value;
+        }
+
         @JsonCreator
-        public static Status fromValue(final String value) {
+        public static Status fromValue(String value) {
             Status constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
@@ -1064,8 +1247,4 @@ public class Tender implements Identifiable {
 
     }
 
-    @Override
-    public Serializable getIdProperty() {
-        return id;
-    }
 }

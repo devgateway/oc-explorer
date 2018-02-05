@@ -16,12 +16,13 @@ import com.github.fge.jsonschema.core.report.LogLevel;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author mpostelnicu
@@ -32,7 +33,7 @@ public class OcdsSchemaValidatorService {
     private JsonSchema schema;
 
     public static final String OCDS_SCHEMA_LOCATION = "/release-schema.json";
-    public static final String OCDS_SCHEMA_ALL_REQUIRED = "/release-schema-all-required.json";
+//    public static final String OCDS_SCHEMA_ALL_REQUIRED = "/release-schema-all-required.json";
     public static final String OCDS_LOCATION_PATCH_LOCATION = "/location_patch_schema.json";
     public static final String OCDS_BID_EXTENSION = "/ocds_bid_extension.mergepatch.json";
 

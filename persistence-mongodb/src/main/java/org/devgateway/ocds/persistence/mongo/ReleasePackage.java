@@ -1,128 +1,200 @@
 package org.devgateway.ocds.persistence.mongo;
 
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
+
 
 /**
  * Schema for an Open Contracting Release Package
  * <p>
- * Note that all releases within a release package must have a unique releaseID
- * within this release package.
- *
+ * Note that all releases within a release package must have a unique releaseID within this release package.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "uri",
+        "version",
+        "extensions",
         "publishedDate",
         "releases",
         "publisher",
         "license",
         "publicationPolicy"
 })
-@Document
 public class ReleasePackage implements Identifiable {
 
-
     /**
-     * Package Identifier
+     * Package identifier
      * <p>
-     * The String of this package that identifies it uniquely in the world.
+     * The URI of this package that identifies it uniquely in the world. Recommended practice is to use a
+     * dereferenceable URI, where a persistent copy of this package is available.
      * (Required)
-     *
      */
     @JsonProperty("uri")
-    @Id
-    private String uri;
-
+    @JsonPropertyDescription("The URI of this package that identifies it uniquely in the world. Recommended practice "
+            + "is to use a dereferenceable URI, where a persistent copy of this package is available.")
+    private URI uri;
     /**
-     * The date that this package was published. Ideally this should be the
-     * latest date that there is release information in this package. (Required)
-     *
+     * OCDS schema version
+     * <p>
+     * The version of the OCDS schema used in this package, expressed as major.minor For example: 1.0 or 1.1
+     * (Required)
+     */
+    @JsonProperty("version")
+    @JsonPropertyDescription("The version of the OCDS schema used in this package, expressed as major.minor For "
+            + "example: 1.0 or 1.1")
+    private String version;
+    /**
+     * OCDS extensions
+     * <p>
+     * An array of OCDS extensions used in this package. Each entry should be a URL to the extension.json file for
+     * that extension.
+     */
+    @JsonProperty("extensions")
+    @JsonPropertyDescription("An array of OCDS extensions used in this package. Each entry should be a URL to the "
+            + "extension.json file for that extension.")
+    private List<URI> extensions = new ArrayList<URI>();
+    /**
+     * Published date
+     * <p>
+     * The date that this package was published. If this package is generated 'on demand', this date should reflect
+     * the date of the last change to the underlying contents of the package.
+     * (Required)
      */
     @JsonProperty("publishedDate")
+    @JsonPropertyDescription("The date that this package was published. If this package is generated 'on demand', "
+            + "this date should reflect the date of the last change to the underlying contents of the package.")
     private Date publishedDate;
-
     /**
-     *
+     * Releases
+     * <p>
+     * <p>
      * (Required)
-     *
      */
     @JsonProperty("releases")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
-    @DBRef
     private Set<Release> releases = new LinkedHashSet<Release>();
-
     /**
+     * Publisher
+     * <p>
      * Information to uniquely identify the publisher of this package.
      * (Required)
-     *
      */
     @JsonProperty("publisher")
+    @JsonPropertyDescription("Information to uniquely identify the publisher of this package.")
     private Publisher publisher;
-
     /**
-     * A link to the license that applies to the data in this datapackage. A
-     * Public Domain Dedication or [Open Definition
-     * Conformant](http://opendefinition.org/licenses/) license is strongly
-     * recommended. The canonical String of the license should be used.
-     * Documents linked from this file may be under other license conditions.
-     *
+     * License
+     * <p>
+     * A link to the license that applies to the data in this package. A Public Domain Dedication or [Open Definition
+     * Conformant](http://opendefinition.org/licenses/) license is strongly recommended. The canonical URI of the
+     * license should be used. Documents linked from this file may be under other license conditions.
      */
     @JsonProperty("license")
-    private String license;
-
+    @JsonPropertyDescription("A link to the license that applies to the data in this package. A Public Domain "
+            + "Dedication or [Open Definition Conformant](http://opendefinition.org/licenses/) license is strongly "
+            + "recommended. The canonical URI of the license should be used. Documents linked from this file may be "
+            + "under other license conditions. ")
+    private URI license;
     /**
-     * A link to a document describing the publishers [publication
-     * policy](http://ocds.open-contracting.org/standard/r/1__0__0/en/
-     * implementation/publication_patterns/#publication-policy).
-     *
+     * Publication policy
+     * <p>
+     * A link to a document describing the publishers [publication policy](http://standard.open-contracting
+     * .org/latest/en/implementation/publication_policy/).
      */
     @JsonProperty("publicationPolicy")
-    private String publicationPolicy;
+    @JsonPropertyDescription("A link to a document describing the publishers [publication policy](http://standard"
+            + ".open-contracting.org/latest/en/implementation/publication_policy/).")
+    private URI publicationPolicy;
 
     /**
-     * Package Identifier
+     * Package identifier
      * <p>
-     * The String of this package that identifies it uniquely in the world.
+     * The URI of this package that identifies it uniquely in the world. Recommended practice is to use a
+     * dereferenceable URI, where a persistent copy of this package is available.
      * (Required)
-     *
-     * @return The uri
      */
     @JsonProperty("uri")
-    public String getUri() {
+    public URI getUri() {
         return uri;
     }
 
     /**
-     * Package Identifier
+     * Package identifier
      * <p>
-     * The String of this package that identifies it uniquely in the world.
+     * The URI of this package that identifies it uniquely in the world. Recommended practice is to use a
+     * dereferenceable URI, where a persistent copy of this package is available.
      * (Required)
-     *
-     * @param uri
-     *            The uri
      */
     @JsonProperty("uri")
-    public void setUri(final String uri) {
+    public void setUri(URI uri) {
         this.uri = uri;
     }
 
     /**
-     * The date that this package was published. Ideally this should be the
-     * latest date that there is release information in this package. (Required)
-     *
-     * @return The publishedDate
+     * OCDS schema version
+     * <p>
+     * The version of the OCDS schema used in this package, expressed as major.minor For example: 1.0 or 1.1
+     * (Required)
+     */
+    @JsonProperty("version")
+    public String getVersion() {
+        return version;
+    }
+
+    /**
+     * OCDS schema version
+     * <p>
+     * The version of the OCDS schema used in this package, expressed as major.minor For example: 1.0 or 1.1
+     * (Required)
+     */
+    @JsonProperty("version")
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    /**
+     * OCDS extensions
+     * <p>
+     * An array of OCDS extensions used in this package. Each entry should be a URL to the extension.json file for
+     * that extension.
+     */
+    @JsonProperty("extensions")
+    public List<URI> getExtensions() {
+        return extensions;
+    }
+
+    /**
+     * OCDS extensions
+     * <p>
+     * An array of OCDS extensions used in this package. Each entry should be a URL to the extension.json file for
+     * that extension.
+     */
+    @JsonProperty("extensions")
+    public void setExtensions(List<URI> extensions) {
+        this.extensions = extensions;
+    }
+
+    /**
+     * Published date
+     * <p>
+     * The date that this package was published. If this package is generated 'on demand', this date should reflect
+     * the date of the last change to the underlying contents of the package.
+     * (Required)
      */
     @JsonProperty("publishedDate")
     public Date getPublishedDate() {
@@ -130,22 +202,22 @@ public class ReleasePackage implements Identifiable {
     }
 
     /**
-     * The date that this package was published. Ideally this should be the
-     * latest date that there is release information in this package. (Required)
-     *
-     * @param publishedDate
-     *            The publishedDate
+     * Published date
+     * <p>
+     * The date that this package was published. If this package is generated 'on demand', this date should reflect
+     * the date of the last change to the underlying contents of the package.
+     * (Required)
      */
     @JsonProperty("publishedDate")
-    public void setPublishedDate(final Date publishedDate) {
+    public void setPublishedDate(Date publishedDate) {
         this.publishedDate = publishedDate;
     }
 
     /**
-     *
+     * Releases
+     * <p>
+     * <p>
      * (Required)
-     *
-     * @return The releases
      */
     @JsonProperty("releases")
     public Set<Release> getReleases() {
@@ -153,10 +225,21 @@ public class ReleasePackage implements Identifiable {
     }
 
     /**
+     * Releases
+     * <p>
+     * <p>
+     * (Required)
+     */
+    @JsonProperty("releases")
+    public void setReleases(Set<Release> releases) {
+        this.releases = releases;
+    }
+
+    /**
+     * Publisher
+     * <p>
      * Information to uniquely identify the publisher of this package.
      * (Required)
-     *
-     * @return The publisher
      */
     @JsonProperty("publisher")
     public Publisher getPublisher() {
@@ -164,101 +247,91 @@ public class ReleasePackage implements Identifiable {
     }
 
     /**
-     *
-     * (Required)
-     *
-     * @param releases
-     *            The releases
-     */
-    @JsonProperty("releases")
-    public void setReleases(final Set<Release> releases) {
-        this.releases = releases;
-    }
-
-    /**
+     * Publisher
+     * <p>
      * Information to uniquely identify the publisher of this package.
      * (Required)
-     *
-     * @param publisher
-     *            The publisher
      */
     @JsonProperty("publisher")
-    public void setPublisher(final Publisher publisher) {
+    public void setPublisher(Publisher publisher) {
         this.publisher = publisher;
     }
 
     /**
-     * A link to the license that applies to the data in this datapackage. A
-     * Public Domain Dedication or [Open Definition
-     * Conformant](http://opendefinition.org/licenses/) license is strongly
-     * recommended. The canonical String of the license should be used.
-     * Documents linked from this file may be under other license conditions.
-     *
-     * @return The license
+     * License
+     * <p>
+     * A link to the license that applies to the data in this package. A Public Domain Dedication or [Open Definition
+     * Conformant](http://opendefinition.org/licenses/) license is strongly recommended. The canonical URI of the
+     * license should be used. Documents linked from this file may be under other license conditions.
      */
     @JsonProperty("license")
-    public String getLicense() {
+    public URI getLicense() {
         return license;
     }
 
     /**
-     * A link to the license that applies to the data in this datapackage. A
-     * Public Domain Dedication or [Open Definition
-     * Conformant](http://opendefinition.org/licenses/) license is strongly
-     * recommended. The canonical String of the license should be used.
-     * Documents linked from this file may be under other license conditions.
-     *
-     * @param license
-     *            The license
+     * License
+     * <p>
+     * A link to the license that applies to the data in this package. A Public Domain Dedication or [Open Definition
+     * Conformant](http://opendefinition.org/licenses/) license is strongly recommended. The canonical URI of the
+     * license should be used. Documents linked from this file may be under other license conditions.
      */
     @JsonProperty("license")
-    public void setLicense(final String license) {
+    public void setLicense(URI license) {
         this.license = license;
     }
 
     /**
-     * A link to a document describing the publishers [publication
-     * policy](http://ocds.open-contracting.org/standard/r/1__0__0/en/
-     * implementation/publication_patterns/#publication-policy).
-     *
-     * @return The publicationPolicy
+     * Publication policy
+     * <p>
+     * A link to a document describing the publishers [publication policy](http://standard.open-contracting
+     * .org/latest/en/implementation/publication_policy/).
      */
     @JsonProperty("publicationPolicy")
-    public String getPublicationPolicy() {
+    public URI getPublicationPolicy() {
         return publicationPolicy;
     }
 
     /**
-     * A link to a document describing the publishers [publication
-     * policy](http://ocds.open-contracting.org/standard/r/1__0__0/en/
-     * implementation/publication_patterns/#publication-policy).
-     *
-     * @param publicationPolicy
-     *            The publicationPolicy
+     * Publication policy
+     * <p>
+     * A link to a document describing the publishers [publication policy](http://standard.open-contracting
+     * .org/latest/en/implementation/publication_policy/).
      */
     @JsonProperty("publicationPolicy")
-    public void setPublicationPolicy(final String publicationPolicy) {
+    public void setPublicationPolicy(URI publicationPolicy) {
         this.publicationPolicy = publicationPolicy;
     }
 
+
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return new ToStringBuilder(this).append("uri", uri)
+                .append("version", version)
+                .append("extensions", extensions)
+                .append("publishedDate", publishedDate)
+                .append("releases", releases)
+                .append("publisher", publisher)
+                .append("license", license)
+                .append("publicationPolicy", publicationPolicy)
+                .toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().
-                append(uri).
-                append(publishedDate).
-                append(releases).
-                append(publisher).
-                append(license).
-                append(publicationPolicy).toHashCode();
+        return new HashCodeBuilder().append(publicationPolicy)
+                .append(license)
+                .append(extensions)
+                .append(publisher)
+                .append(publishedDate)
+                .append(uri)
+                .append(version)
+                .append(releases)
+                .toHashCode();
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
@@ -266,18 +339,19 @@ public class ReleasePackage implements Identifiable {
             return false;
         }
         ReleasePackage rhs = ((ReleasePackage) other);
-        return new EqualsBuilder().
-                append(uri, rhs.uri).
-                append(publishedDate, rhs.publishedDate).
-                append(releases, rhs.releases).
-                append(publisher, rhs.publisher).
-                append(license, rhs.license).
-                append(publicationPolicy, rhs.publicationPolicy).isEquals();
+        return new EqualsBuilder().append(publicationPolicy, rhs.publicationPolicy)
+                .append(license, rhs.license)
+                .append(extensions, rhs.extensions)
+                .append(publisher, rhs.publisher)
+                .append(publishedDate, rhs.publishedDate)
+                .append(uri, rhs.uri)
+                .append(version, rhs.version)
+                .append(releases, rhs.releases)
+                .isEquals();
     }
 
     @Override
     public Serializable getIdProperty() {
         return uri;
     }
-
 }
