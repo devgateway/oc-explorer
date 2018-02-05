@@ -124,13 +124,13 @@
             <artifactId>cglib</artifactId>
             <version>3.1</version>
         </dependency>
-        
+
         <dependency>
-		    <groupId>com.google.javascript</groupId>
-		    <artifactId>closure-compiler</artifactId>
-		    <version>${closure.compiler.version}</version>
-		</dependency>
-	        
+            <groupId>com.google.javascript</groupId>
+            <artifactId>closure-compiler</artifactId>
+            <version>${closure.compiler.version}</version>
+        </dependency>
+
 
         <dependency>
             <groupId>de.agilecoders.wicket.webjars</groupId>
@@ -224,7 +224,7 @@
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
-            <version>${pentaho.poi.version}</version>
+            <version>${poi.version}</version>
         </dependency>
     </dependencies>
 
@@ -354,11 +354,11 @@
             </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-entitymanager</artifactId>                
+                <artifactId>hibernate-entitymanager</artifactId>
             </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-envers</artifactId>                
+                <artifactId>hibernate-envers</artifactId>
             </dependency>
         </dependencies>
     </dependencyManagement>

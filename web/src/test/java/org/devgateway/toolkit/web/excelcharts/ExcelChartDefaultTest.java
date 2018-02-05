@@ -44,7 +44,7 @@ public class ExcelChartDefaultTest {
         Assert.assertEquals("number of charts", 1, charts.size());
 
         final XSSFChart chart = charts.get(0);
-        Assert.assertEquals("chart title", "line chart", chart.getTitle().getString());
+        Assert.assertEquals("chart title", "line chart", chart.getTitleText().getString());
 
         final CTChart ctChart = chart.getCTChart();
         Assert.assertEquals("We should not have any area chart", 0, ctChart.getPlotArea().getAreaChartArray().length);

@@ -41,6 +41,14 @@ public class ListTestFormPage extends AbstractListPage<TestForm> {
     }
 
     @Override
+    protected void onInitialize() {
+        super.onInitialize();
+
+        // enable excel download
+        excelForm.setVisibilityAllowed(true);
+    }
+
+    @Override
     public JpaFilterState<TestForm> newFilterState() {
         return new TestFormFilterState();
     }

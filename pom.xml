@@ -22,10 +22,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <liquibase.version>3.5.3</liquibase.version>
-        <spring.boot.version>1.5.8.RELEASE</spring.boot.version>
+        <spring.boot.version>1.5.10.RELEASE</spring.boot.version>
         <derby.version>10.14.1.0</derby.version>
-        <poi.version>3.14</poi.version>
-        <pentaho.poi.version>3.14</pentaho.poi.version>
+        <poi.version>3.17</poi.version>
+        <pentaho.poi.version>3.17</pentaho.poi.version>
         <commons.lang3.version>3.5</commons.lang3.version>
         <docker.image.prefix>devgateway/toolkit</docker.image.prefix>
         <docker-maven-plugin.version>0.4.13</docker-maven-plugin.version>
