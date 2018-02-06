@@ -37,7 +37,7 @@ class Info extends translatable(Visualization) {
     const startDate = data.getIn(['tender', 'tenderPeriod', 'startDate']);
     const endDate = data.getIn(['tender', 'tenderPeriod', 'endDate']);
     const award = data.get('awards', List()).find(a =>
-      a.get('status') !== 'unsuccessful') || Map();
+      a.get('status') === 'active') || Map();
 
     const flagCount = data.get('flags', List()).filter(flag => flag.get && flag.get('value')).count();
     return (
