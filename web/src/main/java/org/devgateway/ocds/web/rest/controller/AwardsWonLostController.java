@@ -33,6 +33,9 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
+import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.BIDS_DETAILS_TENDERERS_ID;
+import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.BIDS_DETAILS_VALUE_AMOUNT;
+import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.FLAGS_TOTAL_FLAGGED;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.facet;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
@@ -86,9 +89,9 @@ public class AwardsWonLostController extends GenericOCDSController {
                                 noSupplierCriteria,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
                         )),
-                        group("bids.details.tenderers._id").count().as("count")
-                                .sum("bids.details.value.amount").as("totalAmount")
-                                .sum("flags.totalFlagged").as("countFlags"),
+                        group(BIDS_DETAILS_TENDERERS_ID).count().as("count")
+                                .sum(BIDS_DETAILS_VALUE_AMOUNT).as("totalAmount")
+                                .sum(FLAGS_TOTAL_FLAGGED).as("countFlags"),
                         project("count", "totalAmount", "countFlags")
                 ).as("applied").and(
                         match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
@@ -105,7 +108,7 @@ public class AwardsWonLostController extends GenericOCDSController {
                                 ))),
                         group(MongoConstants.FieldNames.AWARDS_SUPPLIERS_ID).count().as("count")
                                 .sum(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT).as("totalAmount")
-                                .sum("flags.totalFlagged").as("countFlags"),
+                                .sum(FLAGS_TOTAL_FLAGGED).as("countFlags"),
                         project("count", "totalAmount", "countFlags")
                 ).as("won"),
                 unwind("won"),
@@ -151,7 +154,7 @@ public class AwardsWonLostController extends GenericOCDSController {
                 ))
                         .count().as("count")
                         .sum(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT).as("totalAmountAwarded")
-                        .sum("flags.totalFlagged").as("countFlags"),
+                        .sum(FLAGS_TOTAL_FLAGGED).as("countFlags"),
                 sort(Sort.Direction.DESC, "count")
         );
         return releaseAgg(agg);

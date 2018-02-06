@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.FLAGS_TOTAL_FLAGGED;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
@@ -180,7 +181,7 @@ public abstract class GenericOCDSController {
     }
 
     protected Criteria getTotalFlaggedCriteria(final DefaultFilterPagingRequest filter) {
-        return createFilterCriteria("flags.totalFlagged", filter.getTotalFlagged(), filter);
+        return createFilterCriteria(FLAGS_TOTAL_FLAGGED, filter.getTotalFlagged(), filter);
     }
 
     /**

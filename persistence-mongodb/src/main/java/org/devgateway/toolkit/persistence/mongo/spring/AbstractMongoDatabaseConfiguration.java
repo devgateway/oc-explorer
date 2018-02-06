@@ -19,6 +19,8 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URL;
 
+import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.FLAGS_TOTAL_FLAGGED;
+
 public abstract class AbstractMongoDatabaseConfiguration {
 
     protected abstract Logger getLogger();
@@ -39,7 +41,7 @@ public abstract class AbstractMongoDatabaseConfiguration {
     }
 
     public void createCorruptionFlagsIndexes() {
-        getTemplate().indexOps(Release.class).ensureIndex(new Index().on("flags.totalFlagged", Direction.ASC));
+        getTemplate().indexOps(Release.class).ensureIndex(new Index().on(FLAGS_TOTAL_FLAGGED, Direction.ASC));
 
         getTemplate().indexOps(Release.class).ensureIndex(new Index().on("flags.flaggedStats.type", Direction.ASC)
                 .on("flags.flaggedStats.count", Direction.ASC)
@@ -101,9 +103,14 @@ public abstract class AbstractMongoDatabaseConfiguration {
                 .ensureIndex(new Index().on("tender.items.classification._id", Direction.ASC));
         getTemplate().indexOps(Release.class).ensureIndex(new Index().
                 on("tender.items.deliveryLocation._id", Direction.ASC));
-
         getTemplate().indexOps(Release.class).ensureIndex(new Index().
                 on("tender.items.deliveryLocation.geometry.coordinates", Direction.ASC));
+
+        getTemplate().indexOps(Release.class).ensureIndex(new Index().
+                on(MongoConstants.FieldNames.BIDS_DETAILS_TENDERERS_ID, Direction.ASC));
+        getTemplate().indexOps(Release.class).ensureIndex(new Index().
+                on(MongoConstants.FieldNames.BIDS_DETAILS_VALUE_AMOUNT, Direction.ASC));
+
 
         getTemplate().indexOps(Organization.class).ensureIndex(new TextIndexDefinitionBuilder()
                 .withDefaultLanguage(MongoConstants.MONGO_LANGUAGE)

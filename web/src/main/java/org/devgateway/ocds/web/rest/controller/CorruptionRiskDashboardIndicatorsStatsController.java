@@ -32,6 +32,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.FLAGS_TOTAL_FLAGGED;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
@@ -97,7 +98,7 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
         Aggregation agg = newAggregation(
                 match(getYearDefaultFilterCriteria(filter,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE)),
-                project().and("flags.totalFlagged").as("totalFlagged"),
+                project().and(FLAGS_TOTAL_FLAGGED).as("totalFlagged"),
                 group().sum("totalFlagged").as(Keys.FLAGGED_COUNT),
                 project(Keys.FLAGGED_COUNT).andExclude(Fields.UNDERSCORE_ID)
         );
