@@ -10,7 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @ActiveProfiles("integration")
-@SpringBootTest(classes = { MongoPersistenceApplication.class })
+@SpringBootTest(classes = { MongoPersistenceApplication.class }, properties = {"net.sf.ehcache.disabled=true"})
 @TestPropertySource("classpath:test.properties")
 @AutoConfigureCache
 /**
