@@ -5,13 +5,14 @@ package org.devgateway.ocds.persistence.mongo.flags;
 
 import org.springframework.data.annotation.Transient;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 
 /**
  * @author mpostelnicu Represents the list of red flags at the Release level
  */
-public class ReleaseFlags implements FlagsWrappable {
+public class ReleaseFlags implements FlagsWrappable, Serializable {
 
     // i038: Competitive tender w/ short bidding period
     private Flag i038;

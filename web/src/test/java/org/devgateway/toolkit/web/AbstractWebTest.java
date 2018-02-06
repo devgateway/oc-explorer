@@ -11,7 +11,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @ActiveProfiles("integration")
-@SpringBootTest(classes = { WebApplication.class }, webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = {WebApplication.class}, webEnvironment = WebEnvironment.RANDOM_PORT,
+        properties = {"net.sf.ehcache.disabled=true"})
 @TestPropertySource("classpath:test.properties")
 @AutoConfigureCache
 public abstract class AbstractWebTest {

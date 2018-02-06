@@ -1,17 +1,21 @@
 package org.devgateway.toolkit.forms.wicket.page;
 
+
+import org.springframework.cache.CacheManager;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.RangeValidator;
-import org.devgateway.toolkit.web.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxToggleBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.persistence.dao.AdminSettings;
 import org.devgateway.toolkit.persistence.repository.AdminSettingsRepository;
+import org.devgateway.toolkit.web.security.SecurityConstants;
 import org.wicketstuff.annotation.mount.MountPath;
 
 import java.util.List;
@@ -37,6 +41,9 @@ public class EditAdminSettingsPage extends AbstractEditPage<AdminSettings> {
     private CheckBoxToggleBootstrapFormComponent enableDailyAutomatedImport;
 
     private TextFieldBootstrapFormComponent<String> importFilesPath;
+
+    @SpringBean
+    private CacheManager cacheManager;
 
     @SpringBean
     protected AdminSettingsRepository adminSettingsRepository;
@@ -91,5 +98,18 @@ public class EditAdminSettingsPage extends AbstractEditPage<AdminSettings> {
         importFilesPath = new TextFieldBootstrapFormComponent<>("importFilesPath");
         editForm.add(importFilesPath);
 
+        addCacheClearLink();
+
+    }
+
+    private void addCacheClearLink() {
+        IndicatingAjaxFallbackLink link = new IndicatingAjaxFallbackLink("clearCache") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                cacheManager.getCacheNames().forEach(c -> cacheManager.getCache(c).clear());
+            }
+        };
+        editForm.add(link);
     }
 }
