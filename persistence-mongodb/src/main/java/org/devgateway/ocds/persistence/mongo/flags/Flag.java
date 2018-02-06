@@ -1,8 +1,9 @@
 package org.devgateway.ocds.persistence.mongo.flags;
 
+import java.io.Serializable;
 import java.util.Set;
 
-public class Flag {
+public class Flag implements Serializable {
 
     private Set<FlagType> types;
 
