@@ -29,7 +29,7 @@ export class ChartTab extends Tab {
     return {
       t: 0,
       l: 50,
-      r: 50,
+      r: 0,
       b: 50,
     };
   }
