@@ -19,7 +19,7 @@ class NrOfContractsWithPE extends CenterTextDonut {
   }
 
   getTitle() {
-    return 'Number of contracts with this procuring entity';
+    return this.t('crd:contract:nrContractWithPE:name');
   }
 }
 

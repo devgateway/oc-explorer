@@ -14,7 +14,7 @@ class PercentPESpending extends CenterTextDonut {
   }
 
   getTitle() {
-    return '% of procuring entity spending to this supplier';
+    return this.t('crd:contract:percentPEspending:name');
   }
 }
 

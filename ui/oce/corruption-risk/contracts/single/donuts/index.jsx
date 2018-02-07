@@ -2,8 +2,9 @@ import cn from 'classnames';
 import backendYearFilterable from '../../../../backend-year-filterable';
 import Chart from '../../../../visualizations/charts/index.jsx';
 import style from './style.less';
+import translatable from '../../../../translatable';
 
-class CenterTextDonut extends React.PureComponent {
+class CenterTextDonut extends translatable(React.PureComponent) {
   getClassnames() {
     return ['center-text-donut'];
   }

@@ -15,14 +15,22 @@ import { wireProps } from '../../tools';
 import styles from '../style.less';
 import DataFetcher from '../../data-fetcher';
 
-const pluralize = (nr, sg, pl) => nr === 1 ? sg : pl;
+class CrosstabExplanation extends translatable(React.PureComponent) {
+  render() {
+    const { data, totalContracts, nrFlags } = this.props;
+    const template = nrFlags === 1 ?
+      this.t('crd:contracts:crosstab:explanation:sg') :
+      this.t('crd:contracts:crosstab:explanation:pl');
 
-const CrosstabExplanation = ({ data, totalContracts, nrFlags }) => (
-  <p>
-    This is 1 of {data} procurements ({(data / totalContracts * 100).toFixed(2)}%
-    of all procurements) with {nrFlags} {pluralize(nrFlags, 'flag', 'flags')}.
-  </p>
-);
+    return (
+      <p>
+        {template.replace('$#$', data)
+          .replace('$#$', (data / totalContracts * 100).toFixed(2))
+          .replace('$#$', nrFlags)}
+      </p>
+    );
+  }
+};
 
 class Info extends translatable(Visualization) {
   getCustomEP() {
@@ -48,14 +56,17 @@ class Info extends translatable(Visualization) {
             <dd>{data.get('ocid')}</dd>
           </dl>
           <dl className="col-md-4">
-            <dt>Status</dt>
+            <dt>{this.t('crd:contracts:baseInfo:status')}</dt>
             <dd>{data.get('tag', []).join(', ')}</dd>
           </dl>
           <div className="col-md-4 flags">
             <img src="assets/icons/flag.svg" alt="Flag icon" className="flag-icon" />
             &nbsp;
             {flagCount}
-            &nbsp;{flagCount === 1 ? 'Flag' : 'Flags'}
+            &nbsp;
+            {this.t(flagCount === 1 ?
+              'crd:contracts:baseInfo:flag:sg' :
+              'crd:contracts:baseInfo:flag:pl')}
           </div>
         </div>
         {title &&
@@ -228,6 +239,7 @@ export default class Contract extends CRDPage {
                  <CrosstabExplanation
                    totalContracts={totalContracts}
                    nrFlags={nrFlags}
+                   translations={translations}
                  />
                </DataFetcher>
                <Crosstab

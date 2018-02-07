@@ -30,7 +30,6 @@ class TopSearch extends translatable(React.Component) {
   render() {
     const { doSearch, placeholder } = this.props;
     const { inputValue } = this.state;
-    const hasSpecialChars = inputValue.indexOf('-') > -1;
     const exactMatch = isExactMatch(inputValue);
 
     return (
@@ -61,7 +60,7 @@ class TopSearch extends translatable(React.Component) {
             />
             &nbsp;
             <label htmlFor="exactMatch">
-              Click box to search OCIDs
+              {this.t('crd:contracts:hint')}
             </label>
           </div>
         </div>
