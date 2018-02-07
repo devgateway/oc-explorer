@@ -415,7 +415,8 @@ public class Amount {
         ZWD("ZWD"),
         ZWL("ZWL"),
         ZWN("ZWN"),
-        ZWR("ZWR");
+        ZWR("ZWR"),
+        BTC("BTC"); //this is just for testing purposes, Bitcoin :)
         private final String value;
         private static final Map<String, Currency> CONSTANTS = new HashMap<String, Currency>();
 
