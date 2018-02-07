@@ -50,8 +50,9 @@ class CrosstabExplanation extends translatable(React.PureComponent) {
     const { nrFlags, corruptionType } = this.props;
     return (
       <p>
-        This supplier has been involved in procurements that have been flagged {nrFlags} times
-        in relation to {this.t(`crd:corruptionType:${corruptionType}:pageTitle`)}
+        {this.t('crd:supplier:crosstabs:explanation')
+          .replace('$#$', nrFlags)
+          .replace('$#$', this.t(`crd:corruptionType:${corruptionType}:pageTitle`))}
       </p>
     );
   }
@@ -99,13 +100,13 @@ class Info extends translatable(Visualization) {
             <tr>
               <td>
                 <dl>
-                  <dt>Supplier ID</dt>
+                  <dt>{this.t('crd:supplier:ID')}</dt>
                   <dd>{info.get('id')}</dd>
                 </dl>
               </td>
               <td>
                 <dl>
-                  <dt>Supplier Name</dt>
+                  <dt>{this.t('crd:supplier:name')}</dt>
                   <dd>{info.get('name')}</dd>
                 </dl>
               </td>
@@ -113,12 +114,18 @@ class Info extends translatable(Visualization) {
                 <img src="assets/icons/flag.svg" alt="Flag icon" className="flag-icon" />
                 &nbsp;
                 {flagCount}
-                &nbsp;{flagCount === 1 ? 'Flag' : 'Flags'}
+                &nbsp;
+                {this.t(flagCount === 1 ?
+                  'crd:contracts:baseInfo:flag:sg' :
+                  'crd:contracts:baseInfo:flag:pl')}
                 <br />
                 <small>
                   (
-                  {contractCount}
-                  &nbsp;{contractCount === 1 ? 'Contract' : 'Contracts'}
+                    {contractCount}
+                    &nbsp;
+                    {this.t(contractCount === 1 ?
+                      'crd:supplier:contract:sg' :
+                      'crd:supplier:contract:pl')}
                   )
                 </small>
               </td>
@@ -130,7 +137,7 @@ class Info extends translatable(Visualization) {
             <tr>
               <td>
                 <dl>
-                  <dt>Supplier Address</dt>
+                  <dt>{this.t('crd:supplier:address')}</dt>
                   {address && <dd>
                     {address.get('streetAddress')}<br />
                     {address.get('locality')} /
@@ -143,7 +150,7 @@ class Info extends translatable(Visualization) {
               </td>
               <td>
                 <dl>
-                  <dt>Supplier Contact Information</dt>
+                  <dt>{this.t('crd:supplier:contact')}</dt>
                   {contact && <dd>
                     {contact.get('name')}<br />
                     {contact.get('email')}<br />
@@ -282,7 +289,7 @@ class Supplier extends CRDPage {
     return (
       <div>
         <section className="supplier-general-statistics">
-          <h2>Supplier General Statistics</h2>
+          <h2>{this.t('crd:supplier:generalStatistics')}</h2>
           <div className="col-sm-4">
             <NrLostVsWon
               {...wireProps(this, 'nr-lost-vs-won')}
@@ -317,7 +324,7 @@ class Supplier extends CRDPage {
               zoomedWidth={width}
               cutData={cutWinsAndLosses}
             >
-              <TitleBelow title="Wins & flags by procuring entity">
+              <TitleBelow title={this.t('crd:supplier:winsAndLosses:title')}>
                 <WinsAndLosses
                   filters={this.injectSupplierFilter(filters, id)}
                 />
@@ -332,7 +339,7 @@ class Supplier extends CRDPage {
               cutData={cutNrFlags}
             >
               <TitleBelow
-                title="No. of flags per indicator in procurements won by supplier"
+                title={this.t('crd:supplier:flaggedNr:title')}
               >
                 <FlaggedNr
                   filters={this.injectSupplierFilter(filters, id)}

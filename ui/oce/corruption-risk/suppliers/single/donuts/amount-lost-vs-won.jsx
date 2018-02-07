@@ -1,5 +1,6 @@
 import { pluck } from '../../../../tools';
 import Donut from '../../../donut';
+import translatable from '../../../../translatable';
 
 class CenterText extends React.PureComponent {
   format(number) {
@@ -26,7 +27,7 @@ class CenterText extends React.PureComponent {
   }
 }
 
-class AmountWonVsLost extends React.Component {
+class AmountWonVsLost extends translatable(React.Component) {
   transformNewData(path, data) {
     const { styling } = this.props;
     const won = data.getIn([0, 'won', 'totalAmount']);
@@ -34,11 +35,13 @@ class AmountWonVsLost extends React.Component {
 
     this.props.requestNewData(path, [{
       color: '#2e833a',
-      label: `$${styling.charts.hoverFormatter(won)} won`,
+      label: this.t('crd:supplier:amountLostVsWon:won')
+        .replace('$#$', styling.charts.hoverFormatter(won)),
       value: won
     }, {
       color: '#72c47e',
-      label: `$${styling.charts.hoverFormatter(lost)} lost`,
+      label: this.t('crd:supplier:amountLostVsWon:lost')
+        .replace('$#$', styling.charts.hoverFormatter(lost)),
       value: lost
     }]);
   }
@@ -51,8 +54,8 @@ class AmountWonVsLost extends React.Component {
         requestNewData={this.transformNewData.bind(this)}
         data={this.props.data || []}
         CenterText={CenterText}
-        title="Amount ($)"
-        subtitle="Won vs. Lost"
+        title={this.t('crd:supplier:amountLostVsWon:title')}
+        subtitle={this.t('crd:supplier:amountLostVsWon:subtitle')}
         endpoint="procurementsWonLost"
       />
     );

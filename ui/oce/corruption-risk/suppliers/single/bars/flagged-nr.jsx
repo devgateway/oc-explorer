@@ -9,7 +9,7 @@ const POPUP_WIDTH = 350;
 const POPUP_HEIGHT = 55;
 const POPUP_ARROW_SIZE = 8;
 
-class Popup extends React.PureComponent {
+class Popup extends translatable(React.PureComponent) {
   render() {
     const { x, y, points } = this.props;
     const point = points[0];
@@ -29,13 +29,17 @@ class Popup extends React.PureComponent {
 
     const flags = point.x;
 
+    const label = flags === 1 ?
+      this.t('crd:supplier:flaggedNr:popup:sg') :
+      this.t('crd:supplier:flaggedNr:popup:pl');
+
     return (
       <div
         className="crd-popup donut-popup text-center"
         style={style}
       >
-        {flags} {flags === 1 ? 'flag' : 'flags'} for "{point.y}"
-        <div className="arrow"/>
+        {label.replace('$#$', flags).replace('$#$', point.y)}
+        <div className="arrow" />
       </div>
     )
   }

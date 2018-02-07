@@ -4,10 +4,11 @@ import DataFetcher from '../../../data-fetcher';
 import { wireProps } from '../../../tools';
 import { pluck } from '../../../../tools';
 import CustomPopup from '../../../custom-popup';
+import translatable from '../../../../translatable';
 
 const POPUP_ARROW_SIZE = 8;
 
-class Popup extends React.PureComponent {
+class Popup extends translatable(React.PureComponent) {
   render() {
     const { x, y, points } = this.props;
     const [a, b] = points;
@@ -42,6 +43,14 @@ class Popup extends React.PureComponent {
     const wins = points[0].x;
     const flags = points[1].x;
 
+    const winLabel = wins === 1 ?
+      this.t('crd:supplier:win:sg') :
+      this.t('crd:supplier:win:pl');
+
+    const flagLabel = flags === 1 ?
+      this.t('crd:contracts:baseInfo:flag:sg') :
+      this.t('crd:contracts:baseInfo:flag:pl');
+
     return (
       <div
         className="crd-popup donut-popup text-center"
@@ -49,8 +58,8 @@ class Popup extends React.PureComponent {
       >
         {PEname}
         <br />
-        {wins} {wins === 1 ? 'win' : 'wins'}, {flags} {flags === 1 ? 'flag' : 'flags'}
-        <div className="arrow"/>
+        {wins} {winLabel}, {flags} {flagLabel}
+        <div className="arrow" />
       </div>
     )
   }

@@ -71,23 +71,23 @@ class SList extends PaginatedTable {
           paginationPosition: 'both',
         }}
       >
-        <TableHeaderColumn dataField='name' dataFormat={mkLink(navigate)}>
-          Name
+        <TableHeaderColumn dataField="name" dataFormat={mkLink(navigate)}>
+          {this.t('crd:suppliers:name')}
         </TableHeaderColumn>
-        <TableHeaderColumn dataField='id' isKey dataFormat={mkLink(navigate)}>
-          ID
+        <TableHeaderColumn dataField="id" isKey dataFormat={mkLink(navigate)}>
+          {this.t('crd:suppliers:ID')}
         </TableHeaderColumn>
-        <TableHeaderColumn dataField='wins'>
-          Wins
+        <TableHeaderColumn dataField="wins">
+          {this.t('crd:suppliers:wins')}
         </TableHeaderColumn>
-        <TableHeaderColumn dataField='winAmount'>
-          Total won
+        <TableHeaderColumn dataField="winAmount">
+          {this.t('crd:suppliers:totalWon')}
         </TableHeaderColumn>
-        <TableHeaderColumn dataField='losses'>
-          Losses
+        <TableHeaderColumn dataField="losses">
+          {this.t('crd:suppliers:losses')}
         </TableHeaderColumn>
         <TableHeaderColumn dataField='flags'>
-          Total No. Flags
+          {this.t('crd:suppliers:nrFlags')}
         </TableHeaderColumn>
       </BootstrapTable>
     );

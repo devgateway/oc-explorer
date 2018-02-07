@@ -18,7 +18,7 @@ class NrOfBidders extends CenterTextDonut {
   }
 
   getTitle() {
-    return 'Number of bidders vs average';
+    return this.t('crd:contract:nrBiddersVsAvg:name');
   }
 }
 
