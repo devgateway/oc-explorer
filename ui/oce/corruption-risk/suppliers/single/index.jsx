@@ -50,8 +50,9 @@ class CrosstabExplanation extends translatable(React.PureComponent) {
     const { nrFlags, corruptionType } = this.props;
     return (
       <p>
-        This supplier has been involved in procurements that have been flagged {nrFlags} times
-        in relation to {this.t(`crd:corruptionType:${corruptionType}:pageTitle`)}
+        {this.t('crd:supplier:crosstabs:explanation')
+          .replace('$#$', nrFlags)
+          .replace('$#$', this.t(`crd:corruptionType:${corruptionType}:pageTitle`))}
       </p>
     );
   }
@@ -323,7 +324,7 @@ class Supplier extends CRDPage {
               zoomedWidth={width}
               cutData={cutWinsAndLosses}
             >
-              <TitleBelow title="Wins & flags by procuring entity">
+              <TitleBelow title={this.t('crd:supplier:winsAndLosses:title')}>
                 <WinsAndLosses
                   filters={this.injectSupplierFilter(filters, id)}
                 />
@@ -338,7 +339,7 @@ class Supplier extends CRDPage {
               cutData={cutNrFlags}
             >
               <TitleBelow
-                title="No. of flags per indicator in procurements won by supplier"
+                title={this.t('crd:supplier:flaggedNr:title')}
               >
                 <FlaggedNr
                   filters={this.injectSupplierFilter(filters, id)}

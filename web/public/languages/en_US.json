@@ -338,5 +338,12 @@
   "crd:supplier:nrFlags:subtitle": "on all procurements won",
   "crd:supplier:nrFlags:label:sg": "$#$ $#$ flag",
   "crd:supplier:nrFlags:label:pl": "$#$ $#$ flags",
+  "crd:supplier:winsAndLosses:title": "Wins & flags by procuring entity",
+  "crd:supplier:win:sg": "Win",
+  "crd:supplier:win:pl": "Wins",
+  "crd:supplier:flaggedNr:title": "No. of flags per indicator in procurements won by supplier",
+  "crd:supplier:flaggedNr:popup:sg": "$#$ flag for \"$#$\"",
+  "crd:supplier:flaggedNr:popup:pl": "$#$ flags for \"$#$\"",
+  "crd:supplier:crosstabs:explanation": "This supplier has been involved in procurements that have been flagged $#$ times in relation to $#$",
   "crd:procuringEntities:top-search": "Search within procuring entities"
 }
