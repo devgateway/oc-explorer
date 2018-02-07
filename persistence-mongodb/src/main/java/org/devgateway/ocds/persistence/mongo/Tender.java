@@ -255,7 +255,7 @@ public class Tender {
     @JsonProperty("tenderPeriod")
     @JsonPropertyDescription("    ")
     @ExcelExport
-    private TenderPeriod tenderPeriod;
+    private Period tenderPeriod;
     /**
      * Period
      * <p>
@@ -263,7 +263,7 @@ public class Tender {
     @JsonProperty("enquiryPeriod")
     @JsonPropertyDescription("    ")
     @ExcelExport
-    private TenderPeriod enquiryPeriod;
+    private Period enquiryPeriod;
     /**
      * Has enquiries?
      * <p>
@@ -292,7 +292,7 @@ public class Tender {
     @JsonProperty("awardPeriod")
     @JsonPropertyDescription("    ")
     @ExcelExport
-    private TenderPeriod awardPeriod;
+    private Period awardPeriod;
     /**
      * Period
      * <p>
@@ -300,7 +300,7 @@ public class Tender {
     @JsonProperty("contractPeriod")
     @JsonPropertyDescription("    ")
     @ExcelExport
-    private TenderPeriod contractPeriod;
+    private Period contractPeriod;
     /**
      * Number of tenderers
      * <p>
@@ -743,7 +743,7 @@ public class Tender {
      * <p>
      */
     @JsonProperty("tenderPeriod")
-    public TenderPeriod getTenderPeriod() {
+    public Period getTenderPeriod() {
         return tenderPeriod;
     }
 
@@ -752,7 +752,7 @@ public class Tender {
      * <p>
      */
     @JsonProperty("tenderPeriod")
-    public void setTenderPeriod(TenderPeriod tenderPeriod) {
+    public void setTenderPeriod(Period tenderPeriod) {
         this.tenderPeriod = tenderPeriod;
     }
 
@@ -761,7 +761,7 @@ public class Tender {
      * <p>
      */
     @JsonProperty("enquiryPeriod")
-    public TenderPeriod getEnquiryPeriod() {
+    public Period getEnquiryPeriod() {
         return enquiryPeriod;
     }
 
@@ -770,7 +770,7 @@ public class Tender {
      * <p>
      */
     @JsonProperty("enquiryPeriod")
-    public void setEnquiryPeriod(TenderPeriod enquiryPeriod) {
+    public void setEnquiryPeriod(Period enquiryPeriod) {
         this.enquiryPeriod = enquiryPeriod;
     }
 
@@ -823,7 +823,7 @@ public class Tender {
      * <p>
      */
     @JsonProperty("awardPeriod")
-    public TenderPeriod getAwardPeriod() {
+    public Period getAwardPeriod() {
         return awardPeriod;
     }
 
@@ -832,7 +832,7 @@ public class Tender {
      * <p>
      */
     @JsonProperty("awardPeriod")
-    public void setAwardPeriod(TenderPeriod awardPeriod) {
+    public void setAwardPeriod(Period awardPeriod) {
         this.awardPeriod = awardPeriod;
     }
 
@@ -841,7 +841,7 @@ public class Tender {
      * <p>
      */
     @JsonProperty("contractPeriod")
-    public TenderPeriod getContractPeriod() {
+    public Period getContractPeriod() {
         return contractPeriod;
     }
 
@@ -850,7 +850,7 @@ public class Tender {
      * <p>
      */
     @JsonProperty("contractPeriod")
-    public void setContractPeriod(TenderPeriod contractPeriod) {
+    public void setContractPeriod(Period contractPeriod) {
         this.contractPeriod = contractPeriod;
     }
 
