@@ -99,13 +99,13 @@ class Info extends translatable(Visualization) {
             <tr>
               <td>
                 <dl>
-                  <dt>Supplier ID</dt>
+                  <dt>{this.t('crd:supplier:ID')}</dt>
                   <dd>{info.get('id')}</dd>
                 </dl>
               </td>
               <td>
                 <dl>
-                  <dt>Supplier Name</dt>
+                  <dt>{this.t('crd:supplier:name')}</dt>
                   <dd>{info.get('name')}</dd>
                 </dl>
               </td>
@@ -113,12 +113,18 @@ class Info extends translatable(Visualization) {
                 <img src="assets/icons/flag.svg" alt="Flag icon" className="flag-icon" />
                 &nbsp;
                 {flagCount}
-                &nbsp;{flagCount === 1 ? 'Flag' : 'Flags'}
+                &nbsp;
+                {this.t(flagCount === 1 ?
+                  'crd:contracts:baseInfo:flag:sg' :
+                  'crd:contracts:baseInfo:flag:pl')}
                 <br />
                 <small>
                   (
-                  {contractCount}
-                  &nbsp;{contractCount === 1 ? 'Contract' : 'Contracts'}
+                    {contractCount}
+                    &nbsp;
+                    {this.t(contractCount === 1 ?
+                      'crd:supplier:contract:sg' :
+                      'crd:supplier:contract:pl')}
                   )
                 </small>
               </td>
@@ -130,7 +136,7 @@ class Info extends translatable(Visualization) {
             <tr>
               <td>
                 <dl>
-                  <dt>Supplier Address</dt>
+                  <dt>{this.t('crd:supplier:address')}</dt>
                   {address && <dd>
                     {address.get('streetAddress')}<br />
                     {address.get('locality')} /
@@ -143,7 +149,7 @@ class Info extends translatable(Visualization) {
               </td>
               <td>
                 <dl>
-                  <dt>Supplier Contact Information</dt>
+                  <dt>{this.t('crd:supplier:contact')}</dt>
                   {contact && <dd>
                     {contact.get('name')}<br />
                     {contact.get('email')}<br />
@@ -282,7 +288,7 @@ class Supplier extends CRDPage {
     return (
       <div>
         <section className="supplier-general-statistics">
-          <h2>Supplier General Statistics</h2>
+          <h2>{this.t('crd:supplier:generalStatistics')}</h2>
           <div className="col-sm-4">
             <NrLostVsWon
               {...wireProps(this, 'nr-lost-vs-won')}

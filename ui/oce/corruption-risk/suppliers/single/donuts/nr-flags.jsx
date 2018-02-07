@@ -15,18 +15,22 @@ class CenterText extends React.PureComponent {
   }
 }
 
-const COLORS = ['#fbc42c', '#3372b2', '#30a0f5']
+const COLORS = ['#fbc42c', '#3372b2', '#30a0f5'];
 
 class TotalFlags extends translatable(React.PureComponent) {
   render() {
     const data = (this.props.data || List()).map((datum, index) => {
       const value = datum.get('indicatorCount');
       const indicatorName = this.t(`crd:corruptionType:${datum.get('type')}:name`);
-        return {
+      const label = value === 1 ?
+        this.t('crd:supplier:nrFlags:label:sg') :
+        this.t('crd:supplier:nrFlags:label:pl');
+
+      return {
         color: COLORS[index],
-        label: `${value} ${indicatorName} ${value === 1 ? 'flag' : 'flags'}`,
+        label: label.replace('$#$', value).replace('$#$', indicatorName),
         value: datum.get('indicatorCount'),
-      }
+      };
     }).toJS();
     return (
       <Donut
@@ -34,8 +38,8 @@ class TotalFlags extends translatable(React.PureComponent) {
         data={data}
         CenterText={CenterText}
         endpoint="totalFlaggedIndicatorsByIndicatorType"
-        title="Total flags by risk type"
-        subtitle="on all procurements won"
+        title={this.t('crd:supplier:nrFlags:title')}
+        subtitle={this.t('crd:supplier:nrFlags:subtitle')}
       />
     );
   }
