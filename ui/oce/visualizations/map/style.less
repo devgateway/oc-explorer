@@ -7,10 +7,16 @@
   height: @windowHeight;
 }
 
+@keyframes fade-in {
+  from { opacity: 0 }
+  to { opacity: 1 }
+}
+
 .tender-locations-popup{
   font-size: 9pt;
   .map-chart{
     .main-svg{
+      animation: fade-in 1s;
       background: transparent!important;
     }
   }
