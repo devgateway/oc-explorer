@@ -137,7 +137,7 @@ public class Award {
     @JsonProperty("contractPeriod")
     @JsonPropertyDescription("    ")
     @ExcelExport
-    private TenderPeriod contractPeriod;
+    private Period contractPeriod;
     /**
      * Documents
      * <p>
@@ -343,7 +343,7 @@ public class Award {
      * <p>
      */
     @JsonProperty("contractPeriod")
-    public TenderPeriod getContractPeriod() {
+    public Period getContractPeriod() {
         return contractPeriod;
     }
 
@@ -352,7 +352,7 @@ public class Award {
      * <p>
      */
     @JsonProperty("contractPeriod")
-    public void setContractPeriod(TenderPeriod contractPeriod) {
+    public void setContractPeriod(Period contractPeriod) {
         this.contractPeriod = contractPeriod;
     }
 
