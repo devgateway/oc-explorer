@@ -26,6 +26,7 @@ import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -205,9 +206,10 @@ public class OcdsController extends GenericOCDSController {
         );
 
         Query query = query(getYearDefaultFilterCriteria(
-                releaseRequest,
-                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
-        )).with(pageRequest);
+                releaseRequest, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
+        ).and(MongoConstants.FieldNames.FLAGS_TOTAL_FLAGGED).gt(0)).
+                with(pageRequest).with(new Sort(Direction.DESC,
+                MongoConstants.FieldNames.FLAGS_TOTAL_FLAGGED));
 
         if (StringUtils.isNotEmpty(releaseRequest.getText())) {
             query.addCriteria(getTextCriteria(releaseRequest));
