@@ -75,7 +75,6 @@ class IndividualIndicatorChart extends CustomPopupChart {
       hovermode: 'closest',
       xaxis: {
         type: 'category',
-        categoryorder: 'category ascending',
         showgrid: false,
       },
       yaxis: {},

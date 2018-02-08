@@ -74,4 +74,4 @@ export const cloneChild = (component, props) =>
     props
   );
 
-export const sortByField = field => (a, b) => b.get(field) - a.get(field);
+export const sortByField = field => (a, b) => a.get(field) - b.get(field);

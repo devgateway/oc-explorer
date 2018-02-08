@@ -59,7 +59,6 @@ class IndicatorTile extends CustomPopupChart{
     return {
       xaxis: {
         type: 'category',
-        categoryorder: 'category ascending',
         showgrid: false,
         showline: false,
         tickangle: -60
@@ -88,6 +87,7 @@ class IndicatorTile extends CustomPopupChart{
     } else {
       datum = data.find(datum => datum.get('year') == year);
     }
+    if (!datum) return null;
     return (
       <div className="crd-popup" style={{top: popup.top, left: popup.left}}>
         <div className="row">
