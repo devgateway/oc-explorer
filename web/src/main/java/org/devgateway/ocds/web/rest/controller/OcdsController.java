@@ -201,21 +201,43 @@ public class OcdsController extends GenericOCDSController {
             @ModelAttribute @Valid final YearFilterPagingRequest releaseRequest) {
 
         Pageable pageRequest = new PageRequest(releaseRequest.getPageNumber(), releaseRequest.getPageSize(),
-                Direction.ASC, "id"
+                Direction.DESC, MongoConstants.FieldNames.FLAGS_TOTAL_FLAGGED
         );
 
+
         Query query = query(getYearDefaultFilterCriteria(
-                releaseRequest,
-                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
-        )).with(pageRequest);
+                releaseRequest, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
+        ).and(MongoConstants.FieldNames.FLAGS_TOTAL_FLAGGED).gt(0)).
+                with(pageRequest);
 
         if (StringUtils.isNotEmpty(releaseRequest.getText())) {
             query.addCriteria(getTextCriteria(releaseRequest));
         }
 
-        List<FlaggedRelease> find = mongoTemplate.find(query, FlaggedRelease.class);
+        return mongoTemplate.find(query, FlaggedRelease.class);
+    }
 
-        return find;
+    /**
+     * Returns a list of OCDS FlaggedReleases, order by Id, using pagination
+     *
+     * @return the release data
+     */
+    @ApiOperation(value = "Counts all available releases with flags, filtered by the given criteria.")
+    @RequestMapping(value = "/api/flaggedRelease/count", method = {RequestMethod.POST, RequestMethod.GET},
+            produces = "application/json")
+    @JsonView(Views.Internal.class)
+    public Long countFlaggedOcdsReleases(
+            @ModelAttribute @Valid final YearFilterPagingRequest releaseRequest) {
+
+        Query query = query(getYearDefaultFilterCriteria(
+                releaseRequest, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
+        ).and(MongoConstants.FieldNames.FLAGS_TOTAL_FLAGGED).gt(0));
+
+        if (StringUtils.isNotEmpty(releaseRequest.getText())) {
+            query.addCriteria(getTextCriteria(releaseRequest));
+        }
+
+        return mongoTemplate.count(query, FlaggedRelease.class);
     }
 
     @ApiOperation(value = "Returns a release entity for the given open contracting id (OCID).")
@@ -224,9 +246,7 @@ public class OcdsController extends GenericOCDSController {
             produces = "application/json")
     @JsonView(Views.Internal.class)
     public FlaggedRelease flaggedReleaseByOcid(@PathVariable final String ocid) {
-
-        FlaggedRelease release = flaggedReleaseRepository.findByOcid(ocid);
-        return release;
+        return flaggedReleaseRepository.findByOcid(ocid);
     }
 
     @ApiOperation(value = "Returns all available packages, filtered by the given criteria."
