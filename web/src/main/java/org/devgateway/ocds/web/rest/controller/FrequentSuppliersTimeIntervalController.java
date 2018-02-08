@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -106,7 +107,7 @@ public class FrequentSuppliersTimeIntervalController extends GenericOCDSControll
         return releaseAgg(agg, FrequentSuppliersResponse.class);
     }
 
-    public static class FrequentSuppliersId {
+    public static class FrequentSuppliersId implements Serializable {
 
         private String procuringEntityId;
         private String supplierId;
@@ -143,7 +144,7 @@ public class FrequentSuppliersTimeIntervalController extends GenericOCDSControll
         }
     }
 
-    public static class FrequentSuppliersResponse {
+    public static class FrequentSuppliersResponse implements Serializable {
         private FrequentSuppliersId identifier;
         private Integer count;
 
