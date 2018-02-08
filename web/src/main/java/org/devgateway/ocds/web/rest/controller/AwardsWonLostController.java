@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.devgateway.ocds.web.rest.controller;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
 import org.devgateway.ocds.persistence.mongo.Award;
@@ -30,13 +31,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.BIDS_DETAILS_TENDERERS_ID;
 import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.BIDS_DETAILS_VALUE_AMOUNT;
 import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.FLAGS_TOTAL_FLAGGED;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.facet;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
@@ -53,13 +57,95 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @Cacheable
 public class AwardsWonLostController extends GenericOCDSController {
 
+    public static class ProcurementsWonLost implements Serializable {
+        private CountAmountFlags applied;
+        private CountAmountFlags won;
+        private Long lostCount = 0L;
+        private BigDecimal lostAmount = BigDecimal.ZERO;
+
+        public CountAmountFlags getApplied() {
+            return applied;
+        }
+
+        public void setApplied(CountAmountFlags applied) {
+            this.applied = applied;
+        }
+
+        public CountAmountFlags getWon() {
+            return won;
+        }
+
+        public void setWon(CountAmountFlags won) {
+            this.won = won;
+        }
+
+        public BigDecimal getLostAmount() {
+            return lostAmount;
+        }
+
+        public void setLostAmount(BigDecimal lostAmount) {
+            this.lostAmount = lostAmount;
+        }
+
+        public Long getLostCount() {
+            return lostCount;
+        }
+
+        public void setLostCount(Long lostCount) {
+            this.lostCount = lostCount;
+        }
+    }
+
+    public static class CountAmountFlags implements Serializable {
+        private String id;
+
+
+        @JsonProperty("_id")
+        public String getId() {
+            return id;
+        }
+
+        private Long count;
+        private BigDecimal totalAmount;
+        private Long countFlags;
+
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public Long getCount() {
+            return count;
+        }
+
+        public void setCount(Long count) {
+            this.count = count;
+        }
+
+        public Long getCountFlags() {
+            return countFlags;
+        }
+
+        public void setCountFlags(Long countFlags) {
+            this.countFlags = countFlags;
+        }
+
+        public BigDecimal getTotalAmount() {
+            return totalAmount;
+        }
+
+        public void setTotalAmount(BigDecimal totalAmount) {
+            this.totalAmount = totalAmount;
+        }
+    }
+
     @ApiOperation(value = "Counts the won, lost procurements, flags and amounts. Receives any filters, "
             + "but most important here is the supplierId and bidderId. Requires bid extension. Use bidderId instead "
             + "of supplierId.")
     @RequestMapping(value = "/api/procurementsWonLost",
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> procurementsWonLost(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<ProcurementsWonLost> procurementsWonLost(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         Assert.notEmpty(filter.getBidderId(), "bidderId must not be empty!");
         Assert.isTrue(
@@ -75,51 +161,69 @@ public class AwardsWonLostController extends GenericOCDSController {
                         filter);
         noSupplierCriteria.remove(MongoConstants.Filters.SUPPLIER_ID);
 
-        Aggregation agg = newAggregation(
-                facet().and(
-                        match(getYearDefaultFilterCriteria(
-                                filter,
-                                noSupplierCriteria,
-                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
-                        )),
-                        unwind("bids.details"),
-                        unwind("bids.details.tenderers"),
-                        match(getYearDefaultFilterCriteria(
-                                filter,
-                                noSupplierCriteria,
-                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
-                        )),
-                        group(BIDS_DETAILS_TENDERERS_ID).count().as("count")
-                                .sum(BIDS_DETAILS_VALUE_AMOUNT).as("totalAmount")
-                                .sum(FLAGS_TOTAL_FLAGGED).as("countFlags"),
-                        project("count", "totalAmount", "countFlags")
-                ).as("applied").and(
-                        match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
-                                .andOperator(getYearDefaultFilterCriteria(
-                                        filter,
-                                        MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
-                                ))),
-                        unwind("awards"),
-                        unwind("awards.suppliers"),
-                        match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
-                                .andOperator(getYearDefaultFilterCriteria(
-                                        filter.awardFiltering(),
-                                        MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
-                                ))),
-                        group(MongoConstants.FieldNames.AWARDS_SUPPLIERS_ID).count().as("count")
-                                .sum(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT).as("totalAmount")
-                                .sum(FLAGS_TOTAL_FLAGGED).as("countFlags"),
-                        project("count", "totalAmount", "countFlags")
-                ).as("won"),
-                unwind("won"),
-                unwind("applied"),
-                project("won", "applied").and("applied._id").cmp("$won._id").as("comp")
-                        .and("applied.count").minus("won.count").as("lostCount")
-                        .and("applied.totalAmount").minus("won.totalAmount").as("lostAmount"),
-                match(where("comp").is(0)),
-                project("won", "applied", "lostCount", "lostAmount")
+        Aggregation agg1 = newAggregation(
+                match(getYearDefaultFilterCriteria(
+                        filter,
+                        noSupplierCriteria,
+                        MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
+                )),
+                unwind("bids.details"),
+                unwind("bids.details.tenderers"),
+                match(getYearDefaultFilterCriteria(
+                        filter,
+                        noSupplierCriteria,
+                        MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
+                )),
+                group(BIDS_DETAILS_TENDERERS_ID).count().as("count")
+                        .sum(BIDS_DETAILS_VALUE_AMOUNT).as("totalAmount")
+                        .sum(FLAGS_TOTAL_FLAGGED).as("countFlags"),
+                project("count", "totalAmount", "countFlags")
         );
-        return releaseAgg(agg);
+
+
+        List<CountAmountFlags> applied = releaseAgg(agg1, CountAmountFlags.class);
+
+
+        Aggregation agg2 = newAggregation(
+                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
+                        .andOperator(getYearDefaultFilterCriteria(
+                                filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
+                        ))),
+                unwind("awards"),
+                unwind("awards.suppliers"),
+                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
+                        .andOperator(getYearDefaultFilterCriteria(
+                                filter.awardFiltering(),
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
+                        ))),
+                group(MongoConstants.FieldNames.AWARDS_SUPPLIERS_ID).count().as("count")
+                        .sum(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT).as("totalAmount")
+                        .sum(FLAGS_TOTAL_FLAGGED).as("countFlags"),
+                project("count", "totalAmount", "countFlags")
+        );
+
+        List<CountAmountFlags> won = releaseAgg(agg2, CountAmountFlags.class);
+
+        ArrayList<ProcurementsWonLost> ret = new ArrayList<>();
+
+        applied.forEach(a -> {
+            ProcurementsWonLost r = new ProcurementsWonLost();
+            r.setApplied(a);
+            Optional<CountAmountFlags> optWon = won.stream().filter(w -> w.getId().equals(a.getId())).findFirst();
+            if (optWon.isPresent()) {
+                r.setWon(optWon.get());
+                r.setLostAmount(r.getApplied().getTotalAmount().subtract(r.getWon().getTotalAmount()));
+                r.setLostCount(r.getApplied().getCount() - r.getWon().getCount());
+            } else {
+                r.setLostAmount(r.getApplied().getTotalAmount());
+                r.setLostCount(r.getLostCount());
+            }
+            ret.add(r);
+        });
+
+        return ret;
+
     }
 
     @ApiOperation(value = "Counts the number of wins per supplierId per procuringEntityId, plus shows the flags"
