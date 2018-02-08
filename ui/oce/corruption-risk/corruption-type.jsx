@@ -59,7 +59,6 @@ class IndicatorTile extends CustomPopupChart{
     return {
       xaxis: {
         type: 'category',
-        categoryorder: 'category ascending',
         showgrid: false,
         showline: false,
         tickangle: -60
