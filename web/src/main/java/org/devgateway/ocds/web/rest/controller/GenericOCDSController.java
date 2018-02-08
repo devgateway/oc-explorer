@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOptions;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
@@ -78,12 +79,21 @@ public abstract class GenericOCDSController {
         return start;
     }
 
+    protected <Z> List<Z> releaseAgg(Aggregation agg, AggregationOptions options, Class<Z> clazz) {
+        return mongoTemplate.aggregate(agg.withOptions(options), "release", clazz)
+                .getMappedResults();
+    }
+
     protected List<DBObject> releaseAgg(Aggregation agg) {
         return releaseAgg(agg, DBObject.class);
     }
 
+    protected List<DBObject> releaseAgg(Aggregation agg, AggregationOptions options) {
+        return releaseAgg(agg, options, DBObject.class);
+    }
+
     protected <Z> List<Z> releaseAgg(Aggregation agg, Class<Z> clazz) {
-        return mongoTemplate.aggregate(agg, "release", clazz).getMappedResults();
+        return releaseAgg(agg, Aggregation.newAggregationOptions().allowDiskUse(true).build(), clazz);
     }
 
     /**
