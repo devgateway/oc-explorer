@@ -132,7 +132,7 @@ export default class Contracts extends CRDPage {
         topSearchPlaceholder={this.t('crd:contracts:top-search')}
         List={CList}
         dataEP="flaggedRelease/all"
-        countEP="ocds/release/count"
+        countEP="flaggedRelease/count"
       />
     );
   }
