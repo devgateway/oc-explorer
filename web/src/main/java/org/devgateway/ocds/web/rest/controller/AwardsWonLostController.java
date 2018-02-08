@@ -31,10 +31,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.BIDS_DETAILS_TENDERERS_ID;
 import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.BIDS_DETAILS_VALUE_AMOUNT;
@@ -55,7 +57,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @Cacheable
 public class AwardsWonLostController extends GenericOCDSController {
 
-    private class ProcurementsWonLost {
+    public static class ProcurementsWonLost implements Serializable {
         private CountAmountFlags applied;
         private CountAmountFlags won;
         private Long lostCount = 0L;
@@ -94,7 +96,7 @@ public class AwardsWonLostController extends GenericOCDSController {
         }
     }
 
-    private class CountAmountFlags {
+    public static class CountAmountFlags implements Serializable {
         private String id;
 
 
@@ -208,8 +210,9 @@ public class AwardsWonLostController extends GenericOCDSController {
         applied.forEach(a -> {
             ProcurementsWonLost r = new ProcurementsWonLost();
             r.setApplied(a);
-            r.setWon(won.stream().filter(w -> w.getId().equals(a.getId())).findFirst().get());
-            if (r.getWon() != null) {
+            Optional<CountAmountFlags> optWon = won.stream().filter(w -> w.getId().equals(a.getId())).findFirst();
+            if (optWon.isPresent()) {
+                r.setWon(optWon.get());
                 r.setLostAmount(r.getApplied().getTotalAmount().subtract(r.getWon().getTotalAmount()));
                 r.setLostCount(r.getApplied().getCount() - r.getWon().getCount());
             } else {
