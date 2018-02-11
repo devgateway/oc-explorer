@@ -24,6 +24,8 @@ import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.json.Views;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -46,6 +48,7 @@ import static org.springframework.data.mongodb.core.query.Query.query;
  * @author mpostelnicu
  */
 @RestController
+@CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
 public class OcdsController extends GenericOCDSController {
 
     private static final String SERVER_DOMAIN = "http://ocexplorer.dgstg.org";
@@ -166,6 +169,7 @@ public class OcdsController extends GenericOCDSController {
     @RequestMapping(value = "/api/ocds/release/count", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
     @JsonView(Views.Public.class)
+    @Cacheable
     public Long ocdsReleasesCount(@ModelAttribute @Valid final YearFilterPagingRequest releaseRequest) {
 
         Pageable pageRequest = new PageRequest(releaseRequest.getPageNumber(), releaseRequest.getPageSize(),
@@ -226,6 +230,7 @@ public class OcdsController extends GenericOCDSController {
     @RequestMapping(value = "/api/flaggedRelease/count", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
     @JsonView(Views.Internal.class)
+    @Cacheable
     public Long countFlaggedOcdsReleases(
             @ModelAttribute @Valid final YearFilterPagingRequest releaseRequest) {
 
