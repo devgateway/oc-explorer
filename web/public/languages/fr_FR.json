@@ -338,5 +338,12 @@
   "crd:supplier:flaggedNr:title": "No. d'alertes par indicateur dans les marchés gagnés par le fournisseur",
   "crd:supplier:flaggedNr:popup:sg": "$#$ alerte pour \"$#$\"",
   "crd:supplier:flaggedNr:popup:pl": "$#$ alertes pour \"$#$\"",
-  "crd:supplier:crosstabs:explanation": "Ce fournisseur a participé à des procédures de passation qui ont été soumises à des alertes  $#$ fois en relation avec $#$"
+  "crd:supplier:crosstabs:explanation": "Ce fournisseur a participé à des procédures de passation qui ont été soumises à des alertes  $#$ fois en relation avec $#$",
+  "crd:contracts:baseInfo:flag:sg": "Flag",
+  "crd:contracts:baseInfo:flag:pl": "Flags",
+  "crd:contract:nrBiddersVsAvg:name": "Number of bidders vs average",
+  "crd:contract:nrContractWithPE:name": "Number of contracts with this procuring entity",
+  "crd:contract:percentPEspending:name": "% of procuring entity spending to this supplier",
+  "crd:supplier:win:sg": "Win",
+  "crd:supplier:win:pl": "Wins"
 }
