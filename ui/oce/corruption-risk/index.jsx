@@ -388,6 +388,7 @@ CorruptionRiskDashboard.propTypes = {
 CorruptionRiskDashboard.TRANSLATIONS = {
   en_US: require('../../../web/public/languages/en_US.json'),
   es_ES: require('../../../web/public/languages/es_ES.json'),
+  fr_FR: require('../../../web/public/languages/fr_FR.json'),
 };
 
 export default CorruptionRiskDashboard;
