@@ -41,10 +41,13 @@ import java.util.Optional;
 import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.BIDS_DETAILS_TENDERERS_ID;
 import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.BIDS_DETAILS_VALUE_AMOUNT;
 import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.FLAGS_TOTAL_FLAGGED;
+import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.TENDER_PERIOD_START_DATE;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
@@ -57,86 +60,25 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @Cacheable
 public class AwardsWonLostController extends GenericOCDSController {
 
-    public static class ProcurementsWonLost implements Serializable {
-        private CountAmountFlags applied;
-        private CountAmountFlags won;
-        private Long lostCount = 0L;
-        private BigDecimal lostAmount = BigDecimal.ZERO;
-
-        public CountAmountFlags getApplied() {
-            return applied;
-        }
-
-        public void setApplied(CountAmountFlags applied) {
-            this.applied = applied;
-        }
-
-        public CountAmountFlags getWon() {
-            return won;
-        }
-
-        public void setWon(CountAmountFlags won) {
-            this.won = won;
-        }
-
-        public BigDecimal getLostAmount() {
-            return lostAmount;
-        }
-
-        public void setLostAmount(BigDecimal lostAmount) {
-            this.lostAmount = lostAmount;
-        }
-
-        public Long getLostCount() {
-            return lostCount;
-        }
-
-        public void setLostCount(Long lostCount) {
-            this.lostCount = lostCount;
-        }
-    }
-
-    public static class CountAmountFlags implements Serializable {
-        private String id;
-
-
-        @JsonProperty("_id")
-        public String getId() {
-            return id;
-        }
-
-        private Long count;
-        private BigDecimal totalAmount;
-        private Long countFlags;
-
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public Long getCount() {
-            return count;
-        }
-
-        public void setCount(Long count) {
-            this.count = count;
-        }
-
-        public Long getCountFlags() {
-            return countFlags;
-        }
-
-        public void setCountFlags(Long countFlags) {
-            this.countFlags = countFlags;
-        }
-
-        public BigDecimal getTotalAmount() {
-            return totalAmount;
-        }
-
-        public void setTotalAmount(BigDecimal totalAmount) {
-            this.totalAmount = totalAmount;
-        }
+    @ApiOperation(value = "Suppliers ordered by countFlags>0, descending")
+    @RequestMapping(value = "/api/suppliersByFlags",
+            method = {RequestMethod.POST, RequestMethod.GET},
+            produces = "application/json")
+    public List<DBObject> suppliersByFlags(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+        Aggregation agg = newAggregation(
+                match(getYearDefaultFilterCriteria(filter, TENDER_PERIOD_START_DATE)
+                        .and(FLAGS_TOTAL_FLAGGED).gt(0)),
+                unwind("awards"),
+                unwind("awards.suppliers"),
+                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())),
+                project("awards.suppliers._id", "awards.suppliers.name",
+                        FLAGS_TOTAL_FLAGGED).andExclude(Fields.UNDERSCORE_ID),
+                group("suppliers._id", "suppliers.name").sum("totalFlagged").as("countFlags"),
+                sort(Sort.Direction.DESC, "countFlags"),
+                skip(filter.getSkip()),
+                limit(filter.getPageSize())
+        );
+        return releaseAgg(agg);
     }
 
     @ApiOperation(value = "Counts the won, lost procurements, flags and amounts. Receives any filters, "
@@ -165,14 +107,14 @@ public class AwardsWonLostController extends GenericOCDSController {
                 match(getYearDefaultFilterCriteria(
                         filter,
                         noSupplierCriteria,
-                        MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
+                        TENDER_PERIOD_START_DATE
                 )),
                 unwind("bids.details"),
                 unwind("bids.details.tenderers"),
                 match(getYearDefaultFilterCriteria(
                         filter,
                         noSupplierCriteria,
-                        MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
+                        TENDER_PERIOD_START_DATE
                 )),
                 group(BIDS_DETAILS_TENDERERS_ID).count().as("count")
                         .sum(BIDS_DETAILS_VALUE_AMOUNT).as("totalAmount")
@@ -188,14 +130,14 @@ public class AwardsWonLostController extends GenericOCDSController {
                 match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
                         .andOperator(getYearDefaultFilterCriteria(
                                 filter,
-                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
+                                TENDER_PERIOD_START_DATE
                         ))),
                 unwind("awards"),
                 unwind("awards.suppliers"),
                 match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
                         .andOperator(getYearDefaultFilterCriteria(
                                 filter.awardFiltering(),
-                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
+                                TENDER_PERIOD_START_DATE
                         ))),
                 group(MongoConstants.FieldNames.AWARDS_SUPPLIERS_ID).count().as("count")
                         .sum(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT).as("totalAmount")
@@ -240,7 +182,7 @@ public class AwardsWonLostController extends GenericOCDSController {
                 match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
                         .andOperator(getYearDefaultFilterCriteria(
                                 filter,
-                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
+                                TENDER_PERIOD_START_DATE
                         )).and(MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_ID).exists(true)
                         .and(MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_NAME).exists(true)),
                 unwind("awards"),
@@ -248,7 +190,7 @@ public class AwardsWonLostController extends GenericOCDSController {
                 match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
                         .andOperator(getYearDefaultFilterCriteria(
                                 filter.awardFiltering(),
-                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
+                                TENDER_PERIOD_START_DATE
                         ))),
                 group(Fields.from(
                         Fields.field("supplierId", MongoConstants
@@ -262,6 +204,85 @@ public class AwardsWonLostController extends GenericOCDSController {
                 sort(Sort.Direction.DESC, "count")
         );
         return releaseAgg(agg);
+    }
+
+    public static class ProcurementsWonLost implements Serializable {
+        private CountAmountFlags applied;
+        private CountAmountFlags won;
+        private Long lostCount = 0L;
+        private BigDecimal lostAmount = BigDecimal.ZERO;
+
+        public CountAmountFlags getApplied() {
+            return applied;
+        }
+
+        public void setApplied(CountAmountFlags applied) {
+            this.applied = applied;
+        }
+
+        public CountAmountFlags getWon() {
+            return won;
+        }
+
+        public void setWon(CountAmountFlags won) {
+            this.won = won;
+        }
+
+        public BigDecimal getLostAmount() {
+            return lostAmount;
+        }
+
+        public void setLostAmount(BigDecimal lostAmount) {
+            this.lostAmount = lostAmount;
+        }
+
+        public Long getLostCount() {
+            return lostCount;
+        }
+
+        public void setLostCount(Long lostCount) {
+            this.lostCount = lostCount;
+        }
+    }
+
+    public static class CountAmountFlags implements Serializable {
+        private String id;
+        private Long count;
+        private BigDecimal totalAmount;
+        private Long countFlags;
+
+        @JsonProperty("_id")
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public Long getCount() {
+            return count;
+        }
+
+        public void setCount(Long count) {
+            this.count = count;
+        }
+
+        public Long getCountFlags() {
+            return countFlags;
+        }
+
+        public void setCountFlags(Long countFlags) {
+            this.countFlags = countFlags;
+        }
+
+        public BigDecimal getTotalAmount() {
+            return totalAmount;
+        }
+
+        public void setTotalAmount(BigDecimal totalAmount) {
+            this.totalAmount = totalAmount;
+        }
     }
 
 
