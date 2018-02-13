@@ -38,6 +38,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.AWARDS_SUPPLIERS_ID;
+import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.AWARDS_SUPPLIERS_NAME;
 import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.BIDS_DETAILS_TENDERERS_ID;
 import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.BIDS_DETAILS_VALUE_AMOUNT;
 import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.FLAGS_TOTAL_FLAGGED;
@@ -70,10 +72,15 @@ public class AwardsWonLostController extends GenericOCDSController {
                         .and(FLAGS_TOTAL_FLAGGED).gt(0)),
                 unwind("awards"),
                 unwind("awards.suppliers"),
-                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())),
-                project("awards.suppliers._id", "awards.suppliers.name",
-                        FLAGS_TOTAL_FLAGGED).andExclude(Fields.UNDERSCORE_ID),
-                group("suppliers._id", "suppliers.name").sum("totalFlagged").as("countFlags"),
+                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
+                        .andOperator(getYearDefaultFilterCriteria(
+                                filter.awardFiltering(),
+                                TENDER_PERIOD_START_DATE
+                        ))),
+                group(Fields.from(
+                        Fields.field("supplierId", AWARDS_SUPPLIERS_ID),
+                        Fields.field("supplierName", AWARDS_SUPPLIERS_NAME))).sum(FLAGS_TOTAL_FLAGGED)
+                        .as("countFlags"),
                 sort(Sort.Direction.DESC, "countFlags"),
                 skip(filter.getSkip()),
                 limit(filter.getPageSize())

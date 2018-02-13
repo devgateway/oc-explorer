@@ -86,6 +86,8 @@ public abstract class AbstractMongoDatabaseConfiguration {
         getTemplate().indexOps(Release.class)
                 .ensureIndex(new Index().on(MongoConstants.FieldNames.AWARDS_SUPPLIERS_ID, Direction.ASC));
         getTemplate().indexOps(Release.class)
+                .ensureIndex(new Index().on(MongoConstants.FieldNames.AWARDS_SUPPLIERS_NAME, Direction.ASC));
+        getTemplate().indexOps(Release.class)
                 .ensureIndex(new Index().on(MongoConstants.FieldNames.AWARDS_DATE, Direction.ASC));
         getTemplate().indexOps(Release.class)
                 .ensureIndex(new Index().on(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT, Direction.ASC));
