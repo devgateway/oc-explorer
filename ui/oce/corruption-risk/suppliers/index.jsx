@@ -43,12 +43,12 @@ class SList extends PaginatedTable {
 
     const jsData = data.get('data', List()).map((supplier) => {
       return {
-        id: supplier.get('id'),
-        name: supplier.get('name'),
+        id: supplier.get('supplierId'),
+        name: supplier.get('supplierName'),
         wins: supplier.get('wins'),
         winAmount: supplier.get('winAmount'),
         losses: supplier.get('losses'),
-        flags: supplier.get('flags'),
+        flags: supplier.get('countFlags'),
       }
     }).toJS();
 
@@ -101,7 +101,7 @@ class Suppliers extends CRDPage {
     this.state.winLossFlagInfo = Map();
     this.injectWinLossData = cacheFn((data, winLossFlagInfo) => {
       return data.update('data', List(), list => list.map(supplier => {
-        const id = supplier.get('id');
+        const id = supplier.get('supplierId');
         if (!winLossFlagInfo.has(id)) return supplier;
         const info = winLossFlagInfo.get(id);
         return supplier
@@ -114,16 +114,22 @@ class Suppliers extends CRDPage {
   }
 
   onNewDataRequested(path, newData) {
-    const supplierIds = newData.get('data').map(pluckImm('id'));
+    const supplierIds = newData.get('data').map(pluckImm('supplierId'));
     this.setState({ winLossFlagInfo: Map() });
     fetchEP(new URI('/api/procurementsWonLost').addSearch({
       bidderId: supplierIds.toJS(),
     })).then(result => {
       this.setState({
-        winLossFlagInfo: Map(supplierIds.zip(result))
+        winLossFlagInfo: Map(result.map(datum => [
+          datum.applied._id,
+          datum
+        ]))
       });
     });
-    this.props.requestNewData(path, newData);
+    this.props.requestNewData(
+      path,
+      newData.set('count', newData.getIn(['count', 0, 'count'], 0))
+    );
   }
 
   render() {
@@ -140,8 +146,8 @@ class Suppliers extends CRDPage {
         className="suppliers-page"
         topSearchPlaceholder={this.t('crd:suppliers:top-search')}
         List={SList}
-        dataEP="ocds/organization/supplier/all"
-        countEP="ocds/organization/supplier/count"
+        dataEP="suppliersByFlags"
+        countEP="suppliersByFlags/count"
       />
     );
   }

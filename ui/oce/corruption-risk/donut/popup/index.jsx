@@ -13,7 +13,8 @@ class DonutPopup extends React.Component {
 
     const text = label.replace(/\$#\$/g, formattedValue);
 
-    let POPUP_HEIGHT = 50;
+    let POPUP_HEIGHT = 55;
+
 
     if (text.length >= 40) POPUP_HEIGHT = 75;
     if (text.length >= 65) POPUP_HEIGHT = 90;
