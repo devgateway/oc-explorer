@@ -126,7 +126,10 @@ class Suppliers extends CRDPage {
         ]))
       });
     });
-    this.props.requestNewData(path, newData);
+    this.props.requestNewData(
+      path,
+      newData.set('count', newData.getIn(['count', 0, 'count'], 0))
+    );
   }
 
   render() {
@@ -144,7 +147,7 @@ class Suppliers extends CRDPage {
         topSearchPlaceholder={this.t('crd:suppliers:top-search')}
         List={SList}
         dataEP="suppliersByFlags"
-        countEP="ocds/organization/supplier/count"
+        countEP="suppliersByFlags/count"
       />
     );
   }
