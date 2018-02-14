@@ -12,7 +12,9 @@ class NrOfContractsWithPE extends CenterTextDonut {
       <div>
         {data.get('thisPE')}
         <div className="secondary">
-          of {data.get('total')}
+          {this.t('crd:contract:nrContractWithPE:of')}
+          &nbsp;
+          {data.get('total')}
         </div>
       </div>
     );

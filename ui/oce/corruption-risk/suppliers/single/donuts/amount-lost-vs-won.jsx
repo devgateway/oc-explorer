@@ -2,7 +2,7 @@ import { pluck } from '../../../../tools';
 import Donut from '../../../donut';
 import translatable from '../../../../translatable';
 
-class CenterText extends React.PureComponent {
+class CenterText extends translatable(React.PureComponent) {
   format(number) {
     const formatted = this.props.styling.charts.hoverFormatter(number) || '';
     return [
@@ -19,7 +19,7 @@ class CenterText extends React.PureComponent {
         <div>
           ${this.format(fst)}
           <div className="secondary">
-            ${this.format(snd)} Lost
+            ${this.format(snd)} {this.t('crd:supplier:amountLostVsWon:Lost')}
           </div>
         </div>
       </div>

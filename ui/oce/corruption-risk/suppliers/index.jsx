@@ -114,7 +114,6 @@ class Suppliers extends CRDPage {
   }
 
   onNewDataRequested(path, newData) {
-    console.log(newData.toJS());
     const supplierIds = newData.get('data').map(pluckImm('supplierId'));
     this.setState({ winLossFlagInfo: Map() });
     fetchEP(new URI('/api/procurementsWonLost').addSearch({
