@@ -21,6 +21,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.util.Assert;
@@ -62,30 +63,36 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @Cacheable
 public class AwardsWonLostController extends GenericOCDSController {
 
+    protected List<AggregationOperation> suppliersByFlagsGroupPart(final YearFilterPagingRequest filter) {
+        List<AggregationOperation> part = new ArrayList<>();
+        part.add(match(getYearDefaultFilterCriteria(filter, TENDER_PERIOD_START_DATE)
+                .and(FLAGS_TOTAL_FLAGGED).gt(0)));
+        part.add(unwind("awards"));
+        part.add(unwind("awards.suppliers"));
+        part.add(match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
+                .andOperator(getYearDefaultFilterCriteria(
+                        filter.awardFiltering(),
+                        TENDER_PERIOD_START_DATE
+                ))));
+        part.add(group(Fields.from(
+                Fields.field("supplierId", AWARDS_SUPPLIERS_ID),
+                Fields.field("supplierName", AWARDS_SUPPLIERS_NAME))).sum(FLAGS_TOTAL_FLAGGED)
+                .as("countFlags")
+        );
+        return part;
+    }
+
+
     @ApiOperation(value = "Suppliers ordered by countFlags>0, descending")
     @RequestMapping(value = "/api/suppliersByFlags",
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
     public List<DBObject> suppliersByFlags(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
-        Aggregation agg = newAggregation(
-                match(getYearDefaultFilterCriteria(filter, TENDER_PERIOD_START_DATE)
-                        .and(FLAGS_TOTAL_FLAGGED).gt(0)),
-                unwind("awards"),
-                unwind("awards.suppliers"),
-                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
-                        .andOperator(getYearDefaultFilterCriteria(
-                                filter.awardFiltering(),
-                                TENDER_PERIOD_START_DATE
-                        ))),
-                group(Fields.from(
-                        Fields.field("supplierId", AWARDS_SUPPLIERS_ID),
-                        Fields.field("supplierName", AWARDS_SUPPLIERS_NAME))).sum(FLAGS_TOTAL_FLAGGED)
-                        .as("countFlags"),
-                sort(Sort.Direction.DESC, "countFlags"),
-                skip(filter.getSkip()),
-                limit(filter.getPageSize())
-        );
-        return releaseAgg(agg);
+        List<AggregationOperation> part = suppliersByFlagsGroupPart(filter);
+        part.add(sort(Sort.Direction.DESC, "countFlags"));
+        part.add(skip(filter.getSkip()));
+        part.add(limit(filter.getPageSize()));
+        return releaseAgg(newAggregation(part));
     }
 
     @ApiOperation(value = "Counts Suppliers ordered by countFlags>0, descending")
@@ -93,20 +100,10 @@ public class AwardsWonLostController extends GenericOCDSController {
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
     public List<DBObject> suppliersByFlagsCount(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
-        Aggregation agg = newAggregation(
-                match(getYearDefaultFilterCriteria(filter, TENDER_PERIOD_START_DATE)
-                        .and(FLAGS_TOTAL_FLAGGED).gt(0)),
-                unwind("awards"),
-                unwind("awards.suppliers"),
-                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
-                        .andOperator(getYearDefaultFilterCriteria(
-                                filter.awardFiltering(),
-                                TENDER_PERIOD_START_DATE
-                        ))),
-                group().count().as("count"),
-                project("count").andExclude(Fields.UNDERSCORE_ID)
-        );
-        return releaseAgg(agg);
+        List<AggregationOperation> part = suppliersByFlagsGroupPart(filter);
+        part.add(group().count().as("count"));
+        part.add(project("count").andExclude(Fields.UNDERSCORE_ID));
+        return releaseAgg(newAggregation(part));
     }
 
     @ApiOperation(value = "Counts the won, lost procurements, flags and amounts. Receives any filters, "
