@@ -88,6 +88,27 @@ public class AwardsWonLostController extends GenericOCDSController {
         return releaseAgg(agg);
     }
 
+    @ApiOperation(value = "Counts Suppliers ordered by countFlags>0, descending")
+    @RequestMapping(value = "/api/suppliersByFlags/count",
+            method = {RequestMethod.POST, RequestMethod.GET},
+            produces = "application/json")
+    public List<DBObject> suppliersByFlagsCount(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+        Aggregation agg = newAggregation(
+                match(getYearDefaultFilterCriteria(filter, TENDER_PERIOD_START_DATE)
+                        .and(FLAGS_TOTAL_FLAGGED).gt(0)),
+                unwind("awards"),
+                unwind("awards.suppliers"),
+                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
+                        .andOperator(getYearDefaultFilterCriteria(
+                                filter.awardFiltering(),
+                                TENDER_PERIOD_START_DATE
+                        ))),
+                group().count().as("count"),
+                project("count").andExclude(Fields.UNDERSCORE_ID)
+        );
+        return releaseAgg(agg);
+    }
+
     @ApiOperation(value = "Counts the won, lost procurements, flags and amounts. Receives any filters, "
             + "but most important here is the supplierId and bidderId. Requires bid extension. Use bidderId instead "
             + "of supplierId.")
