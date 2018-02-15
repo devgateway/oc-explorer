@@ -131,7 +131,7 @@ class IndividualIndicatorPage extends translatable(CRDPage) {
     const { corruptionType, indicator, translations, filters, years, monthly, months, width
       , styling, navigate } = this.props;
     return (
-      <div className="page-corruption-type">
+      <div className="page-individual-indicator">
         <h2 className="page-header">{this.t(`crd:indicators:${indicator}:name`)}</h2>
         <p className="definition">
           <strong>{this.t('crd:indicators:general:indicator')}</strong>

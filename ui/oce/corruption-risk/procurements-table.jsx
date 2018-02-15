@@ -160,7 +160,10 @@ class ProcurementsTable extends PaginatedTable {
           {this.t('crd:procurementsTable:awardsAmount')}
         </TableHeaderColumn>
 
-        <TableHeaderColumn dataField="tenderDate">
+        <TableHeaderColumn
+          dataField="tenderDate"
+          columnClassName="tender-date"
+        >
           {this.t('crd:procurementsTable:tenderDate')}
         </TableHeaderColumn>
 
