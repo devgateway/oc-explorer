@@ -42,7 +42,9 @@ class CList extends PaginatedTable {
 
       const startDate = contract.getIn(['tender', 'tenderPeriod', 'startDate']);
 
-      const flagTypes = contract.getIn(['flags', 'flaggedStats'], List())
+      const flags = contract.get('flags');
+
+      const flagTypes = flags.get('laggedStats', List())
         .map(flagType => this.t(`crd:corruptionType:${flagType.get('type')}:name`))
         .join(', ') || 'N/A';
 
@@ -55,6 +57,7 @@ class CList extends PaginatedTable {
         awardAmount: getAwardAmount(contract),
         startDate: startDate ? new Date(startDate).toLocaleDateString() : 'N/A',
         flagTypes,
+        nrFlags: flags.get('totalFlagged'),
       };
     }).toJS();
 
@@ -113,6 +116,10 @@ class CList extends PaginatedTable {
 
         <TableHeaderColumn dataField="flagTypes">
           {this.t('crd:procurementsTable:flagType')}
+        </TableHeaderColumn>
+
+        <TableHeaderColumn dataField="nrFlags">
+          {this.t('crd:procurementsTable:noOfFlags')}
         </TableHeaderColumn>
       </BootstrapTable>
     );
