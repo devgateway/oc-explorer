@@ -29,10 +29,14 @@ public final class MongoConstants {
         public static final String AWARDS_SUPPLIERS_ID = "awards.suppliers._id";
         public static final String AWARDS_SUPPLIERS_NAME = "awards.suppliers.name";
         public static final String AWARDS_VALUE_AMOUNT = "awards.value.amount";
+        public static final String AWARDS_VALUE = "awards.value";
         public static final String TENDER_PERIOD_START_DATE = "tender.tenderPeriod.startDate";
         public static final String TENDER_PROCURING_ENTITY_ID = "tender.procuringEntity._id";
         public static final String TENDER_PROCURING_ENTITY_NAME = "tender.procuringEntity.name";
+        public static final String TENDER_PERIOD = "tender.tenderPeriod";
+        public static final String TENDER_TITLE = "tender.title";
         public static final String TENDER_PERIOD_END_DATE = "tender.tenderPeriod.endDate";
+        public static final String TENDER_VALUE = "tender.value";
         public static final String TENDER_VALUE_AMOUNT = "tender.value.amount";
         public static final String TENDER_NO_TENDERERS = "tender.numberOfTenderers";
         public static final String TENDER_PROC_METHOD = "tender.procurementMethod";
@@ -41,6 +45,7 @@ public final class MongoConstants {
         public static final String BIDS_DETAILS_TENDERERS_ID = "bids.details.tenderers._id";
         public static final String BIDS_DETAILS_VALUE_AMOUNT = "bids.details.value.amount";
         public static final String FLAGS_TOTAL_FLAGGED = "flags.totalFlagged";
+        public static final String FLAGS_COUNT = "flags.flaggedStats.count";
     }
 
     public static final class Filters {
