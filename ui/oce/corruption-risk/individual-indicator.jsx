@@ -143,7 +143,7 @@ class IndividualIndicatorPage extends translatable(CRDPage) {
     const { chart, table } = this.state;
     const { corruptionType, indicator, translations, filters, years, monthly, months, width
       , styling, navigate } = this.props;
-    console.log(table && table.toJS());
+
     return (
       <div className="page-individual-indicator">
         <h2 className="page-header">{this.t(`crd:indicators:${indicator}:name`)}</h2>

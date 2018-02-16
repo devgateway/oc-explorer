@@ -102,7 +102,10 @@ class ProcurementsTable extends PaginatedTable {
           .keySeq();
 
       return {
-        status: contract.getIn(['tender', 'status'], 'N/A'),
+        status: contract.getIn(
+          ['tender', 'status'],
+          contract.get('status', 'N/A')
+        ),
         id: contract.get('ocid'),
         title: contract.get('title', 'N/A'),
         PEName: contract.getIn(['procuringEntity', 'name'], 'N/A'),
