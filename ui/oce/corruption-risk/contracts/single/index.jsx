@@ -27,7 +27,11 @@ class CrosstabExplanation extends translatable(React.PureComponent) {
         {template.replace('$#$', data)
           .replace('$#$', (data / totalContracts * 100).toFixed(2))
           .replace('$#$', nrFlags)
-          .replace('$#$', this.t(`crd:corruptionType:${corruptionType}:name`))}
+          .replace(
+            '$#$',
+            this.t(`crd:corruptionType:${corruptionType}:name`)
+                .toLowerCase()
+          )}
       </p>
     );
   }
