@@ -6,6 +6,7 @@ import CRDPage from '../page';
 import { getAwardAmount, mkContractLink, wireProps, _3LineText } from '../tools';
 import PaginatedTable from '../paginated-table';
 import Archive from '../archive';
+import BackendDateFilterable from '../backend-date-filterable';
 
 class CList extends PaginatedTable {
   getCustomEP() {
@@ -123,17 +124,20 @@ export default class Contracts extends CRDPage {
   render() {
     const { searchQuery, doSearch, navigate } = this.props;
     return (
-      <Archive
+      <BackendDateFilterable
         {...wireProps(this)}
-        searchQuery={searchQuery}
-        doSearch={doSearch}
-        navigate={navigate}
-        className="contracts-page"
-        topSearchPlaceholder={this.t('crd:contracts:top-search')}
-        List={CList}
-        dataEP="flaggedRelease/all"
-        countEP="flaggedRelease/count"
-      />
+      >
+        <Archive
+          searchQuery={searchQuery}
+          doSearch={doSearch}
+          navigate={navigate}
+          className="contracts-page"
+          topSearchPlaceholder={this.t('crd:contracts:top-search')}
+          List={CList}
+          dataEP="flaggedRelease/all"
+          countEP="flaggedRelease/count"
+        />
+      </BackendDateFilterable>
     );
   }
 }
