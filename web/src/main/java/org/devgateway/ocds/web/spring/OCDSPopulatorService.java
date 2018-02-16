@@ -1,6 +1,5 @@
 package org.devgateway.ocds.web.spring;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.Classification;
 import org.devgateway.ocds.persistence.mongo.Identifiable;
@@ -19,6 +18,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 /**
@@ -28,6 +29,8 @@ import java.util.function.Consumer;
 @Service
 public class OCDSPopulatorService {
 
+    private ConcurrentHashMap<String, AtomicInteger> idxGen;
+
     protected static Logger logger = Logger.getLogger(OCDSPopulatorService.class);
     @Autowired
     private ReleaseRepository releaseRepository;
@@ -36,9 +39,9 @@ public class OCDSPopulatorService {
     @Autowired
     private ClassificationRepository classificationRepository;
 
-    private String getRandomTxt() {
-        return RandomStringUtils.randomAlphabetic(10, 15);
-    }
+    //private String getRandomTxt() {
+//        return RandomStringUtils.randomAlphabetic(10, 15);
+//    }
 
     public void logMessage(String message) {
         logger.info(message);
@@ -52,6 +55,7 @@ public class OCDSPopulatorService {
 
         logMessage.accept("<b>RANDOMIZE ORGS COMPLETED.</b>");
     }
+
 
     public void randomizeReleases(Consumer<String> logMessage) {
         logMessage.accept("<b>RANDOMIZE RELEASES.</b>");
@@ -72,22 +76,24 @@ public class OCDSPopulatorService {
     }
 
 
+
+
     public void randomizeOrganization(Organization o)  {
-        o.setName(getRandomTxt());
+        o.setName(getIdxName("Organization"));
         if (o.getAddress() != null) {
-            o.getAddress().setCountryName(getRandomTxt());
-            o.getAddress().setLocality(getRandomTxt());
-            o.getAddress().setPostalCode(getRandomTxt());
-            o.getAddress().setRegion(getRandomTxt());
-            o.getAddress().setStreetAddress(getRandomTxt());
+            o.getAddress().setCountryName(getIdxName("Country"));
+            o.getAddress().setLocality(getIdxName("Locality"));
+            o.getAddress().setPostalCode(getIdxName("Postal Code"));
+            o.getAddress().setRegion(getIdxName("Region"));
+            o.getAddress().setStreetAddress(getIdxName("Street"));
         }
         if (o.getContactPoint() != null) {
-            o.getContactPoint().setEmail(getRandomTxt());
-            o.getContactPoint().setFaxNumber(getRandomTxt());
-            o.getContactPoint().setName(getRandomTxt());
-            o.getContactPoint().setTelephone(getRandomTxt());
+            o.getContactPoint().setEmail("sample@sample.abc");
+            o.getContactPoint().setFaxNumber("Fax");
+            o.getContactPoint().setName(getIdxName("Contact"));
+            o.getContactPoint().setTelephone("Phone");
             try {
-                o.getContactPoint().setUrl(new URI(getRandomTxt()));
+                o.getContactPoint().setUrl(new URI("http://sample.abc"));
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
@@ -96,7 +102,7 @@ public class OCDSPopulatorService {
     }
 
     public void randomizeClassification(Classification c) {
-        c.setDescription(getRandomTxt());
+        c.setDescription(getIdxName("Classification"));
         classificationRepository.save(c);
     }
 
@@ -133,16 +139,16 @@ public class OCDSPopulatorService {
                     replaceEntitiesWithSavedEntities(award.getSuppliers(),
                             organizationRepository);
                 }
-                award.setDescription(getRandomTxt());
-                award.setTitle(getRandomTxt());
+                award.setDescription(getIdxName("Award Description"));
+                award.setTitle(getIdxName("Award Title"));
             });
             if (r.getBuyer() != null) {
                 r.setBuyer(getSavedEntityFromEntity(r.getBuyer(), organizationRepository));
             }
 
             if (r.getPlanning() != null && r.getPlanning().getBudget() != null) {
-                r.getPlanning().getBudget().setProject(getRandomTxt());
-                r.getPlanning().getBudget().setProjectID(getRandomTxt());
+                r.getPlanning().getBudget().setProject(getIdxName("Project"));
+                r.getPlanning().getBudget().setProjectID(getIdxName("Project ID"));
             }
 
             if (r.getTender() != null) {
@@ -153,7 +159,7 @@ public class OCDSPopulatorService {
 
                 if (r.getTender().getItems() != null) {
                     r.getTender().getItems().forEach(i -> {
-                        i.setDescription(getRandomTxt());
+                        i.setDescription(getIdxName("Tender Item Description"));
                         if (i.getClassification() != null) {
                             i.setClassification(getSavedEntityFromEntity(i.getClassification(),
                                     classificationRepository));
@@ -161,16 +167,22 @@ public class OCDSPopulatorService {
                     });
                 }
             }
-
-
         }
         releaseRepository.save(r);
-
     }
 
 
-//    @PostConstruct
+    public String getIdxName(String category) {
+        if (!idxGen.containsKey(category)) {
+            idxGen.put(category, new AtomicInteger());
+        }
+        return category + " " + idxGen.get(category).incrementAndGet();
+    }
+
+    //@PostConstruct
 //    public void setProcessors() {
+//        idxGen = new ConcurrentHashMap<>();
+//
 //        randomizeOrganizations(this::logMessage);
 //        randomizeClassifications(this::logMessage);
 //        randomizeReleases(this::logMessage);
