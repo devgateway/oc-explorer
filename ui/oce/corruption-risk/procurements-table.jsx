@@ -102,7 +102,10 @@ class ProcurementsTable extends PaginatedTable {
           .keySeq();
 
       return {
-        status: contract.getIn(['tender', 'status'], 'N/A'),
+        status: contract.getIn(
+          ['tender', 'status'],
+          contract.get('status', 'N/A')
+        ),
         id: contract.get('ocid'),
         title: contract.get('title', 'N/A'),
         PEName: contract.getIn(['procuringEntity', 'name'], 'N/A'),
@@ -160,7 +163,10 @@ class ProcurementsTable extends PaginatedTable {
           {this.t('crd:procurementsTable:awardsAmount')}
         </TableHeaderColumn>
 
-        <TableHeaderColumn dataField="tenderDate">
+        <TableHeaderColumn
+          dataField="tenderDate"
+          columnClassName="tender-date"
+        >
           {this.t('crd:procurementsTable:tenderDate')}
         </TableHeaderColumn>
 

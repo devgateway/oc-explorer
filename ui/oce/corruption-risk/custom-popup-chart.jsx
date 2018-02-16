@@ -22,27 +22,32 @@ class CustomPopupChart extends Chart {
     chartContainer.on('plotly_unhover', () => this.hidePopup());
   }
 
+  getPopupWidth() {
+    return POPUP_WIDTH;
+  }
+
   showPopup(data) {
     const point = data.points[0];
     const year = point.x;
     const traceName = point.data.name;
     const traceIndex = point.fullData.index;
     const POPUP_ARROW_SIZE = 8;
+    const popupWidth = this.getPopupWidth();
 
     const { xaxis, yaxis } = point;
     const markerLeft = xaxis.l2p(xaxis._categories.indexOf(point.x)) + xaxis._offset;
     const markerTop = yaxis.l2p(point.y) + yaxis._offset;
     const { left: parentLeft } = this.chartContainer.getBoundingClientRect();
-    const toTheLeft = (markerLeft + parentLeft + POPUP_WIDTH) >= window.innerWidth;
+    const toTheLeft = (markerLeft + parentLeft + popupWidth) >= window.innerWidth;
     let top;
     let left;
 
     if (toTheLeft) {
       top = markerTop - (POPUP_HEIGHT / 2);
-      left = markerLeft - POPUP_WIDTH - (POPUP_ARROW_SIZE * 1.5);
+      left = markerLeft - popupWidth - (POPUP_ARROW_SIZE * 1.5);
     } else {
       top = markerTop - POPUP_HEIGHT - (POPUP_ARROW_SIZE * 1.5);
-      left = markerLeft - (POPUP_WIDTH / 2);
+      left = markerLeft - (popupWidth / 2);
     }
 
     this.setState({

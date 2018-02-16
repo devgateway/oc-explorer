@@ -81,6 +81,13 @@ class IndividualIndicatorChart extends CustomPopupChart {
     };
   }
 
+  getPopupWidth() {
+    const label = this.t('crd:indicatorPage:individualIndicatorChart:popup:percentEligible');
+    return label.length > 23 ?
+      500:
+      350;
+  }
+
   getPopup() {
     const { monthly } = this.props;
     const { popup } = this.state;
@@ -97,7 +104,11 @@ class IndividualIndicatorChart extends CustomPopupChart {
       datum = data.find(datum => datum.get('year') === year);
     }
     return (
-      <div className="crd-popup" style={{ top: popup.top, left: popup.left }}>
+      <div className="crd-popup" style={{
+        top: popup.top,
+        left: popup.left,
+        width: this.getPopupWidth()
+      }}>
         <div className="row">
           <div className="col-sm-12 info text-center">
             {year}
@@ -111,7 +122,9 @@ class IndividualIndicatorChart extends CustomPopupChart {
           <div className="col-sm-4 text-left info">{datum.get('totalPrecondMet')}</div>
           <div className="col-sm-8 text-right title">{this.t('crd:indicatorPage:individualIndicatorChart:popup:percentOfEligibleFlagged')}</div>
           <div className="col-sm-4 text-left info">{datum.get('percentTruePrecondMet').toFixed(2)} %</div>
-          <div className="col-sm-8 text-right title">{this.t('crd:indicatorPage:individualIndicatorChart:popup:percentEligible')}</div>
+          <div className="col-sm-8 text-right title">
+            {this.t('crd:indicatorPage:individualIndicatorChart:popup:percentEligible')}
+          </div>
           <div className="col-sm-4 text-left info">{datum.get('percentPrecondMet').toFixed(2)} %</div>
         </div>
         <div className="arrow" />
@@ -130,8 +143,9 @@ class IndividualIndicatorPage extends translatable(CRDPage) {
     const { chart, table } = this.state;
     const { corruptionType, indicator, translations, filters, years, monthly, months, width
       , styling, navigate } = this.props;
+
     return (
-      <div className="page-corruption-type">
+      <div className="page-individual-indicator">
         <h2 className="page-header">{this.t(`crd:indicators:${indicator}:name`)}</h2>
         <p className="definition">
           <strong>{this.t('crd:indicators:general:indicator')}</strong>
