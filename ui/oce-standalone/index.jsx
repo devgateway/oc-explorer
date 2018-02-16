@@ -101,6 +101,21 @@ class OCEChild extends OCApp {
     );
   }
 
+  languageSwitcher() {
+    const { TRANSLATIONS } = this.constructor;
+    const { locale: selectedLocale } = this.state;
+    if (Object.keys(TRANSLATIONS).length <= 1) return null;
+    return Object.keys(TRANSLATIONS).map(locale => (
+      <a
+        href="javascript:void(0);"
+        onClick={() => this.setLocale(locale)}
+        className={cn({ active: locale === selectedLocale })}
+      >
+        {locale.split('_')[0]}
+      </a>
+    ));
+  }
+
   navigationLink(Tab, index){
     if (OverviewTab !== Tab) return super.navigationLink(Tab, index);
     const { getName, icon } = Tab;
