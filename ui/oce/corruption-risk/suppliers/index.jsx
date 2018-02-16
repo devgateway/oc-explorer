@@ -81,11 +81,11 @@ class SList extends PaginatedTable {
         <TableHeaderColumn dataField="wins">
           {this.t('crd:suppliers:wins')}
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="winAmount">
-          {this.t('crd:suppliers:totalWon')}
-        </TableHeaderColumn>
         <TableHeaderColumn dataField="losses">
           {this.t('crd:suppliers:losses')}
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField="winAmount">
+          {this.t('crd:suppliers:totalWon')}
         </TableHeaderColumn>
         <TableHeaderColumn dataField='flags'>
           {this.t('crd:suppliers:nrFlags')}
@@ -139,11 +139,10 @@ class Suppliers extends CRDPage {
     return (
       <BackendDateFilterable
         {...wireProps(this)}
+        data={this.injectWinLossData(data, winLossFlagInfo)}
+        requestNewData={this.onNewDataRequested.bind(this)}
       >
         <Archive
-          {...wireProps(this)}
-          data={this.injectWinLossData(data, winLossFlagInfo)}
-          requestNewData={this.onNewDataRequested.bind(this)}
           searchQuery={searchQuery}
           doSearch={doSearch}
           navigate={navigate}
