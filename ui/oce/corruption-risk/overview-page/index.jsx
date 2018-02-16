@@ -36,6 +36,15 @@ class CorruptionType extends CustomPopupChart {
     if (!data) return [];
     const { styling, months, monthly, years } = this.props;
     const grouped = this.groupData(data);
+
+    const commonYears = new Set();
+
+    if (!monthly) {
+      Object.values(grouped).forEach(corruptionType =>
+        Object.keys(corruptionType).forEach(year => commonYears.add(year))
+      );
+    }
+
     return Object.keys(grouped).map((type, index) => {
       const dataForType = grouped[type];
       let values = [];
@@ -50,7 +59,7 @@ class CorruptionType extends CustomPopupChart {
         dates = years.sort().toArray();
         values = dates.map(year => (dataForType[year] ? dataForType[year].flaggedCount : 0));
       } else {
-        dates = Object.keys(dataForType).sort();
+        dates = Array.from(commonYears).sort();
         values = dates.map(year => dataForType[year] ? dataForType[year].flaggedCount : 0);
       }
 
