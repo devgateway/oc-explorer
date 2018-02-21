@@ -4,6 +4,7 @@ import { wireProps } from '../../../tools';
 import { pluck, cacheFn } from '../../../../tools';
 import translatable from '../../../../translatable';
 import CustomPopup from '../../../custom-popup';
+import BackendDateFilterable from '../../../backend-date-filterable';
 
 const POPUP_WIDTH = 350;
 const POPUP_HEIGHT = 55;
@@ -102,17 +103,20 @@ class FlaggedNrWrapper extends translatable(React.PureComponent) {
     if (!requestNewData) return null;
     const endpoints = this.getEndpoints(indicatorTypesMapping);
     return (
-      <DataFetcher
+      <BackendDateFilterable
         {...this.props}
         requestNewData={this.onRequestNewData.bind(this)}
-        endpoints={endpoints}
       >
-        <CustomPopup
-          {...this.props}
-          Chart={FlaggedNr}
-          Popup={Popup}
-        />
-      </DataFetcher>
+        <DataFetcher
+          endpoints={endpoints}
+        >
+          <CustomPopup
+            {...this.props}
+            Chart={FlaggedNr}
+            Popup={Popup}
+          />
+        </DataFetcher>
+      </BackendDateFilterable>
     )
   }
 }

@@ -14,6 +14,7 @@ import WinsAndLosses from './bars/wins-and-losses';
 import Crosstab from '../../clickable-crosstab';
 import { CORRUPTION_TYPES } from '../../constants';
 import FlaggedNr from './bars/flagged-nr';
+import BackendDateFilterable from '../../backend-date-filterable';
 
 const TitleBelow = ({ title, children, filters, ...props }) => (
   <div>
@@ -267,10 +268,13 @@ class Supplier extends CRDPage {
           doSearch={doSearch}
           placeholder={this.t('crd:suppliers:top-search')}
         />
-        <Info
+        <BackendDateFilterable
           {...wireProps(this, 'info')}
-          id={id}
-        />
+        >
+          <Info
+            id={id}
+          />
+        </BackendDateFilterable>
 
         {totalFlags === 0 && <section className="flag-analysis">
           <h2>{this.t('crd:contracts:flagAnalysis')}</h2>

@@ -32,7 +32,6 @@ class BackendDateFilterable extends React.PureComponent {
     delete decoratedProps.years;
     delete decoratedProps.months;
     delete decoratedProps.monthly;
-    const { years } = this.props;
     return cloneChild(this, decoratedProps);
   }
 }

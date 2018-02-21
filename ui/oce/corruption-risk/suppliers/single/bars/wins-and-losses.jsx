@@ -5,6 +5,7 @@ import { wireProps } from '../../../tools';
 import { pluck } from '../../../../tools';
 import CustomPopup from '../../../custom-popup';
 import translatable from '../../../../translatable';
+import BackendDateFilterable from '../../../backend-date-filterable';
 
 const POPUP_ARROW_SIZE = 8;
 
@@ -121,6 +122,7 @@ class WinsBarChart extends React.PureComponent {
 
 class WinsBarChartWrapper extends React.PureComponent {
   onRequestNewData(path, data) {
+    if (!data) return;
     const names = data.map(pluck('procuringEntityName'));
     this.props.requestNewData(path, [{
       x: data.map(pluck('count')),
@@ -150,17 +152,20 @@ class WinsBarChartWrapper extends React.PureComponent {
     if (!requestNewData) return null;
 
     return (
-      <DataFetcher
+      <BackendDateFilterable
         {...this.props}
-        endpoint="supplierWinsPerProcuringEntity"
         requestNewData={this.onRequestNewData.bind(this)}
       >
-        <CustomPopup
-          {...this.props}
-          Chart={WinsBarChart}
-          Popup={Popup}
-        />
-      </DataFetcher>
+        <DataFetcher
+          endpoint="supplierWinsPerProcuringEntity"
+        >
+          <CustomPopup
+            {...this.props}
+            Chart={WinsBarChart}
+            Popup={Popup}
+          />
+        </DataFetcher>
+      </BackendDateFilterable>
     );
   }
 }
