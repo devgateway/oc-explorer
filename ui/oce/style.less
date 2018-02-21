@@ -47,24 +47,45 @@
 }
 
 .dashboard-default .dash-switcher-wrapper{
-    cursor: pointer;
-    .glyphicon{
-        font-size: .33em;
-        margin-left: 20px;
-        top: -5px;
+  cursor: pointer;
+  .glyphicon{
+    font-size: .33em;
+    margin-left: 20px;
+    top: -5px;
+  }
+  .dashboard-switcher{
+    background: #cc3c3b;
+    font-weight: 500;
+    padding: 5px;
+    border-top: 1px dotted white;
+    a{
+      color: white;
     }
-    .dashboard-switcher{
-        background: #cc3c3b;
-        font-weight: 500;
-        padding: 5px;
-        border-top: 1px dotted white;
-        a{
-            color: white;
-        }
-    }
+  }
 }
 
 .filters a.export-link{
   text-decoration: none;
   color: white;
+}
+
+.language-switcher{
+  a{
+    text-decoration: none!important;
+    font-weight: bolder;
+    display: block;
+    margin-right: 5px;
+    font-size: 1.5em;
+    padding: 0 5px;
+    border: 1px solid transparent;
+    &.active {
+      border: 1px solid;
+    }
+  }
+}
+
+.dashboard-default {
+  a {
+    color: white;
+  }
 }

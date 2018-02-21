@@ -17,7 +17,7 @@ import DataFetcher from '../../data-fetcher';
 
 class CrosstabExplanation extends translatable(React.PureComponent) {
   render() {
-    const { data, totalContracts, nrFlags } = this.props;
+    const { data, totalContracts, nrFlags, corruptionType } = this.props;
     const template = nrFlags === 1 ?
       this.t('crd:contracts:crosstab:explanation:sg') :
       this.t('crd:contracts:crosstab:explanation:pl');
@@ -26,7 +26,12 @@ class CrosstabExplanation extends translatable(React.PureComponent) {
       <p>
         {template.replace('$#$', data)
           .replace('$#$', (data / totalContracts * 100).toFixed(2))
-          .replace('$#$', nrFlags)}
+          .replace('$#$', nrFlags)
+          .replace(
+            '$#$',
+            this.t(`crd:corruptionType:${corruptionType}:name`)
+                .toLowerCase()
+          )}
       </p>
     );
   }
@@ -240,6 +245,7 @@ export default class Contract extends CRDPage {
                    totalContracts={totalContracts}
                    nrFlags={nrFlags}
                    translations={translations}
+                   corruptionType={corruptionType}
                  />
                </DataFetcher>
                <Crosstab

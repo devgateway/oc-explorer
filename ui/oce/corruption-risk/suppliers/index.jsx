@@ -6,6 +6,7 @@ import PaginatedTable from '../paginated-table';
 import Archive from '../archive';
 import { wireProps } from '../tools';
 import { fetchEP, pluckImm, cacheFn } from '../../tools';
+import BackendDateFilterable from '../backend-date-filterable';
 
 export const mkLink = navigate => (content, { id }) => (
   <a
@@ -80,11 +81,11 @@ class SList extends PaginatedTable {
         <TableHeaderColumn dataField="wins">
           {this.t('crd:suppliers:wins')}
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="winAmount">
-          {this.t('crd:suppliers:totalWon')}
-        </TableHeaderColumn>
         <TableHeaderColumn dataField="losses">
           {this.t('crd:suppliers:losses')}
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField="winAmount">
+          {this.t('crd:suppliers:totalWon')}
         </TableHeaderColumn>
         <TableHeaderColumn dataField='flags'>
           {this.t('crd:suppliers:nrFlags')}
@@ -136,19 +137,22 @@ class Suppliers extends CRDPage {
     const { navigate, searchQuery, doSearch, data } = this.props;
     const { winLossFlagInfo } = this.state;
     return (
-      <Archive
+      <BackendDateFilterable
         {...wireProps(this)}
         data={this.injectWinLossData(data, winLossFlagInfo)}
         requestNewData={this.onNewDataRequested.bind(this)}
-        searchQuery={searchQuery}
-        doSearch={doSearch}
-        navigate={navigate}
-        className="suppliers-page"
-        topSearchPlaceholder={this.t('crd:suppliers:top-search')}
-        List={SList}
-        dataEP="suppliersByFlags"
-        countEP="suppliersByFlags/count"
-      />
+      >
+        <Archive
+          searchQuery={searchQuery}
+          doSearch={doSearch}
+          navigate={navigate}
+          className="suppliers-page"
+          topSearchPlaceholder={this.t('crd:suppliers:top-search')}
+          List={SList}
+          dataEP="suppliersByFlags"
+          countEP="suppliersByFlags/count"
+        />
+      </BackendDateFilterable>
     );
   }
 }
