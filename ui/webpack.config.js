@@ -6,7 +6,8 @@ delete config.output.publicPath;
 delete config.devtool;
 config.plugins = config.plugins.filter(function(plugin){
   return !(plugin instanceof webpack.HotModuleReplacementPlugin) &&
-    !(plugin instanceof webpack.DllReferencePlugin);
+    !(plugin instanceof webpack.DllReferencePlugin) &&
+    !(plugin instanceof webpack.DefinePlugin);
 }).concat([
   new webpack.DefinePlugin({
     "process.env": {
