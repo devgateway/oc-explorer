@@ -17,7 +17,7 @@ public final class MongoUtil {
 
     }
 
-    public static final int BATCH_SIZE = 5000;
+    public static final int BATCH_SIZE = 10000;
 
 
     public static <T, ID extends Serializable> void processRepositoryItemsPaginated(MongoRepository<T, ID> repository,
