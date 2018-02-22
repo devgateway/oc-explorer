@@ -15,6 +15,7 @@ import Crosstab from '../../clickable-crosstab';
 import { CORRUPTION_TYPES } from '../../constants';
 import FlaggedNr from './bars/flagged-nr';
 import BackendDateFilterable from '../../backend-date-filterable';
+import State from '../../../state/oce-state';
 
 const TitleBelow = ({ title, children, filters, ...props }) => (
   <div>
@@ -191,6 +192,18 @@ class Supplier extends CRDPage {
       }
       return result;
     });
+  }
+
+  componentDidMount(...args) {
+    super.componentDidMount(...args);
+    State.assign('supplierId', this.props.id);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { id } = this.props;
+    if (id != nextProps.id) {
+      State.assign('supplierId', id);
+    }
   }
 
   maybeGetFlagAnalysis() {
