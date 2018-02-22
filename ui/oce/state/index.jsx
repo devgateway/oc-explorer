@@ -1,6 +1,12 @@
 const NOTHING = Symbol();
 const pluck = field => obj => obj[field];
 
+function consolify(data) {
+  if (data.toJS) return data.toJS();
+  if (typeof data === 'object') return data;
+  return '';
+}
+
 class Node {
   constructor({ name }) {
     this.name = name;
@@ -17,9 +23,21 @@ class Node {
   }
 
   assign(newState) {
+    if (typeof newState === 'undefined') {
+      console.log(`${this.name} refuses to update to 'undefined'`);
+      return;
+    }
+    if( this.state === newState) {
+      console.log(`${this.name} did not update because new state(${newState}) is the same as the old one`, newState);
+      return;
+    }
+
     this.state = newState;
     this.version++;
-    console.log(`${this.name} has updated to ${this.state} version ${this.version}`);
+    console.log(
+      `${this.name} has updated to ${this.state} version ${this.version}`,
+      consolify(this.state)
+    );
     this.listeners.forEach(setTimeout);
   }
 }
@@ -27,7 +45,7 @@ class Node {
 class Variable extends Node {
   constructor({ name, initial }) {
     super({ name });
-    if (initial !== NOTHING) {
+    if (typeof initial !== 'undefined' && initial !== NOTHING) {
       this.assign(initial);
     }
   } 
@@ -44,6 +62,14 @@ class Mapping extends Node {
   assign() { throw `Nope, can't assign to mapping ${this.name} directly`; }
 
   doMapping() {
+    const unitialized = this.deps.filter(dep => dep.state === NOTHING);
+    if (unitialized.length) {
+      const names = unitialized.map(pluck('name')).join(', ');
+      console.log(
+        `${this.name} skipped update because ${names} ${unitialized.length > 1 ? 'are' : 'is'} uninitialized`
+      );
+      return
+    }
     super.assign(
       this.mapper(...this.deps.map(pluck('state')))
     );
