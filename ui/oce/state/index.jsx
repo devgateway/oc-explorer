@@ -1,4 +1,5 @@
 import URI from 'urijs';
+import debug from 'debug';
 import { fetchEP } from '../tools';
 
 const NOTHING = Symbol();
@@ -11,11 +12,12 @@ function consolify(data) {
 }
 
 class Node {
-  constructor({ name }) {
+  constructor({ name, log }) {
     this.name = name;
     this.listeners = [];
     this.state = NOTHING;
     this.version = 0;
+    this.log = log;
   }
 
   subscribe(listener) {
@@ -27,27 +29,24 @@ class Node {
 
   assign(newState) {
     if (typeof newState === 'undefined') {
-      console.log(`${this.name} refuses to update to 'undefined'`);
+      this.log(`refusing to update to 'undefined'`);
       return;
     }
     if( this.state === newState) {
-      console.log(`${this.name} did not update because new state(${newState}) is the same as the old one`, newState);
+      this.log(`did not update because new state(${newState}) is the same as the old one`, newState);
       return;
     }
 
     this.state = newState;
     this.version++;
-    console.log(
-      `${this.name} has updated to ${this.state} version ${this.version}`,
-      consolify(this.state)
-    );
+    this.log(`Updated to version ${this.version}, state:`, consolify(this.state));
     this.listeners.forEach(setTimeout);
   }
 }
 
 class Variable extends Node {
-  constructor({ name, initial }) {
-    super({ name });
+  constructor({ name, initial, ...opts }) {
+    super({ name, ...opts });
     if (typeof initial !== 'undefined' && initial !== NOTHING) {
       this.assign(initial);
     }
@@ -55,8 +54,8 @@ class Variable extends Node {
 }
 
 class Mapping extends Node {
-  constructor({ name, deps, mapper }) {
-    super({ name });
+  constructor({ name, deps, mapper, ...opts }) {
+    super({ name, ...opts });
     this.mapper = mapper;
     this.deps = deps;
     this.deps.forEach(dep => dep.subscribe(this.doMapping.bind(this)));
@@ -66,8 +65,8 @@ class Mapping extends Node {
     const unitialized = this.deps.filter(dep => dep.state === NOTHING);
     if (unitialized.length) {
       const names = unitialized.map(pluck('name')).join(', ');
-      console.log(
-        `${this.name} skipped update because ${names} ${unitialized.length > 1 ? 'are' : 'is'} uninitialized`
+      this.log(
+        `skipped update because ${names} ${unitialized.length > 1 ? 'are' : 'is'} uninitialized`
       );
       return false;
     }
@@ -93,7 +92,7 @@ class Endpoint extends Mapping {
   doMapping() {
     if (!this.depsOK()) return;
     const url = new URI(this.deps[0].state);
-    console.log(`${this.name} has started a request to ${url}`);
+    this.log(`started a request to ${url}`);
     fetchEP(url).then(data => this.assign(data));
   }
 }
@@ -105,7 +104,10 @@ export default class State {
 
   input(opts) {
     const { name } = opts;
-    this.entities[name] = new Variable(opts);
+    this.entities[name] = new Variable({
+      log: debug(`oce:state:${name}`),
+      ...opts
+    })
   }
 
   assign(name, value) {
@@ -114,17 +116,20 @@ export default class State {
 
   map({ deps, ...opts }) {
     const { name } = opts;
+
     this.entities[name] = new Mapping({
+      log: debug(`oce:state:${name}`),
+      deps: deps.map(dep => this.entities[dep]),
       ...opts,
-      deps: deps.map(dep => this.entities[dep])
     });
   }
 
   endpoint({ url, ...opts }) {
     const { name } = opts;
     this.entities[name] = new Endpoint({
+      log: debug(`oce:state:${name}`),
+      url: this.entities[url],
       ...opts,
-      url: this.entities[url]
     });
   }
 }
