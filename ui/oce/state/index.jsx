@@ -1,3 +1,6 @@
+import URI from 'urijs';
+import { fetchEP } from '../tools';
+
 const NOTHING = Symbol();
 const pluck = field => obj => obj[field];
 
@@ -59,20 +62,39 @@ class Mapping extends Node {
     this.deps.forEach(dep => dep.subscribe(this.doMapping.bind(this)));
   }
 
-  assign() { throw `Nope, can't assign to mapping ${this.name} directly`; }
-
-  doMapping() {
+  depsOK() {
     const unitialized = this.deps.filter(dep => dep.state === NOTHING);
     if (unitialized.length) {
       const names = unitialized.map(pluck('name')).join(', ');
       console.log(
         `${this.name} skipped update because ${names} ${unitialized.length > 1 ? 'are' : 'is'} uninitialized`
       );
-      return
+      return false;
     }
-    super.assign(
+    return true;
+  }
+
+  doMapping() {
+    if (!this.depsOK()) return;
+    this.assign(
       this.mapper(...this.deps.map(pluck('state')))
     );
+  }
+}
+
+class Endpoint extends Mapping {
+  constructor({ url, ...opts }) {
+    super({
+      deps: [url],
+      ...opts
+    });
+  }
+
+  doMapping() {
+    if (!this.depsOK()) return;
+    const url = new URI(this.deps[0].state);
+    console.log(`${this.name} has started a request to ${url}`);
+    fetchEP(url).then(data => this.assign(data));
   }
 }
 
@@ -95,6 +117,14 @@ export default class State {
     this.entities[name] = new Mapping({
       ...opts,
       deps: deps.map(dep => this.entities[dep])
+    });
+  }
+
+  endpoint({ url, ...opts }) {
+    const { name } = opts;
+    this.entities[name] = new Endpoint({
+      ...opts,
+      url: this.entities[url]
     });
   }
 }
