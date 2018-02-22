@@ -94,8 +94,11 @@ public class OCDSPopulatorService {
 
     public void randomizeOrganization(Organization o) {
         o.setName(getIdxName("Organization"));
-        orgNameId.put(o.getId(), o.getName());
+        String oldId = o.getId();
+        orgNameId.put(oldId, o.getName());
         o.setId(o.getName());
+        o.getIdentifier().setId(o.getId());
+        o.getAdditionalIdentifiers().stream().filter(i -> i.getId().equals(oldId)).findFirst().get().setId(o.getId());
 
         if (o.getAddress() != null) {
             o.getAddress().setCountryName(getIdxName("Country"));
@@ -125,8 +128,8 @@ public class OCDSPopulatorService {
     }
 
     public <T extends Identifiable, ID extends Serializable> T getSavedOrgEntityFromEntity(T t,
-                                                                                        MongoRepository<T, ID>
-                                                                                                repository) {
+                                                                                           MongoRepository<T, ID>
+                                                                                                   repository) {
         T newOrg = repository.findOne((ID) orgNameId.get((String) t.getIdProperty()));
         if (newOrg == null) {
             throw new RuntimeException("An unidentified element was used inline");
@@ -135,8 +138,8 @@ public class OCDSPopulatorService {
     }
 
     public <T extends Identifiable, ID extends Serializable> T getSavedEntityFromEntity(T t,
-                                                                                           MongoRepository<T, ID>
-                                                                                                   repository) {
+                                                                                        MongoRepository<T, ID>
+                                                                                                repository) {
         T newOrg = repository.findOne((ID) t.getIdProperty());
         if (newOrg == null) {
             throw new RuntimeException("An unidentified element was used inline");
@@ -147,7 +150,7 @@ public class OCDSPopulatorService {
 
     public <T extends Identifiable, ID extends Serializable>
     void replaceOrgEntitiesWithSavedEntities(Collection<T> c,
-                                          MongoRepository<T, ID> repository) {
+                                             MongoRepository<T, ID> repository) {
         Iterator<T> i = c.iterator();
         while (i.hasNext()) {
             T o = i.next();
