@@ -26,6 +26,10 @@ class Node {
     }
   }
 
+  unsubscribe(name) {
+    delete this.listeners[name];
+  }
+
   assign(newState) {
     if (typeof newState === 'undefined') {
       this.log(`refusing to update to 'undefined'`);
@@ -139,6 +143,11 @@ export default class State {
 
   subscribe(name, sender, listener) {
     this.entities[name].subscribe(sender, listener);
+
+  }
+
+  unsubscribe(name, sender) {
+    this.entities[name].unsubscribe(sender);
   }
 
   getState(name) {
