@@ -45,14 +45,18 @@ class Popup extends translatable(React.Component) {
   }
 
   render() {
-    const { flaggedStats } = this.props;
+    const { flaggedStats, type } = this.props;
     const { showPopup } = this.state;
+    const count = flaggedStats.get(
+      'count',
+      flaggedStats.find(stat => stat.get('type') === type).get('count')
+    );
     return (
       <div
         onMouseEnter={() => this.showPopup()}
         onMouseLeave={() => this.setState({ showPopup: false })}
       >
-        {flaggedStats.get('count')}
+        {count}
         {showPopup && this.getPopup()}
       </div>
     );
@@ -73,7 +77,7 @@ class ProcurementsTable extends PaginatedTable {
   }
 
   render() {
-    const { data, navigate } = this.props;
+    const { data, navigate, corruptionType } = this.props;
 
     if (!data) return null;
 
@@ -93,7 +97,7 @@ class ProcurementsTable extends PaginatedTable {
 
       const flags = contract.get('flags');
       const flaggedStats = flags.get('flaggedStats');
-      const flagType = flaggedStats.get('type');
+      const flagType = flaggedStats.get('type', corruptionType);
       const flagIds =
         flags
           .filter(
