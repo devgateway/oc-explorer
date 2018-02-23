@@ -29,6 +29,7 @@ class Zoomable extends React.PureComponent {
           <div className="crd-fullscreen-popup" style={ style }>
             {cloneChild(this, {
                ...props,
+               zoomed: true, 
                width: width - padding * 2
             })}
           </div>
