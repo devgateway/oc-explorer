@@ -10,24 +10,24 @@ import NrFlags from './donuts/nr-flags';
 import styles from './style.less';
 import { cacheFn, pluckImm } from '../../../tools';
 import Zoomable from '../../zoomable';
-import WinsAndLosses from './bars/wins-and-losses';
 import Crosstab from '../../clickable-crosstab';
 import { CORRUPTION_TYPES } from '../../constants';
 import FlaggedNr from './bars/flagged-nr';
 import BackendDateFilterable from '../../backend-date-filterable';
 import State from '../../../state/oce-state';
+import WinsAndFlags from './bars/wins-and-flags/index';
 
 const TitleBelow = ({ title, children, filters, ...props }) => (
   <div>
     {React.cloneElement(
        React.Children.only(children)
-    , props)}
+       , props)}
     <h4 className="title text-center">
       <button className="btn btn-default btn-sm zoom-button">
         <i className="glyphicon glyphicon-fullscreen" style={{ pointerEvents: 'none' }}/>
       </button>
-      &nbsp;
-      {title}
+    &nbsp;
+  {title}
     </h4>
   </div>
 );
@@ -300,7 +300,7 @@ class Supplier extends CRDPage {
   }
 
   maybeGetSections() {
-    const { width, id, filters, styling, indicatorTypesMapping } = this.props;
+    const { width, id, filters, styling, indicatorTypesMapping, translations } = this.props;
     const donutSize = width / 3 - window.innerWidth / 20;
     const barChartWidth = width / 2 - 100;
     return (
@@ -335,16 +335,9 @@ class Supplier extends CRDPage {
             {this.t('crd:contracts:flagAnalysis')}
           </h2>
           <div className="col-sm-6">
-            <Zoomable
-              {...wireProps(this, 'wins-and-losses')}
-              width={barChartWidth}
-              zoomedWidth={width}
-              cutData={cutWinsAndLosses}
-            >
+            <Zoomable zoomedWidth={width} cutData={() => null}>
               <TitleBelow title={this.t('crd:supplier:winsAndLosses:title')}>
-                <WinsAndLosses
-                  filters={this.injectSupplierFilter(filters, id)}
-                />
+                <WinsAndFlags translations={translations} />
               </TitleBelow>
             </Zoomable>
           </div>

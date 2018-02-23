@@ -26,15 +26,60 @@ state.map({
     filters.update('supplierId', Set(), supplierIds => supplierIds.add(supplierId))
 });
 
-state.map({
-  name: 'supplierDetailsURL',
-  deps: ['supplierId'],
-  mapper: id => `${API_ROOT}/ocds/organization/supplier/id/${id}`
+state.input({
+  name: 'winsAndFlagsURL',
+  initial: `${API_ROOT}/supplierWinsPerProcuringEntity`
 });
 
 state.endpoint({
-  name: 'supplierDetails',
-  url: 'supplierDetailsURL'
+  name: 'winsAndFlagsRaw',
+  url: 'winsAndFlagsURL',
+  params: 'supplierFilters'
+});
+
+state.map({
+  name: 'winsAndFlagsData',
+  deps: ['winsAndFlagsRaw'],
+  mapper(raw) {
+    return raw.map(({ count, countFlags, procuringEntityName}) => ({
+      PEName: procuringEntityName,
+      wins: count,
+      flags: countFlags
+    }));
+  }
 })
+
+/* state.map({
+ *   name: 'supplierDetailsURL',
+ *   deps: ['supplierId'],
+ *   mapper: id => `${API_ROOT}/ocds/organization/supplier/id/${id}`
+ * });
+ * 
+ * state.endpoint({
+ *   name: 'supplierDetails',
+ *   url: 'supplierDetailsURL'
+ * });
+ * 
+ * state.input({
+ *   name: 'totalFlagsURL',
+ *   initial: `${API_ROOT}/totalFlags`
+ * })
+ * 
+ * state.endpoint({
+ *   name: 'supplierTotalFlags',
+ *   url: 'totalFlagsURL',
+ *   params: 'supplierFilters'
+ * });
+ * 
+ * state.input({
+ *   name: 'releaseCountURL',
+ *   initial: `${API_ROOT}/ocds/release/count`
+ * });
+ * 
+ * state.endpoint({
+ *   name: 'supplierReleasesCount',
+ *   url: 'releaseCountURL',
+ *   params: 'supplierFilters'
+ * });*/
 
 export default state;

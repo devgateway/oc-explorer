@@ -5,25 +5,24 @@ import { fetchEP } from '../tools';
 const NOTHING = Symbol();
 const pluck = field => obj => obj[field];
 
-function consolify(data) {
-  if (data.toJS) return data.toJS();
-  if (typeof data === 'object') return data;
-  return '';
-}
+const consolify = data => data.toJS ? data.toJS() : data;
+
+const isNothing = a => typeof a === 'undefined' ||
+  a === NOTHING;
 
 class Node {
   constructor({ name, log }) {
     this.name = name;
-    this.listeners = [];
+    this.listeners = {};
     this.state = NOTHING;
     this.version = 0;
     this.log = log;
   }
 
-  subscribe(listener) {
-    this.listeners.push(listener);
+  subscribe(name, cb) {
+    this.listeners[name] = cb;
     if (this.state !== NOTHING) {
-      listener();
+      cb();
     }
   }
 
@@ -40,7 +39,7 @@ class Node {
     this.state = newState;
     this.version++;
     this.log(`Updated to version ${this.version}, state:`, consolify(this.state));
-    this.listeners.forEach(setTimeout);
+    Object.values(this.listeners).forEach(setTimeout);
   }
 }
 
@@ -58,7 +57,7 @@ class Mapping extends Node {
     super({ name, ...opts });
     this.mapper = mapper;
     this.deps = deps;
-    this.deps.forEach(dep => dep.subscribe(this.doMapping.bind(this)));
+    this.deps.forEach(dep => dep.subscribe(this.name, this.doMapping.bind(this)));
   }
 
   depsOK() {
@@ -82,18 +81,23 @@ class Mapping extends Node {
 }
 
 class Endpoint extends Mapping {
-  constructor({ url, ...opts }) {
+  constructor({ url, params, ...opts }) {
     super({
-      deps: [url],
+      deps: isNothing(params) ? [url] : [url, params],
       ...opts
     });
+    this.url = url;
+    this.params = params;
   }
 
   doMapping() {
     if (!this.depsOK()) return;
     const url = new URI(this.deps[0].state);
-    this.log(`started a request to ${url}`);
+    if (!isNothing(this.params)) {
+      url.addSearch(this.params.state.toJS());
+    }
     fetchEP(url).then(data => this.assign(data));
+    this.log(`started a request to ${url}`);
   }
 }
 
@@ -105,7 +109,7 @@ export default class State {
   input(opts) {
     const { name } = opts;
     this.entities[name] = new Variable({
-      log: debug(`oce:state:${name}`),
+      log: debug(`oce.state.${name}`),
       ...opts
     })
   }
@@ -116,20 +120,28 @@ export default class State {
 
   map({ deps, ...opts }) {
     const { name } = opts;
-
     this.entities[name] = new Mapping({
-      log: debug(`oce:state:${name}`),
+      log: debug(`oce.state.${name}`),
       deps: deps.map(dep => this.entities[dep]),
       ...opts,
     });
   }
 
-  endpoint({ url, ...opts }) {
+  endpoint({ url, params, ...opts }) {
     const { name } = opts;
     this.entities[name] = new Endpoint({
-      log: debug(`oce:state:${name}`),
+      log: debug(`oce.state.${name}`),
       url: this.entities[url],
+      params: isNothing(params) ? NOTHING : this.entities[params],
       ...opts,
     });
+  }
+
+  subscribe(name, sender, listener) {
+    this.entities[name].subscribe(sender, listener);
+  }
+
+  getState(name) {
+    return this.entities[name].state;
   }
 }
