@@ -2,44 +2,43 @@ import { Map, Set } from 'immutable';
 import State from './index';
 const API_ROOT = '/api';
 
-const state = new State();
+export const OCE = new State({ name: 'oce' });
+export const CRD = OCE.substate({ name: 'crd' });
 
-state.input({
+export const filters = CRD.input({
   name: 'filters',
-  initial: Map()
+  initial: Map(),
 });
 
-state.map({
+CRD.mapping({
   name: 'datelessFilters',
-  deps: ['filters'],
-  mapper: filters => filters.delete('years').delete('months')
+  deps: [filters],
+  mapper: filters => filters.delete('years').delete('months'),
 });
 
-state.input({
+export const supplierId = CRD.input({
   name: 'supplierId'
 });
 
-state.map({
+const supplierFilters = CRD.mapping({
   name: 'supplierFilters',
-  deps: ['filters', 'supplierId'],
+  deps: [filters, supplierId],
   mapper: (filters, supplierId) => 
     filters.update('supplierId', Set(), supplierIds => supplierIds.add(supplierId))
 });
 
-state.input({
-  name: 'winsAndFlagsURL',
-  initial: `${API_ROOT}/supplierWinsPerProcuringEntity`
-});
-
-state.endpoint({
+const winsAndFlagsRaw = CRD.remote({
   name: 'winsAndFlagsRaw',
-  url: 'winsAndFlagsURL',
-  params: 'supplierFilters'
+  initialUrl: `${API_ROOT}/supplierWinsPerProcuringEntity`,
+  paramsMapping: {
+    deps: [supplierFilters],
+    mapper: filter => filter.toJS()
+  }
 });
 
-state.map({
+export const winsAndFlagsData = CRD.mapping({
   name: 'winsAndFlagsData',
-  deps: ['winsAndFlagsRaw'],
+  deps: [winsAndFlagsRaw.result],
   mapper(raw) {
     return raw.map(({ count, countFlags, procuringEntityName}) => ({
       PEName: procuringEntityName,
@@ -49,37 +48,37 @@ state.map({
   }
 })
 
-/* state.map({
+/* const supplierDetailsURL = CRD.map({
  *   name: 'supplierDetailsURL',
- *   deps: ['supplierId'],
+ *   deps: [supplierId],
  *   mapper: id => `${API_ROOT}/ocds/organization/supplier/id/${id}`
  * });
- * 
- * state.endpoint({
+ *  
+ * CRD.endpoint({
  *   name: 'supplierDetails',
- *   url: 'supplierDetailsURL'
- * });
- * 
- * state.input({
- *   name: 'totalFlagsURL',
- *   initial: `${API_ROOT}/totalFlags`
- * })
- * 
- * state.endpoint({
- *   name: 'supplierTotalFlags',
- *   url: 'totalFlagsURL',
- *   params: 'supplierFilters'
- * });
- * 
- * state.input({
- *   name: 'releaseCountURL',
- *   initial: `${API_ROOT}/ocds/release/count`
- * });
- * 
- * state.endpoint({
- *   name: 'supplierReleasesCount',
- *   url: 'releaseCountURL',
- *   params: 'supplierFilters'
+ *   url: supplierDetailsURL
  * });*/
+ 
+/* state.input({
+  *   name: 'totalFlagsURL',
+  *   initial: `${API_ROOT}/totalFlags`
+  * })
+* 
+* state.endpoint({
+  *   name: 'supplierTotalFlags',
+  *   url: 'totalFlagsURL',
+  *   params: 'supplierFilters'
+  * });
+* 
+* state.input({
+  *   name: 'releaseCountURL',
+  *   initial: `${API_ROOT}/ocds/release/count`
+  * });
+* 
+* state.endpoint({
+  *   name: 'supplierReleasesCount',
+  *   url: 'releaseCountURL',
+  *   params: 'supplierFilters'
+  * });*/
 
-export default state;
+export default CRD;

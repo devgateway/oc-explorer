@@ -1,7 +1,7 @@
 import { BarChart, Bar, XAxis, YAxis, LabelList, Label, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import translatable from '../../../../../translatable';
 import Popup from './popup';
-import State from '../../../../../state/oce-state';
+import { winsAndFlagsData } from '../../../../../state/oce-state';
 
 function renderTopLeftLabel({ content, ...props }) {
   return (
@@ -20,12 +20,11 @@ class WinsAndFlags extends translatable(React.PureComponent) {
 
   componentDidMount() {
     const { zoomed } = this.props;
-    State.subscribe(
-      'winsAndFlagsData',
+    winsAndFlagsData.subscribe(
       zoomed ? 'ZoomedWinsAndFlagsChart' : 'WinsAndFlagsChart',
       () => {
         this.setState({
-          data: State.getState('winsAndFlagsData')
+          data: winsAndFlagsData.state
         });
       }
     );
@@ -33,8 +32,7 @@ class WinsAndFlags extends translatable(React.PureComponent) {
 
   componentWillUnmount() {
     const { zoomed } = this.props;
-    State.unsubscribe(
-      'winsAndFlagsData',
+    winsAndFlagsData.unsubscribe(
       zoomed ? 'ZoomedWinsAndFlagsChart' : 'WinsAndFlagsChart',
     );
   }
