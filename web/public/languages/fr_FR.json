@@ -86,7 +86,7 @@
   "charts:costEffectiveness:traces:difference": "Différence",
   "charts:costEffectiveness:xAxisTitle": "Année",
   "charts:costEffectiveness:yAxisTitle": "Montant",
-  "charts:costEffectiveness:title": "Efficacité du coût",
+  "charts:costEffectiveness:title": "Rapport Qualité/Prix (montant estimé - montant du contrat)",
   "charts:general:noData": "Aucune donnée",
   "charts:nrCancelled:title": "Nombre d'appels à proposition annulé ",
   "charts:nrCancelled:xAxisTitle": "Année",
