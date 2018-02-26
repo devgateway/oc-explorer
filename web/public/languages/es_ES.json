@@ -86,7 +86,7 @@
   "charts:costEffectiveness:traces:difference": "Difference",
   "charts:costEffectiveness:xAxisTitle": "Year",
   "charts:costEffectiveness:yAxisTitle": "Amount",
-  "charts:costEffectiveness:title": "Cost effectiveness",
+  "charts:costEffectiveness:title": "Relación Calidad/Precio (monto estimado - monto de la adjudicación)",
   "charts:general:noData": "No data",
   "charts:nrCancelled:title": "Number of cancelled invitations to bid",
   "charts:nrCancelled:xAxisTitle": "Year",
