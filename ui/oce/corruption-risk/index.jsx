@@ -18,7 +18,7 @@ import { LOGIN_URL } from './constants';
 // eslint-disable-next-line no-unused-vars
 import style from './style.less';
 import Sidebar from './sidebar';
-import State from '../state/oce-state';
+import { filters as CRDFilters } from '../state/oce-state';
 
 // eslint-disable-next-line no-undef
 class CorruptionRiskDashboard extends React.Component {
@@ -347,7 +347,7 @@ class CorruptionRiskDashboard extends React.Component {
         <Filters
           onUpdate={newState => this.setState({ currentFiltersState: newState })}
           onApply={filtersToApply => {
-              State.assign('filters', filtersToApply);
+              CRDFilters.assign('CRD Dash', filtersToApply);
               this.setState({
                 filterBoxIndex: null,
                 appliedFilters: filtersToApply,

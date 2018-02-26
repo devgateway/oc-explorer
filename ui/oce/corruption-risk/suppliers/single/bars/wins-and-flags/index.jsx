@@ -1,7 +1,7 @@
 import { BarChart, Bar, XAxis, YAxis, LabelList, Label, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import translatable from '../../../../../translatable';
 import Popup from './popup';
-import State from '../../../../../state/oce-state';
+import { CRD, winsAndFlagsData } from '../../../../../state/oce-state';
 
 function renderTopLeftLabel({ content, ...props }) {
   return (
@@ -20,23 +20,22 @@ class WinsAndFlags extends translatable(React.PureComponent) {
 
   componentDidMount() {
     const { zoomed } = this.props;
-    State.subscribe(
-      'winsAndFlagsData',
-      zoomed ? 'ZoomedWinsAndFlagsChart' : 'WinsAndFlagsChart',
-      () => {
-        this.setState({
-          data: State.getState('winsAndFlagsData')
-        });
-      }
-    );
+    const name = zoomed ? 'ZoomedWinsAndFlagsChart' : 'WinsAndFlagsChart';
+    CRD.register(this, name);
+    winsAndFlagsData.subscribe(`oce.crd.${name}`);
+  }
+
+  onDepUpdated() {
+    this.setState({
+      data: winsAndFlagsData.state
+    });
   }
 
   componentWillUnmount() {
     const { zoomed } = this.props;
-    State.unsubscribe(
-      'winsAndFlagsData',
-      zoomed ? 'ZoomedWinsAndFlagsChart' : 'WinsAndFlagsChart',
-    );
+    const name = zoomed ? 'ZoomedWinsAndFlagsChart' : 'WinsAndFlagsChart';
+    CRD.unregister(this, name);
+    winsAndFlagsData.unsubscribe(`oce.crd.${name}`);
   }
 
   render() {
