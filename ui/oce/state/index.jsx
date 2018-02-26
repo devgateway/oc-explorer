@@ -24,21 +24,35 @@ class Node {
       this.name = name;
     }
     this.parent = parent;
+    if (this.parent) {
+      this.parent.register(this, name);
+    }
     this.log = debug(this.name);
-    this.listeners = {};
+    this.listeners = [];
     this.version = 0;
     this.state = NOTHING;
   }
 
-  subscribe(lName, listener) {
-    this.listeners[lName] = listener;
+  notifyListener(lName) {
+    schedule(() => {
+      this.parent.resolveDep(lName).onDepUpdated(this.name);
+    })
+  }
+
+  subscribe(lName) {
+    this.listeners.push(lName);
     if (this.state !== NOTHING) {
-      listener(this.name);
+      this.notifyListener(lName);
     }
   }
 
   unsubscribe(name) {
-    delete this.listeners[name];
+    const index = this.listeners.indexOf(name);
+    if (index === -1) {
+      this.log(`${name} is not a listener!`);
+    } else {
+      this.listeners.splice(index, 1);
+    }
   }
 
   assign(sender, newState) {
@@ -61,11 +75,7 @@ class Node {
     this.state = newState;
     this.version++;
     this.log(`updated to version ${this.version}, state:`, maybeToJS(this.state));
-    Object.values(this.listeners).forEach((listener) => {
-      schedule(() => {
-        listener(this.name);
-      });
-    });
+    this.listeners.forEach(this.notifyListener.bind(this));
   }
 }
 
@@ -91,8 +101,7 @@ class Mapping extends Node {
   attach() {
     this.deps.forEach(dep =>
       this.parent.resolveDep(dep).subscribe(
-        this.name,
-        this.doMapping.bind(this)
+        this.name
       )
     );
   }
@@ -111,7 +120,7 @@ class Mapping extends Node {
     return true;
   }
 
-  doMapping(sender) {
+  onDepUpdated(sender) {
     this.log(`was notified by ${sender}`);
     if (!this.depsOK()) return;
     this.assign(
@@ -127,9 +136,19 @@ export default class State extends Mapping {
     this.entities = [];
   }
 
-  field(Class, { name, ...opts }) {
-    this[name] = new Class({ name, ...opts, parent: this });
+  register(entity, name) {
     this.entities.push(name);
+    this[name] = entity;
+  }
+
+  unregister(name) {
+    const indexOf = this.entities.indexOf(name);
+    this.entities.splice(indexOf, 1);
+    delete this[name];
+  }
+
+  field(Class, { name, ...opts }) {
+    new Class({ name, ...opts, parent: this });
     return this[name];
   }
 
@@ -142,6 +161,7 @@ export default class State extends Mapping {
   remote(opts) { return this.field(Remote, opts); }
 
   resolveDep(name) {
+    if (name === this.name) return this;
     if (name.indexOf(this.name) === 0) {
       const rest = name.slice(this.name.length + 1);
       const iofSeparator = rest.indexOf('.');
@@ -186,10 +206,6 @@ class Remote extends State {
       });
     }
 
-    this.deps = ['url', 'params'];
-    this.url.subscribe(this.name, this.fetch.bind(this));
-    this.params.subscribe(this.params, this.fetch.bind(this));
-
     this.input({
       name: 'status',
     });
@@ -201,9 +217,13 @@ class Remote extends State {
     this.input({
       name: 'result',
     });
+
+    this.deps = ['url', 'params'];
+    this.url.subscribe(this.name);
+    this.params.subscribe(this.name);
   }
 
-  fetch(sender) {
+  onDepUpdated(sender) {
     if (this.params.state === NOTHING) return;
     const uri = new URI(this.url.state).addSearch(this.params.state);
     fetchEP(uri).then(data => this.result.assign(this.name, data));

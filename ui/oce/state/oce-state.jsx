@@ -10,11 +10,19 @@ export const filters = CRD.input({
   initial: Map(),
 });
 
-CRD.mapping({
+const datelessFilters = CRD.mapping({
   name: 'datelessFilters',
   deps: [filters],
   mapper: filters => filters.delete('years').delete('months'),
 });
+
+const datefulFilters = CRD.mapping({
+  name: 'datefulFilters',
+  deps: [datelessFilters, filters],
+  mapper: (datelessFilters, filters) =>
+    datelessFilters.set('year', filters.get('years'))
+      .set('month', filters.get('months'))
+})
 
 export const supplierId = CRD.input({
   name: 'supplierId'
@@ -22,7 +30,7 @@ export const supplierId = CRD.input({
 
 const supplierFilters = CRD.mapping({
   name: 'supplierFilters',
-  deps: [filters, supplierId],
+  deps: [datefulFilters, supplierId],
   mapper: (filters, supplierId) => 
     filters.update('supplierId', Set(), supplierIds => supplierIds.add(supplierId))
 });
@@ -58,27 +66,27 @@ export const winsAndFlagsData = CRD.mapping({
  *   name: 'supplierDetails',
  *   url: supplierDetailsURL
  * });*/
- 
+
 /* state.input({
-  *   name: 'totalFlagsURL',
-  *   initial: `${API_ROOT}/totalFlags`
-  * })
-* 
-* state.endpoint({
-  *   name: 'supplierTotalFlags',
-  *   url: 'totalFlagsURL',
-  *   params: 'supplierFilters'
-  * });
-* 
-* state.input({
-  *   name: 'releaseCountURL',
-  *   initial: `${API_ROOT}/ocds/release/count`
-  * });
-* 
-* state.endpoint({
-  *   name: 'supplierReleasesCount',
-  *   url: 'releaseCountURL',
-  *   params: 'supplierFilters'
-  * });*/
+ *   name: 'totalFlagsURL',
+ *   initial: `${API_ROOT}/totalFlags`
+ * })
+ * 
+ * state.endpoint({
+ *   name: 'supplierTotalFlags',
+ *   url: 'totalFlagsURL',
+ *   params: 'supplierFilters'
+ * });
+ * 
+ * state.input({
+ *   name: 'releaseCountURL',
+ *   initial: `${API_ROOT}/ocds/release/count`
+ * });
+ * 
+ * state.endpoint({
+ *   name: 'supplierReleasesCount',
+ *   url: 'releaseCountURL',
+ *   params: 'supplierFilters'
+ * });*/
 
 export default CRD;
