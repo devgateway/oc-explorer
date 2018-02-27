@@ -30,49 +30,36 @@ class Node {
     this.log = debug(this.name);
     this.dependents = [];
     this.listeners = {};
-    this.version = 0;
+    this.initialized = false;
+    this.state = new Promise(resolve => this.resolve = resolve);
+    this.state.then(value => {
+      this.initialized = true;
+      this.log('initialized', maybeToJS(value))
+    });
   }
 
-  notifyDep(dName) {
-    const dep = this.parent.resolveDep(dName);
-    this.parent.resolveDep(dName).onDepUpdated(this.name);
+  invalidateDep(dName) {
+    this.parent.resolveDep(dName).invalidate(this.name);
   }
 
   addDep(dName) {
     this.dependents.push(dName);
-    if (this.state) {
-      this.notifyDep(dName);
-    }
   }
 
   addListener(name, cb) {
     this.listeners[name] = cb;
-    if (!this.eager && Object.keys(this.listeners).length === 1) {
-      this.getState();
-    }
+    cb();
   }
 
   removeListener(name) {
     delete this.listeners[name];
   }
 
-  notifyDeps() {
-    this.dependents.forEach(this.notifyDep.bind(this));
+  invalidateDeps() {
+    this.dependents.forEach(this.invalidateDep.bind(this));
     Object.values(this.listeners).forEach(cb => {
       cb(this.name);
     });
-  }
-
-  assign(sender, newState) {
-    if (this.state === newState) {
-      this.log('newState === oldState', newState);
-      return;
-    }
-
-    this.state = newState;
-    this.version++;
-    this.log(`Updated to version ${this.version}`, maybeToJS(newState));
-    this.notifyDeps();
   }
 
   getState() {
@@ -83,11 +70,28 @@ class Node {
 class HVar extends Node {
   constructor({ name, parent, initial }) {
     super({ name, parent });
-    if (!isNothing(initial)) {
-      this.log('initilized', maybeToJS(initial));
-      this.state = initial;
+    if (typeof initial === 'undefined') {
+      this.log('Starting unitialized');
     } else {
-      this.log('started uninitialized');
+      this.log('Starting initialized', maybeToJS(initial));
+      this.initialized = true;
+      this.state = Promise.resolve(initial);
+    }
+  }
+
+  assign(sender, newState) {
+    if (!this.initialized) {
+      this.resolve(newState);
+      this.initialized = true;
+    } else {
+      this.state.then(oldState => {
+        if (oldState === newState) {
+          this.log('oldState === newState', maybeToJS(newState))
+        } else {
+          this.state = Promise.resolve(newState);
+          this.invalidateDeps();
+        }
+      })
     }
   }
 }
@@ -97,9 +101,49 @@ class Mapping extends Node {
     super(opts);
     this.deps = deps.map(d => d.name);
     this.mapper = mapper;
+    this.initialized = false;
     this.eager = eager;
-    this.depVersions = {};
-    this.attach();
+    if (this.eager) {
+      this.log('initializing(eager)');
+      this.getState();
+    } else {
+      this.log('initialization pending');
+    }
+  }
+
+  depsPromise() {
+    return Promise.all(
+      this.deps.map(dep => this.parent.resolveDep(dep).getState(this.name))
+    )
+  }
+
+  getState(sender) {
+    if (this.initializing || this.updating) {
+    } else if (!this.initialized) {
+      if (!this.eager) {
+        this.log(`initialization triggered by ${sender}`)
+      }
+      this.initializing = true;
+      this.resolve(
+        this.depsPromise().then(args => this.mapper(...args))
+      )
+      this.state.then(() => {
+        this.initializing = false
+        this.attach();
+      });
+    } else if (!this.valid) {
+      if (!this.eager && !Object.values(this.listeners).length) {
+        this.log(`update triggered by ${sender}`);
+      }
+      this.updating = true;
+      this.state = this.depsPromise().then(args => this.mapper(...args));
+      this.state.then(newState => {
+        this.log('updated', maybeToJS(newState))
+        this.updating = false;
+        this.valid = true;
+      });
+    }
+    return this.state;
   }
 
   subscribeTo(depName) {
@@ -110,8 +154,9 @@ class Mapping extends Node {
     this.deps.forEach(this.subscribeTo.bind(this));
   }
 
-  onDepUpdated(sender) {
-    this.log(`Notified by ${sender}`)
+  invalidate(sender) {
+    this.log(`Invalidated by ${sender}`)
+    this.valid = false;
     if (this.eager) {
       this.log('eagerly updating');
       this.getState();
@@ -120,36 +165,8 @@ class Mapping extends Node {
       this.getState();
     } else {
       this.log('is lazy');
-      this.notifyDeps();
     }
-  }
-
-  getState() {
-    let values = [];
-    let versions = {};
-    if (this.deps.every(dName => {
-      const dep = this.parent.resolveDep(dName);
-      const state = dep.getState();
-      values.push(state);
-      versions[dName] = dep.version;
-      return typeof state !== 'undefined' &&
-        dep.version !== this.depVersions[dName]
-    })) {
-      this.log('updating');
-      Promise.resolve(this.mapper(...values)).then(newState => {
-        if (newState !== this.state) {
-          this.state = newState;
-          this.version++;
-          this.depVersions = versions;
-          this.notifyDeps();
-          this.log(`updated to version ${this.version}`, maybeToJS(this.state));
-        } else {
-          this.log('oldState === newState', newState)
-        }
-      })
-    }
-
-    return this.state;
+    this.invalidateDeps();
   }
 }
 

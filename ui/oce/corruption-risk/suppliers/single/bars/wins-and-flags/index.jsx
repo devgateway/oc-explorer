@@ -22,8 +22,10 @@ class WinsAndFlags extends translatable(React.PureComponent) {
     const { zoomed } = this.props;
     const name = zoomed ? 'ZoomedWinsAndFlagsChart' : 'WinsAndFlagsChart';
     winsAndFlagsData.addListener(name, () => {
-      this.setState({
-        data: winsAndFlagsData.getState()
+      winsAndFlagsData.getState(name).then(data => {
+        this.setState({
+          data
+        })
       })
     })
   }

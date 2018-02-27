@@ -10,15 +10,15 @@ export const filters = CRD.input({
   initial: Map(),
 });
 
-const indicatorTypesMapping = CRD.remote({
-  name: 'indicatorTypesMapping'
-});
-
-indicatorTypesMapping.input({
-  name: 'url',
-  initial: `${API_ROOT}/indicatorTypesMapping`
-})
-
+/* const indicatorTypesMapping = CRD.remote({
+ *   name: 'indicatorTypesMapping'
+ * });
+ * 
+ * indicatorTypesMapping.input({
+ *   name: 'url',
+ *   initial: `${API_ROOT}/indicatorTypesMapping`
+ * })
+ */ 
 
 const datelessFilters = CRD.mapping({
   name: 'datelessFilters',
