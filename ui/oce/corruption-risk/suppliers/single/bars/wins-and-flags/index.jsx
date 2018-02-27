@@ -21,21 +21,17 @@ class WinsAndFlags extends translatable(React.PureComponent) {
   componentDidMount() {
     const { zoomed } = this.props;
     const name = zoomed ? 'ZoomedWinsAndFlagsChart' : 'WinsAndFlagsChart';
-    CRD.register(this, name);
-    winsAndFlagsData.subscribe(`oce.crd.${name}`);
-  }
-
-  onDepUpdated() {
-    this.setState({
-      data: winsAndFlagsData.state
-    });
+    winsAndFlagsData.addListener(name, () => {
+      this.setState({
+        data: winsAndFlagsData.getState()
+      })
+    })
   }
 
   componentWillUnmount() {
     const { zoomed } = this.props;
     const name = zoomed ? 'ZoomedWinsAndFlagsChart' : 'WinsAndFlagsChart';
-    CRD.unregister(this, name);
-    winsAndFlagsData.unsubscribe(`oce.crd.${name}`);
+    winsAndFlagsData.removeListener(name);
   }
 
   render() {

@@ -10,6 +10,16 @@ export const filters = CRD.input({
   initial: Map(),
 });
 
+const indicatorTypesMapping = CRD.remote({
+  name: 'indicatorTypesMapping'
+});
+
+indicatorTypesMapping.input({
+  name: 'url',
+  initial: `${API_ROOT}/indicatorTypesMapping`
+})
+
+
 const datelessFilters = CRD.mapping({
   name: 'datelessFilters',
   deps: [filters],
@@ -22,7 +32,7 @@ const datefulFilters = CRD.mapping({
   mapper: (datelessFilters, filters) =>
     datelessFilters.set('year', filters.get('years'))
       .set('month', filters.get('months'))
-})
+});
 
 export const supplierId = CRD.input({
   name: 'supplierId'
@@ -37,16 +47,22 @@ const supplierFilters = CRD.mapping({
 
 const winsAndFlagsRaw = CRD.remote({
   name: 'winsAndFlagsRaw',
-  initialUrl: `${API_ROOT}/supplierWinsPerProcuringEntity`,
-  paramsMapping: {
-    deps: [supplierFilters],
-    mapper: filter => filter.toJS()
-  }
+});
+
+winsAndFlagsRaw.mapping({
+  name: 'params',
+  deps: [supplierFilters],
+  mapper: filter => filter.toJS()
+});
+
+winsAndFlagsRaw.input({
+  name: 'url',
+  initial: `${API_ROOT}/supplierWinsPerProcuringEntity`
 });
 
 export const winsAndFlagsData = CRD.mapping({
   name: 'winsAndFlagsData',
-  deps: [winsAndFlagsRaw.result],
+  deps: [winsAndFlagsRaw],
   mapper(raw) {
     return raw.map(({ count, countFlags, procuringEntityName}) => ({
       PEName: procuringEntityName,

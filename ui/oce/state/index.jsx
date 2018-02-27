@@ -28,54 +28,55 @@ class Node {
       this.parent.register(this, name);
     }
     this.log = debug(this.name);
-    this.listeners = [];
+    this.dependents = [];
+    this.listeners = {};
     this.version = 0;
-    this.state = NOTHING;
   }
 
-  notifyListener(lName) {
-    schedule(() => {
-      this.parent.resolveDep(lName).onDepUpdated(this.name);
-    })
+  notifyDep(dName) {
+    const dep = this.parent.resolveDep(dName);
+    this.parent.resolveDep(dName).onDepUpdated(this.name);
   }
 
-  subscribe(lName) {
-    this.listeners.push(lName);
-    if (this.state !== NOTHING) {
-      this.notifyListener(lName);
+  addDep(dName) {
+    this.dependents.push(dName);
+    if (this.state) {
+      this.notifyDep(dName);
     }
   }
 
-  unsubscribe(name) {
-    const index = this.listeners.indexOf(name);
-    if (index === -1) {
-      this.log(`${name} is not a listener!`);
-    } else {
-      this.listeners.splice(index, 1);
+  addListener(name, cb) {
+    this.listeners[name] = cb;
+    if (!this.eager && Object.keys(this.listeners).length === 1) {
+      this.getState();
     }
+  }
+
+  removeListener(name) {
+    delete this.listeners[name];
+  }
+
+  notifyDeps() {
+    this.dependents.forEach(this.notifyDep.bind(this));
+    Object.values(this.listeners).forEach(cb => {
+      cb(this.name);
+    });
   }
 
   assign(sender, newState) {
-    if (sender === this) {
-      if (this.state === NOTHING) {
-        this.log('initializing');
-      }
-    } else {
-      this.log(`${sender} sent:`, maybeToJS(newState));
-    }
-    if (typeof newState === 'undefined') {
-      this.log('refusing to update to "undefined"');
-      return;
-    }
-    if (newState === this.state) {
-      this.log('newState === oldState', maybeToJS(newState));
+    if (this.state === newState) {
+      this.log('newState === oldState', newState);
       return;
     }
 
     this.state = newState;
     this.version++;
-    this.log(`updated to version ${this.version}, state:`, maybeToJS(this.state));
-    this.listeners.forEach(this.notifyListener.bind(this));
+    this.log(`Updated to version ${this.version}`, maybeToJS(newState));
+    this.notifyDeps();
+  }
+
+  getState() {
+    return this.state;
   }
 }
 
@@ -83,7 +84,8 @@ class HVar extends Node {
   constructor({ name, parent, initial }) {
     super({ name, parent });
     if (!isNothing(initial)) {
-      this.assign(this, initial);
+      this.log('initilized', maybeToJS(initial));
+      this.state = initial;
     } else {
       this.log('started uninitialized');
     }
@@ -91,48 +93,69 @@ class HVar extends Node {
 }
 
 class Mapping extends Node {
-  constructor({ deps, mapper, ...opts }) {
+  constructor({ deps, mapper, eager, ...opts }) {
     super(opts);
     this.deps = deps.map(d => d.name);
     this.mapper = mapper;
-    if (deps.length) this.attach();
+    this.eager = eager;
+    this.depVersions = {};
+    this.attach();
+  }
+
+  subscribeTo(depName) {
+    this.parent.resolveDep(depName).addDep(this.name);
   }
 
   attach() {
-    this.deps.forEach(dep =>
-      this.parent.resolveDep(dep).subscribe(
-        this.name
-      )
-    );
-  }
-
-  depsOK() {
-    const unitialized = this.deps.filter(
-      dep => this.parent.resolveDep(dep).state === NOTHING
-    );
-    if (unitialized.length) {
-      const names = unitialized.join(', ');
-      this.log(
-        `skipped update because ${names} ${unitialized.length > 1 ? 'are' : 'is'} uninitialized`
-      );
-      return false;
-    }
-    return true;
+    this.deps.forEach(this.subscribeTo.bind(this));
   }
 
   onDepUpdated(sender) {
-    this.log(`was notified by ${sender}`);
-    if (!this.depsOK()) return;
-    this.assign(
-      this,
-      this.mapper(...this.deps.map(dep => this.parent.resolveDep(dep).state))
-    );
+    this.log(`Notified by ${sender}`)
+    if (this.eager) {
+      this.log('eagerly updating');
+      this.getState();
+    } else if (Object.values(this.listeners).length) {
+      this.log('doing it for the listeners')
+      this.getState();
+    } else {
+      this.log('is lazy');
+      this.notifyDeps();
+    }
+  }
+
+  getState() {
+    let values = [];
+    let versions = {};
+    if (this.deps.every(dName => {
+      const dep = this.parent.resolveDep(dName);
+      const state = dep.getState();
+      values.push(state);
+      versions[dName] = dep.version;
+      return typeof state !== 'undefined' &&
+        dep.version !== this.depVersions[dName]
+    })) {
+      this.log('updating');
+      Promise.resolve(this.mapper(...values)).then(newState => {
+        if (newState !== this.state) {
+          this.state = newState;
+          this.version++;
+          this.depVersions = versions;
+          this.notifyDeps();
+          this.log(`updated to version ${this.version}`, maybeToJS(this.state));
+        } else {
+          this.log('oldState === newState', newState)
+        }
+      })
+    }
+
+    return this.state;
   }
 }
 
 export default class State extends Mapping {
-  constructor({ name, parent }) {
-    super({ name, parent, deps: [] });
+  constructor({ name, parent, ...opts }) {
+    super({ name, parent, deps: [], ...opts });
     this.entities = [];
   }
 
@@ -148,7 +171,13 @@ export default class State extends Mapping {
   }
 
   field(Class, { name, ...opts }) {
+    let oldDependents = [];
+    if (this[name]) {
+      this.log(`replacing ${name}`);
+      oldDependents = this[name].dependents;
+    }
     new Class({ name, ...opts, parent: this });
+    oldDependents.forEach(this[name].addDep.bind(this[name]));
     return this[name];
   }
 
@@ -178,56 +207,20 @@ export default class State extends Mapping {
 }
 
 class Remote extends State {
-  constructor({ initialUrl, urlMapping, initialParams, paramsMapping, ...opts }) {
-    super(opts);
-    if (initialUrl) {
-      this.input({
-        name: 'url',
-        initial: initialUrl,
-      });
-    } else if (urlMapping) {
-      const urlMappingOpts = urlMapping;
-      this.mapping({
-        name: 'url',
-        ...urlMappingOpts,
-      });
-    }
-
-    if (paramsMapping) {
-      const paramsMappingOpts = paramsMapping;
-      this.mapping({
-        name: 'params',
-        ...paramsMappingOpts,
-      });
-    } else {
-      this.input({
-        name: 'params',
-        initial: initialParams || {},
-      });
-    }
-
-    this.input({
-      name: 'status',
+  constructor(opts) {
+    super({
+      ...opts,
+      mapper(url, params) {
+        const uri = new URI(url).addSearch(params);
+        this.log(`fetching ${uri}`);
+        return fetchEP(uri);
+      }
     });
+    this.input({ name: 'url' });
+    this.input({ name: 'params', initial: {} });
 
-    this.input({
-      name: 'error',
-    });
-
-    this.input({
-      name: 'result',
-    });
-
-    this.deps = ['url', 'params'];
-    this.url.subscribe(this.name);
-    this.params.subscribe(this.name);
-  }
-
-  onDepUpdated(sender) {
-    if (this.params.state === NOTHING) return;
-    const uri = new URI(this.url.state).addSearch(this.params.state);
-    fetchEP(uri).then(data => this.result.assign(this.name, data));
-    this.status.assign(this.name, 'Loading...');
-    this.log(`Fetching ${uri}`);
+    this.deps = [this.url.name, this.params.name];
+    this.url.addDep(this.name);
+    this.params.addDep(this.name);
   }
 }
