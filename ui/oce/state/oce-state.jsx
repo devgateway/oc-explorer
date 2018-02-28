@@ -1,4 +1,6 @@
 import { Map, Set } from 'immutable';
+import URI from 'urijs';
+import { fetchEP } from '../tools';
 import State from './index';
 const API_ROOT = '/api';
 
@@ -10,21 +12,9 @@ export const filters = CRD.input({
   initial: Map(),
 });
 
-const indicatorTypesMappingURL = CRD.input({
-  name: 'indicatorTypesMappingURL',
-  initial: `${API_ROOT}/indicatorTypesMapping`,
-})
-
-const indicatorTypesMapping = CRD.remote({
-  name: 'indicatorTypesMapping',
-  url: indicatorTypesMappingURL
+export const supplierId = CRD.input({
+  name: 'supplierId'
 });
-
-CRD.mapping({
-  name: 'indicatorIdsFlat',
-  deps: [indicatorTypesMapping],
-  mapper: indicatorTypesMapping => Object.keys(indicatorTypesMapping),
-})
 
 const datelessFilters = CRD.mapping({
   name: 'datelessFilters',
@@ -40,16 +30,50 @@ const datefulFilters = CRD.mapping({
       .set('month', filters.get('months'))
 });
 
-export const supplierId = CRD.input({
-  name: 'supplierId'
-});
-
 const supplierFilters = CRD.mapping({
   name: 'supplierFilters',
   deps: [datefulFilters, supplierId],
   mapper: (filters, supplierId) => 
     filters.update('supplierId', Set(), supplierIds => supplierIds.add(supplierId))
 });
+
+const indicatorTypesMappingURL = CRD.input({
+  name: 'indicatorTypesMappingURL',
+  initial: `${API_ROOT}/indicatorTypesMapping`,
+})
+
+const indicatorTypesMapping = CRD.remote({
+  name: 'indicatorTypesMapping',
+  url: indicatorTypesMappingURL
+});
+
+const indicatorIdsFlat = CRD.mapping({
+  name: 'indicatorIdsFlat',
+  deps: [indicatorTypesMapping],
+  mapper: indicatorTypesMapping => Object.keys(indicatorTypesMapping),
+});
+
+export const flaggedNrData = CRD.mapping({
+  name: 'flaggedNrData',
+  deps: [indicatorIdsFlat, supplierFilters, indicatorTypesMapping],
+  eager: true,
+  mapper: (indicatorIds, filters, indicatorTypesMapping) => Promise.all(
+    indicatorIds.map(indicatorId =>
+      fetchEP(
+        new URI(`${API_ROOT}/flags/${indicatorId}/count`).addSearch(filters.toJS())
+      ).then(data => {
+        if (!data[0]) return null;
+        return {
+          indicatorId,
+          count: data[0].count,
+          types: indicatorTypesMapping[indicatorId].types
+        }
+      })
+    )
+  ).then(data =>
+    data.filter(datum => !!datum).sort((a, b) => b.count - a.count)
+  )
+})
 
 const winsAndFlagsURL = CRD.input({
   name: 'winsAndFlagsURL',

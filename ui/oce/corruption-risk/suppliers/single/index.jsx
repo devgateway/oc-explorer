@@ -328,13 +328,8 @@ class Supplier extends CRDPage {
           </div>
           <div className="col-sm-6">
             <Zoomable zoomedWidth={width}>
-              <TitleBelow
-                title={this.t('crd:supplier:flaggedNr:title')}
-              >
-                <FlaggedNr
-                  filters={this.injectSupplierFilter(filters, id)}
-                  indicatorTypesMapping={indicatorTypesMapping}
-                />
+              <TitleBelow title={this.t('crd:supplier:flaggedNr:title')}>
+                <FlaggedNr translations={translations} />
               </TitleBelow>
             </Zoomable>
           </div>
