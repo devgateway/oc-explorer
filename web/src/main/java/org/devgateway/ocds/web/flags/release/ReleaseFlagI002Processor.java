@@ -33,6 +33,7 @@ public class ReleaseFlagI002Processor extends AbstractFlaggedReleaseFlagProcesso
     protected void setPredicates() {
         preconditionsPredicates = Collections.synchronizedList(Arrays.asList(
                 FlaggedReleasePredicates.ACTIVE_AWARD,
+                FlaggedReleasePredicates.BIDS,
                 FlaggedReleasePredicates.UNSUCCESSFUL_AWARD,
                 FlaggedReleasePredicates.ELECTRONIC_SUBMISSION,
                 FlaggedReleasePredicates.OPEN_PROCUREMENT_METHOD

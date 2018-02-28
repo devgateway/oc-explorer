@@ -1,9 +1,11 @@
 package org.devgateway.ocds.persistence.mongo;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -12,7 +14,9 @@ import org.devgateway.ocds.persistence.mongo.merge.Merge;
 import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -220,6 +224,53 @@ public class Detail {
         return new EqualsBuilder().append(id, rhs.id).append(date, rhs.date).append(status, rhs.status)
                 .append(tenderers, rhs.tenderers).append(value, rhs.value).append(documents, rhs.documents
                ).isEquals();
+    }
+
+
+    /**
+     * see https://github.com/open-contracting/ocds_bid_extension/blob/master/codelists/bidStatus.csv
+     */
+    public enum Status {
+
+        invited("invited"),
+        cancelled("pending"),
+        valid("valid"),
+        disqualified("disqualified"),
+        withdrawn("withdrawn");
+
+        private final String value;
+        private static final Map<String, Detail.Status> CONSTANTS = new HashMap<String, Detail.Status>();
+
+        static {
+            for (Detail.Status c : values()) {
+                CONSTANTS.put(c.value, c);
+            }
+        }
+
+        Status(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+
+        @JsonValue
+        public String value() {
+            return this.value;
+        }
+
+        @JsonCreator
+        public static Detail.Status fromValue(String value) {
+            Detail.Status constant = CONSTANTS.get(value);
+            if (constant == null) {
+                throw new IllegalArgumentException(value);
+            } else {
+                return constant;
+            }
+        }
+
     }
 
 }

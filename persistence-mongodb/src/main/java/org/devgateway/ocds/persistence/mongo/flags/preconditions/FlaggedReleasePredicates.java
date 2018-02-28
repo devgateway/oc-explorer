@@ -4,6 +4,7 @@ package org.devgateway.ocds.persistence.mongo.flags.preconditions;
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.Tender;
+import org.springframework.util.ObjectUtils;
 
 /**
  * @author mpostelnicu
@@ -49,6 +50,12 @@ public final class FlaggedReleasePredicates {
                     "Needs to have limited tender procurement method",
                     p -> p.getTender() != null
                             && Tender.ProcurementMethod.limited.equals(p.getTender().getProcurementMethod())
+            );
+
+    public static final NamedPredicate<FlaggedRelease> BIDS =
+            new NamedPredicate<>(
+                    "Needs to have at least one bid",
+                    p -> !ObjectUtils.isEmpty(p.getBids()) && !ObjectUtils.isEmpty(p.getBids().getDetails())
             );
 
     public static final NamedPredicate<FlaggedRelease> ACTIVE_AWARD_WITH_DATE =
