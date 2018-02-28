@@ -32,21 +32,6 @@ const TitleBelow = ({ title, children, filters, ...props }) => (
   </div>
 );
 
-function cutWinsAndLosses(data) {
-  if (!data) return data;
-  const cutData = JSON.parse(JSON.stringify(data));
-  cutData.forEach(datum => {
-    datum.x.splice(5);
-    datum.y.splice(5);
-  });
-  return cutData;
-}
-
-function cutNrFlags(data) {
-  if (!data) return data;
-  return data.slice(0, 5);
-}
-
 class CrosstabExplanation extends translatable(React.PureComponent) {
   render() {
     const { nrFlags, corruptionType } = this.props;
@@ -335,26 +320,16 @@ class Supplier extends CRDPage {
             {this.t('crd:contracts:flagAnalysis')}
           </h2>
           <div className="col-sm-6">
-            <Zoomable zoomedWidth={width} cutData={() => null}>
+            <Zoomable zoomedWidth={width}>
               <TitleBelow title={this.t('crd:supplier:winsAndLosses:title')}>
                 <WinsAndFlags translations={translations} />
               </TitleBelow>
             </Zoomable>
           </div>
           <div className="col-sm-6">
-            <Zoomable
-              {...wireProps(this, 'nr-flagged')}
-              width={barChartWidth}
-              zoomedWidth={width}
-              cutData={cutNrFlags}
-            >
-              <TitleBelow
-                title={this.t('crd:supplier:flaggedNr:title')}
-              >
-                <FlaggedNr
-                  filters={this.injectSupplierFilter(filters, id)}
-                  indicatorTypesMapping={indicatorTypesMapping}
-                />
+            <Zoomable zoomedWidth={width}>
+              <TitleBelow title={this.t('crd:supplier:flaggedNr:title')}>
+                <FlaggedNr translations={translations} />
               </TitleBelow>
             </Zoomable>
           </div>

@@ -28,111 +28,151 @@ class Node {
       this.parent.register(this, name);
     }
     this.log = debug(this.name);
-    this.listeners = [];
-    this.version = 0;
-    this.state = NOTHING;
+    this.dependents = [];
+    this.listeners = {};
+    this.initialized = false;
+    this.state = new Promise(resolve => this.resolve = resolve);
+    this.state.then(value => {
+      this.initialized = true;
+      this.log('initialized', maybeToJS(value))
+    });
   }
 
-  notifyListener(lName) {
-    schedule(() => {
-      this.parent.resolveDep(lName).onDepUpdated(this.name);
-    })
+  invalidateDep(dName) {
+    this.parent.resolveDep(dName).invalidate(this.name);
   }
 
-  subscribe(lName) {
-    this.listeners.push(lName);
-    if (this.state !== NOTHING) {
-      this.notifyListener(lName);
-    }
+  addDep(dName) {
+    this.dependents.push(dName);
   }
 
-  unsubscribe(name) {
-    const index = this.listeners.indexOf(name);
-    if (index === -1) {
-      this.log(`${name} is not a listener!`);
-    } else {
-      this.listeners.splice(index, 1);
-    }
+  addListener(name, cb) {
+    this.listeners[name] = cb;
+    cb();
   }
 
-  assign(sender, newState) {
-    if (sender === this) {
-      if (this.state === NOTHING) {
-        this.log('initializing');
-      }
-    } else {
-      this.log(`${sender} sent:`, maybeToJS(newState));
-    }
-    if (typeof newState === 'undefined') {
-      this.log('refusing to update to "undefined"');
-      return;
-    }
-    if (newState === this.state) {
-      this.log('newState === oldState', maybeToJS(newState));
-      return;
-    }
+  removeListener(name) {
+    delete this.listeners[name];
+  }
 
-    this.state = newState;
-    this.version++;
-    this.log(`updated to version ${this.version}, state:`, maybeToJS(this.state));
-    this.listeners.forEach(this.notifyListener.bind(this));
+  invalidateDeps() {
+    this.dependents.forEach(this.invalidateDep.bind(this));
+    Object.values(this.listeners).forEach(cb => {
+      cb(this.name);
+    });
+  }
+
+  getState() {
+    return this.state;
   }
 }
 
 class HVar extends Node {
   constructor({ name, parent, initial }) {
     super({ name, parent });
-    if (!isNothing(initial)) {
-      this.assign(this, initial);
+    if (typeof initial === 'undefined') {
+      this.log('Starting unitialized');
     } else {
-      this.log('started uninitialized');
+      this.log('Starting initialized', maybeToJS(initial));
+      this.initialized = true;
+      this.state = Promise.resolve(initial);
+    }
+  }
+
+  assign(sender, newState) {
+    if (!this.initialized) {
+      this.resolve(newState);
+      this.initialized = true;
+    } else {
+      this.state.then(oldState => {
+        if (oldState === newState) {
+          this.log('oldState === newState', maybeToJS(newState))
+        } else {
+          this.state = Promise.resolve(newState);
+          this.invalidateDeps();
+        }
+      })
     }
   }
 }
 
 class Mapping extends Node {
-  constructor({ deps, mapper, ...opts }) {
+  constructor({ deps, mapper, eager, ...opts }) {
     super(opts);
     this.deps = deps.map(d => d.name);
     this.mapper = mapper;
-    if (deps.length) this.attach();
+    this.initialized = false;
+    this.eager = eager;
+    if (this.eager) {
+      this.log('initializing(eager)');
+      this.getState();
+    } else {
+      this.log('initialization pending');
+    }
+  }
+
+  depsPromise() {
+    return Promise.all(
+      this.deps.map(dep => this.parent.resolveDep(dep).getState(this.name))
+    )
+  }
+
+  getState(sender) {
+    if (this.initializing || this.updating) {
+    } else if (!this.initialized) {
+      if (!this.eager) {
+        this.log(`initialization triggered by ${sender}`)
+      }
+      this.initializing = true;
+      this.resolve(
+        this.depsPromise().then(args => this.mapper(...args))
+      )
+      this.state.then(() => {
+        this.initializing = false
+        this.attach();
+      });
+    } else if (!this.valid) {
+      if (!this.eager && !Object.values(this.listeners).length) {
+        this.log(`update triggered by ${sender}`);
+      }
+      this.updating = true;
+      this.state = this.depsPromise().then(args => this.mapper(...args));
+      this.state.then(newState => {
+        this.log('updated', maybeToJS(newState))
+        this.updating = false;
+        this.valid = true;
+      });
+    }
+    return this.state;
+  }
+
+  subscribeTo(depName) {
+    this.parent.resolveDep(depName).addDep(this.name);
   }
 
   attach() {
-    this.deps.forEach(dep =>
-      this.parent.resolveDep(dep).subscribe(
-        this.name
-      )
-    );
+    this.deps.forEach(this.subscribeTo.bind(this));
   }
 
-  depsOK() {
-    const unitialized = this.deps.filter(
-      dep => this.parent.resolveDep(dep).state === NOTHING
-    );
-    if (unitialized.length) {
-      const names = unitialized.join(', ');
-      this.log(
-        `skipped update because ${names} ${unitialized.length > 1 ? 'are' : 'is'} uninitialized`
-      );
-      return false;
+  invalidate(sender) {
+    this.log(`Invalidated by ${sender}`)
+    this.valid = false;
+    if (this.eager) {
+      this.log('eagerly updating');
+      this.getState();
+    } else if (Object.values(this.listeners).length) {
+      this.log('doing it for the listeners')
+      this.getState();
+    } else {
+      this.log('is lazy');
     }
-    return true;
-  }
-
-  onDepUpdated(sender) {
-    this.log(`was notified by ${sender}`);
-    if (!this.depsOK()) return;
-    this.assign(
-      this,
-      this.mapper(...this.deps.map(dep => this.parent.resolveDep(dep).state))
-    );
+    this.invalidateDeps();
   }
 }
 
 export default class State extends Mapping {
-  constructor({ name, parent }) {
-    super({ name, parent, deps: [] });
+  constructor({ name, parent, ...opts }) {
+    super({ name, parent, deps: [], ...opts });
     this.entities = [];
   }
 
@@ -148,7 +188,13 @@ export default class State extends Mapping {
   }
 
   field(Class, { name, ...opts }) {
+    let oldDependents = [];
+    if (this[name]) {
+      this.log(`replacing ${name}`);
+      oldDependents = this[name].dependents;
+    }
     new Class({ name, ...opts, parent: this });
+    oldDependents.forEach(this[name].addDep.bind(this[name]));
     return this[name];
   }
 
@@ -178,56 +224,26 @@ export default class State extends Mapping {
 }
 
 class Remote extends State {
-  constructor({ initialUrl, urlMapping, initialParams, paramsMapping, ...opts }) {
-    super(opts);
-    if (initialUrl) {
-      this.input({
-        name: 'url',
-        initial: initialUrl,
-      });
-    } else if (urlMapping) {
-      const urlMappingOpts = urlMapping;
-      this.mapping({
-        name: 'url',
-        ...urlMappingOpts,
-      });
+  constructor({ url, params, ...opts }) {
+    let deps = [];
+    if (url instanceof Node) {
+      deps.push(url);
+    }
+    if (params) {
+      deps.push(params);
     }
 
-    if (paramsMapping) {
-      const paramsMappingOpts = paramsMapping;
-      this.mapping({
-        name: 'params',
-        ...paramsMappingOpts,
-      });
-    } else {
-      this.input({
-        name: 'params',
-        initial: initialParams || {},
-      });
-    }
-
-    this.input({
-      name: 'status',
+    super({
+      deps,
+      ...opts,
+      mapper(url, params) {
+        const uri = new URI(url);
+        if (params) {
+          uri.addSearch(maybeToJS(params));
+        }
+        this.log(`fetching ${uri}`);
+        return fetchEP(uri);
+      }
     });
-
-    this.input({
-      name: 'error',
-    });
-
-    this.input({
-      name: 'result',
-    });
-
-    this.deps = ['url', 'params'];
-    this.url.subscribe(this.name);
-    this.params.subscribe(this.name);
-  }
-
-  onDepUpdated(sender) {
-    if (this.params.state === NOTHING) return;
-    const uri = new URI(this.url.state).addSearch(this.params.state);
-    fetchEP(uri).then(data => this.result.assign(this.name, data));
-    this.status.assign(this.name, 'Loading...');
-    this.log(`Fetching ${uri}`);
   }
 }
