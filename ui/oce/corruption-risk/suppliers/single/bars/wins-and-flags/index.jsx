@@ -1,7 +1,7 @@
 import { BarChart, Bar, XAxis, YAxis, LabelList, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import translatable from '../../../../../translatable';
 import Popup from './popup';
-import { CRD, winsAndFlagsData } from '../../../../../state/oce-state';
+import { winsAndFlagsData } from '../../../../../state/oce-state';
 import { renderTopLeftLabel } from '../tools';
 
 class WinsAndFlags extends translatable(React.PureComponent) {
@@ -54,6 +54,7 @@ class WinsAndFlags extends translatable(React.PureComponent) {
           <Legend
             align="right"
             verticalAlign="top"
+            height={30}
           />
           <Bar
             name={this.t('crd:suppliers:wins')}
