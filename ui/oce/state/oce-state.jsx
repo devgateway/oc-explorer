@@ -56,7 +56,6 @@ const indicatorIdsFlat = CRD.mapping({
 export const flaggedNrData = CRD.mapping({
   name: 'flaggedNrData',
   deps: [indicatorIdsFlat, supplierFilters, indicatorTypesMapping],
-  eager: true,
   mapper: (indicatorIds, filters, indicatorTypesMapping) => Promise.all(
     indicatorIds.map(indicatorId =>
       fetchEP(

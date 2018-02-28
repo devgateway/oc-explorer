@@ -1,13 +1,9 @@
-import { ResponsiveContainer, BarChart, XAxis, YAxis, Legend, Bar, LabelList } from 'recharts';
-import DataFetcher from '../../../data-fetcher';
-import TaggedBarChart from '../../../tagged-bar-chart';
-import { wireProps } from '../../../tools';
-import { pluck, cacheFn } from '../../../../tools';
-import translatable from '../../../../translatable';
-import CustomPopup from '../../../custom-popup';
-import BackendDateFilterable from '../../../backend-date-filterable';
-import { renderTopLeftLabel } from './tools';
-import { flaggedNrData } from '../../../../state/oce-state';
+import { ResponsiveContainer, BarChart, XAxis, YAxis, Legend, Bar, LabelList, Tooltip } from 'recharts';
+import { pluck } from '../../../../tools';
+import translatable from '../../../../../translatable';
+import { renderTopLeftLabel } from '../tools';
+import { flaggedNrData } from '../../../../../state/oce-state';
+import Popup from './popup';
 
 const POPUP_WIDTH = 350;
 const POPUP_HEIGHT = 55;
@@ -75,8 +71,8 @@ class TaggedBar extends translatable(Bar) {
       <g>
         {this.maybeGetGradients(types)}
         {super.renderRectangle(option, {
-          ...props,
-          fill: this.getFill(types),
+           ...props,
+           fill: this.getFill(types),
         })}
       </g>
     )
@@ -109,7 +105,7 @@ export default class FlaggedNr extends translatable(React.PureComponent) {
 
   }
   render() {
-    const { zoomed } = this.props;
+    const { zoomed, translations } = this.props;
     let { data } = this.state;
     let height = 350;
     if (zoomed) {
@@ -132,7 +128,6 @@ export default class FlaggedNr extends translatable(React.PureComponent) {
         color: corruptionTypeColors[corruptionType],
       })
     );
-
     return (
       <ResponsiveContainer width="100%" height={height}>
         <BarChart
@@ -144,6 +139,7 @@ export default class FlaggedNr extends translatable(React.PureComponent) {
         >
           <XAxis type="number" />
           <YAxis type="category" dataKey="indicatorId" hide />
+          <Tooltip content={<Popup />} translations={translations} />
           <Legend
             align="right"
             verticalAlign="top"
@@ -168,102 +164,3 @@ export default class FlaggedNr extends translatable(React.PureComponent) {
   }
 }
 
-/* class Popup extends translatable(React.PureComponent) {
- *   render() {
- *     const { x, y, points } = this.props;
- *     const point = points[0];
- *     const { xaxis, yaxis } = point;
- *     const markerLeft = xaxis.l2p(point.x) + xaxis._offset;
- *     const markerTop = yaxis.l2p(point.pointNumber) + yaxis._offset;
- * 
- *     const left = (markerLeft / 2) - (POPUP_WIDTH / 2);
- *     const top = markerTop - POPUP_HEIGHT - (POPUP_ARROW_SIZE * 1.5);
- * 
- *     const style = {
- *       left,
- *       top,
- *       width: POPUP_WIDTH,
- *       height: POPUP_HEIGHT
- *     };
- * 
- *     const flags = point.x;
- * 
- *     const label = flags === 1 ?
- *       this.t('crd:supplier:flaggedNr:popup:sg') :
- *       this.t('crd:supplier:flaggedNr:popup:pl');
- * 
- *     return (
- *       <div
- *         className="crd-popup donut-popup text-center"
- *         style={style}
- *       >
- *         {label.replace('$#$', flags).replace('$#$', point.y)}
- *         <div className="arrow" />
- *       </div>
- *     )
- *   }
- * }
- * 
- * class FlaggedNr extends translatable(React.PureComponent) {
- *   render() {
- *     const { width, data } = this.props;
- *     return (
- *       <TaggedBarChart
- *         data={data}
- *         width={width}
- *         tags={{
- *         }}
- *       />
- *     );
- *   }
- * }
- * 
- * class FlaggedNrWrapper extends translatable(React.PureComponent) {
- *   constructor(...args){
- *     super(...args);
- *     this.getEndpoints = cacheFn(indicatorTypesMapping =>
- *       Object.keys(indicatorTypesMapping).map(id => `flags/${id}/count`)
- *     );
- *   }
- * 
- *   onRequestNewData(path, data) {
- *     const { indicatorTypesMapping } = this.props;
- *     const chartData = [];
- *     if (Array.isArray(data)) {
- *       Object.keys(indicatorTypesMapping).forEach((id, index) => {
- *         if(data[index].length) {
- *           chartData.push({
- *             x: data[index][0].count,
- *             y: this.t(``),
- *             tags: indicatorTypesMapping[id].types
- *           });
- *         }
- *       });
- *       chartData.sort((a, b) => b.x - a.x);
- *     }
- *     this.props.requestNewData(path, chartData);
- *   }
- * 
- *   render() {
- *     const { requestNewData, indicatorTypesMapping } = this.props;
- *     if (!requestNewData) return null;
- *     const endpoints = this.getEndpoints(indicatorTypesMapping);
- *     return (
- *       <BackendDateFilterable
- *         {...this.props}
- *         requestNewData={this.onRequestNewData.bind(this)}
- *       >
- *         <DataFetcher
- *           endpoints={endpoints}
- *         >
- *           <CustomPopup
- *             {...this.props}
- *             Chart={FlaggedNr}
- *             Popup={Popup}
- *           />
- *         </DataFetcher>
- *       </BackendDateFilterable>
- *     )
- *   }
- * }
- * export default FlaggedNrWrapper;*/
