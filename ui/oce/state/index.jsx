@@ -224,20 +224,26 @@ export default class State extends Mapping {
 }
 
 class Remote extends State {
-  constructor(opts) {
+  constructor({ url, params, ...opts }) {
+    let deps = [];
+    if (url instanceof Node) {
+      deps.push(url);
+    }
+    if (params) {
+      deps.push(params);
+    }
+
     super({
+      deps,
       ...opts,
       mapper(url, params) {
-        const uri = new URI(url).addSearch(params);
+        const uri = new URI(url);
+        if (params) {
+          uri.addSearch(maybeToJS(params));
+        }
         this.log(`fetching ${uri}`);
         return fetchEP(uri);
       }
     });
-    this.input({ name: 'url' });
-    this.input({ name: 'params', initial: {} });
-
-    this.deps = [this.url.name, this.params.name];
-    this.url.addDep(this.name);
-    this.params.addDep(this.name);
   }
 }
