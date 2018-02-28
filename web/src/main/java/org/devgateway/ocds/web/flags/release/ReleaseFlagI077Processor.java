@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcessor {
 
     private static final Integer INTERVAL_DAYS = 365;
-    private static final Integer MAX_AWARDS = 3;
+    private static final Integer MAX_AWARDS = 4;
 
     private ConcurrentHashMap<String, FrequentSuppliersTimeIntervalController.FrequentSuppliersResponse>
             frequentSuppliersMap;
