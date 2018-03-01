@@ -196,7 +196,7 @@
   "crd:indicators:i077:description": "Cuando un proveedor único gana múltiples contratos competitivos de una entidad contratante dentro de un período de tiempo condensado, puede indicar un esfuerzo para favorecer a un proveedor individual, lo que puede resultar en sobornos a las personas involucradas en el proceso de evaluación o adjudicación.",
   "crd:indicators:i077:indicator": "Se otorga un alto número de contratos competitivos a un proveedor dentro de un período de un año por una sola entidad adjudicadora.",
   "crd:indicators:i077:eligibility": "Se ha otorgado una adjudicación. El método de adquisición es competitivo.",
-  "crd:indicators:i077:thresholds": "Mínimo de 2 adjudicaciones otorgadas a 1 proveedor por 1 entidad contratante.",
+  "crd:indicators:i077:thresholds": "Mínimo de 4 adjudicaciones otorgadas a 1 proveedor por 1 entidad contratante.",
   "crd:indicators:i083:name": "Winner-Loser Pattern",
   "crd:indicators:i083:description": "When X supplier wins, same set of tenderers loses (at least twice)",
   "crd:indicators:i083:indicator": "When one supplier wins, the same tenderers always lose.",

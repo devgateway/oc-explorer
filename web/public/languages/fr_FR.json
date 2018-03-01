@@ -196,7 +196,7 @@
   "crd:indicators:i077:description": "Nombre élevé d'attributions de contrats concurrentiels à un fournisseur au cours d'une année civile",
   "crd:indicators:i077:indicator": "Un nombre élevé de contrats est attribué à un fournisseur au cours d'une période d'un an par une seule entité contractante.",
   "crd:indicators:i077:eligibility": "Le marché a été gagné",
-  "crd:indicators:i077:thresholds": "Minimum de 2 prix attribués à 1 fournisseur par 1 entité contractante.",
+  "crd:indicators:i077:thresholds": "Minimum de 4 prix attribués à 1 fournisseur par 1 entité contractante.",
   "crd:indicators:i083:name": "Modèle Gagnant-Perdant",
   "crd:indicators:i083:description": "Lorsque le fournisseur X gagne, le même groupe de soumissionnaires perd (au moins deux fois)",
   "crd:indicators:i083:indicator": "Lorsqu'un fournisseur gagne, les mêmes soumissionnaires perdent toujours.",
