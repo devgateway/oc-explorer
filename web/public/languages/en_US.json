@@ -196,7 +196,7 @@
   "crd:indicators:i077:description": "High number of competitive contract awards to one supplier within a calendar year",
   "crd:indicators:i077:indicator": "A high number of contracts are awarded to one supplier within a one-year time period by a single procuring entity.",
   "crd:indicators:i077:eligibility": "Award has been made.",
-  "crd:indicators:i077:thresholds": "Minimum of 2 awards made to 1 supplier by 1 procuring entity.",
+  "crd:indicators:i077:thresholds": "Minimum of 3 awards made to 1 supplier by 1 procuring entity.",
   "crd:indicators:i083:name": "Winner-Loser Pattern",
   "crd:indicators:i083:description": "When X supplier wins, same set of tenderers loses (at least twice)",
   "crd:indicators:i083:indicator": "When one supplier wins, the same tenderers always lose.",
