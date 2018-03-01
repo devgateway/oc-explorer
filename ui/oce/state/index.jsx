@@ -5,152 +5,245 @@ import { fetchEP } from '../tools';
 const NOTHING = Symbol();
 const pluck = field => obj => obj[field];
 
-const consolify = data => data.toJS ? data.toJS() : data;
+const maybeToJS = data => data && data.toJS ? data.toJS() : data;
 
 const isNothing = a => typeof a === 'undefined' ||
   a === NOTHING;
 
+function schedule(cb) {
+  requestIdleCallback ?
+    requestIdleCallback (cb) :
+    setTimeout(cb);
+}
+
 class Node {
-  constructor({ name, log }) {
-    this.name = name;
-    this.listeners = {};
-    this.state = NOTHING;
-    this.version = 0;
-    this.log = log;
-  }
-
-  subscribe(name, cb) {
-    this.listeners[name] = cb;
-    if (this.state !== NOTHING) {
-      cb();
+  constructor({ name, parent }) {
+    if (parent) {
+      this.name = `${parent.name}.${name}`;
+    } else {
+      this.name = name;
     }
+    this.parent = parent;
+    if (this.parent) {
+      this.parent.register(this, name);
+    }
+    this.log = debug(this.name);
+    this.dependents = [];
+    this.listeners = {};
+    this.initialized = false;
+    this.state = new Promise(resolve => this.resolve = resolve);
+    this.state.then(value => {
+      this.initialized = true;
+      this.log('initialized', maybeToJS(value))
+    });
   }
 
-  unsubscribe(name) {
+  invalidateDep(dName) {
+    this.parent.resolveDep(dName).invalidate(this.name);
+  }
+
+  addDep(dName) {
+    this.dependents.push(dName);
+  }
+
+  addListener(name, cb) {
+    this.listeners[name] = cb;
+    cb();
+  }
+
+  removeListener(name) {
     delete this.listeners[name];
   }
 
-  assign(newState) {
-    if (typeof newState === 'undefined') {
-      this.log(`refusing to update to 'undefined'`);
-      return;
-    }
-    if( this.state === newState) {
-      this.log(`did not update because new state(${newState}) is the same as the old one`, newState);
-      return;
-    }
+  invalidateDeps() {
+    this.dependents.forEach(this.invalidateDep.bind(this));
+    Object.values(this.listeners).forEach(cb => {
+      cb(this.name);
+    });
+  }
 
-    this.state = newState;
-    this.version++;
-    this.log(`Updated to version ${this.version}, state:`, consolify(this.state));
-    Object.values(this.listeners).forEach(setTimeout);
+  getState() {
+    return this.state;
   }
 }
 
-class Variable extends Node {
-  constructor({ name, initial, ...opts }) {
-    super({ name, ...opts });
-    if (typeof initial !== 'undefined' && initial !== NOTHING) {
-      this.assign(initial);
+class HVar extends Node {
+  constructor({ name, parent, initial }) {
+    super({ name, parent });
+    if (typeof initial === 'undefined') {
+      this.log('Starting unitialized');
+    } else {
+      this.log('Starting initialized', maybeToJS(initial));
+      this.initialized = true;
+      this.state = Promise.resolve(initial);
     }
-  } 
+  }
+
+  assign(sender, newState) {
+    if (!this.initialized) {
+      this.resolve(newState);
+      this.initialized = true;
+    } else {
+      this.state.then(oldState => {
+        if (oldState === newState) {
+          this.log('oldState === newState', maybeToJS(newState))
+        } else {
+          this.state = Promise.resolve(newState);
+          this.invalidateDeps();
+        }
+      })
+    }
+  }
 }
 
 class Mapping extends Node {
-  constructor({ name, deps, mapper, ...opts }) {
-    super({ name, ...opts });
+  constructor({ deps, mapper, eager, ...opts }) {
+    super(opts);
+    this.deps = deps.map(d => d.name);
     this.mapper = mapper;
-    this.deps = deps;
-    this.deps.forEach(dep => dep.subscribe(this.name, this.doMapping.bind(this)));
-  }
-
-  depsOK() {
-    const unitialized = this.deps.filter(dep => dep.state === NOTHING);
-    if (unitialized.length) {
-      const names = unitialized.map(pluck('name')).join(', ');
-      this.log(
-        `skipped update because ${names} ${unitialized.length > 1 ? 'are' : 'is'} uninitialized`
-      );
-      return false;
+    this.initialized = false;
+    this.eager = eager;
+    if (this.eager) {
+      this.log('initializing(eager)');
+      this.getState();
+    } else {
+      this.log('initialization pending');
     }
-    return true;
   }
 
-  doMapping() {
-    if (!this.depsOK()) return;
-    this.assign(
-      this.mapper(...this.deps.map(pluck('state')))
-    );
+  depsPromise() {
+    return Promise.all(
+      this.deps.map(dep => this.parent.resolveDep(dep).getState(this.name))
+    )
+  }
+
+  getState(sender) {
+    if (this.initializing || this.updating) {
+    } else if (!this.initialized) {
+      if (!this.eager) {
+        this.log(`initialization triggered by ${sender}`)
+      }
+      this.initializing = true;
+      this.resolve(
+        this.depsPromise().then(args => this.mapper(...args))
+      )
+      this.state.then(() => {
+        this.initializing = false
+        this.attach();
+      });
+    } else if (!this.valid) {
+      if (!this.eager && !Object.values(this.listeners).length) {
+        this.log(`update triggered by ${sender}`);
+      }
+      this.updating = true;
+      this.state = this.depsPromise().then(args => this.mapper(...args));
+      this.state.then(newState => {
+        this.log('updated', maybeToJS(newState))
+        this.updating = false;
+        this.valid = true;
+      });
+    }
+    return this.state;
+  }
+
+  subscribeTo(depName) {
+    this.parent.resolveDep(depName).addDep(this.name);
+  }
+
+  attach() {
+    this.deps.forEach(this.subscribeTo.bind(this));
+  }
+
+  invalidate(sender) {
+    this.log(`Invalidated by ${sender}`)
+    this.valid = false;
+    if (this.eager) {
+      this.log('eagerly updating');
+      this.getState();
+    } else if (Object.values(this.listeners).length) {
+      this.log('doing it for the listeners')
+      this.getState();
+    } else {
+      this.log('is lazy');
+    }
+    this.invalidateDeps();
   }
 }
 
-class Endpoint extends Mapping {
+export default class State extends Mapping {
+  constructor({ name, parent, ...opts }) {
+    super({ name, parent, deps: [], ...opts });
+    this.entities = [];
+  }
+
+  register(entity, name) {
+    this.entities.push(name);
+    this[name] = entity;
+  }
+
+  unregister(name) {
+    const indexOf = this.entities.indexOf(name);
+    this.entities.splice(indexOf, 1);
+    delete this[name];
+  }
+
+  field(Class, { name, ...opts }) {
+    let oldDependents = [];
+    if (this[name]) {
+      this.log(`replacing ${name}`);
+      oldDependents = this[name].dependents;
+    }
+    new Class({ name, ...opts, parent: this });
+    oldDependents.forEach(this[name].addDep.bind(this[name]));
+    return this[name];
+  }
+
+  input(opts) { return this.field(HVar, opts); }
+
+  substate(opts) { return this.field(State, opts); }
+
+  mapping(opts) { return this.field(Mapping, opts); }
+
+  remote(opts) { return this.field(Remote, opts); }
+
+  resolveDep(name) {
+    if (name === this.name) return this;
+    if (name.indexOf(this.name) === 0) {
+      const rest = name.slice(this.name.length + 1);
+      const iofSeparator = rest.indexOf('.');
+      if (iofSeparator === -1) {
+        return this[rest];
+      } else {
+        const substateName = rest.slice(0, iofSeparator);
+        return this[substateName].resolveDep(name);
+      }
+    }
+
+    return this.parent.resolveDep(name);
+  }
+}
+
+class Remote extends State {
   constructor({ url, params, ...opts }) {
-    super({
-      deps: isNothing(params) ? [url] : [url, params],
-      ...opts
-    });
-    this.url = url;
-    this.params = params;
-  }
-
-  doMapping() {
-    if (!this.depsOK()) return;
-    const url = new URI(this.deps[0].state);
-    if (!isNothing(this.params)) {
-      url.addSearch(this.params.state.toJS());
+    let deps = [];
+    if (url instanceof Node) {
+      deps.push(url);
     }
-    fetchEP(url).then(data => this.assign(data));
-    this.log(`started a request to ${url}`);
-  }
-}
+    if (params) {
+      deps.push(params);
+    }
 
-export default class State {
-  constructor() {
-    this.entities = {};
-  }
-
-  input(opts) {
-    const { name } = opts;
-    this.entities[name] = new Variable({
-      log: debug(`oce.state.${name}`),
-      ...opts
-    })
-  }
-
-  assign(name, value) {
-    this.entities[name].assign(value);
-  }
-
-  map({ deps, ...opts }) {
-    const { name } = opts;
-    this.entities[name] = new Mapping({
-      log: debug(`oce.state.${name}`),
-      deps: deps.map(dep => this.entities[dep]),
+    super({
+      deps,
       ...opts,
+      mapper(url, params) {
+        const uri = new URI(url);
+        if (params) {
+          uri.addSearch(maybeToJS(params));
+        }
+        this.log(`fetching ${uri}`);
+        return fetchEP(uri);
+      }
     });
-  }
-
-  endpoint({ url, params, ...opts }) {
-    const { name } = opts;
-    this.entities[name] = new Endpoint({
-      log: debug(`oce.state.${name}`),
-      url: this.entities[url],
-      params: isNothing(params) ? NOTHING : this.entities[params],
-      ...opts,
-    });
-  }
-
-  subscribe(name, sender, listener) {
-    this.entities[name].subscribe(sender, listener);
-
-  }
-
-  unsubscribe(name, sender) {
-    this.entities[name].unsubscribe(sender);
-  }
-
-  getState(name) {
-    return this.entities[name].state;
   }
 }

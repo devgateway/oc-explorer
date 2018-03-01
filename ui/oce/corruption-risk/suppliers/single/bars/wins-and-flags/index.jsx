@@ -1,15 +1,8 @@
-import { BarChart, Bar, XAxis, YAxis, LabelList, Label, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, LabelList, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import translatable from '../../../../../translatable';
 import Popup from './popup';
-import State from '../../../../../state/oce-state';
-
-function renderTopLeftLabel({ content, ...props }) {
-  return (
-    <g transform="translate(-5 -20)">
-      <Label {...props} />
-    </g>
-  )
-}
+import { winsAndFlagsData } from '../../../../../state/oce-state';
+import { renderTopLeftLabel } from '../tools';
 
 class WinsAndFlags extends translatable(React.PureComponent) {
   constructor(props) {
@@ -20,23 +13,20 @@ class WinsAndFlags extends translatable(React.PureComponent) {
 
   componentDidMount() {
     const { zoomed } = this.props;
-    State.subscribe(
-      'winsAndFlagsData',
-      zoomed ? 'ZoomedWinsAndFlagsChart' : 'WinsAndFlagsChart',
-      () => {
+    const name = zoomed ? 'ZoomedWinsAndFlagsChart' : 'WinsAndFlagsChart';
+    winsAndFlagsData.addListener(name, () => {
+      winsAndFlagsData.getState(name).then(data => {
         this.setState({
-          data: State.getState('winsAndFlagsData')
-        });
-      }
-    );
+          data
+        })
+      })
+    })
   }
 
   componentWillUnmount() {
     const { zoomed } = this.props;
-    State.unsubscribe(
-      'winsAndFlagsData',
-      zoomed ? 'ZoomedWinsAndFlagsChart' : 'WinsAndFlagsChart',
-    );
+    const name = zoomed ? 'ZoomedWinsAndFlagsChart' : 'WinsAndFlagsChart';
+    winsAndFlagsData.removeListener(name);
   }
 
   render() {
@@ -64,12 +54,14 @@ class WinsAndFlags extends translatable(React.PureComponent) {
           <Legend
             align="right"
             verticalAlign="top"
+            height={30}
           />
           <Bar
             name={this.t('crd:suppliers:wins')}
             dataKey="wins"
             fill="#289df4"
             minPointSize={3}
+            isAnimationActive={false}
           >
             <LabelList
               dataKey="PEName"
