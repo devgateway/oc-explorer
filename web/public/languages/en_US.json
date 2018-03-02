@@ -271,6 +271,7 @@
   "crd:procurementsTable:tenderDate": "Tender Date",
   "crd:procurementsTable:flagType": "Flag Type",
   "crd:procurementsTable:noOfFlags": "No. of Flags",
+  "crd:procurementsTable:individualIndicator:noOfFlags": "No. of $#$ Flags",
   "crd:procurementsTable:associatedFlags": "Associated $#$ flags",
   "crd:individualIndicatorChart:flaggedProcurements": "Flagged Procurements",
   "crd:individualIndicatorChart:eligibleProcurements": "Eligible Procurements",
