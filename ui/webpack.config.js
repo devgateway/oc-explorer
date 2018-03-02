@@ -15,9 +15,9 @@ config.plugins = config.plugins.filter(function(plugin){
     }
   }),
   new webpack.optimize.DedupePlugin(),
-  // new webpack.optimize.UglifyJsPlugin({
-  //   sourceMap: false
-  // })
+  new webpack.optimize.UglifyJsPlugin({
+    sourceMap: false
+  })
 ]);
 
 module.exports = config;
