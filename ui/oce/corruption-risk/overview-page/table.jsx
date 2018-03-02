@@ -1,10 +1,10 @@
 import ReactDOM from 'react-dom';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { List } from 'immutable';
-import translatable from '../translatable';
-import { POPUP_HEIGHT } from './constants';
-import { getAwardAmount, mkContractLink, _3LineText } from './tools';
-import PaginatedTable from './paginated-table';
+import translatable from '../../translatable';
+import { POPUP_HEIGHT } from '../constants';
+import { getAwardAmount, mkContractLink, _3LineText } from '../tools';
+import PaginatedTable from '../paginated-table';
 
 // eslint-disable-next-line no-undef
 class Popup extends translatable(React.Component) {
@@ -47,10 +47,9 @@ class Popup extends translatable(React.Component) {
   render() {
     const { flaggedStats, type } = this.props;
     const { showPopup } = this.state;
-    const count = flaggedStats.get(
-      'count',
-      flaggedStats.find(stat => stat.get('type') === type).get('count')
-    );
+
+    const count = flaggedStats.get('count', 0);
+    //flaggedStats.find(stat => stat.get('type') === type).get('count')
     return (
       <div
         onMouseEnter={() => this.showPopup()}
