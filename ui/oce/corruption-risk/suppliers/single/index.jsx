@@ -187,7 +187,7 @@ class Supplier extends CRDPage {
   componentWillReceiveProps(nextProps) {
     const { id } = this.props;
     if (id != nextProps.id) {
-      State.assign('supplierId', id);
+      supplierId.assign('supplierId', id);
     }
   }
 
