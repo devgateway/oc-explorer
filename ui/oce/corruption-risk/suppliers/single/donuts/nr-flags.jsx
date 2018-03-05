@@ -1,12 +1,19 @@
 import { List } from 'immutable';
 import Donut from '../../../donut';
 import translatable from '../../../../translatable';
+import { pluck } from '../../../../tools';
 
 class CenterText extends React.PureComponent {
   render() {
     const { data } = this.props;
+    let style = {};
+    const label = data.map(pluck('value')).join('/');
+    if (label.length > 9) {
+      style = { fontSize: '2vw' }
+    }
+
     return (
-      <div className="center-text two-rows total-flags-center-text">
+      <div className="center-text two-rows total-flags-center-text" style={style}>
         {data.map(({ color, value }) =>
           <span key={color} style={{ color }}>{value}</span>
         )}
