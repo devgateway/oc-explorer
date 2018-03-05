@@ -67,9 +67,10 @@ class Node {
   }
 }
 
-class HVar extends Node {
+export class HVar extends Node {
   constructor({ name, parent, initial }) {
     super({ name, parent });
+    this.initial = initial;
     if (typeof initial === 'undefined') {
       this.log('Starting unitialized');
     } else {
@@ -96,7 +97,7 @@ class HVar extends Node {
   }
 }
 
-class Mapping extends Node {
+export class Mapping extends Node {
   constructor({ deps, mapper, eager, ...opts }) {
     super(opts);
     this.deps = deps.map(d => d.name);

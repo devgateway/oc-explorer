@@ -7,6 +7,7 @@ class ClickableCrosstab extends Crosstab {
   constructor(...args) {
     super(...args);
     this.state.currentlySelected = false;
+    this.deselect = () => this.setState({ currentlySelected: false });
   }
 
   row(rowData, rowIndicatorID) {
@@ -82,7 +83,12 @@ class ClickableCrosstab extends Crosstab {
 
   componentDidMount() {
     super.componentDidMount();
-    document.body.addEventListener('click', () => this.setState({ currentlySelected: false }));
+    document.body.addEventListener('click', this.deselect);
+  }
+
+  componentWillUnmount() {
+    super.componentWillUnmount && super.componentWillUnmount();
+    document.body.removeEventListener('click', this.deselect);
   }
 
   render() {
