@@ -7,6 +7,10 @@ import Filters from './filters';
 // eslint-disable-next-line no-unused-vars
 import OCEStyle from './style.less';
 
+if (process.env.NODE_ENV === 'development') {
+  require('./dev')
+}
+
 const MENU_BOX_COMPARISON = 'menu-box';
 const MENU_BOX_FILTERS = 'filters';
 const ROLE_ADMIN = 'ROLE_ADMIN';

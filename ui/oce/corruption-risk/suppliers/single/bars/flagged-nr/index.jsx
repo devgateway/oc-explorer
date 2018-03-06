@@ -112,6 +112,11 @@ export default class FlaggedNr extends translatable(React.PureComponent) {
       height = Math.max(height, data.length * 50);
     } else {
       data = data.slice(0, 5);
+      if (data.length < 5) {
+        for(let counter = data.length; counter < 5; counter++) {
+          data.unshift({ types: [] });
+        }
+      }
     }
 
     const corruptionTypes = new Set();
@@ -139,7 +144,7 @@ export default class FlaggedNr extends translatable(React.PureComponent) {
         >
           <XAxis type="number" />
           <YAxis type="category" dataKey="indicatorId" hide />
-          <Tooltip content={<Popup />} translations={translations} />
+          <Tooltip content={<Popup />} translations={translations} cursor={false} />
           <Legend
             align="right"
             verticalAlign="top"

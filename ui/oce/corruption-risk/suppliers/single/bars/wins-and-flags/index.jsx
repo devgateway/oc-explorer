@@ -31,12 +31,18 @@ class WinsAndFlags extends translatable(React.PureComponent) {
 
   render() {
     const { translations, zoomed } = this.props;
-    let data = this.state.data;
+    let { data } = this.state;
+
     let height = 350;
     if (zoomed) {
       height = Math.max(height, data.length * 50);
     } else {
       data = data.slice(0, 5);
+      if (data.length < 5) {
+        for(let counter = data.length; counter < 5; counter++) {
+          data.unshift({});
+        }
+      }
     }
 
     return (
@@ -50,7 +56,7 @@ class WinsAndFlags extends translatable(React.PureComponent) {
         >
           <XAxis type="number" />
           <YAxis type="category" hide dataKey="PEName" />
-          <Tooltip content={<Popup />} translations={translations} />
+          <Tooltip content={<Popup />} translations={translations} cursor={false}/>
           <Legend
             align="right"
             verticalAlign="top"
