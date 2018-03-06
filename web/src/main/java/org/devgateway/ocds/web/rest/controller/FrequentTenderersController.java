@@ -15,6 +15,7 @@ import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
+import org.devgateway.ocds.web.rest.controller.request.WinningTupleYearFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
@@ -121,5 +123,39 @@ public class FrequentTenderersController extends GenericOCDSController {
 
         return releaseAgg(agg);
     }
+
+    @ApiOperation(value = "Counts the tenders/awards where the given supplier id is among the winners. "
+            + "This assumes there is only  one active award, which always seems to be the case, per tender. ")
+    @RequestMapping(value = "/api/tendererTupleActiveAwardsCount",
+            method = {RequestMethod.POST, RequestMethod.GET},
+            produces = "application/json")
+    public List<DBObject> tendererTupleActiveAwardsCount(@ModelAttribute @Valid
+                                                             final WinningTupleYearFilterPagingRequest filter) {
+
+        List<Criteria> metaFilter = filter.getTendererTuple()
+                .stream()
+                .map(t -> where("bids.details.tenderers._id").is(t))
+                .collect(Collectors.toList());
+
+        metaFilter.add(getYearDefaultFilterCriteria(filter, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE));
+
+        Aggregation agg = newAggregation(
+                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
+                        .andOperator(metaFilter.toArray(new Criteria[0]))),
+                unwind("awards"),
+                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
+                        .andOperator(getYearDefaultFilterCriteria(
+                                filter.awardFiltering(),
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
+                        ))),
+                unwind("awards.suppliers"),
+                group(MongoConstants.FieldNames.AWARDS_SUPPLIERS_ID).count().as("cnt"),
+                project("cnt").and(Fields.UNDERSCORE_ID).as("supplierId")
+                        .andExclude(Fields.UNDERSCORE_ID)
+        );
+
+        return releaseAgg(agg);
+    }
+
 
 }
