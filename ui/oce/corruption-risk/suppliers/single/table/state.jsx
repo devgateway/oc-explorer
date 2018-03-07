@@ -10,11 +10,31 @@ const supplierProcurementsEP = SupplierTableState.input({
   initial: `${API_ROOT}/flaggedRelease/all`,
 });
 
+export const page = SupplierTableState.input({
+  name: 'page',
+  initial: 1,
+});
+
+export const pageSize = SupplierTableState.input({
+  name: 'pageSize',
+  initial: 20,
+});
+
+const filters = SupplierTableState.mapping({
+  name: 'filters',
+  deps: [supplierFilters, page, pageSize],
+  mapper: (supplierFilters, page, pageSize) =>
+    supplierFilters
+      .set('pageSize', pageSize)
+      .set('pageNumber', page - 1)
+});
+
 const supplierProcurementsRaw = SupplierTableState.remote({
   name: 'supplierProcurementsRaw',
   url: supplierProcurementsEP,
-  params: supplierFilters,
+  params: filters,
 });
+
 
 const findActiveAward = awards =>
   awards.find(
@@ -47,6 +67,16 @@ export const supplierProcurementsData = SupplierTableState.mapping({
         flags: Object.keys(datum.flags).filter(key => datum.flags[key].value),
       }
     }),
-})
+});
 
+const supplierProcurementsCountEP = SupplierTableState.input({
+  name: 'supplierProcurementsCountEP',
+  initial: `${API_ROOT}/flaggedRelease/count`,
+});
 
+export const supplierProcurementsCount = SupplierTableState.remote({
+  name: 'supplierProcurementsCount',
+  url: supplierProcurementsCountEP,
+  params: supplierFilters,
+  eager: true,
+});

@@ -11,7 +11,7 @@ export const supplierId = SupplierState.input({
   name: 'supplierId'
 });
 
-const supplierFilters = SupplierState.mapping({
+export const supplierFilters = SupplierState.mapping({
   name: 'supplierFilters',
   deps: [datefulFilters, supplierId],
   mapper: (filters, supplierId) => 
