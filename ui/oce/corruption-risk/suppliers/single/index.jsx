@@ -16,6 +16,7 @@ import FlaggedNr from './bars/flagged-nr';
 import BackendDateFilterable from '../../backend-date-filterable';
 import { supplierId } from './state';
 import WinsAndFlags from './bars/wins-and-flags/index';
+import SupplierTable from './table';
 
 const TitleBelow = ({ title, children, filters, ...props }) => (
   <div>
@@ -251,6 +252,7 @@ class Supplier extends CRDPage {
               </div>
             );
           })}
+        <SupplierTable />
       </section>
     );
   }
