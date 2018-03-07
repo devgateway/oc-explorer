@@ -4,7 +4,7 @@ import { supplierProcurementsData, page, pageSize, supplierProcurementsCount } f
 
 const NAME = 'supplierProcurementsComponent';
 
-class BootstrapTableWrapper extends translatable(React.PureComponent) {
+class BootstrapTableWrapper extends React.PureComponent {
   render() {
     const { columns, data, page, pageSize, onPageChange, onSizePerPageList, count } = this.props;
     return (
@@ -37,7 +37,7 @@ class BootstrapTableWrapper extends translatable(React.PureComponent) {
   }
 }
 
-export default class Table extends React.PureComponent {
+export default class Table extends translatable(React.PureComponent) {
   constructor(...args){
     super(...args);
     this.state = this.state || {};
@@ -75,13 +75,30 @@ export default class Table extends React.PureComponent {
   }
 
   formatTypes(data) {
-    return data
-      .map(datum => `${datum.type}: ${datum.count}`)
-      .join('; ');
+    return (
+      <div>
+        {data.map(datum => {
+          const translated = this.t(`crd:corruptionType:${datum.type}:name`);
+          return <div>{translated}: {datum.count}</div>;
+        })}
+      </div>
+    );
   }
 
   formatFlags(data) {
-    return data.join(', ');
+    return (
+      <div>
+        {data.map(indicator => (
+          <div>
+           {this.t(`crd:indicators:${indicator}:name`)}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  formatDate(date) {
+    return new Date(date).toLocaleDateString();
   }
 
   render() {
@@ -95,23 +112,24 @@ export default class Table extends React.PureComponent {
         onSizePerPageList={newPageSize => pageSize.assign(NAME, newPageSize)}
         count={count}
         columns={[{
-            title: 'PE Name',
+            title: this.t('crd:contracts:baseInfo:procuringEntityName'),
             dataField: 'PEName',
         }, {
-            title: 'Award amount',
+            title: this.t('crd:contracts:list:awardAmount'),
             dataField: 'awardAmount',
         }, {
-            title: 'Award date',
+            title: this.t('crd:contracts:baseInfo:awardDate'),
             dataField: 'awardDate',
+            dataFormat: this.formatDate.bind(this),
         }, {
-            title: 'No of bidders',
+            title: this.t('crd:supplier:table:nrBidders'),
             dataField: 'nrBidders',
         }, {
-            title: 'No of flags',
+            title: this.t('crd:procurementsTable:noOfFlags'),
             dataField: 'types',
             dataFormat: this.formatTypes.bind(this),
         }, {
-            title: 'Flag Name',
+            title: this.t('crd:supplier:table:flagName'),
             dataField: 'flags',
             dataFormat: this.formatFlags.bind(this),
         }]}

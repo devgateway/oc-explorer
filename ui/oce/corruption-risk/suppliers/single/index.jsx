@@ -252,7 +252,8 @@ class Supplier extends CRDPage {
               </div>
             );
           })}
-        <SupplierTable />
+        <h2>{this.t('crd:supplier:table:procurementsWon')}</h2>
+        <SupplierTable translations={translations} />
       </section>
     );
   }
