@@ -14,8 +14,9 @@ import Crosstab from '../../clickable-crosstab';
 import { CORRUPTION_TYPES } from '../../constants';
 import FlaggedNr from './bars/flagged-nr';
 import BackendDateFilterable from '../../backend-date-filterable';
-import { supplierId } from '../../../state/oce-state';
+import { supplierId } from './state';
 import WinsAndFlags from './bars/wins-and-flags/index';
+import SupplierTable from './table';
 
 const TitleBelow = ({ title, children, filters, ...props }) => (
   <div>
@@ -251,6 +252,8 @@ class Supplier extends CRDPage {
               </div>
             );
           })}
+        <h2>{this.t('crd:supplier:table:procurementsWon')}</h2>
+        <SupplierTable translations={translations} />
       </section>
     );
   }
