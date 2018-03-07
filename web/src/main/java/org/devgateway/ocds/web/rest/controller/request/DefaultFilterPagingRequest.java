@@ -6,6 +6,7 @@ package org.devgateway.ocds.web.rest.controller.request;
 import cz.jirutka.validator.collection.constraints.EachPattern;
 import cz.jirutka.validator.collection.constraints.EachRange;
 import io.swagger.annotations.ApiModelProperty;
+import org.devgateway.ocds.web.annotate.OrganizationIdValidation;
 
 import java.math.BigDecimal;
 import java.util.TreeSet;
@@ -31,17 +32,17 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
             "This corresponds the negated bidTypeId filter, matches elements that are NOT in the TreeSet of Ids")
     private TreeSet<String> notBidTypeId;
 
-    @EachPattern(regexp = "^[a-zA-Z0-9\\-]*$")
+    @OrganizationIdValidation
     @ApiModelProperty(value = "This is the id of the organization/procuring entity. "
             + "Corresponds to the OCDS Organization.identifier")
     private TreeSet<String> procuringEntityId;
 
-    @EachPattern(regexp = "^[a-zA-Z0-9\\-]*$")
+    @OrganizationIdValidation
     @ApiModelProperty(value = "This corresponds the negated procuringEntityId filter,"
             + " matches elements that are NOT in the TreeSet of Ids")
     private TreeSet<String> notProcuringEntityId;
 
-    @EachPattern(regexp = "^[a-zA-Z0-9\\-]*$")
+    @OrganizationIdValidation
     @ApiModelProperty(value = "This is the id of the organization/supplier entity. "
             + "Corresponds to the OCDS Organization.identifier")
     private TreeSet<String> supplierId;
