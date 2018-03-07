@@ -124,14 +124,17 @@ export default class Table extends translatable(React.PureComponent) {
         }, {
             title: this.t('crd:supplier:table:nrBidders'),
             dataField: 'nrBidders',
+            width: '10%',
         }, {
             title: this.t('crd:procurementsTable:noOfFlags'),
             dataField: 'types',
             dataFormat: this.formatTypes.bind(this),
+            width: '25%',
         }, {
             title: this.t('crd:supplier:table:flagName'),
             dataField: 'flags',
             dataFormat: this.formatFlags.bind(this),
+            width: '25%',
         }]}
       />
     )
