@@ -14,7 +14,7 @@ import Crosstab from '../../clickable-crosstab';
 import { CORRUPTION_TYPES } from '../../constants';
 import FlaggedNr from './bars/flagged-nr';
 import BackendDateFilterable from '../../backend-date-filterable';
-import { supplierId } from '../../../state/oce-state';
+import { supplierId } from './state';
 import WinsAndFlags from './bars/wins-and-flags/index';
 
 const TitleBelow = ({ title, children, filters, ...props }) => (
