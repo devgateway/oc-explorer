@@ -2,7 +2,7 @@ import { range } from '../../tools';
 import CustomPopupChart from '../custom-popup-chart';
 import CRDPage from '../page';
 import { colorLuminance, wireProps } from '../tools';
-import ProcurementsTable from '../procurements-table';
+import ProcurementsTable from './table';
 import { POPUP_HEIGHT } from '../constants';
 
 const TRACES = ['COLLUSION', 'FRAUD', 'RIGGING'];

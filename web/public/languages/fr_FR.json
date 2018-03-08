@@ -271,6 +271,7 @@
   "crd:procurementsTable:tenderDate": "Date de l'appel d'offres",
   "crd:procurementsTable:flagType": "Type de Drapeau",
   "crd:procurementsTable:noOfFlags": "Nombre de drapeaux",
+  "crd:procurementsTable:individualIndicator:noOfFlags": "Nombre de $#$ drapeaux",
   "crd:procurementsTable:associatedFlags": "Drapeau $#$ associés",
   "crd:individualIndicatorChart:flaggedProcurements": "Processus de passation signalés",
   "crd:individualIndicatorChart:eligibleProcurements": "Processus de passation de marché éligibles",

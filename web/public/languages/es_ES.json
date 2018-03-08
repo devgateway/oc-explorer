@@ -271,6 +271,7 @@
   "crd:procurementsTable:tenderDate": "Fecha de licitación",
   "crd:procurementsTable:flagType": "Tipo de advertencia",
   "crd:procurementsTable:noOfFlags": "No. de advertencias",
+  "crd:procurementsTable:individualIndicator:noOfFlags": "No. de $#$ advertencias",
   "crd:procurementsTable:associatedFlags": "Advertencias $#$ asociadas",
   "crd:individualIndicatorChart:flaggedProcurements": "Contrataciones con advertencias",
   "crd:individualIndicatorChart:eligibleProcurements": "Contrataciones elegibles",
