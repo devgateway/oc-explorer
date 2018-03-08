@@ -2,7 +2,7 @@ import { ResponsiveContainer, BarChart, XAxis, YAxis, Legend, Bar, LabelList, To
 import { pluck } from '../../../../tools';
 import translatable from '../../../../../translatable';
 import { renderTopLeftLabel } from '../tools';
-import { flaggedNrData } from '../../../../../state/oce-state';
+import { flaggedNrData } from '../../state';
 import Popup from './popup';
 
 const POPUP_WIDTH = 350;
