@@ -271,6 +271,7 @@
   "crd:procurementsTable:tenderDate": "Date de l'appel d'offres",
   "crd:procurementsTable:flagType": "Type de Drapeau",
   "crd:procurementsTable:noOfFlags": "Nombre de drapeaux",
+  "crd:procurementsTable:individualIndicator:noOfFlags": "Nombre de $#$ drapeaux",
   "crd:procurementsTable:associatedFlags": "Drapeau $#$ associés",
   "crd:individualIndicatorChart:flaggedProcurements": "Processus de passation signalés",
   "crd:individualIndicatorChart:eligibleProcurements": "Processus de passation de marché éligibles",
@@ -347,5 +348,8 @@
   "crd:contract:nrContractWithPE:name": "Nombre de marchés pour cette autorité contractante entity",
   "crd:contract:percentPEspending:name": "% de marchés accordés à ce fournisseur pour cette autorité contractante",
   "crd:supplier:win:sg": "Gain",
-  "crd:supplier:win:pl": "Gains"
+  "crd:supplier:win:pl": "Gains",
+  "crd:supplier:table:procurementsWon": "Procurements won",
+  "crd:supplier:table:nrBidders": "Number of bidders",
+  "crd:supplier:table:flagName": "Flag name"
 }

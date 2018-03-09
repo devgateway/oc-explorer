@@ -271,6 +271,7 @@
   "crd:procurementsTable:tenderDate": "Fecha de licitación",
   "crd:procurementsTable:flagType": "Tipo de advertencia",
   "crd:procurementsTable:noOfFlags": "No. de advertencias",
+  "crd:procurementsTable:individualIndicator:noOfFlags": "No. de $#$ advertencias",
   "crd:procurementsTable:associatedFlags": "Advertencias $#$ asociadas",
   "crd:individualIndicatorChart:flaggedProcurements": "Contrataciones con advertencias",
   "crd:individualIndicatorChart:eligibleProcurements": "Contrataciones elegibles",
@@ -347,5 +348,8 @@
   "crd:supplier:flaggedNr:popup:sg": "$#$ flag for \"$#$\"",
   "crd:supplier:flaggedNr:popup:pl": "$#$ flags for \"$#$\"",
   "crd:supplier:crosstabs:explanation": "This supplier has been involved in procurements that have been flagged $#$ times in relation to $#$",
+  "crd:supplier:table:procurementsWon": "Procurements won",
+  "crd:supplier:table:nrBidders": "Number of bidders",
+  "crd:supplier:table:flagName": "Flag name",
   "crd:procuringEntities:top-search": "Search within procuring entities"
 }

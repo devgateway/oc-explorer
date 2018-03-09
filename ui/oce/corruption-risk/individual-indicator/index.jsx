@@ -1,9 +1,9 @@
-import CustomPopupChart from './custom-popup-chart';
-import { pluckImm } from '../tools';
-import translatable from '../translatable';
-import CRDPage from './page';
-import { colorLuminance, sortByField } from './tools';
-import ProcurementsTable from './procurements-table';
+import CustomPopupChart from '../custom-popup-chart';
+import { pluckImm } from '../../tools';
+import translatable from '../../translatable';
+import CRDPage from '../page';
+import { colorLuminance, sortByField } from '../tools';
+import ProcurementsTable from './table';
 
 class IndividualIndicatorChart extends CustomPopupChart {
   getCustomEP() {

@@ -27,7 +27,6 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.newA
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
@@ -42,8 +41,6 @@ public abstract class AbstractFlagReleaseSearchController extends AbstractFlagCo
                 match(where("flags.flaggedStats.0").exists(true).and(getFlagProperty()).is(true)
                         .andOperator(getYearDefaultFilterCriteria(filter,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
-                unwind("flags.flaggedStats"),
-                match(where(getFlagProperty()).is(true).andOperator(getFlagTypeFilterCriteria(filter))),
                 project("ocid", TENDER_PROCURING_ENTITY_NAME, TENDER_PERIOD, "flags",
                         TENDER_TITLE, "tag", TENDER_STATUS)
                         .and(TENDER_VALUE).as(TENDER_VALUE).and(AWARDS_VALUE).as(AWARDS_VALUE)
@@ -63,8 +60,6 @@ public abstract class AbstractFlagReleaseSearchController extends AbstractFlagCo
                 match(where("flags.flaggedStats.0").exists(true).and(getFlagProperty()).is(true)
                         .andOperator(getYearDefaultFilterCriteria(filter,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
-                unwind("flags.flaggedStats"),
-                match(where(getFlagProperty()).is(true).andOperator(getFlagTypeFilterCriteria(filter))),
                 group().count().as("count")
         );
         return releaseAgg(agg);
