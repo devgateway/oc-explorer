@@ -60,6 +60,7 @@ export const supplierProcurementsData = SupplierTableState.mapping({
       return {
         id: datum.id,
         PEName: datum.tender.procuringEntity.name,
+        PEId: datum.tender.procuringEntity.id,
         awardAmount: getAwardAmount(datum.awards),
         awardDate: getAwardDate(datum.awards),
         nrBidders: datum.tender.numberOfTenderers,
