@@ -45,6 +45,7 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
             if (validatable.getValue().trim().equals(SUMMERNOTE_EMPTY_HTML)) {
                 ValidationError error = new ValidationError(this);
                 error.addKey("Required");
+                summernoteEditor.setModelObject(SUMMERNOTE_EMPTY_HTML);
                 validatable.error(error);
             }
         }
