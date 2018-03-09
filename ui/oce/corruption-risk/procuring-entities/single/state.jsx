@@ -1,3 +1,4 @@
+import { Set } from 'immutable';
 import { CRD, datefulFilters, API_ROOT } from '../../../state/oce-state';
 
 export const PEState = CRD.substate({
@@ -29,3 +30,21 @@ export const PEInfo = PEState.remote({
   name: 'PEInfoRaw',
   url: PEInfoUrl,
 });
+
+const PEFlagsUrl = PEState.input({
+  name: 'PEFlagsUrl',
+  initial: `${API_ROOT}/totalFlags`,
+});
+
+const PEFlagsCountRaw = PEState.remote({
+  name: 'PEFlagsCountRaw',
+  url: PEFlagsUrl,
+  params: PEFilters,
+});
+
+export const PEFlagsCount = PEState.mapping({
+  name: 'PEFlagsCount',
+  deps: [PEFlagsCountRaw],
+  mapper: data => data[0].flaggedCount,
+});
+

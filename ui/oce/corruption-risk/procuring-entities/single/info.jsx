@@ -1,4 +1,5 @@
-import { PEInfo } from './state';
+import { PEInfo, PEFlagsCount } from './state';
+import translatable from '../../../translatable';
 
 function boundComponent({ name, deps }) {
   return class extends React.PureComponent {
@@ -47,14 +48,15 @@ class Cell extends React.PureComponent {
   }
 }
 
-class Info extends boundComponent({
+class Info extends translatable(boundComponent({
   name: 'PE info',
   deps: {
-    info: PEInfo
+    info: PEInfo,
+    flagsCount: PEFlagsCount,
   }
-}) {
+})) {
   render() {
-    const { info } = this.state;
+    const { info, flagsCount } = this.state;
     if (!info) return null;
     const { address, contactPoint } = info;
 
@@ -69,7 +71,11 @@ class Info extends boundComponent({
                 <td className="flags">
                   <img src="assets/icons/flag.svg" alt="Flag icon" className="flag-icon" />
                   &nbsp;
-                  0
+                  {flagsCount}
+                  &nbsp;
+                  {this.t(flagsCount === 1 ?
+                    'crd:contracts:baseInfo:flag:sg' :
+                    'crd:contracts:baseInfo:flag:pl')}
                 </td>
               </tr>
               <tr>

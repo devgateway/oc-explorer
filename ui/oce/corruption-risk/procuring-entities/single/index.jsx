@@ -18,7 +18,7 @@ class ProcuringEntity extends translatable(React.Component) {
           doSearch={doSearch}
           placeholder={this.t('crd:procuringEntities:top-search')}
         />
-        <Info />
+        <Info translations={translations} />
       </div>
     );
   }
