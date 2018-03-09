@@ -1,4 +1,4 @@
-import { PEInfo, PEFlagsCount } from './state';
+import { PEInfo, PEFlagsCount, associatedBuyers } from './state';
 import translatable from '../../../translatable';
 
 function boundComponent({ name, deps }) {
@@ -36,9 +36,9 @@ function boundComponent({ name, deps }) {
 
 class Cell extends React.PureComponent {
   render() {
-    const { title, children } = this.props;
+    const { title, children, ...props } = this.props;
     return (
-      <td>
+      <td {...props}>
         <dl>
           <dt>{title}</dt>
           <dd>{children}</dd>
@@ -53,10 +53,11 @@ class Info extends translatable(boundComponent({
   deps: {
     info: PEInfo,
     flagsCount: PEFlagsCount,
+    buyers: associatedBuyers,
   }
 })) {
   render() {
-    const { info, flagsCount } = this.state;
+    const { info, flagsCount, buyers } = this.state;
     if (!info) return null;
     const { address, contactPoint } = info;
 
@@ -79,9 +80,9 @@ class Info extends translatable(boundComponent({
                 </td>
               </tr>
               <tr>
-                <td colSpan="3">
-                  buyers
-                </td>
+                <Cell title="Buyers" colSpan="3">
+                  {buyers ? buyers.map(buyer => <p>{buyer}</p>) : null}
+                </Cell>
               </tr>
             </tbody>
           </table>

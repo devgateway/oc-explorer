@@ -48,3 +48,23 @@ export const PEFlagsCount = PEState.mapping({
   mapper: data => data[0].flaggedCount,
 });
 
+const contractsUrl = PEState.input({
+  name: 'contractsUrl',
+  initial: `${API_ROOT}/flaggedRelease/all`
+})
+
+const associatedContracts = PEState.remote({
+  name: 'associatedContracts',
+  url: contractsUrl,
+  params: PEFilters,
+});
+
+export const associatedBuyers = PEState.mapping({
+  name: 'associatedBuyers',
+  deps: [associatedContracts],
+  mapper: contracts => contracts.reduce(
+    (buyers, contracts) => buyers.add(contracts.buyer.name),
+    Set()
+  ),
+});
+
