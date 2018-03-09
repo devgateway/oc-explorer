@@ -52,6 +52,8 @@ class Info extends translatable(Visualization) {
     const award = data.get('awards', List()).find(a =>
       a.get('status') === 'active') || Map();
 
+    const PE = data.getIn(['tender', 'procuringEntity']);
+
     const flagCount = data.get('flags', List()).filter(flag => flag.get && flag.get('value')).count();
     return (
       <section className="info">
@@ -84,10 +86,16 @@ class Info extends translatable(Visualization) {
           <tbody>
             <tr>
               <td>
-                <dl>
+                {PE && <dl>
                   <dt>{this.t('crd:contracts:baseInfo:procuringEntityName')}</dt>
-                  <dd>{data.getIn(['tender', 'procuringEntity', 'name'], this.t('general:undefined'))}</dd>
-                </dl>
+                  <dd>
+                    <a
+                      href={`#!/crd/procuring-entity/${PE.get('id')}`}
+                    >
+                      {PE.get('name')}
+                    </a>
+                  </dd>
+                </dl>}
               </td>
               <td>
                 <dl>

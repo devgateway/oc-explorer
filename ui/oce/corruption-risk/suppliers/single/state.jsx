@@ -60,4 +60,4 @@ export const winsAndFlagsData = SupplierState.mapping({
       flags: countFlags
     }));
   }
-})
+});

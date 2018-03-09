@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 require('./style.less');
 import State, { HVar, Mapping } from '../state';
-import OCEState from '../state/oce-state';
+import { OCE as OCEState } from '../state/oce-state';
 
 class ObjectTable extends React.PureComponent {
   render() {
@@ -45,7 +45,7 @@ class Renderer extends React.PureComponent {
     const { object } = this.props;
     object.addListener(
       'dev-tools',
-      () => object.getState().then(objectState => {
+      () => object.getState('dev-tools').then(objectState => {
         this.setState({ objectState })
       })
     )
@@ -126,11 +126,11 @@ class StateRenderer extends React.PureComponent {
              if (entity instanceof HVar) {
                return <HVarRenderer object={entity} />
              }
-             if (entity instanceof Mapping) {
-               return <MappingRenderer object={entity} />
-             }
              if (entity instanceof State) {
                return <StateRenderer object={entity} />
+             }
+             if (entity instanceof Mapping) {
+               return <MappingRenderer object={entity} />
              }
           })}
         </section>

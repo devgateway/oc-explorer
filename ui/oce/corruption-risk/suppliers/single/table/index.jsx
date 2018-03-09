@@ -101,6 +101,14 @@ export default class Table extends translatable(React.PureComponent) {
     return new Date(date).toLocaleDateString();
   }
 
+  formatPE(PEName, { PEId }) {
+    return (
+      <a href={`#!/crd/procuring-entity/${PEId}`}>
+        {PEName}
+      </a>
+    );
+  }
+
   render() {
     const { data, count } = this.state;
     return (
@@ -114,6 +122,7 @@ export default class Table extends translatable(React.PureComponent) {
         columns={[{
             title: this.t('crd:contracts:baseInfo:procuringEntityName'),
             dataField: 'PEName',
+            dataFormat: this.formatPE.bind(this),
         }, {
             title: this.t('crd:contracts:list:awardAmount'),
             dataField: 'awardAmount',
