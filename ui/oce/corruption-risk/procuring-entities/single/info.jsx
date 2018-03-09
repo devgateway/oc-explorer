@@ -1,4 +1,4 @@
-import { PEInfo, PEFlagsCount, associatedBuyers } from './state';
+import { PEInfo, PEFlagsCount, associatedBuyers, associatedContractsCount } from './state';
 import translatable from '../../../translatable';
 
 function boundComponent({ name, deps }) {
@@ -54,17 +54,18 @@ class Info extends translatable(boundComponent({
     info: PEInfo,
     flagsCount: PEFlagsCount,
     buyers: associatedBuyers,
+    contractsCount: associatedContractsCount,
   }
 })) {
   render() {
-    const { info, flagsCount, buyers } = this.state;
+    const { info, flagsCount, buyers, contractsCount } = this.state;
     if (!info) return null;
     const { address, contactPoint } = info;
 
     return (
       <div className="pe-page">
         <section className="info">
-          <table className="table table-bordered join-bottom info-table">
+          <table className="table table-bordered info-table">
             <tbody>
               <tr>
                 <Cell title={this.t('crd:contracts:baseInfo:procuringEntityName')}>
@@ -79,6 +80,17 @@ class Info extends translatable(boundComponent({
                   {this.t(flagsCount === 1 ?
                     'crd:contracts:baseInfo:flag:sg' :
                     'crd:contracts:baseInfo:flag:pl')}
+
+                  <br />
+                  <small>
+                    (
+                      {contractsCount}
+                      &nbsp;
+                      {this.t(contractsCount === 1 ?
+                        'crd:supplier:contract:sg' :
+                        'crd:supplier:contract:pl')}
+                    )
+                  </small>
                 </td>
               </tr>
               <tr>
@@ -86,10 +98,6 @@ class Info extends translatable(boundComponent({
                   {buyers ? buyers.map(buyer => <p>{buyer}</p>) : null}
                 </Cell>
               </tr>
-            </tbody>
-          </table>
-          <table className="table table-bordered info-table">
-            <tbody>
               <tr>
                 <Cell title="Address">
                   {address.streetAddress} <br />
@@ -99,7 +107,7 @@ class Info extends translatable(boundComponent({
                   &nbsp;
                   {address.countryName}
                 </Cell>
-                <Cell title="Contacts">
+                <Cell title="Contacts" colSpan="2">
                   {contactPoint.name}<br />
                   {contactPoint.email}<br />
                   {contactPoint.telephone}
