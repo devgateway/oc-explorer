@@ -65,7 +65,7 @@ class Info extends translatable(boundComponent({
     return (
       <div className="pe-page">
         <section className="info">
-          <table className="table table-bordered info-table">
+          <table className="table join-bottom table-bordered info-table">
             <tbody>
               <tr>
                 <Cell title={this.t('crd:contracts:baseInfo:procuringEntityName')}>
@@ -93,11 +93,17 @@ class Info extends translatable(boundComponent({
                   </small>
                 </td>
               </tr>
-              <tr>
-                <Cell title={this.t('crd:contracts:baseInfo:buyer')} colSpan="3">
-                  {buyers ? buyers.map(buyer => <p>{buyer}</p>) : null}
-                </Cell>
-              </tr>
+              {buyers && buyers.length &&
+                <tr>
+                  <Cell title={this.t('crd:contracts:baseInfo:buyer')} colSpan="3">
+                    {buyers.map(buyer => <p>{buyer}</p>)}
+                  </Cell>
+                </tr>
+              }
+            </tbody>
+          </table>
+          <table className="table table-bordered info-table">
+            <tbody>
               <tr>
                 <Cell title="Address">
                   {address.streetAddress} <br />
