@@ -67,8 +67,10 @@ class Info extends translatable(boundComponent({
           <table className="table table-bordered join-bottom info-table">
             <tbody>
               <tr>
-                <Cell title="Name">{info.name}</Cell>
-                <Cell title="ID">{info.id}</Cell>
+                <Cell title={this.t('crd:contracts:baseInfo:procuringEntityName')}>
+                  {info.name}
+                </Cell>
+                <Cell title={this.t('crd:suppliers:ID')}>{info.id}</Cell>
                 <td className="flags">
                   <img src="assets/icons/flag.svg" alt="Flag icon" className="flag-icon" />
                   &nbsp;
@@ -80,7 +82,7 @@ class Info extends translatable(boundComponent({
                 </td>
               </tr>
               <tr>
-                <Cell title="Buyers" colSpan="3">
+                <Cell title={this.t('crd:contracts:baseInfo:buyer')} colSpan="3">
                   {buyers ? buyers.map(buyer => <p>{buyer}</p>) : null}
                 </Cell>
               </tr>
