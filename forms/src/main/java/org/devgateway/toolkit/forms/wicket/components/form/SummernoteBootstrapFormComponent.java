@@ -16,6 +16,9 @@ package org.devgateway.toolkit.forms.wicket.components.form;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.editor.SummernoteConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.editor.SummernoteEditor;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.validation.IValidatable;
@@ -72,9 +75,9 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
         super(id);
     }
 
-    public String getUpdateEvent() {
-        return "summernote.blur";
-    }
+//    public String getUpdateEvent() {
+//        return "summernote.blur";
+//    }
 
     @Override
     protected SummernoteEditor inputField(final String id, final IModel<String> model) {
@@ -113,5 +116,20 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
     @Override
     protected FormComponent<String> updatingBehaviorComponent() {
         return summernoteEditor;
+    }
+
+    @Override
+    protected void onBeforeRender() {
+        super.onBeforeRender();
+    }
+
+    @Override
+    public void renderHead(final IHeaderResponse response) {
+        super.renderHead(response);
+
+        //see https://github.com/summernote/summernote/issues/2017
+        String summernoteChildNodesFix = "if(!!document.createRange) document.getSelection().removeAllRanges();";
+        response.render(JavaScriptContentHeaderItem.forScript(summernoteChildNodesFix, "summernote-childNodes-fix"));
+        response.render(OnDomReadyHeaderItem.forScript(summernoteChildNodesFix));
     }
 }

@@ -47,6 +47,7 @@ import org.devgateway.toolkit.forms.wicket.components.form.DateFieldBootstrapFor
 import org.devgateway.toolkit.forms.wicket.components.form.DateTimeFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.GenericBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.Select2ChoiceBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.SummernoteBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.TextAreaFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.page.BasePage;
@@ -158,7 +159,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
         @Override
         public void component(final GenericBootstrapFormComponent<?, ?> object, final IVisit<Void> visit) {
             visit.dontGoDeeper();
-            if (object.getField().isValid()) {
+            if (!(object instanceof SummernoteBootstrapFormComponent) && object.getField().isValid()) {
                 return;
             }
             target.add(object.getBorder());
@@ -177,6 +178,8 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
         }
 
     }
+
+
 
     public class EditForm extends BootstrapForm<T> {
         private static final long serialVersionUID = -9127043819229346784L;
