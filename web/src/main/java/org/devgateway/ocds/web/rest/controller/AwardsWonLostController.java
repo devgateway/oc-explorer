@@ -45,6 +45,8 @@ import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.Fie
 import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.BIDS_DETAILS_VALUE_AMOUNT;
 import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.FLAGS_TOTAL_FLAGGED;
 import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.TENDER_PERIOD_START_DATE;
+import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_ID;
+import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_NAME;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
@@ -82,6 +84,18 @@ public class AwardsWonLostController extends GenericOCDSController {
         return part;
     }
 
+    protected List<AggregationOperation> procuringEntitiesByFlagsGroupPart(final YearFilterPagingRequest filter) {
+        List<AggregationOperation> part = new ArrayList<>();
+        part.add(match(getYearDefaultFilterCriteria(filter, TENDER_PERIOD_START_DATE)
+                .and(FLAGS_TOTAL_FLAGGED).gt(0)));
+        part.add(group(Fields.from(
+                Fields.field("procuringEntityId", TENDER_PROCURING_ENTITY_ID),
+                Fields.field("procuringEntityName", TENDER_PROCURING_ENTITY_NAME))).sum(FLAGS_TOTAL_FLAGGED)
+                .as("countFlags")
+        );
+        return part;
+    }
+
 
     @ApiOperation(value = "Suppliers ordered by countFlags>0, descending")
     @RequestMapping(value = "/api/suppliersByFlags",
@@ -89,6 +103,18 @@ public class AwardsWonLostController extends GenericOCDSController {
             produces = "application/json")
     public List<DBObject> suppliersByFlags(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
         List<AggregationOperation> part = suppliersByFlagsGroupPart(filter);
+        part.add(sort(Sort.Direction.DESC, "countFlags"));
+        part.add(skip(filter.getSkip()));
+        part.add(limit(filter.getPageSize()));
+        return releaseAgg(newAggregation(part));
+    }
+
+    @ApiOperation(value = "Procuring Entities ordered by countFlags>0, descending")
+    @RequestMapping(value = "/api/procuringEntitiesByFlags",
+            method = {RequestMethod.POST, RequestMethod.GET},
+            produces = "application/json")
+    public List<DBObject> procuringEntitiesByFlags(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+        List<AggregationOperation> part = procuringEntitiesByFlagsGroupPart(filter);
         part.add(sort(Sort.Direction.DESC, "countFlags"));
         part.add(skip(filter.getSkip()));
         part.add(limit(filter.getPageSize()));
@@ -105,6 +131,18 @@ public class AwardsWonLostController extends GenericOCDSController {
         part.add(project("count").andExclude(Fields.UNDERSCORE_ID));
         return releaseAgg(newAggregation(part));
     }
+
+    @ApiOperation(value = "Counts procuring entities ordered by countFlags>0, descending")
+    @RequestMapping(value = "/api/procuringEntitiesByFlags/count",
+            method = {RequestMethod.POST, RequestMethod.GET},
+            produces = "application/json")
+    public List<DBObject> procuringEntitiesByFlagsCount(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+        List<AggregationOperation> part = procuringEntitiesByFlagsGroupPart(filter);
+        part.add(group().count().as("count"));
+        part.add(project("count").andExclude(Fields.UNDERSCORE_ID));
+        return releaseAgg(newAggregation(part));
+    }
+
 
     @ApiOperation(value = "Counts the won, lost procurements, flags and amounts. Receives any filters, "
             + "but most important here is the supplierId and bidderId. Requires bid extension. Use bidderId instead "
