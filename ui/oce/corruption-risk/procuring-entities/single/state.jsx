@@ -72,4 +72,17 @@ export const associatedContractsCount = PEState.mapping({
   name: 'associatedContractsCount',
   deps: [associatedContracts],
   mapper: data => data.length,
+});
+
+const associatedSuppliers = PEState.mapping({
+  name: 'associatedSuppliers',
+  deps: ['associatedContracts'],
 })
+
+export const flaggedNrData = PEState.input({
+  name: 'flaggedNrData'
+});
+
+export const winsAndLossesData = PEState.input({
+  name: 'winsAndLossesData',
+});

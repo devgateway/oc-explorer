@@ -14,24 +14,10 @@ import Crosstab from '../../clickable-crosstab';
 import { CORRUPTION_TYPES } from '../../constants';
 import FlaggedNr from './bars/flagged-nr';
 import BackendDateFilterable from '../../backend-date-filterable';
-import { supplierId } from './state';
+import { supplierId, supplierFlaggedNrData, winsAndFlagsData } from './state';
 import WinsAndFlags from './bars/wins-and-flags/index';
 import SupplierTable from './table';
-
-const TitleBelow = ({ title, children, filters, ...props }) => (
-  <div>
-    {React.cloneElement(
-       React.Children.only(children)
-       , props)}
-    <h4 className="title text-center">
-      <button className="btn btn-default btn-sm zoom-button">
-        <i className="glyphicon glyphicon-fullscreen" style={{ pointerEvents: 'none' }}/>
-      </button>
-    &nbsp;
-  {title}
-    </h4>
-  </div>
-);
+import TitleBelow from '../../archive/title-below';
 
 class CrosstabExplanation extends translatable(React.PureComponent) {
   render() {
@@ -323,14 +309,14 @@ class Supplier extends CRDPage {
             {this.t('crd:contracts:flagAnalysis')}
           </h2>
           <div className="col-sm-6">
-            <Zoomable zoomedWidth={width}>
+            <Zoomable zoomedWidth={width} data={winsAndFlagsData}>
               <TitleBelow title={this.t('crd:supplier:winsAndLosses:title')}>
                 <WinsAndFlags translations={translations} />
               </TitleBelow>
             </Zoomable>
           </div>
           <div className="col-sm-6">
-            <Zoomable zoomedWidth={width}>
+            <Zoomable zoomedWidth={width} data={supplierFlaggedNrData}>
               <TitleBelow title={this.t('crd:supplier:flaggedNr:title')}>
                 <FlaggedNr translations={translations} />
               </TitleBelow>
