@@ -10,15 +10,20 @@ class ProcuringEntity extends translatable(React.Component) {
   }
 
   render() {
-    const { translations, doSearch, id } = this.props;
+    const { translations, doSearch } = this.props;
     return (
-      <div className="procuring-entity-page">
+      <div className="pe-page single-page">
         <TopSearch
           translations={translations}
           doSearch={doSearch}
           placeholder={this.t('crd:procuringEntities:top-search')}
         />
         <Info translations={translations} />
+        <section className="flag-analysis">
+          <h2>
+            {this.t('crd:contracts:flagAnalysis')}
+          </h2>
+        </section>
       </div>
     );
   }
