@@ -349,7 +349,7 @@
   "crd:contract:percentPEspending:name": "% de marchés accordés à ce fournisseur pour cette autorité contractante",
   "crd:supplier:win:sg": "Gain",
   "crd:supplier:win:pl": "Gains",
-  "crd:supplier:table:procurementsWon": "Procurements won",
-  "crd:supplier:table:nrBidders": "Number of bidders",
-  "crd:supplier:table:flagName": "Flag name"
+  "crd:supplier:table:procurementsWon": "Marchés gagnés",
+  "crd:supplier:table:nrBidders": "Nombre de soumissionnaires",
+  "crd:supplier:table:flagName": "Nom de l’alerte"
 }
