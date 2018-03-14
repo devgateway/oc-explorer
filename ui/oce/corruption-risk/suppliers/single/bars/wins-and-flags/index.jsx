@@ -12,10 +12,10 @@ class WinsAndFlags extends translatable(React.PureComponent) {
   }
 
   componentDidMount() {
-    const { zoomed } = this.props;
+    const { zoomed, data } = this.props;
     const name = zoomed ? 'ZoomedWinsAndFlagsChart' : 'WinsAndFlagsChart';
-    winsAndFlagsData.addListener(name, () => {
-      winsAndFlagsData.getState(name).then(data => {
+    data.addListener(name, () => {
+      data.getState(name).then(data => {
         this.setState({
           data
         })
@@ -24,9 +24,9 @@ class WinsAndFlags extends translatable(React.PureComponent) {
   }
 
   componentWillUnmount() {
-    const { zoomed } = this.props;
+    const { zoomed, data } = this.props;
     const name = zoomed ? 'ZoomedWinsAndFlagsChart' : 'WinsAndFlagsChart';
-    winsAndFlagsData.removeListener(name);
+    data.removeListener(name);
   }
 
   render() {
