@@ -1,7 +1,7 @@
 import TopSearch from '../../top-search';
 import translatable from '../../../translatable';
 import Info from './info';
-import { PEId, flaggedNrData, winsAndFlagsData } from './state';
+import { PEId, PEFlaggedNrData, winsAndFlagsData } from './state';
 import Zoomable from '../../zoomable';
 import TitleBelow from '../../archive/title-below';
 import WinsAndFlags from '../../suppliers/single/bars/wins-and-flags';
@@ -35,7 +35,7 @@ class ProcuringEntity extends translatable(React.Component) {
             </Zoomable>
           </div>
           <div className="col-sm-6">
-            <Zoomable zoomedWidth={width} data={flaggedNrData}>
+            <Zoomable zoomedWidth={width} data={PEFlaggedNrData}>
               <TitleBelow title={this.t('crd:supplier:flaggedNr:title')}>
                 <FlaggedNr translations={translations} />
               </TitleBelow>

@@ -1,5 +1,6 @@
 import { Set } from 'immutable';
 import { CRD, datefulFilters, API_ROOT } from '../../../state/oce-state';
+import { FlaggedNrMapping } from '../../archive/state';
 
 export const PEState = CRD.substate({
   name: 'PEState',
@@ -79,10 +80,12 @@ const associatedSuppliers = PEState.mapping({
   deps: ['associatedContracts'],
 })
 
-export const flaggedNrData = PEState.input({
-  name: 'flaggedNrData'
-});
-
 export const winsAndLossesData = PEState.input({
   name: 'winsAndLossesData',
+});
+
+export const PEFlaggedNrData = new FlaggedNrMapping({
+  name: 'PEFlaggedNrData',
+  filters: PEFilters,
+  parent: PEState,
 });
