@@ -55,7 +55,7 @@ class WinsAndFlags extends translatable(React.PureComponent) {
           barCategoryGap={15}
         >
           <XAxis type="number" />
-          <YAxis type="category" hide dataKey="PEName" />
+          <YAxis type="category" hide dataKey="name" />
           <Tooltip content={<Popup />} translations={translations} cursor={false}/>
           <Legend
             align="right"
@@ -70,7 +70,7 @@ class WinsAndFlags extends translatable(React.PureComponent) {
             isAnimationActive={false}
           >
             <LabelList
-              dataKey="PEName"
+              dataKey="name"
               position="insideTopLeft"
               content={renderTopLeftLabel}
             />

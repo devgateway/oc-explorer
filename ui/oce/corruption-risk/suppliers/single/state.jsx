@@ -39,7 +39,7 @@ export const winsAndFlagsData = SupplierState.mapping({
   deps: [winsAndFlagsRaw],
   mapper(raw) {
     return raw.map(({ count, countFlags, procuringEntityName}) => ({
-      PEName: procuringEntityName,
+      name: procuringEntityName,
       wins: count,
       flags: countFlags
     }));
