@@ -176,17 +176,20 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
         border.setOutputMarkupId(true);
         add(border);
 
-        field = inputField("field", model);
-        field.setVisibilityAllowed(!ComponentUtil.isViewMode());
-        field.setOutputMarkupId(true);
-        sizeBehavior = new InputBehavior(InputBehavior.Size.Medium);
-        field.add(sizeBehavior);
-        border.add(field);
-
-        field.setLabel(labelModel);
+        initializeField();
 
         tooltipLabel = new TooltipLabel("tooltipLabel", id);
         border.add(tooltipLabel);
+    }
+
+    protected void initializeField() {
+        field = inputField("field", getModel());
+        field.setVisibilityAllowed(!isViewMode());
+        field.setOutputMarkupId(true);
+        sizeBehavior = new InputBehavior(InputBehavior.Size.Medium);
+        field.add(sizeBehavior);
+        border.addOrReplace(field);
+        field.setLabel(labelModel);
     }
 
     @Override
@@ -218,6 +221,10 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
         return field;
     }
 
+    public boolean isViewMode() {
+        return ComponentUtil.isViewMode();
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -235,7 +242,7 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 
         viewModeField = new Label("viewModeField", new ViewModeConverterModel<TYPE>(getModel()));
         viewModeField.setEscapeModelStrings(false);
-        viewModeField.setVisibilityAllowed(ComponentUtil.isViewMode());
+        viewModeField.setVisibilityAllowed(isViewMode());
         border.add(viewModeField);
 
         tooltipLabel.setConfigWithTrigger(configWithTrigger);

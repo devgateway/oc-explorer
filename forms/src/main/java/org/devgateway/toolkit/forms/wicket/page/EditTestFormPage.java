@@ -91,6 +91,7 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
 
         SummernoteBootstrapFormComponent summernote = new SummernoteBootstrapFormComponent("summernote");
         summernote.required();
+        //summernote.setEnabled(false);
         editForm.add(summernote);
 
         Select2ChoiceBootstrapFormComponent<Group> entitySelect = new Select2ChoiceBootstrapFormComponent<Group>(
