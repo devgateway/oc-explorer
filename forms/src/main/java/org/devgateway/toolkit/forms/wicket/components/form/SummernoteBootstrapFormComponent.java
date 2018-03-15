@@ -20,6 +20,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
@@ -31,7 +32,7 @@ import org.devgateway.toolkit.forms.wicket.FormsWebApplication;
 /**
  * @author mpostelnicu
  */
-public class SummernoteBootstrapFormComponent extends GenericBootstrapFormComponent<String, SummernoteEditor> {
+public class SummernoteBootstrapFormComponent extends GenericBootstrapFormComponent<String, FormComponent<String>> {
     private static final int SUMMERNOTE_HEIGHT = 50;
     public static final String SUMMERNOTE_EMPTY_HTML = "<p><br></p>";
 
@@ -80,7 +81,7 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
 //    }
 
     @Override
-    protected SummernoteEditor inputField(final String id, final IModel<String> model) {
+    protected FormComponent<String> inputField(final String id, final IModel<String> model) {
 
         config = new SummernoteConfig();
 
@@ -91,19 +92,26 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
         config.withHeight(SUMMERNOTE_HEIGHT);
         config.withAirMode(false);
 
-        summernoteEditor = new SummernoteEditor(id, initFieldModel(), config);
+        if (isEnabled()) {
+            summernoteEditor = new SummernoteEditor(id, initFieldModel(), config);
+            return summernoteEditor;
+        } else {
+            return  new TextArea<String>(id, initFieldModel());
+        }
 
-        return summernoteEditor;
     }
 
     @Override
     protected void onInitialize() {
+        if (!isEnabled()) {
+            initializeField();
+        }
         super.onInitialize();
         getField().add(validator);
     }
 
     @Override
-    public GenericBootstrapFormComponent<String, SummernoteEditor> required() {
+    public GenericBootstrapFormComponent<String, FormComponent<String>> required() {
         super.required();
         getField().add(new SummernoteEmptyValidator());
         return this;
