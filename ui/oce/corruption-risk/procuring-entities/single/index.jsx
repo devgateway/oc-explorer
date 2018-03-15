@@ -13,6 +13,11 @@ class ProcuringEntity extends translatable(React.Component) {
     PEId.assign('PESingleComponent', id);
   }
 
+  componentDidUpdate() {
+    const { id } = this.props;
+    PEId.assign('PESingleComponent', id);
+  }
+
   render() {
     const { translations, doSearch, width } = this.props;
     return (
