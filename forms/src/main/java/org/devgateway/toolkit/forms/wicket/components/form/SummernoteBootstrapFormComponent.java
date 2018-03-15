@@ -16,6 +16,7 @@ package org.devgateway.toolkit.forms.wicket.components.form;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.editor.SummernoteConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.editor.SummernoteEditor;
+import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
@@ -28,6 +29,7 @@ import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.forms.wicket.FormsWebApplication;
+import org.devgateway.toolkit.forms.wicket.components.ComponentUtil;
 
 /**
  * @author mpostelnicu
@@ -92,7 +94,7 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
         config.withHeight(SUMMERNOTE_HEIGHT);
         config.withAirMode(false);
 
-        if (isEnabled()) {
+        if (isEnabledInHierarchy()) {
             summernoteEditor = new SummernoteEditor(id, initFieldModel(), config);
             return summernoteEditor;
         } else {
@@ -103,7 +105,7 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
 
     @Override
     protected void onInitialize() {
-        if (!isEnabled()) {
+        if (!isEnabledInHierarchy()) {
             initializeField();
         }
         super.onInitialize();
@@ -129,6 +131,15 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
     @Override
     protected void onBeforeRender() {
         super.onBeforeRender();
+    }
+
+
+    @Override
+    public void onEvent(final IEvent<?> event) {
+        ComponentUtil.enableDisableEvent(this, event);
+        if (!isEnabledInHierarchy()) {
+            initializeField();
+        }
     }
 
     @Override
