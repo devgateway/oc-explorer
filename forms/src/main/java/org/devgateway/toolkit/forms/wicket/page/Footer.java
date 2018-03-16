@@ -11,14 +11,14 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.page;
 
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Properties;
-
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.Model;
 
 public class Footer extends Panel {
 
@@ -34,15 +34,19 @@ public class Footer extends Panel {
         super(markupId);
 
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("version.properties");
+        InputStream inputStream2 = getClass().getClassLoader().getResourceAsStream("branch.properties");
         Properties prop = new Properties();
         try {
             prop.load(inputStream);
+            prop.load(inputStream2);
             inputStream.close();
+            inputStream2.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         add(new Label("toolkit-version", Model.of(prop.getProperty("toolkit.version"))));
+        add(new Label("toolkit-branch", Model.of(prop.getProperty("toolkit.branch"))));
         add(new Label("toolkit-year", Calendar.getInstance().get(Calendar.YEAR)));
     }
 }
