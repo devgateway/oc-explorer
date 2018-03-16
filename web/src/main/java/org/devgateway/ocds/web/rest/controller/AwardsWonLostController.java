@@ -76,8 +76,9 @@ public class AwardsWonLostController extends GenericOCDSController {
                 ))));
         part.add(group(Fields.from(
                 Fields.field("supplierId", AWARDS_SUPPLIERS_ID),
-                Fields.field("supplierName", AWARDS_SUPPLIERS_NAME))).sum(FLAGS_TOTAL_FLAGGED)
-                .as("countFlags")
+                Fields.field("supplierName", AWARDS_SUPPLIERS_NAME)
+                )).sum(FLAGS_TOTAL_FLAGGED)
+                        .as("countFlags")
         );
         return part;
     }
@@ -191,6 +192,32 @@ public class AwardsWonLostController extends GenericOCDSController {
 
         return ret;
 
+    }
+
+    @ApiOperation(value = "List of buyers with releases for the given procuring entities."
+            + "procuringEntityId is mandatory")
+    @RequestMapping(value = "/api/buyersForProcuringEntities",
+            method = {RequestMethod.POST, RequestMethod.GET},
+            produces = "application/json")
+    public List<DBObject> buyersProcuringEntities(@ModelAttribute @Valid final YearFilterPagingRequest
+                                                          filter) {
+        Assert.notEmpty(filter.getProcuringEntityId(), "procuringEntityId must not be empty!");
+
+        Aggregation agg = newAggregation(
+                match(where(MongoConstants.FieldNames.BUYER_ID).exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(
+                                filter,
+                                TENDER_PERIOD_START_DATE
+                        ))),
+                group(Fields.from(
+                        Fields.field("buyerId", MongoConstants
+                                .FieldNames.BUYER_ID),
+                        Fields.field("buyerName", MongoConstants.FieldNames.BUYER_NAME),
+                        Fields.field("procuringEntityId", MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_ID)
+                ))
+        );
+
+        return releaseAgg(agg);
     }
 
     @ApiOperation(value = "Counts the number of wins per supplierId per procuringEntityId, plus shows the flags"
