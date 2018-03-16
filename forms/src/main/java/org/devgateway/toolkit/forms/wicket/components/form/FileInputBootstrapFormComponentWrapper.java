@@ -11,13 +11,14 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.components.form;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
+import de.agilecoders.wicket.core.markup.html.bootstrap.image.GlyphIconType;
+import de.agilecoders.wicket.core.markup.html.bootstrap.image.IconBehavior;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInput;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.FileInputConfig;
+import de.agilecoders.wicket.jquery.Key;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -50,15 +51,14 @@ import org.devgateway.toolkit.forms.wicket.events.EditingDisabledEvent;
 import org.devgateway.toolkit.forms.wicket.events.EditingEnabledEvent;
 import org.devgateway.toolkit.persistence.dao.FileContent;
 import org.devgateway.toolkit.persistence.dao.FileMetadata;
+import org.springframework.util.ObjectUtils;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
-import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
-import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
-import de.agilecoders.wicket.core.markup.html.bootstrap.image.GlyphIconType;
-import de.agilecoders.wicket.core.markup.html.bootstrap.image.IconBehavior;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInput;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.FileInputConfig;
-import de.agilecoders.wicket.jquery.Key;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * @author idobre
@@ -90,6 +90,7 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
     protected Boolean visibleOnlyToAdmin = false;
 
     private Boolean disableDeleteButton = false;
+    private boolean requireAtLeastOneItem = false;
 
     public FileInputBootstrapFormComponentWrapper(final String id, final IModel<T> model) {
         super(id, model);
@@ -502,5 +503,15 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
 
     public WebMarkupContainer getAlreadyUploadedFiles() {
         return alreadyUploadedFiles;
+    }
+
+
+    public void requireAtLeastOneItem() {
+        requireAtLeastOneItem = true;
+    }
+
+    @Override
+    public boolean checkRequired() {
+        return !requireAtLeastOneItem || !ObjectUtils.isEmpty(getModelObject());
     }
 }

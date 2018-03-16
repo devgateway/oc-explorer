@@ -11,15 +11,14 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.components.form;
 
-import java.util.Collection;
-
+import de.agilecoders.wicket.core.util.Attributes;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.model.IModel;
 import org.devgateway.toolkit.forms.wicket.components.ComponentUtil;
 import org.devgateway.toolkit.persistence.dao.FileMetadata;
 
-import de.agilecoders.wicket.core.util.Attributes;
+import java.util.Collection;
 
 /**
  * @author idobre
@@ -115,5 +114,13 @@ public class FileInputBootstrapFormComponent extends GenericBootstrapFormCompone
     public FileInputBootstrapFormComponentWrapper<Collection<FileMetadata>>
             getFileInputBootstrapFormComponentWrapper() {
         return fileInputBootstrapFormComponentWrapper;
+    }
+
+
+    @Override
+    public GenericBootstrapFormComponent<Collection<FileMetadata>,
+            FileInputBootstrapFormComponentWrapper<Collection<FileMetadata>>> required() {
+        field.requireAtLeastOneItem();
+        return this;
     }
 }
