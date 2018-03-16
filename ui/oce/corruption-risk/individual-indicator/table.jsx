@@ -47,10 +47,13 @@ class Popup extends translatable(React.Component) {
   render() {
     const { flaggedStats, type } = this.props;
     const { showPopup } = this.state;
-    const count = flaggedStats.get(
-      'count',
-      flaggedStats.find(stat => stat.get('type') === type).get('count')
-    );
+    let count = 0;
+    if (flaggedStats.has('count')) {
+      count = flaggedStats.get('count');
+    } else {
+      count = flaggedStats.find(stat => stat.get('type') === type).get('count')
+    }
+
     return (
       <div
         onMouseEnter={() => this.showPopup()}
