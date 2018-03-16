@@ -13,7 +13,7 @@ export const supplierId = SupplierState.input({
 export const supplierFilters = SupplierState.mapping({
   name: 'supplierFilters',
   deps: [datefulFilters, supplierId],
-  mapper: (filters, supplierId) => 
+  mapper: (filters, supplierId) =>
     filters.update('supplierId', Set(), supplierIds => supplierIds.add(supplierId))
 });
 
