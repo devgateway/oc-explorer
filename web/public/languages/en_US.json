@@ -351,5 +351,7 @@
   "crd:supplier:table:procurementsWon": "Procurements won",
   "crd:supplier:table:nrBidders": "Number of bidders",
   "crd:supplier:table:flagName": "Flag name",
-  "crd:procuringEntities:top-search": "Search within procuring entities"
+  "crd:procuringEntities:top-search": "Search within procuring entities",
+  "crd:procuringEntities:noOfTenders": "No. of Tenders",
+  "crd:procuringEntities:noOfAwards": "No. of Awards"
 }

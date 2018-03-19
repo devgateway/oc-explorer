@@ -351,5 +351,7 @@
   "crd:supplier:win:pl": "Gains",
   "crd:supplier:table:procurementsWon": "Procurements won",
   "crd:supplier:table:nrBidders": "Number of bidders",
-  "crd:supplier:table:flagName": "Flag name"
+  "crd:supplier:table:flagName": "Flag name",
+  "crd:procuringEntities:noOfTenders": "No. of Tenders",
+  "crd:procuringEntities:noOfAwards": "No. of Awards"
 }
