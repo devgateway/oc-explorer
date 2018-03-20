@@ -96,7 +96,7 @@ class Info extends translatable(boundComponent({
               {buyers && buyers.length &&
                 <tr>
                   <Cell title={this.t('crd:contracts:baseInfo:buyer')} colSpan="3">
-                    {buyers.map(buyer => <p>{buyer}</p>)}
+                    {buyers.map(buyer => <p>{buyer.buyerName}</p>)}
                   </Cell>
                 </tr>
               }
