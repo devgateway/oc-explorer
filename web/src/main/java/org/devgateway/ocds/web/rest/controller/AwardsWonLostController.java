@@ -194,6 +194,54 @@ public class AwardsWonLostController extends GenericOCDSController {
 
     }
 
+    @ApiOperation(value = "Number of procurements by tender status for a list of procuring entities")
+    @RequestMapping(value = "/api/procurementsByTenderStatus",
+            method = {RequestMethod.POST, RequestMethod.GET},
+            produces = "application/json")
+    public List<DBObject> procurementsByTenderStatus(@ModelAttribute @Valid final YearFilterPagingRequest
+                                                          filter) {
+        Assert.notEmpty(filter.getProcuringEntityId(), "procuringEntityId must not be empty!");
+
+        Aggregation agg = newAggregation(
+                match(where(MongoConstants.FieldNames.TENDER_STATUS).exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(
+                                filter,
+                                TENDER_PERIOD_START_DATE
+                        ))),
+                group(Fields.from(
+                        Fields.field("procuringEntityId", MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_ID),
+                        Fields.field("procuringEntityName", MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_NAME),
+                        Fields.field("tenderStatus", MongoConstants.FieldNames.TENDER_STATUS)
+                )).count().as("count")
+        );
+
+        return releaseAgg(agg);
+    }
+
+    @ApiOperation(value = "Number of procurements by procurement method for a list of procuring entities")
+    @RequestMapping(value = "/api/procurementsByProcurementMethod",
+            method = {RequestMethod.POST, RequestMethod.GET},
+            produces = "application/json")
+    public List<DBObject> procurementsByProcurementMethod(@ModelAttribute @Valid final YearFilterPagingRequest
+                                                             filter) {
+        Assert.notEmpty(filter.getProcuringEntityId(), "procuringEntityId must not be empty!");
+
+        Aggregation agg = newAggregation(
+                match(where(MongoConstants.FieldNames.TENDER_PROC_METHOD).exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(
+                                filter,
+                                TENDER_PERIOD_START_DATE
+                        ))),
+                group(Fields.from(
+                        Fields.field("procuringEntityId", MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_ID),
+                        Fields.field("procuringEntityName", MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_NAME),
+                        Fields.field("tenderStatus", MongoConstants.FieldNames.TENDER_PROC_METHOD)
+                )).count().as("count")
+        );
+
+        return releaseAgg(agg);
+    }
+
     @ApiOperation(value = "List of buyers with releases for the given procuring entities."
             + "procuringEntityId is mandatory")
     @RequestMapping(value = "/api/buyersForProcuringEntities",
