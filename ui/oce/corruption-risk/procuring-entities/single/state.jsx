@@ -60,13 +60,15 @@ const associatedContracts = PEState.remote({
   params: PEFilters,
 });
 
-export const associatedBuyers = PEState.mapping({
+const associatedBuyersURL = PEState.input({
+  name: 'associatedBuyersURL',
+  initial: `${API_ROOT}/buyersForProcuringEntities`
+});
+
+export const associatedBuyers = PEState.remote({
   name: 'associatedBuyers',
-  deps: [associatedContracts],
-  mapper: contracts => contracts.reduce(
-    (buyers, contracts) => buyers.add(contracts.buyer.name),
-    Set()
-  ),
+  url: associatedBuyersURL,
+  params: PEFilters,
 });
 
 export const associatedContractsCount = PEState.mapping({
