@@ -39,12 +39,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.AWARDS_STATUS;
 import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.AWARDS_SUPPLIERS_ID;
 import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.AWARDS_SUPPLIERS_NAME;
 import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.BIDS_DETAILS_TENDERERS_ID;
 import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.BIDS_DETAILS_VALUE_AMOUNT;
 import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.FLAGS_TOTAL_FLAGGED;
 import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.TENDER_PERIOD_START_DATE;
+import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_ID;
+import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_NAME;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
@@ -53,6 +56,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.proj
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
+import static org.springframework.data.mongodb.core.aggregation.Fields.field;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
@@ -69,15 +73,29 @@ public class AwardsWonLostController extends GenericOCDSController {
                 .and(FLAGS_TOTAL_FLAGGED).gt(0)));
         part.add(unwind("awards"));
         part.add(unwind("awards.suppliers"));
-        part.add(match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
+        part.add(match(where(AWARDS_STATUS).is(Award.Status.active.toString())
                 .andOperator(getYearDefaultFilterCriteria(
                         filter.awardFiltering(),
                         TENDER_PERIOD_START_DATE
                 ))));
         part.add(group(Fields.from(
-                Fields.field("supplierId", AWARDS_SUPPLIERS_ID),
-                Fields.field("supplierName", AWARDS_SUPPLIERS_NAME))).sum(FLAGS_TOTAL_FLAGGED)
-                .as("countFlags")
+                field("supplierId", AWARDS_SUPPLIERS_ID),
+                field("supplierName", AWARDS_SUPPLIERS_NAME)
+                )).sum(FLAGS_TOTAL_FLAGGED)
+                        .as("countFlags")
+        );
+        return part;
+    }
+
+    protected List<AggregationOperation> procuringEntitiesByFlagsGroupPart(final YearFilterPagingRequest filter) {
+        List<AggregationOperation> part = new ArrayList<>();
+        part.add(match(getYearDefaultFilterCriteria(filter, TENDER_PERIOD_START_DATE)
+                .and(FLAGS_TOTAL_FLAGGED).gt(0)));
+        part.add(group(Fields.from(
+                field("procuringEntityId", TENDER_PROCURING_ENTITY_ID),
+                field("procuringEntityName", TENDER_PROCURING_ENTITY_NAME)
+                )).sum(FLAGS_TOTAL_FLAGGED)
+                        .as("countFlags")
         );
         return part;
     }
@@ -95,6 +113,18 @@ public class AwardsWonLostController extends GenericOCDSController {
         return releaseAgg(newAggregation(part));
     }
 
+    @ApiOperation(value = "Procuring Entities ordered by countFlags>0, descending")
+    @RequestMapping(value = "/api/procuringEntitiesByFlags",
+            method = {RequestMethod.POST, RequestMethod.GET},
+            produces = "application/json")
+    public List<DBObject> procuringEntitiesByFlags(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+        List<AggregationOperation> part = procuringEntitiesByFlagsGroupPart(filter);
+        part.add(sort(Sort.Direction.DESC, "countFlags"));
+        part.add(skip(filter.getSkip()));
+        part.add(limit(filter.getPageSize()));
+        return releaseAgg(newAggregation(part));
+    }
+
     @ApiOperation(value = "Counts Suppliers ordered by countFlags>0, descending")
     @RequestMapping(value = "/api/suppliersByFlags/count",
             method = {RequestMethod.POST, RequestMethod.GET},
@@ -105,6 +135,51 @@ public class AwardsWonLostController extends GenericOCDSController {
         part.add(project("count").andExclude(Fields.UNDERSCORE_ID));
         return releaseAgg(newAggregation(part));
     }
+
+    @ApiOperation(value = "Counts procuring entities ordered by countFlags>0, descending")
+    @RequestMapping(value = "/api/procuringEntitiesByFlags/count",
+            method = {RequestMethod.POST, RequestMethod.GET},
+            produces = "application/json")
+    public List<DBObject> procuringEntitiesByFlagsCount(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+        List<AggregationOperation> part = procuringEntitiesByFlagsGroupPart(filter);
+        part.add(group().count().as("count"));
+        part.add(project("count").andExclude(Fields.UNDERSCORE_ID));
+        return releaseAgg(newAggregation(part));
+    }
+
+
+    @ApiOperation(value = "Number of tenders grouped by procuring entities. All filters apply. "
+            + "procuringEntityId filter is mandatory.")
+    @RequestMapping(value = "/api/procuringEntitiesTendersCount",
+            method = {RequestMethod.POST, RequestMethod.GET},
+            produces = "application/json")
+    public List<DBObject> procuringEntitiesTendersCount(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+        Assert.notEmpty(filter.getProcuringEntityId(), "procuringEntityId must not be empty!");
+        Aggregation agg = newAggregation(
+                match(getYearDefaultFilterCriteria(filter, TENDER_PERIOD_START_DATE)),
+                group(TENDER_PROCURING_ENTITY_ID).count().as("tenderCount")
+        );
+
+        return releaseAgg(agg);
+    }
+
+    @ApiOperation(value = "Number of awards grouped by procuring entities. All filters apply. "
+            + "procuringEntityId filter is mandatory.")
+    @RequestMapping(value = "/api/procuringEntitiesAwardsCount",
+            method = {RequestMethod.POST, RequestMethod.GET},
+            produces = "application/json")
+    public List<DBObject> procuringEntitiesAwardsCount(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+        Assert.notEmpty(filter.getProcuringEntityId(), "procuringEntityId must not be empty!");
+        Aggregation agg = newAggregation(
+                match(getYearDefaultFilterCriteria(filter, TENDER_PERIOD_START_DATE)),
+                unwind("awards"),
+                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())),
+                group(TENDER_PROCURING_ENTITY_ID).count().as("awardCount")
+        );
+
+        return releaseAgg(agg);
+    }
+
 
     @ApiOperation(value = "Counts the won, lost procurements, flags and amounts. Receives any filters, "
             + "but most important here is the supplierId and bidderId. Requires bid extension. Use bidderId instead "
@@ -152,14 +227,14 @@ public class AwardsWonLostController extends GenericOCDSController {
 
 
         Aggregation agg2 = newAggregation(
-                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
+                match(where(AWARDS_STATUS).is(Award.Status.active.toString())
                         .andOperator(getYearDefaultFilterCriteria(
                                 filter,
                                 TENDER_PERIOD_START_DATE
                         ))),
                 unwind("awards"),
                 unwind("awards.suppliers"),
-                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
+                match(where(AWARDS_STATUS).is(Award.Status.active.toString())
                         .andOperator(getYearDefaultFilterCriteria(
                                 filter.awardFiltering(),
                                 TENDER_PERIOD_START_DATE
@@ -252,7 +327,7 @@ public class AwardsWonLostController extends GenericOCDSController {
         Assert.notEmpty(filter.getSupplierId(), "supplierId must not be empty!");
 
         Aggregation agg = newAggregation(
-                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
+                match(where(AWARDS_STATUS).is(Award.Status.active.toString())
                         .andOperator(getYearDefaultFilterCriteria(
                                 filter,
                                 TENDER_PERIOD_START_DATE
@@ -260,16 +335,16 @@ public class AwardsWonLostController extends GenericOCDSController {
                         .and(MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_NAME).exists(true)),
                 unwind("awards"),
                 unwind("awards.suppliers"),
-                match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())
+                match(where(AWARDS_STATUS).is(Award.Status.active.toString())
                         .andOperator(getYearDefaultFilterCriteria(
                                 filter.awardFiltering(),
                                 TENDER_PERIOD_START_DATE
                         ))),
                 group(Fields.from(
-                        Fields.field("supplierId", MongoConstants
+                        field("supplierId", MongoConstants
                                 .FieldNames.AWARDS_SUPPLIERS_ID),
-                        Fields.field("procuringEntityName", MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_NAME),
-                        Fields.field("procuringEntityId", MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_ID)
+                        field("procuringEntityName", MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_NAME),
+                        field("procuringEntityId", MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_ID)
                 ))
                         .count().as("count")
                         .sum(MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT).as("totalAmountAwarded")

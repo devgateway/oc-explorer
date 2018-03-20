@@ -87,10 +87,10 @@ export default class FlaggedNr extends translatable(React.PureComponent) {
   }
 
   componentDidMount() {
-    const { zoomed } = this.props;
+    const { zoomed, data } = this.props;
     const name = zoomed ? 'ZoomedFlaggedNrChart' : 'FlaggedNrChart';
-    flaggedNrData.addListener(name, () => {
-      flaggedNrData.getState(name).then(data => {
+    data.addListener(name, () => {
+      data.getState(name).then(data => {
         this.setState({
           data
         })
@@ -99,9 +99,9 @@ export default class FlaggedNr extends translatable(React.PureComponent) {
   }
 
   componentWillUnmount() {
-    const { zoomed } = this.props;
+    const { zoomed, data } = this.props;
     const name = zoomed ? 'ZoomedFlaggedNrChart' : 'FlaggedNrChart';
-    flaggedNrData.removeListener(name);
+    data.removeListener(name);
 
   }
   render() {

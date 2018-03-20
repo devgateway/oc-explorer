@@ -5,14 +5,14 @@ class Popup extends translatable(React.PureComponent) {
     const { coordinate, active, viewBox, payload } = this.props;
     if (!active || !payload[0]) return null;
 
-    const { PEName, wins, flags } = payload[0].payload;
+    const { name, wins, flags } = payload[0].payload;
 
     let POPUP_HEIGHT = 70;
-    if (PEName.length > 100) {
+    if (name.length > 100) {
       POPUP_HEIGHT = 140;
-    } else if (PEName.length > 70 ) {
+    } else if (name.length > 70 ) {
       POPUP_HEIGHT = 110;
-    } else if (PEName.length > 40 ) {
+    } else if (name.length > 40 ) {
       POPUP_HEIGHT = 90;
     }
 
@@ -37,7 +37,7 @@ class Popup extends translatable(React.PureComponent) {
           className="crd-popup donut-popup text-center"
           style={style}
         >
-          {PEName}
+          {name}
           <br />
           {wins} {winLabel}, {flags} {flagLabel}
           <div className="arrow" />

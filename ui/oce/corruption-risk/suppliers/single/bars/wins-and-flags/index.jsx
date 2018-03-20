@@ -12,10 +12,10 @@ class WinsAndFlags extends translatable(React.PureComponent) {
   }
 
   componentDidMount() {
-    const { zoomed } = this.props;
+    const { zoomed, data } = this.props;
     const name = zoomed ? 'ZoomedWinsAndFlagsChart' : 'WinsAndFlagsChart';
-    winsAndFlagsData.addListener(name, () => {
-      winsAndFlagsData.getState(name).then(data => {
+    data.addListener(name, () => {
+      data.getState(name).then(data => {
         this.setState({
           data
         })
@@ -24,9 +24,9 @@ class WinsAndFlags extends translatable(React.PureComponent) {
   }
 
   componentWillUnmount() {
-    const { zoomed } = this.props;
+    const { zoomed, data } = this.props;
     const name = zoomed ? 'ZoomedWinsAndFlagsChart' : 'WinsAndFlagsChart';
-    winsAndFlagsData.removeListener(name);
+    data.removeListener(name);
   }
 
   render() {
@@ -55,7 +55,7 @@ class WinsAndFlags extends translatable(React.PureComponent) {
           barCategoryGap={15}
         >
           <XAxis type="number" />
-          <YAxis type="category" hide dataKey="PEName" />
+          <YAxis type="category" hide dataKey="name" />
           <Tooltip content={<Popup />} translations={translations} cursor={false}/>
           <Legend
             align="right"
@@ -70,7 +70,7 @@ class WinsAndFlags extends translatable(React.PureComponent) {
             isAnimationActive={false}
           >
             <LabelList
-              dataKey="PEName"
+              dataKey="name"
               position="insideTopLeft"
               content={renderTopLeftLabel}
             />

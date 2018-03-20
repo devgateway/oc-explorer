@@ -41,8 +41,8 @@ class PEList extends PaginatedTable {
 
     const jsData = data.get('data', List()).map((supplier) => {
       return {
-        id: supplier.get('id'),
-        name: supplier.get('name')
+        id: supplier.get('procuringEntityId'),
+        name: supplier.get('procuringEntityName')
       }
     }).toJS();
 
@@ -88,8 +88,8 @@ class ProcuringEntities extends CRDPage {
         className="procuring-entities-page"
         topSearchPlaceholder={this.t('crd:procuringEntities:top-search')}
         List={PEList}
-        dataEP="ocds/organization/procuringEntity/all"
-        countEP="ocds/organization/procuringEntity/count"
+        dataEP="procuringEntitiesByFlags"
+        countEP="procuringEntitiesByFlags/count"
       />
     );
   }
