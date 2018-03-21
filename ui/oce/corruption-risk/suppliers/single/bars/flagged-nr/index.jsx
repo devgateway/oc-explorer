@@ -1,16 +1,10 @@
 import { ResponsiveContainer, BarChart, XAxis, YAxis, Legend, Bar, LabelList, Tooltip } from 'recharts';
-import { pluck } from '../../../../tools';
 import translatable from '../../../../../translatable';
-import { renderTopLeftLabel } from '../tools';
-import { flaggedNrData } from '../../state';
+import { renderTopLeftLabel } from '../../../../archive/tools';
 import Popup from './popup';
 
-const POPUP_WIDTH = 350;
-const POPUP_HEIGHT = 55;
-const POPUP_ARROW_SIZE = 8;
-
 const corruptionTypeColors = {
-  FRAUD:  '#299df4',
+  FRAUD: '#299df4',
   RIGGING: '#3372b2',
   COLLUSION: '#fbc42c'
 }
@@ -87,10 +81,10 @@ export default class FlaggedNr extends translatable(React.PureComponent) {
   }
 
   componentDidMount() {
-    const { zoomed } = this.props;
+    const { zoomed, data } = this.props;
     const name = zoomed ? 'ZoomedFlaggedNrChart' : 'FlaggedNrChart';
-    flaggedNrData.addListener(name, () => {
-      flaggedNrData.getState(name).then(data => {
+    data.addListener(name, () => {
+      data.getState(name).then(data => {
         this.setState({
           data
         })
@@ -99,9 +93,9 @@ export default class FlaggedNr extends translatable(React.PureComponent) {
   }
 
   componentWillUnmount() {
-    const { zoomed } = this.props;
+    const { zoomed, data } = this.props;
     const name = zoomed ? 'ZoomedFlaggedNrChart' : 'FlaggedNrChart';
-    flaggedNrData.removeListener(name);
+    data.removeListener(name);
 
   }
   render() {

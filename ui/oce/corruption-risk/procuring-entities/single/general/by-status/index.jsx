@@ -12,7 +12,7 @@ class WinsAndFlags extends translatable(React.PureComponent) {
 
   componentDidMount() {
     const { zoomed, data } = this.props;
-    const name = zoomed ? 'ZoomedWinsAndFlagsChart' : 'WinsAndFlagsChart';
+    const name = zoomed ? 'ZoomedProcurementsByStatusChart' : 'ProcurementsByStatusChart';
     data.addListener(name, () => {
       data.getState(name).then(data => {
         this.setState({
@@ -24,7 +24,7 @@ class WinsAndFlags extends translatable(React.PureComponent) {
 
   componentWillUnmount() {
     const { zoomed, data } = this.props;
-    const name = zoomed ? 'ZoomedWinsAndFlagsChart' : 'WinsAndFlagsChart';
+    const name = zoomed ? 'ZoomedProcurementsByStatusChart' : 'ProcurementsByStatusChart';
     data.removeListener(name);
   }
 
@@ -49,37 +49,31 @@ class WinsAndFlags extends translatable(React.PureComponent) {
         <BarChart
           layout="vertical"
           data={data}
-          barSize={zoomed ? 5 : 10}
+          barSize={zoomed ? 10 : 20}
           barGap={0}
           barCategoryGap={15}
         >
           <XAxis type="number" />
-          <YAxis type="category" hide dataKey="name" />
-          <Tooltip content={<Popup />} translations={translations} cursor={false}/>
+          <YAxis type="category" hide dataKey="status" />
+          <Tooltip content={<Popup />} translations={translations} cursor={false} />
           <Legend
             align="right"
             verticalAlign="top"
             height={30}
           />
           <Bar
-            name={this.t('crd:suppliers:wins')}
-            dataKey="wins"
+            name={this.t('crd:procuringEntities:byStatus:title')}
+            dataKey="count"
             fill="#289df4"
             minPointSize={3}
             isAnimationActive={false}
           >
             <LabelList
-              dataKey="name"
+              dataKey="status"
               position="insideTopLeft"
               content={renderTopLeftLabel}
             />
           </Bar>
-          <Bar
-            name={this.t('crd:contracts:baseInfo:flag:pl')}
-            dataKey="flags"
-            fill="#ce4747"
-            minPointSize={3}
-          />
         </BarChart>
       </ResponsiveContainer>
     )
