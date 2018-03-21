@@ -1,16 +1,10 @@
 import { ResponsiveContainer, BarChart, XAxis, YAxis, Legend, Bar, LabelList, Tooltip } from 'recharts';
-import { pluck } from '../../../../tools';
 import translatable from '../../../../../translatable';
-import { renderTopLeftLabel } from '../tools';
-import { flaggedNrData } from '../../state';
+import { renderTopLeftLabel } from '../../../../archive/tools';
 import Popup from './popup';
 
-const POPUP_WIDTH = 350;
-const POPUP_HEIGHT = 55;
-const POPUP_ARROW_SIZE = 8;
-
 const corruptionTypeColors = {
-  FRAUD:  '#299df4',
+  FRAUD: '#299df4',
   RIGGING: '#3372b2',
   COLLUSION: '#fbc42c'
 }

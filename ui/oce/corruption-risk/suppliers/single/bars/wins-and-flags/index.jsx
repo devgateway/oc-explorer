@@ -1,8 +1,7 @@
 import { BarChart, Bar, XAxis, YAxis, LabelList, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import translatable from '../../../../../translatable';
 import Popup from './popup';
-import { winsAndFlagsData } from '../../state';
-import { renderTopLeftLabel } from '../tools';
+import { renderTopLeftLabel } from '../../../../archive/tools';
 
 class WinsAndFlags extends translatable(React.PureComponent) {
   constructor(props) {
