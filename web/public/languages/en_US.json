@@ -352,6 +352,9 @@
   "crd:supplier:table:nrBidders": "Number of bidders",
   "crd:supplier:table:flagName": "Flag name",
   "crd:procuringEntities:top-search": "Search within procuring entities",
+  "crd:procuringEntities:generalStatistics": "General Statistics",
   "crd:procuringEntities:noOfTenders": "No. of Tenders",
-  "crd:procuringEntities:noOfAwards": "No. of Awards"
+  "crd:procuringEntities:noOfAwards": "No. of Awards",
+  "crd:procuringEntities:byStatus:title": "No. of Procurements by Contract Status",
+  "crd:procuringEntities:byMethod:title": "Number of procurements by procurement method."
 }

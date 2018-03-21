@@ -62,7 +62,7 @@ class WinsAndFlags extends translatable(React.PureComponent) {
             height={30}
           />
           <Bar
-            name={'No. procurements by status'}
+            name={this.t('crd:procuringEntities:byStatus:title')}
             dataKey="count"
             fill="#289df4"
             minPointSize={3}

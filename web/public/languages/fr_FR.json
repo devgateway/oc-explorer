@@ -352,6 +352,10 @@
   "crd:supplier:table:procurementsWon": "Marchés gagnés",
   "crd:supplier:table:nrBidders": "Nombre de soumissionnaires",
   "crd:supplier:table:flagName": "Nom de l’alerte",
+  "crd:procuringEntities:generalStatistics": "Statistiques générales",
   "crd:procuringEntities:noOfTenders": "No. of Tenders",
-  "crd:procuringEntities:noOfAwards": "No. of Awards"
+  "crd:procuringEntities:noOfAwards": "No. of Awards",
+  "crd:procuringEntities:byStatus:title": "No. of Procurements by Contract Status",
+  "crd:procuringEntities:byMethod:title": "Number of procurements by procurement method."
+ 
 }

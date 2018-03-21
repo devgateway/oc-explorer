@@ -34,14 +34,14 @@ class ProcuringEntity extends translatable(React.Component) {
           <h2>{this.t('crd:procuringEntities:generalStatistics')}</h2>
           <div className="col-sm-6">
             <Zoomable zoomedWidth={width} data={procurementsByStatusData}>
-              <TitleBelow title={'No. of Procurements by Contract Status'}>
+              <TitleBelow title={this.t('crd:procuringEntities:byStatus:title')}>
                 <ProcurementsByStatus translations={translations} />
               </TitleBelow>
             </Zoomable>
           </div>
           <div className="col-sm-6">
             <Zoomable zoomedWidth={width} data={procurementsByMethodData}>
-              <TitleBelow title={'Number of procurements by procurement method.'}>
+              <TitleBelow title={this.t('crd:procuringEntities:byMethod:title')}>
                 <ProcurementsByMethod translations={translations} />
               </TitleBelow>
             </Zoomable>
