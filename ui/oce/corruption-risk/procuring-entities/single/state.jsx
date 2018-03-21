@@ -130,3 +130,47 @@ export const winsAndFlagsData = PEState.mapping({
     flags: 2001,
   }]
 });
+
+const procurementsByMethodUrl = PEState.input({
+  name: 'procurementsByMethodUrl',
+  initial: `${API_ROOT}/procurementsByProcurementMethod`,
+});
+
+const procurementsByMethodRaw = PEState.remote({
+  name: 'procurementsByMethodRaw',
+  url: procurementsByMethodUrl,
+  params: PEFilters,
+});
+
+export const procurementsByMethodData = PEState.mapping({
+  name: 'procurementsByMethodData',
+  deps: [procurementsByMethodRaw],
+  mapper: data => data.map(
+    datum => ({
+      status: datum.tenderStatus,
+      count: datum.count,
+    })
+  ).sort((a, b) => b.count - a.count)
+});
+
+const procurementsByStatusUrl = PEState.input({
+  name: 'procurementsByStatusUrl',
+  initial: `${API_ROOT}/procurementsByTenderStatus`,
+});
+
+const procurementsByStatusRaw = PEState.remote({
+  name: 'procurementsByStatusRaw',
+  url: procurementsByStatusUrl,
+  params: PEFilters,
+});
+
+export const procurementsByStatusData = PEState.mapping({
+  name: 'procurementsByStatusData',
+  deps: [procurementsByStatusRaw],
+  mapper: data => data.map(
+    datum => ({
+      status: datum.tenderStatus,
+      count: datum.count,
+    })
+  ).sort((a, b) => b.count - a.count)
+});
