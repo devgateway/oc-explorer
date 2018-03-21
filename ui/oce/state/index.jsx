@@ -82,14 +82,15 @@ export class HVar extends Node {
 
   assign(sender, newState) {
     if (!this.initialized) {
-      this.resolve(newState);
       this.initialized = true;
+      this.resolve(newState);
     } else {
       this.state.then(oldState => {
         if (oldState === newState) {
           this.log('oldState === newState', maybeToJS(newState))
         } else {
           this.state = Promise.resolve(newState);
+          this.state.then(newState => this.log('updated to state', maybeToJS(newState)))
           this.invalidateDeps();
         }
       })

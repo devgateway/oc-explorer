@@ -4,6 +4,7 @@ import CRDPage from '../page';
 import PaginatedTable from '../paginated-table';
 import Archive from '../archive';
 import { wireProps } from '../tools';
+import { PEIds, TendersCount, AwardsCount } from './state';
 
 export const mkLink = navigate => (content, { id }) => (
   <a
@@ -15,12 +16,44 @@ export const mkLink = navigate => (content, { id }) => (
 );
 
 class PEList extends PaginatedTable {
+  constructor(...args){
+    super(...args);
+    this.state = this.state || {};
+    this.state.tenders = {};
+    this.state.awards = {};
+  }
+
   getCustomEP() {
     const { searchQuery } = this.props;
     const eps = super.getCustomEP();
     return searchQuery ?
       eps.map(ep => ep.addSearch('text', searchQuery)) :
       eps;
+  }
+
+  componentWillMount() {
+    TendersCount.addListener(
+      'PEList',
+      this.updateBindings.bind(this),
+    );
+    AwardsCount.addListener(
+      'PEList',
+      this.updateBindings.bind(this),
+    );
+  }
+
+  updateBindings() {
+    Promise.all([
+      TendersCount.getState(),
+      AwardsCount.getState(),
+    ]).then(([tenders, awards]) => {
+      this.setState({ tenders, awards });
+    });
+  }
+
+  componentWillUnmount() {
+    TendersCount.removeListener('PEList');
+    AwardsCount.removeListener('PEList');
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -30,6 +63,16 @@ class PEList extends PaginatedTable {
     } else {
       super.componentDidUpdate(prevProps, prevState);
     }
+
+    const { data } = this.props;
+    if (prevProps.data !== data) {
+      PEIds.assign(
+        'PEList',
+        this.props.data
+          .get('data', List())
+          .map(datum => datum.get('procuringEntityId'))
+      );
+    }
   }
 
   render() {
@@ -37,12 +80,16 @@ class PEList extends PaginatedTable {
 
     const count = data.get('count', 0);
 
-    const { pageSize, page } = this.state;
+    const { pageSize, page, tenders, awards } = this.state;
 
     const jsData = data.get('data', List()).map((supplier) => {
+      const id = supplier.get('procuringEntityId');
       return {
-        id: supplier.get('procuringEntityId'),
-        name: supplier.get('procuringEntityName')
+        id,
+        name: supplier.get('procuringEntityName'),
+        nrTenders: tenders[id],
+        nrAwards: awards[id],
+        nrFlags: supplier.get('countFlags'),
       }
     }).toJS();
 
@@ -66,10 +113,19 @@ class PEList extends PaginatedTable {
         }}
       >
         <TableHeaderColumn dataField='id' isKey dataFormat={mkLink(navigate)}>
-          ID
+          {this.t('crd:suppliers:ID')}
         </TableHeaderColumn>
         <TableHeaderColumn dataField='name' dataFormat={mkLink(navigate)}>
-          Name
+          {this.t('crd:suppliers:name')}
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField='nrTenders'>
+          {this.t('crd:procuringEntities:noOfTenders')}
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField='nrAwards'>
+          {this.t('crd:procuringEntities:noOfAwards')}
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField='nrFlags'>
+          {this.t('crd:procurementsTable:noOfFlags')}
         </TableHeaderColumn>
       </BootstrapTable>
     );

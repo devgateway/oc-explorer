@@ -351,5 +351,7 @@
   "crd:supplier:table:procurementsWon": "Contrataciones ganadas",
   "crd:supplier:table:nrBidders": "Número de ofertantes",
   "crd:supplier:table:flagName": "Nombre de la alerta",
-  "crd:procuringEntities:top-search": "Search within procuring entities"
+  "crd:procuringEntities:top-search": "Search within procuring entities",
+  "crd:procuringEntities:noOfTenders": "No. of Tenders",
+  "crd:procuringEntities:noOfAwards": "No. of Awards"
 }
