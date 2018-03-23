@@ -82,6 +82,17 @@ export const associatedContractsCount = PEState.remote({
   params: PEFilters,
 });
 
+const unflaggedContractsCountUrl = PEState.input({
+  name: 'unflaggedContractsCountUrl',
+  initial: `${API_ROOT}/ocds/release/count`,
+});
+
+export const associatedUnflaggedContractsCount = PEState.remote({
+  name: 'associatedUnflaggedContractsCount',
+  url: unflaggedContractsCountUrl,
+  params: PEFilters,
+});
+
 const associatedSuppliers = PEState.mapping({
   name: 'associatedSuppliers',
   deps: ['associatedContracts'],
