@@ -1,4 +1,10 @@
-import { PEInfo, PEFlagsCount, associatedBuyers, associatedContractsCount } from './state';
+import {
+  PEInfo,
+  PEFlagsCount,
+  associatedBuyers,
+  associatedContractsCount,
+  associatedUnflaggedContractsCount,
+} from './state';
 import translatable from '../../../translatable';
 import boundComponent from '../../../state/bound-component';
 
@@ -23,10 +29,11 @@ class Info extends translatable(boundComponent({
     flagsCount: PEFlagsCount,
     buyers: associatedBuyers,
     contractsCount: associatedContractsCount,
+    unflaggedContractsCount: associatedUnflaggedContractsCount,
   }
 })) {
   render() {
-    const { info, flagsCount, buyers, contractsCount } = this.state;
+    const { info, flagsCount, buyers, contractsCount, unflaggedContractsCount } = this.state;
     if (!info) return null;
     const { address, contactPoint } = info;
 
@@ -51,13 +58,10 @@ class Info extends translatable(boundComponent({
 
                   <br />
                   <small>
-                    (
-                      {contractsCount}
-                      &nbsp;
-                      {this.t(contractsCount === 1 ?
-                        'crd:supplier:contract:sg' :
-                        'crd:supplier:contract:pl')}
-                    )
+                    ({this.t('crd:procuringEntities:info:procurementsCount')
+                      .replace('$#$', contractsCount)
+                      .replace('$#$', unflaggedContractsCount)
+                    })
                   </small>
                 </td>
               </tr>

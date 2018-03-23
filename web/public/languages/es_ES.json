@@ -356,6 +356,6 @@
   "crd:procuringEntities:noOfTenders": "No. of Tenders",
   "crd:procuringEntities:noOfAwards": "No. of Awards",
   "crd:procuringEntities:byStatus:title": "No. of Procurements by Contract Status",
-  "crd:procuringEntities:byMethod:title": "Number of procurements by procurement method."
-
+  "crd:procuringEntities:byMethod:title": "Number of procurements by procurement method.",
+  "crd:procuringEntities:info:procurementsCount": "on $#$ procurements out of $#$ procurements"
 }
