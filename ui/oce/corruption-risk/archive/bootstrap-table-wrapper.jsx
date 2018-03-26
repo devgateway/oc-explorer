@@ -1,6 +1,15 @@
 export default class BootstrapTableWrapper extends React.PureComponent {
   render() {
-    const { columns, data, page, pageSize, onPageChange, onSizePerPageList, count } = this.props;
+    const {
+      columns,
+      data,
+      page,
+      pageSize,
+      onPageChange,
+      onSizePerPageList,
+      count,
+      containerClass,
+    } = this.props;
     return (
       <BootstrapTable
         data={data}
@@ -19,6 +28,7 @@ export default class BootstrapTableWrapper extends React.PureComponent {
           onSizePerPageList,
           paginationPosition: 'both',
         }}
+        containerClass={containerClass}
       >
         <TableHeaderColumn dataField="id" isKey hidden/>
         {columns.map(({ title, ...props }) => (
