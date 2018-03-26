@@ -133,11 +133,19 @@ class PEList extends PaginatedTable {
 }
 
 class ProcuringEntities extends CRDPage {
+  requestNewData(path, newData) {
+    this.props.requestNewData(
+      path,
+      newData.set('count', newData.getIn(['count', 0, 'count']))
+    );
+  }
+
   render() {
     const { navigate, searchQuery, doSearch } = this.props;
     return (
       <Archive
         {...wireProps(this)}
+        requestNewData={this.requestNewData.bind(this)}
         searchQuery={searchQuery}
         doSearch={doSearch}
         navigate={navigate}
