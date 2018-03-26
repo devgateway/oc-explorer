@@ -88,7 +88,6 @@ public abstract class GenericOCDSController {
     }
 
     protected List<DBObject> releaseAgg(Aggregation agg) {
-        System.out.println(agg);
         return releaseAgg(agg, DBObject.class);
     }
 
@@ -406,7 +405,7 @@ public abstract class GenericOCDSController {
     }
 
     protected CriteriaDefinition getTextCriteria(DefaultFilterPagingRequest filter) {
-        if (ObjectUtils.isEmpty(filter.getText())) {
+        if (ObjectUtils.isEmpty(filter.getText()) || filter.getAwardFiltering()) {
             return new Criteria();
         } else {
             return TextCriteria.forLanguage(MongoConstants.MONGO_LANGUAGE).matchingAny(filter.getText());
