@@ -2,6 +2,7 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import translatable from '../../../../translatable';
 import { supplierProcurementsData, page, pageSize, supplierProcurementsCount } from './state';
 import BootstrapTableWrapper from '../../../archive/bootstrap-table-wrapper';
+import style from './style.less';
 
 const NAME = 'supplierProcurementsComponent';
 
@@ -87,9 +88,12 @@ export default class Table extends translatable(React.PureComponent) {
         onPageChange={newPage => page.assign(NAME, newPage)}
         onSizePerPageList={newPageSize => pageSize.assign(NAME, newPageSize)}
         count={count}
+        containerClass="supplier-procurements-table"
         columns={[{
             title: this.t('crd:contracts:baseInfo:procuringEntityName'),
             dataField: 'PEName',
+            className: 'pe-name',
+            columnClassName: 'pe-name',
             dataFormat: this.formatPE.bind(this),
         }, {
             title: this.t('crd:contracts:list:awardAmount'),
