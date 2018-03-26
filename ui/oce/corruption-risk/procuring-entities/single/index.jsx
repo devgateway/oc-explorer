@@ -8,6 +8,7 @@ import WinsAndFlags from '../../suppliers/single/bars/wins-and-flags';
 import FlaggedNr from '../../suppliers/single/bars/flagged-nr';
 import ProcurementsByStatus from './general/by-status';
 import ProcurementsByMethod from './general/by-method';
+import ProcurementsTable from './table';
 
 class ProcuringEntity extends translatable(React.Component) {
   componentWillMount() {
@@ -66,6 +67,8 @@ class ProcuringEntity extends translatable(React.Component) {
               </TitleBelow>
             </Zoomable>
           </div>
+          <h2>{this.t('crd:supplier:table:procurementsWon')}</h2>
+          <ProcurementsTable translations={translations} />
         </section>
       </div>
     );
