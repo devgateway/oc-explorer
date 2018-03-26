@@ -13,7 +13,6 @@ package org.devgateway.ocds.web.rest.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.Publisher;
 import org.devgateway.ocds.persistence.mongo.Release;
@@ -148,14 +147,7 @@ public class OcdsController extends GenericOCDSController {
                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
         ))
                 .with(pageRequest);
-
-        if (StringUtils.isNotEmpty(releaseRequest.getText())) {
-            query.addCriteria(getTextCriteria(releaseRequest));
-        }
-
-        List<Release> find = mongoTemplate.find(query, Release.class);
-
-        return find;
+        return mongoTemplate.find(query, Release.class);
 
     }
 
@@ -181,13 +173,7 @@ public class OcdsController extends GenericOCDSController {
                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
         )).with(pageRequest);
 
-        if (StringUtils.isNotEmpty(releaseRequest.getText())) {
-            query.addCriteria(getTextCriteria(releaseRequest));
-        }
-
-        Long count = mongoTemplate.count(query, Release.class);
-
-        return count;
+        return mongoTemplate.count(query, Release.class);
 
     }
 
@@ -214,10 +200,6 @@ public class OcdsController extends GenericOCDSController {
         ).and(MongoConstants.FieldNames.FLAGS_TOTAL_FLAGGED).gt(0)).
                 with(pageRequest);
 
-        if (StringUtils.isNotEmpty(releaseRequest.getText())) {
-            query.addCriteria(getTextCriteria(releaseRequest));
-        }
-
         return mongoTemplate.find(query, FlaggedRelease.class);
     }
 
@@ -237,10 +219,6 @@ public class OcdsController extends GenericOCDSController {
         Query query = query(getYearDefaultFilterCriteria(
                 releaseRequest, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
         ).and(MongoConstants.FieldNames.FLAGS_TOTAL_FLAGGED).gt(0));
-
-        if (StringUtils.isNotEmpty(releaseRequest.getText())) {
-            query.addCriteria(getTextCriteria(releaseRequest));
-        }
 
         return mongoTemplate.count(query, FlaggedRelease.class);
     }
