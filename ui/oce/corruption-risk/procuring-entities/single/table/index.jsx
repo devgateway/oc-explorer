@@ -1,6 +1,6 @@
 import translatable from '../../../../translatable';
 import BootstrapTableWrapper from '../../../archive/bootstrap-table-wrapper';
-import { procurementsData } from './state';
+import { procurementsData, page, pageSize, procurementsCount } from './state';
 
 const NAME = 'PEProcurementsComponent';
 
@@ -13,20 +13,32 @@ class Table extends translatable(React.PureComponent) {
 
   componentDidMount() {
     procurementsData.addListener(NAME, () => this.updateBindings());
+    page.addListener(NAME, () => this.updateBindings());
+    pageSize.addListener(NAME, () => this.updateBindings());
+    procurementsCount.addListener(NAME, () => this.updateBindings());
   }
 
   updateBindings() {
     Promise.all([
-      procurementsData.getState(NAME)
-    ]).then(([data]) => {
+      procurementsData.getState(NAME),
+      page.getState(NAME),
+      pageSize.getState(NAME),
+      procurementsCount.getState(NAME),
+    ]).then(([data, page, pageSize, procurementsCount]) => {
       this.setState({
-        data
+        data,
+        page,
+        pageSize,
+        count: procurementsCount,
       })
     })
   }
 
   componentWillUnmount() {
     procurementsData.removeListener(NAME);
+    page.removeListener(NAME);
+    pageSize.removeListener(NAME);
+    procurementsCount.removeListener(NAME);
   }
 
   formatFlags(data) {
@@ -42,11 +54,16 @@ class Table extends translatable(React.PureComponent) {
   }
 
   render() {
-    const { data } = this.state;
+    const { data, count } = this.state;
 
     return (
       <BootstrapTableWrapper
         data={data}
+        page={this.state.page}
+        pageSize={this.state.pageSize}
+        onPageChange={newPage => page.assign(NAME, newPage)}
+        onSizePerPageList={newPageSize => pageSize.assign(NAME, newPageSize)}
+        count={count}
         columns={[{
             title: 'Tender name',
             dataField: 'name',
