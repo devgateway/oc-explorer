@@ -3,6 +3,7 @@
  */
 package org.devgateway.ocds.web.rest.controller;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.apache.commons.lang3.ArrayUtils;
@@ -26,6 +27,7 @@ import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.data.mongodb.core.query.TextCriteria;
+import org.springframework.util.ObjectUtils;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
@@ -39,6 +41,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.devgateway.ocds.persistence.mongo.constants.MongoConstants.FieldNames.FLAGS_TOTAL_FLAGGED;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
@@ -402,7 +405,11 @@ public abstract class GenericOCDSController {
     }
 
     protected CriteriaDefinition getTextCriteria(DefaultFilterPagingRequest filter) {
-        return TextCriteria.forLanguage(MongoConstants.MONGO_LANGUAGE).matchingAny(filter.getText());
+        if (ObjectUtils.isEmpty(filter.getText()) || filter.getAwardFiltering()) {
+            return new Criteria();
+        } else {
+            return TextCriteria.forLanguage(MongoConstants.MONGO_LANGUAGE).matchingAny(filter.getText());
+        }
     }
 
     /**
@@ -547,9 +554,10 @@ public abstract class GenericOCDSController {
         map.put(MongoConstants.Filters.AWARD_STATUS, getAwardStatusFilterCriteria(filter));
         map.put(MongoConstants.Filters.BIDDER_ID, getBidderIdCriteria(filter));
         map.put(MongoConstants.Filters.TOTAL_FLAGGED, getTotalFlaggedCriteria(filter));
-        //map.put(MongoConstants.Filters.TEXT, getTextCriteria(filter));
+        map.put(MongoConstants.Filters.TEXT, getTextCriteria(filter));
         return map;
     }
+
 
     /**
      * Removes {@link Criteria} objects that were generated empty because they are not needed and they seem to slow
@@ -558,13 +566,40 @@ public abstract class GenericOCDSController {
      * @param values
      * @return
      */
-    protected Criteria[] getEmptyFilteredCriteria(Collection<CriteriaDefinition> values) {
-        return values.stream().distinct().toArray(Criteria[]::new);
+    protected CriteriaDefinition[] getEmptyFilteredCriteria(Collection<CriteriaDefinition> values) {
+        return values.stream().distinct().toArray(CriteriaDefinition[]::new);
+    }
+
+    /**
+     * We ensure {@link TextCriteria} is always returned first before {@link Criteria}
+     *
+     * @param criteria
+     * @return
+     * @see Criteria#createCriteriaList(Criteria[])
+     */
+    private BasicDBList createTextSearchFriendlyCriteriaList(CriteriaDefinition[] criteria) {
+        BasicDBList bsonList = new BasicDBList();
+        Arrays.stream(criteria).sorted((c1, c2) -> c2.getClass().getSimpleName()
+                .compareTo(c1.getClass().getSimpleName()))
+                .map(CriteriaDefinition::getCriteriaObject).collect(Collectors.toCollection(() -> bsonList));
+        return bsonList;
     }
 
     protected Criteria getDefaultFilterCriteria(final DefaultFilterPagingRequest filter,
                                                 Map<String, CriteriaDefinition> map) {
-        return new Criteria().andOperator(getEmptyFilteredCriteria(map.values()));
+        return getAndOperatorCriteriaDefinition(map.values());
+    }
+
+    /**
+     * For some reason the mongodb spring team did not add support for this, probably because the $text
+     * criteria has some limitations, has to be always first in a list of criteria, etc...
+     *
+     * @param criteriaDefinitions
+     * @return
+     */
+    protected Criteria getAndOperatorCriteriaDefinition(Collection<CriteriaDefinition> criteriaDefinitions) {
+        return new Criteria("$and").is(createTextSearchFriendlyCriteriaList(getEmptyFilteredCriteria(
+                criteriaDefinitions)));
     }
 
     protected Criteria getDefaultFilterCriteria(final DefaultFilterPagingRequest filter) {
@@ -579,7 +614,7 @@ public abstract class GenericOCDSController {
                                                     Map<String, CriteriaDefinition> map,
                                                     final String dateProperty) {
         map.put(MongoConstants.Filters.YEAR, getYearFilterCriteria(filter, dateProperty));
-        return new Criteria().andOperator(getEmptyFilteredCriteria(map.values()));
+        return getAndOperatorCriteriaDefinition(map.values());
     }
 
     protected MatchOperation getMatchDefaultFilterOperation(final DefaultFilterPagingRequest filter) {
