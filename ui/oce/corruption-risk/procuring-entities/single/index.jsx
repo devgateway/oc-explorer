@@ -67,7 +67,7 @@ class ProcuringEntity extends translatable(React.Component) {
               </TitleBelow>
             </Zoomable>
           </div>
-          <h2>{this.t('crd:supplier:table:procurementsWon')}</h2>
+          <h2>Procurements by [this Procuring Entity]</h2>
           <ProcurementsTable translations={translations} />
         </section>
       </div>

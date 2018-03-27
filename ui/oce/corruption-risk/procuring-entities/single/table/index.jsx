@@ -32,12 +32,6 @@ class Table extends translatable(React.PureComponent) {
   render() {
     const { data } = this.state;
     /*
-    Tender name
-    OCID
-    Award status
-    Tender amount
-    Award amount
-    Number of bidders
     Number of flags
     Flag name
     */
@@ -45,8 +39,23 @@ class Table extends translatable(React.PureComponent) {
       <BootstrapTableWrapper
         data={data}
         columns={[{
+            title: 'Tender name',
+            dataField: 'name'
+        }, {
+            title: 'OCID',
+            dataField: 'ocid'
+        }, {
+            title: 'Award status',
+            dataField: 'awardStatus',
+        }, {
+            title: 'Tender amount',
+            dataField: 'tenderAmount',
+        }, {
             title: this.t('crd:contracts:list:awardAmount'),
             dataField: 'awardAmount',
+        }, {
+            title: 'Number of bidders',
+            dataField: 'nrBidders',
         }]}
       />
     );
