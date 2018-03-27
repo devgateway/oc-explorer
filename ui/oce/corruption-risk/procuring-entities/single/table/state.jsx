@@ -54,13 +54,13 @@ export const procurementsData = PEState.mapping({
     raw.map(datum => {
       return {
         id: datum.id,
-        name: datum.name || 'N/A',
+        name: datum.tender.title || 'N/A',
         ocid: datum.ocid,
-        awardStatus: 'awardStatus',
-        tenderAmount: 123,
+        awardStatus: getAwardAmount(datum.awards) ? 'active' : 'unsuccessful',
+        tenderAmount: `${datum.tender.value.amount} ${datum.tender.value.currency}`,
         awardAmount: getAwardAmount(datum.awards),
         nrBidders: datum.tender.numberOfTenderers || 0,
-        types: datum.flags.flaggedStats,
+        nrFlags: datum.flags.totalFlagged,
         flags: Object.keys(datum.flags).filter(key => datum.flags[key].value),
       }
     })

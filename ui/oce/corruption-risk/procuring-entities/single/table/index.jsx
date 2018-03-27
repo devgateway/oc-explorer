@@ -29,18 +29,28 @@ class Table extends translatable(React.PureComponent) {
     procurementsData.removeListener(NAME);
   }
 
+  formatFlags(data) {
+    return (
+      <div>
+        {data.map(indicator => (
+          <div>
+            {this.t(`crd:indicators:${indicator}:name`)}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   render() {
     const { data } = this.state;
-    /*
-    Number of flags
-    Flag name
-    */
+
     return (
       <BootstrapTableWrapper
         data={data}
         columns={[{
             title: 'Tender name',
-            dataField: 'name'
+            dataField: 'name',
+            width: '20%',
         }, {
             title: 'OCID',
             dataField: 'ocid'
@@ -56,6 +66,14 @@ class Table extends translatable(React.PureComponent) {
         }, {
             title: 'Number of bidders',
             dataField: 'nrBidders',
+        }, {
+            title: 'Number of flags',
+            dataField: 'nrFlags',
+        }, {
+            title: this.t('crd:supplier:table:flagName'),
+            dataField: 'flags',
+            dataFormat: this.formatFlags.bind(this),
+            width: '20%',
         }]}
       />
     );
