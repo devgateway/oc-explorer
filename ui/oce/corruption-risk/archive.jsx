@@ -14,7 +14,7 @@ class Archive extends CRDPage {
       <div className={cn(className)}>
         <TopSearch
           translations={translations}
-          searchQuery={decodeURI(searchQuery)}
+          searchQuery={searchQuery ? decodeURI(searchQuery) : ''}
           doSearch={doSearch}
           placeholder={topSearchPlaceholder}
         />

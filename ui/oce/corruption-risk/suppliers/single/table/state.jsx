@@ -35,7 +35,6 @@ const supplierProcurementsRaw = SupplierTableState.remote({
   params: filters,
 });
 
-
 const findActiveAward = awards =>
   awards.find(
     award => award.status === 'active'
@@ -79,5 +78,4 @@ export const supplierProcurementsCount = SupplierTableState.remote({
   name: 'supplierProcurementsCount',
   url: supplierProcurementsCountEP,
   params: supplierFilters,
-  eager: true,
 });

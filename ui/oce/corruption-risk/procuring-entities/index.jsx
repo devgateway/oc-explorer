@@ -136,7 +136,7 @@ class ProcuringEntities extends CRDPage {
   requestNewData(path, newData) {
     this.props.requestNewData(
       path,
-      newData.set('count', newData.getIn(['count', 0, 'count']))
+      newData.set('count', newData.getIn(['count', 0, 'count'], 0))
     );
   }
 
