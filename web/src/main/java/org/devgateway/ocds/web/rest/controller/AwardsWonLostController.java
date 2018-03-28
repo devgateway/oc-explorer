@@ -374,6 +374,8 @@ public class AwardsWonLostController extends GenericOCDSController {
                 group(Fields.from(
                         field("supplierId", MongoConstants
                                 .FieldNames.AWARDS_SUPPLIERS_ID),
+                        field("supplierName", MongoConstants
+                                .FieldNames.AWARDS_SUPPLIERS_NAME),
                         field("procuringEntityName", MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_NAME),
                         field("procuringEntityId", MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_ID)
                 ))
