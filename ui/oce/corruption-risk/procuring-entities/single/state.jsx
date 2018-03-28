@@ -120,7 +120,7 @@ export const winsAndFlagsData = PEState.mapping({
   deps: [winsAndFlagsRaw],
   mapper: data => data.map(datum => {
     return {
-      name: datum.supplierId,
+      name: datum.supplierName,
       wins: datum.count,
       flags: datum.countFlags,
     }
