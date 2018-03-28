@@ -14,7 +14,7 @@ class Archive extends CRDPage {
       <div className={cn(className)}>
         <TopSearch
           translations={translations}
-          searchQuery={searchQuery}
+          searchQuery={searchQuery ? decodeURI(searchQuery) : ''}
           doSearch={doSearch}
           placeholder={topSearchPlaceholder}
         />
@@ -24,7 +24,10 @@ class Archive extends CRDPage {
             (count === 1 ?
               this.t('crd:contracts:top-search:resultsFor:sg') :
               this.t('crd:contracts:top-search:resultsFor:pl')
-            ).replace('$#$', count).replace('$#$', searchQuery)}
+            ).replace('$#$', count).replace(
+              '$#$',
+              searchQuery.replace(/\%22/g, '')
+            )}
         </h3>}
 
         <List
