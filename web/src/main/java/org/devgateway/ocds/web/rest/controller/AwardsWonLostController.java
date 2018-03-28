@@ -26,6 +26,7 @@ import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -273,7 +274,7 @@ public class AwardsWonLostController extends GenericOCDSController {
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
     public List<DBObject> procurementsByTenderStatus(@ModelAttribute @Valid final YearFilterPagingRequest
-                                                          filter) {
+                                                             filter) {
         Assert.notEmpty(filter.getProcuringEntityId(), "procuringEntityId must not be empty!");
 
         Aggregation agg = newAggregation(
@@ -297,7 +298,7 @@ public class AwardsWonLostController extends GenericOCDSController {
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
     public List<DBObject> procurementsByProcurementMethod(@ModelAttribute @Valid final YearFilterPagingRequest
-                                                             filter) {
+                                                                  filter) {
         Assert.notEmpty(filter.getProcuringEntityId(), "procuringEntityId must not be empty!");
 
         Aggregation agg = newAggregation(
@@ -350,7 +351,11 @@ public class AwardsWonLostController extends GenericOCDSController {
     public List<DBObject> procurementsWonLostPerProcuringEntity(@ModelAttribute @Valid final YearFilterPagingRequest
                                                                         filter) {
 
-        Assert.notEmpty(filter.getSupplierId(), "supplierId must not be empty!");
+        Assert.isTrue(
+                !ObjectUtils.isEmpty(filter.getSupplierId())
+                        || !ObjectUtils.isEmpty(filter.getProcuringEntityId()),
+                "Either supplierId or procuringEntityId must not be empty!"
+        );
 
         Aggregation agg = newAggregation(
                 match(where(AWARDS_STATUS).is(Award.Status.active.toString())
@@ -369,6 +374,8 @@ public class AwardsWonLostController extends GenericOCDSController {
                 group(Fields.from(
                         field("supplierId", MongoConstants
                                 .FieldNames.AWARDS_SUPPLIERS_ID),
+                        field("supplierName", MongoConstants
+                                .FieldNames.AWARDS_SUPPLIERS_NAME),
                         field("procuringEntityName", MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_NAME),
                         field("procuringEntityId", MongoConstants.FieldNames.TENDER_PROCURING_ENTITY_ID)
                 ))
