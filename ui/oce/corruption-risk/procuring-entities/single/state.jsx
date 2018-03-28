@@ -106,7 +106,7 @@ export const PEFlaggedNrData = new FlaggedNrMapping({
 
 const winsAndFlagsURL = PEState.input({
   name: 'winsAndFlagsURL',
-  initial: `${API_ROOT}/suppliersByFlags`,
+  initial: `${API_ROOT}/supplierWinsPerProcuringEntity `,
 });
 
 const winsAndFlagsRaw = PEState.remote({
@@ -120,8 +120,8 @@ export const winsAndFlagsData = PEState.mapping({
   deps: [winsAndFlagsRaw],
   mapper: data => data.map(datum => {
     return {
-      name: datum.supplierName,
-      wins: 9000,
+      name: datum.supplierId,
+      wins: datum.count,
       flags: datum.countFlags,
     }
   })
