@@ -104,42 +104,27 @@ export const PEFlaggedNrData = new FlaggedNrMapping({
   parent: PEState,
 });
 
+const winsAndFlagsURL = PEState.input({
+  name: 'winsAndFlagsURL',
+  initial: `${API_ROOT}/supplierWinsPerProcuringEntity `,
+});
+
+const winsAndFlagsRaw = PEState.remote({
+  name: 'winsAndFlagsRaw',
+  url: winsAndFlagsURL,
+  params: PEFilters,
+});
+
 export const winsAndFlagsData = PEState.mapping({
   name: 'winsAndFlagsData',
-  deps: [associatedContracts],
-  mapper: () => [{
-    name: 'Mock 1',
-    wins: 9000,
-    flags: 9001,
-  }, {
-    name: 'Mock 2',
-    wins: 8000,
-    flags: 8001,
-  }, {
-    name: 'Mock 3',
-    wins: 7000,
-    flags: 7001,
-  }, {
-    name: 'Mock 4',
-    wins: 6000,
-    flags: 6001,
-  }, {
-    name: 'Mock 5',
-    wins: 5000,
-    flags: 5001,
-  }, {
-    name: 'Mock 6',
-    wins: 4000,
-    flags: 4001,
-  }, {
-    name: 'Mock 7',
-    wins: 3000,
-    flags: 3001,
-  }, {
-    name: 'Mock 8',
-    wins: 2000,
-    flags: 2001,
-  }]
+  deps: [winsAndFlagsRaw],
+  mapper: data => data.map(datum => {
+    return {
+      name: datum.supplierName,
+      wins: datum.count,
+      flags: datum.countFlags,
+    }
+  })
 });
 
 const procurementsByMethodUrl = PEState.input({
