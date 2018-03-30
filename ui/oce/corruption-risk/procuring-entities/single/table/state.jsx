@@ -47,6 +47,14 @@ function getAwardAmount(awards) {
   return `${value.amount} ${value.currency}`;
 }
 
+function getTenderAmount(datum) {
+  try {
+    return `${datum.tender.value.amount} ${datum.tender.value.currency}`;
+  } catch(whatever) {
+    return 0;
+  }
+}
+
 export const procurementsData = PEState.mapping({
   name: 'procurementsData',
   deps: [procurementsRaw],
@@ -57,7 +65,7 @@ export const procurementsData = PEState.mapping({
         name: datum.tender.title || 'N/A',
         ocid: datum.ocid,
         awardStatus: getAwardAmount(datum.awards) ? 'active' : 'unsuccessful',
-        tenderAmount: `${datum.tender.value.amount} ${datum.tender.value.currency}`,
+        tenderAmount: getTenderAmount(datum),
         awardAmount: getAwardAmount(datum.awards),
         nrBidders: datum.tender.numberOfTenderers || 0,
         nrFlags: datum.flags.totalFlagged,
