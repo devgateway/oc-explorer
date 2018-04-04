@@ -10,10 +10,10 @@ import boundComponent from '../../../state/bound-component';
 
 class Cell extends React.PureComponent {
   render() {
-    const { title, children, ...props } = this.props;
+    const { title, children, dlClassName, ...props } = this.props;
     return (
       <td {...props}>
-        <dl>
+        <dl className={dlClassName}>
           <dt>{title}</dt>
           <dd>{children}</dd>
         </dl>
@@ -77,7 +77,7 @@ class Info extends translatable(boundComponent({
           <table className="table table-bordered info-table">
             <tbody>
               <tr>
-                <Cell title="Address">
+                <Cell title="Address" dlClassName="smaller">
                   {address.streetAddress} <br />
                   {address.locality} /
                   &nbsp;
@@ -85,7 +85,7 @@ class Info extends translatable(boundComponent({
                   &nbsp;
                   {address.countryName}
                 </Cell>
-                <Cell title="Contacts" colSpan="2">
+                <Cell title="Contacts" colSpan="2" dlClassName="smaller">
                   {contactPoint.name}<br />
                   {contactPoint.email}<br />
                   {contactPoint.telephone}

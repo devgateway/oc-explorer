@@ -1,10 +1,14 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Source+Sans+Pro:400,600');
+
 @headerHeight: 64px;
 .introduction {
   font-size: 16px;
   margin-bottom: 20px;
   margin-top: 10px;
 }
+
 .dashboard-corruption-risk{
+  font-family: Montserrat;
   &>header{
     background: #144361;
     &.branding {
@@ -27,8 +31,9 @@
         padding: 5px;
         &.corruption-dash-title{
           color: #9fa9ba;
-          font-size: 20px;
-          margin-top: 10px;
+          font-size: 18px;
+          font-weight: 600;
+          margin-top: 12px;
         }
         .glyphicon{
           font-size: .53em;
@@ -68,7 +73,7 @@
     .title{
       text-transform: uppercase;
       float: left;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: bold;
       padding: 20px 30px 20px 8px;
       @media (max-width: 969px) {
@@ -96,10 +101,14 @@
         margin-top: 3px;
       }
 
+      .box-title {
+        font-size: 12px;
+      }
+
       &.open{
         position: relative;
         .box-title{
-          font-weight: bold;
+          font-weight: 600;
         }
         .dropdown{
           display: block;
@@ -635,13 +644,24 @@
 }
 
 .contract-page, .supplier-page, .pe-page {
-  dl{
-    dt{
-      font-size: .8em;
+  font-family: 'Source Sans Pro';
+  dl {
+    margin-bottom: 0;
+    dt {
+      font-size: .7em;
       font-weight: normal;
     }
-    dd{
-      font-size: 1.5em;
+    dd {
+      font-size: 1.3em;
+      p {
+        margin-bottom: 0;
+      }
+    }
+
+    &.smaller {
+      dd {
+        font-size: 1em;
+      }
     }
   }
 

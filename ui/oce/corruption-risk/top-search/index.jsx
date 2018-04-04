@@ -33,10 +33,13 @@ class TopSearch extends translatable(React.Component) {
     const exactMatch = isExactMatch(inputValue);
 
     return (
-      <div className="top-search">
-        <div className="row">
-          <form action="javascript:void(0);" onSubmit={() => doSearch(inputValue)}>
-            <div className="input-group col-lg-4 col-md-6 col-sm-8 top-search">
+        <form
+          action="javascript:void(0);"
+          className="top-search row"
+          onSubmit={() => doSearch(inputValue)}
+        >
+          <div className="form-group col-sm-6">
+            <div className="input-group">
               <input
                 type="text"
                 className="form-control"
@@ -48,10 +51,8 @@ class TopSearch extends translatable(React.Component) {
                 <i className="glyphicon glyphicon-search" />
               </div>
             </div>
-          </form>
-        </div>
-        <div className="row">
-          <div className="col-sm-12">
+          </div>
+          <div className="form-group exact-match col-sm-6">
             <input
               id="exactMatch"
               type="checkbox"
@@ -63,8 +64,7 @@ class TopSearch extends translatable(React.Component) {
               {this.t('crd:contracts:hint')}
             </label>
           </div>
-        </div>
-      </div>
+        </form>
     );
   }
 }
