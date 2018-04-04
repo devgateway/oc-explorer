@@ -50,11 +50,13 @@ class Info extends translatable(boundComponent({
                 <td className="flags">
                   <img src="assets/icons/flag.svg" alt="Flag icon" className="flag-icon" />
                   &nbsp;
-                  {flagsCount}
-                  &nbsp;
-                  {this.t(flagsCount === 1 ?
-                    'crd:contracts:baseInfo:flag:sg' :
-                    'crd:contracts:baseInfo:flag:pl')}
+                  <span className="count">
+                    {flagsCount}
+                    &nbsp;
+                    {this.t(flagsCount === 1 ?
+                      'crd:contracts:baseInfo:flag:sg' :
+                      'crd:contracts:baseInfo:flag:pl')}
+                  </span>
                   <small>
                     {contractsCount} procurements flagged
                     <br />
