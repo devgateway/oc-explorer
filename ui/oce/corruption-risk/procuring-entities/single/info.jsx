@@ -55,13 +55,10 @@ class Info extends translatable(boundComponent({
                   {this.t(flagsCount === 1 ?
                     'crd:contracts:baseInfo:flag:sg' :
                     'crd:contracts:baseInfo:flag:pl')}
-
-                  <br />
                   <small>
-                    ({this.t('crd:procuringEntities:info:procurementsCount')
-                      .replace('$#$', contractsCount)
-                      .replace('$#$', unflaggedContractsCount)
-                    })
+                    {contractsCount} procurements flagged
+                    <br />
+                    (Out of {unflaggedContractsCount} procurement processes)
                   </small>
                 </td>
               </tr>
@@ -87,8 +84,8 @@ class Info extends translatable(boundComponent({
                 </Cell>
                 <Cell title="Contacts" colSpan="2" dlClassName="smaller">
                   {contactPoint.name}<br />
-                  {contactPoint.email}<br />
-                  {contactPoint.telephone}
+      {contactPoint.email}<br />
+      {contactPoint.telephone}
                 </Cell>
               </tr>
             </tbody>
