@@ -60,7 +60,7 @@ class Info extends translatable(boundComponent({
                   <small>
                     {contractsCount} procurements flagged
                     <br />
-                    (Out of {unflaggedContractsCount} procurement processes)
+                    (Out of {unflaggedContractsCount} procurement won)
                   </small>
                 </td>
               </tr>
