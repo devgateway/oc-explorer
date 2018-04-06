@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Source+Sans+Pro:400,600');
 
 @headerHeight: 64px;
+@gutterRight: 80pt;
+@gutterRightMd: 60pt;
+
 .introduction {
   font-size: 16px;
   margin-bottom: 20px;
@@ -52,12 +55,20 @@
       }
     }
 
-    .login-wrapper{
-      padding: 10px 0 15px 15px;
-      text-align: right;
-      button{
-        width: 150px;
-        background: #35ae46;
+    .header-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      .login-wrapper{
+        margin-right: @gutterRight;
+        @media (max-width: 1200px) {
+          margin-right: @gutterRightMd;
+        }
+        margin-left: 10px;
+        button {
+          width: 150px;
+          background: #35ae46;
+        }
       }
     }
   }
@@ -76,6 +87,11 @@
       font-size: 12px;
       font-weight: bold;
       padding: 20px 30px 20px 8px;
+      margin-left: 135px;
+      margin-right: 35px;
+      @media (max-width: 1024px) {
+        margin-right: 5px;
+      }
       @media (max-width: 969px) {
         padding: 0 5px;
       }
@@ -152,10 +168,14 @@
       }
     }
     .download{
-      padding: 14px 0;
+      padding: 14px 15px;
       text-align: right;
-      button{
+      button {
         padding: 5px 25px;
+        margin-right: @gutterRight;
+        @media (max-width: 1200px) {
+          margin-right: @gutterRightMd;
+        }
       };
     }
 
@@ -356,11 +376,15 @@
   .table-striped>tbody>tr:nth-of-type(even){
     background: #f5f8fa;
   }
+
   .content{
     @arrowSize: 8px;
     margin-top: 89px;
     margin-bottom: 80px;
-    padding: 20px 40px 0 30px;
+    padding: 30px @gutterRight 0 50px;
+    @media (max-width: 1200px) {
+      padding: 30px @gutterRightMd 0 50px;
+    }
 
     .crd-popup {
       @popupWidth: 400px;//if you're changing this you need to also change POPUP_WIDTH in constants.es6
