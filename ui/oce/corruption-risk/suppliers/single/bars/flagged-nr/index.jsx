@@ -140,7 +140,7 @@ export default class FlaggedNr extends translatable(React.PureComponent) {
           <YAxis type="category" dataKey="indicatorId" hide />
           <Tooltip content={<Popup />} translations={translations} cursor={false} />
           <Legend
-            align="right"
+            align="left"
             verticalAlign="top"
             payload={legendPayload}
             height={30}

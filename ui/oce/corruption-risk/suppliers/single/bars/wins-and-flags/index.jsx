@@ -57,7 +57,7 @@ class WinsAndFlags extends translatable(React.PureComponent) {
           <YAxis type="category" hide dataKey="name" />
           <Tooltip content={<Popup />} translations={translations} cursor={false}/>
           <Legend
-            align="right"
+            align="left"
             verticalAlign="top"
             height={30}
           />

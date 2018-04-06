@@ -56,11 +56,6 @@ class WinsAndFlags extends translatable(React.PureComponent) {
           <XAxis type="number" />
           <YAxis type="category" hide dataKey="status" />
           <Tooltip content={<Popup />} translations={translations} cursor={false} />
-          <Legend
-            align="right"
-            verticalAlign="top"
-            height={30}
-          />
           <Bar
             name={this.t('crd:procuringEntities:byMethod:title')}
             dataKey="count"
