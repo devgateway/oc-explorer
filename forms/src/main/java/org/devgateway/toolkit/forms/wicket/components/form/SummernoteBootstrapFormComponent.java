@@ -15,7 +15,6 @@
 package org.devgateway.toolkit.forms.wicket.components.form;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.editor.SummernoteConfig;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.editor.SummernoteEditor;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
@@ -38,7 +37,7 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
     private static final int SUMMERNOTE_HEIGHT = 50;
     public static final String SUMMERNOTE_EMPTY_HTML = "<p><br></p>";
 
-    private SummernoteEditor summernoteEditor;
+    private ToolkitSummernoteEditor summernoteEditor;
 
     private StringValidator validator = WebConstants.StringValidators.MAXIMUM_LENGTH_VALIDATOR_ONE_LINE_TEXTAREA;
 
@@ -95,7 +94,7 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
         config.withAirMode(false);
 
         if (isEnabledInHierarchy()) {
-            summernoteEditor = new SummernoteEditor(id, initFieldModel(), config);
+            summernoteEditor = new ToolkitSummernoteEditor(id, initFieldModel(), config);
             return summernoteEditor;
         } else {
             return  new TextArea<String>(id, initFieldModel());
