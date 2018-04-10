@@ -27,7 +27,6 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.devgateway.toolkit.forms.WebConstants;
-import org.devgateway.toolkit.forms.wicket.FormsWebApplication;
 import org.devgateway.toolkit.forms.wicket.components.ComponentUtil;
 
 /**
@@ -86,9 +85,7 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
 
         config = new SummernoteConfig();
 
-        // this enabled for demo purposes, but it stores the files in volatile
-        // disk dir
-        config.useStorageId(FormsWebApplication.STORAGE_ID);
+        config.useStorageId(SummernoteJpaStorageService.STORAGE_ID);
 
         config.withHeight(SUMMERNOTE_HEIGHT);
         config.withAirMode(false);
