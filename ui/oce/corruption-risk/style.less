@@ -734,3 +734,22 @@
     }
   }
 }
+
+.oce-chart {
+  position: relative;
+  @msgWidth: 200px;
+  @msgHeight: 70px;
+  .message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -@msgHeight / 2;
+    margin-left: -@msgWidth / 2;
+    width: @msgWidth;
+    height: @msgHeight;
+    border: 1px solid #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
