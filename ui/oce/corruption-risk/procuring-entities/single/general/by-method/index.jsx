@@ -42,7 +42,7 @@ class ProcurementsByMethod extends translatable(React.PureComponent) {
     if (zoomed) {
       height = Math.max(height, data.length * 50);
     } else {
-      data = data.slice(0, 5);
+      data = data.slice(0, length);
       if (data.length < length) {
         for (let counter = data.length; counter < length; counter++) {
           data.unshift({});

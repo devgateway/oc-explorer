@@ -14,7 +14,7 @@ import Crosstab from '../../clickable-crosstab';
 import { CORRUPTION_TYPES } from '../../constants';
 import FlaggedNr from './bars/flagged-nr';
 import BackendDateFilterable from '../../backend-date-filterable';
-import { supplierId, supplierFlaggedNrData, winsAndFlagsData } from './state';
+import { supplierId, supplierFlaggedNrData, winsAndFlagsData, maxCommonDataLength } from './state';
 import WinsAndFlags from './bars/wins-and-flags/index';
 import SupplierTable from './table';
 import TitleBelow from '../../archive/title-below';
@@ -309,14 +309,14 @@ class Supplier extends CRDPage {
             {this.t('crd:contracts:flagAnalysis')}
           </h2>
           <div className="col-sm-6">
-            <Zoomable zoomedWidth={width} data={winsAndFlagsData}>
+            <Zoomable zoomedWidth={width} data={winsAndFlagsData} length={maxCommonDataLength}>
               <TitleBelow title={this.t('crd:supplier:winsAndLosses:title')}>
                 <WinsAndFlags translations={translations} />
               </TitleBelow>
             </Zoomable>
           </div>
           <div className="col-sm-6">
-            <Zoomable zoomedWidth={width} data={supplierFlaggedNrData}>
+            <Zoomable zoomedWidth={width} data={supplierFlaggedNrData} length={maxCommonDataLength}>
               <TitleBelow title={this.t('crd:supplier:flaggedNr:title')}>
                 <FlaggedNr translations={translations} />
               </TitleBelow>
