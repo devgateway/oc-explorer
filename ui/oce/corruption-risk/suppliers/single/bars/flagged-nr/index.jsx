@@ -135,37 +135,39 @@ export default class FlaggedNr extends translatable(React.PureComponent) {
       })
     );
     return (
-      <ResponsiveContainer width="100%" height={height}>
-        <BarChart
-          layout="vertical"
-          data={data}
-          barSize={zoomed ? 10 : 20}
-          barGap={0}
-          barCategoryGap={15}
-        >
-          <XAxis type="number" />
-          <YAxis type="category" dataKey="indicatorId" hide />
-          <Tooltip content={<Popup />} translations={translations} cursor={false} />
-          <Legend
-            align="left"
-            verticalAlign="top"
-            payload={legendPayload}
-            height={30}
-          />
-          <TaggedBar
-            dataKey="count"
-            minPointSize={3}
-            isAnimationActive={false}
+      <div className="oce-chart">
+        <ResponsiveContainer width="100%" height={height}>
+          <BarChart
+            layout="vertical"
+            data={data}
+            barSize={zoomed ? 10 : 20}
+            barGap={0}
+            barCategoryGap={15}
           >
-            <LabelList
-              formatter={indicatorId => this.t(`crd:indicators:${indicatorId}:name`)}
-              dataKey="indicatorId"
-              position="insideTopLeft"
-              content={renderTopLeftLabel}
+            <XAxis type="number" />
+            <YAxis type="category" dataKey="indicatorId" hide />
+            <Tooltip content={<Popup />} translations={translations} cursor={false} />
+            <Legend
+              align="left"
+              verticalAlign="top"
+              payload={legendPayload}
+              height={30}
             />
-          </TaggedBar>
-        </BarChart>
-      </ResponsiveContainer>
+            <TaggedBar
+              dataKey="count"
+              minPointSize={3}
+              isAnimationActive={false}
+            >
+              <LabelList
+                formatter={indicatorId => this.t(`crd:indicators:${indicatorId}:name`)}
+                dataKey="indicatorId"
+                position="insideTopLeft"
+                content={renderTopLeftLabel}
+              />
+            </TaggedBar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     )
   }
 }
