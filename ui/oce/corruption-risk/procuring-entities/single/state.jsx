@@ -174,5 +174,17 @@ export const procurementsByStatusData = PEState.mapping({
 export const maxCommonDataLength = PEState.mapping({
   name: 'maxCommonDataLength',
   deps: [procurementsByStatusData, procurementsByMethodData],
-  mapper: (a, b) => Math.max(a.length, b.length),
+  mapper: (a, b) => Math.min(
+    5,
+    Math.max(a.length, b.length)
+  )
+});
+
+export const max2ndRowCommonDataLength = PEState.mapping({
+  name: 'max2ndRowCommonDataLength',
+  deps: [winsAndFlagsData, PEFlaggedNrData],
+  mapper: (a, b) => Math.min(
+    5,
+    Math.max(a.length, b.length)
+  ),
 });

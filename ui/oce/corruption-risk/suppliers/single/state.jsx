@@ -45,3 +45,12 @@ export const winsAndFlagsData = SupplierState.mapping({
     }));
   }
 });
+
+export const maxCommonDataLength = SupplierState.mapping({
+  name: 'maxCommonDataLength',
+  deps: [winsAndFlagsData, supplierFlaggedNrData],
+  mapper: (a, b) => Math.min(
+    5,
+    Math.max(a.length, b.length)
+  ),
+})

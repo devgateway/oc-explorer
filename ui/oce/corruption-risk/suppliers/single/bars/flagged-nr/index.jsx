@@ -78,10 +78,11 @@ export default class FlaggedNr extends translatable(React.PureComponent) {
     super(props);
     this.state = this.state || {};
     this.state.data = [];
+    this.state.length = 5;
   }
 
   componentDidMount() {
-    const { zoomed, data } = this.props;
+    const { zoomed, data, length } = this.props;
     const name = zoomed ? 'ZoomedFlaggedNrChart' : 'FlaggedNrChart';
     data.addListener(name, () => {
       data.getState(name).then(data => {
@@ -89,29 +90,35 @@ export default class FlaggedNr extends translatable(React.PureComponent) {
           data
         })
       })
-    })
+    });
+    length.addListener(name, () => {
+      length.getState(name).then(length => this.setState({ length }))
+    });
   }
 
   componentWillUnmount() {
-    const { zoomed, data } = this.props;
+    const { zoomed, data, length } = this.props;
     const name = zoomed ? 'ZoomedFlaggedNrChart' : 'FlaggedNrChart';
     data.removeListener(name);
-
+    length.removeListener(name);
   }
+
   render() {
     const { zoomed, translations } = this.props;
-    let { data } = this.state;
+    let { data, length } = this.state;
     let height = 350;
     if (zoomed) {
       height = Math.max(height, data.length * 50);
     } else {
-      data = data.slice(0, 5);
-      if (data.length < 5) {
-        for(let counter = data.length; counter < 5; counter++) {
+      data = data.slice(0, length);
+      if (data.length < length) {
+        for(let counter = data.length; counter < length; counter++) {
           data.unshift({ types: [] });
         }
       }
     }
+
+    height = Math.max(length * 70, 200);
 
     const corruptionTypes = new Set();
     data.forEach(

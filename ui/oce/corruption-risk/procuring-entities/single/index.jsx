@@ -1,7 +1,15 @@
 import TopSearch from '../../top-search';
 import translatable from '../../../translatable';
 import Info from './info';
-import { PEId, PEFlaggedNrData, winsAndFlagsData, procurementsByStatusData, procurementsByMethodData, PEInfo } from './state';
+import {
+  PEId,
+  PEFlaggedNrData,
+  winsAndFlagsData,
+  procurementsByStatusData,
+  procurementsByMethodData,
+  PEInfo,
+  max2ndRowCommonDataLength
+} from './state';
 import Zoomable from '../../zoomable';
 import TitleBelow from '../../archive/title-below';
 import WinsAndFlags from '../../suppliers/single/bars/wins-and-flags';
@@ -75,14 +83,14 @@ class ProcuringEntity extends translatable(React.Component) {
           </h2>
           <div className="row">
             <div className="col-sm-6">
-              <Zoomable zoomedWidth={width} data={winsAndFlagsData}>
+              <Zoomable zoomedWidth={width} data={winsAndFlagsData} length={max2ndRowCommonDataLength}>
                 <TitleBelow title={this.t('crd:supplier:winsAndLosses:title')}>
                   <WinsAndFlags translations={translations} />
                 </TitleBelow>
               </Zoomable>
             </div>
             <div className="col-sm-6">
-              <Zoomable zoomedWidth={width} data={PEFlaggedNrData}>
+              <Zoomable zoomedWidth={width} data={PEFlaggedNrData} length={max2ndRowCommonDataLength}>
                 <TitleBelow title={this.t('crd:supplier:flaggedNr:title')}>
                   <FlaggedNr translations={translations} />
                 </TitleBelow>
