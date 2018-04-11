@@ -9,12 +9,13 @@ export default class BootstrapTableWrapper extends React.PureComponent {
       onSizePerPageList,
       count,
       containerClass,
+      bordered
     } = this.props;
     return (
       <BootstrapTable
         data={data}
         striped
-        bordered={false}
+        bordered={bordered}
         pagination
         remote
         fetchInfo={{
@@ -39,4 +40,8 @@ export default class BootstrapTableWrapper extends React.PureComponent {
       </BootstrapTable>
     )
   }
+}
+
+BootstrapTableWrapper.defaultProps = {
+  bordered: false
 }
