@@ -1,4 +1,4 @@
-import { BarChart, Bar, XAxis, YAxis, LabelList, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, LabelList, ResponsiveContainer, Legend, Tooltip, Text } from 'recharts';
 import translatable from '../../../../../translatable';
 import Popup from './popup';
 import { renderTopLeftLabel } from '../../../../archive/tools';
@@ -33,55 +33,59 @@ class WinsAndFlags extends translatable(React.PureComponent) {
     let { data } = this.state;
 
     let height = 350;
+    let slicedData = data;
     if (zoomed) {
       height = Math.max(height, data.length * 50);
     } else {
-      data = data.slice(0, 5);
-      if (data.length < 5) {
-        for(let counter = data.length; counter < 5; counter++) {
-          data.unshift({});
+      slicedData = data.slice(0, 5);
+      if (slicedData.length < 5) {
+        for(let counter = slicedData.length; counter < 5; counter++) {
+          slicedData.unshift({});
         }
       }
     }
 
     return (
-      <ResponsiveContainer width="100%" height={height}>
-        <BarChart
-          layout="vertical"
-          data={data}
-          barSize={zoomed ? 5 : 10}
-          barGap={0}
-          barCategoryGap={15}
-        >
-          <XAxis type="number" />
-          <YAxis type="category" hide dataKey="name" />
-          <Tooltip content={<Popup />} translations={translations} cursor={false}/>
-          <Legend
-            align="left"
-            verticalAlign="top"
-            height={30}
-          />
-          <Bar
-            name={this.t('crd:suppliers:wins')}
-            dataKey="wins"
-            fill="#289df4"
-            minPointSize={3}
-            isAnimationActive={false}
+      <div className="oce-chart">
+        <ResponsiveContainer width="100%" height={height}>
+          <BarChart
+            layout="vertical"
+            data={slicedData}
+            barSize={zoomed ? 5 : 10}
+            barGap={0}
+            barCategoryGap={15}
           >
-            <LabelList
-              dataKey="name"
-              position="insideTopLeft"
-              content={renderTopLeftLabel}
+            <XAxis type="number" />
+            <YAxis type="category" hide dataKey="name" />
+            <Tooltip content={<Popup />} translations={translations} cursor={false}/>
+            <Legend
+              align="left"
+              verticalAlign="top"
+              height={30}
             />
-          </Bar>
-          <Bar
-            name={this.t('crd:contracts:baseInfo:flag:pl')}
-            dataKey="flags"
-            fill="#ce4747"
-            minPointSize={3}
-          />
-        </BarChart>
-      </ResponsiveContainer>
+            <Bar
+              name={this.t('crd:suppliers:wins')}
+              dataKey="wins"
+              fill="#289df4"
+              minPointSize={3}
+              isAnimationActive={false}
+            >
+              <LabelList
+                dataKey="name"
+                position="insideTopLeft"
+                content={renderTopLeftLabel}
+              />
+            </Bar>
+            <Bar
+              name={this.t('crd:contracts:baseInfo:flag:pl')}
+              dataKey="flags"
+              fill="#ce4747"
+              minPointSize={3}
+            />
+          </BarChart>
+        </ResponsiveContainer>
+        {!data.length && <div className="message">No data</div>}
+      </div>
     )
   }
 }
