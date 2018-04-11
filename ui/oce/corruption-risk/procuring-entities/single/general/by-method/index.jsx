@@ -4,7 +4,7 @@ import Popup from './popup';
 import { renderTopLeftLabel } from '../../../../archive/tools';
 import { maxCommonDataLength } from '../../state';
 
-class WinsAndFlags extends translatable(React.PureComponent) {
+class ProcurementsByMethod extends translatable(React.PureComponent) {
   constructor(props) {
     super(props);
     this.state = this.state || {};
@@ -82,4 +82,4 @@ class WinsAndFlags extends translatable(React.PureComponent) {
   }
 }
 
-export default WinsAndFlags;
+export default ProcurementsByMethod;
