@@ -48,9 +48,9 @@ class WinsAndFlags extends translatable(React.PureComponent) {
           slicedData.unshift({});
         }
       }
-    }
 
-    height = Math.max(length * 70, 200);
+      height = Math.max(length * 70, 200);
+    }
 
     return (
       <div className="oce-chart">

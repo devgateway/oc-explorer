@@ -116,9 +116,9 @@ export default class FlaggedNr extends translatable(React.PureComponent) {
           data.unshift({ types: [] });
         }
       }
-    }
 
-    height = Math.max(length * 70, 200);
+      height = Math.max(length * 70, 200);
+    }
 
     const corruptionTypes = new Set();
     data.forEach(
