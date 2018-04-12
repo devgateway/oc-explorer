@@ -1,11 +1,18 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Source+Sans+Pro:400,600');
+
 @headerHeight: 64px;
+@gutterRight: 80pt;
+@gutterRightMd: 60pt;
+
 .introduction {
   font-size: 16px;
   margin-bottom: 20px;
   margin-top: 10px;
 }
+
 .dashboard-corruption-risk{
   &>header{
+    font-family: 'Montserrat';
     background: #144361;
     &.branding {
       height: 54px;
@@ -27,8 +34,9 @@
         padding: 5px;
         &.corruption-dash-title{
           color: #9fa9ba;
-          font-size: 20px;
-          margin-top: 10px;
+          font-size: 18px;
+          font-weight: 600;
+          margin-top: 12px;
         }
         .glyphicon{
           font-size: .53em;
@@ -47,17 +55,26 @@
       }
     }
 
-    .login-wrapper{
-      padding: 10px 0 15px 15px;
-      text-align: right;
-      button{
-        width: 150px;
-        background: #35ae46;
+    .header-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      .login-wrapper{
+        margin-right: @gutterRight;
+        @media (max-width: 1200px) {
+          margin-right: @gutterRightMd;
+        }
+        margin-left: 10px;
+        button {
+          width: 150px;
+          background: #35ae46;
+        }
       }
     }
   }
 
   &>.filters-bar{
+    font-family: 'Montserrat';
     background: #c3e6fc;
     top: @headerHeight - 15;
     height: @headerHeight - 9;
@@ -68,9 +85,14 @@
     .title{
       text-transform: uppercase;
       float: left;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: bold;
       padding: 20px 30px 20px 8px;
+      margin-left: 135px;
+      margin-right: 35px;
+      @media (max-width: 1024px) {
+        margin-right: 5px;
+      }
       @media (max-width: 969px) {
         padding: 0 5px;
       }
@@ -96,10 +118,14 @@
         margin-top: 3px;
       }
 
+      .box-title {
+        font-size: 12px;
+      }
+
       &.open{
         position: relative;
         .box-title{
-          font-weight: bold;
+          font-weight: 600;
         }
         .dropdown{
           display: block;
@@ -143,10 +169,14 @@
       }
     }
     .download{
-      padding: 14px 0;
+      padding: 14px 15px;
       text-align: right;
-      button{
+      button {
         padding: 5px 25px;
+        margin-right: @gutterRight;
+        @media (max-width: 1200px) {
+          margin-right: @gutterRightMd;
+        }
       };
     }
 
@@ -347,11 +377,15 @@
   .table-striped>tbody>tr:nth-of-type(even){
     background: #f5f8fa;
   }
+
   .content{
     @arrowSize: 8px;
     margin-top: 89px;
     margin-bottom: 80px;
-    padding: 20px 40px 0 30px;
+    padding: 30px @gutterRight 0 50px;
+    @media (max-width: 1200px) {
+      padding: 30px @gutterRightMd 0 50px;
+    }
 
     .crd-popup {
       @popupWidth: 400px;//if you're changing this you need to also change POPUP_WIDTH in constants.es6
@@ -635,13 +669,23 @@
 }
 
 .contract-page, .supplier-page, .pe-page {
-  dl{
-    dt{
-      font-size: .8em;
+  dl {
+    margin-bottom: 0;
+    dt {
+      font-size: .7em;
       font-weight: normal;
     }
-    dd{
-      font-size: 1.5em;
+    dd {
+      font-size: 1.3em;
+      p {
+        margin-bottom: 0;
+      }
+    }
+
+    &.smaller {
+      dd {
+        font-size: 1em;
+      }
     }
   }
 
@@ -687,6 +731,53 @@
         font-size: .6em;
         display: block;
       }
+    }
+  }
+}
+
+.oce-chart {
+  position: relative;
+  @msgWidth: 200px;
+  @msgHeight: 70px;
+  .message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -@msgHeight / 2;
+    margin-left: -@msgWidth / 2;
+    width: @msgWidth;
+    height: @msgHeight;
+    border: 1px solid #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .recharts-label, .recharts-cartesian-axis-ticks {
+    fill: #adafb2;
+    font-size: 12px;
+    font-family: Montserrat;
+    font-weight: 600;
+  }
+
+  .recharts-legend-item-text {
+    font-family: Source Sans Pro;
+    font-size: 16px;
+    font-weight: 600;
+    color: #767676;
+  }
+
+  & + .title {
+    font-family: 'Source Sans Pro';
+    font-size: 18px;
+    font-weight: 600;
+    text-align: left;
+    color: #354052;
+    text-indent: -5px;
+    padding-right: 40px;
+    button {
+      float: right;
+      margin-right: -40px;
     }
   }
 }

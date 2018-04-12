@@ -106,7 +106,7 @@ export const PEFlaggedNrData = new FlaggedNrMapping({
 
 const winsAndFlagsURL = PEState.input({
   name: 'winsAndFlagsURL',
-  initial: `${API_ROOT}/supplierWinsPerProcuringEntity `,
+  initial: `${API_ROOT}/supplierWinsPerProcuringEntity`,
 });
 
 const winsAndFlagsRaw = PEState.remote({
@@ -169,4 +169,22 @@ export const procurementsByStatusData = PEState.mapping({
       count: datum.count,
     })
   ).sort((a, b) => b.count - a.count)
+});
+
+export const maxCommonDataLength = PEState.mapping({
+  name: 'maxCommonDataLength',
+  deps: [procurementsByStatusData, procurementsByMethodData],
+  mapper: (a, b) => Math.min(
+    5,
+    Math.max(a.length, b.length)
+  )
+});
+
+export const max2ndRowCommonDataLength = PEState.mapping({
+  name: 'max2ndRowCommonDataLength',
+  deps: [winsAndFlagsData, PEFlaggedNrData],
+  mapper: (a, b) => Math.min(
+    5,
+    Math.max(a.length, b.length)
+  ),
 });

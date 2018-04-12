@@ -313,7 +313,7 @@ class CorruptionRiskDashboard extends React.Component {
           />
         }
         <header className="branding row">
-          <div className="col-sm-9 logo-wrapper">
+          <div className="col-sm-7 logo-wrapper">
             <img src="assets/dg-logo.svg" alt="DG logo" />
             <div className={cn('dash-switcher-wrapper', { open: dashboardSwitcherOpen })}>
               <h1
@@ -336,13 +336,14 @@ class CorruptionRiskDashboard extends React.Component {
               }
             </div>
           </div>
-          <div className="col-sm-1 language-switcher">
-            {this.languageSwitcher()}
+          <div className="col-sm-5 header-right">
+            <span className="language-switcher">
+              {this.languageSwitcher()}
+            </span>
+            <span className="login-wrapper">
+              {!disabledApiSecurity && this.loginBox()}
+            </span>
           </div>
-          <div className="col-sm-1 login-wrapper">
-            {!disabledApiSecurity && this.loginBox()}
-          </div>
-          <div className="col-sm-1" />
         </header>
         <Filters
           onUpdate={newState => this.setState({ currentFiltersState: newState })}

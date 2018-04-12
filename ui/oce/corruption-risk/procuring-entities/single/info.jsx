@@ -10,10 +10,10 @@ import boundComponent from '../../../state/bound-component';
 
 class Cell extends React.PureComponent {
   render() {
-    const { title, children, ...props } = this.props;
+    const { title, children, dlClassName, ...props } = this.props;
     return (
       <td {...props}>
-        <dl>
+        <dl className={dlClassName}>
           <dt>{title}</dt>
           <dd>{children}</dd>
         </dl>
@@ -50,18 +50,17 @@ class Info extends translatable(boundComponent({
                 <td className="flags">
                   <img src="assets/icons/flag.svg" alt="Flag icon" className="flag-icon" />
                   &nbsp;
-                  {flagsCount}
-                  &nbsp;
-                  {this.t(flagsCount === 1 ?
-                    'crd:contracts:baseInfo:flag:sg' :
-                    'crd:contracts:baseInfo:flag:pl')}
-
-                  <br />
+                  <span className="count">
+                    {flagsCount}
+                    &nbsp;
+                    {this.t(flagsCount === 1 ?
+                      'crd:contracts:baseInfo:flag:sg' :
+                      'crd:contracts:baseInfo:flag:pl')}
+                  </span>
                   <small>
-                    ({this.t('crd:procuringEntities:info:procurementsCount')
-                      .replace('$#$', contractsCount)
-                      .replace('$#$', unflaggedContractsCount)
-                    })
+                    {contractsCount} procurements flagged
+                    <br />
+                    (Out of {unflaggedContractsCount} procurement won)
                   </small>
                 </td>
               </tr>
@@ -77,7 +76,7 @@ class Info extends translatable(boundComponent({
           <table className="table table-bordered info-table">
             <tbody>
               <tr>
-                <Cell title="Address">
+                <Cell title="Address" dlClassName="smaller">
                   {address.streetAddress} <br />
                   {address.locality} /
                   &nbsp;
@@ -85,10 +84,10 @@ class Info extends translatable(boundComponent({
                   &nbsp;
                   {address.countryName}
                 </Cell>
-                <Cell title="Contacts" colSpan="2">
+                <Cell title="Contacts" colSpan="2" dlClassName="smaller">
                   {contactPoint.name}<br />
-                  {contactPoint.email}<br />
-                  {contactPoint.telephone}
+      {contactPoint.email}<br />
+      {contactPoint.telephone}
                 </Cell>
               </tr>
             </tbody>

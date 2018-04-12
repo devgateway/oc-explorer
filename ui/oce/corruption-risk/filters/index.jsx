@@ -13,9 +13,7 @@ class Filters extends translatable(React.Component) {
     const {BOXES} = this.constructor;
     return (
       <div className="row filters-bar" onMouseDown={e => e.stopPropagation()}>
-        <div className="col-lg-1 col-md-1 col-sm-1">
-        </div>
-        <div className="col-lg-9 col-md-9 col-sm-9">
+        <div className="col-md-10">
           <div className="title">{this.t('filters:hint')}</div>
           {BOXES.map((Box, index) => {
              return (
@@ -34,12 +32,11 @@ class Filters extends translatable(React.Component) {
              )
           })}
         </div>
-        <div className="col-lg-1 col-md-1 col-sm-1 download">
+        <div className="col-md-2 download">
           <button className="btn btn-default" disabled>
             <i className="glyphicon glyphicon-download-alt"></i>
           </button>
         </div>
-        <div className="col-lg-1 col-md-1 col-sm-1"></div>
       </div>
     )
   }

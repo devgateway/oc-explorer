@@ -58,6 +58,7 @@ class Table extends translatable(React.PureComponent) {
 
     return (
       <BootstrapTableWrapper
+        bordered
         data={data}
         page={this.state.page}
         pageSize={this.state.pageSize}
