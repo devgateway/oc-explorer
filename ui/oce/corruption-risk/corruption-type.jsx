@@ -171,7 +171,7 @@ class CorruptionType extends translatable(CRDPage){
                           years={years}
                           monthly={monthly}
                           months={months}
-                          width={width/3-60}
+                          width={width/3-95}
                           styling={styling}
                         />
                       </div>
