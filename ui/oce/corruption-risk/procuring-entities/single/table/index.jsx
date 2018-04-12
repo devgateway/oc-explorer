@@ -46,7 +46,7 @@ class Table extends translatable(React.PureComponent) {
       <div>
         {data.map(indicator => (
           <div>
-            {this.t(`crd:indicators:${indicator}:name`)}
+            &#9679; {this.t(`crd:indicators:${indicator}:name`)}
           </div>
         ))}
       </div>
