@@ -69,6 +69,7 @@ class WinsAndFlags extends translatable(React.PureComponent) {
               align="left"
               verticalAlign="top"
               height={30}
+              iconType="square"
             />
             <Bar
               name={this.t('crd:suppliers:wins')}

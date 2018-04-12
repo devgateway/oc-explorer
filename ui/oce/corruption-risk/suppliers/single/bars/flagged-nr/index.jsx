@@ -130,7 +130,7 @@ export default class FlaggedNr extends translatable(React.PureComponent) {
     const legendPayload = [...corruptionTypes].map(
       corruptionType => ({
         value: this.t(`crd:corruptionType:${corruptionType}:name`),
-        type: 'rect',
+        type: 'square',
         color: corruptionTypeColors[corruptionType],
       })
     );
