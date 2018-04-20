@@ -11,28 +11,30 @@
  *******************************************************************************/
 package org.devgateway.toolkit.persistence.dao;
 
-import java.io.Serializable;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
 import javax.persistence.OneToOne;
-
-import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
+import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * @author idobre
  * @since 11/13/14
- *
- *        Entity used to store the metadata of uploaded files
+ * <p>
+ * Entity used to store the metadata of uploaded files
  */
 
 @Entity
 @Audited
+@Table(indexes = {@Index(columnList = "name")})
 public class FileMetadata extends AbstractAuditableEntity implements Serializable {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
