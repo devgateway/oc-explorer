@@ -29,6 +29,9 @@
 
     <logger name="org.pentaho.reporting.libraries.fonts" level="WARN" />
     <logger name="org.pentaho.reporting.engine.classic" level="WARN" />
+    <logger name="com.google.javascript.jscomp" level="ERROR" />
+
+
 
     <!-- Setting the root level of logging to INFO -->
     <root level="INFO">
