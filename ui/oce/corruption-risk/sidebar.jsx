@@ -81,7 +81,7 @@ class Sidebar extends translatable(React.PureComponent) {
             <a
               href="javascript:void(0);"
               onClick={() => navigate('suppliers')}
-              className={cn('archive-link', { active: page === 'suppliers' })}
+              className={cn('archive-link', { active: page === 'suppliers' || page === 'supplier' })}
               key="suppliers"
             >
               <img className="blue" src={`assets/icons/blue/suppliers.svg`} alt="Suppliers icon" />
@@ -91,7 +91,7 @@ class Sidebar extends translatable(React.PureComponent) {
             <a
               href="javascript:void(0);"
               onClick={() => navigate('procuring-entities')}
-              className={cn('archive-link', { active: page === 'procuring-entities' })}
+              className={cn('archive-link', { active: page === 'procuring-entities' || page === 'procuring-entity' })}
               key="procuring-entities"
             >
               <img className="blue" src={`assets/icons/blue/procuring-entities.svg`} alt="Procuring entities icon" />
@@ -101,7 +101,7 @@ class Sidebar extends translatable(React.PureComponent) {
             <a
               href="#!/crd/contracts"
               onClick={() => navigate('contracts')}
-              className={cn('archive-link', 'contracts-link', { active: page === 'contracts' })}
+              className={cn('archive-link', 'contracts-link', { active: page === 'contracts' || page === 'contract' })}
               key="contracts"
             >
               <img className="blue" src={`assets/icons/blue/contracts.svg`} alt="Contracts icon" />
