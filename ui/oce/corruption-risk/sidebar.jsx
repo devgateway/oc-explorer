@@ -61,7 +61,7 @@ class Sidebar extends translatable(React.PureComponent) {
                  .length;
 
                let corruptionType;
-               if (page === 'type') {
+               if (page === 'type' || page === 'indicator') {
                  [, corruptionType] = route;
                }
 
