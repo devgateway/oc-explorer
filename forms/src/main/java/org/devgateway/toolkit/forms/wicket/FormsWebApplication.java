@@ -34,6 +34,8 @@ import org.apache.wicket.devutils.diskstore.DebugDiskDataStore;
 import org.apache.wicket.markup.html.IPackageResourceGuard;
 import org.apache.wicket.markup.html.SecurePackageResourceGuard;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.request.resource.caching.FilenameWithVersionResourceCachingStrategy;
 import org.apache.wicket.request.resource.caching.NoOpResourceCachingStrategy;
 import org.apache.wicket.request.resource.caching.version.CachingResourceVersion;
@@ -47,6 +49,7 @@ import org.devgateway.toolkit.forms.wicket.converters.NonNumericFilteredBigDecim
 import org.devgateway.toolkit.forms.wicket.page.BasePage;
 import org.devgateway.toolkit.forms.wicket.page.Homepage;
 import org.devgateway.toolkit.forms.wicket.page.user.LoginPage;
+import org.devgateway.toolkit.forms.wicket.styles.BaseStyles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -55,6 +58,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.wicketstuff.annotation.scan.AnnotatedMountScanner;
+import org.wicketstuff.select2.ApplicationSettings;
 
 import java.math.BigDecimal;
 
@@ -64,13 +68,13 @@ import java.math.BigDecimal;
  * method.
  *
  * @author Stefan Kloe, mpostelnicu
- *
  */
 @EnableScheduling
 @SpringBootApplication
 @ComponentScan("org.devgateway.toolkit")
 @PropertySource("classpath:/org/devgateway/toolkit/forms/application.properties")
 public class FormsWebApplication extends AuthenticatedWebApplication {
+
 
     public static final String STORAGE_ID = "fileStorage";
 
@@ -91,9 +95,9 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
 
     /**
      * @see org.apache.wicket.Application#newConverterLocator() This adds the
-     *      {@link NonNumericFilteredBigDecimalConverter} as the standard
-     *      {@link BigDecimal} converter for ALL fields using this type accross
-     *      the application
+     * {@link NonNumericFilteredBigDecimalConverter} as the standard
+     * {@link BigDecimal} converter for ALL fields using this type accross
+     * the application
      **/
     @Override
     protected IConverterLocator newConverterLocator() {
@@ -111,8 +115,10 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
         SummernoteConfig.addStorage(summernoteJpaStorageService);
 
         // mount the resource reference responsible for image uploads
-        mountResource(SummernoteStoredImageResourceReference.SUMMERNOTE_MOUNT_PATH,
-                new SummernoteStoredImageResourceReference(SummernoteJpaStorageService.STORAGE_ID));
+        mountResource(
+                SummernoteStoredImageResourceReference.SUMMERNOTE_MOUNT_PATH,
+                new SummernoteStoredImageResourceReference(SummernoteJpaStorageService.STORAGE_ID)
+        );
     }
 
     /**
@@ -160,8 +166,10 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
         // -Dwicket.configuration=deployment
         // The default is Development, so this code is not used
         if (usesDeploymentConfig()) {
-            getResourceSettings().setCachingStrategy(new FilenameWithVersionResourceCachingStrategy("-v-",
-                    new CachingResourceVersion(new Adler32ResourceVersion())));
+            getResourceSettings().setCachingStrategy(new FilenameWithVersionResourceCachingStrategy(
+                    "-v-",
+                    new CachingResourceVersion(new Adler32ResourceVersion())
+            ));
 
             getResourceSettings().setJavaScriptCompressor(
                     new GoogleClosureJavaScriptCompressor(CompilationLevel.SIMPLE_OPTIMIZATIONS));
@@ -228,11 +236,26 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
         }
 
         SessionFinderHolder.setSessionFinder(sessionFinderService);
+
+        useCustomizedSelect2Version();
+    }
+
+    /**
+     * see https://github.com/devgateway/dg-toolkit/issues/228
+     */
+    private void useCustomizedSelect2Version() {
+        ResourceReference javaScriptReference = new JavaScriptResourceReference(
+                BaseStyles.class, "/assets/js/select2/select2.js");
+        ResourceReference javaScriptReferenceFull = new JavaScriptResourceReference(
+                BaseStyles.class, "/assets/js/select2/select2.full.js");
+        ApplicationSettings select2Settings = ApplicationSettings.get();
+        select2Settings.setJavaScriptReference(javaScriptReference);
+        select2Settings.setJavascriptReferenceFull(javaScriptReferenceFull);
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.wicket.authroles.authentication.AuthenticatedWebApplication#
      * getSignInPageClass()
