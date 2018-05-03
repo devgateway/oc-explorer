@@ -314,7 +314,7 @@ class CorruptionRiskDashboard extends React.Component {
         }
         <header className="branding row">
           <div className="col-sm-7 logo-wrapper">
-            <img src="assets/dg-logo.svg" alt="DG logo" />
+            <img className="logo" src="assets/dg-logo-small.png" alt="DG logo" />
             <div className={cn('dash-switcher-wrapper', { open: dashboardSwitcherOpen })}>
               <h1
                 className="corruption-dash-title"
