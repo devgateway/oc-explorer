@@ -284,6 +284,7 @@ class CorruptionRiskDashboard extends React.Component {
         id={id}
         styling={styling}
         doSearch={query => navigate(plSlug, query)}
+        navigate={navigate}
         indicatorTypesMapping={indicatorTypesMapping}
         {...additionalProps}
       />

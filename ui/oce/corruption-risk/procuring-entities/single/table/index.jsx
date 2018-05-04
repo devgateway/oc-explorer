@@ -1,6 +1,7 @@
 import translatable from '../../../../translatable';
 import BootstrapTableWrapper from '../../../archive/bootstrap-table-wrapper';
 import { procurementsData, page, pageSize, procurementsCount } from './state';
+import { mkContractLink } from '../../../tools';
 
 const NAME = 'PEProcurementsComponent';
 
@@ -55,6 +56,7 @@ class Table extends translatable(React.PureComponent) {
 
   render() {
     const { data, count } = this.state;
+    const { navigate } = this.props;
 
     return (
       <BootstrapTableWrapper
@@ -69,9 +71,11 @@ class Table extends translatable(React.PureComponent) {
             title: 'Tender name',
             dataField: 'name',
             width: '20%',
+            dataFormat: mkContractLink(navigate),
         }, {
             title: 'OCID',
-            dataField: 'ocid'
+            dataField: 'id',
+            dataFormat: mkContractLink(navigate),
         }, {
             title: 'Award status',
             dataField: 'awardStatus',

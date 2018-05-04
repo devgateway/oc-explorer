@@ -61,9 +61,8 @@ export const procurementsData = PEState.mapping({
   mapper: raw =>
     raw.map(datum => {
       return {
-        id: datum.id,
+        id: datum.ocid,
         name: datum.tender.title || 'N/A',
-        ocid: datum.ocid,
         awardStatus: getAwardAmount(datum.awards) ? 'active' : 'unsuccessful',
         tenderAmount: getTenderAmount(datum),
         awardAmount: getAwardAmount(datum.awards),
