@@ -47,7 +47,7 @@ class ProcuringEntity extends translatable(React.Component) {
   }
 
   render() {
-    const { translations, doSearch, width } = this.props;
+    const { translations, doSearch, width, navigate } = this.props;
     const { PEName } = this.state;
 
     return (
@@ -98,7 +98,10 @@ class ProcuringEntity extends translatable(React.Component) {
             </div>
           </div>
           <h2>Procurements by {PEName}</h2>
-          <ProcurementsTable translations={translations} />
+          <ProcurementsTable
+            translations={translations}
+            navigate={navigate}
+          />
         </section>
       </div>
     );
