@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.ReleaseFlags;
-import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.FlaggedReleaseRepository;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI002Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI007Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI019Processor;
@@ -18,6 +18,7 @@ import org.devgateway.ocds.web.flags.release.ReleaseFlagI171Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI180Processor;
 import org.devgateway.toolkit.persistence.mongo.spring.MongoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -60,6 +61,9 @@ public class ReleaseFlaggingService {
     private ReleaseFlagI085Processor releaseFlagI085Processor;
     @Autowired
     private ReleaseFlagI171Processor releaseFlagI171Processor;
+
+    @Autowired
+    private CacheManager cacheManager;
 
     private Collection<AbstractFlaggedReleaseFlagProcessor> releaseFlagProcessors;
 
@@ -105,6 +109,9 @@ public class ReleaseFlaggingService {
                 this::logMessage);
 
         logMessage.accept("<b>CORRUPTION FLAGGING COMPLETE.</b>");
+
+        //clear caches manually
+        cacheManager.getCacheNames().forEach(c -> cacheManager.getCache(c).clear());
     }
 
     /**

@@ -62,6 +62,10 @@ public class LoginPage extends BasePage {
 
         private String referrer;
 
+        private TextFieldBootstrapFormComponent<String> usernameField;
+        private PasswordFieldBootstrapFormComponent passwordField;
+
+
         LoginForm(final String id) {
             super(id);
 
@@ -87,15 +91,28 @@ public class LoginPage extends BasePage {
             notificationPanel.setOutputMarkupId(true);
             add(notificationPanel);
 
-            final TextFieldBootstrapFormComponent<String> username = new TextFieldBootstrapFormComponent<>("username",
-                    new StringResourceModel("user", LoginPage.this, null), new PropertyModel<String>(this, "username"));
-            username.required();
-            add(username);
 
-            final PasswordFieldBootstrapFormComponent password =
-                    new PasswordFieldBootstrapFormComponent("password", new PropertyModel<>(this, "password"));
-            password.getField().setResetPassword(false);
-            add(password);
+            usernameField = new TextFieldBootstrapFormComponent<String>("username",
+                    new StringResourceModel("user", LoginPage.this, null),
+                    new PropertyModel<String>(this, "username")) {
+                @Override
+                public String getUpdateEvent() {
+                    return null;
+                }
+            };
+            usernameField.required();
+            add(usernameField);
+
+
+            passwordField = new PasswordFieldBootstrapFormComponent("password",
+                    new PropertyModel<>(this, "password")) {
+                @Override
+                public String getUpdateEvent() {
+                    return null;
+                }
+            };
+            passwordField.getField().setResetPassword(false);
+            add(passwordField);
 
             final IndicatingAjaxButton submit =
                     new IndicatingAjaxButton("submit", new StringResourceModel("submit.label", LoginPage.this, null)) {
@@ -129,6 +146,9 @@ public class LoginPage extends BasePage {
                         @Override
                         protected void onError(final AjaxRequestTarget target, final Form<?> form) {
                             target.add(notificationPanel);
+                            target.add(notificationPanel);
+                            target.add(usernameField);
+                            target.add(passwordField);
                         }
                     };
             add(submit);

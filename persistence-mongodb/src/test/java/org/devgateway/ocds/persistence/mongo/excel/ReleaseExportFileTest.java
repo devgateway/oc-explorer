@@ -25,9 +25,9 @@ public class ReleaseExportFileTest {
 
         final ExcelFile releaseExcelFile = new ReleaseExportFile(new ArrayList<>(releasePackage.getReleases()));
         final Workbook workbook = releaseExcelFile.createWorkbook();
-        // try (FileOutputStream outputStream = new FileOutputStream("/Users/ionut/Downloads/ocds-export.xlsx")) {
-        //     workbook.write(outputStream);
-        // }
+//         try (FileOutputStream outputStream = new FileOutputStream("/home/mihai/ocds-export.xlsx")) {
+//             workbook.write(outputStream);
+//         }
 
         Assert.assertEquals("Number of sheets", 6, workbook.getNumberOfSheets());
 
@@ -52,7 +52,7 @@ public class ReleaseExportFileTest {
 
         Assert.assertEquals("item number of rows", 9, workbook.getSheet("item").getLastRowNum());
 
-        Assert.assertEquals("contract flatten organizatio id", "E09000003 | E09000003",
+        Assert.assertEquals("contract flatten organization id", "E09000003 | E09000003",
                 workbook.getSheet("contract").getRow(2).getCell(17).toString());
     }
 }

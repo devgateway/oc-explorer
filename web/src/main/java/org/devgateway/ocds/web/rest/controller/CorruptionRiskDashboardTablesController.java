@@ -19,7 +19,6 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.List;
 
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
@@ -64,16 +64,32 @@ public class CorruptionRiskDashboardTablesController extends GenericOCDSControll
                 project("ocid", "tender.procuringEntity.name", "tender.tenderPeriod", "flags",
                         "tender.title", "tag")
                         .and("tender.value").as("tender.value").and("awards.value").as("awards.value")
+                        .and(MongoConstants.FieldNames.AWARDS_STATUS).as(MongoConstants.FieldNames.AWARDS_STATUS)
                         .andExclude(Fields.UNDERSCORE_ID),
                 sort(Sort.Direction.DESC, "flags.flaggedStats.count"),
                 skip(filter.getSkip()),
                 limit(filter.getPageSize())
         );
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release",
-                DBObject.class);
-        List<DBObject> list = results.getMappedResults();
-        return list;
+        return releaseAgg(agg);
+    }
+
+    @ApiOperation(value = "Counts data to show in the table on corruption risk overview page.")
+    @RequestMapping(value = "/api/corruptionRiskOverviewTable/count",
+            method = {RequestMethod.POST, RequestMethod.GET},
+            produces = "application/json")
+    public List<DBObject> corruptionRiskOverviewTableCount(
+            @ModelAttribute @Valid final YearFilterPagingRequest filter) {
+
+        Aggregation agg = newAggregation(
+                match(where("flags.flaggedStats.0").exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
+                unwind("flags.flaggedStats"),
+                group().count().as("count")
+        );
+
+       return releaseAgg(agg);
     }
 
 }

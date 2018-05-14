@@ -1,6 +1,6 @@
 import CatChart from "./cat-chart";
 
-class ProcurementMethod extends CatChart{
+class ProcurementMethod extends CatChart {
   static getName(t){return t('charts:procurementMethod:title')}
 
   static getCatName(datum, t){
@@ -18,6 +18,14 @@ class ProcurementMethod extends CatChart{
         tickprefix: "   "
       }
     }
+  }
+
+  getDecoratedLayout() {
+    if(window.innerWidth > 1600) return super.getDecoratedLayout();
+    const layout = JSON.parse(JSON.stringify(super.getDecoratedLayout()));
+    layout.margin.b = 150;
+    layout.margin.r = 100;
+    return layout;
   }
 }
 

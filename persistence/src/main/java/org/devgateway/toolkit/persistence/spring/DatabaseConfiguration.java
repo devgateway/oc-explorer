@@ -1,25 +1,20 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2015 Development Gateway, Inc and others.
- *
+ * <p>
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the MIT License (MIT)
  * which accompanies this distribution, and is available at
  * https://opensource.org/licenses/MIT
- *
+ * <p>
  * Contributors:
  * Development Gateway - initial API and implementation
- *******************************************************************************/
+ */
 /**
- * 
+ *
  */
 package org.devgateway.toolkit.persistence.spring;
 
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.util.Properties;
-
-import javax.naming.NamingException;
-
+import liquibase.integration.spring.SpringLiquibase;
 import org.apache.derby.drda.NetworkServerControl;
 import org.apache.log4j.Logger;
 import org.apache.tomcat.jdbc.pool.DataSource;
@@ -32,6 +27,12 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.mock.jndi.SimpleNamingContextBuilder;
+
+import javax.naming.NamingException;
+import javax.persistence.EntityManagerFactory;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.util.Properties;
 
 /**
  * @author mpostelnicu
@@ -85,7 +86,7 @@ public class DatabaseConfiguration {
      * toolkitDS/driver=org.apache.derby.jdbc.ClientDriver toolkitDS/user=app
      * toolkitDS/password=app
      * toolkitDS/url=jdbc:derby://localhost//derby/toolkit
-     * 
+     *
      * @return
      */
     @Bean
@@ -106,11 +107,11 @@ public class DatabaseConfiguration {
 
     /**
      * Creates a {@link javax.sql.DataSource} based on Tomcat {@link DataSource}
-     * 
+     *
      * @return
      */
     @Bean
-    @DependsOn(value = { "derbyServer" })
+    @DependsOn(value = {"derbyServer"})
     public DataSource dataSource() {
         PoolProperties pp = new PoolProperties();
         pp.setJmxEnabled(true);
@@ -129,7 +130,7 @@ public class DatabaseConfiguration {
 
     /**
      * Graciously starts a Derby Database Server when the application starts up
-     * 
+     *
      * @return
      * @throws Exception
      */
@@ -141,6 +142,14 @@ public class DatabaseConfiguration {
         NetworkServerControl nsc = new NetworkServerControl(InetAddress.getByName("localhost"), derbyPort);
         nsc.start(new PrintWriter(java.lang.System.out, true));
         return nsc;
+    }
+
+    @Bean
+    public SpringLiquibaseRunner liquibaseAfterJPA(final SpringLiquibase springLiquibase,
+                                                   final EntityManagerFactory entityManagerFactory) {
+        logger.info("Instantiating SpringLiquibaseRunner after initialization of entityManager using factory "
+                + entityManagerFactory);
+        return new SpringLiquibaseRunner(springLiquibase);
     }
 
 }

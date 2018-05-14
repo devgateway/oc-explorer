@@ -6,3 +6,4 @@
 /.settings/
 /derby.log
 /.checkstyle
+/ehcache-diskstore/

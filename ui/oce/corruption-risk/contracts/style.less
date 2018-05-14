@@ -1,0 +1,55 @@
+.contracts-page{
+  margin-bottom: 40px;
+  table {
+    th, td{
+      @width: 12.5%;
+      @ocidDateDelta: 3%;
+      width: @width;
+      &.ocid {
+        width: @width + @ocidDateDelta;
+      }
+      &.date {
+        width: @width - @ocidDateDelta;
+      }
+    }
+    th{
+      color: #a1adbc;
+    }
+    td{
+      font-weight: 600;
+      font-size: .9em;
+    }
+  }
+}
+
+.react-bs-table table td, .react-bs-table table th{
+  white-space: normal;
+}
+
+.contract-page {
+  .flag-analysis {
+    clear: both;
+
+    h2 {
+      padding-top: 50px;
+    }
+  }
+
+  section.contract-statistics {
+    h2 {
+      margin-bottom: 40px;
+      @media screen and (max-width: 1500px) {
+        margin-bottom: 20px;
+      }
+
+      @media screen and (max-width: 1400px) {
+        margin-bottom: 10px;
+      }
+
+      @media screen and (max-width: 1300px) {
+        margin-bottom: 0;
+      }
+
+    }
+  }
+}

@@ -1,12 +1,26 @@
 /**
  * init function that is called from the Wicket Component
  */
-var init = function (parameters) {
+var initChart = function (parameters) {
     'use strict';
+
+    if (parameters === undefined) {
+        return;
+    }
+
+    // check if we have the 'colors' property for a marker and copy it to 'color' property as well.
+    for(var i = 0; i < parameters.data.length; i++) {
+        if (parameters.data[i].marker !== undefined && parameters.data[i].marker.colors !== undefined) {
+            parameters.data[i].marker.color = parameters.data[i].marker.colors;
+        }
+    }
 
     var chart = new PlotlyChart(parameters);
     chart.render();
 };
+
+// run 'initChart' function to avoid being removed by the javascript optimizer.
+initChart();
 
 /**
  * Object.assign for ES5
@@ -39,7 +53,7 @@ if (typeof Object.assign != 'function') {
 PlotlyChart.prototype.defaultProps = {
     chartId:          'chartId',
     layout: {
-        showlegend:    true,
+        showlegend:    true
     }
 };
 

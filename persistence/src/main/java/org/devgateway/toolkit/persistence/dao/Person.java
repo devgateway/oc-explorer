@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.devgateway.ocds.persistence.dao.UserDashboard;
 import org.devgateway.toolkit.persistence.dao.categories.Group;
 import org.devgateway.toolkit.persistence.dao.categories.Role;
+import org.devgateway.toolkit.persistence.excel.annotation.ExcelExport;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.envers.Audited;
@@ -38,12 +39,16 @@ import java.util.Set;
 public class Person extends AbstractAuditableEntity implements Serializable, UserDetails, Labelable {
     private static final long serialVersionUID = 109780377848343674L;
 
+    @ExcelExport
     private String username;
 
+    @ExcelExport
     private String firstName;
 
+    @ExcelExport
     private String lastName;
 
+    @ExcelExport
     private String email;
 
     @JsonIgnore
@@ -63,10 +68,10 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @ManyToOne(fetch = FetchType.EAGER)
     private Group group;
-    
+
     @ManyToOne(fetch = FetchType.EAGER)
     private UserDashboard defaultDashboard;
-    
+
 
     @ManyToMany(fetch = FetchType.EAGER,  mappedBy = "users")
     private Set<UserDashboard> dashboards = new HashSet<>();
@@ -90,7 +95,7 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
     @ManyToMany(fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<Role> roles;
-   
+
     public Boolean getEnabled() {
         return enabled;
     }
@@ -298,7 +303,7 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
     @Override
     public void setLabel(String label) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override

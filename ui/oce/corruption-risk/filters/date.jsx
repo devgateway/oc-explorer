@@ -11,7 +11,7 @@ class DateBox extends FilterBox{
   }
 
   getTitle(){
-    return 'Date';
+    return this.t('filters:tabs:date:title');
   }
 
   reset(){
@@ -49,17 +49,16 @@ class DateBox extends FilterBox{
 
            return (
              <span
-                 key={year}
-                 className={cn('toggleable-item', {selected})}
-                 onClick={toggleYear}
+               key={year}
+               className={cn('toggleable-item', {selected})}
+               onClick={toggleYear}
              >
                {year}
              </span>
            )
-         })}
+        })}
         <p>
-          To select a single year and be able to select months,
-          hold 'shift' while clicking on a year.
+          {this.t('yearsBar:ctrlClickHint')}
         </p>
         <div className="toggleable-wrapper">
           {selectedYears.count() == 1 && months.map(month => {
@@ -73,14 +72,14 @@ class DateBox extends FilterBox{
              }
              return (
                <span
-                   key={month}
-                   className={cn('toggleable-item', {selected})}
-                   onClick={toggleMonth}
-               >
+                 key={month}
+                 className={cn('toggleable-item', {selected})}
+                 onClick={toggleMonth}
+                 >
                  {this.t(`general:months:${month}`)}
                </span>
              )
-           })}
+          })}
         </div>
       </div>
     )

@@ -20,7 +20,6 @@ import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperat
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,8 +69,8 @@ public class FundingByLocationController extends GenericOCDSController {
 
         DBObject project = new BasicDBObject();
         project.put("tender.items.deliveryLocation", 1);
-        project.put("tender.value.amount", 1);        
-        addYearlyMonthlyProjection(filter, project, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
+        project.put(MongoConstants.FieldNames.TENDER_VALUE_AMOUNT, 1);
+        addYearlyMonthlyProjection(filter, project, ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE));
 
         Aggregation agg = newAggregation(
                 match(where("tender").exists(true).and(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true)
@@ -79,7 +78,7 @@ public class FundingByLocationController extends GenericOCDSController {
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 new CustomProjectionOperation(project), unwind("$tender.items"),
                 unwind("$tender.items.deliveryLocation"),
-                project(getYearlyMonthlyGroupingFields(filter)).and("tender.value.amount")
+                project(getYearlyMonthlyGroupingFields(filter)).and(MongoConstants.FieldNames.TENDER_VALUE_AMOUNT)
                         .as("tenderAmount")
                         .and("tender.items.deliveryLocation").as("deliveryLocation"),
                 match(where("deliveryLocation.geometry.coordinates.0").exists(true)),
@@ -89,9 +88,7 @@ public class FundingByLocationController extends GenericOCDSController {
         // ,skip(filter.getSkip()), limit(filter.getPageSize())
         );
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> tagCount = results.getMappedResults();
-        return tagCount;
+        return releaseAgg(agg);
     }
 
 
@@ -134,9 +131,7 @@ public class FundingByLocationController extends GenericOCDSController {
         // ,skip(filter.getSkip()),limit(filter.getPageSize())
         );
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> tagCount = results.getMappedResults();
-        return tagCount;
+        return releaseAgg(agg);
     }
 
 

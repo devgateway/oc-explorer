@@ -4,7 +4,7 @@ import org.devgateway.ocds.persistence.mongo.Address;
 import org.devgateway.ocds.persistence.mongo.ContactPoint;
 import org.devgateway.ocds.persistence.mongo.Identifier;
 import org.devgateway.ocds.persistence.mongo.Organization;
-import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.OrganizationRepository;
 import org.devgateway.ocds.web.rest.controller.request.OrganizationSearchRequest;
 import org.devgateway.ocds.web.rest.controller.selector.BuyerSearchController;
 import org.devgateway.ocds.web.rest.controller.selector.OrganizationSearchController;
@@ -17,6 +17,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 public class OrganizationEndpointsTest extends AbstractWebTest {
@@ -58,14 +60,18 @@ public class OrganizationEndpointsTest extends AbstractWebTest {
         contactPoint.setEmail("mpostelnicu@developmentgateway.org");
         contactPoint.setFaxNumber("01234567");
         contactPoint.setTelephone("01234567");
-        contactPoint.setUrl("http://developmentgateway.org");
+        try {
+            contactPoint.setUrl(new URI("http://developmentgateway.org"));
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
         organization.setContactPoint(contactPoint);
 
         final Identifier identifier = new Identifier();
         identifier.setId(ORG_ID);
         organization.getAdditionalIdentifiers().add(identifier);
-        organization.getRoles().add(Organization.OrganizationType.procuringEntity);
-        organization.getRoles().add(Organization.OrganizationType.buyer);
+        organization.getRoles().add(Organization.OrganizationType.procuringEntity.toString());
+        organization.getRoles().add(Organization.OrganizationType.buyer.toString());
 
         final Organization savedOrganization = organizationRepository.save(organization);
 

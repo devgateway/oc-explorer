@@ -42,7 +42,7 @@ class ValueAmount extends FilterBox {
   }
 
   getTitle() {
-    return 'Value amount';
+    return this.t('filters:tabs:valueAmount:title');
   }
 
   update(slug, {min, max}, {min: minPossibleValue, max: maxPossibleValue}) {

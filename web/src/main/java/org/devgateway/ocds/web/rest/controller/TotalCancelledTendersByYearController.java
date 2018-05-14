@@ -14,13 +14,13 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -56,23 +56,21 @@ public class TotalCancelledTendersByYearController extends GenericOCDSController
 
 
         DBObject project = new BasicDBObject();
-        addYearlyMonthlyProjection(filter, project, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
-        project.put("tender.value.amount", 1);
+        addYearlyMonthlyProjection(filter, project, ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE));
+        project.put(MongoConstants.FieldNames.TENDER_VALUE_AMOUNT, 1);
 
         Aggregation agg = newAggregation(
-                match(where("tender.status").is("cancelled")
+                match(where(MongoConstants.FieldNames.TENDER_STATUS).is(Tender.Status.cancelled.toString())
                         .and(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true)
                         .andOperator(getYearDefaultFilterCriteria(filter,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 new CustomOperation(new BasicDBObject("$project", project)),
                 getYearlyMonthlyGroupingOperation(filter).
-                sum("$tender.value.amount").as(Keys.TOTAL_CANCELLED_TENDERS_AMOUNT),
+                sum(ref(MongoConstants.FieldNames.TENDER_VALUE_AMOUNT)).as(Keys.TOTAL_CANCELLED_TENDERS_AMOUNT),
                 transformYearlyGrouping(filter).andInclude(Keys.TOTAL_CANCELLED_TENDERS_AMOUNT),
                 getSortByYearMonth(filter));
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> list = results.getMappedResults();
-        return list;
+       return releaseAgg(agg);
     }
 
 }

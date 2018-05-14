@@ -21,7 +21,6 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,7 +64,7 @@ public class TendersByItemClassification extends GenericOCDSController {
         DBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
         project.put("tender." + Keys.ITEMS_CLASSIFICATION, 1);
-        project.put("tender.value.amount", 1);
+        project.put(MongoConstants.FieldNames.TENDER_VALUE_AMOUNT, 1);
 
         Aggregation agg = newAggregation(
                 match(where(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true)
@@ -73,12 +72,10 @@ public class TendersByItemClassification extends GenericOCDSController {
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 new CustomProjectionOperation(project), unwind("tender.items"),
                 group("$tender." + Keys.ITEMS_CLASSIFICATION).count().as(Keys.TOTAL_TENDERS)
-                        .sum("tender.value.amount").as(Keys.TOTAL_TENDER_AMOUNT),
+                        .sum(MongoConstants.FieldNames.TENDER_VALUE_AMOUNT).as(Keys.TOTAL_TENDER_AMOUNT),
                 sort(Direction.ASC, Fields.UNDERSCORE_ID));
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> list = results.getMappedResults();
-        return list;
+        return releaseAgg(agg);
     }
 
 }

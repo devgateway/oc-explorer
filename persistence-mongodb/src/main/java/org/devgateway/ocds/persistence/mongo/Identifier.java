@@ -1,18 +1,22 @@
 package org.devgateway.ocds.persistence.mongo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
-import org.devgateway.ocds.persistence.mongo.merge.Merge;
-import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.net.URI;
+
 
 /**
- *  Identifier OCDS entity http://standard.open-contracting.org/latest/en/schema/reference/#identifier
+ * Identifier
+ * <p>
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "scheme",
         "id",
@@ -22,57 +26,59 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public class Identifier {
 
     /**
-     * Organization identifiers be drawn from an existing identification scheme.
-     * This field is used to indicate the scheme or codelist in which the identifier will be found.
-     * This value should be drawn from the
-     * [Organization Identifier Scheme]
-     *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists/#organization-identifier-scheme).
-     *
+     * Scheme
+     * <p>
+     * Organization identifiers should be drawn from an existing organization identifier list. The scheme field is
+     * used to indicate the list or register from which the identifier is drawn. This value should be drawn from the
+     * [Organization Identifier Scheme](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#organization-identifier-scheme) codelist.
      */
-    @ExcelExport
     @JsonProperty("scheme")
-    @Merge(MergeStrategy.ocdsVersion)
+    @ExcelExport
+    @JsonPropertyDescription("Organization identifiers should be drawn from an existing organization identifier list."
+            + " The scheme field is used to indicate the list or register from which the identifier is drawn. This "
+            + "value should be drawn from the [Organization Identifier Scheme](http://standard.open-contracting"
+            + ".org/latest/en/schema/codelists/#organization-identifier-scheme) codelist.")
     private String scheme;
-
     /**
+     * ID
+     * <p>
      * The identifier of the organization in the selected scheme.
-     *
      */
-    @ExcelExport
     @JsonProperty("id")
-    @Merge(MergeStrategy.ocdsVersion)
+    @ExcelExport
+    @JsonPropertyDescription("The identifier of the organization in the selected scheme.")
     private String id;
-
     /**
+     * Legal Name
+     * <p>
      * The legally registered name of the organization.
-     *
      */
-    @ExcelExport
     @JsonProperty("legalName")
-    @Merge(MergeStrategy.ocdsVersion)
-    private String legalName;
-
-    /**
-     * A URI to identify the organization, such as those provided by
-     * [Open Corporates](http://www.opencorporates.com) or some other relevant URI provider.
-     * This is not for listing the website of the organization: t
-     * hat can be done through the url field of the Organization contact point.
-     *
-     */
     @ExcelExport
+    @JsonPropertyDescription("The legally registered name of the organization.")
+    private String legalName;
+    /**
+     * URI
+     * <p>
+     * A URI to identify the organization, such as those provided by [Open Corporates](http://www.opencorporates.com)
+     * or some other relevant URI provider. This is not for listing the website of the organization: that can be done
+     * through the URL field of the Organization contact point.
+     */
     @JsonProperty("uri")
-    @Merge(MergeStrategy.ocdsVersion)
-    private String uri;
+    @ExcelExport
+    @JsonPropertyDescription("A URI to identify the organization, such as those provided by [Open Corporates]"
+            + "(http://www.opencorporates.com) or some other relevant URI provider. This is not for listing the "
+            + "website of the organization: that can be done through the URL field of the Organization contact point.")
+    private URI uri;
 
     /**
-     * Organization identifiers be drawn from an existing identification scheme.
-     * This field is used to indicate the scheme or codelist in which the identifier will be found.
-     * This value should be drawn from the
-     * [Organization Identifier Scheme]
-     *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists/#organization-identifier-scheme).
-     *
-     * @return
-     *     The scheme
+     * Scheme
+     * <p>
+     * Organization identifiers should be drawn from an existing organization identifier list. The scheme field is
+     * used to indicate the list or register from which the identifier is drawn. This value should be drawn from the
+     * [Organization Identifier Scheme](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#organization-identifier-scheme) codelist.
      */
     @JsonProperty("scheme")
     public String getScheme() {
@@ -80,25 +86,22 @@ public class Identifier {
     }
 
     /**
-     * Organization identifiers be drawn from an existing identification scheme.
-     * This field is used to indicate the scheme or codelist in which the identifier will be found.
-     * This value should be drawn from the
-     * [Organization Identifier Scheme]
-     *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists/#organization-identifier-scheme).
-     *
-     * @param scheme
-     *     The scheme
+     * Scheme
+     * <p>
+     * Organization identifiers should be drawn from an existing organization identifier list. The scheme field is
+     * used to indicate the list or register from which the identifier is drawn. This value should be drawn from the
+     * [Organization Identifier Scheme](http://standard.open-contracting
+     * .org/latest/en/schema/codelists/#organization-identifier-scheme) codelist.
      */
     @JsonProperty("scheme")
-    public void setScheme(final String scheme) {
+    public void setScheme(String scheme) {
         this.scheme = scheme;
     }
 
     /**
+     * ID
+     * <p>
      * The identifier of the organization in the selected scheme.
-     *
-     * @return
-     *     The id
      */
     @JsonProperty("id")
     public String getId() {
@@ -106,21 +109,19 @@ public class Identifier {
     }
 
     /**
+     * ID
+     * <p>
      * The identifier of the organization in the selected scheme.
-     *
-     * @param id
-     *     The id
      */
     @JsonProperty("id")
-    public void setId(final String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
     /**
+     * Legal Name
+     * <p>
      * The legally registered name of the organization.
-     *
-     * @return
-     *     The legalName
      */
     @JsonProperty("legalName")
     public String getLegalName() {
@@ -128,61 +129,60 @@ public class Identifier {
     }
 
     /**
+     * Legal Name
+     * <p>
      * The legally registered name of the organization.
-     *
-     * @param legalName
-     *     The legalName
      */
     @JsonProperty("legalName")
-    public void setLegalName(final String legalName) {
+    public void setLegalName(String legalName) {
         this.legalName = legalName;
     }
 
     /**
-     * A URI to identify the organization, such as those provided by
-     * [Open Corporates](http://www.opencorporates.com) or some other relevant URI provider.
-     * This is not for listing the website of the organization:
-     * that can be done through the url field of the Organization contact point.
-     *
-     * @return
-     *     The uri
+     * URI
+     * <p>
+     * A URI to identify the organization, such as those provided by [Open Corporates](http://www.opencorporates.com)
+     * or some other relevant URI provider. This is not for listing the website of the organization: that can be done
+     * through the URL field of the Organization contact point.
      */
     @JsonProperty("uri")
-    public String getUri() {
+    public URI getUri() {
         return uri;
     }
 
     /**
-     * A URI to identify the organization, such as those provided by
-     * [Open Corporates](http://www.opencorporates.com) or some other relevant URI provider.
-     * This is not for listing the website of the organization:
-     * that can be done through the url field of the Organization contact point.
-     *
-     * @param uri
-     *     The uri
+     * URI
+     * <p>
+     * A URI to identify the organization, such as those provided by [Open Corporates](http://www.opencorporates.com)
+     * or some other relevant URI provider. This is not for listing the website of the organization: that can be done
+     * through the URL field of the Organization contact point.
      */
     @JsonProperty("uri")
-    public void setUri(final String uri) {
+    public void setUri(URI uri) {
         this.uri = uri;
     }
 
+
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return new ToStringBuilder(this).append("scheme", scheme)
+                .append("id", id)
+                .append("legalName", legalName)
+                .append("uri", uri)
+                .toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().
-                append(scheme).
-                append(id).
-                append(legalName).
-                append(uri).
-                toHashCode();
+        return new HashCodeBuilder().append(legalName)
+                .append(id)
+                .append(scheme)
+                .append(uri)
+                .toHashCode();
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
@@ -190,12 +190,11 @@ public class Identifier {
             return false;
         }
         Identifier rhs = ((Identifier) other);
-        return new EqualsBuilder().
-                append(scheme, rhs.scheme).
-                append(id, rhs.id).
-                append(legalName, rhs.legalName).
-                append(uri, rhs.uri).
-                isEquals();
+        return new EqualsBuilder().append(legalName, rhs.legalName)
+                .append(id, rhs.id)
+                .append(scheme, rhs.scheme)
+                .append(uri, rhs.uri)
+                .isEquals();
     }
 
 }

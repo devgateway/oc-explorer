@@ -29,7 +29,7 @@ public class XSSFLineChartData extends AbstractXSSFChartData {
 
     @Override
     protected CustomChartSeries createNewSerie(final int id, final int order, final ChartDataSource<?> categories,
-            final ChartDataSource<? extends Number> values) {
+                                               final ChartDataSource<? extends Number> values) {
         return new AbstractSeries(id, order, categories, values) {
             @Override
             public void addToChart(final XmlObject ctChart) {
@@ -74,7 +74,7 @@ public class XSSFLineChartData extends AbstractXSSFChartData {
             lineChart.addNewAxId().setVal(ax.getId());
         }
 
-        xssfChart.setTitle(this.title);
+        xssfChart.setTitleText(this.title);
 
         // add grid lines
         CTCatAx[] ctCatAx = plotArea.getCatAxArray();

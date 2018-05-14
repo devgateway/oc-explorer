@@ -113,6 +113,9 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
     }
 
     protected void getAjaxFormComponentUpdatingBehavior() {
+        if (getUpdateEvent() == null) {
+            return;
+        }
         updatingBehaviorComponent().add(new AjaxFormComponentUpdatingBehavior(getUpdateEvent()) {
 
             private static final long serialVersionUID = -2696538086634114609L;

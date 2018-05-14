@@ -17,7 +17,7 @@ module.exports = {
         test: /\.(jsx|es6)$/,
         loaders: [
           'react-hot',
-          'babel-loader?babelrc=false,presets[]=react,presets[]=es2015,cacheDirectory'
+          'babel-loader?babelrc=true,cacheDirectory'
         ],
         exclude: /node_modules/
       },
@@ -31,10 +31,20 @@ module.exports = {
   },
   devtool: 'source-map',
   plugins: [
+    new webpack.DefinePlugin({
+      "process.env": {
+        NODE_ENV: JSON.stringify("development")
+      }
+    }),
+    new webpack.DllReferencePlugin({
+      context: __dirname,
+      name: 'lib',
+      manifest: require('./dll/manifest.json')
+    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.ProvidePlugin({
       fetch: 'imports?this=>global!exports?global.fetch!whatwg-fetch',
-      React: "react"
+      React: "react",
     })
   ],
   eslint:{

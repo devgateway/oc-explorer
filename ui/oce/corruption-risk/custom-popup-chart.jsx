@@ -1,46 +1,53 @@
-import Chart from "../visualizations/charts/frontend-date-filterable";
-import ReactIgnore from "../react-ignore.jsx";
-import cn from "classnames";
-import {POPUP_HEIGHT, POPUP_WIDTH} from "./constants";
+import cn from 'classnames';
+import Chart from '../visualizations/charts/frontend-date-filterable';
+import ReactIgnore from '../react-ignore.jsx';
+import { POPUP_HEIGHT, POPUP_WIDTH } from './constants';
 
-class CustomPopupChart extends Chart{
-  constructor(...args){
+class CustomPopupChart extends Chart {
+  constructor(...args) {
     super(...args);
     this.state = {
       popup: {
         show: false,
         left: 0,
-        top: 0
-      }
-    }
+        top: 0,
+      },
+    };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     super.componentDidMount();
-    const {chartContainer} = this.refs;
+    const { chartContainer } = this;
     chartContainer.on('plotly_hover', this.showPopup.bind(this));
-    chartContainer.on('plotly_unhover', data => this.hidePopup());
+    chartContainer.on('plotly_unhover', () => this.hidePopup());
   }
 
-  showPopup(data){
+  getPopupWidth() {
+    return POPUP_WIDTH;
+  }
+
+  showPopup(data) {
     const point = data.points[0];
     const year = point.x;
     const traceName = point.data.name;
+    const traceIndex = point.fullData.index;
     const POPUP_ARROW_SIZE = 8;
+    const popupWidth = this.getPopupWidth();
 
-    const {xaxis, yaxis} = point;
-    const markerLeft = xaxis.l2p(point.pointNumber) + xaxis._offset;
+    const { xaxis, yaxis } = point;
+    const markerLeft = xaxis.l2p(xaxis._categories.indexOf(point.x)) + xaxis._offset;
     const markerTop = yaxis.l2p(point.y) + yaxis._offset;
-    const {left: parentLeft} = this.refs.chartContainer.getBoundingClientRect();
-    const toTheLeft = (markerLeft + parentLeft + POPUP_WIDTH) >= window.innerWidth;
-    let top, left;
+    const { left: parentLeft } = this.chartContainer.getBoundingClientRect();
+    const toTheLeft = (markerLeft + parentLeft + popupWidth) >= window.innerWidth;
+    let top;
+    let left;
 
-    if(toTheLeft){
-      top = markerTop - POPUP_HEIGHT / 2;
-      left = markerLeft - POPUP_WIDTH - POPUP_ARROW_SIZE * 1.5;
+    if (toTheLeft) {
+      top = markerTop - (POPUP_HEIGHT / 2);
+      left = markerLeft - popupWidth - (POPUP_ARROW_SIZE * 1.5);
     } else {
-      top = markerTop - POPUP_HEIGHT - POPUP_ARROW_SIZE * 1.5;
-      left = markerLeft - POPUP_WIDTH / 2;
+      top = markerTop - POPUP_HEIGHT - (POPUP_ARROW_SIZE * 1.5);
+      left = markerLeft - (popupWidth / 2);
     }
 
     this.setState({
@@ -50,37 +57,38 @@ class CustomPopupChart extends Chart{
         top,
         left,
         year,
-        traceName
-      }
+        traceName,
+        traceIndex,
+      },
     });
   }
 
-  hidePopup(){
+  hidePopup() {
     this.setState({
       popup: {
-        show: false
-      }
+        show: false,
+      },
     });
   }
 
-  render(){
-    const {loading, popup} = this.state;
-    let hasNoData = !loading && this.hasNoData();
+  render() {
+    const { loading, popup } = this.state;
+    const hasNoData = !loading && this.hasNoData();
     return (
-      <div className={cn("chart-container", {"popup-left": popup.toTheLeft})}>
-    	  {hasNoData && <div className="message">{this.t('charts:general:noData')}</div>}
-	      {loading && <div className="message">
-  	      Loading...<br/>
-    	    <img src="assets/loading-bubbles.svg" alt=""/>
-	      </div>}
+      <div className={cn('chart-container', { 'popup-left': popup.toTheLeft })}>
+        {hasNoData && <div className="message">{this.t('charts:general:noData')}</div>}
+        {loading && <div className="message">
+          Loading...<br />
+          <img src="assets/loading-bubbles.svg" alt="" />
+        </div>}
 
-  	    {popup.show && this.getPopup()}
+        {popup.show && this.getPopup()}
 
-	      <ReactIgnore>
-  	      <div ref="chartContainer"/>
-	      </ReactIgnore>
+        <ReactIgnore>
+          <div ref={(c) => { this.chartContainer = c; }} />
+        </ReactIgnore>
       </div>
-    )
+    );
   }
 }
 

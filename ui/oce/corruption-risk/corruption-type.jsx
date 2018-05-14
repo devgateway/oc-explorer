@@ -2,10 +2,10 @@ import URI from "urijs";
 import {Map} from "immutable";
 import {pluckImm} from "../tools";
 import CustomPopupChart from "./custom-popup-chart";
-import Table from "../visualizations/tables/index";
 import translatable from '../translatable';
 import CRDPage from "./page";
-import { colorLuminance } from './tools';
+import { colorLuminance, sortByField } from './tools';
+import Crosstab from './crosstab';
 
 class IndicatorTile extends CustomPopupChart{
   getCustomEP(){
@@ -15,9 +15,11 @@ class IndicatorTile extends CustomPopupChart{
 
   getData(){
     const color = this.props.styling.charts.traceColors[2];
-    const data = super.getData();
+    let data = super.getData();
     if(!data) return [];
-    const {monthly} = this.props;
+    const { monthly } = this.props;
+    data = data.sort(sortByField(monthly ? 'month': 'year'));
+
     let dates = monthly ?
       data.map(datum => {
         const month = datum.get('month');
@@ -71,7 +73,7 @@ class IndicatorTile extends CustomPopupChart{
   }
 
   getPopup(){
-    const {indicator, monthly} = this.props;
+    const {monthly} = this.props;
     const {popup} = this.state;
     const {year} = popup;
     const data = super.getData();
@@ -85,6 +87,7 @@ class IndicatorTile extends CustomPopupChart{
     } else {
       datum = data.find(datum => datum.get('year') == year);
     }
+    if (!datum) return null;
     return (
       <div className="crd-popup" style={{top: popup.top, left: popup.left}}>
         <div className="row">
@@ -94,13 +97,13 @@ class IndicatorTile extends CustomPopupChart{
           <div className="col-sm-12">
             <hr/>
           </div>
-          <div className="col-sm-8 text-right title">Procurements Flagged</div>
+          <div className="col-sm-8 text-right title">{this.t('crd:corruptionType:indicatorTile:procurementsFlagged')}</div>
           <div className="col-sm-4 text-left info">{datum.get('totalTrue')}</div>
-          <div className="col-sm-8 text-right title">Eligible Procurements</div>
+          <div className="col-sm-8 text-right title">{this.t('crd:corruptionType:indicatorTile:eligibleProcurements')}</div>
           <div className="col-sm-4 text-left info">{datum.get('totalPrecondMet')}</div>
-          <div className="col-sm-8 text-right title">% Eligible Procurements Flagged</div>
+          <div className="col-sm-8 text-right title">{this.t('crd:corruptionType:indicatorTile:percentEligibleFlagged')}</div>
           <div className="col-sm-4 text-left info">{datum.get('percentTruePrecondMet').toFixed(2)} %</div>
-          <div className="col-sm-8 text-right title">% Procurements Eligible</div>
+          <div className="col-sm-8 text-right title">{this.t('crd:corruptionType:indicatorTile:percentProcurementsEligible')}</div>
           <div className="col-sm-4 text-left info">{datum.get('percentPrecondMet').toFixed(2)} %</div>
         </div>
         <div className="arrow"/>
@@ -109,109 +112,6 @@ class IndicatorTile extends CustomPopupChart{
   }
 }
 
-class Crosstab extends Table{
-  getCustomEP(){
-    const {indicators} = this.props;
-    return indicators.map(indicator => `flags/${indicator}/crosstab`);
-  }
-
-  componentDidUpdate(prevProps, ...args){
-    if(this.props.indicators != prevProps.indicators){
-      this.fetch();
-    }
-    super.componentDidUpdate(prevProps, ...args);
-  }
-
-  transform(data){
-    const {indicators} = this.props;
-    let matrix = {}, x = 0, y = 0;
-    for(x = 0; x<indicators.length; x++){
-      const xIndicatorID = indicators[x];
-      matrix[xIndicatorID] = {};
-      const datum = data[x][0];
-      for(y = 0; y<indicators.length; y++){
-        const yIndicatorID = indicators[y];
-        if(datum){
-          matrix[xIndicatorID][yIndicatorID] = {
-            count: datum[yIndicatorID],
-            percent: datum.percent[yIndicatorID]
-          }
-        } else {
-          matrix[xIndicatorID][yIndicatorID] = {
-            count: 0,
-            percent: 0
-          }
-        }
-      }
-    }
-    return matrix;
-  }
-
-  row(rowData, rowIndicatorID){
-    const rowIndicatorName = this.t(`crd:indicators:${rowIndicatorID}:name`);
-    const rowIndicatorDescription = this.t(`crd:indicators:${rowIndicatorID}:indicator`);
-    return (
-      <tr key={rowIndicatorID}>
-      <td>{rowIndicatorName}</td>
-      <td className="nr-flags">{rowData.getIn([rowIndicatorID, 'count'])}</td>
-      {rowData.map((datum, indicatorID) => {
-        const indicatorName = this.t(`crd:indicators:${indicatorID}:name`);
-        const indicatorDescription = this.t(`crd:indicators:${indicatorID}:indicator`);
-        if(indicatorID == rowIndicatorID){
-          return <td className="not-applicable" key={indicatorID}>&mdash;</td>
-        } else {
-          const percent = datum.get('percent');
-          const count = datum.get('count');
-          const color = Math.round(255 - 255 * (percent/100))
-          const style = {backgroundColor: `rgb(${color}, 255, ${color})`}
-          return (
-            <td key={indicatorID} className="hoverable" style={style}>
-              {percent && percent.toFixed(2)} %
-              <div className="crd-popup text-left">
-                <div className="row">
-                  <div className="col-sm-12 info">
-                    {percent.toFixed(2)}% of procurements flagged for "{rowIndicatorName}" are also flagged for "{indicatorName}"
-                  </div>
-                  <div className="col-sm-12">
-                    <hr/>
-                  </div>
-                  <div className="col-sm-12 info">
-                    <h4>{count} Procurements flagged with both;</h4>
-                    <p><strong>{rowIndicatorName}</strong>: {rowIndicatorDescription}</p>
-                    <p className="and">and</p>
-                    <p><strong>{indicatorName}</strong>: {indicatorDescription}</p>
-                  </div>
-                </div>
-                <div className="arrow"/>
-              </div>
-            </td>
-          )
-        }
-      }).toArray()}
-      </tr>
-    )
-  }
-
-  render(){
-    const {indicators, data} = this.props;
-    if(!data) return null;
-    if(!data.count()) return null;
-    return (
-      <table className="table table-striped table-hover table-bordered table-crosstab">
-        <thead>
-          <tr>
-            <th></th>
-            <th># Flags</th>
-            {data.map((_, indicatorID) => <th key={indicatorID}>{this.t(`crd:indicators:${indicatorID}:name`)}</th>).toArray()}
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((rowData, indicatorID) => this.row(rowData, indicatorID)).toArray()}
-        </tbody>
-      </table>
-    )
-  }
-}
 
 function groupBy3(arr){
   if(arr.length == 0) return [];
@@ -254,7 +154,7 @@ class CorruptionType extends translatable(CRDPage){
              <div className="row">
                {row.map(indicator => {
                   const indicatorName = this.t(`crd:indicators:${indicator}:name`);
-                  const indicatorDescription = this.t(`crd:indicators:${indicator}:indicator`);
+                  const indicatorDescription = this.t(`crd:indicators:${indicator}:shortDescription`);
                   return (
                     <div className="col-sm-4 indicator-tile-container" key={corruptionType+indicator} onClick={e => onGotoIndicator(indicator)}>
                       <div className="border">
@@ -271,7 +171,7 @@ class CorruptionType extends translatable(CRDPage){
                           years={years}
                           monthly={monthly}
                           months={months}
-                          width={width/3-60}
+                          width={width/3-95}
                           styling={styling}
                         />
                       </div>

@@ -64,7 +64,6 @@ import java.math.BigDecimal;
  * method.
  *
  * @author Stefan Kloe, mpostelnicu
- *
  */
 @EnableScheduling
 @SpringBootApplication
@@ -84,16 +83,15 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
     private SessionFinderService sessionFinderService;
 
 
-
     public static void main(final String[] args) {
         SpringApplication.run(FormsWebApplication.class, args);
     }
 
     /**
      * @see org.apache.wicket.Application#newConverterLocator() This adds the
-     *      {@link NonNumericFilteredBigDecimalConverter} as the standard
-     *      {@link BigDecimal} converter for ALL fields using this type accross
-     *      the application
+     * {@link NonNumericFilteredBigDecimalConverter} as the standard
+     * {@link BigDecimal} converter for ALL fields using this type accross
+     * the application
      **/
     @Override
     protected IConverterLocator newConverterLocator() {
@@ -111,8 +109,10 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
         SummernoteConfig.addStorage(new SummernoteFileStorage(STORAGE_ID, folder));
 
         // mount the resource reference responsible for image uploads
-        mountResource(SummernoteStoredImageResourceReference.SUMMERNOTE_MOUNT_PATH,
-                new SummernoteStoredImageResourceReference(STORAGE_ID));
+        mountResource(
+                SummernoteStoredImageResourceReference.SUMMERNOTE_MOUNT_PATH,
+                new SummernoteStoredImageResourceReference(STORAGE_ID)
+        );
     }
 
     /**
@@ -160,8 +160,10 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
         // -Dwicket.configuration=deployment
         // The default is Development, so this code is not used
         if (usesDeploymentConfig()) {
-            getResourceSettings().setCachingStrategy(new FilenameWithVersionResourceCachingStrategy("-v-",
-                    new CachingResourceVersion(new Adler32ResourceVersion())));
+            getResourceSettings().setCachingStrategy(new FilenameWithVersionResourceCachingStrategy(
+                    "-v-",
+                    new CachingResourceVersion(new Adler32ResourceVersion())
+            ));
 
             getResourceSettings().setJavaScriptCompressor(
                     new GoogleClosureJavaScriptCompressor(CompilationLevel.SIMPLE_OPTIMIZATIONS));

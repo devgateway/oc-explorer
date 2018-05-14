@@ -151,7 +151,7 @@
                             "scheme": "GB-COH",
                             "id": "1234567844",
                             "legalName": "Supplier 01 ",
-                            "url": "http://example.com/supplier01/"
+                            "uri": "http://example.com/supplier01/"
                         },
                         "name": "Supplier 01 name",
                         "address": {
@@ -377,7 +377,7 @@
                             "scheme": "GB-COH",
                             "id": "1234567845",
                             "legalName": "Supplier 02",
-                            "url": "http://example.com/supplier02/"
+                            "uri": "http://example.com/supplier02/"
                         },
                         "name": "Supplier 02 name",
                         "address": {
@@ -602,7 +602,7 @@
                             "scheme": "GB-COH",
                             "id": "1234567844",
                             "legalName": "Supplier 03",
-                            "url": "http://example.com/supplier03/"
+                            "uri": "http://example.com/supplier03/"
                         },
                         "name": "Supplier 03 name",
                         "address": {

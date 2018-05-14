@@ -1,46 +1,61 @@
-import frontendDateFilterable from "../frontend-date-filterable";
 import { Map, TileLayer } from 'react-leaflet';
-import {pluck} from "../../tools";
-import Cluster from "./cluster";
-import Location from "./location";
-import Visualization from "../../visualization";
-import style from "./style.less";
+import frontendDateFilterable from '../frontend-date-filterable';
+import { pluck } from '../../tools';
+import Cluster from './cluster';
+import Location from './location';
+import Visualization from '../../visualization';
+// eslint-disable-next-line no-unused-vars
+import style from './style.less';
 
-class MapVisual extends frontendDateFilterable(Visualization){
-  getMaxAmount(){
+const swap = ([a, b]) => [b, a];
+
+class MapVisual extends frontendDateFilterable(Visualization) {
+  getMaxAmount() {
     return Math.max(0, ...this.getData().map(pluck('amount')));
   }
 
-  getTiles(){
+  getTiles () {
     return (
-        <TileLayer
-            url='//{s}.tile.osm.org/{z}/{x}/{y}.png'
-            attribution='&copy; <a href="//osm.org/copyright">OpenStreetMap</a> contributors'
-        />
-    )
+      <TileLayer
+        url="//{s}.tile.osm.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="//osm.org/copyright">OpenStreetMap</a> contributors'
+      />
+    );
   }
 
-  render(){
-    let {translations, filters, years, styling, monthly, months, center, zoom} = this.props;
-    return <Map center={center} zoom={zoom}>
-      {this.getTiles()}
-      <Cluster maxAmount={this.getMaxAmount()}>
-        {this.getData().map(location => (
+  render() {
+    const { translations, filters, years, styling, monthly, months, zoom, data } = this.props;
+    let center;
+    let _zoom;
+    if (data){
+      center = L.latLngBounds(this.getData().map(pluck('coords')).map(swap)).getCenter();
+      _zoom = zoom;
+    } else {
+      center = [0, 0];
+      _zoom = 1;
+    }
+
+    return (
+      <Map center={center} zoom={_zoom}>
+        {this.getTiles()}
+        <Cluster maxAmount={this.getMaxAmount()}>
+          {this.getData().map(location => (
             <this.constructor.Location
-                key={location._id}
-                position={location.coords.reverse()}
-                maxAmount={this.getMaxAmount()}
-                data={location}
-                translations={translations}
-                filters={filters}
-                years={years}
-                monthly={monthly}
-                months={months}
-                styling={styling}
+              key={location._id}
+              position={location.coords.reverse()}
+              maxAmount={this.getMaxAmount()}
+              data={location}
+              translations={translations}
+              filters={filters}
+              years={years}
+              monthly={monthly}
+              months={months}
+              styling={styling}
             />
-        ))}
-      </Cluster>
-    </Map>
+          ))}
+        </Cluster>
+      </Map>
+    );
   }
 }
 

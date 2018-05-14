@@ -1,13 +1,12 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import java.util.List;
-
+import com.mongodb.DBObject;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.mongodb.DBObject;
+import java.util.List;
 
 /**
  * @author idobre
@@ -22,7 +21,7 @@ public class AverageNumberOfTenderersControllerTest extends AbstractEndPointCont
     @Test
     public void averageNumberOfTenderers() throws Exception {
         final List<DBObject> averageNumberOfTenderers = averageNumberOfTenderersController
-                .averageNumberOfTenderers(new YearFilterPagingRequest());
+                .averageNumberOfTenderersYearly(new YearFilterPagingRequest());
 
         final DBObject sec = averageNumberOfTenderers.get(1);
         int year = (int) sec.get(AverageNumberOfTenderersController.Keys.YEAR);

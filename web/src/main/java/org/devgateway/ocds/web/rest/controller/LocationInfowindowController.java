@@ -8,7 +8,6 @@ import org.devgateway.ocds.persistence.mongo.spring.json.Views;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,15 +43,15 @@ public class LocationInfowindowController extends GenericOCDSController {
                 match(where("tender").exists(true).orOperator(
                         where("tender.items.deliveryLocation._id").exists(true)
                 )
-                        .andOperator(getYearDefaultFilterCriteria(filter,
-                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
+                        .andOperator(getYearDefaultFilterCriteria(
+                                filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
+                        ))),
                 project("tender").andExclude(Fields.UNDERSCORE_ID),
                 skip(filter.getSkip()), limit(filter.getPageSize())
         );
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> tagCount = results.getMappedResults();
-        return tagCount;
+        return releaseAgg(agg);
     }
 
     @ApiOperation(value = "Displays the planning items, filtered by location. See the location filter "
@@ -72,9 +71,7 @@ public class LocationInfowindowController extends GenericOCDSController {
                 skip(filter.getSkip()), limit(filter.getPageSize())
         );
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> tagCount = results.getMappedResults();
-        return tagCount;
+        return releaseAgg(agg);
     }
 
     @ApiOperation(value = "Displays the awards, filtered by location. See the location filter "
@@ -89,14 +86,13 @@ public class LocationInfowindowController extends GenericOCDSController {
                 match(where("awards.0").exists(true).orOperator(
                         where("tender.items.deliveryLocation._id").exists(true)
                 )
-                        .andOperator(getYearDefaultFilterCriteria(filter, "awards.date"))),
+                        .andOperator(getYearDefaultFilterCriteria(filter, MongoConstants.FieldNames.AWARDS_DATE))),
                 project("awards").andExclude(Fields.UNDERSCORE_ID),
                 unwind("awards"),
+                match(getYearDefaultFilterCriteria(filter.awardFiltering(), MongoConstants.FieldNames.AWARDS_DATE)),
                 skip(filter.getSkip()), limit(filter.getPageSize())
         );
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> tagCount = results.getMappedResults();
-        return tagCount;
+        return releaseAgg(agg);
     }
 }

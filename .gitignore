@@ -23,3 +23,4 @@ rebel.xml
 /forms/.rebel.xml.bak
 /derby.log
 /LOG_DIR_IS_UNDEFINED/
+/ehcache-diskstore/

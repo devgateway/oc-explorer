@@ -1,15 +1,14 @@
-
 package org.devgateway.ocds.persistence.mongo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-/**
- * http://standard.open-contracting.org/latest/en/schema/reference/#changes
- */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "property",
         "former_value"
@@ -17,28 +16,33 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class Change {
 
     /**
-     * The property name that has been changed relative to the place the amendment is.
-     * For example if the contract value has changed, then the property under changes within
-     * the contract.amendment would be value.amount.
-     *
+     * Property
+     * <p>
+     * The property name that has been changed relative to the place the amendment is. For example if the contract
+     * value has changed, then the property under changes within the contract.amendment would be value.amount.
+     * (Deprecated in 1.1)
      */
     @JsonProperty("property")
+    @JsonPropertyDescription("The property name that has been changed relative to the place the amendment is. For "
+            + "example if the contract value has changed, then the property under changes within the contract"
+            + ".amendment would be value.amount. (Deprecated in 1.1)")
     private String property;
-
     /**
-     * The previous value of the changed property, in whatever type the property is.
-     *
+     * Former Value
+     * <p>
+     * The previous value of the changed property, in whatever type the property is. (Deprecated in 1.1)
      */
     @JsonProperty("former_value")
+    @JsonPropertyDescription("The previous value of the changed property, in whatever type the property is. "
+            + "(Deprecated in 1.1)")
     private String formerValue;
 
     /**
-     * The property name that has been changed relative to the place the amendment is.
-     * For example if the contract value has changed, then the property under changes within
-     * the contract.amendment would be value.amount.
-     *
-     * @return
-     *     The property
+     * Property
+     * <p>
+     * The property name that has been changed relative to the place the amendment is. For example if the contract
+     * value has changed, then the property under changes within the contract.amendment would be value.amount.
+     * (Deprecated in 1.1)
      */
     @JsonProperty("property")
     public String getProperty() {
@@ -46,23 +50,21 @@ public class Change {
     }
 
     /**
-     * The property name that has been changed relative to the place the amendment is.
-     * For example if the contract value has changed, then the property under changes within
-     * the contract.amendment would be value.amount.
-     *
-     * @param property
-     *     The property
+     * Property
+     * <p>
+     * The property name that has been changed relative to the place the amendment is. For example if the contract
+     * value has changed, then the property under changes within the contract.amendment would be value.amount.
+     * (Deprecated in 1.1)
      */
     @JsonProperty("property")
-    public void setProperty(final String property) {
+    public void setProperty(String property) {
         this.property = property;
     }
 
     /**
-     * The previous value of the changed property, in whatever type the property is.
-     *
-     * @return
-     *     The formerValue
+     * Former Value
+     * <p>
+     * The previous value of the changed property, in whatever type the property is. (Deprecated in 1.1)
      */
     @JsonProperty("former_value")
     public String getFormerValue() {
@@ -70,31 +72,30 @@ public class Change {
     }
 
     /**
-     * The previous value of the changed property, in whatever type the property is.
-     *
-     * @param formerValue
-     *     The former_value
+     * Former Value
+     * <p>
+     * The previous value of the changed property, in whatever type the property is. (Deprecated in 1.1)
      */
     @JsonProperty("former_value")
-    public void setFormerValue(final String formerValue) {
+    public void setFormerValue(String formerValue) {
         this.formerValue = formerValue;
     }
 
+
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return new ToStringBuilder(this).append("property", property)
+                .append("formerValue", formerValue)
+                .toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().
-                append(property).
-                append(formerValue).
-                toHashCode();
+        return new HashCodeBuilder().append(property).append(formerValue).toHashCode();
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
@@ -102,10 +103,9 @@ public class Change {
             return false;
         }
         Change rhs = ((Change) other);
-        return new EqualsBuilder().
-                append(property, rhs.property).
-                append(formerValue, rhs.formerValue).
-                isEquals();
+        return new EqualsBuilder().append(property, rhs.property)
+                .append(formerValue, rhs.formerValue)
+                .isEquals();
     }
 
 }

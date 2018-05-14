@@ -210,7 +210,8 @@ aside [role=navigation]{
 
 .content.map-content{
   padding-left: 0;
-  margin-top: 64px;
+  margin-top: @headerHeight * 2;
+  margin-bottom: 66px;
   padding-right: 0;
   overflow: hidden;
   .leaflet-container{
@@ -431,4 +432,15 @@ aside [role=navigation]{
 
 .logo-wrapper>*{
   float:left;
+}
+
+.language-switcher{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  img{
+    width: 32px;
+    margin-left: .4em;
+    cursor: pointer;
+  }
 }

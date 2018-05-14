@@ -34,6 +34,8 @@ import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 /**
  * @author mpostelnicu This configures the spring security for the Web project.
@@ -62,6 +64,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Bean
+    public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        firewall.setAllowUrlEncodedSlash(true);
+        firewall.setAllowSemicolon(true);
+        return firewall;
+    }
+
+    @Bean
     public HttpSessionSecurityContextRepository httpSessionSecurityContextRepository() {
         return new HttpSessionSecurityContextRepository();
     }
@@ -76,7 +86,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(final WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/", "/home", "/v2/api-docs/**", "/swagger-ui.html**", "/webjars/**", "/images/**",
+        web.httpFirewall(allowUrlEncodedSlashHttpFirewall()).ignoring().
+                antMatchers("/", "/home", "/v2/api-docs/**", "/swagger-ui.html**", "/webjars/**", "/images/**",
                 "/configuration/**", "/swagger-resources/**", "/dashboard", "/languages/**", "/isAuthenticated",
                 "/wicket/resource/**/*.ttf", "/wicket/resource/**/*.woff", "/corruption-risk",
                 SecurityUtil.getDisabledApiSecurity(adminSettingsRepository) ? "/api/**" : "/",

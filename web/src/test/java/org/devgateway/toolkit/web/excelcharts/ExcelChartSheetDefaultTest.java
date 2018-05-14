@@ -1,6 +1,7 @@
 package org.devgateway.toolkit.web.excelcharts;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Chart;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -40,10 +41,10 @@ public class ExcelChartSheetDefaultTest {
         excelChartSheet.writeCell("text", row, 2);
         excelChartSheet.writeCell(1, row, 3);
 
-        Assert.assertEquals(Cell.CELL_TYPE_BLANK, row.getCell(0).getCellType());
+        Assert.assertEquals(CellType.BLANK, row.getCell(0).getCellTypeEnum());
         Assert.assertEquals("Yes", row.getCell(1).getStringCellValue());
-        Assert.assertEquals(Cell.CELL_TYPE_STRING, row.getCell(2).getCellType());
-        Assert.assertEquals(Cell.CELL_TYPE_NUMERIC, row.getCell(3).getCellType());
+        Assert.assertEquals(CellType.STRING, row.getCell(2).getCellTypeEnum());
+        Assert.assertEquals(CellType.NUMERIC, row.getCell(3).getCellTypeEnum());
     }
 
     @Test
