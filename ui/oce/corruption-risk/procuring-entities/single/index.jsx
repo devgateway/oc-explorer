@@ -18,10 +18,11 @@ import ProcurementsByStatus from './general/by-status';
 import ProcurementsByMethod from './general/by-method';
 import ProcurementsTable from './table';
 import style from './style.less';
+import CRDPage from '../../page';
 
 const NAME = 'ProcuringEntitySingle';
 
-class ProcuringEntity extends translatable(React.Component) {
+class ProcuringEntity extends CRDPage {
   constructor(...args){
     super(...args);
     this.state = this.state || {};
