@@ -85,14 +85,14 @@ class ProcuringEntity extends CRDPage {
           <div className="row">
             <div className="col-sm-6">
               <Zoomable zoomedWidth={width} data={winsAndFlagsData} length={max2ndRowCommonDataLength}>
-                <TitleBelow title={this.t('crd:supplier:winsAndLosses:title')}>
+                <TitleBelow title={this.t('crd:procuringEntity:winsAndFlags:title')}>
                   <WinsAndFlags translations={translations} />
                 </TitleBelow>
               </Zoomable>
             </div>
             <div className="col-sm-6">
               <Zoomable zoomedWidth={width} data={PEFlaggedNrData} length={max2ndRowCommonDataLength}>
-                <TitleBelow title={this.t('crd:supplier:flaggedNr:title')}>
+                <TitleBelow title={this.t('crd:procuringEntity:flaggedNr:title')}>
                   <FlaggedNr translations={translations} />
                 </TitleBelow>
               </Zoomable>
