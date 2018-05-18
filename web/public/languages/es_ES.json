@@ -357,5 +357,7 @@
   "crd:procuringEntities:noOfAwards": "No. of Awards",
   "crd:procuringEntities:byStatus:title": "No. of Procurements by Contract Status",
   "crd:procuringEntities:byMethod:title": "Number of procurements by procurement method.",
-  "crd:procuringEntities:info:procurementsCount": "on $#$ procurements out of $#$ procurements"
+  "crd:procuringEntities:info:procurementsCount": "on $#$ procurements out of $#$ procurements",
+  "crd:procuringEntity:winsAndFlags:title": "Wins & flags by supplier",
+  "crd:procuringEntity:flaggedNr:title": "No. of flags per indicator in procurements by this PE"
 }
