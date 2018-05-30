@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Source+Sans+Pro:400,600');
 
-@headerHeight: 64px;
+@headerHeight: 57px;
 @gutterRight: 80pt;
 @gutterRightMd: 60pt;
 
@@ -12,10 +12,10 @@
 
 .dashboard-corruption-risk {
   &>header{
-    font-family: 'Montserrat';
+    font-family: 'Montserrat', sans-serif;
     background: #144361;
     &.branding {
-      height: 54px;
+      height: @headerHeight;
     }
 
     .logo-wrapper>*{
@@ -39,7 +39,7 @@
           color: #9fa9ba;
           font-size: 18px;
           font-weight: 600;
-          margin-top: 12px;
+          margin-top: 14px;
         }
         .glyphicon{
           font-size: .53em;
@@ -77,10 +77,10 @@
   }
 
   &>.filters-bar{
-    font-family: 'Montserrat';
+    font-family: 'Montserrat', sans-serif;
     background: #c3e6fc;
-    top: @headerHeight - 15;
-    height: @headerHeight - 9;
+    top: @headerHeight;
+    height: @headerHeight;
     left: 0;
     right: 0;
     position: fixed;
@@ -100,12 +100,13 @@
         padding: 0 5px;
       }
     }
+
     .filter{
       @boxFilterColor: #0083e5;
       @boxWidth: 500px;
       float: left;
       height: 100%;
-      padding: 12px 0;
+      padding: 10px 0;
       margin-right: 16px;
       margin-top: 5px;
       color: #899cb1;
@@ -204,15 +205,14 @@
     }
   }
 
-  aside{
+  aside {
     @leftPadding: 30px;
-    bottom:0;
+    bottom: 0;
     background: transparent;
     border-right: none;
     height: 100%;
     padding-left: @leftPadding;
-    padding-top: 10px;
-    top: @headerHeight * 1.5;
+    top: @headerHeight * 2;
 
     .small {
       font-size: 80%;
@@ -285,22 +285,25 @@
     }
 
     [role=navigation]{
+      font-family: Montserrat, sans-serif;
       margin-left: -@leftPadding;
       margin-top: -1px;
       border-right: 1px solid #e7ebef;
       border-bottom-right-radius: 5px;
-      a{
+      a {
+        font-weight: 600;
         border-bottom: 1px solid #e6eaee;
         color: #000000;
         background: #fafafa;
         cursor: pointer;
         display: block;
-        font-size: 0.9em;
-        line-height: 190%;
+        font-size: 12px;
+        line-height: 40px;
         padding: 8px 0 8px 25px;
         text-decoration: none;
         text-transform: uppercase;
         white-space: nowrap;
+        height: @headerHeight;
 
         &:first-child{
           border-top: 1px solid #e6eaee;
@@ -366,7 +369,7 @@
 
         .glyphicon {
           color: #34ac45;
-          padding: 5px 15px;
+          padding: 10px 30px;
           font-size: 1.5em;
         }
       }
