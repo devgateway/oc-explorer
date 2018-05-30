@@ -4,12 +4,6 @@
 @gutterRight: 80pt;
 @gutterRightMd: 60pt;
 
-.introduction {
-  font-size: 16px;
-  margin-bottom: 20px;
-  margin-top: 10px;
-}
-
 .dashboard-corruption-risk {
   &>header{
     font-family: 'Montserrat', sans-serif;
@@ -53,7 +47,7 @@
         font-weight: 500;
         padding: 5px;
         border-top: 1px dotted white;
-        a{
+        a {
           color: white;
         }
       }
@@ -383,13 +377,54 @@
     background: #f5f8fa;
   }
 
-  .content{
+  .content {
     @arrowSize: 8px;
     margin-top: 89px;
     margin-bottom: 80px;
     padding: 30px @gutterRight 0 50px;
     @media (max-width: 1200px) {
       padding: 30px @gutterRightMd 0 50px;
+    }
+
+    h2, h3, h4 {
+      font-family: 'Source Sans Pro', sans-serif;
+      font-weight: 600;
+      color: #333;
+    }
+
+    h2 {
+      font-size: 30px;
+    }
+
+    h3 {
+      font-size: 26px;
+    }
+
+    .page-header {
+      border-bottom: none;
+    }
+
+    .page-corruption-type, .page-individual-indicator {
+      h2 {
+        margin-top: 15px;
+      }
+
+      p.introduction, p.definition {
+        font-family: Montserrat, sans-serif;
+        font-size: 12px;
+      }
+
+      p.introduction, h2+p.definition {
+        margin-top: -20px;
+      }
+    }
+
+    .page-corruption-type p.introduction {
+      margin-bottom: 20px;
+    }
+
+    .page-individual-indicator p.definition {
+      margin-bottom: 0;
     }
 
     .crd-popup {
@@ -446,10 +481,14 @@
     }
 
 
-    .chart-corruption-types{
+    .chart-corruption-types {
       position: relative;
       .hovertext{
         opacity: 0;
+      }
+
+      h3 {
+        margin-top: 15px;
       }
     }
 
