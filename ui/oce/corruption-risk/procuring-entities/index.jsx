@@ -97,7 +97,6 @@ class PEList extends PaginatedTable {
       <BootstrapTable
         data={jsData}
         striped
-        bordered={false}
         pagination
         remote
         fetchInfo={{
