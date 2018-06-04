@@ -1,21 +1,15 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Source+Sans+Pro:400,600');
 
-@headerHeight: 64px;
+@headerHeight: 57px;
 @gutterRight: 80pt;
 @gutterRightMd: 60pt;
 
-.introduction {
-  font-size: 16px;
-  margin-bottom: 20px;
-  margin-top: 10px;
-}
-
 .dashboard-corruption-risk {
   &>header{
-    font-family: 'Montserrat';
+    font-family: 'Montserrat', sans-serif;
     background: #144361;
     &.branding {
-      height: 54px;
+      height: @headerHeight;
     }
 
     .logo-wrapper>*{
@@ -25,7 +19,7 @@
     img.logo {
       width: 45px;
       height: 45px;
-      margin-left: 15px;
+      margin-left: 25px;
       margin-top: 5px;
     }
 
@@ -39,7 +33,8 @@
           color: #9fa9ba;
           font-size: 18px;
           font-weight: 600;
-          margin-top: 12px;
+          margin-top: 14px;
+          margin-left: 10px;
         }
         .glyphicon{
           font-size: .53em;
@@ -52,7 +47,7 @@
         font-weight: 500;
         padding: 5px;
         border-top: 1px dotted white;
-        a{
+        a {
           color: white;
         }
       }
@@ -77,21 +72,20 @@
   }
 
   &>.filters-bar{
-    font-family: 'Montserrat';
+    font-family: 'Montserrat', sans-serif;
     background: #c3e6fc;
-    top: @headerHeight - 15;
-    height: @headerHeight - 9;
+    top: @headerHeight;
+    height: @headerHeight;
     left: 0;
     right: 0;
     position: fixed;
     z-index: 10;
-    .title{
+    .title {
       text-transform: uppercase;
       float: left;
       font-size: 12px;
       font-weight: bold;
-      padding: 20px 30px 20px 8px;
-      margin-left: 60px;
+      padding: 20px 30px 20px 85px;
       margin-right: 35px;
       @media (max-width: 1024px) {
         margin-right: 5px;
@@ -100,12 +94,13 @@
         padding: 0 5px;
       }
     }
+
     .filter{
       @boxFilterColor: #0083e5;
       @boxWidth: 500px;
       float: left;
       height: 100%;
-      padding: 12px 0;
+      padding: 10px 0;
       margin-right: 16px;
       margin-top: 5px;
       color: #899cb1;
@@ -204,15 +199,14 @@
     }
   }
 
-  aside{
+  aside {
     @leftPadding: 30px;
-    bottom:0;
+    bottom: 0;
     background: transparent;
     border-right: none;
     height: 100%;
     padding-left: @leftPadding;
-    padding-top: 10px;
-    top: @headerHeight * 1.5;
+    top: @headerHeight * 2;
 
     .small {
       font-size: 80%;
@@ -285,22 +279,25 @@
     }
 
     [role=navigation]{
+      font-family: Montserrat, sans-serif;
       margin-left: -@leftPadding;
       margin-top: -1px;
       border-right: 1px solid #e7ebef;
       border-bottom-right-radius: 5px;
-      a{
+      a {
+        font-weight: 600;
         border-bottom: 1px solid #e6eaee;
         color: #000000;
         background: #fafafa;
         cursor: pointer;
         display: block;
-        font-size: 0.9em;
-        line-height: 190%;
-        padding: 8px 0 8px 25px;
+        font-size: 12px;
+        line-height: 40px;
+        padding: 8px 0 8px 35px;
         text-decoration: none;
         text-transform: uppercase;
         white-space: nowrap;
+        height: @headerHeight;
 
         &:first-child{
           border-top: 1px solid #e6eaee;
@@ -322,7 +319,7 @@
 
         img{
           display: inline-block;
-          margin-right: 10px;
+          margin-right: 20px;
           width: 32px;
           &.white {
             display: none;
@@ -366,7 +363,7 @@
 
         .glyphicon {
           color: #34ac45;
-          padding: 5px 15px;
+          padding: 10px 30px;
           font-size: 1.5em;
         }
       }
@@ -380,13 +377,45 @@
     background: #f5f8fa;
   }
 
-  .content{
+  .content {
     @arrowSize: 8px;
     margin-top: 89px;
     margin-bottom: 80px;
     padding: 30px @gutterRight 0 50px;
     @media (max-width: 1200px) {
       padding: 30px @gutterRightMd 0 50px;
+    }
+
+    h2, h3, h4 {
+      font-family: 'Source Sans Pro', sans-serif;
+      font-weight: 600;
+    }
+
+    .page-header {
+      border-bottom: none;
+    }
+
+    .page-corruption-type, .page-individual-indicator {
+      h2 {
+        margin-top: 15px;
+      }
+
+      p.introduction, p.definition {
+        font-family: Montserrat, sans-serif;
+        font-size: 12px;
+      }
+
+      p.introduction, h2+p.definition {
+        margin-top: -20px;
+      }
+    }
+
+    .page-corruption-type p.introduction {
+      margin-bottom: 20px;
+    }
+
+    .page-individual-indicator p.definition {
+      margin-bottom: 0;
     }
 
     .crd-popup {
@@ -443,10 +472,14 @@
     }
 
 
-    .chart-corruption-types{
+    .chart-corruption-types {
       position: relative;
       .hovertext{
         opacity: 0;
+      }
+
+      h3 {
+        margin-top: 15px;
       }
     }
 
@@ -475,7 +508,9 @@
     }
 
     .table-crosstab{
-      border-top: none;
+      font-family: 'Source Sans Pro', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
       .nr-flags{
         color: #004f99;
       }
@@ -484,9 +519,6 @@
       }
       td, th{
         text-align: center;
-      }
-      th:first-child{
-        border-left: 1px solid transparent;
       }
       td:first-child{
         text-align: right;
@@ -504,13 +536,12 @@
       box-shadow: inset 0px 0px 0px 5px #ffd307;
     }
 
-    .react-bs-table {
-      th{
+    .react-bs-table-container {
+      font-family: 'Source Sans Pro', sans-serif;
+      font-weight: 600;
+      font-size: 12px;
+      th {
         color: #a1adbc;
-      }
-      td{
-        font-weight: 600;
-        font-size: .9em;
       }
     }
 
@@ -728,8 +759,12 @@
 
     .flags {
       font-size: 2em;
+      .count {
+        color: #ce4747;
+        font-weight: 600;
+      }
       small {
-        margin-left: 45px;
+        margin-left: 40px;
         font-size: .6em;
         display: block;
       }

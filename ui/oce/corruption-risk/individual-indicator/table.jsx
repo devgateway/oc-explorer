@@ -131,7 +131,6 @@ class ProcurementsTable extends PaginatedTable {
       <BootstrapTable
         data={jsData}
         striped
-        bordered={false}
         pagination
         remote
         fetchInfo={{

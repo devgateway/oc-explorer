@@ -87,12 +87,13 @@ class Info extends translatable(Visualization) {
               <td className="flags">
                 <img src="assets/icons/flag.svg" alt="Flag icon" className="flag-icon" />
                 &nbsp;
-                {flagCount}
-                &nbsp;
-                {this.t(flagCount === 1 ?
-                  'crd:contracts:baseInfo:flag:sg' :
-                  'crd:contracts:baseInfo:flag:pl')}
-                <br />
+                <span className="count">
+                  {flagCount}
+                  &nbsp;
+                  {this.t(flagCount === 1 ?
+                    'crd:contracts:baseInfo:flag:sg' :
+                    'crd:contracts:baseInfo:flag:pl')}
+                </span>
                 <small>
                   (
                     {contractCount}
@@ -110,7 +111,7 @@ class Info extends translatable(Visualization) {
           <tbody>
             <tr>
               <td>
-                <dl>
+                <dl className="smaller">
                   <dt>{this.t('crd:supplier:address')}</dt>
                   {address && <dd>
                     {address.get('streetAddress')}<br />
@@ -123,7 +124,7 @@ class Info extends translatable(Visualization) {
                 </dl>
               </td>
               <td>
-                <dl>
+                <dl className="smaller">
                   <dt>{this.t('crd:supplier:contact')}</dt>
                   {contact && <dd>
                     {contact.get('name')}<br />

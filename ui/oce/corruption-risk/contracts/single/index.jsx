@@ -69,11 +69,13 @@ class Info extends translatable(Visualization) {
           <div className="col-md-4 flags">
             <img src="assets/icons/flag.svg" alt="Flag icon" className="flag-icon" />
             &nbsp;
-            {flagCount}
-            &nbsp;
-            {this.t(flagCount === 1 ?
-              'crd:contracts:baseInfo:flag:sg' :
-              'crd:contracts:baseInfo:flag:pl')}
+            <span className="count">
+              {flagCount}
+              &nbsp;
+              {this.t(flagCount === 1 ?
+                'crd:contracts:baseInfo:flag:sg' :
+                'crd:contracts:baseInfo:flag:pl')}
+            </span>
           </div>
         </div>
         {title &&

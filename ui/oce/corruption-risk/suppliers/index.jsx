@@ -57,7 +57,6 @@ class SList extends PaginatedTable {
       <BootstrapTable
         data={jsData}
         striped
-        bordered={false}
         pagination
         remote
         fetchInfo={{
