@@ -83,6 +83,7 @@ export default class Table extends translatable(React.PureComponent) {
     return (
       <BootstrapTableWrapper
         data={data}
+        bordered
         page={this.state.page}
         pageSize={this.state.pageSize}
         onPageChange={newPage => page.assign(NAME, newPage)}
