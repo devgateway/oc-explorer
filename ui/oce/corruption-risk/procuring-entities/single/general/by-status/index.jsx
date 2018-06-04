@@ -1,4 +1,4 @@
-import { BarChart, Bar, XAxis, YAxis, LabelList, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, LabelList, ResponsiveContainer, Tooltip } from 'recharts';
 import translatable from '../../../../../translatable';
 import Popup from './popup';
 import { renderTopLeftLabel } from '../../../../archive/tools';
@@ -44,7 +44,7 @@ class ProcurementsByStatus extends translatable(React.PureComponent) {
     } else {
       data = data.slice(0, 5);
       if (data.length < length) {
-        for(let counter = data.length; counter < length; counter++) {
+        for (let counter = data.length; counter < length; counter++) {
           data.unshift({});
         }
       }
