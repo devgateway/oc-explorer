@@ -159,6 +159,9 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
         @Override
         public void component(final GenericBootstrapFormComponent<?, ?> object, final IVisit<Void> visit) {
             visit.dontGoDeeper();
+            if (object instanceof SummernoteBootstrapFormComponent) {
+                object.getField().processInput();
+            }
             if (!(object instanceof SummernoteBootstrapFormComponent) && object.getField().isValid()) {
                 return;
             }

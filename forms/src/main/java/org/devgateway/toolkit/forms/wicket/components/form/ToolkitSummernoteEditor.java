@@ -10,6 +10,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.editor.SummernoteS
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.editor.SummernoteStoredImageResourceReference;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeCssReference;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.references.SpinJsReference;
+import de.agilecoders.wicket.jquery.IKey;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.wicket.WicketRuntimeException;
@@ -49,23 +50,43 @@ import java.util.regex.Pattern;
  */
 public class ToolkitSummernoteEditor extends FormComponent<String> {
 
+    public static class ToolkitSummernoteConfig extends SummernoteConfig {
+
+        private static final Integer DEFAULT_MAX_IMAGE_FILE_SIZE = 524288;
+
+
+        private static final IKey<Integer> MAX_IMAGE_FILE_SIZE = newKey("maximumImageFileSize", null);
+
+        public ToolkitSummernoteConfig() {
+            super();
+            put(MAX_IMAGE_FILE_SIZE, DEFAULT_MAX_IMAGE_FILE_SIZE);
+            withMaxFileSize(DEFAULT_MAX_IMAGE_FILE_SIZE);
+        }
+
+        public ToolkitSummernoteConfig withMaximumImageFileSize(final Integer size) {
+            put(MAX_IMAGE_FILE_SIZE, size);
+            return this;
+        }
+    }
+
+
     private static final long serialVersionUID = 1L;
 
     private static final Pattern NEW_LINE_PATTERN = Pattern.compile("(\\r\\n|\\n|\\r)");
 
-    private final SummernoteConfig config;
+    private final ToolkitSummernoteConfig config;
 
     private final SummernoteEditorImageAjaxEventBehavior summernoteEditorImageAjaxEventBehavior;
 
     public ToolkitSummernoteEditor(final String id) {
-        this(id, null, new SummernoteConfig());
+        this(id, null, new ToolkitSummernoteConfig());
     }
 
     public ToolkitSummernoteEditor(final String id, final IModel<String> model) {
-        this(id, model, new SummernoteConfig());
+        this(id, model, new ToolkitSummernoteConfig());
     }
 
-    public ToolkitSummernoteEditor(final String id, final IModel<String> model, final SummernoteConfig config) {
+    public ToolkitSummernoteEditor(final String id, final IModel<String> model, final ToolkitSummernoteConfig config) {
         super(id, model);
 
         this.setOutputMarkupId(true);
@@ -97,6 +118,9 @@ public class ToolkitSummernoteEditor extends FormComponent<String> {
 
     @Override
     public void renderHead(final IHeaderResponse response) {
+        if (!isEnabled()) {
+            return;
+        }
         response.render(CssHeaderItem.forReference(SummernoteEditorCssReference.instance()));
         response.render(CssHeaderItem.forReference(FontAwesomeCssReference.instance()));
         response.render(CssHeaderItem.forReference(SummernoteEditorOverlayCssReference.instance()));
@@ -106,8 +130,9 @@ public class ToolkitSummernoteEditor extends FormComponent<String> {
         PackageTextTemplate summernoteTemplate = null;
         try {
             summernoteTemplate = new PackageTextTemplate(
-                    de.agilecoders.wicket.extensions.markup.html.bootstrap.editor.SummernoteEditor.class,
+                    ToolkitSummernoteEditor.class,
                     "js/summernote_init.js"
+
             );
             config.withImageUploadCallbackUrl(summernoteEditorImageAjaxEventBehavior.getCallbackUrl().toString());
             config.put(SummernoteConfig.Id, getMarkupId());
@@ -155,7 +180,6 @@ public class ToolkitSummernoteEditor extends FormComponent<String> {
      * @param fux    the exception
      */
     protected void onImageError(final AjaxRequestTarget target, final FileUploadException fux) {
-        // NOOP
     }
 
     private class SummernoteEditorImageAjaxEventBehavior extends AbstractDefaultAjaxBehavior {
@@ -167,7 +191,7 @@ public class ToolkitSummernoteEditor extends FormComponent<String> {
             try {
                 ServletWebRequest webRequest = (ServletWebRequest) getRequest();
                 MultipartServletWebRequest multiPartRequest = webRequest.newMultipartWebRequest(
-                        Bytes.megabytes(config.getMaxFileSize()), "ignored");
+                        Bytes.bytes(config.getMaxFileSize()), "ignored");
                 multiPartRequest.parseFileParts();
                 Map<String, FileItem> fileItemsMap = storeFile(target, multiPartRequest);
                 onImageUpload(target, fileItemsMap);
