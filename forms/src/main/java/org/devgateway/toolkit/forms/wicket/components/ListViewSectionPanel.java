@@ -12,6 +12,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.devgateway.toolkit.forms.wicket.components.form.BootstrapAddButton;
 import org.devgateway.toolkit.forms.wicket.components.form.BootstrapDeleteButton;
+import org.devgateway.toolkit.forms.wicket.components.form.SummernoteBootstrapFormComponent;
 import org.devgateway.toolkit.persistence.dao.AbstractAuditableEntity;
 
 import java.util.List;
@@ -48,6 +49,7 @@ public abstract class ListViewSectionPanel<T extends AbstractAuditableEntity, PA
 
             @Override
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+                SummernoteBootstrapFormComponent.addSummernoteProcessInputVisitor(form);
                 ListViewSectionPanel.this.getModelObject().remove(index);
                 listView.removeAll();
                 target.add(listWrapper);
@@ -69,7 +71,7 @@ public abstract class ListViewSectionPanel<T extends AbstractAuditableEntity, PA
 
             @Override
             protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
-                @SuppressWarnings("unchecked")
+                SummernoteBootstrapFormComponent.addSummernoteProcessInputVisitor(form);
                 T newChild = createNewChild((IModel<PARENT>) ListViewSectionPanel.this.getParent().getDefaultModel());
                 ListViewSectionPanel.this.getModel().getObject().add(newChild);
 

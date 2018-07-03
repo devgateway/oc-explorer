@@ -14,14 +14,17 @@
  */
 package org.devgateway.toolkit.forms.wicket.components.form;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.form.InputBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.editor.SummernoteConfig;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
@@ -33,14 +36,46 @@ import org.devgateway.toolkit.forms.wicket.components.ComponentUtil;
  * @author mpostelnicu
  */
 public class SummernoteBootstrapFormComponent extends GenericBootstrapFormComponent<String, FormComponent<String>> {
-    private static final int SUMMERNOTE_HEIGHT = 50;
+    private static final int SUMMERNOTE_HEIGHT = 100;
     public static final String SUMMERNOTE_EMPTY_HTML = "<p><br></p>";
+
+    public static class SummernoteUpdateValidationVisitor implements IVisitor<SummernoteBootstrapFormComponent, Void> {
+        @Override
+        public void component(final SummernoteBootstrapFormComponent components, final IVisit<Void> iVisit) {
+            components.getField().processInput();
+        }
+    }
+
+    /**
+     * This should be invoked in {@link org.devgateway.toolkit.forms.wicket.components.ListViewSectionPanel}
+     * during add/removal of items, to ensure correct processing of summernote forms
+     * @param form
+     */
+    public static void addSummernoteProcessInputVisitor(final Form<?> form) {
+        form.visitChildren(
+                SummernoteBootstrapFormComponent.class,
+                new SummernoteBootstrapFormComponent.SummernoteUpdateValidationVisitor()
+        );
+    }
+
+    /**
+     * Do not add {@link InputBehavior} for non editable textfields
+     * @return
+     */
+    @Override
+    protected InputBehavior getInputBehavior() {
+        if (isEnabledInHierarchy()) {
+            return super.getInputBehavior();
+        } else {
+            return null;
+        }
+    }
 
     private ToolkitSummernoteEditor summernoteEditor;
 
     private StringValidator validator = WebConstants.StringValidators.MAXIMUM_LENGTH_VALIDATOR_ONE_LINE_TEXTAREA;
 
-    private SummernoteConfig config;
+    private ToolkitSummernoteEditor.ToolkitSummernoteConfig config;
 
     public class SummernoteEmptyValidator implements IValidator<String> {
 
@@ -76,25 +111,32 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
         super(id);
     }
 
+//    @Override
 //    public String getUpdateEvent() {
-//        return "summernote.blur";
+//        return "summernote.change";
 //    }
 
     @Override
     protected FormComponent<String> inputField(final String id, final IModel<String> model) {
 
-        config = new SummernoteConfig();
+        config = new ToolkitSummernoteEditor.ToolkitSummernoteConfig();
 
         config.useStorageId(SummernoteJpaStorageService.STORAGE_ID);
 
         config.withHeight(SUMMERNOTE_HEIGHT);
         config.withAirMode(false);
+        //config.getButtons("Insert").remove("picture");
+        config.getButtons("Insert").remove("video");
+        config.getButtons("Style").remove("style");
+        config.getButtons("Style").remove("color");
+        config.getButtons("Layout").clear();
+        config.getButtons("Misc").clear();
 
         if (isEnabledInHierarchy()) {
             summernoteEditor = new ToolkitSummernoteEditor(id, initFieldModel(), config);
             return summernoteEditor;
         } else {
-            return  new TextArea<String>(id, initFieldModel());
+            return new NonEditableTextField<>(id, initFieldModel());
         }
 
     }

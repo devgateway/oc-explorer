@@ -22,13 +22,20 @@ import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.attributes.ThrottlingSettings;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckGroup;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.RadioGroup;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.time.Duration;
 import org.devgateway.toolkit.forms.models.SubComponentWrapModel;
@@ -36,10 +43,19 @@ import org.devgateway.toolkit.forms.models.ViewModeConverterModel;
 import org.devgateway.toolkit.forms.wicket.components.ComponentUtil;
 import org.devgateway.toolkit.forms.wicket.components.FieldPanel;
 import org.devgateway.toolkit.forms.wicket.components.TooltipLabel;
+import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
+import org.devgateway.toolkit.persistence.dao.GenericPersistable;
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.AuditQuery;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author mpostelnicu
- *
  */
 public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComponent<TYPE>> extends FieldPanel<TYPE> {
     private static final long serialVersionUID = -7051128382707812456L;
@@ -60,6 +76,16 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 
     protected IModel<String> labelModel;
 
+    protected Class<?> auditorClass;
+
+    protected WebMarkupContainer revisions;
+
+    protected IModel<EntityManager> entityManagerModel;
+
+    protected IModel<? extends GenericPersistable> revisionOwningEntityModel;
+
+    protected boolean revisionsEnabled = false;
+
     //prevents repainting of select boxes and other problems with triggering the update even while the component js
     //is not done updating.
     private static final int THROTTLE_UPDATE_DELAY_MS = 200;
@@ -75,6 +101,82 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
             return new SubComponentWrapModel<TYPE>(this);
         }
         return (IModel<TYPE>) getDefaultModel();
+    }
+
+    public void enableRevisionsView(final AbstractEditPage<?> page) {
+        enableRevisionsView(page.getNewInstanceClass(), page.getEntityManager(), page.getEditForm().getModel());
+    }
+
+    public void enableRevisionsView(final Class<?> auditorClass,
+                                    final EntityManager entityManager,
+                                    final IModel<? extends GenericPersistable> owningEntityModel) {
+        this.auditorClass = auditorClass;
+        this.entityManagerModel = new LoadableDetachableModel<EntityManager>() {
+            @Override
+            protected EntityManager load() {
+                return entityManager;
+            }
+        };
+        this.revisionOwningEntityModel = owningEntityModel;
+        revisionsEnabled = true;
+    }
+
+
+    protected IModel<? extends List<TYPE>> getRevisionsModel() {
+        return new AbstractReadOnlyModel<List<TYPE>>() {
+            @Override
+            public List<TYPE> getObject() {
+                if (!revisionsEnabled || revisionOwningEntityModel.getObject().isNew()) {
+                    return new ArrayList<>();
+                }
+                AuditReader reader = AuditReaderFactory.get(entityManagerModel.getObject());
+                AuditQuery query = reader.createQuery().forRevisionsOfEntity(auditorClass, false, false);
+                query.add(AuditEntity.property("id").eq(revisionOwningEntityModel.getObject().getId()));
+                return query.getResultList();
+            }
+        };
+    }
+
+    protected void createRevisions() {
+        revisions = new WebMarkupContainer("revisions");
+        revisions.setOutputMarkupId(true);
+        revisions.setVisibilityAllowed(revisionsEnabled);
+        add(revisions);
+        revisions.add(new ListView<TYPE>("rows", getRevisionsModel()) {
+            public void populateItem(final ListItem<TYPE> item) {
+                Object[] obj = (Object[]) item.getModelObject();
+                Label data = new Label("data", new PropertyModel<>(
+                        obj[0],
+                        GenericBootstrapFormComponent.this.getId()
+                ));
+                data.setEscapeModelStrings(false);
+                item.add(data);
+
+                Label lastUpdated = DateLabel.forShortStyle("lastUpdated", new PropertyModel<>(
+                        obj[0],
+                        "lastUpdated"
+                ));
+                item.add(lastUpdated);
+
+
+                Label lastModifiedBy = new Label("lastModifiedBy", new PropertyModel<>(
+                        obj[0],
+                        "lastModifiedBy"
+                ));
+                item.add(lastModifiedBy);
+
+                Label revisionType = new Label("revisionType", new PropertyModel<>(
+                        obj[2],
+                        "name"
+                ));
+                item.add(revisionType);
+
+                Label id = new Label("id", item.getIndex());
+                item.add(id);
+
+            }
+        });
+
     }
 
     /**
@@ -182,12 +284,19 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
         border.add(tooltipLabel);
     }
 
+    protected InputBehavior getInputBehavior() {
+        return new InputBehavior(InputBehavior.Size.Medium);
+    }
+
     protected void initializeField() {
         field = inputField("field", getModel());
         field.setVisibilityAllowed(!isViewMode());
         field.setOutputMarkupId(true);
-        sizeBehavior = new InputBehavior(InputBehavior.Size.Medium);
-        field.add(sizeBehavior);
+        sizeBehavior = getInputBehavior();
+        if (sizeBehavior != null) {
+            field.add(sizeBehavior);
+        }
+
         border.addOrReplace(field);
         field.setLabel(labelModel);
     }
@@ -227,7 +336,7 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.wicket.Component#onConfigure()
      */
     @Override
@@ -246,6 +355,8 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
         border.add(viewModeField);
 
         tooltipLabel.setConfigWithTrigger(configWithTrigger);
+
+        createRevisions();
     }
 
     /**

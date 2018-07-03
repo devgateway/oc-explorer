@@ -44,7 +44,6 @@ import org.wicketstuff.annotation.mount.MountPath;
 
 /**
  * @author mpostelnicu
- *
  */
 
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_USER)
@@ -83,15 +82,17 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
 
         TextFieldBootstrapFormComponent<String> textField = new TextFieldBootstrapFormComponent<>("textField");
         textField.required();
+        textField.enableRevisionsView(this);
         editForm.add(textField);
 
         TextAreaFieldBootstrapFormComponent<String> textArea = new TextAreaFieldBootstrapFormComponent<>("textArea");
         textArea.required();
+        textArea.enableRevisionsView(this);
         editForm.add(textArea);
 
         SummernoteBootstrapFormComponent summernote = new SummernoteBootstrapFormComponent("summernote");
         summernote.required();
-        //summernote.setEnabled(false);
+        summernote.enableRevisionsView(this);
         editForm.add(summernote);
 
         Select2ChoiceBootstrapFormComponent<Group> entitySelect = new Select2ChoiceBootstrapFormComponent<Group>(
@@ -100,18 +101,22 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
         editForm.add(entitySelect);
 
         Select2MultiChoiceBootstrapFormComponent<Role> entityMultiSelect =
-                new Select2MultiChoiceBootstrapFormComponent<Role>("entityMultiSelect",
-                        new GenericPersistableJpaRepositoryTextChoiceProvider<Role>(roleRepository));
-        entityMultiSelect.required();
+                new Select2MultiChoiceBootstrapFormComponent<Role>(
+                        "entityMultiSelect",
+                        new GenericPersistableJpaRepositoryTextChoiceProvider<Role>(roleRepository)
+                );
+        entityMultiSelect.enableRevisionsView(this);
         editForm.add(entityMultiSelect);
 
         CheckBoxBootstrapFormComponent checkbox = new CheckBoxBootstrapFormComponent("checkbox");
         checkbox.required();
+        checkbox.enableRevisionsView(this);
         editForm.add(checkbox);
 
         CheckBoxPickerBootstrapFormComponent checkboxPicker =
                 new CheckBoxPickerBootstrapFormComponent("checkboxPicker");
         checkboxPicker.required();
+        checkboxPicker.enableRevisionsView(this);
         editForm.add(checkboxPicker);
 
         CheckBoxToggleBootstrapFormComponent checkboxToggle =
