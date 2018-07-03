@@ -182,12 +182,19 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
         border.add(tooltipLabel);
     }
 
+    protected InputBehavior getInputBehavior() {
+        return new InputBehavior(InputBehavior.Size.Medium);
+    }
+
     protected void initializeField() {
         field = inputField("field", getModel());
         field.setVisibilityAllowed(!isViewMode());
         field.setOutputMarkupId(true);
-        sizeBehavior = new InputBehavior(InputBehavior.Size.Medium);
-        field.add(sizeBehavior);
+        sizeBehavior = getInputBehavior();
+        if (sizeBehavior != null) {
+            field.add(sizeBehavior);
+        }
+
         border.addOrReplace(field);
         field.setLabel(labelModel);
     }
