@@ -17,6 +17,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.form.InputBehavior;
 import de.agilecoders.wicket.core.markup.html.bootstrap.form.InputBehavior.Size;
 import de.agilecoders.wicket.core.util.Attributes;
 import org.apache.log4j.Logger;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.attributes.ThrottlingSettings;
@@ -25,6 +26,7 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckGroup;
@@ -79,6 +81,11 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
     protected Class<?> auditorClass;
 
     protected WebMarkupContainer revisions;
+    protected TransparentWebMarkupContainer revisionsCollapse;
+    protected TransparentWebMarkupContainer revisionsMasterGroup;
+    protected TransparentWebMarkupContainer revisionsChildGroup;
+    protected WebMarkupContainer revisionsPanelLink;
+    private Label revisionsPanelLabel;
 
     protected IModel<EntityManager> entityManagerModel;
 
@@ -132,6 +139,7 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
                 AuditReader reader = AuditReaderFactory.get(entityManagerModel.getObject());
                 AuditQuery query = reader.createQuery().forRevisionsOfEntity(auditorClass, false, false);
                 query.add(AuditEntity.property("id").eq(revisionOwningEntityModel.getObject().getId()));
+                query.add(AuditEntity.property(GenericBootstrapFormComponent.this.getId()).hasChanged());
                 return query.getResultList();
             }
         };
@@ -139,7 +147,25 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 
     protected void createRevisions() {
         revisions = new WebMarkupContainer("revisions");
+        revisionsCollapse = new TransparentWebMarkupContainer("revisionsCollapse");
+        revisionsCollapse.setOutputMarkupId(true);
+        revisions.add(revisionsCollapse);
         revisions.setOutputMarkupId(true);
+        revisionsPanelLink = new WebMarkupContainer("revisionsPanelLink");
+        revisionsPanelLabel = new Label("revisionsPanelLabel", new ResourceModel(getLabelKey()));
+        revisionsPanelLink.add(revisionsPanelLabel);
+        revisionsPanelLink.add(AttributeModifier.append("href", "#" + revisionsCollapse.getMarkupId()));
+        revisionsMasterGroup = new TransparentWebMarkupContainer("revisionsMasterGroup");
+        add(revisionsMasterGroup);
+        revisionsChildGroup = new TransparentWebMarkupContainer("revisionsChildGroup");
+        add(revisionsChildGroup);
+
+        if (!revisionsEnabled) {
+            revisionsMasterGroup.add(AttributeModifier.remove("class"));
+            revisionsChildGroup.add(AttributeModifier.remove("class"));
+        }
+
+        revisions.add(revisionsPanelLink);
         revisions.setVisibilityAllowed(revisionsEnabled);
         add(revisions);
         revisions.add(new ListView<TYPE>("rows", getRevisionsModel()) {
@@ -173,7 +199,6 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 
                 Label id = new Label("id", item.getIndex());
                 item.add(id);
-
             }
         });
 

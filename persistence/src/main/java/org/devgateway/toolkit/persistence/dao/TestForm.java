@@ -14,10 +14,12 @@
  */
 package org.devgateway.toolkit.persistence.dao;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import org.devgateway.toolkit.persistence.dao.categories.Group;
+import org.devgateway.toolkit.persistence.dao.categories.Role;
+import org.devgateway.toolkit.persistence.excel.annotation.ExcelExport;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -26,13 +28,10 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
-import org.devgateway.toolkit.persistence.dao.categories.Group;
-import org.devgateway.toolkit.persistence.dao.categories.Role;
-import org.devgateway.toolkit.persistence.excel.annotation.ExcelExport;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.envers.Audited;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author mpostelnicu

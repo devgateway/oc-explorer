@@ -81,13 +81,13 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
         super.onInitialize();
 
         TextFieldBootstrapFormComponent<String> textField = new TextFieldBootstrapFormComponent<>("textField");
-        textField.required();
-        textField.enableRevisionsView(this);
+        textField.required().enableRevisionsView(this);
         editForm.add(textField);
 
+
+
         TextAreaFieldBootstrapFormComponent<String> textArea = new TextAreaFieldBootstrapFormComponent<>("textArea");
-        textArea.required();
-        textArea.enableRevisionsView(this);
+        textArea.required().enableRevisionsView(this);
         editForm.add(textArea);
 
         SummernoteBootstrapFormComponent summernote = new SummernoteBootstrapFormComponent("summernote");
@@ -105,7 +105,6 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
                         "entityMultiSelect",
                         new GenericPersistableJpaRepositoryTextChoiceProvider<Role>(roleRepository)
                 );
-        entityMultiSelect.enableRevisionsView(this);
         editForm.add(entityMultiSelect);
 
         CheckBoxBootstrapFormComponent checkbox = new CheckBoxBootstrapFormComponent("checkbox");

@@ -15,11 +15,15 @@
 package org.devgateway.toolkit.forms.wicket.components.form;
 
 import de.agilecoders.wicket.core.util.Attributes;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.model.IModel;
+import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Select2BootstrapTheme;
 import org.wicketstuff.select2.Select2Choice;
+
+import javax.persistence.EntityManager;
 
 /**
  * @author mpostelnicu
@@ -82,7 +86,13 @@ public class Select2ChoiceBootstrapFormComponent<TYPE>
         field.getSettings().setDropdownAutoWidth(true);
         field.getSettings().setTheme(new Select2BootstrapTheme(false));
         super.onInitialize();
+    }
 
+    @Override
+    public void enableRevisionsView(final Class<?> auditorClass,
+                                    final EntityManager entityManager,
+                                    final IModel<? extends GenericPersistable> owningEntityModel) {
+        throw new NotImplementedException("");
     }
 
     @Override
