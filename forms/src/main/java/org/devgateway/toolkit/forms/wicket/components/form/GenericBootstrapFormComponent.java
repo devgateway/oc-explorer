@@ -23,7 +23,6 @@ import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.attributes.ThrottlingSettings;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
@@ -32,12 +31,9 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckGroup;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.RadioGroup;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.time.Duration;
 import org.devgateway.toolkit.forms.models.SubComponentWrapModel;
@@ -81,17 +77,13 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
     protected Class<?> auditorClass;
 
     protected WebMarkupContainer revisions;
-    protected TransparentWebMarkupContainer revisionsCollapse;
-    protected TransparentWebMarkupContainer revisionsMasterGroup;
-    protected TransparentWebMarkupContainer revisionsChildGroup;
-    protected WebMarkupContainer revisionsPanelLink;
-    private Label revisionsPanelLabel;
+    protected TransparentWebMarkupContainer masterGroup;
+    protected TransparentWebMarkupContainer childGroup;
+
 
     protected IModel<EntityManager> entityManagerModel;
 
     protected IModel<? extends GenericPersistable> revisionOwningEntityModel;
-
-    protected boolean revisionsEnabled = false;
 
     //prevents repainting of select boxes and other problems with triggering the update even while the component js
     //is not done updating.
@@ -110,8 +102,14 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
         return (IModel<TYPE>) getDefaultModel();
     }
 
-    public void enableRevisionsView(final AbstractEditPage<?> page) {
+    protected void enableRevisionsView(final AbstractEditPage<?> page) {
         enableRevisionsView(page.getNewInstanceClass(), page.getEntityManager(), page.getEditForm().getModel());
+    }
+
+    public void enableRevisionsView() {
+        AbstractEditPage<?> parentPage = (AbstractEditPage<?>) getPage();
+        enableRevisionsView(
+                parentPage.getNewInstanceClass(), parentPage.getEntityManager(), parentPage.getEditForm().getModel());
     }
 
     public void enableRevisionsView(final Class<?> auditorClass,
@@ -125,15 +123,19 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
             }
         };
         this.revisionOwningEntityModel = owningEntityModel;
-        revisionsEnabled = true;
+
+        masterGroup.add(AttributeModifier.replace("class", "panel panel-default"));
+        childGroup.add(AttributeModifier.replace("class", "panel-body"));
+
+        addOrReplace(new RevisionsPanel<TYPE>("revisions", getRevisionsModel()));
     }
 
 
-    protected IModel<? extends List<TYPE>> getRevisionsModel() {
+    protected IModel<List<TYPE>> getRevisionsModel() {
         return new AbstractReadOnlyModel<List<TYPE>>() {
             @Override
             public List<TYPE> getObject() {
-                if (!revisionsEnabled || revisionOwningEntityModel.getObject().isNew()) {
+                if (revisionOwningEntityModel.getObject().isNew()) {
                     return new ArrayList<>();
                 }
                 AuditReader reader = AuditReaderFactory.get(entityManagerModel.getObject());
@@ -143,65 +145,6 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
                 return query.getResultList();
             }
         };
-    }
-
-    protected void createRevisions() {
-        revisions = new WebMarkupContainer("revisions");
-        revisionsCollapse = new TransparentWebMarkupContainer("revisionsCollapse");
-        revisionsCollapse.setOutputMarkupId(true);
-        revisions.add(revisionsCollapse);
-        revisions.setOutputMarkupId(true);
-        revisionsPanelLink = new WebMarkupContainer("revisionsPanelLink");
-        revisionsPanelLabel = new Label("revisionsPanelLabel", new ResourceModel(getLabelKey()));
-        revisionsPanelLink.add(revisionsPanelLabel);
-        revisionsPanelLink.add(AttributeModifier.append("href", "#" + revisionsCollapse.getMarkupId()));
-        revisionsMasterGroup = new TransparentWebMarkupContainer("revisionsMasterGroup");
-        add(revisionsMasterGroup);
-        revisionsChildGroup = new TransparentWebMarkupContainer("revisionsChildGroup");
-        add(revisionsChildGroup);
-
-        if (!revisionsEnabled) {
-            revisionsMasterGroup.add(AttributeModifier.remove("class"));
-            revisionsChildGroup.add(AttributeModifier.remove("class"));
-        }
-
-        revisions.add(revisionsPanelLink);
-        revisions.setVisibilityAllowed(revisionsEnabled);
-        add(revisions);
-        revisions.add(new ListView<TYPE>("rows", getRevisionsModel()) {
-            public void populateItem(final ListItem<TYPE> item) {
-                Object[] obj = (Object[]) item.getModelObject();
-                Label data = new Label("data", new PropertyModel<>(
-                        obj[0],
-                        GenericBootstrapFormComponent.this.getId()
-                ));
-                data.setEscapeModelStrings(false);
-                item.add(data);
-
-                Label lastUpdated = DateLabel.forShortStyle("lastUpdated", new PropertyModel<>(
-                        obj[0],
-                        "lastUpdated"
-                ));
-                item.add(lastUpdated);
-
-
-                Label lastModifiedBy = new Label("lastModifiedBy", new PropertyModel<>(
-                        obj[0],
-                        "lastModifiedBy"
-                ));
-                item.add(lastModifiedBy);
-
-                Label revisionType = new Label("revisionType", new PropertyModel<>(
-                        obj[2],
-                        "name"
-                ));
-                item.add(revisionType);
-
-                Label id = new Label("id", item.getIndex());
-                item.add(id);
-            }
-        });
-
     }
 
     /**
@@ -381,7 +324,14 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 
         tooltipLabel.setConfigWithTrigger(configWithTrigger);
 
-        createRevisions();
+        masterGroup = new TransparentWebMarkupContainer("masterGroup");
+        add(masterGroup);
+        childGroup = new TransparentWebMarkupContainer("childGroup");
+        add(childGroup);
+
+        revisions = new WebMarkupContainer("revisions"); // this is just a placeholder
+        add(revisions);
+
     }
 
     /**
