@@ -10,12 +10,12 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.model.ResourceModel;
 
 import java.util.List;
 
 public class RevisionsPanel<TYPE> extends GenericPanel<List<TYPE>> {
 
+    private final String auditProperty;
     protected TransparentWebMarkupContainer revisionsCollapse;
     protected TransparentWebMarkupContainer revisionsMasterGroup;
     protected TransparentWebMarkupContainer revisionsChildGroup;
@@ -23,12 +23,13 @@ public class RevisionsPanel<TYPE> extends GenericPanel<List<TYPE>> {
     protected Label revisionsPanelLabel;
 
 
-    public RevisionsPanel(final String id, final IModel<List<TYPE>> model) {
+    public RevisionsPanel(final String id, final IModel<List<TYPE>> model, final String auditProperty) {
         super(id, model);
+        this.auditProperty = auditProperty;
     }
 
-    private String getLabelKeyFromGenericComponent() {
-        return ((GenericBootstrapFormComponent) this.getParent()).getLabelKey();
+    private IModel<String> getLabelKeyFromGenericComponent() {
+        return ((GenericBootstrapFormComponent) this.getParent()).getLabelModel();
     }
 
     @Override
@@ -39,7 +40,7 @@ public class RevisionsPanel<TYPE> extends GenericPanel<List<TYPE>> {
         add(revisionsCollapse);
         setOutputMarkupId(true);
         revisionsPanelLink = new WebMarkupContainer("revisionsPanelLink");
-        revisionsPanelLabel = new Label("revisionsPanelLabel", new ResourceModel(getLabelKeyFromGenericComponent()));
+        revisionsPanelLabel = new Label("revisionsPanelLabel", getLabelKeyFromGenericComponent());
         revisionsPanelLink.add(revisionsPanelLabel);
         revisionsPanelLink.add(AttributeModifier.append("href", "#" + revisionsCollapse.getMarkupId()));
 
@@ -49,7 +50,7 @@ public class RevisionsPanel<TYPE> extends GenericPanel<List<TYPE>> {
                 Object[] obj = (Object[]) item.getModelObject();
                 Label data = new Label("data", new PropertyModel<>(
                         obj[0],
-                        RevisionsPanel.this.getParent().getId()
+                        auditProperty
                 ));
                 data.setEscapeModelStrings(false);
                 item.add(data);

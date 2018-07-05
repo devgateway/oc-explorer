@@ -82,6 +82,7 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 
 
     protected IModel<EntityManager> entityManagerModel;
+    protected String auditProperty;
 
     protected IModel<? extends GenericPersistable> revisionOwningEntityModel;
 
@@ -127,7 +128,8 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
         masterGroup.add(AttributeModifier.replace("class", "panel panel-default"));
         childGroup.add(AttributeModifier.replace("class", "panel-body"));
 
-        addOrReplace(new RevisionsPanel<TYPE>("revisions", getRevisionsModel()));
+
+        addOrReplace(new RevisionsPanel<TYPE>("revisions", getRevisionsModel(), auditProperty));
     }
 
 
@@ -141,7 +143,7 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
                 AuditReader reader = AuditReaderFactory.get(entityManagerModel.getObject());
                 AuditQuery query = reader.createQuery().forRevisionsOfEntity(auditorClass, false, false);
                 query.add(AuditEntity.property("id").eq(revisionOwningEntityModel.getObject().getId()));
-                query.add(AuditEntity.property(GenericBootstrapFormComponent.this.getId()).hasChanged());
+                query.add(AuditEntity.property(auditProperty).hasChanged());
                 return query.getResultList();
             }
         };
@@ -228,8 +230,13 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
         this(id, null);
     }
 
+    @Deprecated
     public String getLabelKey() {
         return this.getId() + ".label";
+    }
+
+    public IModel<String> getLabelModel() {
+        return labelModel;
     }
 
     public GenericBootstrapFormComponent(final String id, final IModel<TYPE> model) {
@@ -250,6 +257,7 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 
         tooltipLabel = new TooltipLabel("tooltipLabel", id);
         border.add(tooltipLabel);
+        auditProperty = this.getId();
     }
 
     protected InputBehavior getInputBehavior() {
@@ -347,5 +355,13 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 
     public void setConfigWithTrigger(final TooltipConfig.OpenTrigger configWithTrigger) {
         this.configWithTrigger = configWithTrigger;
+    }
+
+    public String getAuditProperty() {
+        return auditProperty;
+    }
+
+    public void setAuditProperty(final String auditProperty) {
+        this.auditProperty = auditProperty;
     }
 }

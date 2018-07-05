@@ -82,18 +82,19 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
 
         TextFieldBootstrapFormComponent<String> textField = new TextFieldBootstrapFormComponent<>("textField");
         editForm.add(textField);
-        textField.required().enableRevisionsView();
+        textField.required();
+        textField.enableRevisionsView();
+
 
 
 
         TextAreaFieldBootstrapFormComponent<String> textArea = new TextAreaFieldBootstrapFormComponent<>("textArea");
         editForm.add(textArea);
-        textArea.required().enableRevisionsView();
+        textArea.required();
 
         SummernoteBootstrapFormComponent summernote = new SummernoteBootstrapFormComponent("summernote");
         editForm.add(summernote);
-        summernote.required().enableRevisionsView();
-
+        summernote.required();
         Select2ChoiceBootstrapFormComponent<Group> entitySelect = new Select2ChoiceBootstrapFormComponent<Group>(
                 "entitySelect", new GenericPersistableJpaRepositoryTextChoiceProvider<Group>(groupRepository));
         entitySelect.required();
@@ -109,13 +110,13 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
         CheckBoxBootstrapFormComponent checkbox = new CheckBoxBootstrapFormComponent("checkbox");
         checkbox.required();
         editForm.add(checkbox);
-        checkbox.enableRevisionsView();
+        //checkbox.enableRevisionsView();
 
         CheckBoxPickerBootstrapFormComponent checkboxPicker =
                 new CheckBoxPickerBootstrapFormComponent("checkboxPicker");
         checkboxPicker.required();
         editForm.add(checkboxPicker);
-        checkboxPicker.enableRevisionsView();
+        //checkboxPicker.enableRevisionsView();
 
         CheckBoxToggleBootstrapFormComponent checkboxToggle =
                 new CheckBoxToggleBootstrapFormComponent("checkboxToggle");
