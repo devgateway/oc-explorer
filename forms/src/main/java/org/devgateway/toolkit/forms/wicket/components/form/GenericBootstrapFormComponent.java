@@ -124,14 +124,18 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
             }
         };
         this.revisionOwningEntityModel = owningEntityModel;
-
-        masterGroup.add(AttributeModifier.replace("class", "panel panel-default"));
-        childGroup.add(AttributeModifier.replace("class", "panel-body"));
-
-
         addOrReplace(new RevisionsPanel<TYPE>("revisions", getRevisionsModel(), auditProperty));
     }
 
+    /**
+     * Encloses the component and revisions section with a boostrap panel
+     * @return
+     */
+    public GenericBootstrapFormComponent<TYPE, FIELD> encloseWithBorder() {
+        masterGroup.add(AttributeModifier.append("class", "panel panel-default"));
+        childGroup.add(AttributeModifier.append("class", "panel-body"));
+        return this;
+    }
 
     protected IModel<List<TYPE>> getRevisionsModel() {
         return new AbstractReadOnlyModel<List<TYPE>>() {
