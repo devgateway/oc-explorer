@@ -12,6 +12,11 @@ import org.apache.wicket.model.PropertyModel;
 
 import java.util.List;
 
+/**
+ * Panel that shows envers revisions and can be attached to {@link GenericBootstrapFormComponent}
+ *
+ * @param <TYPE> the component type
+ */
 public class RevisionsPanel<TYPE> extends GenericPanel<List<TYPE>> {
 
     private final String auditProperty;
@@ -22,6 +27,14 @@ public class RevisionsPanel<TYPE> extends GenericPanel<List<TYPE>> {
     protected Label revisionsPanelLabel;
 
 
+    /**
+     * @param id the revision panel id
+     * @param model list of revisions coming from the component, this is usually fed with
+     *              {@link GenericBootstrapFormComponent#getRevisionsModel()}
+     * @param auditProperty the audit property. This is required because sometimes the component is bound with a
+     *                      model that has a different source than the component name as property, so we cannot
+     *                      assume the id is the property.
+     */
     public RevisionsPanel(final String id, final IModel<List<TYPE>> model, final String auditProperty) {
         super(id, model);
         this.auditProperty = auditProperty;
