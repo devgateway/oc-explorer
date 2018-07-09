@@ -94,7 +94,7 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
 
         SummernoteBootstrapFormComponent summernote = new SummernoteBootstrapFormComponent("summernote");
         editForm.add(summernote);
-        summernote.required();
+        summernote.required().enableRevisionsView();
         Select2ChoiceBootstrapFormComponent<Group> entitySelect = new Select2ChoiceBootstrapFormComponent<Group>(
                 "entitySelect", new GenericPersistableJpaRepositoryTextChoiceProvider<Group>(groupRepository));
         entitySelect.required();

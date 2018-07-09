@@ -1,7 +1,6 @@
 package org.devgateway.toolkit.forms.wicket.components.form;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -55,9 +54,9 @@ public class RevisionsPanel<TYPE> extends GenericPanel<List<TYPE>> {
                 data.setEscapeModelStrings(false);
                 item.add(data);
 
-                Label lastUpdated = DateLabel.forShortStyle("lastUpdated", new PropertyModel<>(
+                Label lastUpdated = new Label("lastUpdated", new PropertyModel<>(
                         obj[0],
-                        "lastUpdated"
+                        "lastUpdated.toDate"
                 ));
                 item.add(lastUpdated);
 
