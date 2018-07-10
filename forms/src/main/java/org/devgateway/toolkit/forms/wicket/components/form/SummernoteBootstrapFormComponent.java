@@ -49,6 +49,7 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
     /**
      * This should be invoked in {@link org.devgateway.toolkit.forms.wicket.components.ListViewSectionPanel}
      * during add/removal of items, to ensure correct processing of summernote forms
+     *
      * @param form
      */
     public static void addSummernoteProcessInputVisitor(final Form<?> form) {
@@ -60,6 +61,7 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
 
     /**
      * Do not add {@link InputBehavior} for non editable textfields
+     *
      * @return
      */
     @Override
@@ -132,13 +134,8 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
         config.getButtons("Layout").clear();
         config.getButtons("Misc").clear();
 
-        if (isEnabledInHierarchy()) {
-            summernoteEditor = new ToolkitSummernoteEditor(id, initFieldModel(), config);
-            return summernoteEditor;
-        } else {
-            return new NonEditableTextField<>(id, initFieldModel());
-        }
-
+        summernoteEditor = new ToolkitSummernoteEditor(id, initFieldModel(), config);
+        return summernoteEditor;
     }
 
     @Override
@@ -175,10 +172,8 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
     @Override
     public void onEvent(final IEvent<?> event) {
         ComponentUtil.enableDisableEvent(this, event);
-        if (!isEnabledInHierarchy()) {
-            initializeField();
-        }
     }
+
 
     @Override
     public void renderHead(final IHeaderResponse response) {

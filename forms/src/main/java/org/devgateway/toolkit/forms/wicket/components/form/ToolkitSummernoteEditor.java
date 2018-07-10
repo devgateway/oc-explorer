@@ -25,6 +25,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.parser.XmlTag;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.http.servlet.MultipartServletWebRequest;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
@@ -100,10 +101,28 @@ public class ToolkitSummernoteEditor extends FormComponent<String> {
 
     @Override
     protected void onComponentTag(final ComponentTag tag) {
-        super.onComponentTag(tag);
+        if (!isEnabledInHierarchy()) {
+            tag.setName("div");
+            if (tag.isOpenClose()) {
+                // always transform the tag to <div></div> so even labels defined as <span/> render
+                tag.setType(XmlTag.TagType.OPEN);
+            }
+            return; //stop processing here, we do not call super and we do not want any more modifiers on our tag
+        }
 
         if (config.isAirMode()) {
             tag.setName("div");
+        }
+        super.onComponentTag(tag);
+    }
+
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+
+        //we do not need ANY behaviors if this component is disabled, we just render text, nothing else is relevant
+        if (!isEnabledInHierarchy()) {
+            getBehaviors().forEach(this::remove);
         }
     }
 
@@ -111,14 +130,20 @@ public class ToolkitSummernoteEditor extends FormComponent<String> {
     public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag) {
         super.onComponentTagBody(markupStream, openTag);
 
-        if (config.isAirMode()) {
+        //just render the text when we are disabled, we will not show the rich text UI
+        if (!isEnabledInHierarchy()) {
+            setEscapeModelStrings(false);
+            replaceComponentTagBody(markupStream, openTag, getDefaultModelObjectAsString());
+        } else if (config.isAirMode()) {
             replaceComponentTagBody(markupStream, openTag, getModelObject());
         }
     }
 
     @Override
     public void renderHead(final IHeaderResponse response) {
-        if (!isEnabled()) {
+
+        //skip adding any scripts if we are disabled, we will just print the text in the tag
+        if (!isEnabledInHierarchy()) {
             return;
         }
         response.render(CssHeaderItem.forReference(SummernoteEditorCssReference.instance()));

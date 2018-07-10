@@ -11,8 +11,11 @@ import org.apache.wicket.model.IModel;
  * It can be useful to showing disabled text fields
  * @author mihai
  *
+ * We are not longer using this, {@link ToolkitSummernoteEditor} is now smart enough to deal with read only state
+ *
  * @param <T>
  */
+@Deprecated
 public class NonEditableTextField<T> extends AbstractTextComponent<T> {
 
     public NonEditableTextField(final String id) {
