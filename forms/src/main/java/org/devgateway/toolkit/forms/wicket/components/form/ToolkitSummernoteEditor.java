@@ -1,6 +1,7 @@
 package org.devgateway.toolkit.forms.wicket.components.form;
 
 import com.google.common.io.BaseEncoding;
+import de.agilecoders.wicket.core.markup.html.bootstrap.form.InputBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.editor.SummernoteConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.editor.SummernoteEditorCssReference;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.editor.SummernoteEditorFormDataReference;
@@ -17,6 +18,7 @@ import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
@@ -35,6 +37,7 @@ import org.apache.wicket.util.lang.Args;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.template.PackageTextTemplate;
+import org.springframework.util.ObjectUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -50,6 +53,9 @@ import java.util.regex.Pattern;
  * @author Tobias Soloschenko
  */
 public class ToolkitSummernoteEditor extends FormComponent<String> {
+
+
+    private List<? extends Behavior> shelvedBehaviors;
 
     public static class ToolkitSummernoteConfig extends SummernoteConfig {
 
@@ -120,9 +126,15 @@ public class ToolkitSummernoteEditor extends FormComponent<String> {
     protected void onConfigure() {
         super.onConfigure();
 
-        //we do not need ANY behaviors if this component is disabled, we just render text, nothing else is relevant
+        //we do not need input behavior no this component while in read only mode (editing disabled)
         if (!isEnabledInHierarchy()) {
-            getBehaviors().forEach(this::remove);
+            shelvedBehaviors = getBehaviors(InputBehavior.class);
+            shelvedBehaviors.forEach(this::remove);
+        } else {
+            if (!ObjectUtils.isEmpty(shelvedBehaviors)) {
+                add(shelvedBehaviors.toArray(new Behavior[0]));
+                shelvedBehaviors.clear();
+            }
         }
     }
 
