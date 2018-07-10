@@ -46,6 +46,11 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
         }
     }
 
+    @Override
+    protected boolean printUnescaped() {
+        return true;
+    }
+
     /**
      * This should be invoked in {@link org.devgateway.toolkit.forms.wicket.components.ListViewSectionPanel}
      * during add/removal of items, to ensure correct processing of summernote forms
@@ -105,6 +110,7 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
     public SummernoteBootstrapFormComponent(final String id, final IModel<String> labelModel) {
         super(id, labelModel, null);
     }
+
 
     /**
      * @param id

@@ -44,6 +44,12 @@ public class RevisionsPanel<TYPE> extends GenericPanel<List<TYPE>> {
         return ((GenericBootstrapFormComponent) this.getParent()).getLabelModel();
     }
 
+    private boolean printUnescaped() {
+        return ((GenericBootstrapFormComponent) this.getParent()).printUnescaped();
+    }
+
+
+
     @Override
     protected void onInitialize() {
         super.onInitialize();
@@ -64,7 +70,7 @@ public class RevisionsPanel<TYPE> extends GenericPanel<List<TYPE>> {
                         obj[0],
                         auditProperty
                 ));
-                data.setEscapeModelStrings(false);
+                data.setEscapeModelStrings(!printUnescaped());
                 item.add(data);
 
                 Label lastUpdated = new Label("lastUpdated", new PropertyModel<>(

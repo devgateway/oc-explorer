@@ -124,11 +124,24 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
             }
         };
         this.revisionOwningEntityModel = owningEntityModel;
-        addOrReplace(new RevisionsPanel<TYPE>("revisions", getRevisionsModel(), auditProperty));
+        addOrReplace(getRevisionsPanel());
+    }
+
+    /**
+     * True if the control can print contents unescaped when in readonly mode
+     * @return
+     */
+    protected boolean printUnescaped() {
+        return false;
+    }
+
+    protected RevisionsPanel<TYPE> getRevisionsPanel() {
+        return new RevisionsPanel<TYPE>("revisions", getRevisionsModel(), auditProperty);
     }
 
     /**
      * Encloses the component and revisions section with a boostrap panel
+     *
      * @return
      */
     public GenericBootstrapFormComponent<TYPE, FIELD> encloseWithBorder() {
