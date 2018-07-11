@@ -108,7 +108,7 @@ public class ToolkitSummernoteEditor extends FormComponent<String> {
     @Override
     protected void onComponentTag(final ComponentTag tag) {
         if (!isEnabledInHierarchy()) {
-            tag.setName("div");
+            tag.put("style", "display:none;");
             if (tag.isOpenClose()) {
                 // always transform the tag to <div></div> so even labels defined as <span/> render
                 tag.setType(XmlTag.TagType.OPEN);
