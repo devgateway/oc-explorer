@@ -20,6 +20,7 @@ import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
@@ -38,6 +39,7 @@ import org.devgateway.toolkit.forms.wicket.components.ComponentUtil;
 public class SummernoteBootstrapFormComponent extends GenericBootstrapFormComponent<String, FormComponent<String>> {
     private static final int SUMMERNOTE_HEIGHT = 100;
     public static final String SUMMERNOTE_EMPTY_HTML = "<p><br></p>";
+    private Label readOnlyField;
 
     public static class SummernoteUpdateValidationVisitor implements IVisitor<SummernoteBootstrapFormComponent, Void> {
         @Override
@@ -144,6 +146,15 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
         return summernoteEditor;
     }
 
+    protected void addReadOnlyField() {
+        readOnlyField = new Label("readOnlyField", getModel());
+        readOnlyField.setEscapeModelStrings(false);
+        readOnlyField.setVisibilityAllowed(false);
+        readOnlyField.setOutputMarkupId(true);
+        readOnlyField.setOutputMarkupPlaceholderTag(true);
+        border.add(readOnlyField);
+    }
+
     @Override
     protected void onInitialize() {
         if (!isEnabledInHierarchy()) {
@@ -151,6 +162,7 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
         }
         super.onInitialize();
         getField().add(validator);
+        addReadOnlyField();
     }
 
     @Override
@@ -189,5 +201,13 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
         String summernoteChildNodesFix = "if(!!document.createRange) document.getSelection().removeAllRanges();";
         response.render(JavaScriptContentHeaderItem.forScript(summernoteChildNodesFix, "summernote-childNodes-fix"));
         response.render(OnDomReadyHeaderItem.forScript(summernoteChildNodesFix));
+    }
+
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        if (!isEnabledInHierarchy()) {
+            readOnlyField.setVisibilityAllowed(true);
+        }
     }
 }
