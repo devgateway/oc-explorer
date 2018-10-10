@@ -20,6 +20,7 @@ import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
@@ -38,6 +39,7 @@ import org.devgateway.toolkit.forms.wicket.components.ComponentUtil;
 public class SummernoteBootstrapFormComponent extends GenericBootstrapFormComponent<String, FormComponent<String>> {
     private static final int SUMMERNOTE_HEIGHT = 100;
     public static final String SUMMERNOTE_EMPTY_HTML = "<p><br></p>";
+    private Label readOnlyField;
 
     public static class SummernoteUpdateValidationVisitor implements IVisitor<SummernoteBootstrapFormComponent, Void> {
         @Override
@@ -46,9 +48,15 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
         }
     }
 
+    @Override
+    protected boolean printUnescaped() {
+        return true;
+    }
+
     /**
      * This should be invoked in {@link org.devgateway.toolkit.forms.wicket.components.ListViewSectionPanel}
      * during add/removal of items, to ensure correct processing of summernote forms
+     *
      * @param form
      */
     public static void addSummernoteProcessInputVisitor(final Form<?> form) {
@@ -60,6 +68,7 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
 
     /**
      * Do not add {@link InputBehavior} for non editable textfields
+     *
      * @return
      */
     @Override
@@ -104,6 +113,7 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
         super(id, labelModel, null);
     }
 
+
     /**
      * @param id
      */
@@ -132,13 +142,17 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
         config.getButtons("Layout").clear();
         config.getButtons("Misc").clear();
 
-        if (isEnabledInHierarchy()) {
-            summernoteEditor = new ToolkitSummernoteEditor(id, initFieldModel(), config);
-            return summernoteEditor;
-        } else {
-            return new NonEditableTextField<>(id, initFieldModel());
-        }
+        summernoteEditor = new ToolkitSummernoteEditor(id, initFieldModel(), config);
+        return summernoteEditor;
+    }
 
+    protected void addReadOnlyField() {
+        readOnlyField = new Label("readOnlyField", getModel());
+        readOnlyField.setEscapeModelStrings(false);
+        readOnlyField.setVisibilityAllowed(false);
+        readOnlyField.setOutputMarkupId(true);
+        readOnlyField.setOutputMarkupPlaceholderTag(true);
+        border.add(readOnlyField);
     }
 
     @Override
@@ -148,6 +162,7 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
         }
         super.onInitialize();
         getField().add(validator);
+        addReadOnlyField();
     }
 
     @Override
@@ -175,10 +190,8 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
     @Override
     public void onEvent(final IEvent<?> event) {
         ComponentUtil.enableDisableEvent(this, event);
-        if (!isEnabledInHierarchy()) {
-            initializeField();
-        }
     }
+
 
     @Override
     public void renderHead(final IHeaderResponse response) {
@@ -188,5 +201,13 @@ public class SummernoteBootstrapFormComponent extends GenericBootstrapFormCompon
         String summernoteChildNodesFix = "if(!!document.createRange) document.getSelection().removeAllRanges();";
         response.render(JavaScriptContentHeaderItem.forScript(summernoteChildNodesFix, "summernote-childNodes-fix"));
         response.render(OnDomReadyHeaderItem.forScript(summernoteChildNodesFix));
+    }
+
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        if (!isEnabledInHierarchy()) {
+            readOnlyField.setVisibilityAllowed(true);
+        }
     }
 }

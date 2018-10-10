@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
+<body>
+<wicket:panel>
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a wicket:id="revisionsPanelLink" data-toggle="collapse">
+                        <span wicket:id="revisionsPanelLabel"></span>&nbsp;Revisions
+                    </a>
+                </h4>
+            </div>
+            <div wicket:id="revisionsCollapse" class="panel-collapse collapse">
+
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Last Updated</th>
+                        <th>Updated By</th>
+                        <th>Revision Data</th>
+                        <th>Revision Type</th>
+                    </tr>
+                    </thead>
+                    <tbody wicket:id="rows">
+                    <tr>
+                        <td wicket:id="id"></td>
+                        <td wicket:id="lastUpdated"></td>
+                        <td wicket:id="lastModifiedBy"></td>
+                        <td>
+                            <div class="revision-data-div" wicket:id="data"/>
+                        </td>
+                        <td wicket:id="revisionType"></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</wicket:panel>
+</body>
+</html>

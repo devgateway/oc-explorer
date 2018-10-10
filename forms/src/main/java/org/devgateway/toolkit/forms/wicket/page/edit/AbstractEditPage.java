@@ -126,6 +126,14 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
     @SpringBean(required = false)
     protected MarkupCacheService markupCacheService;
 
+    public EditForm getEditForm() {
+        return editForm;
+    }
+
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
+
     public void flushReportingCaches() {
         if (reportsCacheService != null && markupCacheService != null) {
             reportsCacheService.flushCache();
@@ -133,6 +141,10 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
             markupCacheService.clearReportsCache();
             markupCacheService.clearReportsApiCache();
         }
+    }
+
+    public Class<?> getNewInstanceClass() {
+        return newInstance().getClass();
     }
 
     public GenericBootstrapValidationVisitor getBootstrapValidationVisitor(final AjaxRequestTarget target) {

@@ -55,3 +55,9 @@ html {
 .file-preview.loading {
     background: transparent url('./assets/img/ajax-loader.gif') no-repeat scroll center center content-box !important;
 }
+
+.revision-data-div {
+    width: 50em;
+    overflow-x: auto;
+    white-space: nowrap;
+}
