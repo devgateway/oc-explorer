@@ -50,10 +50,6 @@
             <artifactId>spring-boot-starter-data-rest</artifactId>
         </dependency>
 
-        <!-- Uncomment this if you are planning to use Spring Boot DevTools (if
-            you don't use JRebel) <dependency> <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId> </dependency> -->
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -158,17 +154,18 @@
             <version>${derby.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <version>1.1.0.Final</version>
-        </dependency>
+        <!-- This is used just in case we need bean validation -->
+        <!--<dependency>-->
+        <!--<groupId>javax.validation</groupId>-->
+        <!--<artifactId>validation-api</artifactId>-->
+        <!--<version>2.0.1.Final</version>-->
+        <!--</dependency>-->
 
-        <dependency>
-            <groupId>javax.el</groupId>
-            <artifactId>javax.el-api</artifactId>
-            <version>2.2.5</version>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>javax.el</groupId>-->
+        <!--<artifactId>javax.el-api</artifactId>-->
+        <!--<version>3.0.1-b06</version>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -178,7 +175,7 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version>${liquibase.version}</version><!--$NO-MVN-MAN-VER$ -->
+            <version>${liquibase.version}</version>
         </dependency>
 
         <dependency>
@@ -266,6 +263,7 @@
                     <compilerArgument>-proc:none</compilerArgument>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.bsc.maven</groupId>
                 <artifactId>maven-processor-plugin</artifactId>

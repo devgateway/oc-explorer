@@ -35,6 +35,8 @@
         <zt.zip.version>1.12</zt.zip.version>
         <wicket.webjars.version>0.5.6</wicket.webjars.version>
         <closure.compiler.version>v20180402</closure.compiler.version>
+        <cglib.version>3.1</cglib.version>
+        <yuicompressor.version>2.4.8</yuicompressor.version>
     </properties>
 
     <dependencies>
@@ -77,15 +79,6 @@
             <artifactId>web</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-
-        <!--
-        Uncomment this if you are planning to use Spring Boot DevTools (if you don't use JRebel)
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-        </dependency>
-         -->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -144,7 +137,7 @@
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
-            <version>3.1</version>
+            <version>${cglib.version}</version>
         </dependency>
 
         <dependency>
@@ -152,7 +145,6 @@
             <artifactId>closure-compiler</artifactId>
             <version>${closure.compiler.version}</version>
         </dependency>
-
 
         <dependency>
             <groupId>de.agilecoders.wicket.webjars</groupId>
@@ -224,7 +216,7 @@
         <dependency>
             <groupId>com.yahoo.platform.yui</groupId>
             <artifactId>yuicompressor</artifactId>
-            <version>2.4.8</version>
+            <version>${yuicompressor.version}</version>
         </dependency>
 
         <dependency>
