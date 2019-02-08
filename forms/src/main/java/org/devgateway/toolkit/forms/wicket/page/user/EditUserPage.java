@@ -120,7 +120,7 @@ public class EditUserPage extends AbstractEditPage<Person> {
         private Long userId;
 
         public UniqueUsernameValidator() {
-            this.userId = new Long(-1);
+            this.userId = Long.valueOf(-1);
         }
 
         public UniqueUsernameValidator(final Long userId) {
@@ -147,7 +147,7 @@ public class EditUserPage extends AbstractEditPage<Person> {
         private Long userId;
 
         public UniqueEmailAddressValidator() {
-            this.userId = new Long(-1);
+            this.userId = Long.valueOf(-1);
         }
 
         public UniqueEmailAddressValidator(final Long userId) {
@@ -165,7 +165,7 @@ public class EditUserPage extends AbstractEditPage<Person> {
         }
     }
 
-    public class PasswordPatternValidator extends PatternValidator {
+    public static class PasswordPatternValidator extends PatternValidator {
         private static final long serialVersionUID = 7886016396095273777L;
 
         // 1 digit, 1 lower, 1 upper, 1 symbol "@#$%", from 6 to 20
@@ -180,7 +180,7 @@ public class EditUserPage extends AbstractEditPage<Person> {
 
     }
 
-    public class UsernamePatternValidator extends PatternValidator {
+    public static class UsernamePatternValidator extends PatternValidator {
         private static final long serialVersionUID = -5456988677371244333L;
 
         private static final String USERNAME_PATTERN = "[a-zA-Z0-9]*";

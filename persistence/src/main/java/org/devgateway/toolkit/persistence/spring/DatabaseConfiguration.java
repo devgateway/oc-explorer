@@ -43,6 +43,7 @@ import java.util.Properties;
 @PropertySource("classpath:/org/devgateway/toolkit/persistence/application.properties")
 @Profile("!integration")
 public class DatabaseConfiguration {
+    private static final Logger logger = Logger.getLogger(DatabaseConfiguration.class);
 
     @Value("${spring.datasource.username}")
     private String springDatasourceUsername;
@@ -70,8 +71,6 @@ public class DatabaseConfiguration {
 
     @Value("${dg-toolkit.datasource.jndi-name}")
     private String datasourceJndiName;
-
-    protected static Logger logger = Logger.getLogger(DatabaseConfiguration.class);
 
     /**
      * This bean creates the JNDI tree and registers the

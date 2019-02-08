@@ -29,15 +29,15 @@ import java.util.List;
 /**
  * @author idobre
  * @since 3/3/16
- *
- *        Class the removes the cache created in
- *        org.devgateway.ccrs.web.wicket.page.reports.AbstractReportPage#ResourceStreamPanel#getCacheKey
- *        function
+ * <p>
+ * Class the removes the cache created in
+ * org.devgateway.ccrs.web.wicket.page.reports.AbstractReportPage#ResourceStreamPanel#getCacheKey
+ * function
  */
 @Component
 @Profile("reports")
 public class MarkupCacheService {
-    protected static Logger logger = LoggerFactory.getLogger(MarkupCacheService.class);
+    private static final Logger logger = LoggerFactory.getLogger(MarkupCacheService.class);
 
     /**
      * start-key used to identify the reports markup
@@ -70,10 +70,10 @@ public class MarkupCacheService {
      */
     public void addReportToCache(final String outputType, final String reportName, final String parameters,
                                  final byte[] buffer) {
-        CacheManager cm = CacheManager.getInstance();
+        final CacheManager cm = CacheManager.getInstance();
 
         // get the reports cache "reportsCache", declared in ehcache.xml
-        Cache cache = cm.getCache("reportsCache");
+        final Cache cache = cm.getCache("reportsCache");
 
         cache.put(new Element(createCacheKey(outputType, reportName, parameters), buffer));
     }
@@ -87,12 +87,12 @@ public class MarkupCacheService {
      * @return
      */
     public byte[] getReportFromCache(final String outputType, final String reportName, final String parameters) {
-        CacheManager cm = CacheManager.getInstance();
+        final CacheManager cm = CacheManager.getInstance();
 
         // get the reports cache "reportsCache", declared in ehcache.xml
-        Cache cache = cm.getCache("reportsCache");
+        final Cache cache = cm.getCache("reportsCache");
 
-        String key = createCacheKey(outputType, reportName, parameters);
+        final String key = createCacheKey(outputType, reportName, parameters);
 
         if (cache.isKeyInCache(key)) {
             return (byte[]) cache.get(key).getObjectValue();
@@ -105,22 +105,21 @@ public class MarkupCacheService {
      * Display some statistics about reports cache
      */
     public void getReportsStat() {
-        CacheManager cm = CacheManager.getInstance();
+        final CacheManager cm = CacheManager.getInstance();
 
         // get the reports cache "reportsCache", declared in ehcache.xml
-        Cache cache = cm.getCache("reportsCache");
+        final Cache cache = cm.getCache("reportsCache");
 
-        @SuppressWarnings("unchecked")
-        List<String> cacheKeys = cache.getKeys();
+        final List<String> cacheKeys = cache.getKeys();
         long size = 0;
-        for (String k : cacheKeys) {
+        for (final String k : cacheKeys) {
             logger.info("key: " + k);
             byte[] buf = (byte[]) cache.get(k).getObjectValue();
             size += buf.length;
         }
         Statistics stats = cache.getStatistics();
         StringBuffer sb = new StringBuffer();
-        sb.append(String.format("%s objects, %s hits, %s misses\n", stats.getObjectCount(), stats.getCacheHits(),
+        sb.append(String.format("%s objects, %s hits, %s misses", stats.getObjectCount(), stats.getCacheHits(),
                 stats.getCacheMisses()));
 
         logger.info(String.valueOf(sb));
@@ -131,10 +130,10 @@ public class MarkupCacheService {
      * Remove from cache all reports content
      */
     public void clearReportsCache() {
-        CacheManager cm = CacheManager.getInstance();
+        final CacheManager cm = CacheManager.getInstance();
 
         // get the reports cache "reportsCache", declared in ehcache.xml
-        Cache cache = cm.getCache("reportsCache");
+        final Cache cache = cm.getCache("reportsCache");
 
         if (cache != null) {
             cache.removeAll();
@@ -145,17 +144,17 @@ public class MarkupCacheService {
      * Remove from cache all reports api content
      */
     public void clearReportsApiCache() {
-        CacheManager cm = CacheManager.getInstance();
+        final CacheManager cm = CacheManager.getInstance();
 
         // get the reports cache "reportsApiCache", declared in ehcache.xml
-        Cache cache = cm.getCache("reportsApiCache");
+        final Cache cache = cm.getCache("reportsApiCache");
 
         if (cache != null) {
             cache.removeAll();
         }
 
         // get the reports cache "excelExportCache", declared in ehcache.xml
-        Cache excelExportCache = cm.getCache("excelExportCache");
+        final Cache excelExportCache = cm.getCache("excelExportCache");
 
         if (excelExportCache != null) {
             excelExportCache.removeAll();

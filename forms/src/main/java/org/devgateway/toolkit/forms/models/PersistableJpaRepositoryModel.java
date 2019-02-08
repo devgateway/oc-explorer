@@ -11,25 +11,24 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.models;
 
+import nl.dries.wicket.hibernate.dozer.DozerModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.devgateway.toolkit.forms.wicket.providers.SortableJpaRepositoryDataProvider;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import nl.dries.wicket.hibernate.dozer.DozerModel;
-
 /**
  * USE THIS ONLY FOR {@link SortableJpaRepositoryDataProvider}S Use
  * {@link DozerModel} for editing complex forms
- * 
- * @author mpostelnicu
  *
- * @param <T>
- *            the type of the entity to be accessed
+ * @param <T> the type of the entity to be accessed
+ * @author mpostelnicu
  */
 public class PersistableJpaRepositoryModel<T extends GenericPersistable> extends LoadableDetachableModel<T> {
     private static final long serialVersionUID = -3668189792112474025L;
+
     private Long id;
+
     private JpaRepository<T, Long> jpaRepository;
 
     public PersistableJpaRepositoryModel(final Long id, final JpaRepository<T, Long> jpaRepository) {
@@ -52,7 +51,7 @@ public class PersistableJpaRepositoryModel<T extends GenericPersistable> extends
 
     @Override
     public int hashCode() {
-        return Long.valueOf(id).hashCode();
+        return id.hashCode();
     }
 
     @SuppressWarnings("unchecked")
@@ -63,8 +62,8 @@ public class PersistableJpaRepositoryModel<T extends GenericPersistable> extends
         } else if (obj == null) {
             return false;
         } else if (obj instanceof PersistableJpaRepositoryModel) {
-            PersistableJpaRepositoryModel<T> other = (PersistableJpaRepositoryModel<T>) obj;
-            return other.id == id;
+            final PersistableJpaRepositoryModel<T> other = (PersistableJpaRepositoryModel<T>) obj;
+            return other.id.equals(id);
         }
         return false;
     }
