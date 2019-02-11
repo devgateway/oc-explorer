@@ -14,17 +14,12 @@ package org.devgateway.toolkit.forms.util;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
-import net.sf.ehcache.Statistics;
-import org.apache.commons.io.FileUtils;
 import org.apache.wicket.markup.Markup;
 import org.apache.wicket.markup.MarkupCache;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * @author idobre
@@ -37,8 +32,6 @@ import java.util.List;
 @Component
 @Profile("reports")
 public class MarkupCacheService {
-    private static final Logger logger = LoggerFactory.getLogger(MarkupCacheService.class);
-
     /**
      * start-key used to identify the reports markup
      */
@@ -99,31 +92,6 @@ public class MarkupCacheService {
         }
 
         return null;
-    }
-
-    /**
-     * Display some statistics about reports cache
-     */
-    public void getReportsStat() {
-        final CacheManager cm = CacheManager.getInstance();
-
-        // get the reports cache "reportsCache", declared in ehcache.xml
-        final Cache cache = cm.getCache("reportsCache");
-
-        final List<String> cacheKeys = cache.getKeys();
-        long size = 0;
-        for (final String k : cacheKeys) {
-            logger.info("key: " + k);
-            byte[] buf = (byte[]) cache.get(k).getObjectValue();
-            size += buf.length;
-        }
-        Statistics stats = cache.getStatistics();
-        StringBuffer sb = new StringBuffer();
-        sb.append(String.format("%s objects, %s hits, %s misses", stats.getObjectCount(), stats.getCacheHits(),
-                stats.getCacheMisses()));
-
-        logger.info(String.valueOf(sb));
-        logger.info("cache total size: " + FileUtils.byteCountToDisplaySize(size));
     }
 
     /**

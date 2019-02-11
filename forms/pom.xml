@@ -34,7 +34,7 @@
         <wicket.bootstrap.version>0.10.17</wicket.bootstrap.version>
         <zt.zip.version>1.12</zt.zip.version>
         <wicket.webjars.version>0.5.6</wicket.webjars.version>
-        <closure.compiler.version>v20180402</closure.compiler.version>
+        <closure.compiler.version>v20190121</closure.compiler.version>
         <cglib.version>3.1</cglib.version>
         <yuicompressor.version>2.4.8</yuicompressor.version>
     </properties>
@@ -115,11 +115,6 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-rest-hal-browser</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-remoting</artifactId>
         </dependency>
 
         <dependency>

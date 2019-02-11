@@ -19,9 +19,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <start-class>org.devgateway.toolkit.persistence.spring.PersistenceApplication</start-class>
         <java.version>1.8</java.version>
-        <joda.time.version>2.9.7</joda.time.version>
-        <jadira.usertype.version>5.0.0.GA</jadira.usertype.version>
-        <ehcache.version>2.6.11</ehcache.version>
+        <ehcache.version>2.10.6</ehcache.version>
         <dozer.hibernate.model.version>0.3.5-06032016</dozer.hibernate.model.version>
         <commons.lang3.version>3.2.1</commons.lang3.version>
         <guava.version>24.1-jre</guava.version>
@@ -77,7 +75,7 @@
 
         <dependency>
             <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache-core</artifactId>
+            <artifactId>ehcache</artifactId>
             <version>${ehcache.version}</version>
         </dependency>
 
@@ -180,23 +178,6 @@
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>${liquibase.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jadira.usertype</groupId>
-            <artifactId>usertype.core</artifactId>
-            <version>${jadira.usertype.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>hibernate-entitymanager</artifactId>
-                    <groupId>org.hibernate</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>

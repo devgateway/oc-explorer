@@ -70,13 +70,10 @@ import java.math.BigDecimal;
  * @author Stefan Kloe, mpostelnicu
  */
 @EnableScheduling
-@SpringBootApplication
+@SpringBootApplication(exclude = {org.springframework.boot.autoconfigure.gson.GsonAutoConfiguration.class})
 @ComponentScan("org.devgateway.toolkit")
 @PropertySource("classpath:/org/devgateway/toolkit/forms/application.properties")
 public class FormsWebApplication extends AuthenticatedWebApplication {
-
-
-    public static final String STORAGE_ID = "fileStorage";
 
     private static final String BASE_PACKAGE_FOR_PAGES = BasePage.class.getPackage().getName();
 
