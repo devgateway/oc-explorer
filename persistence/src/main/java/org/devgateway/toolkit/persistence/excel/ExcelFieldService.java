@@ -1,11 +1,12 @@
 package org.devgateway.toolkit.persistence.excel;
 
 import com.google.common.collect.Lists;
-import org.apache.log4j.Logger;
 import org.devgateway.toolkit.persistence.excel.annotation.ExcelExport;
 import org.devgateway.toolkit.persistence.excel.info.ClassFields;
 import org.devgateway.toolkit.persistence.excel.info.ClassFieldsDefault;
 import org.devgateway.toolkit.persistence.excel.info.ClassFieldsExcelExport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Persistable;
 
 import java.lang.reflect.Field;
@@ -22,7 +23,7 @@ import java.util.Map;
  * @since 10/11/2017
  */
 public final class ExcelFieldService {
-    private static final Logger logger = Logger.getLogger(ExcelFieldService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExcelFieldService.class);
 
     private static Map<Field, FieldType> fieldsTypeCache;
 
@@ -104,7 +105,7 @@ public final class ExcelFieldService {
                 try {
                     fieldClass = Class.forName(genericListType.getActualTypeArguments()[0].getTypeName());
                 } catch (ClassNotFoundException e) {
-                    logger.error(e);
+                    logger.error("Error getting field class", e);
                 }
             } else {
                 fieldClass = field.getType();
@@ -160,7 +161,7 @@ public final class ExcelFieldService {
                 objectId = (Long) idMethod.invoke(object);
             }
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            logger.error(e);
+            logger.error("Error getting Object ID", e);
         }
 
         return objectId;

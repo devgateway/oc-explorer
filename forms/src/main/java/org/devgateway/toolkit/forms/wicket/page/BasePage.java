@@ -25,7 +25,6 @@ import de.agilecoders.wicket.core.markup.html.themes.bootstrap.BootstrapCssRefer
 import de.agilecoders.wicket.core.util.CssClassNames;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeCssReference;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeIconType;
-import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
@@ -56,6 +55,8 @@ import org.devgateway.toolkit.forms.wicket.page.user.EditUserPage;
 import org.devgateway.toolkit.forms.wicket.page.user.LogoutPage;
 import org.devgateway.toolkit.forms.wicket.styles.BaseStyles;
 import org.devgateway.toolkit.persistence.dao.Person;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +70,7 @@ import java.util.Locale;
 public abstract class BasePage extends GenericWebPage<Void> {
     private static final long serialVersionUID = -4179591658828697452L;
 
-    protected static final Logger logger = Logger.getLogger(BasePage.class);
+    protected static final Logger logger = LoggerFactory.getLogger(BasePage.class);
 
     protected TransparentWebMarkupContainer mainContainer;
 

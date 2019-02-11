@@ -11,14 +11,10 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.page.lists;
 
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.zip.Deflater;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapBookmarkablePageLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons.Size;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeIconType;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.ladda.LaddaAjaxButton;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -55,22 +51,25 @@ import org.devgateway.toolkit.forms.wicket.providers.SortableJpaRepositoryDataPr
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.devgateway.toolkit.persistence.excel.service.ExcelGeneratorService;
 import org.devgateway.toolkit.persistence.repository.BaseJpaRepository;
-
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapBookmarkablePageLink;
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons.Size;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeIconType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.Deflater;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * @author mpostelnicu This class can be use to display a list of Categories
  *
  *         T - entity type Y - filter
  */
-public abstract class AbstractListPage<T extends GenericPersistable> extends BasePage {
+public abstract class AbstractListPage<T extends GenericPersistable & Serializable> extends BasePage {
     private static final long serialVersionUID = 1958350868666244087L;
 
     protected SortableJpaRepositoryDataProvider<T> dataProvider;
@@ -141,7 +140,7 @@ public abstract class AbstractListPage<T extends GenericPersistable> extends Bas
         super(parameters);
 
         columns = new ArrayList<>();
-        columns.add(new PropertyColumn<T, String>(new Model<>("ID"), "id", "id"));
+        columns.add(new PropertyColumn<>(new Model<>("ID"), "id", "id"));
     }
 
     public ActionPanel getActionPanel(final String id, final IModel<T> model) {
@@ -285,7 +284,7 @@ public abstract class AbstractListPage<T extends GenericPersistable> extends Bas
                                     response.flushBuffer();
                                 }
                             } catch (IOException e) {
-                                logger.error(e);
+                                logger.error("Download error", e);
                             }
 
                             RequestCycle.get().scheduleRequestHandlerAfterCurrent(null);

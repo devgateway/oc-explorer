@@ -1,11 +1,12 @@
 package org.devgateway.toolkit.persistence.excel;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -24,7 +25,7 @@ import java.util.StringJoiner;
  * @since 13/11/2017
  */
 public class ExcelSheetDefault extends AbstractExcelSheet {
-    private static final Logger logger = Logger.getLogger(ExcelSheetDefault.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExcelSheetDefault.class);
 
     private static final String PARENTSHEET = "parentSheet";
     private static final String PARENTID = "parentID";
@@ -172,7 +173,7 @@ public class ExcelSheetDefault extends AbstractExcelSheet {
                         break;
                 }
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                logger.error(e);
+                logger.error("Error write row ", e);
             }
         }
     }
@@ -251,7 +252,7 @@ public class ExcelSheetDefault extends AbstractExcelSheet {
                         break;
                 }
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                logger.error(e);
+                logger.error("Error write row flat", e);
             }
         }
     }

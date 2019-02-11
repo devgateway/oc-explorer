@@ -16,32 +16,34 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 /**
- * 
  * This is a bean that reads the auditor information which is used to audit the
  * JPA entities
- * 
- * @author mihai
  *
+ * @author mihai
  */
 @Component
 public class AuditorAwareImpl implements AuditorAware<String> {
 
     @Override
-    public String getCurrentAuditor() {
+    public Optional<String> getCurrentAuditor() {
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
             return null;
         }
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
             return null;
         }
+
         final Object principal = authentication.getPrincipal();
         if (principal instanceof Person) {
-            return ((Person) principal).getUsername();
+            return Optional.of(((Person) principal).getUsername());
         }
-        return null;
 
+        return null;
     }
 
 }

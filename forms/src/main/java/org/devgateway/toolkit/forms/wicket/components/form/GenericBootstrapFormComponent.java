@@ -16,7 +16,6 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.form.FormGroup;
 import de.agilecoders.wicket.core.markup.html.bootstrap.form.InputBehavior;
 import de.agilecoders.wicket.core.markup.html.bootstrap.form.InputBehavior.Size;
 import de.agilecoders.wicket.core.util.Attributes;
-import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -47,6 +46,8 @@ import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ import java.util.List;
 public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComponent<TYPE>> extends FieldPanel<TYPE> {
     private static final long serialVersionUID = -7051128382707812456L;
 
-    protected static Logger logger = Logger.getLogger(GenericBootstrapFormComponent.class);
+    private static final Logger logger = LoggerFactory.getLogger(GenericBootstrapFormComponent.class);
 
     protected FormGroup border;
 

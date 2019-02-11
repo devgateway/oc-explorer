@@ -11,21 +11,23 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.providers;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
 import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.devgateway.toolkit.persistence.dao.Labelable;
 import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author mpostelnicu
@@ -36,7 +38,7 @@ public abstract class AbstractJpaRepositoryTextChoiceProvider<T extends GenericP
 
     private static final long serialVersionUID = 5709987900445896586L;
 
-    private static final Logger logger = Logger.getLogger(AbstractJpaRepositoryTextChoiceProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractJpaRepositoryTextChoiceProvider.class);
 
     protected T newObject;
 
@@ -100,9 +102,9 @@ public abstract class AbstractJpaRepositoryTextChoiceProvider<T extends GenericP
                     newObject = clazz.newInstance();
                     newObject.setLabel(term);
                 } catch (InstantiationException e) {
-                    logger.error(e);
+                    logger.error("Error creating a new Item", e);
                 } catch (IllegalAccessException e) {
-                    logger.error(e);
+                    logger.error("Error creating a new Item", e);
                 }
 
                 List<T> newElementsList = new ArrayList<>();
@@ -146,12 +148,12 @@ public abstract class AbstractJpaRepositoryTextChoiceProvider<T extends GenericP
         ArrayList<T> response = new ArrayList<>();
         for (String s : idsList) {
             Long id = Long.parseLong(s);
-            T findOne = getTextSearchableRepository().findOne(id);
-            if (findOne == null) {
+            Optional<T> findOne = getTextSearchableRepository().findById(id);
+            if (!findOne.isPresent()) {
                 logger.error("Cannot find entity with id=" + id + " in repository "
                         + getTextSearchableRepository().getClass());
             } else {
-                response.add(findOne);
+                response.add(findOne.get());
             }
         }
         return response;

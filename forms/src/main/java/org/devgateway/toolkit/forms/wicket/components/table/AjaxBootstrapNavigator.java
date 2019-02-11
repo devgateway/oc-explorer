@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.components.table;
 
-import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.link.AbstractLink;
@@ -25,8 +24,6 @@ import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
  */
 
 public class AjaxBootstrapNavigator extends AjaxPagingNavigator {
-    protected static Logger logger = Logger.getLogger(AjaxBootstrapNavigator.class);
-
     private static final long serialVersionUID = -5572869834775798502L;
 
     private boolean hideFastPagination;

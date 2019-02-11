@@ -15,7 +15,6 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationMessa
 import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapForm;
 import de.agilecoders.wicket.core.util.Attributes;
 import nl.dries.wicket.hibernate.dozer.DozerModel;
-import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.Form;
@@ -56,6 +55,8 @@ import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.devgateway.toolkit.persistence.dao.Labelable;
 import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepository;
 import org.devgateway.toolkit.reporting.spring.util.ReportsCacheService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -66,8 +67,8 @@ import java.io.Serializable;
  * @author mpostelnicu Page used to make editing easy, extend to get easy access
  *         to one entity for editing
  */
-public abstract class AbstractEditPage<T extends GenericPersistable> extends BasePage {
-    protected static Logger logger = Logger.getLogger(AbstractEditPage.class);
+public abstract class AbstractEditPage<T extends GenericPersistable & Serializable> extends BasePage {
+    private static final Logger logger = LoggerFactory.getLogger(AbstractEditPage.class);
 
     private static final long serialVersionUID = -5928614890244382103L;
 
@@ -455,11 +456,11 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
         IModel<T> model = null;
 
         if (entityId != null) {
-            model = new DozerModel<>(jpaRepository.findOne(entityId));
+            model = new DozerModel<>(jpaRepository.findById(entityId).orElse(null));
         } else {
             T instance = newInstance();
             if (instance != null) {
-                model = new Model<>(instance);
+                model = new Model(instance);
             }
         }
 

@@ -11,6 +11,15 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.service;
 
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+import org.zeroturnaround.zip.ZipUtil;
+
+import javax.sql.DataSource;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -20,15 +29,6 @@ import java.nio.file.Paths;
 import java.sql.CallableStatement;
 import java.sql.SQLException;
 
-import javax.sql.DataSource;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-import org.zeroturnaround.zip.ZipUtil;
-
 /**
  * @author mpostelnicu Provides built-in backup services. Defaults to the
  *         database location derby.system.home. Currently works only for Derby.
@@ -37,7 +37,8 @@ import org.zeroturnaround.zip.ZipUtil;
 @Service
 public class DerbyDatabaseBackupService {
 
-    private static final Logger LOGGER = Logger.getLogger(DerbyDatabaseBackupService.class);
+    private static final Logger logger = LoggerFactory.getLogger(DerbyDatabaseBackupService.class);
+
     public static final String DATABASE_PRODUCT_NAME_APACHE_DERBY = "Apache Derby";
     public static final String ARCHIVE_SUFFIX = ".zip";
 
@@ -60,7 +61,7 @@ public class DerbyDatabaseBackupService {
         try {
             databaseProductName = datasource.getConnection().getMetaData().getDatabaseProductName();
         } catch (SQLException e) {
-            LOGGER.error("Cannot read databaseProductName from Connection!"
+            logger.error("Cannot read databaseProductName from Connection!"
                     + DerbyDatabaseBackupService.class.getCanonicalName() + " cannot continue!" + e);
             return;
         }
@@ -95,7 +96,7 @@ public class DerbyDatabaseBackupService {
                 // fall back to hostname instead
                 parent = InetAddress.getLocalHost().getHostName();
             } catch (UnknownHostException e) {
-                LOGGER.debug("Cannot get localhost/hostname! " + e);
+                logger.debug("Cannot get localhost/hostname! " + e);
                 return null;
             }
         }
@@ -143,13 +144,13 @@ public class DerbyDatabaseBackupService {
             cs.setString(1, lastBackupURL);
             cs.execute();
         } catch (SQLException e) {
-            LOGGER.error("Cannot perform database backup!", e);
+            logger.error("Cannot perform database backup!", e);
             return;
         } finally {
             try {
                 cs.close();
             } catch (SQLException e) {
-                LOGGER.error("Error closing backup connection ", e);
+                logger.error("Error closing backup connection ", e);
                 return;
             }
         }
@@ -161,10 +162,10 @@ public class DerbyDatabaseBackupService {
         try {
             FileUtils.deleteDirectory(backupURLFile);
         } catch (IOException e) {
-            LOGGER.error("Cannot delete temporary backup directory", e);
+            logger.error("Cannot delete temporary backup directory", e);
         }
 
-        LOGGER.info("Backed up database to " + lastBackupURL + ARCHIVE_SUFFIX);
+        logger.info("Backed up database to " + lastBackupURL + ARCHIVE_SUFFIX);
     }
 
     public String getLastBackupURL() {

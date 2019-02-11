@@ -12,7 +12,8 @@
 package org.devgateway.toolkit.forms.wicket.providers;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 
@@ -31,7 +32,7 @@ import java.util.Map;
 public class GenericChoiceProvider<T> extends ChoiceProvider<T> {
     private static final long serialVersionUID = 1L;
 
-    private static final Logger LOGGER = Logger.getLogger(GenericChoiceProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(GenericChoiceProvider.class);
 
     /**
      * all elements are identified by and id which in this case is the String
@@ -86,7 +87,7 @@ public class GenericChoiceProvider<T> extends ChoiceProvider<T> {
                     // just get the element from the map
                     ret.add(bagOfElements.get(id));
                 } catch (final NumberFormatException e) {
-                    LOGGER.error(e.getMessage());
+                    logger.error(e.getMessage());
                 }
             }
         }

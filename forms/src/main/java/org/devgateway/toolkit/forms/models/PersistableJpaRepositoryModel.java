@@ -45,7 +45,7 @@ public class PersistableJpaRepositoryModel<T extends GenericPersistable> extends
 
     @Override
     protected T load() {
-        return jpaRepository.findOne(id);
+        return jpaRepository.findById(id).orElse(null);
 
     }
 

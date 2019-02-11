@@ -19,7 +19,6 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.image.IconBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInput;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.FileInputConfig;
 import de.agilecoders.wicket.jquery.Key;
-import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
@@ -69,8 +68,6 @@ import java.util.List;
 
 public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPanel<T> {
     private static final long serialVersionUID = 1L;
-
-    protected static Logger logger = Logger.getLogger(FileInputBootstrapFormComponentWrapper.class);
 
     protected Collection<FileMetadata> filesModel;
 

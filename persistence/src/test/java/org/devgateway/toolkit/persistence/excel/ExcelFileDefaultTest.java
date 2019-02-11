@@ -1,10 +1,11 @@
 package org.devgateway.toolkit.persistence.excel;
 
-import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.devgateway.toolkit.persistence.excel.annotation.ExcelExport;
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Persistable;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.List;
  * @since 13/11/2017
  */
 public class ExcelFileDefaultTest {
-    private static final Logger logger = Logger.getLogger(ExcelFileDefaultTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExcelFileDefaultTest.class);
 
     @Test
     public void createWorkbook() throws Exception {
