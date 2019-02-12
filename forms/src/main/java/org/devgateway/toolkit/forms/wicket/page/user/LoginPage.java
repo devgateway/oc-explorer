@@ -128,6 +128,8 @@ public class LoginPage extends BasePage {
 
                         @Override
                         protected void onSubmit(final AjaxRequestTarget target) {
+                            super.onSubmit(target);
+
                             SSAuthenticatedWebSession session =
                                     SSAuthenticatedWebSession.getSSAuthenticatedWebSession();
                             if (session.signIn(LoginForm.this.username, LoginForm.this.password)) {
@@ -153,6 +155,8 @@ public class LoginPage extends BasePage {
 
                         @Override
                         protected void onError(final AjaxRequestTarget target) {
+                            super.onError(target);
+
                             target.add(notificationPanel);
                             target.add(notificationPanel);
                             target.add(usernameField);
@@ -173,6 +177,8 @@ public class LoginPage extends BasePage {
 
                 @Override
                 protected void onSubmit(final AjaxRequestTarget target) {
+                    super.onSubmit(target);
+                    
                     setResponsePage(ForgotYourPasswordPage.class);
                 }
             };

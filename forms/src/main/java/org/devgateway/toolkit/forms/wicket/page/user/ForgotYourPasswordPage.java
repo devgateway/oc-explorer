@@ -71,6 +71,8 @@ public class ForgotYourPasswordPage extends BasePage {
 
                 @Override
                 protected void onSubmit(final AjaxRequestTarget target) {
+                    super.onSubmit(target);
+
                     StandardPasswordEncoder encoder = new StandardPasswordEncoder("");
                     Person person = personRepository.findByEmail(emailAddress);
 
@@ -98,6 +100,8 @@ public class ForgotYourPasswordPage extends BasePage {
 
                 @Override
                 protected void onError(final AjaxRequestTarget target) {
+                    super.onError(target);
+
                     target.add(feedbackPanel);
                 }
             };
@@ -110,6 +114,8 @@ public class ForgotYourPasswordPage extends BasePage {
 
                 @Override
                 protected void onSubmit(final AjaxRequestTarget target) {
+                    super.onSubmit(target);
+
                     setResponsePage(LoginPage.class);
                 }
             };

@@ -301,6 +301,8 @@ public class EditUserPage extends AbstractEditPage<Person> {
 
             @Override
             protected void onSubmit(final AjaxRequestTarget target) {
+                super.onSubmit(target);
+
                 Person saveable = editForm.getModelObject();
                 StandardPasswordEncoder encoder = new StandardPasswordEncoder("");
 

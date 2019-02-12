@@ -380,6 +380,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
 
         @Override
         protected void onError(final AjaxRequestTarget target) {
+            super.onError(target);
             target.add(feedbackPanel);
         }
     }

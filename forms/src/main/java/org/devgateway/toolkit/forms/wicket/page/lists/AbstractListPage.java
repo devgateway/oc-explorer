@@ -304,6 +304,8 @@ public abstract class AbstractListPage<T extends GenericPersistable & Serializab
                     Buttons.Type.Warning) {
                 @Override
                 protected void onSubmit(final AjaxRequestTarget target) {
+                    super.onSubmit(target);
+                    
                     // initiate the file download
                     download.initiate(target);
                 }

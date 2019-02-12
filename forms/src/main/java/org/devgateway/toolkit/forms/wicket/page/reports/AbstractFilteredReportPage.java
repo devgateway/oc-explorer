@@ -53,7 +53,7 @@ public abstract class AbstractFilteredReportPage<T> extends AbstractReportPage {
                 @SuppressWarnings("unchecked")
                 @Override
                 protected void onSubmit(final AjaxRequestTarget target) {
-                    onFilterSubmit(target, (Form<T>) form);
+                    onFilterSubmit(target, form);
 
                     target.add(feedbackPanel);
                     target.add(htmlReportPanel);
@@ -64,6 +64,7 @@ public abstract class AbstractFilteredReportPage<T> extends AbstractReportPage {
 
                 @Override
                 protected void onError(final AjaxRequestTarget target) {
+                    super.onError(target);
                     target.add(feedbackPanel);
                     target.add(htmlReportPanel);
                     target.add(pdfDownload);
