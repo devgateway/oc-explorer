@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.providers;
 
-import java.util.Iterator;
-
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.IFilterStateLocator;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
@@ -28,11 +26,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 
+import java.util.Iterator;
+
 /**
  * @author mpostelnicu
- *
- *         Smart generic {@link SortableDataProvider} that binds to
- *         {@link BaseJpaRepository}
+ * <p>
+ * Smart generic {@link SortableDataProvider} that binds to
+ * {@link BaseJpaRepository}
  */
 public class SortableJpaRepositoryDataProvider<T extends GenericPersistable> extends SortableDataProvider<T, String>
         implements IFilterStateLocator<JpaFilterState<T>> {
@@ -72,7 +72,9 @@ public class SortableJpaRepositoryDataProvider<T extends GenericPersistable> ext
     public Iterator<? extends T> iterator(final long first, final long count) {
         int page = (int) ((double) first / WebConstants.PAGE_SIZE);
         Page<T> findAll = jpaRepository.findAll(filterState.getSpecification(),
-                new PageRequest(page, WebConstants.PAGE_SIZE, translateSort()));
+                translateSort() == null
+                        ? PageRequest.of(page, WebConstants.PAGE_SIZE)
+                        : PageRequest.of(page, WebConstants.PAGE_SIZE, translateSort()));
         return findAll.iterator();
     }
 
