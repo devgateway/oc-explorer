@@ -30,13 +30,14 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <wicket.version>7.10.0</wicket.version>
-        <wicket.bootstrap.version>0.10.17</wicket.bootstrap.version>
-        <zt.zip.version>1.12</zt.zip.version>
-        <wicket.webjars.version>0.5.6</wicket.webjars.version>
+        <wicket.version>8.3.0</wicket.version>
+        <wicket.bootstrap.version>3.0.0-M8</wicket.bootstrap.version>
+        <zt.zip.version>1.13</zt.zip.version>
+        <wicket.webjars.version>2.0.10</wicket.webjars.version>
         <closure.compiler.version>v20190121</closure.compiler.version>
         <cglib.version>3.1</cglib.version>
         <yuicompressor.version>2.4.8</yuicompressor.version>
+        <wicket-datetime.version>8.0.0-M7</wicket-datetime.version>
     </properties>
 
     <dependencies>
@@ -156,7 +157,7 @@
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-datetime</artifactId>
-            <version>${wicket.version}</version>
+            <version>${wicket-datetime.version}</version>
         </dependency>
 
         <dependency>
@@ -223,7 +224,7 @@
         <dependency>
             <groupId>de.agilecoders.wicket</groupId>
             <artifactId>wicket-bootstrap-less</artifactId>
-            <version>${wicket.bootstrap.version}</version>
+            <version>2.0.7</version>
         </dependency>
 
         <dependency>

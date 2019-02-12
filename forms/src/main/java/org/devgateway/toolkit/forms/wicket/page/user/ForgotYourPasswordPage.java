@@ -5,7 +5,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -71,7 +70,7 @@ public class ForgotYourPasswordPage extends BasePage {
                 private static final long serialVersionUID = 1L;
 
                 @Override
-                protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+                protected void onSubmit(final AjaxRequestTarget target) {
                     StandardPasswordEncoder encoder = new StandardPasswordEncoder("");
                     Person person = personRepository.findByEmail(emailAddress);
 
@@ -91,14 +90,14 @@ public class ForgotYourPasswordPage extends BasePage {
                         message.setVisibilityAllowed(true);
                         goBack.setVisibilityAllowed(true);
 
-                        target.add(form);
+                        target.add(ForgotPasswordForm.this);
                     }
 
                     target.add(feedbackPanel);
                 }
 
                 @Override
-                protected void onError(final AjaxRequestTarget target, final Form<?> form) {
+                protected void onError(final AjaxRequestTarget target) {
                     target.add(feedbackPanel);
                 }
             };
@@ -110,7 +109,7 @@ public class ForgotYourPasswordPage extends BasePage {
                 private static final long serialVersionUID = 1L;
 
                 @Override
-                protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+                protected void onSubmit(final AjaxRequestTarget target) {
                     setResponsePage(LoginPage.class);
                 }
             };

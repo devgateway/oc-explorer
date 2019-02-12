@@ -68,6 +68,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author mihai This is the base class for Pentaho reports displayed in Wicket.
@@ -239,9 +240,9 @@ public abstract class AbstractReportPage extends BasePage {
             super.onAfterRender();
 
             // unblock the UI after we render the HTML report
-            AjaxRequestTarget target = RequestCycle.get().find(AjaxRequestTarget.class);
-            if (target != null) {
-                target.appendJavaScript("$.unblockUI();");
+            Optional<AjaxRequestTarget> target = RequestCycle.get().find(AjaxRequestTarget.class);
+            if (target.isPresent()) {
+                target.get().appendJavaScript("$.unblockUI();");
             }
         }
 

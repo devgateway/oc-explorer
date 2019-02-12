@@ -1,16 +1,16 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2015 Development Gateway, Inc and others.
- *
+ * <p>
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the MIT License (MIT)
  * which accompanies this distribution, and is available at
  * https://opensource.org/licenses/MIT
- *
+ * <p>
  * Contributors:
  * Development Gateway - initial API and implementation
- *******************************************************************************/
+ */
 /**
- * 
+ *
  */
 package org.devgateway.toolkit.forms.wicket.page;
 
@@ -26,7 +26,7 @@ import org.devgateway.toolkit.forms.security.SecurityConstants;
 public class Homepage extends BasePage {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -35,7 +35,5 @@ public class Homepage extends BasePage {
      */
     public Homepage(final PageParameters parameters) {
         super(parameters);
-        // TODO Auto-generated constructor stub
     }
-
 }

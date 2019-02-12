@@ -137,13 +137,6 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
         WicketWebjars.install(this);
 
         final IBootstrapSettings settings = new BootstrapSettings();
-        // specify an empty bootstrap css resource so that we can have more
-        // control when do we load the bootstrap styles.
-        // By default all pages will load bootstrap.css file and there are
-        // situations (like print page) when we don't need this styles.
-        // The boostrap.css file is loaded as dependency in MainCss Instance
-        // settings.setCssResourceReference(EmptyCss.INSTANCE);
-
         settings.useCdnResources(false);
 
         // use the default bootstrap theme

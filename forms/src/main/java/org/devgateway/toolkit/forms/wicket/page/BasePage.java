@@ -15,7 +15,6 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameApp
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.dropdown.MenuBookmarkablePageLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.html.HtmlTag;
-import de.agilecoders.wicket.core.markup.html.bootstrap.image.GlyphIconType;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarComponents;
@@ -207,7 +206,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
                         return list;
                     }
                 };
-        languageDropDown.setIconType(GlyphIconType.flag);
+        languageDropDown.setIconType(FontAwesomeIconType.flag);
         return languageDropDown;
     }
 
@@ -215,7 +214,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
         // logout menu
         NavbarButton<LogoutPage> logoutMenu =
                 new NavbarButton<LogoutPage>(LogoutPage.class, new StringResourceModel("navbar.logout", this, null));
-        logoutMenu.setIconType(GlyphIconType.logout);
+        logoutMenu.setIconType(FontAwesomeIconType.sign_out);
         MetaDataRoleAuthorizationStrategy.authorize(logoutMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
 
         return logoutMenu;
@@ -233,7 +232,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
         NavbarButton<EditUserPage> accountMenu =
                 new NavbarButton<>(EditUserPage.class, pageParametersForAccountPage, account);
-        accountMenu.setIconType(GlyphIconType.user);
+        accountMenu.setIconType(FontAwesomeIconType.user);
         MetaDataRoleAuthorizationStrategy.authorize(accountMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
         return accountMenu;
     }
@@ -241,7 +240,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
     protected NavbarButton<Homepage> newHomeMenu() {
         // home
         NavbarButton<Homepage> homeMenu = new NavbarButton<>(Homepage.class, Model.of("Home"));
-        homeMenu.setIconType(GlyphIconType.home);
+        homeMenu.setIconType(FontAwesomeIconType.home);
         MetaDataRoleAuthorizationStrategy.authorize(homeMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
         return homeMenu;
     }
@@ -305,7 +304,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
             }
         };
 
-        adminMenu.setIconType(GlyphIconType.cog);
+        adminMenu.setIconType(FontAwesomeIconType.cog);
         MetaDataRoleAuthorizationStrategy.authorize(adminMenu, Component.RENDER, SecurityConstants.Roles.ROLE_ADMIN);
 
         return adminMenu;

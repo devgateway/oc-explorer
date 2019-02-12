@@ -35,7 +35,6 @@ public class SpringEndpointsPage extends BasePage {
      */
     public SpringEndpointsPage(final PageParameters parameters) {
         super(parameters);
-        // TODO Auto-generated constructor stub
     }
 
 }

@@ -14,10 +14,10 @@ package org.devgateway.toolkit.forms.wicket.components.form;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
-import de.agilecoders.wicket.core.markup.html.bootstrap.image.GlyphIconType;
 import de.agilecoders.wicket.core.markup.html.bootstrap.image.IconBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInput;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.FileInputConfig;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeIconType;
 import de.agilecoders.wicket.jquery.Key;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -221,7 +221,7 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
                         target.add(alreadyUploadedFiles);
                     }
                 };
-                delete.add(new IconBehavior(GlyphIconType.remove));
+                delete.add(new IconBehavior(FontAwesomeIconType.trash));
                 delete.add(new TooltipBehavior(new StringResourceModel("removeUploadedFileTooltip",
                         FileInputBootstrapFormComponentWrapper.this, null), TOOLTIP_CONFIG));
 
@@ -328,7 +328,7 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
                         target.add(pendingFiles);
                     }
                 };
-                delete.add(new IconBehavior(GlyphIconType.remove));
+                delete.add(new IconBehavior(FontAwesomeIconType.trash));
                 delete.add(new TooltipBehavior(new StringResourceModel("removeUploadedFileTooltip",
                         FileInputBootstrapFormComponentWrapper.this, null), TOOLTIP_CONFIG));
 

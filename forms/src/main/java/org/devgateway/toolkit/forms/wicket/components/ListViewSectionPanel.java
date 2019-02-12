@@ -4,7 +4,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -48,8 +47,9 @@ public abstract class ListViewSectionPanel<T extends AbstractAuditableEntity, PA
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
-                SummernoteBootstrapFormComponent.addSummernoteProcessInputVisitor(form);
+            protected void onSubmit(final AjaxRequestTarget target) {
+                // TODO - do we need this?
+                // SummernoteBootstrapFormComponent.addSummernoteProcessInputVisitor(form);
                 ListViewSectionPanel.this.getModelObject().remove(index);
                 listView.removeAll();
                 target.add(listWrapper);
@@ -70,8 +70,9 @@ public abstract class ListViewSectionPanel<T extends AbstractAuditableEntity, PA
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
-                SummernoteBootstrapFormComponent.addSummernoteProcessInputVisitor(form);
+            protected void onSubmit(final AjaxRequestTarget target) {
+                // TODO - do we need this?
+                // SummernoteBootstrapFormComponent.addSummernoteProcessInputVisitor(form);
                 T newChild = createNewChild((IModel<PARENT>) ListViewSectionPanel.this.getParent().getDefaultModel());
                 ListViewSectionPanel.this.getModel().getObject().add(newChild);
 

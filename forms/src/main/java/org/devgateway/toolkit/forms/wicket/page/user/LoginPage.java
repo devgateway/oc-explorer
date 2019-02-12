@@ -14,12 +14,11 @@
  */
 package org.devgateway.toolkit.forms.wicket.page.user;
 
-import javax.servlet.http.HttpServletRequest;
-
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapForm;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -40,8 +39,7 @@ import org.devgateway.toolkit.persistence.repository.PersonRepository;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.wicketstuff.annotation.mount.MountPath;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
-import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapForm;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author mpostelnicu
@@ -104,7 +102,7 @@ public class LoginPage extends BasePage {
 
             usernameField = new TextFieldBootstrapFormComponent<String>("username",
                     new StringResourceModel("user", LoginPage.this, null),
-                    new PropertyModel<String>(this, "username")) {
+                    new PropertyModel<>(this, "username")) {
                 @Override
                 public String getUpdateEvent() {
                     return null;
@@ -129,7 +127,7 @@ public class LoginPage extends BasePage {
                         private static final long serialVersionUID = 1L;
 
                         @Override
-                        protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+                        protected void onSubmit(final AjaxRequestTarget target) {
                             SSAuthenticatedWebSession session =
                                     SSAuthenticatedWebSession.getSSAuthenticatedWebSession();
                             if (session.signIn(LoginForm.this.username, LoginForm.this.password)) {
@@ -154,7 +152,7 @@ public class LoginPage extends BasePage {
                         }
 
                         @Override
-                        protected void onError(final AjaxRequestTarget target, final Form<?> form) {
+                        protected void onError(final AjaxRequestTarget target) {
                             target.add(notificationPanel);
                             target.add(notificationPanel);
                             target.add(usernameField);
@@ -174,7 +172,7 @@ public class LoginPage extends BasePage {
                 }
 
                 @Override
-                protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+                protected void onSubmit(final AjaxRequestTarget target) {
                     setResponsePage(ForgotYourPasswordPage.class);
                 }
             };

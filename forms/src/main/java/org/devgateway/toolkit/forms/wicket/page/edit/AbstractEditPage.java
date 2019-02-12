@@ -17,7 +17,6 @@ import de.agilecoders.wicket.core.util.Attributes;
 import nl.dries.wicket.hibernate.dozer.DozerModel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -235,7 +234,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
                 private static final long serialVersionUID = -249084359200507749L;
 
                 @Override
-                protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+                protected void onSubmit(final AjaxRequestTarget target) {
                     setResponsePage(listPageClass);
                 }
             });
@@ -261,7 +260,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
         }
 
         @Override
-        protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+        protected void onSubmit(final AjaxRequestTarget target) {
             // save the object and go back to the list page
             T saveable = editForm.getModelObject();
 
@@ -310,7 +309,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
         }
 
         @Override
-        protected void onError(final AjaxRequestTarget target, final Form<?> form) {
+        protected void onError(final AjaxRequestTarget target) {
             // make all errors visible
             GenericBootstrapValidationVisitor genericBootstrapValidationVisitor = getBootstrapValidationVisitor(target);
             editForm.visitChildren(GenericBootstrapFormComponent.class, genericBootstrapValidationVisitor);
@@ -364,7 +363,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
         }
 
         @Override
-        protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+        protected void onSubmit(final AjaxRequestTarget target) {
             T deleteable = editForm.getModelObject();
             try {
                 jpaRepository.delete(deleteable);
@@ -380,7 +379,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
         }
 
         @Override
-        protected void onError(final AjaxRequestTarget target, final Form<?> form) {
+        protected void onError(final AjaxRequestTarget target) {
             target.add(feedbackPanel);
         }
     }

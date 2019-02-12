@@ -42,7 +42,7 @@ public abstract class BootstrapCancelButton extends LaddaAjaxButton {
     }
 
     @Override
-    protected abstract void onSubmit(AjaxRequestTarget target, Form<?> form);
+    protected abstract void onSubmit(AjaxRequestTarget target);
 
     /*
      * (non-Javadoc)

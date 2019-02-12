@@ -303,7 +303,7 @@ public abstract class AbstractListPage<T extends GenericPersistable & Serializab
                     new Model<>("Excel Download"),
                     Buttons.Type.Warning) {
                 @Override
-                protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+                protected void onSubmit(final AjaxRequestTarget target) {
                     // initiate the file download
                     download.initiate(target);
                 }
