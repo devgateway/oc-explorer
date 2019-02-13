@@ -31,7 +31,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <wicket.version>8.3.0</wicket.version>
-        <wicket.bootstrap.version>3.0.0-M8</wicket.bootstrap.version>
+        <wicket.bootstrap.version>2.0.7</wicket.bootstrap.version>
         <zt.zip.version>1.13</zt.zip.version>
         <wicket.webjars.version>2.0.10</wicket.webjars.version>
         <closure.compiler.version>v20190121</closure.compiler.version>
@@ -224,7 +224,7 @@
         <dependency>
             <groupId>de.agilecoders.wicket</groupId>
             <artifactId>wicket-bootstrap-less</artifactId>
-            <version>2.0.7</version>
+            <version>${wicket.bootstrap.version}</version>
         </dependency>
 
         <dependency>
