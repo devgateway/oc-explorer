@@ -39,7 +39,6 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.request.resource.caching.FilenameWithVersionResourceCachingStrategy;
 import org.apache.wicket.request.resource.caching.NoOpResourceCachingStrategy;
 import org.apache.wicket.request.resource.caching.version.CachingResourceVersion;
-import org.apache.wicket.serialize.java.DeflatedJavaSerializer;
 import org.apache.wicket.settings.RequestCycleSettings.RenderStrategy;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.file.Folder;
@@ -50,6 +49,7 @@ import org.devgateway.toolkit.forms.wicket.page.BasePage;
 import org.devgateway.toolkit.forms.wicket.page.Homepage;
 import org.devgateway.toolkit.forms.wicket.page.user.LoginPage;
 import org.devgateway.toolkit.forms.wicket.styles.BaseStyles;
+import org.nustaq.serialization.FSTConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -58,6 +58,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.wicketstuff.annotation.scan.AnnotatedMountScanner;
+import org.wicketstuff.pageserializer.fast2.Fast2WicketSerializer;
 import org.wicketstuff.select2.ApplicationSettings;
 
 import java.math.BigDecimal;
@@ -165,7 +166,9 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
                     new GoogleClosureJavaScriptCompressor(CompilationLevel.SIMPLE_OPTIMIZATIONS));
             getResourceSettings().setCssCompressor(new YuiCssCompressor());
 
-            getFrameworkSettings().setSerializer(new DeflatedJavaSerializer(getApplicationKey()));
+            // getFrameworkSettings().setSerializer(new DeflatedJavaSerializer(getApplicationKey()));
+            FSTConfiguration fstConfiguration = Fast2WicketSerializer.getDefaultFSTConfiguration();
+            getFrameworkSettings().setSerializer(new Fast2WicketSerializer(fstConfiguration));
 
             getMarkupSettings().setStripComments(true);
         } else {
