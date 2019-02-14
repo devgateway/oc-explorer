@@ -19,7 +19,7 @@ VALUES
   true,
   NULL,
   NULL,
-  '61f3d99fb8ddfa54b714e84a0238e575930fda10e09dbd030b92edf1cf77c4d947e506e26ae9bf33',
+  '$2a$10$wvn/WOzcIGu.GGFGDhEzS.0KVIhHG3ypCNjH4ui1Xa8h3qgt2mdZ6',
   NULL,
   'admin',
   NULL

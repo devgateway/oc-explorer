@@ -18,7 +18,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractTool
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
-import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.IModel;
 
 /**
  * @author idobre
@@ -33,14 +33,8 @@ public class AjaxBootstrapNavigationToolbar extends AbstractToolbar {
 
         WebMarkupContainer span = new WebMarkupContainer("span");
         this.add(span);
-        span.add(AttributeModifier.replace("colspan", new AbstractReadOnlyModel<String>() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public String getObject() {
-                return String.valueOf(table.getColumns().size());
-            }
-        }));
+        span.add(AttributeModifier.replace("colspan",
+                (IModel<String>) () -> String.valueOf(table.getColumns().size())));
 
         span.add(new Component[] { this.newPagingNavigator("navigator", table) });
     }

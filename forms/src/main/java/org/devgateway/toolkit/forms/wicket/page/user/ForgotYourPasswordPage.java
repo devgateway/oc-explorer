@@ -14,6 +14,7 @@ import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFor
 import org.devgateway.toolkit.forms.wicket.page.BasePage;
 import org.devgateway.toolkit.persistence.dao.Person;
 import org.devgateway.toolkit.persistence.repository.PersonRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.wicketstuff.annotation.mount.MountPath;
 
@@ -26,6 +27,9 @@ public class ForgotYourPasswordPage extends BasePage {
 
     @SpringBean
     private SendEmailService sendEmailService;
+
+    @SpringBean
+    private PasswordEncoder passwordEncoder;
 
     public static final int RANDOM_PASSWORD_LENGTH = 16;
 
@@ -73,14 +77,13 @@ public class ForgotYourPasswordPage extends BasePage {
                 protected void onSubmit(final AjaxRequestTarget target) {
                     super.onSubmit(target);
 
-                    StandardPasswordEncoder encoder = new StandardPasswordEncoder("");
-                    Person person = personRepository.findByEmail(emailAddress);
+                    final Person person = personRepository.findByEmail(emailAddress);
 
                     if (person == null) {
                         feedbackPanel.error("Email address not found");
                     } else {
                         String newPassword = RandomStringUtils.random(RANDOM_PASSWORD_LENGTH, true, true);
-                        person.setPassword(encoder.encode(newPassword));
+                        person.setPassword(passwordEncoder.encode(newPassword));
                         person.setChangePassword(true);
 
                         personRepository.saveAndFlush(person);

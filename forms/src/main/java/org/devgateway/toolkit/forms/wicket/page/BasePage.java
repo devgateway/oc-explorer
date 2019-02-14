@@ -348,11 +348,6 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
         // Load Scripts.
         response.render(RespondJavaScriptReference.headerItem());
-        response.render(JavaScriptHeaderItem.forReference(JQueryResourceReference.get()));
-
-        // response.render(JavaScriptHeaderItem.forReference(
-        // new JavaScriptResourceReference(MainCss.class,
-        // "/assets/js/fileupload.js")
-        // ));
+        response.render(JavaScriptHeaderItem.forReference(JQueryResourceReference.getV2()));
     }
 }

@@ -45,6 +45,8 @@ import org.devgateway.toolkit.persistence.dao.categories.Role;
 import org.devgateway.toolkit.persistence.repository.GroupRepository;
 import org.devgateway.toolkit.persistence.repository.PersonRepository;
 import org.devgateway.toolkit.persistence.repository.RoleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.wicketstuff.annotation.mount.MountPath;
 
@@ -66,6 +68,9 @@ public class EditUserPage extends AbstractEditPage<Person> {
 
     @SpringBean
     private SendEmailService sendEmailService;
+
+    @SpringBean
+    private PasswordEncoder passwordEncoder;
 
     protected TextFieldBootstrapFormComponent<String> userName = new TextFieldBootstrapFormComponent<>("username");
 
@@ -303,12 +308,10 @@ public class EditUserPage extends AbstractEditPage<Person> {
             protected void onSubmit(final AjaxRequestTarget target) {
                 super.onSubmit(target);
 
-                Person saveable = editForm.getModelObject();
-                StandardPasswordEncoder encoder = new StandardPasswordEncoder("");
-
+                final Person saveable = editForm.getModelObject();
                 // encode the password
                 if (saveable.getChangePass()) {
-                    saveable.setPassword(encoder.encode(password.getField().getModelObject()));
+                    saveable.setPassword(passwordEncoder.encode(password.getField().getModelObject()));
                 } else {
                     if (saveable.getPassword() == null || saveable.getPassword().compareTo("") == 0) {
                         feedbackPanel.error(new StringResourceModel("nullPassword", this, null).getString());

@@ -30,7 +30,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckGroup;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.RadioGroup;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.ResourceModel;
@@ -137,7 +136,7 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
     }
 
     protected RevisionsPanel<TYPE> getRevisionsPanel() {
-        return new RevisionsPanel<TYPE>("revisions", getRevisionsModel(), auditProperty);
+        return new RevisionsPanel<>("revisions", getRevisionsModel(), auditProperty);
     }
 
     /**
@@ -152,18 +151,15 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
     }
 
     protected IModel<List<TYPE>> getRevisionsModel() {
-        return new AbstractReadOnlyModel<List<TYPE>>() {
-            @Override
-            public List<TYPE> getObject() {
-                if (revisionOwningEntityModel.getObject().isNew()) {
-                    return new ArrayList<>();
-                }
-                AuditReader reader = AuditReaderFactory.get(entityManagerModel.getObject());
-                AuditQuery query = reader.createQuery().forRevisionsOfEntity(auditorClass, false, false);
-                query.add(AuditEntity.property("id").eq(revisionOwningEntityModel.getObject().getId()));
-                query.add(AuditEntity.property(auditProperty).hasChanged());
-                return query.getResultList();
+        return (IModel<List<TYPE>>) () -> {
+            if (revisionOwningEntityModel.getObject().isNew()) {
+                return new ArrayList<>();
             }
+            AuditReader reader = AuditReaderFactory.get(entityManagerModel.getObject());
+            AuditQuery query = reader.createQuery().forRevisionsOfEntity(auditorClass, false, false);
+            query.add(AuditEntity.property("id").eq(revisionOwningEntityModel.getObject().getId()));
+            query.add(AuditEntity.property(auditProperty).hasChanged());
+            return query.getResultList();
         };
     }
 
@@ -246,11 +242,6 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 
     public GenericBootstrapFormComponent(final String id) {
         this(id, null);
-    }
-
-    @Deprecated
-    public String getLabelKey() {
-        return this.getId() + ".label";
     }
 
     public IModel<String> getLabelModel() {

@@ -34,7 +34,6 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
@@ -147,8 +146,8 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
         alreadyUploadedFiles
                 .add(new Label("uploadedFilesTitle", new StringResourceModel("uploadedFilesTitle", this, null)));
 
-        AbstractReadOnlyModel<List<FileMetadata>> alreadyUploadedFilesModel =
-                new AbstractReadOnlyModel<List<FileMetadata>>() {
+        IModel<List<FileMetadata>> alreadyUploadedFilesModel =
+                new IModel<List<FileMetadata>>() {
                     private static final long serialVersionUID = 1L;
 
                     @Override
@@ -290,7 +289,7 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
 
         pendingFiles.add(new Label("pendingFilesTitle", new StringResourceModel("pendingFilesTitle", this, null)));
 
-        AbstractReadOnlyModel<List<FileMetadata>> pendingFilesModel = new AbstractReadOnlyModel<List<FileMetadata>>() {
+        IModel<List<FileMetadata>> pendingFilesModel = new IModel<List<FileMetadata>>() {
             private static final long serialVersionUID = 1L;
 
             @Override

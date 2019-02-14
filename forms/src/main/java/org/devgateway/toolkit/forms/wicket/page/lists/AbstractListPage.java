@@ -246,7 +246,7 @@ public abstract class AbstractListPage<T extends GenericPersistable & Serializab
                                 // if we need to export just one file then we don't create an archive
                                 if (count <= batchSize) {
                                     // set a maximum download of objects per excel file
-                                    final PageRequest pageRequest = new PageRequest(0, batchSize,
+                                    final PageRequest pageRequest = PageRequest.of(0, batchSize,
                                             Sort.Direction.ASC, "id");
 
                                     final byte[] bytes = excelGeneratorService.getExcelDownload(
@@ -268,7 +268,7 @@ public abstract class AbstractListPage<T extends GenericPersistable & Serializab
                                     zout.setLevel(Deflater.NO_COMPRESSION);
                                     final int numberOfPages = (int) Math.ceil((double) count / batchSize);
                                     for (int i = 0; i < numberOfPages; i++) {
-                                        final PageRequest pageRequest = new PageRequest(i, batchSize,
+                                        final PageRequest pageRequest = PageRequest.of(i, batchSize,
                                                 Sort.Direction.ASC, "id");
                                         final byte[] bytes = excelGeneratorService.getExcelDownload(
                                                 jpaRepository,

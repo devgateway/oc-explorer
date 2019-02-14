@@ -16,7 +16,7 @@ import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigation
 import org.apache.wicket.markup.html.list.LoopItem;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
 import org.apache.wicket.markup.html.navigation.paging.IPagingLabelProvider;
-import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.IModel;
 
 /**
  * @author idobre
@@ -42,7 +42,7 @@ public class BootstrapPagingNavigation extends AjaxPagingNavigation {
         final long pageIndex = getStartIndex() + loopItem.getIndex();
 
         // Add disabled class to enclosing list item.
-        loopItem.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
+        loopItem.add(new AttributeModifier("class", new IModel<Object>() {
             private static final long serialVersionUID = 1L;
 
             @Override

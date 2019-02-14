@@ -28,7 +28,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
@@ -59,6 +59,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${roleHierarchy}")
     private String roleHierarchyStringRepresentation;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Bean
     public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
@@ -127,8 +130,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(final AuthenticationManagerBuilder auth) throws Exception {
-        // we use standard password encoder for all passwords
-        StandardPasswordEncoder spe = new StandardPasswordEncoder();
-        auth.userDetailsService(customJPAUserDetailsService).passwordEncoder(spe);
+        auth.userDetailsService(customJPAUserDetailsService).passwordEncoder(passwordEncoder);
     }
 }

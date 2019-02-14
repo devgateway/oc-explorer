@@ -119,12 +119,12 @@ public abstract class AbstractJpaRepositoryTextChoiceProvider<T extends GenericP
     }
 
     protected Page<T> getItemsByTerm(final String term, final int page) {
-        PageRequest pageRequest = new PageRequest(page, WebConstants.SELECT_PAGE_SIZE, sort);
+        PageRequest pageRequest = PageRequest.of(page, WebConstants.SELECT_PAGE_SIZE, sort);
         return getTextSearchableRepository().searchText(term, pageRequest);
     }
 
     public Page<T> findAll(final int page) {
-        PageRequest pageRequest = new PageRequest(page, WebConstants.SELECT_PAGE_SIZE, sort);
+        PageRequest pageRequest = PageRequest.of(page, WebConstants.SELECT_PAGE_SIZE, sort);
         return getTextSearchableRepository().findAll(pageRequest);
     }
 

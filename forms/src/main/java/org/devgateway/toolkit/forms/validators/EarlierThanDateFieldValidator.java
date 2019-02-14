@@ -14,13 +14,12 @@
  */
 package org.devgateway.toolkit.forms.validators;
 
-import java.util.Date;
-
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.devgateway.toolkit.forms.wicket.components.form.DateFieldBootstrapFormComponent;
+
+import java.util.Date;
 
 /**
  * @author mpostelnicu {@link DateFieldBootstrapFormComponent} validator for
@@ -30,7 +29,7 @@ public class EarlierThanDateFieldValidator implements IValidator<Date> {
 
     private static final long serialVersionUID = 1L;
 
-    private DateFieldBootstrapFormComponent highDate;
+    private final DateFieldBootstrapFormComponent highDate;
 
     /**
      * Provide a {@link DateFieldBootstrapFormComponent} that has to be
@@ -48,12 +47,11 @@ public class EarlierThanDateFieldValidator implements IValidator<Date> {
             return;
         }
 
-        Date endDate = (Date) highDate.getField().getConvertedInput();
+        final Date endDate = highDate.getField().getConvertedInput();
 
         if (endDate != null && validatable.getValue() != null && endDate.before(validatable.getValue())) {
-            ValidationError error = new ValidationError(this);
-            error.setVariable("highDateName",
-                    new StringResourceModel(highDate.getLabelKey(), highDate.getParent(), null).getString());
+            final ValidationError error = new ValidationError(this);
+            error.setVariable("highDateName", highDate.getLabelModel().getObject());
             validatable.error(error);
         }
     }

@@ -18,8 +18,7 @@ public class CustomRestMvcConfiguration {
 
     @Bean
     public RepositoryRestConfigurer repositoryRestConfigurer() {
-
-        return new RepositoryRestConfigurerAdapter() {
+        return new RepositoryRestConfigurer() {
 
             @Override
             public void configureRepositoryRestConfiguration(final RepositoryRestConfiguration config) {
