@@ -218,7 +218,7 @@ public abstract class AbstractListPage<T extends GenericPersistable & Serializab
     /**
      * A wrapper form that is used to fire the excel download action
      */
-    public class ExcelDownloadForm extends Form {
+    public class ExcelDownloadForm extends Form<Void> {
         public ExcelDownloadForm(final String id) {
             super(id);
         }

@@ -71,7 +71,7 @@ public class SortableJpaRepositoryDataProvider<T extends GenericPersistable> ext
     @Override
     public Iterator<? extends T> iterator(final long first, final long count) {
         int page = (int) ((double) first / WebConstants.PAGE_SIZE);
-        Page<T> findAll = jpaRepository.findAll(filterState.getSpecification(),
+        final Page<T> findAll = jpaRepository.findAll(filterState.getSpecification(),
                 translateSort() == null
                         ? PageRequest.of(page, WebConstants.PAGE_SIZE)
                         : PageRequest.of(page, WebConstants.PAGE_SIZE, translateSort()));

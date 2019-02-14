@@ -77,7 +77,9 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
     protected Class<?> auditorClass;
 
     protected WebMarkupContainer revisions;
+
     protected TransparentWebMarkupContainer masterGroup;
+
     protected TransparentWebMarkupContainer childGroup;
 
 
@@ -98,7 +100,7 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
     @SuppressWarnings("unchecked")
     protected IModel<TYPE> initFieldModel() {
         if (getDefaultModel() == null) {
-            return new SubComponentWrapModel<TYPE>(this);
+            return new SubComponentWrapModel<>(this);
         }
         return (IModel<TYPE>) getDefaultModel();
     }

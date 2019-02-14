@@ -31,7 +31,6 @@ import java.util.Optional;
 
 /**
  * @author mpostelnicu
- *
  */
 public abstract class AbstractJpaRepositoryTextChoiceProvider<T extends GenericPersistable & Labelable>
         extends ChoiceProvider<T> {
@@ -57,14 +56,14 @@ public abstract class AbstractJpaRepositoryTextChoiceProvider<T extends GenericP
     }
 
     public AbstractJpaRepositoryTextChoiceProvider(final TextSearchableRepository<T, Long> textSearchableRepository,
-            final Class<T> clazz, final Boolean addNewElements) {
+                                                   final Class<T> clazz, final Boolean addNewElements) {
         this.textSearchableRepository = textSearchableRepository;
         this.clazz = clazz;
         this.addNewElements = addNewElements;
     }
 
     public AbstractJpaRepositoryTextChoiceProvider(final TextSearchableRepository<T, Long> textSearchableRepository,
-            final IModel<Collection<T>> restrictedToItemsModel) {
+                                                   final IModel<Collection<T>> restrictedToItemsModel) {
         this(textSearchableRepository);
         this.restrictedToItemsModel = restrictedToItemsModel;
     }
@@ -119,12 +118,16 @@ public abstract class AbstractJpaRepositoryTextChoiceProvider<T extends GenericP
     }
 
     protected Page<T> getItemsByTerm(final String term, final int page) {
-        PageRequest pageRequest = PageRequest.of(page, WebConstants.SELECT_PAGE_SIZE, sort);
+        final PageRequest pageRequest = sort == null
+                ? PageRequest.of(page, WebConstants.SELECT_PAGE_SIZE)
+                : PageRequest.of(page, WebConstants.SELECT_PAGE_SIZE, sort);
         return getTextSearchableRepository().searchText(term, pageRequest);
     }
 
     public Page<T> findAll(final int page) {
-        PageRequest pageRequest = PageRequest.of(page, WebConstants.SELECT_PAGE_SIZE, sort);
+        final PageRequest pageRequest = sort == null
+                ? PageRequest.of(page, WebConstants.SELECT_PAGE_SIZE)
+                : PageRequest.of(page, WebConstants.SELECT_PAGE_SIZE, sort);
         return getTextSearchableRepository().findAll(pageRequest);
     }
 
