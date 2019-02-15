@@ -88,6 +88,14 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-devgateway-dozer-hibernate-model</id>
+            <name>bintray</name>
+            <url>https://dl.bintray.com/devgateway/dozer-hibernate-model</url>
+        </repository>
     </repositories>
 
     <pluginRepositories>
