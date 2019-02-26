@@ -86,6 +86,7 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
     protected Boolean visibleOnlyToAdmin = false;
 
     private Boolean disableDeleteButton = false;
+
     private boolean requireAtLeastOneItem = false;
 
     public FileInputBootstrapFormComponentWrapper(final String id, final IModel<T> model) {

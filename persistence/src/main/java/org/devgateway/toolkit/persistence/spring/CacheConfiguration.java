@@ -24,8 +24,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.auditing.DateTimeProvider;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.management.MBeanServer;
+import java.time.ZonedDateTime;
+import java.time.temporal.TemporalAccessor;
+import java.util.Optional;
 
 /**
  * @author mpostelnicu
@@ -33,7 +38,13 @@ import javax.management.MBeanServer;
  */
 @Configuration
 @EnableCaching
+@EnableJpaAuditing(dateTimeProviderRef = "auditingDateTimeProvider")
 public class CacheConfiguration {
+    @Bean(name = "auditingDateTimeProvider")
+    public DateTimeProvider dateTimeProvider() {
+        return () -> Optional.of(ZonedDateTime.now());
+    }
+
 
     @Autowired(required = false)
     private MBeanServer mbeanServer;
