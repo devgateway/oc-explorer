@@ -25,7 +25,6 @@
         <guava.version>24.1-jre</guava.version>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
         <hibernate-validator.version>6.0.14.Final</hibernate-validator.version>
-        <tomcat-jdbc.version>8.5.37</tomcat-jdbc.version>
     </properties>
 
     <parent>
@@ -208,11 +207,6 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>${poi.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-jdbc</artifactId>
-            <version>${tomcat-jdbc.version}</version>
         </dependency>
     </dependencies>
 

@@ -14,10 +14,10 @@
  */
 package org.devgateway.toolkit.persistence.spring;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import liquibase.integration.spring.SpringLiquibase;
 import org.apache.derby.drda.NetworkServerControl;
-import org.apache.tomcat.jdbc.pool.DataSource;
-import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +31,7 @@ import org.springframework.mock.jndi.SimpleNamingContextBuilder;
 
 import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.util.Properties;
@@ -57,12 +58,6 @@ public class DatabaseConfiguration {
 
     @Value("${spring.datasource.driver-class-name}")
     private String springDatasourceDriverClassName;
-
-    @Value("${spring.datasource.transaction-isolation}")
-    private int springDatasourceTransactionIsolation;
-
-    @Value("${spring.datasource.initial-size}")
-    private int springDatasourceInitialSize;
 
     @Value("${spring.datasource.max-active}")
     private int springDatasourceMaxActive;
@@ -104,25 +99,21 @@ public class DatabaseConfiguration {
     }
 
     /**
-     * Creates a {@link javax.sql.DataSource} based on Tomcat {@link DataSource}
+     * Creates a {@link javax.sql.DataSource} based on HikariCP {@link HikariDataSource}
      *
      * @return
      */
     @Bean
     @DependsOn(value = {"derbyServer"})
     public DataSource dataSource() {
-        PoolProperties pp = new PoolProperties();
-        pp.setJmxEnabled(true);
-        pp.setDefaultTransactionIsolation(springDatasourceTransactionIsolation);
-        pp.setInitialSize(springDatasourceInitialSize);
-        pp.setMaxActive(springDatasourceMaxActive);
+        final HikariConfig config = new HikariConfig();
+        config.setMaximumPoolSize(springDatasourceMaxActive);
+        config.setJdbcUrl(springDatasourceUrl);
+        config.setUsername(springDatasourceUsername);
+        config.setPassword(springDatasourcePassword);
+        config.setDriverClassName(springDatasourceDriverClassName);
 
-        DataSource dataSource = new DataSource(pp);
-
-        dataSource.setUrl(springDatasourceUrl);
-        dataSource.setUsername(springDatasourceUsername);
-        dataSource.setPassword(springDatasourcePassword);
-        dataSource.setDriverClassName(springDatasourceDriverClassName);
+        final HikariDataSource dataSource = new HikariDataSource(config);
         return dataSource;
     }
 
