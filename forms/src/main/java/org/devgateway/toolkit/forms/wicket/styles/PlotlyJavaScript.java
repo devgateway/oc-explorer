@@ -15,6 +15,6 @@ public class PlotlyJavaScript extends JavaScriptResourceReference {
      * Construct.
      */
     public PlotlyJavaScript() {
-        super(PlotlyJavaScript.class, "/assets/js/plotly/plotly-basic.min.js");
+        super(PlotlyJavaScript.class, "/assets/js/plotly/plotly.min.js");
     }
 }
