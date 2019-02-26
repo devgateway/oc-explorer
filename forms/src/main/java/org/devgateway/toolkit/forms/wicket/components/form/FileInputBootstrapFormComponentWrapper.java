@@ -61,8 +61,8 @@ import java.util.List;
 /**
  * @author idobre
  * @since 11/13/14
- *
- *        Multi upload file component that acts as a form component
+ * <p>
+ * Multi upload file component that acts as a form component
  */
 
 public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPanel<T> {
@@ -93,7 +93,7 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
 
         setOutputMarkupId(true);
         setRenderBodyOnly(true); // we need this because bootstrap is adding
-                                 // unnecessary classes to the component
+        // unnecessary classes to the component
     }
 
     public FileInputBootstrapFormComponentWrapper<T> maxFiles(final int maxFiles) {
@@ -269,6 +269,8 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
 
             @Override
             protected void onConfigure() {
+                super.onConfigure();
+
                 if (filesModel != null && filesModel.size() > 0) {
                     for (FileMetadata file : filesModel) {
                         if (file.isNew()) {
