@@ -14,13 +14,14 @@
  */
 package org.devgateway.toolkit.persistence.spring;
 
-import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import liquibase.integration.spring.SpringLiquibase;
 import org.apache.derby.drda.NetworkServerControl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -46,21 +47,6 @@ import java.util.Properties;
 @Profile("!integration")
 public class DatabaseConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(DatabaseConfiguration.class);
-
-    @Value("${spring.datasource.username}")
-    private String springDatasourceUsername;
-
-    @Value("${spring.datasource.password}")
-    private String springDatasourcePassword;
-
-    @Value("${spring.datasource.url}")
-    private String springDatasourceUrl;
-
-    @Value("${spring.datasource.driver-class-name}")
-    private String springDatasourceDriverClassName;
-
-    @Value("${spring.datasource.max-active}")
-    private int springDatasourceMaxActive;
 
     @Value("${dg-toolkit.derby.port}")
     private int derbyPort;
@@ -104,17 +90,10 @@ public class DatabaseConfiguration {
      * @return
      */
     @Bean
+    @ConfigurationProperties(prefix = "spring.datasource")
     @DependsOn(value = {"derbyServer"})
     public DataSource dataSource() {
-        final HikariConfig config = new HikariConfig();
-        config.setMaximumPoolSize(springDatasourceMaxActive);
-        config.setJdbcUrl(springDatasourceUrl);
-        config.setUsername(springDatasourceUsername);
-        config.setPassword(springDatasourcePassword);
-        config.setDriverClassName(springDatasourceDriverClassName);
-
-        final HikariDataSource dataSource = new HikariDataSource(config);
-        return dataSource;
+        return DataSourceBuilder.create().build();
     }
 
     /**
