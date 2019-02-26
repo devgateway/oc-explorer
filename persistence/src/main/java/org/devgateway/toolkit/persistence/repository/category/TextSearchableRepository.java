@@ -11,13 +11,13 @@
  *******************************************************************************/
 package org.devgateway.toolkit.persistence.repository.category;
 
-import java.io.Serializable;
-
 import org.devgateway.toolkit.persistence.repository.BaseJpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.Serializable;
 
 /**
  * @author idobre

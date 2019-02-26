@@ -31,12 +31,12 @@ public class AjaxBootstrapNavigationToolbar extends AbstractToolbar {
     public AjaxBootstrapNavigationToolbar(final DataTable<?, ?> table) {
         super(table);
 
-        WebMarkupContainer span = new WebMarkupContainer("span");
+        final WebMarkupContainer span = new WebMarkupContainer("span");
         this.add(span);
         span.add(AttributeModifier.replace("colspan",
                 (IModel<String>) () -> String.valueOf(table.getColumns().size())));
 
-        span.add(new Component[] { this.newPagingNavigator("navigator", table) });
+        span.add(new Component[]{this.newPagingNavigator("navigator", table)});
     }
 
     protected PagingNavigator newPagingNavigator(final String navigatorId, final DataTable<?, ?> table) {

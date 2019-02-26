@@ -20,9 +20,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 
  * @author mpostelnicu
- *
  */
 @Transactional
 public interface RoleRepository extends TextSearchableRepository<Role, Long>, JpaRepository<Role, Long> {

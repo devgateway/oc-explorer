@@ -26,8 +26,8 @@ import java.util.Map;
 /**
  * @author idobre
  * @since 1/27/15
- *
- *        This is a ChoiceProvider for "non-persistable" unique list of elements
+ * <p>
+ * This is a ChoiceProvider for "non-persistable" unique list of elements
  */
 public class GenericChoiceProvider<T> extends ChoiceProvider<T> {
     private static final long serialVersionUID = 1L;

@@ -1,4 +1,4 @@
-package org.devgateway.toolkit.forms.wicket.components.table;
+package org.devgateway.toolkit.forms.wicket.components.table.filter;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.jpa.domain.Specification;

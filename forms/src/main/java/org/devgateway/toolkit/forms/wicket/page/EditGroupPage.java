@@ -47,9 +47,8 @@ public class EditGroupPage extends AbstractEditPage<Group> {
     protected void onInitialize() {
         super.onInitialize();
 
-        TextFieldBootstrapFormComponent<String> gname = new TextFieldBootstrapFormComponent<>("label");
-        gname.required();
-        editForm.add(gname);
-
+        final TextFieldBootstrapFormComponent<String> name = new TextFieldBootstrapFormComponent<>("label");
+        name.required();
+        editForm.add(name);
     }
 }

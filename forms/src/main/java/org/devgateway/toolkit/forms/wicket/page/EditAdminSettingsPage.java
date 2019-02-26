@@ -1,7 +1,5 @@
 package org.devgateway.toolkit.forms.wicket.page;
 
-import java.util.List;
-
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.StringResourceModel;
@@ -13,6 +11,8 @@ import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.persistence.dao.AdminSettings;
 import org.devgateway.toolkit.persistence.repository.AdminSettingsRepository;
 import org.wicketstuff.annotation.mount.MountPath;
+
+import java.util.List;
 
 /**
  * @author idobre

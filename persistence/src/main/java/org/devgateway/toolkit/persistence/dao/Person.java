@@ -145,8 +145,7 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
     }
 
     /**
-     * @param authorities
-     *            the authorities to set
+     * @param authorities the authorities to set
      */
     public void setAuthorities(final Collection<? extends GrantedAuthority> authorities) {
         this.authorities = authorities;

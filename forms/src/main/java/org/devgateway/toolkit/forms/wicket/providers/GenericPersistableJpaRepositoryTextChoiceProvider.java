@@ -1,25 +1,25 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2015 Development Gateway, Inc and others.
- *
+ * <p>
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the MIT License (MIT)
  * which accompanies this distribution, and is available at
  * https://opensource.org/licenses/MIT
- *
+ * <p>
  * Contributors:
  * Development Gateway - initial API and implementation
- *******************************************************************************/
+ */
 /**
- * 
+ *
  */
 package org.devgateway.toolkit.forms.wicket.providers;
-
-import java.util.Collection;
 
 import org.apache.wicket.model.IModel;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.devgateway.toolkit.persistence.dao.Labelable;
 import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepository;
+
+import java.util.Collection;
 
 /**
  * @author mpostelnicu
@@ -48,7 +48,7 @@ public class GenericPersistableJpaRepositoryTextChoiceProvider<T extends Generic
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.vaynberg.wicket.select2.TextChoiceProvider#getDisplayText(java.lang.
      * Object)

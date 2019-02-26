@@ -50,8 +50,7 @@ public class SendEmailService {
      * @param newPassword
      */
     public void sendEmailResetPassword(final Person person, final String newPassword) {
-
-        SimpleMailMessage msg = new SimpleMailMessage();
+        final SimpleMailMessage msg = new SimpleMailMessage();
         msg.setTo(person.getEmail());
         msg.setFrom("support@developmentgateway.org");
         msg.setSubject("Recover your password");

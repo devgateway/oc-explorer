@@ -33,11 +33,12 @@ public class ListUserPage extends AbstractListPage<Person> {
 
     public ListUserPage(final PageParameters pageParameters) {
         super(pageParameters);
+
         this.jpaRepository = userRepository;
         this.editPageClass = EditUserPageElevated.class;
-        columns.add(new PropertyColumn<Person, String>(new Model<String>("Name"), "username", "username"));
-        columns.add(new PropertyColumn<Person, String>(new Model<String>("Group"), "group", "group"));
-        columns.add(new PropertyColumn<Person, String>(new Model<String>("Roles"), "roles", "roles"));
+        columns.add(new PropertyColumn<>(new Model<>("Name"), "username", "username"));
+        columns.add(new PropertyColumn<>(new Model<>("Group"), "group", "group"));
+        columns.add(new PropertyColumn<>(new Model<>("Roles"), "roles", "roles"));
     }
 
     @Override

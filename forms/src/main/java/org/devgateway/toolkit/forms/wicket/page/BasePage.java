@@ -132,8 +132,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
     /**
      * Construct.
      *
-     * @param parameters
-     *            current page parameters
+     * @param parameters current page parameters
      */
     public BasePage(final PageParameters parameters) {
         super(parameters);
@@ -259,11 +258,11 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
                 list.add(new MenuBookmarkablePageLink<ListTestFormPage>(ListTestFormPage.class, null,
                         new StringResourceModel("navbar.testcomponents", this, null))
-                                .setIconType(FontAwesomeIconType.android));
+                        .setIconType(FontAwesomeIconType.android));
 
                 list.add(new MenuBookmarkablePageLink<SpringEndpointsPage>(SpringEndpointsPage.class, null,
                         new StringResourceModel("navbar.springendpoints", this, null))
-                                .setIconType(FontAwesomeIconType.anchor));
+                        .setIconType(FontAwesomeIconType.anchor));
 
                 list.add(new MenuBookmarkablePageLink<JminixRedirectPage>(JminixRedirectPage.class, null,
                         new StringResourceModel("navbar.jminix", this, null)).setIconType(FontAwesomeIconType.bug));
@@ -298,7 +297,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
                 list.add(new MenuBookmarkablePageLink<Void>(EditAdminSettingsPage.class,
                         new StringResourceModel("navbar.adminSettings", BasePage.this, null))
-                                .setIconType(FontAwesomeIconType.briefcase));
+                        .setIconType(FontAwesomeIconType.briefcase));
 
                 return list;
             }
@@ -313,8 +312,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
     /**
      * creates a new {@link Navbar} instance
      *
-     * @param markupId
-     *            The components markup id.
+     * @param markupId The components markup id.
      * @return a new {@link Navbar} instance
      */
     protected Navbar newNavbar(final String markupId) {
@@ -323,7 +321,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
         /**
          * Make sure to update the BaseStyles when the navbar position changes.
-         * 
+         *
          * @see org.devgateway.toolkit.forms.wicket.styles.BaseStyles
          */
         navbar.setPosition(Navbar.Position.TOP);

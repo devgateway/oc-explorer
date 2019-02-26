@@ -31,10 +31,6 @@ import java.io.OutputStream;
  * @since 11/14/14
  */
 public class CustomDownloadLink extends Link<FileMetadata> {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
     private static final TooltipConfig TOOLTIP_CONFIG =
             new TooltipConfig().withPlacement(TooltipConfig.Placement.bottom);
 
@@ -46,12 +42,7 @@ public class CustomDownloadLink extends Link<FileMetadata> {
 
     @Override
     public void onClick() {
-        AbstractResourceStreamWriter rstream = new AbstractResourceStreamWriter() {
-            /**
-             * 
-             */
-            private static final long serialVersionUID = 1L;
-
+        final AbstractResourceStreamWriter rstream = new AbstractResourceStreamWriter() {
             @Override
             public void write(final OutputStream output) throws IOException {
                 output.write(getModelObject().getContent().getBytes());

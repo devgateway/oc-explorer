@@ -24,12 +24,6 @@ import org.devgateway.toolkit.forms.security.SecurityConstants;
  */
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_USER)
 public class Homepage extends BasePage {
-
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
-
     /**
      * @param parameters
      */

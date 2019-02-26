@@ -11,31 +11,25 @@
  *******************************************************************************/
 package org.devgateway.toolkit.persistence.dao.categories;
 
-import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.devgateway.toolkit.persistence.dao.Labelable;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.envers.Audited;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import java.io.Serializable;
+
 /**
- * 
  * @author mpostelnicu
- *
  */
 @Entity
 @Audited
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Role extends GenericPersistable implements Serializable, Comparable<Role>, Labelable {
-
-    /**
-     * 
-     */
     private static final long serialVersionUID = -6007958105920327142L;
+
     private String authority;
 
     @Column(name = "authority")
@@ -51,8 +45,7 @@ public class Role extends GenericPersistable implements Serializable, Comparable
     }
 
     /**
-     * @param authority
-     *            the authority to set
+     * @param authority the authority to set
      */
     public void setAuthority(final String authority) {
         this.authority = authority;

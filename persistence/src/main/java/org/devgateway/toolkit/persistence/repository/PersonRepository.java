@@ -18,9 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- *
  * @author mpostelnicu
- *
  */
 @Transactional
 public interface PersonRepository extends BaseJpaRepository<Person, Long> {

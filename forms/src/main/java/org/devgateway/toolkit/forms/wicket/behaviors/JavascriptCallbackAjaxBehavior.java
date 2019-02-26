@@ -11,14 +11,14 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.behaviors;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.util.template.PackageTextTemplate;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class JavascriptCallbackAjaxBehavior extends AbstractDefaultAjaxBehavior {
 
@@ -33,7 +33,7 @@ public abstract class JavascriptCallbackAjaxBehavior extends AbstractDefaultAjax
 
     @Override
     public void renderHead(final Component component, final IHeaderResponse response) {
-        Map<String, Object> map = new HashMap<>();
+        final Map<String, Object> map = new HashMap<>();
         map.put("callbackUrl", getCallbackUrl().toString());
         map.put("args", getCallbackArguments());
         map.put("componentMarkupId", component.getMarkupId());

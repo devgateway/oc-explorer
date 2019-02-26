@@ -26,11 +26,8 @@ import org.wicketstuff.annotation.mount.MountPath;
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_ADMIN)
 @MountPath(value = "/listgroups")
 public class ListGroupPage extends AbstractListPage<Group> {
-
-    /**
-     * 
-     */
     private static final long serialVersionUID = -324298525712620234L;
+
     @SpringBean
     protected GroupRepository groupRepository;
 

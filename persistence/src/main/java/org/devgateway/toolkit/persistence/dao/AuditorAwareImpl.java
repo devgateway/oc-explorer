@@ -33,7 +33,7 @@ public class AuditorAwareImpl implements AuditorAware<String> {
             return null;
         }
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
             return null;
         }

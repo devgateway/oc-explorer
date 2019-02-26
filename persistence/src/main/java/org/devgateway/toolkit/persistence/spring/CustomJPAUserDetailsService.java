@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.devgateway.toolkit.persistence.spring;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.devgateway.toolkit.persistence.dao.Person;
 import org.devgateway.toolkit.persistence.dao.categories.Role;
 import org.devgateway.toolkit.persistence.repository.PersonRepository;
@@ -26,12 +23,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * {@link UserDetailsService} that uses JPA
- * 
+ *
  * @author mpostelnicu, krams
  * @see http
- *      ://krams915.blogspot.fi/2012/01/spring-security-31-implement_3065.html
+ * ://krams915.blogspot.fi/2012/01/spring-security-31-implement_3065.html
  */
 @Component
 public class CustomJPAUserDetailsService implements UserDetailsService {
@@ -48,12 +48,11 @@ public class CustomJPAUserDetailsService implements UserDetailsService {
     @Override
     public Person loadUserByUsername(final String username) throws UsernameNotFoundException {
         try {
-            Person domainUser = personRepository.findByUsername(username);
+            final Person domainUser = personRepository.findByUsername(username);
+            final Set<GrantedAuthority> grantedAuthorities = getGrantedAuthorities(domainUser);
 
-            Set<GrantedAuthority> grantedAuthorities = getGrantedAuthorities(domainUser);
             domainUser.setAuthorities(grantedAuthorities);
             return domainUser;
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -66,16 +65,15 @@ public class CustomJPAUserDetailsService implements UserDetailsService {
      * (only if the {@link User} belongs to only one {@link PersistedUserGroup})
      * and converts all {@link PersistedAuthority} objects to
      * {@link GrantedAuthority}.
-     * 
+     *
      * @param domainUser
      * @return a {@link Set} containing the {@link GrantedAuthority}S
      */
     public static Set<GrantedAuthority> getGrantedAuthorities(final Person domainUser) {
-
-        Set<GrantedAuthority> grantedAuth = new HashSet<GrantedAuthority>();
+        final Set<GrantedAuthority> grantedAuth = new HashSet<>();
 
         // get user authorities
-        for (Role authority : domainUser.getRoles()) {
+        for (final Role authority : domainUser.getRoles()) {
             grantedAuth.add(new SimpleGrantedAuthority(authority.getAuthority()));
         }
 

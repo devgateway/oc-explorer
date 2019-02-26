@@ -9,7 +9,7 @@ import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFor
 /**
  * A TextFilteredPropertyColumn that uses TextFieldBootstrapFormComponent as a
  * filter.
- *
+ * <p>
  * Created by octavian on 15.04.2016.
  */
 public class TextFilteredBootstrapPropertyColumn<T, F, S> extends TextFilteredPropertyColumn<T, F, S> {
@@ -17,7 +17,7 @@ public class TextFilteredBootstrapPropertyColumn<T, F, S> extends TextFilteredPr
     private static final long serialVersionUID = 7360465890668796668L;
 
     public TextFilteredBootstrapPropertyColumn(final IModel<String> displayModel, final S sortProperty,
-            final String propertyExpression) {
+                                               final String propertyExpression) {
         super(displayModel, sortProperty, propertyExpression);
     }
 

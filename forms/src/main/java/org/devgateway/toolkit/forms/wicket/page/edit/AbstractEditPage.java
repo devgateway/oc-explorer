@@ -64,7 +64,7 @@ import java.io.Serializable;
 
 /**
  * @author mpostelnicu Page used to make editing easy, extend to get easy access
- *         to one entity for editing
+ * to one entity for editing
  */
 public abstract class AbstractEditPage<T extends GenericPersistable & Serializable> extends BasePage {
     private static final Logger logger = LoggerFactory.getLogger(AbstractEditPage.class);
@@ -156,7 +156,6 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
      * we can see the errors
      *
      * @author mpostelnicu
-     *
      */
     public class GenericBootstrapValidationVisitor implements IVisitor<GenericBootstrapFormComponent<?, ?>, Void> {
 
@@ -193,7 +192,6 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
         }
 
     }
-
 
 
     public class EditForm extends BootstrapForm<T> {
@@ -246,7 +244,6 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
      * further by subclasses
      *
      * @author mpostelnicu
-     *
      */
     public class SaveEditPageButton extends BootstrapSubmitButton {
         private static final long serialVersionUID = 9075809391795974349L;
@@ -332,16 +329,14 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
         }
 
         /**
-         * @param redirect
-         *            the redirect to set
+         * @param redirect the redirect to set
          */
         public void setRedirect(final boolean redirect) {
             this.redirect = redirect;
         }
 
         /**
-         * @param redirectToSelf
-         *            the redirectToSelf to set
+         * @param redirectToSelf the redirectToSelf to set
          */
         public void setRedirectToSelf(final boolean redirectToSelf) {
             this.redirectToSelf = redirectToSelf;

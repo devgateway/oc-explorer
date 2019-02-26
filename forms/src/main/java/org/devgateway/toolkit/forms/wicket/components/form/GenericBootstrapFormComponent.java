@@ -131,6 +131,7 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 
     /**
      * True if the control can print contents unescaped when in readonly mode
+     *
      * @return
      */
     protected boolean printUnescaped() {

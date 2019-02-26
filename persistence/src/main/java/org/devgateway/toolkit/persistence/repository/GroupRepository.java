@@ -16,9 +16,7 @@ import org.devgateway.toolkit.persistence.repository.category.CategoryRepository
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 
  * @author mpostelnicu
- *
  */
 @Transactional
 //@RepositoryRestResource // uncomment this to enable rest api access over group entities

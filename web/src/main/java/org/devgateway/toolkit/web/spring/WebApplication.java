@@ -18,7 +18,6 @@ import org.springframework.context.annotation.PropertySource;
 
 /**
  * @author mpostelnicu
- *
  */
 
 @SpringBootApplication

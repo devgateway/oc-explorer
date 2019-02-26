@@ -86,8 +86,6 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
         textField.enableRevisionsView();
 
 
-
-
         TextAreaFieldBootstrapFormComponent<String> textArea = new TextAreaFieldBootstrapFormComponent<>("textArea");
         editForm.add(textArea);
         textArea.required();

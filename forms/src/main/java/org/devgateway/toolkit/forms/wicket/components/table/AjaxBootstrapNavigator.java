@@ -42,7 +42,7 @@ public class AjaxBootstrapNavigator extends AjaxPagingNavigator {
     }
 
     public AjaxBootstrapNavigator(final String id, final IPageable pageable, final IPagingLabelProvider labelProvider,
-            final boolean hideFastPagination) {
+                                  final boolean hideFastPagination) {
         this(id, pageable, labelProvider);
 
         this.hideFastPagination = hideFastPagination;
@@ -74,22 +74,20 @@ public class AjaxBootstrapNavigator extends AjaxPagingNavigator {
 
     @Override
     protected PagingNavigation newNavigation(final String id, final IPageable pageable,
-            final IPagingLabelProvider labelProvider) {
+                                             final IPagingLabelProvider labelProvider) {
         return new BootstrapPagingNavigation(id, pageable, labelProvider);
     }
 
     @Override
     protected AbstractLink newPagingNavigationIncrementLink(final String id, final IPageable pageable,
-            final int increment) {
-        AbstractLink link = super.newPagingNavigationIncrementLink(id, pageable, increment);
-        // TODO:disable link
+                                                            final int increment) {
+        final AbstractLink link = super.newPagingNavigationIncrementLink(id, pageable, increment);
         return link;
     }
 
     @Override
     protected AbstractLink newPagingNavigationLink(final String id, final IPageable pageable, final int pageNumber) {
-        AbstractLink link = super.newPagingNavigationLink(id, pageable, pageNumber);
-        // TODO:disable link
+        final AbstractLink link = super.newPagingNavigationLink(id, pageable, pageNumber);
         return link;
     }
 }

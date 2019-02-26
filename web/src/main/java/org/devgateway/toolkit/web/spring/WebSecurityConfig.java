@@ -37,10 +37,8 @@ import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 /**
- *
  * @author mpostelnicu This configures the spring security for the Web project.
- *         An
- *
+ * An
  */
 
 @Configuration

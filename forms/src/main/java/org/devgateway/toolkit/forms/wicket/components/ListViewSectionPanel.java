@@ -16,13 +16,12 @@ import org.devgateway.toolkit.persistence.dao.AbstractAuditableEntity;
 import java.util.List;
 
 /**
- * @author idobre
- * @since 10/5/16
- *
- * Class that displays a list of <T> type with the possibility of adding/removing elements.
- *
  * @param <T>      The current list data type
  * @param <PARENT> The parent field data type
+ * @author idobre
+ * @since 10/5/16
+ * <p>
+ * Class that displays a list of <T> type with the possibility of adding/removing elements.
  */
 
 public abstract class ListViewSectionPanel<T extends AbstractAuditableEntity, PARENT extends AbstractAuditableEntity>

@@ -42,7 +42,7 @@ import org.devgateway.toolkit.forms.exceptions.NullEditPageClassException;
 import org.devgateway.toolkit.forms.exceptions.NullJpaRepositoryException;
 import org.devgateway.toolkit.forms.wicket.components.form.AJAXDownload;
 import org.devgateway.toolkit.forms.wicket.components.table.AjaxFallbackBootstrapDataTable;
-import org.devgateway.toolkit.forms.wicket.components.table.JpaFilterState;
+import org.devgateway.toolkit.forms.wicket.components.table.filter.JpaFilterState;
 import org.devgateway.toolkit.forms.wicket.components.table.ResettingFilterForm;
 import org.devgateway.toolkit.forms.wicket.page.BasePage;
 import org.devgateway.toolkit.forms.wicket.page.RevisionsPage;

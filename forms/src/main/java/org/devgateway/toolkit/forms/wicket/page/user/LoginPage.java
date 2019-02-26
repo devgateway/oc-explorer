@@ -1,14 +1,14 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2015 Development Gateway, Inc and others.
- *
+ * <p>
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the MIT License (MIT)
  * which accompanies this distribution, and is available at
  * https://opensource.org/licenses/MIT
- *
+ * <p>
  * Contributors:
  * Development Gateway - initial API and implementation
- *******************************************************************************/
+ */
 /**
  *
  */
@@ -60,12 +60,12 @@ public class LoginPage extends BasePage {
         private String username;
 
         private String password;
-        
+
         private String referrer;
 
         private TextFieldBootstrapFormComponent<String> usernameField;
         private PasswordFieldBootstrapFormComponent passwordField;
-        
+
         protected void retrieveReferrerFromSavedRequestIfPresent() {
             StringValue referrerParam = RequestCycle.get().getRequest().getRequestParameters()
                     .getParameterValue("referrer");
@@ -91,7 +91,7 @@ public class LoginPage extends BasePage {
         @Override
         protected void onInitialize() {
             super.onInitialize();
-            
+
             retrieveReferrerFromSavedRequestIfPresent();
 
             final NotificationPanel notificationPanel = new NotificationPanel("loginFeedback");
@@ -178,7 +178,7 @@ public class LoginPage extends BasePage {
                 @Override
                 protected void onSubmit(final AjaxRequestTarget target) {
                     super.onSubmit(target);
-                    
+
                     setResponsePage(ForgotYourPasswordPage.class);
                 }
             };

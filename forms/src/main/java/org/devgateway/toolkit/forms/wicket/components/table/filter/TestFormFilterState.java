@@ -1,4 +1,4 @@
-package org.devgateway.toolkit.forms.wicket.components.table;
+package org.devgateway.toolkit.forms.wicket.components.table.filter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.devgateway.toolkit.persistence.dao.TestForm;

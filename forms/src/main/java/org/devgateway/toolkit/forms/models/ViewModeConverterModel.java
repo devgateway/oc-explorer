@@ -26,18 +26,10 @@ import java.util.Date;
  *         convert the model object to something printable (string-like)
  */
 public class ViewModeConverterModel<T> implements IModel<String> {
-
     private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
     private IModel<T> originalModel;
 
-    /**
-     * 
-     */
     public ViewModeConverterModel(final IModel<T> originalModel) {
         this.originalModel = originalModel;
     }
