@@ -45,6 +45,7 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.resource.JQueryResourceReference;
 import org.apache.wicket.util.string.StringValue;
 import org.devgateway.toolkit.forms.WebConstants;
@@ -366,5 +367,8 @@ public abstract class BasePage extends GenericWebPage<Void> {
         // Load Scripts.
         response.render(RespondJavaScriptReference.headerItem());
         response.render(JavaScriptHeaderItem.forReference(JQueryResourceReference.getV2()));
+
+        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(BaseStyles.class,
+                "assets/js/fileupload.js")));
     }
 }
