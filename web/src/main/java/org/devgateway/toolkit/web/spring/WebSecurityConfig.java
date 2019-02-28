@@ -63,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
-        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        final StrictHttpFirewall firewall = new StrictHttpFirewall();
         firewall.setAllowUrlEncodedSlash(true);
         firewall.setAllowSemicolon(true);
         return firewall;
@@ -76,8 +76,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public SecurityContextPersistenceFilter securityContextPersistenceFilter() {
-
-        SecurityContextPersistenceFilter securityContextPersistenceFilter =
+        final SecurityContextPersistenceFilter securityContextPersistenceFilter =
                 new SecurityContextPersistenceFilter(httpSessionSecurityContextRepository());
         return securityContextPersistenceFilter;
     }
@@ -104,7 +103,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * @return
      */
     private SecurityExpressionHandler<FilterInvocation> webExpressionHandler() {
-        DefaultWebSecurityExpressionHandler handler = new DefaultWebSecurityExpressionHandler();
+        final DefaultWebSecurityExpressionHandler handler = new DefaultWebSecurityExpressionHandler();
         handler.setRoleHierarchy(roleHierarchy());
         return handler;
     }
@@ -115,7 +114,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Bean
     RoleHierarchy roleHierarchy() {
-        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+        final RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
         roleHierarchy.setHierarchy(roleHierarchyStringRepresentation);
         return roleHierarchy;
     }

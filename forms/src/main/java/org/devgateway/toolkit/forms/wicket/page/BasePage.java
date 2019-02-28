@@ -13,6 +13,7 @@ package org.devgateway.toolkit.forms.wicket.page;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.dropdown.MenuBookmarkablePageLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.dropdown.MenuDivider;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.html.HtmlTag;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
@@ -50,6 +51,7 @@ import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.security.SecurityUtil;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListGroupPage;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListTestFormPage;
+import org.devgateway.toolkit.forms.wicket.page.lists.ListUserPage;
 import org.devgateway.toolkit.forms.wicket.page.user.EditUserPage;
 import org.devgateway.toolkit.forms.wicket.page.user.LogoutPage;
 import org.devgateway.toolkit.forms.wicket.styles.BaseStyles;
@@ -180,7 +182,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
     }
 
     protected NotificationPanel createFeedbackPanel() {
-        NotificationPanel notificationPanel = new NotificationPanel("feedback");
+        final NotificationPanel notificationPanel = new NotificationPanel("feedback");
         notificationPanel.setOutputMarkupId(true);
         return notificationPanel;
     }
@@ -211,7 +213,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
     protected NavbarButton<LogoutPage> newLogoutMenu() {
         // logout menu
-        NavbarButton<LogoutPage> logoutMenu =
+        final NavbarButton<LogoutPage> logoutMenu =
                 new NavbarButton<LogoutPage>(LogoutPage.class, new StringResourceModel("navbar.logout", this, null));
         logoutMenu.setIconType(FontAwesomeIconType.sign_out);
         MetaDataRoleAuthorizationStrategy.authorize(logoutMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
@@ -220,8 +222,8 @@ public abstract class BasePage extends GenericWebPage<Void> {
     }
 
     protected NavbarButton<EditUserPage> newAccountMenu() {
-        PageParameters pageParametersForAccountPage = new PageParameters();
-        Person person = SecurityUtil.getCurrentAuthenticatedPerson();
+        final PageParameters pageParametersForAccountPage = new PageParameters();
+        final Person person = SecurityUtil.getCurrentAuthenticatedPerson();
         // account menu
         Model<String> account = null;
         if (person != null) {
@@ -229,7 +231,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
             pageParametersForAccountPage.add(WebConstants.PARAM_ID, person.getId());
         }
 
-        NavbarButton<EditUserPage> accountMenu =
+        final NavbarButton<EditUserPage> accountMenu =
                 new NavbarButton<>(EditUserPage.class, pageParametersForAccountPage, account);
         accountMenu.setIconType(FontAwesomeIconType.user);
         MetaDataRoleAuthorizationStrategy.authorize(accountMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
@@ -252,13 +254,19 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
             @Override
             protected List<AbstractLink> newSubMenuButtons(final String arg0) {
-                List<AbstractLink> list = new ArrayList<>();
+                final List<AbstractLink> list = new ArrayList<>();
+                list.add(new MenuBookmarkablePageLink<ListTestFormPage>(ListUserPage.class, null,
+                        new StringResourceModel("navbar.users", this, null))
+                        .setIconType(FontAwesomeIconType.users));
+
                 list.add(new MenuBookmarkablePageLink<ListGroupPage>(ListGroupPage.class, null,
                         new StringResourceModel("navbar.groups", this, null)).setIconType(FontAwesomeIconType.tags));
 
                 list.add(new MenuBookmarkablePageLink<ListTestFormPage>(ListTestFormPage.class, null,
                         new StringResourceModel("navbar.testcomponents", this, null))
                         .setIconType(FontAwesomeIconType.android));
+
+                list.add(new MenuDivider());
 
                 list.add(new MenuBookmarkablePageLink<SpringEndpointsPage>(SpringEndpointsPage.class, null,
                         new StringResourceModel("navbar.springendpoints", this, null))
@@ -267,7 +275,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
                 list.add(new MenuBookmarkablePageLink<JminixRedirectPage>(JminixRedirectPage.class, null,
                         new StringResourceModel("navbar.jminix", this, null)).setIconType(FontAwesomeIconType.bug));
 
-                MenuBookmarkablePageLink<HALRedirectPage> halBrowserLink =
+                final MenuBookmarkablePageLink<HALRedirectPage> halBrowserLink =
                         new MenuBookmarkablePageLink<HALRedirectPage>(HALRedirectPage.class, null,
                                 new StringResourceModel("navbar.halbrowser", this, null)) {
                             private static final long serialVersionUID = 1L;
@@ -282,18 +290,21 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
                 list.add(halBrowserLink);
 
-                MenuBookmarkablePageLink<UIRedirectPage> uiBrowserLink = new MenuBookmarkablePageLink<UIRedirectPage>(
-                        UIRedirectPage.class, null, new StringResourceModel("navbar.ui", this, null)) {
-                    private static final long serialVersionUID = 1L;
+                final MenuBookmarkablePageLink<UIRedirectPage> uiBrowserLink =
+                        new MenuBookmarkablePageLink<UIRedirectPage>(
+                                UIRedirectPage.class, null, new StringResourceModel("navbar.ui", this, null)) {
+                            private static final long serialVersionUID = 1L;
 
-                    @Override
-                    protected void onComponentTag(final ComponentTag tag) {
-                        super.onComponentTag(tag);
-                        tag.put("target", "_blank");
-                    }
-                };
+                            @Override
+                            protected void onComponentTag(final ComponentTag tag) {
+                                super.onComponentTag(tag);
+                                tag.put("target", "_blank");
+                            }
+                        };
                 uiBrowserLink.setIconType(FontAwesomeIconType.rocket).setEnabled(true);
                 list.add(uiBrowserLink);
+
+                list.add(new MenuDivider());
 
                 list.add(new MenuBookmarkablePageLink<Void>(EditAdminSettingsPage.class,
                         new StringResourceModel("navbar.adminSettings", BasePage.this, null))
