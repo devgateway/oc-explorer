@@ -29,7 +29,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.management.MBeanServer;
 import java.time.ZonedDateTime;
-import java.time.temporal.TemporalAccessor;
 import java.util.Optional;
 
 /**
@@ -51,7 +50,7 @@ public class CacheConfiguration {
 
     @Bean
     public EhCacheManagerFactoryBean ehCacheManagerFactoryBean() {
-        EhCacheManagerFactoryBean ehCacheManagerFactoryBean = new EhCacheManagerFactoryBean();
+        final EhCacheManagerFactoryBean ehCacheManagerFactoryBean = new EhCacheManagerFactoryBean();
         ehCacheManagerFactoryBean.setConfigLocation(new ClassPathResource("ehcache.xml"));
         ehCacheManagerFactoryBean.setShared(true);
         return ehCacheManagerFactoryBean;
@@ -65,9 +64,8 @@ public class CacheConfiguration {
     @Bean(destroyMethod = "dispose", initMethod = "init")
     @Profile("!integration")
     public ManagementService ehCacheManagementService(final EhCacheManagerFactoryBean factory) {
-        ManagementService managementService =
+        final ManagementService managementService =
                 new ManagementService(factory.getObject(), mbeanServer, true, true, true, true);
         return managementService;
     }
-
 }
