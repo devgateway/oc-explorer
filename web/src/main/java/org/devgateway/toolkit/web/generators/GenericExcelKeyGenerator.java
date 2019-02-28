@@ -16,7 +16,7 @@ import java.lang.reflect.Method;
  * This KeyGenerator is used for Excel File Generator.
  */
 public class GenericExcelKeyGenerator implements KeyGenerator {
-    private final Logger logger = LoggerFactory.getLogger(GenericExcelKeyGenerator.class);
+    private static final Logger logger = LoggerFactory.getLogger(GenericExcelKeyGenerator.class);
 
     private final ObjectMapper objectMapper;
 

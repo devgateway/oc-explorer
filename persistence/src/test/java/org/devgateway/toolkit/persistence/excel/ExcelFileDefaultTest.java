@@ -2,12 +2,14 @@ package org.devgateway.toolkit.persistence.excel;
 
 import org.apache.poi.ss.usermodel.Workbook;
 import org.devgateway.toolkit.persistence.excel.annotation.ExcelExport;
+import org.devgateway.toolkit.persistence.excel.service.TranslateService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Persistable;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,11 +18,18 @@ import java.util.List;
  * @since 13/11/2017
  */
 public class ExcelFileDefaultTest {
-    private static final Logger logger = LoggerFactory.getLogger(ExcelFileDefaultTest.class);
+    protected static final Logger logger = LoggerFactory.getLogger(ExcelFileDefaultTest.class);
+
+    public class TestTranslateService implements TranslateService {
+        @Override
+        public String getTranslation(Class clazz, Field field) {
+            return null;
+        }
+    }
 
     @Test
     public void createWorkbook() throws Exception {
-        final ExcelFile excelFile = new ExcelFileDefault(createObjects());
+        final ExcelFile excelFile = new ExcelFileDefault(createObjects(), new TestTranslateService());
         final Workbook workbook = excelFile.createWorkbook();
 
         // try (FileOutputStream outputStream = new FileOutputStream("/Users/ionut/Downloads/file-export.xlsx")) {

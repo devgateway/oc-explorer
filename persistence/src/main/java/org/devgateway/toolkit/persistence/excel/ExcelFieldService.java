@@ -1,10 +1,12 @@
 package org.devgateway.toolkit.persistence.excel;
 
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 import org.devgateway.toolkit.persistence.excel.annotation.ExcelExport;
 import org.devgateway.toolkit.persistence.excel.info.ClassFields;
 import org.devgateway.toolkit.persistence.excel.info.ClassFieldsDefault;
 import org.devgateway.toolkit.persistence.excel.info.ClassFieldsExcelExport;
+import org.devgateway.toolkit.persistence.excel.service.TranslateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Persistable;
@@ -105,7 +107,7 @@ public final class ExcelFieldService {
                 try {
                     fieldClass = Class.forName(genericListType.getActualTypeArguments()[0].getTypeName());
                 } catch (ClassNotFoundException e) {
-                    logger.error("Error getting field class", e);
+                    logger.error("getFieldClass Error!", e);
                 }
             } else {
                 fieldClass = field.getType();
@@ -161,7 +163,7 @@ public final class ExcelFieldService {
                 objectId = (Long) idMethod.invoke(object);
             }
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            logger.error("Error getting Object ID", e);
+            logger.error("getObjectID error", e);
         }
 
         return objectId;
@@ -172,15 +174,41 @@ public final class ExcelFieldService {
      *
      * @param field
      */
-    public static String getFieldName(final Field field) {
+    public static String getFieldName(final Class clazz, final Field field, final TranslateService translateService) {
         final ExcelExport excelExport = field.getAnnotation(ExcelExport.class);
         if (excelExport != null) {
+            String label = null;
+            if (excelExport.useTranslation()) {
+                label = translateService.getTranslation(clazz, field);
+            }
             if (!excelExport.name().isEmpty()) {
-                return excelExport.name();
+                if (StringUtils.isEmpty(label)) {
+                    return excelExport.name();
+                } else {
+                    return excelExport.name() + " - " + label;
+                }
+
             }
         }
 
         return field.getName();
+    }
+
+    /**
+     * Returns the onlyForClass prop of the {@link Field}.
+     *
+     * @param field
+     */
+    public static Class[] getFieldClazz(final Field field) {
+        final ExcelExport excelExport = field.getAnnotation(ExcelExport.class);
+        if (excelExport != null) {
+            if (excelExport.onlyForClass().length != 0
+                    && !excelExport.onlyForClass()[0].getSimpleName().equals("void")) {
+                return excelExport.onlyForClass();
+            }
+        }
+
+        return null;
     }
 
     /**

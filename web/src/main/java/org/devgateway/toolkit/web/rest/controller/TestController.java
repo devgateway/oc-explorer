@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CacheConfig(cacheNames = "reportsApiCache")
 @Cacheable
 public class TestController {
-    protected final Logger logger = LoggerFactory.getLogger(TestController.class);
+    protected static final Logger logger = LoggerFactory.getLogger(TestController.class);
 
     @ApiOperation(value = "Test API")
     @RequestMapping(value = "/api/testAPI", method = RequestMethod.GET, produces = "application/json")

@@ -1,5 +1,6 @@
 package org.devgateway.toolkit.persistence.excel.info;
 
+import org.devgateway.toolkit.persistence.excel.ExcelFieldService;
 import org.devgateway.toolkit.persistence.excel.annotation.ExcelExport;
 
 import java.lang.reflect.Field;
@@ -26,8 +27,33 @@ public final class ClassFieldsExcelExport implements ClassFields {
         // return only classes that are annotated with @ExcelExport
         final Iterator<Field> fields = StreamSupport.stream(originalFields.spliterator(), false)
                 .filter(field -> field.getAnnotation(ExcelExport.class) != null)
+                .filter(this::filterByClass)
                 .iterator();
 
         return fields;
+    }
+
+    /**
+     * Filter by {@link ExcelExport#onlyForClass()} property.
+     */
+    private boolean filterByClass(final Field field) {
+        Class[] allowedClasses = ExcelFieldService.getFieldClazz(field);
+
+        if (allowedClasses == null) {
+            return true;
+        }
+
+        for (Class clazz : allowedClasses) {
+            if (clazz.equals(this.getClazz())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public Class getClazz() {
+        return this.original.getClazz();
     }
 }
