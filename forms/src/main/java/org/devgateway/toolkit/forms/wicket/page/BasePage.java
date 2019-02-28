@@ -12,6 +12,7 @@
 package org.devgateway.toolkit.forms.wicket.page;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapBookmarkablePageLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.dropdown.MenuBookmarkablePageLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.dropdown.MenuDivider;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
@@ -267,6 +268,13 @@ public abstract class BasePage extends GenericWebPage<Void> {
                         .setIconType(FontAwesomeIconType.android));
 
                 list.add(new MenuDivider());
+
+                final BootstrapBookmarkablePageLink swagger = new MenuBookmarkablePageLink<Void>(SwaggerPage.class,
+                        new StringResourceModel("navbar.swagger", BasePage.this, null))
+                        .setIconType(FontAwesomeIconType.code);
+                MetaDataRoleAuthorizationStrategy.authorize(swagger, Component.RENDER,
+                        SecurityConstants.Roles.ROLE_ADMIN);
+                list.add(swagger);
 
                 list.add(new MenuBookmarkablePageLink<SpringEndpointsPage>(SpringEndpointsPage.class, null,
                         new StringResourceModel("navbar.springendpoints", this, null))
