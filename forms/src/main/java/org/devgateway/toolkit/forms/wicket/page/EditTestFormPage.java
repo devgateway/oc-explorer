@@ -33,14 +33,13 @@ import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFor
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListTestFormPage;
 import org.devgateway.toolkit.forms.wicket.providers.GenericChoiceProvider;
-import org.devgateway.toolkit.forms.wicket.providers.GenericPersistableJpaRepositoryTextChoiceProvider;
+import org.devgateway.toolkit.forms.wicket.providers.GenericPersistableJpaTextChoiceProvider;
 import org.devgateway.toolkit.persistence.dao.Role;
 import org.devgateway.toolkit.persistence.dao.TestForm;
 import org.devgateway.toolkit.persistence.dao.categories.Group;
-import org.devgateway.toolkit.persistence.repository.RoleRepository;
-import org.devgateway.toolkit.persistence.repository.TestFormRepository;
-import org.devgateway.toolkit.persistence.repository.category.GroupRepository;
+import org.devgateway.toolkit.persistence.service.RoleService;
 import org.devgateway.toolkit.persistence.service.TestFormService;
+import org.devgateway.toolkit.persistence.service.category.GroupService;
 import org.wicketstuff.annotation.mount.MountPath;
 
 /**
@@ -57,10 +56,10 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
     private TestFormService testFormService;
 
     @SpringBean
-    private RoleRepository roleRepository;
+    private RoleService roleService;
 
     @SpringBean
-    private GroupRepository groupRepository;
+    private GroupService groupService;
 
     /**
      * @param parameters
@@ -70,12 +69,6 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
 
         this.jpaService = testFormService;
         this.listPageClass = ListTestFormPage.class;
-    }
-
-    // TODO - move this to Service
-    @Override
-    protected TestForm newInstance() {
-        return new TestForm();
     }
 
     @Override
@@ -96,14 +89,14 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
         editForm.add(summernote);
         summernote.required().enableRevisionsView();
         Select2ChoiceBootstrapFormComponent<Group> entitySelect = new Select2ChoiceBootstrapFormComponent<Group>(
-                "entitySelect", new GenericPersistableJpaRepositoryTextChoiceProvider<>(groupRepository));
+                "entitySelect", new GenericPersistableJpaTextChoiceProvider<>(groupService));
         entitySelect.required();
         editForm.add(entitySelect);
 
         Select2MultiChoiceBootstrapFormComponent<Role> entityMultiSelect =
                 new Select2MultiChoiceBootstrapFormComponent<Role>(
                         "entityMultiSelect",
-                        new GenericPersistableJpaRepositoryTextChoiceProvider<>(roleRepository)
+                        new GenericPersistableJpaTextChoiceProvider<>(roleService)
                 );
         editForm.add(entityMultiSelect);
 
@@ -136,7 +129,7 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
         editForm.add(fileInput);
 
         Select2ChoiceBootstrapFormComponent<Group> preloadedEntitySelect = new Select2ChoiceBootstrapFormComponent<>(
-                "preloadedEntitySelect", new GenericChoiceProvider<>(groupRepository.findAll()));
+                "preloadedEntitySelect", new GenericChoiceProvider<>(groupService.findAll()));
         preloadedEntitySelect.required();
         editForm.add(preloadedEntitySelect);
 

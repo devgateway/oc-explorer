@@ -19,7 +19,6 @@ import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFor
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListGroupPage;
 import org.devgateway.toolkit.persistence.dao.categories.Group;
-import org.devgateway.toolkit.persistence.repository.category.GroupRepository;
 import org.devgateway.toolkit.persistence.service.category.GroupService;
 import org.wicketstuff.annotation.mount.MountPath;
 
@@ -28,11 +27,6 @@ import org.wicketstuff.annotation.mount.MountPath;
 public class EditGroupPage extends AbstractEditPage<Group> {
 
     private static final long serialVersionUID = -6069250112046118104L;
-
-    @Override
-    protected Group newInstance() {
-        return new Group();
-    }
 
     @SpringBean
     private GroupService groupService;

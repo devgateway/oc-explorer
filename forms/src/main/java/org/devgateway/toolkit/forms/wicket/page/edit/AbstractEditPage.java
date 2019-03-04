@@ -64,7 +64,9 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
      *
      * @return
      */
-    protected abstract T newInstance();
+    private T newInstance() {
+        return jpaService.newInstance().get();
+    }
 
     /**
      * The repository used to fetch and save the entity, this is initialized in
@@ -122,8 +124,11 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
     }
 
     public void flushReportingCaches() {
-        if (reportsCacheService != null && markupCacheService != null) {
+        if (reportsCacheService != null) {
             reportsCacheService.flushCache();
+        }
+
+        if (markupCacheService != null) {
             markupCacheService.flushMarkupCache();
             markupCacheService.clearPentahoReportsCache();
             markupCacheService.clearAllCaches();
@@ -255,8 +260,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
             // attached
             entityManager.clear();
 
-            // we flush the mondrian/wicket/reports cache to ensure it gets
-            // rebuilt
+            // we flush the mondrian/wicket/reports cache to ensure it gets rebuilt
             flushReportingCaches();
 
             // only redirect if redirect is true
@@ -349,6 +353,9 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
             T deleteable = editForm.getModelObject();
             try {
                 jpaService.delete(deleteable);
+
+                // we flush the mondrian/wicket/reports cache to ensure it gets rebuilt
+                flushReportingCaches();
             } catch (DataIntegrityViolationException e) {
                 error(new NotificationMessage(
                         new StringResourceModel("delete_error_message", AbstractEditPage.this, null))

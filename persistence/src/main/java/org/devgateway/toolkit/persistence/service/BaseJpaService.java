@@ -18,38 +18,50 @@ import java.util.Optional;
  * @author idobre
  * @since 2019-03-04
  */
-@CacheConfig(cacheNames = "servicesCache")
+@CacheConfig(keyGenerator = "genericKeyGenerator", cacheNames = "servicesCache")
 public abstract class BaseJpaService<T extends GenericPersistable & Serializable> {
 
-    @Cacheable(key = "{ #root.targetClass, #root.methodName }")
+    @Cacheable
     public List<T> findAll() {
         return repository().findAll();
     }
 
+    @Cacheable
     public List<T> findAll(final Sort sort) {
         return repository().findAll(sort);
     }
 
+    @Cacheable
     public List<T> findAll(final Specification<T> spec) {
         return repository().findAll(spec);
     }
 
+    @Cacheable
     public Page<T> findAll(final Specification<T> spec, final Pageable pageable) {
         return repository().findAll(spec, pageable);
     }
 
+    @Cacheable
+    public Page<T> findAll(final Pageable pageable) {
+        return repository().findAll(pageable);
+    }
+
+    @Cacheable
     public List<T> findAll(final Specification<T> spec, final Sort sort) {
         return repository().findAll(spec, sort);
     }
 
+    @Cacheable
     public long count(final Specification<T> spec) {
         return repository().count(spec);
     }
 
+    @Cacheable
     public Optional<T> findById(final Long id) {
         return repository().findById(id);
     }
 
+    @Cacheable
     public long count() {
         return repository().count();
     }

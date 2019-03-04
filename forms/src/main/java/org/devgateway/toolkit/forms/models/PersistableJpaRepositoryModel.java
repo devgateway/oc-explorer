@@ -13,14 +13,14 @@ package org.devgateway.toolkit.forms.models;
 
 import nl.dries.wicket.hibernate.dozer.DozerModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.devgateway.toolkit.forms.wicket.providers.SortableJpaRepositoryDataProvider;
+import org.devgateway.toolkit.forms.wicket.providers.SortableJpaServiceDataProvider;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.devgateway.toolkit.persistence.service.BaseJpaService;
 
 import java.io.Serializable;
 
 /**
- * USE THIS ONLY FOR {@link SortableJpaRepositoryDataProvider}S Use
+ * USE THIS ONLY FOR {@link SortableJpaServiceDataProvider}S Use
  * {@link DozerModel} for editing complex forms
  *
  * @param <T> the type of the entity to be accessed

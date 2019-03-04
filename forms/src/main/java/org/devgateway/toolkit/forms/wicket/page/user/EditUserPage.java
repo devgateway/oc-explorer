@@ -38,13 +38,15 @@ import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFor
 import org.devgateway.toolkit.forms.wicket.page.Homepage;
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListUserPage;
-import org.devgateway.toolkit.forms.wicket.providers.GenericPersistableJpaRepositoryTextChoiceProvider;
+import org.devgateway.toolkit.forms.wicket.providers.GenericPersistableJpaTextChoiceProvider;
 import org.devgateway.toolkit.persistence.dao.Person;
 import org.devgateway.toolkit.persistence.dao.Role;
 import org.devgateway.toolkit.persistence.dao.categories.Group;
 import org.devgateway.toolkit.persistence.repository.RoleRepository;
 import org.devgateway.toolkit.persistence.repository.category.GroupRepository;
 import org.devgateway.toolkit.persistence.service.PersonService;
+import org.devgateway.toolkit.persistence.service.RoleService;
+import org.devgateway.toolkit.persistence.service.category.GroupService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.wicketstuff.annotation.mount.MountPath;
 
@@ -57,10 +59,10 @@ public class EditUserPage extends AbstractEditPage<Person> {
     private PersonService personService;
 
     @SpringBean
-    private GroupRepository groupRepository;
+    private GroupService groupService;
 
     @SpringBean
-    private RoleRepository roleRepository;
+    private RoleService roleService;
 
     @SpringBean
     private SendEmailService sendEmailService;
@@ -79,10 +81,10 @@ public class EditUserPage extends AbstractEditPage<Person> {
     protected TextFieldBootstrapFormComponent<String> title = new TextFieldBootstrapFormComponent<>("title");
 
     protected Select2ChoiceBootstrapFormComponent<Group> group = new Select2ChoiceBootstrapFormComponent<>("group",
-            new GenericPersistableJpaRepositoryTextChoiceProvider<>(groupRepository));
+            new GenericPersistableJpaTextChoiceProvider<>(groupService));
 
     protected Select2MultiChoiceBootstrapFormComponent<Role> roles = new Select2MultiChoiceBootstrapFormComponent<>(
-            "roles", new Model<>("Roles"), new GenericPersistableJpaRepositoryTextChoiceProvider<>(roleRepository));
+            "roles", new Model<>("Roles"), new GenericPersistableJpaTextChoiceProvider<>(roleService));
 
     protected CheckBoxBootstrapFormComponent enabled = new CheckBoxBootstrapFormComponent("enabled");
 
@@ -185,11 +187,6 @@ public class EditUserPage extends AbstractEditPage<Person> {
         public UsernamePatternValidator() {
             super(USERNAME_PATTERN);
         }
-    }
-
-    @Override
-    protected Person newInstance() {
-        return new Person();
     }
 
     @Override

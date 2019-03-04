@@ -9,7 +9,6 @@ import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxToggleBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.persistence.dao.AdminSettings;
-import org.devgateway.toolkit.persistence.repository.AdminSettingsRepository;
 import org.devgateway.toolkit.persistence.service.AdminSettingsService;
 import org.wicketstuff.annotation.mount.MountPath;
 
@@ -43,11 +42,6 @@ public class EditAdminSettingsPage extends AbstractEditPage<AdminSettings> {
                 entityId = listSettings.get(0).getId();
             }
         }
-    }
-
-    @Override
-    protected AdminSettings newInstance() {
-        return new AdminSettings();
     }
 
     @Override

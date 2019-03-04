@@ -16,7 +16,6 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 import org.apache.wicket.markup.Markup;
 import org.apache.wicket.markup.MarkupCache;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -30,7 +29,6 @@ import java.util.Collection;
  * function
  */
 @Component
-@Profile("reports")
 public class MarkupCacheService {
     /**
      * start-key used to identify the reports markup

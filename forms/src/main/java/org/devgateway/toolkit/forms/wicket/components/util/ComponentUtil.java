@@ -21,10 +21,12 @@ import org.devgateway.toolkit.forms.wicket.components.form.TextAreaFieldBootstra
 import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.events.EditingDisabledEvent;
 import org.devgateway.toolkit.forms.wicket.events.EditingEnabledEvent;
-import org.devgateway.toolkit.forms.wicket.providers.GenericPersistableJpaRepositoryTextChoiceProvider;
+import org.devgateway.toolkit.forms.wicket.providers.GenericPersistableJpaTextChoiceProvider;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.devgateway.toolkit.persistence.dao.Labelable;
-import org.devgateway.toolkit.persistence.repository.norepository.TextSearchableRepository;
+import org.devgateway.toolkit.persistence.service.TextSearchableService;
+
+import java.io.Serializable;
 
 /**
  * @author idobre
@@ -68,6 +70,7 @@ public final class ComponentUtil {
         final CheckBoxBootstrapFormComponent checkBox = new CheckBoxBootstrapFormComponent(id);
         checkBox.setIsFloatedInput(isFloatedInput);
         parent.add(checkBox);
+
         return checkBox;
     }
 
@@ -78,6 +81,7 @@ public final class ComponentUtil {
         final CheckBoxToggleBootstrapFormComponent checkToggle = new CheckBoxToggleBootstrapFormComponent(id);
         checkToggle.setIsFloatedInput(isFloatedInput);
         parent.add(checkToggle);
+
         return checkToggle;
     }
 
@@ -88,6 +92,7 @@ public final class ComponentUtil {
         final CheckBoxYesNoToggleBootstrapFormComponent checkToggle = new CheckBoxYesNoToggleBootstrapFormComponent(id);
         checkToggle.setIsFloatedInput(isFloatedInput);
         parent.add(checkToggle);
+
         return checkToggle;
     }
 
@@ -96,6 +101,7 @@ public final class ComponentUtil {
             final String id) {
         final TextAreaFieldBootstrapFormComponent<String> textAreaField = new TextAreaFieldBootstrapFormComponent<>(id);
         parent.add(textAreaField);
+
         return textAreaField;
     }
 
@@ -106,6 +112,7 @@ public final class ComponentUtil {
         final TextFieldBootstrapFormComponent<String> textField = new TextFieldBootstrapFormComponent<>(id);
         textField.setIsFloatedInput(isFloatedInput);
         parent.add(textField);
+
         return textField;
     }
 
@@ -121,6 +128,7 @@ public final class ComponentUtil {
         };
         textField.setIsFloatedInput(isFloatedInput);
         parent.add(textField);
+
         return textField;
     }
 
@@ -132,6 +140,7 @@ public final class ComponentUtil {
         textField.setIsFloatedInput(isFloatedInput);
         textField.integer();
         parent.add(textField);
+
         return textField;
     }
 
@@ -143,6 +152,7 @@ public final class ComponentUtil {
         textField.setIsFloatedInput(isFloatedInput);
         textField.asDouble();
         parent.add(textField);
+
         return textField;
     }
 
@@ -153,6 +163,7 @@ public final class ComponentUtil {
         final DateTimeFieldBootstrapFormComponent field = new DateTimeFieldBootstrapFormComponent(id);
         field.setIsFloatedInput(isFloatedInput);
         parent.add(field);
+
         return field;
     }
 
@@ -163,36 +174,39 @@ public final class ComponentUtil {
         final DateFieldBootstrapFormComponent field = new DateFieldBootstrapFormComponent(id);
         field.setIsFloatedInput(isFloatedInput);
         parent.add(field);
+
         return field;
     }
 
-    public static <E extends GenericPersistable & Labelable> Select2ChoiceBootstrapFormComponent<E>
+    public static <E extends GenericPersistable & Labelable & Serializable> Select2ChoiceBootstrapFormComponent<E>
     addSelect2ChoiceField(
             final WebMarkupContainer parent,
             final String id,
-            final TextSearchableRepository<E, Long> repository,
+            final TextSearchableService<E> searchService,
             final boolean isFloatedInput) {
-        GenericPersistableJpaRepositoryTextChoiceProvider<E> choiceProvider
-                = new GenericPersistableJpaRepositoryTextChoiceProvider<>(repository);
-        Select2ChoiceBootstrapFormComponent<E> component = new Select2ChoiceBootstrapFormComponent<>(id,
+        final GenericPersistableJpaTextChoiceProvider<E> choiceProvider
+                = new GenericPersistableJpaTextChoiceProvider<>(searchService);
+        final Select2ChoiceBootstrapFormComponent<E> component = new Select2ChoiceBootstrapFormComponent<>(id,
                 choiceProvider);
         component.setIsFloatedInput(isFloatedInput);
         parent.add(component);
+
         return component;
     }
 
-    public static <E extends GenericPersistable & Labelable> Select2MultiChoiceBootstrapFormComponent<E>
+    public static <E extends GenericPersistable & Labelable & Serializable> Select2MultiChoiceBootstrapFormComponent<E>
     addSelect2MultiChoiceField(
             final WebMarkupContainer parent,
             final String id,
-            final TextSearchableRepository<E, Long> repository,
+            final TextSearchableService<E> searchService,
             final boolean isFloatedInput) {
-        GenericPersistableJpaRepositoryTextChoiceProvider<E> choiceProvider =
-                new GenericPersistableJpaRepositoryTextChoiceProvider<>(repository);
-        Select2MultiChoiceBootstrapFormComponent<E> component =
+        final GenericPersistableJpaTextChoiceProvider<E> choiceProvider =
+                new GenericPersistableJpaTextChoiceProvider<>(searchService);
+        final Select2MultiChoiceBootstrapFormComponent<E> component =
                 new Select2MultiChoiceBootstrapFormComponent<>(id, choiceProvider);
         component.setIsFloatedInput(isFloatedInput);
         parent.add(component);
+
         return component;
     }
 

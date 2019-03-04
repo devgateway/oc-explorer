@@ -15,7 +15,7 @@ import org.apache.wicket.model.IModel;
 import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.devgateway.toolkit.persistence.dao.Labelable;
-import org.devgateway.toolkit.persistence.repository.norepository.TextSearchableRepository;
+import org.devgateway.toolkit.persistence.service.TextSearchableService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -24,6 +24,7 @@ import org.springframework.data.domain.Sort;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -32,44 +33,40 @@ import java.util.Optional;
 /**
  * @author mpostelnicu
  */
-public abstract class AbstractJpaRepositoryTextChoiceProvider<T extends GenericPersistable & Labelable>
+public abstract class AbstractJpaTextChoiceProvider<T extends GenericPersistable & Labelable & Serializable>
         extends ChoiceProvider<T> {
 
     private static final long serialVersionUID = 5709987900445896586L;
 
-    private static final Logger logger = LoggerFactory.getLogger(AbstractJpaRepositoryTextChoiceProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractJpaTextChoiceProvider.class);
 
-    protected T newObject;
+    private T newObject;
 
-    protected Sort sort;
+    private Sort sort;
 
     protected Boolean addNewElements = false;
 
     private Class<T> clazz;
 
-    protected IModel<Collection<T>> restrictedToItemsModel;
+    private IModel<Collection<T>> restrictedToItemsModel;
 
-    protected TextSearchableRepository<T, Long> textSearchableRepository;
+    private final TextSearchableService<T> textSearchableService;
 
-    public AbstractJpaRepositoryTextChoiceProvider(final TextSearchableRepository<T, Long> textSearchableRepository) {
-        this.textSearchableRepository = textSearchableRepository;
+    public AbstractJpaTextChoiceProvider(final TextSearchableService<T> textSearchableService) {
+        this.textSearchableService = textSearchableService;
     }
 
-    public AbstractJpaRepositoryTextChoiceProvider(final TextSearchableRepository<T, Long> textSearchableRepository,
-                                                   final Class<T> clazz, final Boolean addNewElements) {
-        this.textSearchableRepository = textSearchableRepository;
+    public AbstractJpaTextChoiceProvider(final TextSearchableService<T> textSearchableService,
+                                         final Class<T> clazz, final Boolean addNewElements) {
+        this.textSearchableService = textSearchableService;
         this.clazz = clazz;
         this.addNewElements = addNewElements;
     }
 
-    public AbstractJpaRepositoryTextChoiceProvider(final TextSearchableRepository<T, Long> textSearchableRepository,
-                                                   final IModel<Collection<T>> restrictedToItemsModel) {
-        this(textSearchableRepository);
+    public AbstractJpaTextChoiceProvider(final TextSearchableService<T> textSearchableService,
+                                         final IModel<Collection<T>> restrictedToItemsModel) {
+        this(textSearchableService);
         this.restrictedToItemsModel = restrictedToItemsModel;
-    }
-
-    public TextSearchableRepository<T, Long> getTextSearchableRepository() {
-        return textSearchableRepository;
     }
 
     @Override
@@ -121,14 +118,14 @@ public abstract class AbstractJpaRepositoryTextChoiceProvider<T extends GenericP
         final PageRequest pageRequest = sort == null
                 ? PageRequest.of(page, WebConstants.SELECT_PAGE_SIZE)
                 : PageRequest.of(page, WebConstants.SELECT_PAGE_SIZE, sort);
-        return getTextSearchableRepository().searchText(term, pageRequest);
+        return textSearchableService.searchText(term, pageRequest);
     }
 
     public Page<T> findAll(final int page) {
         final PageRequest pageRequest = sort == null
                 ? PageRequest.of(page, WebConstants.SELECT_PAGE_SIZE)
                 : PageRequest.of(page, WebConstants.SELECT_PAGE_SIZE, sort);
-        return getTextSearchableRepository().findAll(pageRequest);
+        return textSearchableService.findAll(pageRequest);
     }
 
     @Override
@@ -139,7 +136,7 @@ public abstract class AbstractJpaRepositoryTextChoiceProvider<T extends GenericP
             // create new element
             if (Long.parseLong(id) == 0 && addNewElements) {
                 if (newObject != null && newObject.getId() == null) {
-                    getTextSearchableRepository().save(newObject);
+                    textSearchableService.save(newObject);
                 }
 
                 id = newObject.getId().toString();
@@ -151,10 +148,10 @@ public abstract class AbstractJpaRepositoryTextChoiceProvider<T extends GenericP
         ArrayList<T> response = new ArrayList<>();
         for (String s : idsList) {
             Long id = Long.parseLong(s);
-            Optional<T> findOne = getTextSearchableRepository().findById(id);
+            Optional<T> findOne = textSearchableService.findById(id);
             if (!findOne.isPresent()) {
-                logger.error("Cannot find entity with id=" + id + " in repository "
-                        + getTextSearchableRepository().getClass());
+                logger.error("Cannot find entity with id=" + id + " in service "
+                        + textSearchableService.getClass());
             } else {
                 response.add(findOne.get());
             }

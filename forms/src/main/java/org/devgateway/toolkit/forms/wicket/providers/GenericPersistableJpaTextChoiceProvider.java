@@ -18,41 +18,33 @@ import org.apache.wicket.model.IModel;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.devgateway.toolkit.persistence.dao.Labelable;
 import org.devgateway.toolkit.persistence.repository.norepository.TextSearchableRepository;
+import org.devgateway.toolkit.persistence.service.TextSearchableService;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
  * @author mpostelnicu
  *
  */
-public class GenericPersistableJpaRepositoryTextChoiceProvider<T extends GenericPersistable & Labelable>
-        extends AbstractJpaRepositoryTextChoiceProvider<T> {
+public class GenericPersistableJpaTextChoiceProvider<T extends GenericPersistable & Labelable & Serializable>
+        extends AbstractJpaTextChoiceProvider<T> {
     private static final long serialVersionUID = -643286578944834690L;
 
-    public GenericPersistableJpaRepositoryTextChoiceProvider(
-            final TextSearchableRepository<T, Long> textSearchableRepository) {
-        super(textSearchableRepository);
+    public GenericPersistableJpaTextChoiceProvider(final TextSearchableService<T> textSearchableService) {
+        super(textSearchableService);
     }
 
-    public GenericPersistableJpaRepositoryTextChoiceProvider(
-            final TextSearchableRepository<T, Long> textSearchableRepository,
-            final IModel<Collection<T>> restrictedToItemsModel) {
-        super(textSearchableRepository, restrictedToItemsModel);
+    public GenericPersistableJpaTextChoiceProvider(final TextSearchableService<T> textSearchableService,
+                                                   final IModel<Collection<T>> restrictedToItemsModel) {
+        super(textSearchableService, restrictedToItemsModel);
     }
 
-    public GenericPersistableJpaRepositoryTextChoiceProvider(
-            final TextSearchableRepository<T, Long> textSearchableRepository, final Class<T> clazz,
-            final Boolean addNewElements) {
-        super(textSearchableRepository, clazz, addNewElements);
+    public GenericPersistableJpaTextChoiceProvider(final TextSearchableService<T> textSearchableService,
+                                                   final Class<T> clazz, final Boolean addNewElements) {
+        super(textSearchableService, clazz, addNewElements);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.vaynberg.wicket.select2.TextChoiceProvider#getDisplayText(java.lang.
-     * Object)
-     */
     @Override
     public String getDisplayValue(final T choice) {
         if (addNewElements && choice.getId() == null) {

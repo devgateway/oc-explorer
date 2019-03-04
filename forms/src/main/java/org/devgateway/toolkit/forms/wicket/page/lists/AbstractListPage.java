@@ -46,7 +46,7 @@ import org.devgateway.toolkit.forms.wicket.components.table.filter.JpaFilterStat
 import org.devgateway.toolkit.forms.wicket.page.BasePage;
 import org.devgateway.toolkit.forms.wicket.page.RevisionsPage;
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
-import org.devgateway.toolkit.forms.wicket.providers.SortableJpaRepositoryDataProvider;
+import org.devgateway.toolkit.forms.wicket.providers.SortableJpaServiceDataProvider;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.devgateway.toolkit.persistence.excel.service.ExcelGeneratorService;
 import org.devgateway.toolkit.persistence.service.BaseJpaService;
@@ -79,7 +79,7 @@ public abstract class AbstractListPage<T extends GenericPersistable & Serializab
 
     protected BaseJpaService<T> jpaService;
 
-    protected SortableJpaRepositoryDataProvider<T> dataProvider;
+    protected SortableJpaServiceDataProvider<T> dataProvider;
 
     protected BootstrapBookmarkablePageLink<T> editPageLink;
 
@@ -110,7 +110,7 @@ public abstract class AbstractListPage<T extends GenericPersistable & Serializab
             throw new NullEditPageClassException();
         }
 
-        dataProvider = new SortableJpaRepositoryDataProvider<>(jpaService);
+        dataProvider = new SortableJpaServiceDataProvider<>(jpaService);
         dataProvider.setFilterState(newFilterState());
 
         // create the excel download form; by default this form is hidden and we should make it visible only to pages

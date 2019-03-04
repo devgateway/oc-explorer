@@ -26,7 +26,6 @@ import java.io.Serializable;
 @NoRepositoryBean
 @Transactional
 public interface TextSearchableRepository<T, ID extends Serializable> extends BaseJpaRepository<T, ID> {
-
     @Override
     Page<T> findAll(Pageable pageable);
 

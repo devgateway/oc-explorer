@@ -34,7 +34,7 @@ import java.util.Iterator;
  * <p>
  * Smart generic {@link SortableDataProvider} that binds to {@link BaseJpaService}
  */
-public class SortableJpaRepositoryDataProvider<T extends GenericPersistable & Serializable>
+public class SortableJpaServiceDataProvider<T extends GenericPersistable & Serializable>
         extends SortableDataProvider<T, String> implements IFilterStateLocator<JpaFilterState<T>> {
     private static final long serialVersionUID = 6507887810859971417L;
 
@@ -47,7 +47,7 @@ public class SortableJpaRepositoryDataProvider<T extends GenericPersistable & Se
      *
      * @param jpaService
      */
-    public SortableJpaRepositoryDataProvider(final BaseJpaService<T> jpaService) {
+    public SortableJpaServiceDataProvider(final BaseJpaService<T> jpaService) {
         this.jpaService = jpaService;
     }
 
