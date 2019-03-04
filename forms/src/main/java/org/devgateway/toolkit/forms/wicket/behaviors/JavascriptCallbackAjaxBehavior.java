@@ -21,9 +21,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class JavascriptCallbackAjaxBehavior extends AbstractDefaultAjaxBehavior {
-
     private static final long serialVersionUID = 1L;
-    protected PackageTextTemplate scriptTemplate;
+
+    private PackageTextTemplate scriptTemplate;
 
     public JavascriptCallbackAjaxBehavior(final PackageTextTemplate scriptTemplate) {
         this.scriptTemplate = scriptTemplate;

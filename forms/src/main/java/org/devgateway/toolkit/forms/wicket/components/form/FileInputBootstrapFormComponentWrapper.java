@@ -68,7 +68,7 @@ import java.util.List;
 public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPanel<T> {
     private static final long serialVersionUID = 1L;
 
-    protected Collection<FileMetadata> filesModel;
+    private Collection<FileMetadata> filesModel;
 
     private int maxFiles = 0;
 
@@ -81,9 +81,9 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
 
     private WebMarkupContainer pendingFiles;
 
-    protected BootstrapFileInput bootstrapFileInput;
+    private BootstrapFileInput bootstrapFileInput;
 
-    protected Boolean visibleOnlyToAdmin = false;
+    private Boolean visibleOnlyToAdmin = false;
 
     private Boolean disableDeleteButton = false;
 

@@ -35,7 +35,7 @@ import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFor
 import org.devgateway.toolkit.forms.wicket.page.BasePage;
 import org.devgateway.toolkit.forms.wicket.page.Homepage;
 import org.devgateway.toolkit.persistence.dao.Person;
-import org.devgateway.toolkit.persistence.repository.PersonRepository;
+import org.devgateway.toolkit.persistence.service.PersonService;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.wicketstuff.annotation.mount.MountPath;
 
@@ -50,7 +50,7 @@ public class LoginPage extends BasePage {
     private static final long serialVersionUID = 1L;
 
     @SpringBean
-    private PersonRepository personRepository;
+    private PersonService personService;
 
     private static final int HIDE_NOTIFICATION_SECONDS = 15;
 

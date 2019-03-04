@@ -68,7 +68,7 @@ public abstract class AbstractAuditableEntity extends GenericPersistable
     public abstract AbstractAuditableEntity getParent();
 
     /**
-     * @see http ://stackoverflow.com/questions/10697945/hibernate-envers-track-
+     * stackoverflow.com/questions/10697945/hibernate-envers-track-
      * revisions -in-the-owning-side-of-a-onetomany-relation updates parent
      * timestamp when child is updated. Useful for forcing envers to
      * generate a revision for parents when it generates a revision for

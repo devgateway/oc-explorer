@@ -73,20 +73,20 @@ public abstract class AbstractListPage<T extends GenericPersistable & Serializab
 
     protected Class<? extends AbstractEditPage<T>> editPageClass;
 
-    protected AjaxFallbackBootstrapDataTable<T, String> dataTable;
+    private AjaxFallbackBootstrapDataTable<T, String> dataTable;
 
     protected List<IColumn<T, String>> columns;
 
     protected BaseJpaService<T> jpaService;
 
-    protected SortableJpaServiceDataProvider<T> dataProvider;
+    private SortableJpaServiceDataProvider<T> dataProvider;
 
-    protected BootstrapBookmarkablePageLink<T> editPageLink;
+    private BootstrapBookmarkablePageLink<T> editPageLink;
 
     protected Form excelForm;
 
     @SpringBean
-    protected ExcelGeneratorService excelGeneratorService;
+    private ExcelGeneratorService excelGeneratorService;
 
     public AbstractListPage(final PageParameters parameters) {
         super(parameters);

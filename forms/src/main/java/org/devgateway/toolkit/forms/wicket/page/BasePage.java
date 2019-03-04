@@ -75,11 +75,11 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
     protected static final Logger logger = LoggerFactory.getLogger(BasePage.class);
 
-    protected TransparentWebMarkupContainer mainContainer;
+    private TransparentWebMarkupContainer mainContainer;
 
-    protected Header mainHeader;
+    private Header mainHeader;
 
-    protected Footer mainFooter;
+    private Footer mainFooter;
 
     protected Label pageTitle;
 

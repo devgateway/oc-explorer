@@ -42,8 +42,6 @@ import org.devgateway.toolkit.forms.wicket.providers.GenericPersistableJpaTextCh
 import org.devgateway.toolkit.persistence.dao.Person;
 import org.devgateway.toolkit.persistence.dao.Role;
 import org.devgateway.toolkit.persistence.dao.categories.Group;
-import org.devgateway.toolkit.persistence.repository.RoleRepository;
-import org.devgateway.toolkit.persistence.repository.category.GroupRepository;
 import org.devgateway.toolkit.persistence.service.PersonService;
 import org.devgateway.toolkit.persistence.service.RoleService;
 import org.devgateway.toolkit.persistence.service.category.GroupService;

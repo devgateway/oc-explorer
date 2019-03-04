@@ -37,7 +37,7 @@ public final class ReportUtil {
      * @param directoryName
      * @return
      * @throws IOException
-     * @see https://github.com/pentaho/pentaho-reporting/blob/master/designer/
+     * see https://github.com/pentaho/pentaho-reporting/blob/master/designer/
      *      report-designer/src/org/pentaho/reporting/designer/core/actions/
      *      report/preview/PreviewHtmlAction.java
      */

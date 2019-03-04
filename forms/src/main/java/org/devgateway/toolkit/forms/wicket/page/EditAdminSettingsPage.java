@@ -27,7 +27,7 @@ public class EditAdminSettingsPage extends AbstractEditPage<AdminSettings> {
     private CheckBoxToggleBootstrapFormComponent rebootServer;
 
     @SpringBean
-    protected AdminSettingsService adminSettingsService;
+    private AdminSettingsService adminSettingsService;
 
     public EditAdminSettingsPage(final PageParameters parameters) {
         super(parameters);

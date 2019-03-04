@@ -21,7 +21,7 @@ import java.util.Map;
  * @since 22/03/2018
  */
 public class ExcelSheetImportDefault implements ExcelSheetImport {
-    protected static final Logger logger = LoggerFactory.getLogger(ExcelSheetImportDefault.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExcelSheetImportDefault.class);
 
     private final ImportBean importBean;
 

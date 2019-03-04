@@ -107,13 +107,13 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
     protected BootstrapDeleteButton deleteButton;
 
     @SpringBean
-    protected EntityManager entityManager;
+    private EntityManager entityManager;
 
     @SpringBean(required = false)
-    protected ReportsCacheService reportsCacheService;
+    private ReportsCacheService reportsCacheService;
 
     @SpringBean(required = false)
-    protected MarkupCacheService markupCacheService;
+    private MarkupCacheService markupCacheService;
 
     public EditForm getEditForm() {
         return editForm;
@@ -151,9 +151,9 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
      */
     public class GenericBootstrapValidationVisitor implements IVisitor<GenericBootstrapFormComponent<?, ?>, Void> {
 
-        protected AjaxRequestTarget target;
+        private AjaxRequestTarget target;
 
-        protected GenericBootstrapFormComponent<?, ?> lastInvalidVisitedObject;
+        private GenericBootstrapFormComponent<?, ?> lastInvalidVisitedObject;
 
         public GenericBootstrapValidationVisitor(final AjaxRequestTarget target) {
             this.target = target;
@@ -240,9 +240,9 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
     public class SaveEditPageButton extends BootstrapSubmitButton {
         private static final long serialVersionUID = 9075809391795974349L;
 
-        protected boolean redirect = true;
+        private boolean redirect = true;
 
-        protected boolean redirectToSelf = false;
+        private boolean redirectToSelf = false;
 
         public SaveEditPageButton(final String id, final IModel<String> model) {
             super(id, model);

@@ -18,7 +18,7 @@ import java.util.List;
  * @since 13/11/2017
  */
 public class ExcelFileDefaultTest {
-    protected static final Logger logger = LoggerFactory.getLogger(ExcelFileDefaultTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExcelFileDefaultTest.class);
 
     public class TestTranslateService implements TranslateService {
         @Override

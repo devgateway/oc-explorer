@@ -21,14 +21,14 @@ import java.util.List;
  * @author idobre
  * @since 10/5/16
  * <p>
- * Class that displays a list of <T> type with the possibility of adding/removing elements.
+ * Class that displays a list of T type with the possibility of adding/removing elements.
  */
 
 public abstract class ListViewSectionPanel<T extends AbstractAuditableEntity, PARENT extends AbstractAuditableEntity>
         extends CompoundSectionPanel<List<T>> {
     private WebMarkupContainer listWrapper;
 
-    protected ListView<T> listView;
+    private ListView<T> listView;
 
     public ListViewSectionPanel(final String id) {
         super(id);

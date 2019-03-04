@@ -26,7 +26,7 @@ import java.util.StringJoiner;
  * @since 13/11/2017
  */
 public class ExcelSheetDefault extends AbstractExcelSheet {
-    protected static final Logger logger = LoggerFactory.getLogger(ExcelSheetDefault.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExcelSheetDefault.class);
 
     private static final String PARENTSHEET = "parentSheet";
     private static final String PARENTID = "parentID";

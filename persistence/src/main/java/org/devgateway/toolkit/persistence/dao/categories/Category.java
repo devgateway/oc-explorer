@@ -41,7 +41,7 @@ public class Category extends AbstractAuditableEntity implements Serializable, L
 
     protected String label;
 
-    protected String description;
+    private String description;
 
     public Category(final String label) {
         this.label = label;

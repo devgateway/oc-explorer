@@ -13,7 +13,7 @@ package org.devgateway.toolkit.persistence.spring;
 
 import org.devgateway.toolkit.persistence.dao.Person;
 import org.devgateway.toolkit.persistence.dao.Role;
-import org.devgateway.toolkit.persistence.repository.PersonRepository;
+import org.devgateway.toolkit.persistence.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,14 +30,13 @@ import java.util.Set;
  * {@link UserDetailsService} that uses JPA
  *
  * @author mpostelnicu, krams
- * @see http
- * ://krams915.blogspot.fi/2012/01/spring-security-31-implement_3065.html
+ * see krams915.blogspot.fi/2012/01/spring-security-31-implement_3065.html
  */
 @Component
 public class CustomJPAUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private PersonRepository personRepository;
+    private PersonService personService;
 
     /**
      * Returns a populated {@link UserDetails} object. The username is first
@@ -48,7 +47,7 @@ public class CustomJPAUserDetailsService implements UserDetailsService {
     @Override
     public Person loadUserByUsername(final String username) throws UsernameNotFoundException {
         try {
-            final Person domainUser = personRepository.findByUsername(username);
+            final Person domainUser = personService.findByUsername(username);
             final Set<GrantedAuthority> grantedAuthorities = getGrantedAuthorities(domainUser);
 
             domainUser.setAuthorities(grantedAuthorities);
@@ -59,11 +58,6 @@ public class CustomJPAUserDetailsService implements UserDetailsService {
     }
 
     /**
-     * Reads {@link PersistedAuthority} objects from the
-     * {@link org.devgateway.eudevfin.auth.common.domain.PersistedUser#getPersistedAuthorities()}
-     * and also from the {@link PersistedUserGroup#getPersistedAuthorities()}
-     * (only if the {@link User} belongs to only one {@link PersistedUserGroup})
-     * and converts all {@link PersistedAuthority} objects to
      * {@link GrantedAuthority}.
      *
      * @param domainUser

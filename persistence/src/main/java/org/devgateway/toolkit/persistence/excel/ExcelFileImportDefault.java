@@ -20,7 +20,7 @@ import java.util.Optional;
  * @since 21/03/2018
  */
 public class ExcelFileImportDefault implements ExcelFileImport {
-    protected static final Logger logger = LoggerFactory.getLogger(ExcelFileImportDefault.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExcelFileImportDefault.class);
 
     private final Class clazz;
 

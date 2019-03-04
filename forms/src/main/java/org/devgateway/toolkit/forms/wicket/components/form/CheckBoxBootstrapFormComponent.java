@@ -28,7 +28,7 @@ public class CheckBoxBootstrapFormComponent extends GenericEnablingBootstrapForm
 
     private Boolean isFloatedInput = false;
 
-    protected CheckBox wrappedCheckbox;
+    private CheckBox wrappedCheckbox;
 
     public CheckBoxBootstrapFormComponent(final String id, final IModel<String> labelModel,
             final IModel<Boolean> model) {

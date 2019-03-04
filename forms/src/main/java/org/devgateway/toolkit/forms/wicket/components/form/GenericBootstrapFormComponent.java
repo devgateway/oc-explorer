@@ -64,29 +64,29 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 
     protected FIELD field;
 
-    protected Label viewModeField;
+    private Label viewModeField;
 
-    protected InputBehavior sizeBehavior;
+    private InputBehavior sizeBehavior;
 
     private TooltipConfig.OpenTrigger configWithTrigger = TooltipConfig.OpenTrigger.hover;
 
-    protected TooltipLabel tooltipLabel;
+    private TooltipLabel tooltipLabel;
 
-    protected IModel<String> labelModel;
+    private IModel<String> labelModel;
 
-    protected Class<?> auditorClass;
+    private Class<?> auditorClass;
 
-    protected WebMarkupContainer revisions;
+    private WebMarkupContainer revisions;
 
-    protected TransparentWebMarkupContainer masterGroup;
+    private TransparentWebMarkupContainer masterGroup;
 
-    protected TransparentWebMarkupContainer childGroup;
+    private TransparentWebMarkupContainer childGroup;
 
+    private IModel<EntityManager> entityManagerModel;
 
-    protected IModel<EntityManager> entityManagerModel;
-    protected String auditProperty;
+    private String auditProperty;
 
-    protected IModel<? extends GenericPersistable> revisionOwningEntityModel;
+    private IModel<? extends GenericPersistable> revisionOwningEntityModel;
 
     //prevents repainting of select boxes and other problems with triggering the update even while the component js
     //is not done updating.

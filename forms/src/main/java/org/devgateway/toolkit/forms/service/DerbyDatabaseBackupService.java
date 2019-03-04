@@ -47,7 +47,7 @@ public class DerbyDatabaseBackupService {
 
     private String lastBackupURL;
 
-    protected String databaseName = "sample";
+    private String databaseName = "sample";
 
     /**
      * Invokes backup database. This is invoked by Spring {@link Scheduled} We

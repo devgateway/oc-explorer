@@ -21,6 +21,10 @@ public class FileMetadataService extends BaseJpaService<FileMetadata> {
     @Autowired
     private FileMetadataRepository fileMetadataRepository;
 
+    public FileMetadata findByName(final String name) {
+        return fileMetadataRepository.findByName(name);
+    }
+
     @Override
     protected BaseJpaRepository<FileMetadata, Long> repository() {
         return fileMetadataRepository;

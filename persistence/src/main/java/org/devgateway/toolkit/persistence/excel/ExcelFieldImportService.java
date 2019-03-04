@@ -26,7 +26,7 @@ import java.util.Map;
  * @since 19/03/2018
  */
 public final class ExcelFieldImportService {
-    protected static final Logger logger = LoggerFactory.getLogger(ExcelFieldImportService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExcelFieldImportService.class);
 
     private static Map<Field, FieldTypeImport> fieldsTypeCache;
 

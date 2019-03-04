@@ -18,14 +18,17 @@ import java.util.List;
  * @param <TYPE> the component type
  */
 public class RevisionsPanel<TYPE> extends GenericPanel<List<TYPE>> {
-
     private final String auditProperty;
-    protected TransparentWebMarkupContainer revisionsCollapse;
-    protected TransparentWebMarkupContainer revisionsMasterGroup;
-    protected TransparentWebMarkupContainer revisionsChildGroup;
-    protected WebMarkupContainer revisionsPanelLink;
-    protected Label revisionsPanelLabel;
 
+    private TransparentWebMarkupContainer revisionsCollapse;
+
+    private TransparentWebMarkupContainer revisionsMasterGroup;
+
+    private TransparentWebMarkupContainer revisionsChildGroup;
+
+    private WebMarkupContainer revisionsPanelLink;
+
+    private Label revisionsPanelLabel;
 
     /**
      * @param id the revision panel id

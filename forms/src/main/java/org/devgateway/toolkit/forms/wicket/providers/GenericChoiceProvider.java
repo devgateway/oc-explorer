@@ -37,7 +37,7 @@ public class GenericChoiceProvider<T> extends ChoiceProvider<T> {
     /**
      * all elements are identified by and id which in this case is the String
      * representation of the T object (see @toJson function) so we retain the
-     * elements as a tuple <id, T> so we can easily have access to the original
+     * elements as a tuple (id, T) so we can easily have access to the original
      * T object in the @toChoices function
      */
     private Map<String, T> bagOfElements;

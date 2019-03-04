@@ -11,7 +11,6 @@ import org.apache.wicket.model.ResourceModel;
  * @see CompoundSectionPanel#onInitialize()
  */
 public class CompoundSectionPanel<T> extends GenericPanel<T> {
-
     private static final long serialVersionUID = 1L;
 
     protected IModel<String> title;

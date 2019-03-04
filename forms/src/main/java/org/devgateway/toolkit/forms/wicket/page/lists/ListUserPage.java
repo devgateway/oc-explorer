@@ -29,7 +29,7 @@ public class ListUserPage extends AbstractListPage<Person> {
     private static final long serialVersionUID = 3529738250403399032L;
 
     @SpringBean
-    protected PersonService personService;
+    private PersonService personService;
 
     public ListUserPage(final PageParameters pageParameters) {
         super(pageParameters);

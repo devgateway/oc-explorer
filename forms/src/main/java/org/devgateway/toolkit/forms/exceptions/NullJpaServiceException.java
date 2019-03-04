@@ -21,7 +21,7 @@ public class NullJpaServiceException extends RuntimeException {
     private static final long serialVersionUID = -2779145093766288562L;
 
     public NullJpaServiceException() {
-        super("jpaService is null! Please set the jpaRepository in your constructor");
+        super("jpaService is null! Please set the jpaService in your constructor");
     }
 
 }

@@ -13,7 +13,7 @@ import org.devgateway.toolkit.forms.service.SendEmailService;
 import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.page.BasePage;
 import org.devgateway.toolkit.persistence.dao.Person;
-import org.devgateway.toolkit.persistence.repository.PersonRepository;
+import org.devgateway.toolkit.persistence.service.PersonService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.wicketstuff.annotation.mount.MountPath;
 
@@ -22,7 +22,7 @@ public class ForgotYourPasswordPage extends BasePage {
     private static final long serialVersionUID = -6767090562116351915L;
 
     @SpringBean
-    private PersonRepository personRepository;
+    private PersonService personService;
 
     @SpringBean
     private SendEmailService sendEmailService;
@@ -76,16 +76,16 @@ public class ForgotYourPasswordPage extends BasePage {
                 protected void onSubmit(final AjaxRequestTarget target) {
                     super.onSubmit(target);
 
-                    final Person person = personRepository.findByEmail(emailAddress);
+                    final Person person = personService.findByEmail(emailAddress);
 
                     if (person == null) {
                         feedbackPanel.error("Email address not found");
                     } else {
-                        String newPassword = RandomStringUtils.random(RANDOM_PASSWORD_LENGTH, true, true);
+                        final String newPassword = RandomStringUtils.random(RANDOM_PASSWORD_LENGTH, true, true);
                         person.setPassword(passwordEncoder.encode(newPassword));
                         person.setChangePassword(true);
 
-                        personRepository.saveAndFlush(person);
+                        personService.saveAndFlush(person);
                         sendEmailService.sendEmailResetPassword(person, newPassword);
 
                         emailAddressField.setVisibilityAllowed(false);
