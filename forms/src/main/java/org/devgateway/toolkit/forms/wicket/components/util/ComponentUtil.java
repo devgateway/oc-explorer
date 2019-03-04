@@ -120,7 +120,7 @@ public final class ComponentUtil {
             final WebMarkupContainer parent,
             final String id,
             final boolean isFloatedInput) {
-        final TextFieldBootstrapFormComponent<String> textField = new TextFieldBootstrapFormComponent(id) {
+        final TextFieldBootstrapFormComponent<String> textField = new TextFieldBootstrapFormComponent<String>(id) {
             @Override
             public String getUpdateEvent() {
                 return null;
