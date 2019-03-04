@@ -158,7 +158,7 @@ public abstract class AbstractReportPage extends BasePage {
                         if (canRenderReport()) {
                             // first try to fetch the report from cache,
                             // otherwise create the report and cache it
-                            byte[] reportContent = markupCacheService.getReportFromCache(outputType.name(),
+                            byte[] reportContent = markupCacheService.getPentahoReportFromCache(outputType.name(),
                                     FilenameUtils.getName(AbstractReportPage.this.reportResourceName).replace(".prpt",
                                             ""),
                                     getPageParameters().toString());
@@ -169,7 +169,7 @@ public abstract class AbstractReportPage extends BasePage {
 
                                 if (caching) {
                                     markupCacheService
-                                            .addReportToCache(outputType.name(),
+                                            .addPentahoReportToCache(outputType.name(),
                                                     FilenameUtils.getName(AbstractReportPage.this.reportResourceName)
                                                             .replace(".prpt", ""),
                                                     getPageParameters().toString(), reportContent);

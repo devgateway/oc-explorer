@@ -10,6 +10,7 @@ import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxToggleBootstr
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.persistence.dao.AdminSettings;
 import org.devgateway.toolkit.persistence.repository.AdminSettingsRepository;
+import org.devgateway.toolkit.persistence.service.AdminSettingsService;
 import org.wicketstuff.annotation.mount.MountPath;
 
 import java.util.List;
@@ -27,16 +28,16 @@ public class EditAdminSettingsPage extends AbstractEditPage<AdminSettings> {
     private CheckBoxToggleBootstrapFormComponent rebootServer;
 
     @SpringBean
-    protected AdminSettingsRepository adminSettingsRepository;
+    protected AdminSettingsService adminSettingsService;
 
     public EditAdminSettingsPage(final PageParameters parameters) {
         super(parameters);
 
-        this.jpaRepository = adminSettingsRepository;
+        this.jpaService = adminSettingsService;
         this.listPageClass = Homepage.class;
 
         if (entityId == null) {
-            List<AdminSettings> listSettings = adminSettingsRepository.findAll();
+            final List<AdminSettings> listSettings = adminSettingsService.findAll();
             // just keep 1 entry for settings
             if (listSettings.size() == 1) {
                 entityId = listSettings.get(0).getId();

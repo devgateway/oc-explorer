@@ -40,6 +40,7 @@ import org.devgateway.toolkit.persistence.dao.categories.Group;
 import org.devgateway.toolkit.persistence.repository.RoleRepository;
 import org.devgateway.toolkit.persistence.repository.TestFormRepository;
 import org.devgateway.toolkit.persistence.repository.category.GroupRepository;
+import org.devgateway.toolkit.persistence.service.TestFormService;
 import org.wicketstuff.annotation.mount.MountPath;
 
 /**
@@ -53,7 +54,7 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
     private static final long serialVersionUID = 1L;
 
     @SpringBean
-    private TestFormRepository testComponentsRepository;
+    private TestFormService testFormService;
 
     @SpringBean
     private RoleRepository roleRepository;
@@ -67,7 +68,7 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
     public EditTestFormPage(final PageParameters parameters) {
         super(parameters);
 
-        this.jpaRepository = testComponentsRepository;
+        this.jpaService = testFormService;
         this.listPageClass = ListTestFormPage.class;
     }
 

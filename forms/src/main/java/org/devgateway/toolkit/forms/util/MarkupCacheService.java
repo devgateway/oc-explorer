@@ -61,8 +61,8 @@ public class MarkupCacheService {
      * @param parameters
      * @param buffer
      */
-    public void addReportToCache(final String outputType, final String reportName, final String parameters,
-                                 final byte[] buffer) {
+    public void addPentahoReportToCache(final String outputType, final String reportName, final String parameters,
+                                        final byte[] buffer) {
         final CacheManager cm = CacheManager.getInstance();
 
         // get the reports cache "reportsCache", declared in ehcache.xml
@@ -79,7 +79,7 @@ public class MarkupCacheService {
      * @param parameters
      * @return
      */
-    public byte[] getReportFromCache(final String outputType, final String reportName, final String parameters) {
+    public byte[] getPentahoReportFromCache(final String outputType, final String reportName, final String parameters) {
         final CacheManager cm = CacheManager.getInstance();
 
         // get the reports cache "reportsCache", declared in ehcache.xml
@@ -97,7 +97,7 @@ public class MarkupCacheService {
     /**
      * Remove from cache all reports content
      */
-    public void clearReportsCache() {
+    public void clearPentahoReportsCache() {
         final CacheManager cm = CacheManager.getInstance();
 
         // get the reports cache "reportsCache", declared in ehcache.xml
@@ -109,23 +109,27 @@ public class MarkupCacheService {
     }
 
     /**
-     * Remove from cache all reports api content
+     * Remove from cache all APIs/Services content.
      */
-    public void clearReportsApiCache() {
+    public void clearAllCaches() {
         final CacheManager cm = CacheManager.getInstance();
 
         // get the reports cache "reportsApiCache", declared in ehcache.xml
         final Cache cache = cm.getCache("reportsApiCache");
-
         if (cache != null) {
             cache.removeAll();
         }
 
         // get the reports cache "excelExportCache", declared in ehcache.xml
         final Cache excelExportCache = cm.getCache("excelExportCache");
-
         if (excelExportCache != null) {
             excelExportCache.removeAll();
+        }
+
+        // get the reports cache "servicesCache", declared in ehcache.xml
+        final Cache servicesCache = cm.getCache("servicesCache");
+        if (servicesCache != null) {
+            servicesCache.removeAll();
         }
     }
 

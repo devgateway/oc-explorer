@@ -20,43 +20,39 @@ import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.forms.models.PersistableJpaRepositoryModel;
 import org.devgateway.toolkit.forms.wicket.components.table.filter.JpaFilterState;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
-import org.devgateway.toolkit.persistence.repository.norepository.BaseJpaRepository;
+import org.devgateway.toolkit.persistence.service.BaseJpaService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 /**
  * @author mpostelnicu
  * <p>
- * Smart generic {@link SortableDataProvider} that binds to
- * {@link BaseJpaRepository}
+ * Smart generic {@link SortableDataProvider} that binds to {@link BaseJpaService}
  */
-public class SortableJpaRepositoryDataProvider<T extends GenericPersistable> extends SortableDataProvider<T, String>
-        implements IFilterStateLocator<JpaFilterState<T>> {
-
+public class SortableJpaRepositoryDataProvider<T extends GenericPersistable & Serializable>
+        extends SortableDataProvider<T, String> implements IFilterStateLocator<JpaFilterState<T>> {
     private static final long serialVersionUID = 6507887810859971417L;
 
-    protected BaseJpaRepository<T, Long> jpaRepository;
+    private final BaseJpaService<T> jpaService;
 
     private JpaFilterState<T> filterState;
 
     /**
-     * Always provide a proxy jpaRepository here! For example one coming from a
-     * {@link SpringBean}
+     * Always provide a proxy jpaService here! For example one coming from a {@link SpringBean}
      *
-     * @param jpaRepository
+     * @param jpaService
      */
-    public SortableJpaRepositoryDataProvider(final BaseJpaRepository<T, Long> jpaRepository) {
-        this.jpaRepository = jpaRepository;
+    public SortableJpaRepositoryDataProvider(final BaseJpaService<T> jpaService) {
+        this.jpaService = jpaService;
     }
 
     /**
      * Translates from a {@link SortParam} to a Spring {@link Sort}
-     *
-     * @return
      */
     protected Sort translateSort() {
         if (getSort() == null) {
@@ -71,7 +67,7 @@ public class SortableJpaRepositoryDataProvider<T extends GenericPersistable> ext
     @Override
     public Iterator<? extends T> iterator(final long first, final long count) {
         int page = (int) ((double) first / WebConstants.PAGE_SIZE);
-        final Page<T> findAll = jpaRepository.findAll(filterState.getSpecification(),
+        final Page<T> findAll = jpaService.findAll(filterState.getSpecification(),
                 translateSort() == null
                         ? PageRequest.of(page, WebConstants.PAGE_SIZE)
                         : PageRequest.of(page, WebConstants.PAGE_SIZE, translateSort()));
@@ -80,7 +76,7 @@ public class SortableJpaRepositoryDataProvider<T extends GenericPersistable> ext
 
     @Override
     public long size() {
-        return jpaRepository.count(filterState.getSpecification());
+        return jpaService.count(filterState.getSpecification());
     }
 
     /**
@@ -90,7 +86,7 @@ public class SortableJpaRepositoryDataProvider<T extends GenericPersistable> ext
      */
     @Override
     public IModel<T> model(final T object) {
-        return new PersistableJpaRepositoryModel<T>(object, jpaRepository);
+        return new PersistableJpaRepositoryModel<T>(object, jpaService);
     }
 
     @Override

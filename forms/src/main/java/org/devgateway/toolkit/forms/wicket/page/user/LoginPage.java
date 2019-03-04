@@ -99,7 +99,6 @@ public class LoginPage extends BasePage {
             notificationPanel.setOutputMarkupId(true);
             add(notificationPanel);
 
-
             usernameField = new TextFieldBootstrapFormComponent<String>("username",
                     new StringResourceModel("user", LoginPage.this, null),
                     new PropertyModel<>(this, "username")) {
@@ -110,7 +109,6 @@ public class LoginPage extends BasePage {
             };
             usernameField.required();
             add(usernameField);
-
 
             passwordField = new PasswordFieldBootstrapFormComponent("password",
                     new PropertyModel<>(this, "password")) {

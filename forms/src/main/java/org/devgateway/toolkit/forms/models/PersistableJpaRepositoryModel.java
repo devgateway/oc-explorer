@@ -15,7 +15,9 @@ import nl.dries.wicket.hibernate.dozer.DozerModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.devgateway.toolkit.forms.wicket.providers.SortableJpaRepositoryDataProvider;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.devgateway.toolkit.persistence.service.BaseJpaService;
+
+import java.io.Serializable;
 
 /**
  * USE THIS ONLY FOR {@link SortableJpaRepositoryDataProvider}S Use
@@ -24,28 +26,29 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @param <T> the type of the entity to be accessed
  * @author mpostelnicu
  */
-public class PersistableJpaRepositoryModel<T extends GenericPersistable> extends LoadableDetachableModel<T> {
+public class PersistableJpaRepositoryModel<T extends GenericPersistable & Serializable>
+        extends LoadableDetachableModel<T> {
     private static final long serialVersionUID = -3668189792112474025L;
 
-    private Long id;
+    private final Long id;
 
-    private JpaRepository<T, Long> jpaRepository;
+    private final BaseJpaService<T> jpaService;
 
-    public PersistableJpaRepositoryModel(final Long id, final JpaRepository<T, Long> jpaRepository) {
+    public PersistableJpaRepositoryModel(final Long id, final BaseJpaService<T> jpaService) {
         super();
         this.id = id;
-        this.jpaRepository = jpaRepository;
+        this.jpaService = jpaService;
     }
 
-    public PersistableJpaRepositoryModel(final T t, final JpaRepository<T, Long> jpaRepository) {
+    public PersistableJpaRepositoryModel(final T t, final BaseJpaService<T> jpaService) {
         super(t);
         this.id = t.getId();
-        this.jpaRepository = jpaRepository;
+        this.jpaService = jpaService;
     }
 
     @Override
     protected T load() {
-        return jpaRepository.findById(id).orElse(null);
+        return jpaService.findById(id).orElse(null);
 
     }
 

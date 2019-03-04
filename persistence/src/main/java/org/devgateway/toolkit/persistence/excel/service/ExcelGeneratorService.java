@@ -3,13 +3,12 @@ package org.devgateway.toolkit.persistence.excel.service;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.devgateway.toolkit.persistence.excel.ExcelFile;
 import org.devgateway.toolkit.persistence.excel.ExcelFileDefault;
-import org.devgateway.toolkit.persistence.repository.norepository.BaseJpaRepository;
+import org.devgateway.toolkit.persistence.service.BaseJpaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -29,18 +28,17 @@ public class ExcelGeneratorService {
     /**
      * Method that returns a byte array with an excel export.
      *
-     * @param jpaRepository - {@link JpaRepository} from where we will get the data
-     * @param spec          - {@link Specification} for filtering the data
-     * @param pageable      - {@link Pageable} for paginating the data
-     *
+     * @param jpaService - {@link BaseJpaService} from where we will get the data
+     * @param spec       - {@link Specification} for filtering the data
+     * @param pageable   - {@link Pageable} for paginating the data
      * @return byte[]
      * @throws IOException
      */
     @Cacheable
-    public byte[] getExcelDownload(final BaseJpaRepository jpaRepository,
+    public byte[] getExcelDownload(final BaseJpaService jpaService,
                                    final Specification spec,
                                    final Pageable pageable) throws IOException {
-        final List<Object> objects = jpaRepository.findAll(spec, pageable).getContent();
+        final List<Object> objects = jpaService.findAll(spec, pageable).getContent();
         final ExcelFile excelFile = new ExcelFileDefault(objects, translateService);
         final Workbook workbook = excelFile.createWorkbook();
 
@@ -55,7 +53,6 @@ public class ExcelGeneratorService {
      * Method that returns a byte array with an excel export.
      *
      * @param objects - entities that will be exported to excel file.
-     *
      * @return byte[]
      * @throws IOException
      */
@@ -73,13 +70,13 @@ public class ExcelGeneratorService {
     /**
      * Return the number of records for this {@link Specification}.
      *
-     * @param jpaRepository
+     * @param jpaService
      * @param spec
      * @return count
      */
     @Cacheable
-    public long count(final BaseJpaRepository jpaRepository,
+    public long count(final BaseJpaService jpaService,
                       final Specification spec) {
-        return jpaRepository.count(spec);
+        return jpaService.count(spec);
     }
 }

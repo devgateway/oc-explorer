@@ -42,13 +42,11 @@ import org.devgateway.toolkit.forms.wicket.providers.GenericPersistableJpaReposi
 import org.devgateway.toolkit.persistence.dao.Person;
 import org.devgateway.toolkit.persistence.dao.Role;
 import org.devgateway.toolkit.persistence.dao.categories.Group;
-import org.devgateway.toolkit.persistence.repository.PersonRepository;
 import org.devgateway.toolkit.persistence.repository.RoleRepository;
 import org.devgateway.toolkit.persistence.repository.category.GroupRepository;
+import org.devgateway.toolkit.persistence.service.PersonService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.wicketstuff.annotation.mount.MountPath;
-
-import java.util.List;
 
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_USER)
 @MountPath(value = "/account")
@@ -56,7 +54,7 @@ public class EditUserPage extends AbstractEditPage<Person> {
     private static final long serialVersionUID = 5208480049061989277L;
 
     @SpringBean
-    private PersonRepository userRepository;
+    private PersonService personService;
 
     @SpringBean
     private GroupRepository groupRepository;
@@ -112,7 +110,7 @@ public class EditUserPage extends AbstractEditPage<Person> {
     public EditUserPage(final PageParameters parameters) {
         super(parameters);
 
-        this.jpaRepository = userRepository;
+        this.jpaService = personService;
         this.listPageClass = ListUserPage.class;
     }
 
@@ -131,14 +129,11 @@ public class EditUserPage extends AbstractEditPage<Person> {
 
         @Override
         public void validate(final IValidatable<String> validatable) {
-            String username = validatable.getValue();
-            List<Person> persons = userRepository.findByName(username);
-            for (int i = 0; i < persons.size(); i++) {
-                if (persons.get(i) != null && !persons.get(i).getId().equals(userId)) {
-                    ValidationError error = new ValidationError(getString("uniqueUser"));
-                    validatable.error(error);
-                    break;
-                }
+            final String username = validatable.getValue();
+            final Person person = personService.findByUsername(username);
+            if (person != null && !person.getId().equals(userId)) {
+                final ValidationError error = new ValidationError(getString("uniqueUser"));
+                validatable.error(error);
             }
         }
     }
@@ -158,10 +153,10 @@ public class EditUserPage extends AbstractEditPage<Person> {
 
         @Override
         public void validate(final IValidatable<String> validatable) {
-            String emailAddress = validatable.getValue();
-            Person person = userRepository.findByEmail(emailAddress);
+            final String emailAddress = validatable.getValue();
+            final Person person = personService.findByEmail(emailAddress);
             if (person != null && !person.getId().equals(userId)) {
-                ValidationError error = new ValidationError(getString("uniqueEmailAddress"));
+                final ValidationError error = new ValidationError(getString("uniqueEmailAddress"));
                 validatable.error(error);
             }
         }
@@ -324,7 +319,7 @@ public class EditUserPage extends AbstractEditPage<Person> {
                     saveable.setChangePassword(false);
                 }
 
-                jpaRepository.save(saveable);
+                jpaService.save(saveable);
                 if (!SecurityUtil.isCurrentUserAdmin()) {
                     setResponsePage(Homepage.class);
                 } else {

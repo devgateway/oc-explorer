@@ -24,40 +24,27 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.lang.Classes;
 import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
-import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
-import org.apache.wicket.validation.validator.EmailAddressValidator;
-import org.apache.wicket.validation.validator.RangeValidator;
 import org.devgateway.toolkit.forms.WebConstants;
-import org.devgateway.toolkit.forms.exceptions.NullJpaRepositoryException;
+import org.devgateway.toolkit.forms.exceptions.NullJpaServiceException;
 import org.devgateway.toolkit.forms.exceptions.NullListPageClassException;
 import org.devgateway.toolkit.forms.util.MarkupCacheService;
 import org.devgateway.toolkit.forms.wicket.components.ComponentUtil;
 import org.devgateway.toolkit.forms.wicket.components.form.BootstrapCancelButton;
 import org.devgateway.toolkit.forms.wicket.components.form.BootstrapDeleteButton;
 import org.devgateway.toolkit.forms.wicket.components.form.BootstrapSubmitButton;
-import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxBootstrapFormComponent;
-import org.devgateway.toolkit.forms.wicket.components.form.DateFieldBootstrapFormComponent;
-import org.devgateway.toolkit.forms.wicket.components.form.DateTimeFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.GenericBootstrapFormComponent;
-import org.devgateway.toolkit.forms.wicket.components.form.Select2ChoiceBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.SummernoteBootstrapFormComponent;
-import org.devgateway.toolkit.forms.wicket.components.form.TextAreaFieldBootstrapFormComponent;
-import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.page.BasePage;
-import org.devgateway.toolkit.forms.wicket.providers.GenericPersistableJpaRepositoryTextChoiceProvider;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
-import org.devgateway.toolkit.persistence.dao.Labelable;
-import org.devgateway.toolkit.persistence.repository.norepository.TextSearchableRepository;
+import org.devgateway.toolkit.persistence.service.BaseJpaService;
 import org.devgateway.toolkit.reporting.spring.util.ReportsCacheService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.persistence.EntityManager;
 import java.io.Serializable;
@@ -67,9 +54,9 @@ import java.io.Serializable;
  * to one entity for editing
  */
 public abstract class AbstractEditPage<T extends GenericPersistable & Serializable> extends BasePage {
-    private static final Logger logger = LoggerFactory.getLogger(AbstractEditPage.class);
-
     private static final long serialVersionUID = -5928614890244382103L;
+
+    private static final Logger logger = LoggerFactory.getLogger(AbstractEditPage.class);
 
     /**
      * Factory method for the new instance of the entity being editing. This
@@ -83,7 +70,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
      * The repository used to fetch and save the entity, this is initialized in
      * subclasses
      */
-    protected JpaRepository<T, Long> jpaRepository;
+    protected BaseJpaService<T> jpaService;
 
     /**
      * The page that is responsible for listing the entities (used here as a
@@ -138,8 +125,8 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
         if (reportsCacheService != null && markupCacheService != null) {
             reportsCacheService.flushCache();
             markupCacheService.flushMarkupCache();
-            markupCacheService.clearReportsCache();
-            markupCacheService.clearReportsApiCache();
+            markupCacheService.clearPentahoReportsCache();
+            markupCacheService.clearAllCaches();
         }
     }
 
@@ -262,7 +249,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
             T saveable = editForm.getModelObject();
 
             // saves the entity and flushes the changes
-            jpaRepository.saveAndFlush(saveable);
+            jpaService.saveAndFlush(saveable);
 
             // clears session and detaches all entities that are currently
             // attached
@@ -361,7 +348,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
         protected void onSubmit(final AjaxRequestTarget target) {
             T deleteable = editForm.getModelObject();
             try {
-                jpaRepository.delete(deleteable);
+                jpaService.delete(deleteable);
             } catch (DataIntegrityViolationException e) {
                 error(new NotificationMessage(
                         new StringResourceModel("delete_error_message", AbstractEditPage.this, null))
@@ -438,9 +425,9 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
     protected void onInitialize() {
         super.onInitialize();
 
-        // we cant do anything if we dont have a jparepository here
-        if (jpaRepository == null) {
-            throw new NullJpaRepositoryException();
+        // we cant do anything if we dont have a jpaService here
+        if (jpaService == null) {
+            throw new NullJpaServiceException();
         }
 
         // we dont like receiving null list pages
@@ -451,7 +438,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
         IModel<T> model = null;
 
         if (entityId != null) {
-            model = new DozerModel<>(jpaRepository.findById(entityId).orElse(null));
+            model = new DozerModel<>(jpaService.findById(entityId).orElse(null));
         } else {
             T instance = newInstance();
             if (instance != null) {
@@ -462,71 +449,5 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
         if (model != null) {
             editForm.setCompoundPropertyModel(model);
         }
-    }
-
-    protected String getClassName() {
-        return Classes.simpleName(getClass());
-    }
-
-    public IValidator<? super String> isEmail() {
-        return EmailAddressValidator.getInstance();
-    }
-
-    public <P extends Comparable<? super P> & Serializable> RangeValidator<P> inRange(final P min, final P max) {
-        return new RangeValidator<>(min, max);
-    }
-
-    public CheckBoxBootstrapFormComponent addCheckBox(final String name) {
-        CheckBoxBootstrapFormComponent checkBox = new CheckBoxBootstrapFormComponent(name);
-        editForm.add(checkBox);
-        return checkBox;
-    }
-
-    public TextAreaFieldBootstrapFormComponent<String> addTextAreaField(final String name) {
-        TextAreaFieldBootstrapFormComponent<String> textAreaField = new TextAreaFieldBootstrapFormComponent<>(name);
-        editForm.add(textAreaField);
-        return textAreaField;
-    }
-
-    public TextFieldBootstrapFormComponent<String> addTextField(final String name) {
-        TextFieldBootstrapFormComponent<String> textField = new TextFieldBootstrapFormComponent<>(name);
-        editForm.add(textField);
-        return textField;
-    }
-
-    public TextFieldBootstrapFormComponent<Integer> addIntegerTextField(final String name) {
-        TextFieldBootstrapFormComponent<Integer> textField = new TextFieldBootstrapFormComponent<>(name);
-        textField.integer();
-        editForm.add(textField);
-        return textField;
-    }
-
-    public TextFieldBootstrapFormComponent<String> addDoubleField(final String name) {
-        TextFieldBootstrapFormComponent<String> textField = new TextFieldBootstrapFormComponent<>(name);
-        textField.asDouble();
-        editForm.add(textField);
-        return textField;
-    }
-
-    public DateTimeFieldBootstrapFormComponent addDateTimeField(final String name) {
-        DateTimeFieldBootstrapFormComponent field = new DateTimeFieldBootstrapFormComponent(name);
-        editForm.add(field);
-        return field;
-    }
-
-    public DateFieldBootstrapFormComponent addDateField(final String name) {
-        DateFieldBootstrapFormComponent field = new DateFieldBootstrapFormComponent(name);
-        editForm.add(field);
-        return field;
-    }
-
-    public <E extends GenericPersistable & Labelable> Select2ChoiceBootstrapFormComponent<E>
-    addSelect2ChoiceField(final String name, final TextSearchableRepository<E, Long> repository) {
-        GenericPersistableJpaRepositoryTextChoiceProvider<E> choiceProvider =
-                new GenericPersistableJpaRepositoryTextChoiceProvider<>(repository);
-        Select2ChoiceBootstrapFormComponent<E> component =
-                new Select2ChoiceBootstrapFormComponent<>(name, choiceProvider);
-        editForm.add(component);
-        return component;
     }
 }
