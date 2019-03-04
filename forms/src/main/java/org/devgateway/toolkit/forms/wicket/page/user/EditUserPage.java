@@ -40,11 +40,11 @@ import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListUserPage;
 import org.devgateway.toolkit.forms.wicket.providers.GenericPersistableJpaRepositoryTextChoiceProvider;
 import org.devgateway.toolkit.persistence.dao.Person;
+import org.devgateway.toolkit.persistence.dao.Role;
 import org.devgateway.toolkit.persistence.dao.categories.Group;
-import org.devgateway.toolkit.persistence.dao.categories.Role;
-import org.devgateway.toolkit.persistence.repository.GroupRepository;
 import org.devgateway.toolkit.persistence.repository.PersonRepository;
 import org.devgateway.toolkit.persistence.repository.RoleRepository;
+import org.devgateway.toolkit.persistence.repository.category.GroupRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.wicketstuff.annotation.mount.MountPath;
 

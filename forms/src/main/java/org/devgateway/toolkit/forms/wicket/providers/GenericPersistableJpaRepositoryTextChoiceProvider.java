@@ -17,7 +17,7 @@ package org.devgateway.toolkit.forms.wicket.providers;
 import org.apache.wicket.model.IModel;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.devgateway.toolkit.persistence.dao.Labelable;
-import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepository;
+import org.devgateway.toolkit.persistence.repository.norepository.TextSearchableRepository;
 
 import java.util.Collection;
 

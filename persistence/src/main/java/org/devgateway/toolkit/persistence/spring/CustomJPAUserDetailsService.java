@@ -12,7 +12,7 @@
 package org.devgateway.toolkit.persistence.spring;
 
 import org.devgateway.toolkit.persistence.dao.Person;
-import org.devgateway.toolkit.persistence.dao.categories.Role;
+import org.devgateway.toolkit.persistence.dao.Role;
 import org.devgateway.toolkit.persistence.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

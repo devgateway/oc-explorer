@@ -9,10 +9,8 @@
  * Contributors:
  * Development Gateway - initial API and implementation
  *******************************************************************************/
-package org.devgateway.toolkit.persistence.dao.categories;
+package org.devgateway.toolkit.persistence.dao;
 
-import org.devgateway.toolkit.persistence.dao.GenericPersistable;
-import org.devgateway.toolkit.persistence.dao.Labelable;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.envers.Audited;

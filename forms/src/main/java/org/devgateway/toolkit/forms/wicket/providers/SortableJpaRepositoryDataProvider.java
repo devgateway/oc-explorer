@@ -20,7 +20,7 @@ import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.forms.models.PersistableJpaRepositoryModel;
 import org.devgateway.toolkit.forms.wicket.components.table.filter.JpaFilterState;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
-import org.devgateway.toolkit.persistence.repository.BaseJpaRepository;
+import org.devgateway.toolkit.persistence.repository.norepository.BaseJpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;

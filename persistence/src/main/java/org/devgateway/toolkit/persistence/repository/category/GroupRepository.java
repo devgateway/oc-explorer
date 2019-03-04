@@ -9,17 +9,17 @@
  * Contributors:
  * Development Gateway - initial API and implementation
  *******************************************************************************/
-/**
- * 
- */
-package org.devgateway.toolkit.persistence.dao;
+package org.devgateway.toolkit.persistence.repository.category;
+
+import org.devgateway.toolkit.persistence.dao.categories.Group;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author mpostelnicu
- *
  */
-public interface Indexable {
-    int getIndex();
+@Transactional
+//@RepositoryRestResource // uncomment this to enable rest api access over group entities
+public interface GroupRepository extends CategoryRepository<Group> {
 
-    void setIndex(int index);
+    Group findByLabel(String label);
 }

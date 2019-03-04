@@ -9,8 +9,9 @@
  * Contributors:
  * Development Gateway - initial API and implementation
  *******************************************************************************/
-package org.devgateway.toolkit.persistence.dao;
+package org.devgateway.toolkit.persistence.service;
 
+import org.devgateway.toolkit.persistence.dao.Person;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

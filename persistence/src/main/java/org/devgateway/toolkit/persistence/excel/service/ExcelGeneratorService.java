@@ -3,7 +3,7 @@ package org.devgateway.toolkit.persistence.excel.service;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.devgateway.toolkit.persistence.excel.ExcelFile;
 import org.devgateway.toolkit.persistence.excel.ExcelFileDefault;
-import org.devgateway.toolkit.persistence.repository.BaseJpaRepository;
+import org.devgateway.toolkit.persistence.repository.norepository.BaseJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;

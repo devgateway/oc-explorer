@@ -9,9 +9,8 @@
  * Contributors:
  * Development Gateway - initial API and implementation
  *******************************************************************************/
-package org.devgateway.toolkit.persistence.repository.category;
+package org.devgateway.toolkit.persistence.repository.norepository;
 
-import org.devgateway.toolkit.persistence.repository.BaseJpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.NoRepositoryBean;

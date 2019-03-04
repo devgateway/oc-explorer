@@ -19,7 +19,7 @@ import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFor
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListGroupPage;
 import org.devgateway.toolkit.persistence.dao.categories.Group;
-import org.devgateway.toolkit.persistence.repository.GroupRepository;
+import org.devgateway.toolkit.persistence.repository.category.GroupRepository;
 import org.wicketstuff.annotation.mount.MountPath;
 
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_ADMIN)

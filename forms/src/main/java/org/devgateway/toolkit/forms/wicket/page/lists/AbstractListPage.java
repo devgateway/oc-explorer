@@ -50,7 +50,7 @@ import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.forms.wicket.providers.SortableJpaRepositoryDataProvider;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.devgateway.toolkit.persistence.excel.service.ExcelGeneratorService;
-import org.devgateway.toolkit.persistence.repository.BaseJpaRepository;
+import org.devgateway.toolkit.persistence.repository.norepository.BaseJpaRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 

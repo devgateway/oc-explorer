@@ -12,7 +12,7 @@
 package org.devgateway.toolkit.forms.security;
 
 import org.devgateway.toolkit.persistence.dao.Person;
-import org.devgateway.toolkit.persistence.dao.categories.Role;
+import org.devgateway.toolkit.persistence.dao.Role;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 

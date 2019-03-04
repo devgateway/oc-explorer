@@ -12,6 +12,7 @@
 package org.devgateway.toolkit.persistence.repository.category;
 
 import org.devgateway.toolkit.persistence.dao.categories.Category;
+import org.devgateway.toolkit.persistence.repository.norepository.TextSearchableRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;

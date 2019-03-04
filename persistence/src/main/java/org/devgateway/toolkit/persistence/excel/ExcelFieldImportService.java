@@ -8,7 +8,7 @@ import org.devgateway.toolkit.persistence.excel.info.ClassFields;
 import org.devgateway.toolkit.persistence.excel.info.ClassFieldsDefault;
 import org.devgateway.toolkit.persistence.excel.info.ClassFieldsExcelImport;
 import org.devgateway.toolkit.persistence.excel.info.ImportBean;
-import org.devgateway.toolkit.persistence.repository.BaseJpaRepository;
+import org.devgateway.toolkit.persistence.repository.norepository.BaseJpaRepository;
 import org.devgateway.toolkit.persistence.repository.PersonRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

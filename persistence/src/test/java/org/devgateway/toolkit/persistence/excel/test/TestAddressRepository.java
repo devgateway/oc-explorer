@@ -1,6 +1,6 @@
 package org.devgateway.toolkit.persistence.excel.test;
 
-import org.devgateway.toolkit.persistence.repository.BaseJpaRepository;
+import org.devgateway.toolkit.persistence.repository.norepository.BaseJpaRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

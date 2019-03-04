@@ -12,6 +12,7 @@
 package org.devgateway.toolkit.persistence.repository;
 
 import org.devgateway.toolkit.persistence.dao.TestForm;
+import org.devgateway.toolkit.persistence.repository.norepository.BaseJpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**

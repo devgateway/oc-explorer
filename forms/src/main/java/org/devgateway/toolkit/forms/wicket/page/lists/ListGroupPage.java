@@ -20,7 +20,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.page.EditGroupPage;
 import org.devgateway.toolkit.persistence.dao.categories.Group;
-import org.devgateway.toolkit.persistence.repository.GroupRepository;
+import org.devgateway.toolkit.persistence.repository.category.GroupRepository;
 import org.wicketstuff.annotation.mount.MountPath;
 
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_ADMIN)

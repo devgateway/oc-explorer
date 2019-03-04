@@ -1,4 +1,4 @@
-package org.devgateway.toolkit.persistence.repository;
+package org.devgateway.toolkit.persistence.repository.norepository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

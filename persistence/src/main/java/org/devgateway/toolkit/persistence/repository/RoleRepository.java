@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.devgateway.toolkit.persistence.repository;
 
-import org.devgateway.toolkit.persistence.dao.categories.Role;
-import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepository;
+import org.devgateway.toolkit.persistence.dao.Role;
+import org.devgateway.toolkit.persistence.repository.norepository.TextSearchableRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

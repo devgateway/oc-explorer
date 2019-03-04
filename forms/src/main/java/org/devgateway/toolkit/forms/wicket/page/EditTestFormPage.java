@@ -34,12 +34,12 @@ import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListTestFormPage;
 import org.devgateway.toolkit.forms.wicket.providers.GenericChoiceProvider;
 import org.devgateway.toolkit.forms.wicket.providers.GenericPersistableJpaRepositoryTextChoiceProvider;
+import org.devgateway.toolkit.persistence.dao.Role;
 import org.devgateway.toolkit.persistence.dao.TestForm;
 import org.devgateway.toolkit.persistence.dao.categories.Group;
-import org.devgateway.toolkit.persistence.dao.categories.Role;
-import org.devgateway.toolkit.persistence.repository.GroupRepository;
 import org.devgateway.toolkit.persistence.repository.RoleRepository;
 import org.devgateway.toolkit.persistence.repository.TestFormRepository;
+import org.devgateway.toolkit.persistence.repository.category.GroupRepository;
 import org.wicketstuff.annotation.mount.MountPath;
 
 /**
@@ -71,6 +71,7 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
         this.listPageClass = ListTestFormPage.class;
     }
 
+    // TODO - move this to Service
     @Override
     protected TestForm newInstance() {
         return new TestForm();

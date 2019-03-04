@@ -52,7 +52,7 @@ import org.devgateway.toolkit.forms.wicket.page.BasePage;
 import org.devgateway.toolkit.forms.wicket.providers.GenericPersistableJpaRepositoryTextChoiceProvider;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.devgateway.toolkit.persistence.dao.Labelable;
-import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepository;
+import org.devgateway.toolkit.persistence.repository.norepository.TextSearchableRepository;
 import org.devgateway.toolkit.reporting.spring.util.ReportsCacheService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

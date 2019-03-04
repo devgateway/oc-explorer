@@ -15,7 +15,7 @@ import org.apache.wicket.model.IModel;
 import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.devgateway.toolkit.persistence.dao.Labelable;
-import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepository;
+import org.devgateway.toolkit.persistence.repository.norepository.TextSearchableRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
