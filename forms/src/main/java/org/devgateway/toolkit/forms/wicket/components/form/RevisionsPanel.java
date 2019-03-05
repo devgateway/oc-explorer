@@ -31,9 +31,9 @@ public class RevisionsPanel<TYPE> extends GenericPanel<List<TYPE>> {
     private Label revisionsPanelLabel;
 
     /**
-     * @param id the revision panel id
-     * @param model list of revisions coming from the component, this is usually fed with
-     *              {@link GenericBootstrapFormComponent#getRevisionsModel()}
+     * @param id            the revision panel id
+     * @param model         list of revisions coming from the component, this is usually fed with
+     *                      {@link GenericBootstrapFormComponent#getRevisionsModel()}
      * @param auditProperty the audit property. This is required because sometimes the component is bound with a
      *                      model that has a different source than the component name as property, so we cannot
      *                      assume the id is the property.
@@ -52,7 +52,6 @@ public class RevisionsPanel<TYPE> extends GenericPanel<List<TYPE>> {
     }
 
 
-
     @Override
     protected void onInitialize() {
         super.onInitialize();
@@ -60,6 +59,7 @@ public class RevisionsPanel<TYPE> extends GenericPanel<List<TYPE>> {
         revisionsCollapse.setOutputMarkupId(true);
         add(revisionsCollapse);
         setOutputMarkupId(true);
+
         revisionsPanelLink = new WebMarkupContainer("revisionsPanelLink");
         revisionsPanelLabel = new Label("revisionsPanelLabel", getLabelKeyFromGenericComponent());
         revisionsPanelLink.add(revisionsPanelLabel);
@@ -68,34 +68,34 @@ public class RevisionsPanel<TYPE> extends GenericPanel<List<TYPE>> {
         add(revisionsPanelLink);
         add(new ListView<TYPE>("rows", getModel()) {
             public void populateItem(final ListItem<TYPE> item) {
-                Object[] obj = (Object[]) item.getModelObject();
-                Label data = new Label("data", new PropertyModel<>(
+                final Object[] obj = (Object[]) item.getModelObject();
+                final Label data = new Label("data", new PropertyModel<>(
                         obj[0],
                         auditProperty
                 ));
                 data.setEscapeModelStrings(!printUnescaped());
                 item.add(data);
 
-                Label lastUpdated = new Label("lastUpdated", new PropertyModel<>(
+                final Label lastUpdated = new Label("lastModifiedDate", new PropertyModel<>(
                         obj[0],
-                        "lastUpdated.toDate"
+                        "lastModifiedDate"
                 ));
                 item.add(lastUpdated);
 
 
-                Label lastModifiedBy = new Label("lastModifiedBy", new PropertyModel<>(
+                final Label lastModifiedBy = new Label("lastModifiedBy", new PropertyModel<>(
                         obj[0],
                         "lastModifiedBy"
                 ));
                 item.add(lastModifiedBy);
 
-                Label revisionType = new Label("revisionType", new PropertyModel<>(
+                final Label revisionType = new Label("revisionType", new PropertyModel<>(
                         obj[2],
                         "name"
                 ));
                 item.add(revisionType);
 
-                Label id = new Label("id", item.getIndex());
+                final Label id = new Label("id", item.getIndex());
                 item.add(id);
             }
         });

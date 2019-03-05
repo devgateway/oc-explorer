@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @CacheConfig(cacheNames = "servicesCache")
 @Transactional(readOnly = true)
-public class RoleServiceImpl extends BaseJpaServiceImpl<Role> implements TextSearchableService<Role>, RoleService {
+public class RoleServiceImpl extends BaseJpaServiceImpl<Role> implements RoleService {
     @Autowired
     private RoleRepository roleRepository;
 

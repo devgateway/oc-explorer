@@ -5,7 +5,6 @@ import org.devgateway.toolkit.persistence.repository.category.GroupRepository;
 import org.devgateway.toolkit.persistence.repository.norepository.BaseJpaRepository;
 import org.devgateway.toolkit.persistence.repository.norepository.TextSearchableRepository;
 import org.devgateway.toolkit.persistence.service.BaseJpaServiceImpl;
-import org.devgateway.toolkit.persistence.service.TextSearchableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @CacheConfig(cacheNames = "servicesCache")
 @Transactional(readOnly = true)
-public class GroupServiceImpl extends BaseJpaServiceImpl<Group> implements TextSearchableService<Group>, GroupService {
+public class GroupServiceImpl extends BaseJpaServiceImpl<Group> implements GroupService {
     @Autowired
     private GroupRepository groupRepository;
 

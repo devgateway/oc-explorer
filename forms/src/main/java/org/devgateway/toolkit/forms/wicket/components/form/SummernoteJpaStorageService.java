@@ -4,7 +4,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.editor.SummernoteS
 import org.apache.commons.io.IOUtils;
 import org.devgateway.toolkit.persistence.dao.FileContent;
 import org.devgateway.toolkit.persistence.dao.FileMetadata;
-import org.devgateway.toolkit.persistence.service.FileMetadataServiceImpl;
+import org.devgateway.toolkit.persistence.service.FileMetadataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +17,7 @@ public class SummernoteJpaStorageService implements SummernoteStorage {
     public static final String STORAGE_ID = "jpaStorage";
 
     @Autowired
-    private FileMetadataServiceImpl fileMetadataService;
-
+    private FileMetadataService fileMetadataService;
 
     @Override
     public void writeContent(final String imageName, final InputStream inputStream) {

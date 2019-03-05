@@ -4,7 +4,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.devgateway.toolkit.persistence.excel.ExcelFile;
 import org.devgateway.toolkit.persistence.excel.ExcelFileDefault;
 import org.devgateway.toolkit.persistence.service.BaseJpaService;
-import org.devgateway.toolkit.persistence.service.BaseJpaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -29,7 +28,7 @@ public class ExcelGeneratorService {
     /**
      * Method that returns a byte array with an excel export.
      *
-     * @param jpaService - {@link BaseJpaServiceImpl} from where we will get the data
+     * @param jpaService - {@link BaseJpaService} from where we will get the data
      * @param spec       - {@link Specification} for filtering the data
      * @param pageable   - {@link Pageable} for paginating the data
      * @return byte[]
