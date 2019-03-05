@@ -14,7 +14,11 @@ public final class Data implements Serializable {
 
     private final List<?> x;
 
-    private final List<? extends Number> y;
+    private final List<?> y;
+
+    private final List<?> theta;
+
+    private final List<?> r;
 
     private final String type;
 
@@ -22,11 +26,23 @@ public final class Data implements Serializable {
 
     private final String hoverinfo;
 
+    private final String textinfo;
+
+    private final List<String> hovertext;
+
     private final Double hole;
+
+    private final Boolean sort;
+
+    private final String direction;
 
     private final Double pull;
 
     private final List<String> text;
+
+    private final String textposition;
+
+    private final Font textfont;
 
     private final Marker marker;
 
@@ -34,20 +50,58 @@ public final class Data implements Serializable {
 
     private final String fill;
 
+    private final String orientation;
+
+    private final Boolean cliponaxis;
+
+    private final List<String> locations;
+
+    private final String locationmode;
+
+    private final List<?> z;
+
+    private final List<List<Object>> colorscale;
+
+    private final Boolean autocolorscale;
+
+    private final Boolean reversescale;
+
+    private final Boolean zauto;
+
+    private final Colorbar colorbar;
+
     public Data(final DataBuilder dataBuilder) {
         this.values = dataBuilder.values;
         this.labels = dataBuilder.labels;
         this.x = dataBuilder.x;
         this.y = dataBuilder.y;
+        this.theta = dataBuilder.theta;
+        this.r = dataBuilder.r;
         this.type = dataBuilder.type;
         this.name = dataBuilder.name;
         this.hoverinfo = dataBuilder.hoverinfo;
+        this.textinfo = dataBuilder.textinfo;
+        this.hovertext = dataBuilder.hovertext;
         this.hole = dataBuilder.hole;
+        this.sort = dataBuilder.sort;
+        this.direction = dataBuilder.direction;
         this.pull = dataBuilder.pull;
         this.text = dataBuilder.text;
+        this.textposition = dataBuilder.textposition;
+        this.textfont = dataBuilder.textfont;
         this.marker = dataBuilder.marker;
         this.mode = dataBuilder.mode;
         this.fill = dataBuilder.fill;
+        this.orientation = dataBuilder.orientation;
+        this.cliponaxis = dataBuilder.cliponaxis;
+        this.locations = dataBuilder.locations;
+        this.locationmode = dataBuilder.locationmode;
+        this.z = dataBuilder.z;
+        this.colorscale = dataBuilder.colorscale;
+        this.autocolorscale = dataBuilder.autocolorscale;
+        this.reversescale = dataBuilder.reversescale;
+        this.zauto = dataBuilder.zauto;
+        this.colorbar = dataBuilder.colorbar;
     }
 
     public static class DataBuilder {
@@ -57,7 +111,11 @@ public final class Data implements Serializable {
 
         private List<?> x;
 
-        private List<? extends Number> y;
+        private List<?> y;
+
+        private List<?> theta;
+
+        private List<?> r;
 
         private String type;
 
@@ -65,17 +123,49 @@ public final class Data implements Serializable {
 
         private String hoverinfo;
 
+        private String textinfo;
+
+        private List<String> hovertext;
+
         private Double hole;
+
+        private Boolean sort;
+
+        private String direction;
 
         private Double pull;
 
         private List<String> text;
+
+        private String textposition;
+
+        private Font textfont;
 
         private Marker marker;
 
         private String mode;
 
         private String fill;
+
+        private String orientation;
+
+        private Boolean cliponaxis;
+
+        private List<String> locations;
+
+        private String locationmode;
+
+        private List<?> z;
+
+        private List<List<Object>> colorscale;
+
+        private Boolean autocolorscale;
+
+        private Boolean reversescale;
+
+        private Boolean zauto;
+
+        private Colorbar colorbar;
 
         public DataBuilder setValues(final List<? extends Number> values) {
             this.values = values;
@@ -92,8 +182,18 @@ public final class Data implements Serializable {
             return this;
         }
 
-        public DataBuilder setY(final List<? extends Number> y) {
+        public DataBuilder setY(final List<?> y) {
             this.y = y;
+            return this;
+        }
+
+        public DataBuilder setTheta(final List<?> theta) {
+            this.theta = theta;
+            return this;
+        }
+
+        public DataBuilder setR(final List<?> r) {
+            this.r = r;
             return this;
         }
 
@@ -112,8 +212,28 @@ public final class Data implements Serializable {
             return this;
         }
 
+        public DataBuilder setTextinfo(final String textinfo) {
+            this.textinfo = textinfo;
+            return this;
+        }
+
+        public DataBuilder setHovertext(final List<String> hovertext) {
+            this.hovertext = hovertext;
+            return this;
+        }
+
         public DataBuilder setHole(final Double hole) {
             this.hole = hole;
+            return this;
+        }
+
+        public DataBuilder setSort(final Boolean sort) {
+            this.sort = sort;
+            return this;
+        }
+
+        public DataBuilder setDirection(final String direction) {
+            this.direction = direction;
             return this;
         }
 
@@ -124,6 +244,16 @@ public final class Data implements Serializable {
 
         public DataBuilder setText(final List<String> text) {
             this.text = text;
+            return this;
+        }
+
+        public DataBuilder setTextposition(final String textposition) {
+            this.textposition = textposition;
+            return this;
+        }
+
+        public DataBuilder setTextfont(final Font textfont) {
+            this.textfont = textfont;
             return this;
         }
 
@@ -139,6 +269,56 @@ public final class Data implements Serializable {
 
         public DataBuilder setFill(final String fill) {
             this.fill = fill;
+            return this;
+        }
+
+        public DataBuilder setOrientation(final String orientation) {
+            this.orientation = orientation;
+            return this;
+        }
+
+        public DataBuilder setCliponaxis(final Boolean cliponaxis) {
+            this.cliponaxis = cliponaxis;
+            return this;
+        }
+
+        public DataBuilder setLocations(final List<String> locations) {
+            this.locations = locations;
+            return this;
+        }
+
+        public DataBuilder setLocationmode(final String locationmode) {
+            this.locationmode = locationmode;
+            return this;
+        }
+
+        public DataBuilder setZ(final List<?> z) {
+            this.z = z;
+            return this;
+        }
+
+        public DataBuilder setColorscale(final List<List<Object>> colorscale) {
+            this.colorscale = colorscale;
+            return this;
+        }
+
+        public DataBuilder setAutocolorscale(final Boolean autocolorscale) {
+            this.autocolorscale = autocolorscale;
+            return this;
+        }
+
+        public DataBuilder setReversescale(final Boolean reversescale) {
+            this.reversescale = reversescale;
+            return this;
+        }
+
+        public DataBuilder setZauto(final Boolean zauto) {
+            this.zauto = zauto;
+            return this;
+        }
+
+        public DataBuilder setColorbar(final Colorbar colorbar) {
+            this.colorbar = colorbar;
             return this;
         }
 

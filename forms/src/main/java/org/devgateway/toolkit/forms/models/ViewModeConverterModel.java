@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.models;
 
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.forms.wicket.components.form.GenericBootstrapFormComponent;
@@ -26,28 +25,15 @@ import java.util.Date;
  *         {@link WebConstants#PARAM_VIEW_MODE} is true in the browser and will
  *         convert the model object to something printable (string-like)
  */
-public class ViewModeConverterModel<T> extends AbstractReadOnlyModel<String> {
-
+public class ViewModeConverterModel<T> implements IModel<String> {
     private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
     private IModel<T> originalModel;
 
-    /**
-     * 
-     */
     public ViewModeConverterModel(final IModel<T> originalModel) {
         this.originalModel = originalModel;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.wicket.model.IModel#getObject()
-     */
     @Override
     public String getObject() {
         T object = originalModel.getObject();

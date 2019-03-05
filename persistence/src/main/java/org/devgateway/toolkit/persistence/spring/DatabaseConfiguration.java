@@ -14,22 +14,24 @@
  */
 package org.devgateway.toolkit.persistence.spring;
 
+import com.zaxxer.hikari.HikariDataSource;
 import liquibase.integration.spring.SpringLiquibase;
 import org.apache.derby.drda.NetworkServerControl;
-import org.apache.log4j.Logger;
-import org.apache.tomcat.jdbc.pool.DataSource;
-import org.apache.tomcat.jdbc.pool.PoolProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.mock.jndi.SimpleNamingContextBuilder;
 
 import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.util.Properties;
@@ -39,39 +41,16 @@ import java.util.Properties;
  *
  */
 @Configuration
-@EnableJpaAuditing
 @PropertySource("classpath:/org/devgateway/toolkit/persistence/application.properties")
 @Profile("!integration")
 public class DatabaseConfiguration {
-
-    @Value("${spring.datasource.username}")
-    private String springDatasourceUsername;
-
-    @Value("${spring.datasource.password}")
-    private String springDatasourcePassword;
-
-    @Value("${spring.datasource.url}")
-    private String springDatasourceUrl;
-
-    @Value("${spring.datasource.driver-class-name}")
-    private String springDatasourceDriverClassName;
-
-    @Value("${spring.datasource.transaction-isolation}")
-    private int springDatasourceTransactionIsolation;
-
-    @Value("${spring.datasource.initial-size}")
-    private int springDatasourceInitialSize;
-
-    @Value("${spring.datasource.max-active}")
-    private int springDatasourceMaxActive;
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseConfiguration.class);
 
     @Value("${dg-toolkit.derby.port}")
     private int derbyPort;
 
     @Value("${dg-toolkit.datasource.jndi-name}")
     private String datasourceJndiName;
-
-    protected static Logger logger = Logger.getLogger(DatabaseConfiguration.class);
 
     /**
      * This bean creates the JNDI tree and registers the
@@ -96,36 +75,23 @@ public class DatabaseConfiguration {
         try {
             builder.activate();
         } catch (IllegalStateException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (NamingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return builder;
     }
 
     /**
-     * Creates a {@link javax.sql.DataSource} based on Tomcat {@link DataSource}
+     * Creates a {@link javax.sql.DataSource} based on HikariCP {@link HikariDataSource}
      *
      * @return
      */
     @Bean
+    @ConfigurationProperties(prefix = "spring.datasource")
     @DependsOn(value = {"derbyServer"})
     public DataSource dataSource() {
-        PoolProperties pp = new PoolProperties();
-        pp.setJmxEnabled(true);
-        pp.setDefaultTransactionIsolation(springDatasourceTransactionIsolation);
-        pp.setInitialSize(springDatasourceInitialSize);
-        pp.setMaxActive(springDatasourceMaxActive);
-
-        DataSource dataSource = new DataSource(pp);
-
-        dataSource.setUrl(springDatasourceUrl);
-        dataSource.setUsername(springDatasourceUsername);
-        dataSource.setPassword(springDatasourcePassword);
-        dataSource.setDriverClassName(springDatasourceDriverClassName);
-        return dataSource;
+        return DataSourceBuilder.create().build();
     }
 
     /**

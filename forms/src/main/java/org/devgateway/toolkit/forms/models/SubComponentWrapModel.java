@@ -23,25 +23,19 @@ import org.apache.wicket.model.IWrapModel;
  *
  */
 public class SubComponentWrapModel<T> implements IWrapModel<T> {
-
     private static final long serialVersionUID = 4054354057335519754L;
-    private Component parent;
+
+    private final Component parent;
 
     public SubComponentWrapModel(final Component parent) {
         this.parent = parent;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.wicket.model.IWrapModel#getWrappedModel()
-     */
     @Override
     public IModel<?> getWrappedModel() {
         return parent.getDefaultModel();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public T getObject() {
         return (T) parent.getDefaultModelObject();
@@ -54,7 +48,7 @@ public class SubComponentWrapModel<T> implements IWrapModel<T> {
 
     @Override
     public void detach() {
-        IModel<?> wrappedModel = getWrappedModel();
+        final IModel<?> wrappedModel = getWrappedModel();
         if (wrappedModel != null) {
             wrappedModel.detach();
         }

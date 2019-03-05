@@ -33,14 +33,6 @@ public class SendEmailService {
 
     private SimpleMailMessage templateMessage;
 
-    public SimpleMailMessage getTemplateMessage() {
-        return templateMessage;
-    }
-
-    public void setTemplateMessage(final SimpleMailMessage templateMessage) {
-        this.templateMessage = templateMessage;
-    }
-
     /**
      * Send a reset password email. This is UNSAFE because passwords are sent in
      * clear text. Nevertheless some customers will ask for these emails to be
@@ -50,8 +42,7 @@ public class SendEmailService {
      * @param newPassword
      */
     public void sendEmailResetPassword(final Person person, final String newPassword) {
-
-        SimpleMailMessage msg = new SimpleMailMessage();
+        final SimpleMailMessage msg = new SimpleMailMessage();
         msg.setTo(person.getEmail());
         msg.setFrom("support@developmentgateway.org");
         msg.setSubject("Recover your password");

@@ -14,6 +14,7 @@ package org.devgateway.toolkit.web.spring;
 import org.devgateway.toolkit.persistence.spring.CustomJPAUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -21,12 +22,13 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.access.expression.SecurityExpressionHandler;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
@@ -35,13 +37,12 @@ import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 /**
- *
  * @author mpostelnicu This configures the spring security for the Web project.
- *         An
- *
+ * An
  */
 
 @Configuration
+@ConditionalOnMissingClass("org.devgateway.toolkit.forms.FormsSecurityConfig")
 @Order(2) // this loads the security config after the forms security (if you use
 // them overlayed, it must pick that one first)
 @PropertySource("classpath:allowedApiEndpoints.properties")
@@ -57,9 +58,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${roleHierarchy}")
     private String roleHierarchyStringRepresentation;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Bean
     public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
-        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        final StrictHttpFirewall firewall = new StrictHttpFirewall();
         firewall.setAllowUrlEncodedSlash(true);
         firewall.setAllowSemicolon(true);
         return firewall;
@@ -72,8 +76,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public SecurityContextPersistenceFilter securityContextPersistenceFilter() {
-
-        SecurityContextPersistenceFilter securityContextPersistenceFilter =
+        final SecurityContextPersistenceFilter securityContextPersistenceFilter =
                 new SecurityContextPersistenceFilter(httpSessionSecurityContextRepository());
         return securityContextPersistenceFilter;
     }
@@ -87,8 +90,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http.authorizeRequests().expressionHandler(webExpressionHandler()) // inject role hierarchy
                 .antMatchers("/", "/home").permitAll().antMatchers("/dummy").authenticated().anyRequest()
-                .authenticated().and().formLogin().loginPage("/login").permitAll().and().
-                requestCache().and().logout().permitAll().and()
+                .authenticated().and().formLogin().loginPage("/login").permitAll().and()
+                .requestCache().and().logout().permitAll().and()
                 .sessionManagement().and().csrf().disable();
         http.addFilter(securityContextPersistenceFilter());
     }
@@ -100,7 +103,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * @return
      */
     private SecurityExpressionHandler<FilterInvocation> webExpressionHandler() {
-        DefaultWebSecurityExpressionHandler handler = new DefaultWebSecurityExpressionHandler();
+        final DefaultWebSecurityExpressionHandler handler = new DefaultWebSecurityExpressionHandler();
         handler.setRoleHierarchy(roleHierarchy());
         return handler;
     }
@@ -111,15 +114,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Bean
     RoleHierarchy roleHierarchy() {
-        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+        final RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
         roleHierarchy.setHierarchy(roleHierarchyStringRepresentation);
         return roleHierarchy;
     }
 
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
     @Autowired
     public void configureGlobal(final AuthenticationManagerBuilder auth) throws Exception {
-        // we use standard password encoder for all passwords
-        StandardPasswordEncoder spe = new StandardPasswordEncoder();
-        auth.userDetailsService(customJPAUserDetailsService).passwordEncoder(spe);
+        auth.userDetailsService(customJPAUserDetailsService).passwordEncoder(passwordEncoder);
     }
 }

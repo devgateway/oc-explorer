@@ -1,32 +1,31 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2015 Development Gateway, Inc and others.
- *
+ * <p>
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the MIT License (MIT)
  * which accompanies this distribution, and is available at
  * https://opensource.org/licenses/MIT
- *
+ * <p>
  * Contributors:
  * Development Gateway - initial API and implementation
- *******************************************************************************/
+ */
 /**
- * 
+ *
  */
 package org.devgateway.toolkit.forms.wicket.components.form;
 
-import java.math.BigDecimal;
-
+import de.agilecoders.wicket.core.util.Attributes;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.devgateway.toolkit.forms.WebConstants;
 
-import de.agilecoders.wicket.core.util.Attributes;
+import java.math.BigDecimal;
 
 /**
  * @author mpostelnicu
- * 
+ *
  */
 public class TextFieldBootstrapFormComponent<TYPE> extends GenericBootstrapFormComponent<TYPE, TextField<TYPE>> {
     private static final long serialVersionUID = 8062663141536130313L;

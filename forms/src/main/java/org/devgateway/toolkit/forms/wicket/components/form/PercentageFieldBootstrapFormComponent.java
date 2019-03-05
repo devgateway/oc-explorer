@@ -14,8 +14,6 @@
  */
 package org.devgateway.toolkit.forms.wicket.components.form;
 
-import java.math.BigDecimal;
-
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
@@ -24,6 +22,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.BigDecimalConverter;
 import org.apache.wicket.validation.validator.RangeValidator;
+
+import java.math.BigDecimal;
 
 /**
  * @author mpostelnicu Field for showing percentages

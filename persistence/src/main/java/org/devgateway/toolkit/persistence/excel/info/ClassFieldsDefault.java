@@ -48,6 +48,11 @@ public final class ClassFieldsDefault implements ClassFields {
         return fields;
     }
 
+    @Override
+    public Class getClazz() {
+        return this.clazz;
+    }
+
     /**
      * Function used to get also the inherited fields.
      *

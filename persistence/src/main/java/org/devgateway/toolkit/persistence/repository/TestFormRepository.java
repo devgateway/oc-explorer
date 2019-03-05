@@ -12,12 +12,11 @@
 package org.devgateway.toolkit.persistence.repository;
 
 import org.devgateway.toolkit.persistence.dao.TestForm;
+import org.devgateway.toolkit.persistence.repository.norepository.BaseJpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 
  * @author mpostelnicu
- *
  */
 @Transactional
 public interface TestFormRepository extends BaseJpaRepository<TestForm, Long> {

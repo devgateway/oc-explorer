@@ -14,8 +14,9 @@
  */
 package org.devgateway.toolkit.reporting.spring;
 
-import org.apache.log4j.Logger;
 import org.pentaho.reporting.engine.classic.core.ClassicEngineBoot;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -28,8 +29,7 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @Profile("reports")
 public class ReportingConfiguration {
-
-    protected static Logger logger = Logger.getLogger(ReportingConfiguration.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReportingConfiguration.class);
 
     /**
      * Bean that starts the mondrian engine

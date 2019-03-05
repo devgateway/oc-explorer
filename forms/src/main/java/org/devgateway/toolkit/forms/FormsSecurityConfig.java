@@ -54,7 +54,7 @@ public class FormsSecurityConfig extends WebSecurityConfig {
     /**
      * This bean defines the same key in the
      * {@link RememberMeAuthenticationProvider}
-     * 
+     *
      * @return
      */
     @Bean
@@ -65,7 +65,7 @@ public class FormsSecurityConfig extends WebSecurityConfig {
     /**
      * This bean configures the {@link TokenBasedRememberMeServices} with
      * {@link CustomJPAUserDetailsService}
-     * 
+     *
      * @return
      */
     @Bean
@@ -84,10 +84,10 @@ public class FormsSecurityConfig extends WebSecurityConfig {
         // enabled this basically means any guest
         // user will have an annoymous default role
         http.anonymous().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER).
-        // we let Wicket create and manage sessions, so we disable
-        // session creation by spring
-                and().csrf().disable(); // csrf protection interferes with some
-                                        // wicket stuff
+                // we let Wicket create and manage sessions, so we disable
+                // session creation by spring
+                        and().csrf().disable(); // csrf protection interferes with some
+        // wicket stuff
 
         // we enable http rememberMe cookie for autologin
         // http.rememberMe().key(UNIQUE_SECRET_REMEMBER_ME_KEY);

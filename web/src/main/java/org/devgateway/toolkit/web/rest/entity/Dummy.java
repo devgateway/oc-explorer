@@ -12,9 +12,7 @@
 package org.devgateway.toolkit.web.rest.entity;
 
 /**
- * 
  * @author mpostelnicu
- *
  */
 public class Dummy {
 

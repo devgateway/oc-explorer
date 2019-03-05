@@ -20,8 +20,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.embedded.tomcat.TomcatWebServer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Profile;
@@ -42,8 +42,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @PropertySource("classpath:/org/devgateway/toolkit/persistence/application.properties")
 @ComponentScan("org.devgateway.toolkit")
 public class PersistenceApplication {
-
-    private Logger logger = LoggerFactory.getLogger(PersistenceApplication.class);
+    private static final Logger logger = LoggerFactory.getLogger(PersistenceApplication.class);
 
     public static void main(final String[] args) {
         SpringApplication.run(PersistenceApplication.class, args);
@@ -51,14 +50,14 @@ public class PersistenceApplication {
 
     @Bean
     @Profile("!integration")
-    public TomcatEmbeddedServletContainerFactory tomcatFactory(@Qualifier("liquibaseAfterJPA") final
-                                                                   SpringLiquibaseRunner liquibaseAfterJPA) {
+    public TomcatServletWebServerFactory tomcatFactory(@Qualifier("liquibaseAfterJPA") final
+                                                       SpringLiquibaseRunner liquibaseAfterJPA) {
         logger.info("Instantiating tomcat after initialization of " + liquibaseAfterJPA);
-        return new TomcatEmbeddedServletContainerFactory() {
+        return new TomcatServletWebServerFactory() {
             @Override
-            protected TomcatEmbeddedServletContainer getTomcatEmbeddedServletContainer(final Tomcat tomcat) {
+            protected TomcatWebServer getTomcatWebServer(final Tomcat tomcat) {
                 tomcat.enableNaming();
-                return super.getTomcatEmbeddedServletContainer(tomcat);
+                return super.getTomcatWebServer(tomcat);
             }
         };
     }

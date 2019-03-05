@@ -22,7 +22,7 @@ public class EmailServiceConfiguration {
 
     @Bean
     public JavaMailSenderImpl javaMailSenderImpl() {
-        JavaMailSenderImpl jmsi = new JavaMailSenderImpl();
+        final JavaMailSenderImpl jmsi = new JavaMailSenderImpl();
         jmsi.setHost("localhost");
         jmsi.setPort(SMTP_PORT);
         return jmsi;

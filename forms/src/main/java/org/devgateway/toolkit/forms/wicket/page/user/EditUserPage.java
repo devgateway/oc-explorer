@@ -15,9 +15,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
-import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -25,31 +24,28 @@ import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
-import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.security.SecurityUtil;
 import org.devgateway.toolkit.forms.service.SendEmailService;
-import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxToggleBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.PasswordFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.Select2ChoiceBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.Select2MultiChoiceBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.util.ComponentUtil;
 import org.devgateway.toolkit.forms.wicket.page.Homepage;
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListUserPage;
-import org.devgateway.toolkit.forms.wicket.providers.GenericPersistableJpaRepositoryTextChoiceProvider;
 import org.devgateway.toolkit.persistence.dao.Person;
+import org.devgateway.toolkit.persistence.dao.Role;
 import org.devgateway.toolkit.persistence.dao.categories.Group;
-import org.devgateway.toolkit.persistence.dao.categories.Role;
-import org.devgateway.toolkit.persistence.repository.GroupRepository;
-import org.devgateway.toolkit.persistence.repository.PersonRepository;
-import org.devgateway.toolkit.persistence.repository.RoleRepository;
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
+import org.devgateway.toolkit.persistence.service.PersonService;
+import org.devgateway.toolkit.persistence.service.RoleService;
+import org.devgateway.toolkit.persistence.service.category.GroupService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.wicketstuff.annotation.mount.MountPath;
-
-import java.util.List;
 
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_USER)
 @MountPath(value = "/account")
@@ -57,142 +53,50 @@ public class EditUserPage extends AbstractEditPage<Person> {
     private static final long serialVersionUID = 5208480049061989277L;
 
     @SpringBean
-    private PersonRepository userRepository;
+    private PersonService personService;
 
     @SpringBean
-    private GroupRepository groupRepository;
+    private GroupService groupService;
 
     @SpringBean
-    private RoleRepository roleRepository;
+    private RoleService roleService;
 
     @SpringBean
     private SendEmailService sendEmailService;
 
-    protected TextFieldBootstrapFormComponent<String> userName = new TextFieldBootstrapFormComponent<>("username");
+    @SpringBean
+    private PasswordEncoder passwordEncoder;
 
-    protected TextFieldBootstrapFormComponent<String> firstName = new TextFieldBootstrapFormComponent<>("firstName");
+    protected TextFieldBootstrapFormComponent<String> username;
 
-    protected TextFieldBootstrapFormComponent<String> lastName = new TextFieldBootstrapFormComponent<>("lastName");
+    protected TextFieldBootstrapFormComponent<String> firstName;
 
-    protected TextFieldBootstrapFormComponent<String> email = new TextFieldBootstrapFormComponent<>("email");
+    protected TextFieldBootstrapFormComponent<String> lastName;
 
-    protected TextFieldBootstrapFormComponent<String> title = new TextFieldBootstrapFormComponent<>("title");
+    protected TextFieldBootstrapFormComponent<String> email;
 
-    protected Select2ChoiceBootstrapFormComponent<Group> group = new Select2ChoiceBootstrapFormComponent<>("group",
-            new GenericPersistableJpaRepositoryTextChoiceProvider<>(groupRepository));
+    protected TextFieldBootstrapFormComponent<String> title;
 
-    protected Select2MultiChoiceBootstrapFormComponent<Role> roles = new Select2MultiChoiceBootstrapFormComponent<>(
-            "roles", new Model<>("Roles"), new GenericPersistableJpaRepositoryTextChoiceProvider<>(roleRepository));
+    protected Select2ChoiceBootstrapFormComponent<Group> group;
 
-    protected CheckBoxBootstrapFormComponent enabled = new CheckBoxBootstrapFormComponent("enabled");
+    protected Select2MultiChoiceBootstrapFormComponent<Role> roles;
 
-    protected CheckBoxBootstrapFormComponent changePassword = new CheckBoxBootstrapFormComponent("changePassword");
+    protected CheckBoxToggleBootstrapFormComponent enabled;
 
-    protected final PasswordFieldBootstrapFormComponent password =
-            new PasswordFieldBootstrapFormComponent("plainPassword");
+    protected CheckBoxToggleBootstrapFormComponent changePasswordNextSignIn;
 
-    protected final PasswordFieldBootstrapFormComponent cpassword =
-            new PasswordFieldBootstrapFormComponent("plainPasswordCheck", new Model<>());
+    protected CheckBoxToggleBootstrapFormComponent changeProfilePassword;
 
-    protected CheckBoxBootstrapFormComponent changePass = new CheckBoxBootstrapFormComponent("changePass") {
-        private static final long serialVersionUID = -1591795804543610117L;
+    protected PasswordFieldBootstrapFormComponent plainPassword;
 
-        @Override
-        protected void onUpdate(final AjaxRequestTarget target) {
-            password.getField().setEnabled(this.getModelObject());
-            cpassword.getField().setEnabled(this.getModelObject());
+    protected PasswordFieldBootstrapFormComponent plainPasswordCheck;
 
-            target.add(password);
-            target.add(cpassword);
-        }
-    };
 
     public EditUserPage(final PageParameters parameters) {
         super(parameters);
 
-        this.jpaRepository = userRepository;
+        this.jpaService = personService;
         this.listPageClass = ListUserPage.class;
-    }
-
-    protected class UniqueUsernameValidator implements IValidator<String> {
-
-        private static final long serialVersionUID = -2412508063601996929L;
-        private Long userId;
-
-        public UniqueUsernameValidator() {
-            this.userId = new Long(-1);
-        }
-
-        public UniqueUsernameValidator(final Long userId) {
-            this.userId = userId;
-        }
-
-        @Override
-        public void validate(final IValidatable<String> validatable) {
-            String username = validatable.getValue();
-            List<Person> persons = userRepository.findByName(username);
-            for (int i = 0; i < persons.size(); i++) {
-                if (persons.get(i) != null && !persons.get(i).getId().equals(userId)) {
-                    ValidationError error = new ValidationError(getString("uniqueUser"));
-                    validatable.error(error);
-                    break;
-                }
-            }
-        }
-    }
-
-    protected class UniqueEmailAddressValidator implements IValidator<String> {
-        private static final long serialVersionUID = 972971245491631372L;
-
-        private Long userId;
-
-        public UniqueEmailAddressValidator() {
-            this.userId = new Long(-1);
-        }
-
-        public UniqueEmailAddressValidator(final Long userId) {
-            this.userId = userId;
-        }
-
-        @Override
-        public void validate(final IValidatable<String> validatable) {
-            String emailAddress = validatable.getValue();
-            Person person = userRepository.findByEmail(emailAddress);
-            if (person != null && !person.getId().equals(userId)) {
-                ValidationError error = new ValidationError(getString("uniqueEmailAddress"));
-                validatable.error(error);
-            }
-        }
-    }
-
-    public class PasswordPatternValidator extends PatternValidator {
-        private static final long serialVersionUID = 7886016396095273777L;
-
-        // 1 digit, 1 lower, 1 upper, 1 symbol "@#$%", from 6 to 20
-        // private static final String PASSWORD_PATTERN =
-        // "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})";
-        // 1 digit, 1 caps letter, from 10 to 20
-        private static final String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z]).{10,20})";
-
-        public PasswordPatternValidator() {
-            super(PASSWORD_PATTERN);
-        }
-
-    }
-
-    public class UsernamePatternValidator extends PatternValidator {
-        private static final long serialVersionUID = -5456988677371244333L;
-
-        private static final String USERNAME_PATTERN = "[a-zA-Z0-9]*";
-
-        public UsernamePatternValidator() {
-            super(USERNAME_PATTERN);
-        }
-    }
-
-    @Override
-    protected Person newInstance() {
-        return new Person();
     }
 
     @Override
@@ -207,92 +111,85 @@ public class EditUserPage extends AbstractEditPage<Person> {
 
         super.onInitialize();
 
-        userName.required();
-        userName.getField().add(new UsernamePatternValidator());
+        username = ComponentUtil.addTextField(editForm, "username", false);
+        username.required();
+        username.getField().add(new UsernamePatternValidator());
         StringValue idPerson = getPageParameters().get(WebConstants.PARAM_ID);
         if (!idPerson.isNull()) {
-            userName.getField().add(new UniqueUsernameValidator(idPerson.toLong()));
+            username.getField().add(new UniqueUsernameValidator(idPerson.toLong()));
         } else {
-            userName.getField().add(new UniqueUsernameValidator());
+            username.getField().add(new UniqueUsernameValidator());
         }
-        userName.setIsFloatedInput(true);
-        editForm.add(userName);
-        MetaDataRoleAuthorizationStrategy.authorize(userName, Component.ENABLE, SecurityConstants.Roles.ROLE_ADMIN);
+        editForm.add(username);
+        MetaDataRoleAuthorizationStrategy.authorize(username, Component.ENABLE, SecurityConstants.Roles.ROLE_ADMIN);
 
+        firstName = ComponentUtil.addTextField(editForm, "firstName", false);
         firstName.required();
-        firstName.setIsFloatedInput(true);
-        editForm.add(firstName);
 
+        lastName = ComponentUtil.addTextField(editForm, "lastName", false);
         lastName.required();
-        lastName.setIsFloatedInput(true);
-        editForm.add(lastName);
 
-        email.required();
-        email.getField().add(EmailAddressValidator.getInstance());
+        email = ComponentUtil.addTextField(editForm, "email", false);
+        email.required()
+                .getField().add(RfcCompliantEmailAddressValidator.getInstance());
         if (!idPerson.isNull()) {
             email.getField().add(new UniqueEmailAddressValidator(idPerson.toLong()));
         } else {
             email.getField().add(new UniqueEmailAddressValidator());
         }
-        email.setIsFloatedInput(true);
-        editForm.add(email);
 
-        title.setIsFloatedInput(true);
-        editForm.add(title);
+        title = ComponentUtil.addTextField(editForm, "title", false);
 
+        group = ComponentUtil.addSelect2ChoiceField(editForm, "group", groupService, false);
         group.required();
-        group.setIsFloatedInput(true);
-        editForm.add(group);
         MetaDataRoleAuthorizationStrategy.authorize(group, Component.RENDER, SecurityConstants.Roles.ROLE_ADMIN);
 
+        roles = ComponentUtil.addSelect2MultiChoiceField(editForm, "roles", roleService, false);
         roles.required();
-        roles.getField().setOutputMarkupId(true);
-        roles.setIsFloatedInput(true);
-        editForm.add(roles);
         MetaDataRoleAuthorizationStrategy.authorize(roles, Component.RENDER, SecurityConstants.Roles.ROLE_ADMIN);
 
-        // stop resetting the password fields each time they are rendered
-        password.getField().setResetPassword(false);
-        cpassword.getField().setResetPassword(false);
-        if (SecurityUtil.isCurrentUserAdmin() && !SecurityUtil.isUserAdmin(compoundModel.getObject())
-                && idPerson.isNull()) {
-            // hide the change password checkbox and set it's model to true
-            compoundModel.getObject().setChangePass(true);
-            changePass.setVisibilityAllowed(false);
-        } else {
-            compoundModel.getObject().setChangePass(compoundModel.getObject().getChangePassword());
-            password.getField().setEnabled(compoundModel.getObject().getChangePassword());
-            cpassword.getField().setEnabled(compoundModel.getObject().getChangePassword());
-        }
-
-        changePass.setIsFloatedInput(true);
-        editForm.add(changePass);
-
-        password.getField().add(new PasswordPatternValidator());
-        password.setOutputMarkupId(true);
-        password.setIsFloatedInput(true);
-        editForm.add(password);
-
-        cpassword.setOutputMarkupId(true);
-        cpassword.setIsFloatedInput(true);
-        editForm.add(cpassword);
-
-        editForm.add(new EqualPasswordInputValidator(password.getField(), cpassword.getField()));
-
-        enabled.setIsFloatedInput(true);
-        editForm.add(enabled);
+        enabled = ComponentUtil.addCheckToggle(editForm, "enabled", false);
         MetaDataRoleAuthorizationStrategy.authorize(enabled, Component.RENDER, SecurityConstants.Roles.ROLE_ADMIN);
 
-        changePassword.setIsFloatedInput(true);
-        editForm.add(changePassword);
-        MetaDataRoleAuthorizationStrategy.authorize(changePassword, Component.RENDER,
+        changePasswordNextSignIn = ComponentUtil.addCheckToggle(editForm, "changePasswordNextSignIn", false);
+        MetaDataRoleAuthorizationStrategy.authorize(changePasswordNextSignIn, Component.RENDER,
                 SecurityConstants.Roles.ROLE_ADMIN);
 
-        MetaDataRoleAuthorizationStrategy.authorize(deleteButton, Component.RENDER, SecurityConstants.Roles.ROLE_ADMIN);
-    }
+        changeProfilePassword = new CheckBoxToggleBootstrapFormComponent("changeProfilePassword") {
+            @Override
+            protected void onUpdate(final AjaxRequestTarget target) {
+                plainPassword.setVisibilityAllowed(this.getModelObject());
+                plainPasswordCheck.setVisibilityAllowed(this.getModelObject());
 
-    protected boolean isChangePassPage() {
-        return false;
+                target.add(plainPassword);
+                target.add(plainPasswordCheck);
+            }
+        };
+        editForm.add(changeProfilePassword);
+
+        plainPassword = ComponentUtil.addTextPasswordField(editForm, "plainPassword", false);
+        plainPassword.required();
+        // stop resetting the password fields each time they are rendered
+        plainPassword.getField().setResetPassword(false);
+        plainPassword.getField().add(new PasswordPatternValidator());
+
+        plainPasswordCheck = ComponentUtil.addTextPasswordField(editForm, "plainPasswordCheck", false);
+        plainPasswordCheck.required();
+        plainPasswordCheck.getField().setResetPassword(false);
+
+        if (SecurityUtil.isCurrentUserAdmin() && idPerson.isNull()) {
+            // hide the change password checkbox and set it's model to true
+            editForm.getModelObject().setChangeProfilePassword(false);
+            plainPassword.setVisibilityAllowed(true);
+            plainPasswordCheck.setVisibilityAllowed(true);
+        } else {
+            plainPassword.setVisibilityAllowed(editForm.getModelObject().getChangePasswordNextSignIn());
+            plainPasswordCheck.setVisibilityAllowed(editForm.getModelObject().getChangePasswordNextSignIn());
+        }
+
+        editForm.add(new EqualPasswordInputValidator(plainPassword.getField(), plainPasswordCheck.getField()));
+
+        MetaDataRoleAuthorizationStrategy.authorize(deleteButton, Component.RENDER, SecurityConstants.Roles.ROLE_ADMIN);
     }
 
     @Override
@@ -301,28 +198,21 @@ public class EditUserPage extends AbstractEditPage<Person> {
             private static final long serialVersionUID = 5214537995514151323L;
 
             @Override
-            protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
-                Person saveable = editForm.getModelObject();
-                StandardPasswordEncoder encoder = new StandardPasswordEncoder("");
+            protected void onSubmit(final AjaxRequestTarget target) {
+                super.onSubmit(target);
 
+                final Person person = editForm.getModelObject();
                 // encode the password
-                if (saveable.getChangePass()) {
-                    saveable.setPassword(encoder.encode(password.getField().getModelObject()));
-                } else {
-                    if (saveable.getPassword() == null || saveable.getPassword().compareTo("") == 0) {
-                        feedbackPanel.error(new StringResourceModel("nullPassword", this, null).getString());
-                        target.add(feedbackPanel);
-                        return;
-                    }
+                if (person.getChangeProfilePassword()) {
+                    person.setPassword(passwordEncoder.encode(plainPassword.getField().getModelObject()));
                 }
 
-                // user just changed his password so don't force him to change
-                // it again next time
+                // user just changed his password so don't force him to change it again next time
                 if (isChangePassPage()) {
-                    saveable.setChangePassword(false);
+                    person.setChangePasswordNextSignIn(false);
                 }
 
-                jpaRepository.save(saveable);
+                jpaService.save(person);
                 if (!SecurityUtil.isCurrentUserAdmin()) {
                     setResponsePage(Homepage.class);
                 } else {
@@ -330,5 +220,82 @@ public class EditUserPage extends AbstractEditPage<Person> {
                 }
             }
         };
+    }
+
+    public static class PasswordPatternValidator extends PatternValidator {
+        private static final long serialVersionUID = 7886016396095273777L;
+
+        // 1 digit, 1 lower, 1 upper, 1 symbol "@#$%", from 6 to 20
+        // private static final String PASSWORD_PATTERN =
+        // "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})";
+        // 1 digit, 1 caps letter, from 10 to 20
+        private static final String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z]).{10,20})";
+
+        public PasswordPatternValidator() {
+            super(PASSWORD_PATTERN);
+        }
+
+    }
+
+    public static class UsernamePatternValidator extends PatternValidator {
+        private static final long serialVersionUID = -5456988677371244333L;
+
+        private static final String USERNAME_PATTERN = "[a-zA-Z0-9]*";
+
+        public UsernamePatternValidator() {
+            super(USERNAME_PATTERN);
+        }
+    }
+
+    protected class UniqueUsernameValidator implements IValidator<String> {
+        private static final long serialVersionUID = -2412508063601996929L;
+
+        private Long userId;
+
+        public UniqueUsernameValidator() {
+            this.userId = Long.valueOf(-1);
+        }
+
+        public UniqueUsernameValidator(final Long userId) {
+            this.userId = userId;
+        }
+
+        @Override
+        public void validate(final IValidatable<String> validatable) {
+            final String username = validatable.getValue();
+            final Person person = personService.findByUsername(username);
+            if (person != null && !person.getId().equals(userId)) {
+                final ValidationError error = new ValidationError(getString("uniqueUser"));
+                validatable.error(error);
+            }
+        }
+    }
+
+    protected class UniqueEmailAddressValidator implements IValidator<String> {
+        private static final long serialVersionUID = 972971245491631372L;
+
+        private Long userId;
+
+        public UniqueEmailAddressValidator() {
+            this.userId = Long.valueOf(-1);
+        }
+
+        public UniqueEmailAddressValidator(final Long userId) {
+            this.userId = userId;
+        }
+
+        @Override
+        public void validate(final IValidatable<String> validatable) {
+            final String emailAddress = validatable.getValue();
+            final Person person = personService.findByEmail(emailAddress);
+            if (person != null && !person.getId().equals(userId)) {
+                final ValidationError error = new ValidationError(getString("uniqueEmailAddress"));
+                validatable.error(error);
+            }
+        }
+    }
+
+    protected boolean isChangePassPage() {
+        return false;
     }
 }

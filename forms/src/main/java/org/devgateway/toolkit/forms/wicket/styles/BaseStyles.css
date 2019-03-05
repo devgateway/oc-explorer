@@ -9,6 +9,13 @@ html {
      * suddenly the content doesn't fit above the fold.
      */
     overflow-y: scroll;
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 50px !important;
 }
 
 .mainHeader.with-navbar-default .navbar-default {
@@ -47,7 +54,12 @@ html {
      * Add some spacing around the footer.
      */
     margin-top: 2em;
-    margin-bottom: 2em;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 50px;
+    background-color: #222;
 }
 
 /* file upload

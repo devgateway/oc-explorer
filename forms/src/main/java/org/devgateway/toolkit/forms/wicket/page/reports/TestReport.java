@@ -24,7 +24,7 @@ import java.util.Map;
 @MountPath(value = "reports/testReport")
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_USER)
 public class TestReport extends AbstractFilteredReportPage {
-    protected final Logger logger = LoggerFactory.getLogger(TestReport.class);
+    private static final Logger logger = LoggerFactory.getLogger(TestReport.class);
 
     public static final String HOST = "host";
 

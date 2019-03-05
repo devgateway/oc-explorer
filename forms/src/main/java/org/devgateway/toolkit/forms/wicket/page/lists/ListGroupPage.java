@@ -20,27 +20,23 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.page.EditGroupPage;
 import org.devgateway.toolkit.persistence.dao.categories.Group;
-import org.devgateway.toolkit.persistence.repository.GroupRepository;
+import org.devgateway.toolkit.persistence.service.category.GroupService;
 import org.wicketstuff.annotation.mount.MountPath;
 
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_ADMIN)
 @MountPath(value = "/listgroups")
 public class ListGroupPage extends AbstractListPage<Group> {
-
-    /**
-     * 
-     */
     private static final long serialVersionUID = -324298525712620234L;
+
     @SpringBean
-    protected GroupRepository groupRepository;
+    protected GroupService groupService;
 
     public ListGroupPage(final PageParameters pageParameters) {
         super(pageParameters);
-        this.jpaRepository = groupRepository;
+        this.jpaService = groupService;
         this.editPageClass = EditGroupPage.class;
-        columns.add(new PropertyColumn<Group, String>(
-                new Model<String>((new StringResourceModel("name", ListGroupPage.this, null)).getString()), "label",
+        columns.add(new PropertyColumn<>(
+                new Model<>((new StringResourceModel("name", ListGroupPage.this, null)).getString()), "label",
                 "label"));
     }
-
 }

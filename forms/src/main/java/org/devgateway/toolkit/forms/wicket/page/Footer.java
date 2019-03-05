@@ -27,8 +27,7 @@ public class Footer extends Panel {
     /**
      * Construct.
      *
-     * @param markupId
-     *            The components markup id.
+     * @param markupId The components markup id.
      */
     public Footer(final String markupId) {
         super(markupId);

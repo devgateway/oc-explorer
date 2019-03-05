@@ -1,16 +1,16 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2015 Development Gateway, Inc and others.
- *
+ * <p>
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the MIT License (MIT)
  * which accompanies this distribution, and is available at
  * https://opensource.org/licenses/MIT
- *
+ * <p>
  * Contributors:
  * Development Gateway - initial API and implementation
- *******************************************************************************/
+ */
 /**
- * 
+ *
  */
 package org.devgateway.toolkit.forms.wicket.components.form;
 
@@ -28,7 +28,7 @@ import java.util.Collection;
 
 /**
  * @author mpostelnicu
- * 
+ *
  */
 public class Select2MultiChoiceBootstrapFormComponent<TYPE>
         extends GenericBootstrapFormComponent<Collection<TYPE>, Select2MultiChoice<TYPE>> {
@@ -37,7 +37,8 @@ public class Select2MultiChoiceBootstrapFormComponent<TYPE>
     private Boolean isFloatedInput = false;
 
     public Select2MultiChoiceBootstrapFormComponent(final String id, final IModel<String> labelModel,
-            final IModel<Collection<TYPE>> model, final ChoiceProvider<TYPE> choiceProvider) {
+                                                    final IModel<Collection<TYPE>> model,
+                                                    final ChoiceProvider<TYPE> choiceProvider) {
         super(id, labelModel, model);
         provider(choiceProvider);
     }
@@ -48,13 +49,13 @@ public class Select2MultiChoiceBootstrapFormComponent<TYPE>
     }
 
     public Select2MultiChoiceBootstrapFormComponent(final String id, final IModel<String> labelModel,
-            final ChoiceProvider<TYPE> choiceProvider) {
+                                                    final ChoiceProvider<TYPE> choiceProvider) {
         super(id, labelModel, null);
         provider(choiceProvider);
     }
 
     public Select2MultiChoiceBootstrapFormComponent(final String id, final ChoiceProvider<TYPE> choiceProvider,
-            final IModel<Collection<TYPE>> model) {
+                                                    final IModel<Collection<TYPE>> model) {
         super(id, model);
         provider(choiceProvider);
     }

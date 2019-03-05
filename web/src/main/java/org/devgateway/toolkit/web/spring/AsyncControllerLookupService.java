@@ -1,9 +1,7 @@
 /**
- * 
+ *
  */
 package org.devgateway.toolkit.web.spring;
-
-import java.util.concurrent.Future;
 
 import org.devgateway.toolkit.web.spring.util.AsyncBeanParamControllerMethodCallable;
 import org.slf4j.Logger;
@@ -11,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.Future;
 
 /**
  * @author mihai Service designed to run a
@@ -26,7 +26,7 @@ public class AsyncControllerLookupService {
 
     @Async
     public <RET, FILT> Future<RET> asyncInvoke(final AsyncBeanParamControllerMethodCallable<RET, FILT> callable,
-            final FILT filter) {
+                                               final FILT filter) {
         logger.debug("Invoking " + callable);
         return new AsyncResult<>(callable.invokeControllerMethod(filter));
     }
@@ -36,7 +36,7 @@ public class AsyncControllerLookupService {
      * tasks is done executing. that means {@link Future#isDone()} is true for
      * all. Invoking this method will block current thread until all tasks are
      * done.
-     * 
+     *
      * @param future
      *            the list of {@link Future} tasks to wait execution
      */

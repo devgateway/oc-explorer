@@ -15,8 +15,6 @@ import org.apache.wicket.request.resource.CssResourceReference;
 
 /**
  * The base CSS for the project.
- *
- * TODO: Convert to LESS; Bootstrap also uses LESS.
  */
 public class BaseStyles extends CssResourceReference {
     private static final long serialVersionUID = 1L;

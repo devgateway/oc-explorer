@@ -4,7 +4,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -12,26 +11,24 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.devgateway.toolkit.forms.wicket.components.form.BootstrapAddButton;
 import org.devgateway.toolkit.forms.wicket.components.form.BootstrapDeleteButton;
-import org.devgateway.toolkit.forms.wicket.components.form.SummernoteBootstrapFormComponent;
 import org.devgateway.toolkit.persistence.dao.AbstractAuditableEntity;
 
 import java.util.List;
 
 /**
- * @author idobre
- * @since 10/5/16
- *
- * Class that displays a list of <T> type with the possibility of adding/removing elements.
- *
  * @param <T>      The current list data type
  * @param <PARENT> The parent field data type
+ * @author idobre
+ * @since 10/5/16
+ * <p>
+ * Class that displays a list of T type with the possibility of adding/removing elements.
  */
 
 public abstract class ListViewSectionPanel<T extends AbstractAuditableEntity, PARENT extends AbstractAuditableEntity>
         extends CompoundSectionPanel<List<T>> {
     private WebMarkupContainer listWrapper;
 
-    protected ListView<T> listView;
+    private ListView<T> listView;
 
     public ListViewSectionPanel(final String id) {
         super(id);
@@ -48,8 +45,7 @@ public abstract class ListViewSectionPanel<T extends AbstractAuditableEntity, PA
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
-                SummernoteBootstrapFormComponent.addSummernoteProcessInputVisitor(form);
+            protected void onSubmit(final AjaxRequestTarget target) {
                 ListViewSectionPanel.this.getModelObject().remove(index);
                 listView.removeAll();
                 target.add(listWrapper);
@@ -70,8 +66,7 @@ public abstract class ListViewSectionPanel<T extends AbstractAuditableEntity, PA
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
-                SummernoteBootstrapFormComponent.addSummernoteProcessInputVisitor(form);
+            protected void onSubmit(final AjaxRequestTarget target) {
                 T newChild = createNewChild((IModel<PARENT>) ListViewSectionPanel.this.getParent().getDefaultModel());
                 ListViewSectionPanel.this.getModel().getObject().add(newChild);
 

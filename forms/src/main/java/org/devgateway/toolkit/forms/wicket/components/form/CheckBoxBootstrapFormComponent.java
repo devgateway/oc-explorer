@@ -11,13 +11,13 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.components.form;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapCheckbox;
+import de.agilecoders.wicket.core.util.Attributes;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
-
-import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapCheckbox;
-import de.agilecoders.wicket.core.util.Attributes;
+import org.apache.wicket.model.Model;
 
 /**
  * @author mpostelnicu
@@ -28,7 +28,7 @@ public class CheckBoxBootstrapFormComponent extends GenericEnablingBootstrapForm
 
     private Boolean isFloatedInput = false;
 
-    protected CheckBox wrappedCheckbox;
+    private CheckBox wrappedCheckbox;
 
     public CheckBoxBootstrapFormComponent(final String id, final IModel<String> labelModel,
             final IModel<Boolean> model) {
@@ -63,7 +63,7 @@ public class CheckBoxBootstrapFormComponent extends GenericEnablingBootstrapForm
 
     @Override
     protected BootstrapCheckbox inputField(final String id, final IModel<Boolean> model) {
-        return new BootstrapCheckbox(id, initFieldModel()) {
+        return new BootstrapCheckbox(id, initFieldModel(), Model.of()) {
             private static final long serialVersionUID = 1L;
 
             @Override

@@ -19,7 +19,7 @@ import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFor
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListGroupPage;
 import org.devgateway.toolkit.persistence.dao.categories.Group;
-import org.devgateway.toolkit.persistence.repository.GroupRepository;
+import org.devgateway.toolkit.persistence.service.category.GroupService;
 import org.wicketstuff.annotation.mount.MountPath;
 
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_ADMIN)
@@ -28,17 +28,12 @@ public class EditGroupPage extends AbstractEditPage<Group> {
 
     private static final long serialVersionUID = -6069250112046118104L;
 
-    @Override
-    protected Group newInstance() {
-        return new Group();
-    }
-
     @SpringBean
-    private GroupRepository groupRepository;
+    protected GroupService groupService;
 
     public EditGroupPage(final PageParameters parameters) {
         super(parameters);
-        this.jpaRepository = groupRepository;
+        this.jpaService = groupService;
         this.listPageClass = ListGroupPage.class;
 
     }
@@ -47,9 +42,8 @@ public class EditGroupPage extends AbstractEditPage<Group> {
     protected void onInitialize() {
         super.onInitialize();
 
-        TextFieldBootstrapFormComponent<String> gname = new TextFieldBootstrapFormComponent<>("label");
-        gname.required();
-        editForm.add(gname);
-
+        final TextFieldBootstrapFormComponent<String> name = new TextFieldBootstrapFormComponent<>("label");
+        name.required();
+        editForm.add(name);
     }
 }

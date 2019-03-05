@@ -29,15 +29,14 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  */
 @Transactional
 public abstract class AbstractSpringDataRestControllerTest extends AbstractWebTest {
+    private PersistentEntityResourceAssembler persistentEntityResourceAssembler;
 
-    protected PersistentEntityResourceAssembler persistentEntityResourceAssembler;
-
-    protected PageRequest pageRequest;
+    private PageRequest pageRequest;
 
     @Autowired
-    protected WebApplicationContext context;
+    private WebApplicationContext context;
 
-    protected MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     /**
      * http://stackoverflow.com/a/36960968 

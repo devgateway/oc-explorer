@@ -27,7 +27,7 @@ public class SwaggerConfig {
     }
 
     private ApiInfo yaliApiInfo() {
-        return new ApiInfoBuilder().title("Yali API")
+        return new ApiInfoBuilder().title("Application API")
                 .description("These endpoints are used to feed reports").license("MIT License")
                 .licenseUrl("https://opensource.org/licenses/MIT").version("1.0").build();
     }

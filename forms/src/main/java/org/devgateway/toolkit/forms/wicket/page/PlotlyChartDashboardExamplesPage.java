@@ -69,7 +69,7 @@ public class PlotlyChartDashboardExamplesPage extends BasePage {
     private static final Integer[] Y7 = {3, 5, 1, 7};
     private static final Integer[] X7 = {1, 2, 3, 4};
 
-    private final Logger logger = LoggerFactory.getLogger(PlotlyChartDashboardExamplesPage.class);
+    private static final Logger logger = LoggerFactory.getLogger(PlotlyChartDashboardExamplesPage.class);
 
     public PlotlyChartDashboardExamplesPage(final PageParameters parameters) {
         super(parameters);

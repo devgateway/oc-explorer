@@ -1,21 +1,20 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2015 Development Gateway, Inc and others.
- *
+ * <p>
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the MIT License (MIT)
  * which accompanies this distribution, and is available at
  * https://opensource.org/licenses/MIT
- *
+ * <p>
  * Contributors:
  * Development Gateway - initial API and implementation
- *******************************************************************************/
+ */
 /**
- * 
+ *
  */
 package org.devgateway.toolkit.persistence.spring;
 
-import javax.management.MBeanServer;
-
+import net.sf.ehcache.management.ManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -25,8 +24,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.auditing.DateTimeProvider;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-import net.sf.ehcache.management.ManagementService;
+import javax.management.MBeanServer;
+import java.time.ZonedDateTime;
+import java.util.Optional;
 
 /**
  * @author mpostelnicu
@@ -34,14 +37,20 @@ import net.sf.ehcache.management.ManagementService;
  */
 @Configuration
 @EnableCaching
+@EnableJpaAuditing(dateTimeProviderRef = "auditingDateTimeProvider")
 public class CacheConfiguration {
+    @Bean(name = "auditingDateTimeProvider")
+    public DateTimeProvider dateTimeProvider() {
+        return () -> Optional.of(ZonedDateTime.now());
+    }
+
 
     @Autowired(required = false)
     private MBeanServer mbeanServer;
 
     @Bean
     public EhCacheManagerFactoryBean ehCacheManagerFactoryBean() {
-        EhCacheManagerFactoryBean ehCacheManagerFactoryBean = new EhCacheManagerFactoryBean();
+        final EhCacheManagerFactoryBean ehCacheManagerFactoryBean = new EhCacheManagerFactoryBean();
         ehCacheManagerFactoryBean.setConfigLocation(new ClassPathResource("ehcache.xml"));
         ehCacheManagerFactoryBean.setShared(true);
         return ehCacheManagerFactoryBean;
@@ -55,9 +64,8 @@ public class CacheConfiguration {
     @Bean(destroyMethod = "dispose", initMethod = "init")
     @Profile("!integration")
     public ManagementService ehCacheManagementService(final EhCacheManagerFactoryBean factory) {
-        ManagementService managementService =
+        final ManagementService managementService =
                 new ManagementService(factory.getObject(), mbeanServer, true, true, true, true);
         return managementService;
     }
-
 }

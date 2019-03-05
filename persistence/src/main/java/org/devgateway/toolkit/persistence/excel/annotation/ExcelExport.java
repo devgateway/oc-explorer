@@ -10,6 +10,8 @@ import java.lang.annotation.RetentionPolicy;
  * {@link #separateSheet}  - parameter that indicates if an object should be exported in a separate Excel Sheet
  * {@link #justExport}     - just export the Object usually using {@link #toString} method (without exporting it's
  *                           children)
+ * {@link #useTranslation}  - parameter that indicates if we should try to get the field translation for the header
+ * {@link #onlyForClass}   - in case the class is extended and we want to Import this field only for a particular child
  *
  * @author idobre
  * @since 10/11/2017
@@ -22,6 +24,10 @@ public @interface ExcelExport {
 
     boolean separateSheet() default false;
 
+    boolean useTranslation() default false;
+
     boolean justExport() default false;
+
+    Class[] onlyForClass() default void.class;
 }
 

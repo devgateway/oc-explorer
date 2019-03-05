@@ -99,7 +99,7 @@ public abstract class AbstractExcelSheet implements ExcelSheet {
 
     /**
      * Creates a cell and tries to determine it's type based on the value type.
-     *
+     * <p>
      * There is only one Cell object otherwise the Heap Space will fill really quickly.
      *
      * @param value
@@ -130,9 +130,9 @@ public abstract class AbstractExcelSheet implements ExcelSheet {
                             cell.setCellValue(((Boolean) value) ? "Yes" : "No");
                         } else {
                             if (value instanceof Date) {
-                                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                                final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-                                cell = row.createCell(column, CellType.STRING);
+                                cell = row.createCell(column);
                                 cell.setCellValue(sdf.format((Date) value));
                             } else {
                                 cell = row.createCell(column, CellType.STRING);
@@ -193,9 +193,9 @@ public abstract class AbstractExcelSheet implements ExcelSheet {
         final Row row = sheet.createRow(rowNumber);
 
         if (rowNumber < 1) {
-            row.setHeight((short) 800);             // 40px (800 / 10 / 2)
+            row.setHeight((short) 2000);             // 100px (2000 / 10 / 2)
         } else {
-            row.setHeight((short) 600);             // 30px (600 / 10 / 2)
+            row.setHeight((short) 600);              // 30px  (600 / 10 / 2)
         }
 
         return row;
