@@ -17,6 +17,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.form.InputBehavior;
 import de.agilecoders.wicket.core.markup.html.bootstrap.form.InputBehavior.Size;
 import de.agilecoders.wicket.core.util.Attributes;
 import org.apache.log4j.Logger;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.attributes.ThrottlingSettings;
@@ -24,11 +25,15 @@ import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckGroup;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.RadioGroup;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.time.Duration;
 import org.devgateway.toolkit.forms.models.SubComponentWrapModel;
@@ -36,10 +41,19 @@ import org.devgateway.toolkit.forms.models.ViewModeConverterModel;
 import org.devgateway.toolkit.forms.wicket.components.ComponentUtil;
 import org.devgateway.toolkit.forms.wicket.components.FieldPanel;
 import org.devgateway.toolkit.forms.wicket.components.TooltipLabel;
+import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
+import org.devgateway.toolkit.persistence.dao.GenericPersistable;
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.AuditQuery;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author mpostelnicu
- *
  */
 public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComponent<TYPE>> extends FieldPanel<TYPE> {
     private static final long serialVersionUID = -7051128382707812456L;
@@ -60,6 +74,18 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 
     protected IModel<String> labelModel;
 
+    protected Class<?> auditorClass;
+
+    protected WebMarkupContainer revisions;
+    protected TransparentWebMarkupContainer masterGroup;
+    protected TransparentWebMarkupContainer childGroup;
+
+
+    protected IModel<EntityManager> entityManagerModel;
+    protected String auditProperty;
+
+    protected IModel<? extends GenericPersistable> revisionOwningEntityModel;
+
     //prevents repainting of select boxes and other problems with triggering the update even while the component js
     //is not done updating.
     private static final int THROTTLE_UPDATE_DELAY_MS = 200;
@@ -75,6 +101,69 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
             return new SubComponentWrapModel<TYPE>(this);
         }
         return (IModel<TYPE>) getDefaultModel();
+    }
+
+    protected void enableRevisionsView(final AbstractEditPage<?> page) {
+        enableRevisionsView(page.getNewInstanceClass(), page.getEntityManager(), page.getEditForm().getModel());
+    }
+
+    public void enableRevisionsView() {
+        AbstractEditPage<?> parentPage = (AbstractEditPage<?>) getPage();
+        enableRevisionsView(
+                parentPage.getNewInstanceClass(), parentPage.getEntityManager(), parentPage.getEditForm().getModel());
+    }
+
+    public void enableRevisionsView(final Class<?> auditorClass,
+                                    final EntityManager entityManager,
+                                    final IModel<? extends GenericPersistable> owningEntityModel) {
+        this.auditorClass = auditorClass;
+        this.entityManagerModel = new LoadableDetachableModel<EntityManager>() {
+            @Override
+            protected EntityManager load() {
+                return entityManager;
+            }
+        };
+        this.revisionOwningEntityModel = owningEntityModel;
+        addOrReplace(getRevisionsPanel());
+    }
+
+    /**
+     * True if the control can print contents unescaped when in readonly mode
+     * @return
+     */
+    protected boolean printUnescaped() {
+        return false;
+    }
+
+    protected RevisionsPanel<TYPE> getRevisionsPanel() {
+        return new RevisionsPanel<TYPE>("revisions", getRevisionsModel(), auditProperty);
+    }
+
+    /**
+     * Encloses the component and revisions section with a boostrap panel
+     *
+     * @return
+     */
+    public GenericBootstrapFormComponent<TYPE, FIELD> encloseWithBorder() {
+        masterGroup.add(AttributeModifier.append("class", "panel panel-default"));
+        childGroup.add(AttributeModifier.append("class", "panel-body"));
+        return this;
+    }
+
+    protected IModel<List<TYPE>> getRevisionsModel() {
+        return new AbstractReadOnlyModel<List<TYPE>>() {
+            @Override
+            public List<TYPE> getObject() {
+                if (revisionOwningEntityModel.getObject().isNew()) {
+                    return new ArrayList<>();
+                }
+                AuditReader reader = AuditReaderFactory.get(entityManagerModel.getObject());
+                AuditQuery query = reader.createQuery().forRevisionsOfEntity(auditorClass, false, false);
+                query.add(AuditEntity.property("id").eq(revisionOwningEntityModel.getObject().getId()));
+                query.add(AuditEntity.property(auditProperty).hasChanged());
+                return query.getResultList();
+            }
+        };
     }
 
     /**
@@ -158,8 +247,13 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
         this(id, null);
     }
 
+    @Deprecated
     public String getLabelKey() {
         return this.getId() + ".label";
+    }
+
+    public IModel<String> getLabelModel() {
+        return labelModel;
     }
 
     public GenericBootstrapFormComponent(final String id, final IModel<TYPE> model) {
@@ -176,17 +270,28 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
         border.setOutputMarkupId(true);
         add(border);
 
-        field = inputField("field", model);
-        field.setVisibilityAllowed(!ComponentUtil.isViewMode());
-        field.setOutputMarkupId(true);
-        sizeBehavior = new InputBehavior(InputBehavior.Size.Medium);
-        field.add(sizeBehavior);
-        border.add(field);
-
-        field.setLabel(labelModel);
+        initializeField();
 
         tooltipLabel = new TooltipLabel("tooltipLabel", id);
         border.add(tooltipLabel);
+        auditProperty = this.getId();
+    }
+
+    protected InputBehavior getInputBehavior() {
+        return new InputBehavior(InputBehavior.Size.Medium);
+    }
+
+    protected void initializeField() {
+        field = inputField("field", getModel());
+        field.setVisibilityAllowed(!isViewMode());
+        field.setOutputMarkupId(true);
+        sizeBehavior = getInputBehavior();
+        if (sizeBehavior != null) {
+            field.add(sizeBehavior);
+        }
+
+        border.addOrReplace(field);
+        field.setLabel(labelModel);
     }
 
     @Override
@@ -218,9 +323,13 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
         return field;
     }
 
+    public boolean isViewMode() {
+        return ComponentUtil.isViewMode();
+    }
+
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.wicket.Component#onConfigure()
      */
     @Override
@@ -235,10 +344,19 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 
         viewModeField = new Label("viewModeField", new ViewModeConverterModel<TYPE>(getModel()));
         viewModeField.setEscapeModelStrings(false);
-        viewModeField.setVisibilityAllowed(ComponentUtil.isViewMode());
+        viewModeField.setVisibilityAllowed(isViewMode());
         border.add(viewModeField);
 
         tooltipLabel.setConfigWithTrigger(configWithTrigger);
+
+        masterGroup = new TransparentWebMarkupContainer("masterGroup");
+        add(masterGroup);
+        childGroup = new TransparentWebMarkupContainer("childGroup");
+        add(childGroup);
+
+        revisions = new WebMarkupContainer("revisions"); // this is just a placeholder
+        add(revisions);
+
     }
 
     /**
@@ -254,5 +372,13 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 
     public void setConfigWithTrigger(final TooltipConfig.OpenTrigger configWithTrigger) {
         this.configWithTrigger = configWithTrigger;
+    }
+
+    public String getAuditProperty() {
+        return auditProperty;
+    }
+
+    public void setAuditProperty(final String auditProperty) {
+        this.auditProperty = auditProperty;
     }
 }
