@@ -21,6 +21,7 @@ import org.devgateway.toolkit.forms.models.PersistableJpaRepositoryModel;
 import org.devgateway.toolkit.forms.wicket.components.table.filter.JpaFilterState;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.devgateway.toolkit.persistence.service.BaseJpaService;
+import org.devgateway.toolkit.persistence.service.BaseJpaServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -32,7 +33,7 @@ import java.util.Iterator;
 /**
  * @author mpostelnicu
  * <p>
- * Smart generic {@link SortableDataProvider} that binds to {@link BaseJpaService}
+ * Smart generic {@link SortableDataProvider} that binds to {@link BaseJpaServiceImpl}
  */
 public class SortableJpaServiceDataProvider<T extends GenericPersistable & Serializable>
         extends SortableDataProvider<T, String> implements IFilterStateLocator<JpaFilterState<T>> {

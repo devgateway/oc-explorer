@@ -35,6 +35,7 @@ public class ListUserPage extends AbstractListPage<Person> {
         super(pageParameters);
 
         this.jpaService = personService;
+
         this.editPageClass = EditUserPageElevated.class;
         columns.add(new PropertyColumn<>(new Model<>("Name"), "username", "username"));
         columns.add(new PropertyColumn<>(new Model<>("Group"), "group", "group"));

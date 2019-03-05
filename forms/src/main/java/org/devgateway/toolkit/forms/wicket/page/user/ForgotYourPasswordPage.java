@@ -15,7 +15,7 @@ import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFor
 import org.devgateway.toolkit.forms.wicket.components.util.ComponentUtil;
 import org.devgateway.toolkit.forms.wicket.page.BasePage;
 import org.devgateway.toolkit.persistence.dao.Person;
-import org.devgateway.toolkit.persistence.service.PersonService;
+import org.devgateway.toolkit.persistence.service.PersonServiceImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.wicketstuff.annotation.mount.MountPath;
 
@@ -28,7 +28,7 @@ public class ForgotYourPasswordPage extends BasePage {
     public static final int RANDOM_PASSWORD_LENGTH = 16;
 
     @SpringBean
-    private PersonService personService;
+    private PersonServiceImpl personService;
 
     @SpringBean
     private SendEmailService sendEmailService;

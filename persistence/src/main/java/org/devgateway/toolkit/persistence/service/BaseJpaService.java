@@ -1,8 +1,6 @@
 package org.devgateway.toolkit.persistence.service;
 
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
-import org.devgateway.toolkit.persistence.repository.norepository.BaseJpaRepository;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,74 +12,42 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * @author idobre
- * @since 2019-03-04
- */
-@CacheConfig(keyGenerator = "genericKeyGenerator", cacheNames = "servicesCache")
-public abstract class BaseJpaService<T extends GenericPersistable & Serializable> {
+public interface BaseJpaService<T extends GenericPersistable & Serializable> {
+    @Cacheable
+    List<T> findAll();
 
     @Cacheable
-    public List<T> findAll() {
-        return repository().findAll();
-    }
+    List<T> findAll(Sort sort);
 
     @Cacheable
-    public List<T> findAll(final Sort sort) {
-        return repository().findAll(sort);
-    }
+    List<T> findAll(Specification<T> spec);
 
     @Cacheable
-    public List<T> findAll(final Specification<T> spec) {
-        return repository().findAll(spec);
-    }
+    Page<T> findAll(Specification<T> spec, Pageable pageable);
 
     @Cacheable
-    public Page<T> findAll(final Specification<T> spec, final Pageable pageable) {
-        return repository().findAll(spec, pageable);
-    }
+    Page<T> findAll(Pageable pageable);
 
     @Cacheable
-    public Page<T> findAll(final Pageable pageable) {
-        return repository().findAll(pageable);
-    }
+    List<T> findAll(Specification<T> spec, Sort sort);
 
     @Cacheable
-    public List<T> findAll(final Specification<T> spec, final Sort sort) {
-        return repository().findAll(spec, sort);
-    }
+    long count(Specification<T> spec);
 
     @Cacheable
-    public long count(final Specification<T> spec) {
-        return repository().count(spec);
-    }
+    Optional<T> findById(Long id);
 
     @Cacheable
-    public Optional<T> findById(final Long id) {
-        return repository().findById(id);
-    }
-
-    @Cacheable
-    public long count() {
-        return repository().count();
-    }
+    long count();
 
     @Transactional(readOnly = false)
-    public <S extends T> S save(final S entity) {
-        return repository().save(entity);
-    }
+    <S extends T> S save(S entity);
 
     @Transactional(readOnly = false)
-    public <S extends T> S saveAndFlush(final S entity) {
-        return repository().saveAndFlush(entity);
-    }
+    <S extends T> S saveAndFlush(S entity);
 
     @Transactional(readOnly = false)
-    public void delete(final T entity) {
-        repository().delete(entity);
-    }
+    void delete(T entity);
 
-    protected abstract BaseJpaRepository<T, Long> repository();
-
-    public abstract Optional<T> newInstance();
+    T newInstance();
 }

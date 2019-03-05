@@ -43,8 +43,8 @@ import org.devgateway.toolkit.persistence.dao.Person;
 import org.devgateway.toolkit.persistence.dao.Role;
 import org.devgateway.toolkit.persistence.dao.categories.Group;
 import org.devgateway.toolkit.persistence.service.PersonService;
-import org.devgateway.toolkit.persistence.service.RoleService;
-import org.devgateway.toolkit.persistence.service.category.GroupService;
+import org.devgateway.toolkit.persistence.service.RoleServiceImpl;
+import org.devgateway.toolkit.persistence.service.category.GroupServiceImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.wicketstuff.annotation.mount.MountPath;
 
@@ -57,10 +57,10 @@ public class EditUserPage extends AbstractEditPage<Person> {
     private PersonService personService;
 
     @SpringBean
-    private GroupService groupService;
+    private GroupServiceImpl groupService;
 
     @SpringBean
-    private RoleService roleService;
+    private RoleServiceImpl roleService;
 
     @SpringBean
     private SendEmailService sendEmailService;
