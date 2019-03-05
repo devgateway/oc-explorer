@@ -11,8 +11,9 @@ import java.util.Optional;
 /**
  * @author idobre
  * @since 2019-03-04
- *
- * This interface is usually implemented by a class that already extends {@link BaseJpaService} so no need to implement
+ * <p>
+ * This interface is usually implemented by a class that already extends {@link BaseJpaServiceImpl} so no need to
+ * implement
  * any methods beside {@link #textRepository}. The defaul method {@link #searchText} should be enough
  * for normal use cases.
  */

@@ -9,7 +9,7 @@ import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxToggleBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.persistence.dao.AdminSettings;
-import org.devgateway.toolkit.persistence.service.AdminSettingsService;
+import org.devgateway.toolkit.persistence.service.AdminSettingsServiceImpl;
 import org.wicketstuff.annotation.mount.MountPath;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public class EditAdminSettingsPage extends AbstractEditPage<AdminSettings> {
     private CheckBoxToggleBootstrapFormComponent rebootServer;
 
     @SpringBean
-    private AdminSettingsService adminSettingsService;
+    private AdminSettingsServiceImpl adminSettingsService;
 
     public EditAdminSettingsPage(final PageParameters parameters) {
         super(parameters);

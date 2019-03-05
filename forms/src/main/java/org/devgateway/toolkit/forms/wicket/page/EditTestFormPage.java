@@ -96,7 +96,7 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
         Select2MultiChoiceBootstrapFormComponent<Role> entityMultiSelect =
                 new Select2MultiChoiceBootstrapFormComponent<Role>(
                         "entityMultiSelect",
-                        new GenericPersistableJpaTextChoiceProvider<>(roleService)
+                        new GenericPersistableJpaTextChoiceProvider<Role>(roleService)
                 );
         editForm.add(entityMultiSelect);
 
