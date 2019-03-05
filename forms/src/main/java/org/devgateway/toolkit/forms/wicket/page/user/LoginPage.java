@@ -19,7 +19,8 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapForm;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.flow.RedirectToUrlException;
@@ -32,6 +33,7 @@ import org.devgateway.toolkit.forms.security.SecurityUtil;
 import org.devgateway.toolkit.forms.wicket.SSAuthenticatedWebSession;
 import org.devgateway.toolkit.forms.wicket.components.form.PasswordFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.util.ComponentUtil;
 import org.devgateway.toolkit.forms.wicket.page.BasePage;
 import org.devgateway.toolkit.forms.wicket.page.Homepage;
 import org.devgateway.toolkit.persistence.dao.Person;
@@ -40,6 +42,7 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 import org.wicketstuff.annotation.mount.MountPath;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 
 /**
  * @author mpostelnicu
@@ -47,50 +50,75 @@ import javax.servlet.http.HttpServletRequest;
  */
 @MountPath("/login")
 public class LoginPage extends BasePage {
-    private static final long serialVersionUID = 1L;
+    private static final int HIDE_NOTIFICATION_SECONDS = 15;
 
     @SpringBean
     private PersonService personService;
 
-    private static final int HIDE_NOTIFICATION_SECONDS = 15;
+    private final LoginBean loginBean;
 
-    class LoginForm extends BootstrapForm<Void> {
-        private static final long serialVersionUID = 2066636625524650473L;
+    public LoginPage(final PageParameters parameters) {
+        super(parameters);
 
+        // redirect to homepage if user reaches the /login page while authenticated
+        if (AbstractAuthenticatedWebSession.get().isSignedIn()) {
+            setResponsePage(Homepage.class);
+        }
+
+        loginBean = new LoginBean();
+    }
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+
+        pageTitle.setVisible(false);
+
+        final LoginForm loginForm = new LoginForm("loginform", new CompoundPropertyModel<>(loginBean));
+        add(loginForm);
+    }
+
+    class LoginBean implements Serializable {
         private String username;
 
         private String password;
 
-        private String referrer;
-
-        private TextFieldBootstrapFormComponent<String> usernameField;
-        private PasswordFieldBootstrapFormComponent passwordField;
-
-        protected void retrieveReferrerFromSavedRequestIfPresent() {
-            StringValue referrerParam = RequestCycle.get().getRequest().getRequestParameters()
-                    .getParameterValue("referrer");
-            if (!referrerParam.isEmpty()) {
-                referrer = referrerParam.toString();
-            } else {
-
-                HttpServletRequest request = ((HttpServletRequest) getRequest().getContainerRequest());
-                SavedRequest savedRequest = (SavedRequest) request.getSession()
-                        .getAttribute("SPRING_SECURITY_SAVED_REQUEST");
-                if (savedRequest != null) {
-                    referrer = savedRequest.getRedirectUrl();
-                }
-            }
+        public String getUsername() {
+            return username;
         }
 
-        LoginForm(final String id) {
-            super(id);
+        public void setUsername(final String username) {
+            this.username = username;
+        }
 
-            pageTitle.setVisible(false);
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(final String password) {
+            this.password = password;
+        }
+    }
+
+
+    class LoginForm extends BootstrapForm<LoginBean> {
+        private static final long serialVersionUID = 2066636625524650473L;
+
+        private TextFieldBootstrapFormComponent<String> username;
+
+        private PasswordFieldBootstrapFormComponent password;
+
+        private String referrer;
+
+        LoginForm(final String componentId, final IModel<LoginBean> model) {
+            super(componentId, model);
         }
 
         @Override
         protected void onInitialize() {
             super.onInitialize();
+
+            pageTitle.setVisible(false);
 
             retrieveReferrerFromSavedRequestIfPresent();
 
@@ -99,68 +127,55 @@ public class LoginPage extends BasePage {
             notificationPanel.setOutputMarkupId(true);
             add(notificationPanel);
 
-            usernameField = new TextFieldBootstrapFormComponent<String>("username",
-                    new StringResourceModel("user", LoginPage.this, null),
-                    new PropertyModel<>(this, "username")) {
+            username = ComponentUtil.addTextLoginField(this, "username", false);
+            username.required();
+
+            password = ComponentUtil.addTextPasswordField(this, "password", false);
+            password.required();
+            password.getField().setResetPassword(false);
+
+            final IndicatingAjaxButton submit = new IndicatingAjaxButton("submit",
+                    new StringResourceModel("submit.label", LoginPage.this, null)) {
+                private static final long serialVersionUID = 1L;
+
                 @Override
-                public String getUpdateEvent() {
-                    return null;
-                }
-            };
-            usernameField.required();
-            add(usernameField);
+                protected void onSubmit(final AjaxRequestTarget target) {
+                    super.onSubmit(target);
 
-            passwordField = new PasswordFieldBootstrapFormComponent("password",
-                    new PropertyModel<>(this, "password")) {
-                @Override
-                public String getUpdateEvent() {
-                    return null;
-                }
-            };
-            passwordField.getField().setResetPassword(false);
-            add(passwordField);
+                    final SSAuthenticatedWebSession session = SSAuthenticatedWebSession.getSSAuthenticatedWebSession();
+                    final String name = LoginForm.this.getModelObject().getUsername();
+                    final String pass = LoginForm.this.getModelObject().getPassword();
 
-            final IndicatingAjaxButton submit =
-                    new IndicatingAjaxButton("submit", new StringResourceModel("submit.label", LoginPage.this, null)) {
-                        private static final long serialVersionUID = 1L;
-
-                        @Override
-                        protected void onSubmit(final AjaxRequestTarget target) {
-                            super.onSubmit(target);
-
-                            SSAuthenticatedWebSession session =
-                                    SSAuthenticatedWebSession.getSSAuthenticatedWebSession();
-                            if (session.signIn(LoginForm.this.username, LoginForm.this.password)) {
-                                Person user = SecurityUtil.getCurrentAuthenticatedPerson();
-                                if (user.getChangePassword()) {
-                                    PageParameters pageParam = new PageParameters();
-                                    pageParam.add(WebConstants.PARAM_ID, user.getId());
-                                    setResponsePage(ChangePasswordPage.class, pageParam);
-                                } else {
-                                    if (referrer != null) {
-                                        throw new RedirectToUrlException(referrer);
-                                    }
-                                    setResponsePage(getApplication().getHomePage());
-                                }
-                            } else if (session.getAe().getMessage().equalsIgnoreCase("User is disabled")) {
-                                notificationPanel.error(session.getAe().getMessage());
-                                target.add(notificationPanel);
-                            } else {
-                                notificationPanel.error(getString("bad_credentials"));
-                                target.add(notificationPanel);
+                    if (session.signIn(name, pass)) {
+                        Person user = SecurityUtil.getCurrentAuthenticatedPerson();
+                        if (user.getChangePassword()) {
+                            final PageParameters pageParam = new PageParameters();
+                            pageParam.add(WebConstants.PARAM_ID, user.getId());
+                            setResponsePage(ChangePasswordPage.class, pageParam);
+                        } else {
+                            if (referrer != null) {
+                                throw new RedirectToUrlException(referrer);
                             }
+                            setResponsePage(getApplication().getHomePage());
                         }
+                    } else if (session.getAe().getMessage().equalsIgnoreCase("User is disabled")) {
+                        notificationPanel.error(session.getAe().getMessage());
+                        target.add(notificationPanel);
+                    } else {
+                        notificationPanel.error(getString("bad_credentials"));
+                        target.add(notificationPanel);
+                    }
+                }
 
-                        @Override
-                        protected void onError(final AjaxRequestTarget target) {
-                            super.onError(target);
+                @Override
+                protected void onError(final AjaxRequestTarget target) {
+                    super.onError(target);
 
-                            target.add(notificationPanel);
-                            target.add(notificationPanel);
-                            target.add(usernameField);
-                            target.add(passwordField);
-                        }
-                    };
+                    target.add(notificationPanel);
+                    target.add(username);
+                    target.add(password);
+                }
+            };
             add(submit);
 
             final IndicatingAjaxButton forgotPassword = new IndicatingAjaxButton("forgotPassword",
@@ -182,22 +197,21 @@ public class LoginPage extends BasePage {
             };
             add(forgotPassword);
         }
-    }
 
-    /**
-     * @param parameters
-     *            The page parameters.
-     */
-    public LoginPage(final PageParameters parameters) {
-        super(parameters);
+        private void retrieveReferrerFromSavedRequestIfPresent() {
+            final StringValue referrerParam = RequestCycle.get().getRequest().getRequestParameters()
+                    .getParameterValue("referrer");
+            if (!referrerParam.isEmpty()) {
+                referrer = referrerParam.toString();
+            } else {
 
-        // redirect to homepage if user reaches the /login page while
-        // authenticated
-        if (AbstractAuthenticatedWebSession.get().isSignedIn()) {
-            setResponsePage(Homepage.class);
+                HttpServletRequest request = ((HttpServletRequest) getRequest().getContainerRequest());
+                SavedRequest savedRequest = (SavedRequest) request.getSession()
+                        .getAttribute("SPRING_SECURITY_SAVED_REQUEST");
+                if (savedRequest != null) {
+                    referrer = savedRequest.getRedirectUrl();
+                }
+            }
         }
-
-        LoginForm loginForm = new LoginForm("loginform");
-        add(loginForm);
     }
 }

@@ -15,6 +15,7 @@ import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxYesNoToggleBo
 import org.devgateway.toolkit.forms.wicket.components.form.DateFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.DateTimeFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.GenericBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.PasswordFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.Select2ChoiceBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.Select2MultiChoiceBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.TextAreaFieldBootstrapFormComponent;
@@ -132,6 +133,22 @@ public final class ComponentUtil {
         return textField;
     }
 
+    public static PasswordFieldBootstrapFormComponent addTextPasswordField(
+            final WebMarkupContainer parent,
+            final String id,
+            final boolean isFloatedInput) {
+        final PasswordFieldBootstrapFormComponent textField = new PasswordFieldBootstrapFormComponent(id) {
+            @Override
+            public String getUpdateEvent() {
+                return null;
+            }
+        };
+        textField.setIsFloatedInput(isFloatedInput);
+        parent.add(textField);
+
+        return textField;
+    }
+
     public static TextFieldBootstrapFormComponent<Integer> addIntegerTextField(
             final WebMarkupContainer parent,
             final String id,
@@ -214,11 +231,9 @@ public final class ComponentUtil {
      * Trivial method to set the child {@link GenericBootstrapFormComponent}
      * required when added to the parent {@link WebMarkupContainer}
      *
-     * @param requiredFlag
-     *            the {@link FormComponent#setRequired(boolean)}
+     * @param requiredFlag the {@link FormComponent#setRequired(boolean)}
      * @param parent
      * @param child
-     *
      * @return the parent
      */
     public static MarkupContainer addRequiredFlagBootstrapFormComponent(
