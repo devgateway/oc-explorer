@@ -105,7 +105,7 @@ public class ForgotYourPasswordPage extends BasePage {
                     } else {
                         final String newPassword = RandomStringUtils.random(RANDOM_PASSWORD_LENGTH, true, true);
                         person.setPassword(passwordEncoder.encode(newPassword));
-                        person.setChangePassword(true);
+                        person.setChangePasswordNextSignIn(true);
 
                         personService.saveAndFlush(person);
                         sendEmailService.sendEmailResetPassword(person, newPassword);

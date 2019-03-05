@@ -148,7 +148,7 @@ public class LoginPage extends BasePage {
 
                     if (session.signIn(name, pass)) {
                         Person user = SecurityUtil.getCurrentAuthenticatedPerson();
-                        if (user.getChangePassword()) {
+                        if (user.getChangePasswordNextSignIn()) {
                             final PageParameters pageParam = new PageParameters();
                             pageParam.add(WebConstants.PARAM_ID, user.getId());
                             setResponsePage(ChangePasswordPage.class, pageParam);
