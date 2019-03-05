@@ -179,7 +179,8 @@ public class EditUserPage extends AbstractEditPage<Person> {
 
         if (SecurityUtil.isCurrentUserAdmin() && idPerson.isNull()) {
             // hide the change password checkbox and set it's model to true
-            editForm.getModelObject().setChangeProfilePassword(false);
+            editForm.getModelObject().setChangeProfilePassword(true);
+            changeProfilePassword.setVisibilityAllowed(false);
             plainPassword.setVisibilityAllowed(true);
             plainPasswordCheck.setVisibilityAllowed(true);
         } else {
