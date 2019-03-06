@@ -22,8 +22,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Collection;
@@ -32,6 +34,7 @@ import java.util.List;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @Audited
+@Table(indexes = {@Index(columnList = "username")})
 public class Person extends AbstractAuditableEntity implements Serializable, UserDetails {
     private static final long serialVersionUID = 109780377848343674L;
 
