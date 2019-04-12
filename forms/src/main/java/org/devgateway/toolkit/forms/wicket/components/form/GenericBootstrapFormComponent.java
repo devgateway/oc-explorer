@@ -36,9 +36,9 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.time.Duration;
 import org.devgateway.toolkit.forms.models.SubComponentWrapModel;
 import org.devgateway.toolkit.forms.models.ViewModeConverterModel;
-import org.devgateway.toolkit.forms.wicket.components.ComponentUtil;
 import org.devgateway.toolkit.forms.wicket.components.FieldPanel;
 import org.devgateway.toolkit.forms.wicket.components.TooltipLabel;
+import org.devgateway.toolkit.forms.wicket.components.util.ComponentUtil;
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.hibernate.envers.AuditReader;
@@ -58,46 +58,112 @@ import java.util.List;
 public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComponent<TYPE>> extends FieldPanel<TYPE> {
     private static final long serialVersionUID = -7051128382707812456L;
 
-    private static final Logger logger = LoggerFactory.getLogger(GenericBootstrapFormComponent.class);
+    // prevents repainting of select boxes and other problems with triggering the update
+    // even while the component js is not done updating.
+    private static final int THROTTLE_UPDATE_DELAY_MS = 200;
 
     protected FormGroup border;
 
     protected FIELD field;
 
-    private Label viewModeField;
-
     private InputBehavior sizeBehavior;
 
     private TooltipConfig.OpenTrigger configWithTrigger = TooltipConfig.OpenTrigger.hover;
 
-    private TooltipLabel tooltipLabel;
+    // use a flag if we need to display a Tooltip since StringResourceModel it's expensive
+    private Boolean showTooltip = false;
 
-    private IModel<String> labelModel;
+    private final IModel<String> labelModel;
 
-    private Class<?> auditorClass;
+    public GenericBootstrapFormComponent(final String id) {
+        this(id, null);
+    }
 
-    private WebMarkupContainer revisions;
+    public GenericBootstrapFormComponent(final String id, final IModel<TYPE> model) {
+        this(id, new ResourceModel(id + ".label"), model);
+    }
 
-    private TransparentWebMarkupContainer masterGroup;
+    public GenericBootstrapFormComponent(final String id, final IModel<String> labelModel, final IModel<TYPE> model) {
+        super(id, model);
 
-    private TransparentWebMarkupContainer childGroup;
+        this.labelModel = labelModel;
 
-    private IModel<EntityManager> entityManagerModel;
+        border = new FormGroup("enclosing-field-group");
+        border.setOutputMarkupId(true);
+        add(border);
+        initializeField();
+    }
 
-    private String auditProperty;
+    public GenericBootstrapFormComponent<TYPE, FIELD> type(final Class<?> clazz) {
+        field.setType(clazz);
+        return this;
+    }
 
-    private IModel<? extends GenericPersistable> revisionOwningEntityModel;
+    public GenericBootstrapFormComponent<TYPE, FIELD> size(final Size size) {
+        sizeBehavior.size(size);
+        return this;
+    }
 
-    //prevents repainting of select boxes and other problems with triggering the update even while the component js
-    //is not done updating.
-    private static final int THROTTLE_UPDATE_DELAY_MS = 200;
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+
+        setOutputMarkupId(true);
+        setOutputMarkupPlaceholderTag(true);
+
+        if ((field instanceof RadioGroup) || (field instanceof CheckGroup)) {
+            getAjaxFormChoiceComponentUpdatingBehavior();
+        } else {
+            getAjaxFormComponentUpdatingBehavior();
+        }
+
+        final Label viewModeField = new Label("viewModeField", new ViewModeConverterModel<>(getModel()));
+        viewModeField.setEscapeModelStrings(false);
+        viewModeField.setVisibilityAllowed(isViewMode());
+        border.add(viewModeField);
+
+        if (showTooltip) {
+            final TooltipLabel tooltipLabel = new TooltipLabel("tooltipLabel", getId());
+            tooltipLabel.setVisibilityAllowed(showTooltip);
+            tooltipLabel.setConfigWithTrigger(configWithTrigger);
+            border.add(tooltipLabel);
+        } else {
+            border.add(new TransparentWebMarkupContainer("tooltipLabel").setVisibilityAllowed(false));
+        }
+
+        add(new TransparentWebMarkupContainer("revisions").setVisibilityAllowed(false)); // this is just a placeholder
+    }
+
+    protected void initializeField() {
+        field = inputField("field", getModel());
+        field.setOutputMarkupId(true);
+        field.setVisibilityAllowed(!isViewMode());
+        sizeBehavior = getInputBehavior();
+        if (sizeBehavior != null) {
+            field.add(sizeBehavior);
+        }
+
+        border.add(field);
+        field.setLabel(labelModel);
+    }
+
+    protected abstract FIELD inputField(String id, IModel<TYPE> model);
+
+    @Override
+    protected void onComponentTag(final ComponentTag tag) {
+        super.onComponentTag(tag);
+
+        // add a new class for required fields
+        if (field.isRequired()) {
+            Attributes.addClass(tag, "required");
+        }
+    }
 
     @Override
     public void onEvent(final IEvent<?> event) {
-        ComponentUtil.enableDisableEvent(this, event);
+        org.devgateway.toolkit.forms.wicket.components.util.ComponentUtil.enableDisableEvent(this, event);
     }
 
-    @SuppressWarnings("unchecked")
     protected IModel<TYPE> initFieldModel() {
         if (getDefaultModel() == null) {
             return new SubComponentWrapModel<>(this);
@@ -105,12 +171,8 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
         return (IModel<TYPE>) getDefaultModel();
     }
 
-    protected void enableRevisionsView(final AbstractEditPage<?> page) {
-        enableRevisionsView(page.getNewInstanceClass(), page.getEntityManager(), page.getEditForm().getModel());
-    }
-
     public void enableRevisionsView() {
-        AbstractEditPage<?> parentPage = (AbstractEditPage<?>) getPage();
+        final AbstractEditPage<?> parentPage = (AbstractEditPage<?>) getPage();
         enableRevisionsView(
                 parentPage.getNewInstanceClass(), parentPage.getEntityManager(), parentPage.getEditForm().getModel());
     }
@@ -118,62 +180,51 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
     public void enableRevisionsView(final Class<?> auditorClass,
                                     final EntityManager entityManager,
                                     final IModel<? extends GenericPersistable> owningEntityModel) {
-        this.auditorClass = auditorClass;
-        this.entityManagerModel = new LoadableDetachableModel<EntityManager>() {
+        final IModel<EntityManager> entityManagerModel = new LoadableDetachableModel<EntityManager>() {
             @Override
             protected EntityManager load() {
                 return entityManager;
             }
         };
-        this.revisionOwningEntityModel = owningEntityModel;
-        addOrReplace(getRevisionsPanel());
+        addOrReplace(getRevisionsPanel(auditorClass, entityManagerModel, owningEntityModel));
     }
 
     /**
      * True if the control can print contents unescaped when in readonly mode
-     *
-     * @return
      */
     protected boolean printUnescaped() {
         return false;
     }
 
-    protected RevisionsPanel<TYPE> getRevisionsPanel() {
-        return new RevisionsPanel<>("revisions", getRevisionsModel(), auditProperty);
+    private RevisionsPanel<TYPE> getRevisionsPanel(final Class<?> auditorClass,
+                                                   final IModel<EntityManager> entityManagerModel,
+                                                   final IModel<? extends GenericPersistable> owningEntityModel) {
+        final String auditProperty = this.getId();
+        return new RevisionsPanel<>("revisions",
+                getRevisionsModel(auditorClass, entityManagerModel, owningEntityModel, auditProperty), auditProperty);
     }
 
-    /**
-     * Encloses the component and revisions section with a boostrap panel
-     *
-     * @return
-     */
-    public GenericBootstrapFormComponent<TYPE, FIELD> encloseWithBorder() {
-        masterGroup.add(AttributeModifier.append("class", "panel panel-default"));
-        childGroup.add(AttributeModifier.append("class", "panel-body"));
-        return this;
-    }
-
-    protected IModel<List<TYPE>> getRevisionsModel() {
+    private IModel<List<TYPE>> getRevisionsModel(final Class<?> auditorClass,
+                                                 final IModel<EntityManager> entityManagerModel,
+                                                 final IModel<? extends GenericPersistable> owningEntityModel,
+                                                 final String auditProperty) {
         return (IModel<List<TYPE>>) () -> {
-            if (revisionOwningEntityModel.getObject().isNew()) {
+            if (owningEntityModel.getObject().isNew()) {
                 return new ArrayList<>();
             }
-            AuditReader reader = AuditReaderFactory.get(entityManagerModel.getObject());
-            AuditQuery query = reader.createQuery().forRevisionsOfEntity(auditorClass, false, false);
-            query.add(AuditEntity.property("id").eq(revisionOwningEntityModel.getObject().getId()));
+            final AuditReader reader = AuditReaderFactory.get(entityManagerModel.getObject());
+            final AuditQuery query = reader.createQuery().forRevisionsOfEntity(auditorClass, false, false);
+            query.add(AuditEntity.property("id").eq(owningEntityModel.getObject().getId()));
             query.add(AuditEntity.property(auditProperty).hasChanged());
             return query.getResultList();
         };
     }
 
     /**
-     * use this behavior for choices/groups that are not one component in the
-     * html but many.
+     * use this behavior for choices/groups that are not one component in the html but many.
      */
-    protected void getAjaxFormChoiceComponentUpdatingBehavior() {
+    private void getAjaxFormChoiceComponentUpdatingBehavior() {
         updatingBehaviorComponent().add(new AjaxFormChoiceComponentUpdatingBehavior() {
-            private static final long serialVersionUID = 1L;
-
             @Override
             protected void updateAjaxAttributes(final AjaxRequestAttributes attributes) {
                 attributes.setThrottlingSettings(new ThrottlingSettings(
@@ -194,8 +245,6 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
      * {@link #getAjaxFormComponentUpdatingBehavior()}. It usuall is the field,
      * but the field may be a wrapper, in which case you should override this
      * and provide the wrapped field.
-     *
-     * @return
      */
     protected FormComponent<TYPE> updatingBehaviorComponent() {
         return field;
@@ -206,7 +255,6 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
             return;
         }
         updatingBehaviorComponent().add(new AjaxFormComponentUpdatingBehavior(getUpdateEvent()) {
-
             private static final long serialVersionUID = -2696538086634114609L;
 
             @Override
@@ -233,78 +281,18 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
         return "blur";
     }
 
-    public GenericBootstrapFormComponent<TYPE, FIELD> type(final Class<?> clazz) {
-        field.setType(clazz);
-        return this;
-    }
-
-    public GenericBootstrapFormComponent<TYPE, FIELD> size(final Size size) {
-        sizeBehavior.size(size);
-        return this;
-    }
-
-    public GenericBootstrapFormComponent(final String id) {
-        this(id, null);
-    }
-
-    public IModel<String> getLabelModel() {
-        return labelModel;
-    }
-
-    public GenericBootstrapFormComponent(final String id, final IModel<TYPE> model) {
-        this(id, new ResourceModel(id + ".label"), model);
-    }
-
-    public GenericBootstrapFormComponent(final String id, final IModel<String> labelModel, final IModel<TYPE> model) {
-        super(id, model);
-        this.labelModel = labelModel;
-        setOutputMarkupId(true);
-        setOutputMarkupPlaceholderTag(true);
-
-        border = new FormGroup("enclosing-field-group");
-        border.setOutputMarkupId(true);
-        add(border);
-
-        initializeField();
-
-        tooltipLabel = new TooltipLabel("tooltipLabel", id);
-        border.add(tooltipLabel);
-        auditProperty = this.getId();
-    }
-
     protected InputBehavior getInputBehavior() {
         return new InputBehavior(InputBehavior.Size.Medium);
     }
 
-    protected void initializeField() {
-        field = inputField("field", getModel());
-        field.setVisibilityAllowed(!isViewMode());
-        field.setOutputMarkupId(true);
-        sizeBehavior = getInputBehavior();
-        if (sizeBehavior != null) {
-            field.add(sizeBehavior);
-        }
-
-        border.addOrReplace(field);
-        field.setLabel(labelModel);
-    }
-
-    @Override
-    protected void onComponentTag(final ComponentTag tag) {
-        super.onComponentTag(tag);
-
-        // add a new class for required fields
-        if (field.isRequired()) {
-            Attributes.addClass(tag, "required");
-        }
+    private boolean isViewMode() {
+        return ComponentUtil.isViewMode();
     }
 
     public GenericBootstrapFormComponent<TYPE, FIELD> hideLabel() {
         field.setLabel(null);
         return this;
     }
-
-    protected abstract FIELD inputField(String id, IModel<TYPE> model);
 
     public GenericBootstrapFormComponent<TYPE, FIELD> required() {
         field.setRequired(true);
@@ -318,47 +306,12 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
         return field;
     }
 
-    public boolean isViewMode() {
-        return ComponentUtil.isViewMode();
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.wicket.Component#onConfigure()
-     */
-    @Override
-    protected void onInitialize() {
-        super.onInitialize();
-
-        if ((field instanceof RadioGroup) || (field instanceof CheckGroup)) {
-            getAjaxFormChoiceComponentUpdatingBehavior();
-        } else {
-            getAjaxFormComponentUpdatingBehavior();
-        }
-
-        viewModeField = new Label("viewModeField", new ViewModeConverterModel<TYPE>(getModel()));
-        viewModeField.setEscapeModelStrings(false);
-        viewModeField.setVisibilityAllowed(isViewMode());
-        border.add(viewModeField);
-
-        tooltipLabel.setConfigWithTrigger(configWithTrigger);
-
-        masterGroup = new TransparentWebMarkupContainer("masterGroup");
-        add(masterGroup);
-        childGroup = new TransparentWebMarkupContainer("childGroup");
-        add(childGroup);
-
-        revisions = new WebMarkupContainer("revisions"); // this is just a placeholder
-        add(revisions);
-
-    }
-
-    /**
-     * @return the border
-     */
     public FormGroup getBorder() {
         return border;
+    }
+
+    public IModel<String> getLabelModel() {
+        return labelModel;
     }
 
     public TooltipConfig.OpenTrigger getConfigWithTrigger() {
@@ -369,11 +322,7 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
         this.configWithTrigger = configWithTrigger;
     }
 
-    public String getAuditProperty() {
-        return auditProperty;
-    }
-
-    public void setAuditProperty(final String auditProperty) {
-        this.auditProperty = auditProperty;
+    public void setShowTooltip(final Boolean showTooltip) {
+        this.showTooltip = showTooltip;
     }
 }

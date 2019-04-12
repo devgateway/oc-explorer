@@ -20,6 +20,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
+import org.devgateway.toolkit.forms.wicket.components.util.ComponentUtil;
 
 /**
  * @author mpostelnicu
@@ -58,14 +59,10 @@ public class TooltipLabel extends Label {
         add(AttributeModifier.append("class", "fa fa-question-circle"));
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.wicket.Component#onConfigure()
-     */
     @Override
     protected void onConfigure() {
         super.onConfigure();
+
         helpModelText = new StringResourceModel(fieldId + ".help", this);
         helpModelText.setDefaultValue("");
 

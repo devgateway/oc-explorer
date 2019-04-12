@@ -40,7 +40,7 @@ public class GenericChoiceProvider<T> extends ChoiceProvider<T> {
      * elements as a tuple (id, T) so we can easily have access to the original
      * T object in the @toChoices function
      */
-    private Map<String, T> bagOfElements;
+    private final Map<String, T> bagOfElements;
 
     public GenericChoiceProvider(final List<T> listOfElements) {
         bagOfElements = new LinkedHashMap<>();

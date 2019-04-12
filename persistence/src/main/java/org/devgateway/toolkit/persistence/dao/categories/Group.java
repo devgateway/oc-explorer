@@ -29,7 +29,6 @@ import java.util.Set;
  */
 @Entity
 @Audited
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Group extends Category {
     private static final long serialVersionUID = 8451785172092014455L;
 
