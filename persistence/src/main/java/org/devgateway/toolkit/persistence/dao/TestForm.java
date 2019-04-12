@@ -27,7 +27,9 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -81,6 +83,11 @@ public class TestForm extends AbstractAuditableEntity implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<FileMetadata> fileInput;
+
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @OneToMany(mappedBy = "testForm", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OrderColumn(name = "index")
+    private List<TestFormChild> testFormChildren = new ArrayList<>();
 
     public TestForm() {
     }
@@ -192,5 +199,13 @@ public class TestForm extends AbstractAuditableEntity implements Serializable {
 
     public void setColorPicker(final String colorPicker) {
         this.colorPicker = colorPicker;
+    }
+
+    public List<TestFormChild> getTestFormChildren() {
+        return testFormChildren;
+    }
+
+    public void setTestFormChildren(final List<TestFormChild> testFormChildren) {
+        this.testFormChildren = testFormChildren;
     }
 }

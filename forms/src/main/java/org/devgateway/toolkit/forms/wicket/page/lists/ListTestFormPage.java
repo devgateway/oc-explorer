@@ -19,7 +19,7 @@ import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.components.table.TextFilteredBootstrapPropertyColumn;
 import org.devgateway.toolkit.forms.wicket.components.table.filter.JpaFilterState;
 import org.devgateway.toolkit.forms.wicket.components.table.filter.TestFormFilterState;
-import org.devgateway.toolkit.forms.wicket.page.EditTestFormPage;
+import org.devgateway.toolkit.forms.wicket.page.edit.EditTestFormPage;
 import org.devgateway.toolkit.persistence.dao.TestForm;
 import org.devgateway.toolkit.persistence.service.RoleService;
 import org.devgateway.toolkit.persistence.service.TestFormService;

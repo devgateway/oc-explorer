@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.lang.Nullable;
 
 import java.io.Serializable;
 import java.util.List;
@@ -22,6 +23,8 @@ public interface BaseJpaService<T extends GenericPersistable & Serializable> {
     Page<T> findAll(Pageable pageable);
 
     List<T> findAll(Specification<T> spec, Sort sort);
+
+    Optional<T> findOne(@Nullable Specification<T> spec);
 
     long count(Specification<T> spec);
 

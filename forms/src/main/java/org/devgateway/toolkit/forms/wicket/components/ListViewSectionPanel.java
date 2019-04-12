@@ -279,6 +279,4 @@ public abstract class ListViewSectionPanel<T extends AbstractAuditableEntity, PA
      * @param item
      */
     public abstract void populateCompoundListItem(ListItem<T> item);
-
-    protected abstract boolean filterListItem(T t);
 }

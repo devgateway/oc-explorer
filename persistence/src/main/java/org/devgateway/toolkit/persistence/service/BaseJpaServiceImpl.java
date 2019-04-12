@@ -47,6 +47,12 @@ public abstract class BaseJpaServiceImpl<T extends GenericPersistable & Serializ
 
     @Override
     @Cacheable
+    public Optional<T> findOne(final Specification<T> spec) {
+        return repository().findOne(spec);
+    }
+
+    @Override
+    @Cacheable
     public Page<T> findAll(final Pageable pageable) {
         return repository().findAll(pageable);
     }
@@ -64,8 +70,14 @@ public abstract class BaseJpaServiceImpl<T extends GenericPersistable & Serializ
     }
 
     @Override
-    @Cacheable
+    @Transactional(readOnly = false)
+    // @Cacheable - no need for cache here.
     public Optional<T> findById(final Long id) {
+        return repository().findById(id);
+    }
+
+    @Cacheable
+    public Optional<T> findByIdCached(final Long id) {
         return repository().findById(id);
     }
 

@@ -12,7 +12,7 @@
 /**
  *
  */
-package org.devgateway.toolkit.forms.wicket.page;
+package org.devgateway.toolkit.forms.wicket.page.edit;
 
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -30,9 +30,8 @@ import org.devgateway.toolkit.forms.wicket.components.form.Select2MultiChoiceBoo
 import org.devgateway.toolkit.forms.wicket.components.form.SummernoteBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.TextAreaFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFormComponent;
-import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
+import org.devgateway.toolkit.forms.wicket.page.edit.panel.TestFormChildPanel;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListTestFormPage;
-import org.devgateway.toolkit.forms.wicket.providers.GenericChoiceProvider;
 import org.devgateway.toolkit.forms.wicket.providers.GenericPersistableJpaTextChoiceProvider;
 import org.devgateway.toolkit.persistence.dao.Role;
 import org.devgateway.toolkit.persistence.dao.TestForm;
@@ -88,6 +87,9 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
         SummernoteBootstrapFormComponent summernote = new SummernoteBootstrapFormComponent("summernote");
         editForm.add(summernote);
         summernote.required().enableRevisionsView();
+
+        editForm.add(new TestFormChildPanel("testFormChildren"));
+
         Select2ChoiceBootstrapFormComponent<Group> entitySelect = new Select2ChoiceBootstrapFormComponent<Group>(
                 "entitySelect", new GenericPersistableJpaTextChoiceProvider<>(groupService));
         entitySelect.required();
@@ -127,11 +129,6 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
         FileInputBootstrapFormComponent fileInput = new FileInputBootstrapFormComponent("fileInput");
         fileInput.required();
         editForm.add(fileInput);
-
-        Select2ChoiceBootstrapFormComponent<Group> preloadedEntitySelect = new Select2ChoiceBootstrapFormComponent<>(
-                "preloadedEntitySelect", new GenericChoiceProvider<>(groupService.findAll()));
-        preloadedEntitySelect.required();
-        editForm.add(preloadedEntitySelect);
 
         ColorPickerBootstrapFormComponent colorPicker = new ColorPickerBootstrapFormComponent("colorPicker");
         colorPicker.required();
