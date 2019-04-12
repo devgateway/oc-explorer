@@ -79,7 +79,7 @@ public class ForgotYourPasswordPage extends BasePage {
         protected void onInitialize() {
             super.onInitialize();
 
-            emailAddress = ComponentUtil.addTextField(this, "emailAddress", false);
+            emailAddress = ComponentUtil.addTextField(this, "emailAddress");
             emailAddress.getField().add(ComponentUtil.isEmail());
             emailAddress.required();
 

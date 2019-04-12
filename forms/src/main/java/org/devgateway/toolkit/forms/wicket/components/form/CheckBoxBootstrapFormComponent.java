@@ -12,8 +12,6 @@
 package org.devgateway.toolkit.forms.wicket.components.form;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapCheckbox;
-import de.agilecoders.wicket.core.util.Attributes;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
@@ -25,8 +23,6 @@ import org.apache.wicket.model.Model;
  */
 public class CheckBoxBootstrapFormComponent extends GenericEnablingBootstrapFormComponent<Boolean, BootstrapCheckbox> {
     private static final long serialVersionUID = -4032850928243673675L;
-
-    private Boolean isFloatedInput = false;
 
     private CheckBox wrappedCheckbox;
 
@@ -45,15 +41,6 @@ public class CheckBoxBootstrapFormComponent extends GenericEnablingBootstrapForm
 
     public CheckBoxBootstrapFormComponent(final String id) {
         super(id);
-    }
-
-    @Override
-    protected void onComponentTag(final ComponentTag tag) {
-        super.onComponentTag(tag);
-
-        if (isFloatedInput) {
-            Attributes.addClass(tag, "floated-input");
-        }
     }
 
     @Override
@@ -78,14 +65,6 @@ public class CheckBoxBootstrapFormComponent extends GenericEnablingBootstrapForm
     @Override
     public String getUpdateEvent() {
         return "click";
-    }
-
-    public Boolean getIsFloatedInput() {
-        return isFloatedInput;
-    }
-
-    public void setIsFloatedInput(final Boolean isFloatedInput) {
-        this.isFloatedInput = isFloatedInput;
     }
 
     @Override

@@ -35,8 +35,6 @@ public class DateFieldBootstrapFormComponent extends GenericBootstrapFormCompone
 
     public static final String DEFAULT_FORMAT = "dd/MM/yy";
 
-    private Boolean isFloatedInput = false;
-
     /**
      * @param id
      * @param labelModel
@@ -96,22 +94,5 @@ public class DateFieldBootstrapFormComponent extends GenericBootstrapFormCompone
             }
         };
         border.add(clearDateLink);
-    }
-
-    @Override
-    protected void onComponentTag(final ComponentTag tag) {
-        super.onComponentTag(tag);
-
-        if (isFloatedInput) {
-            Attributes.addClass(tag, "floated-input");
-        }
-    }
-
-    public Boolean getIsFloatedInput() {
-        return isFloatedInput;
-    }
-
-    public void setIsFloatedInput(final Boolean isFloatedInput) {
-        this.isFloatedInput = isFloatedInput;
     }
 }

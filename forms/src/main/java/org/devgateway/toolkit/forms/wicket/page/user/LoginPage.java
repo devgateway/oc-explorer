@@ -127,10 +127,10 @@ public class LoginPage extends BasePage {
             notificationPanel.setOutputMarkupId(true);
             add(notificationPanel);
 
-            username = ComponentUtil.addTextLoginField(this, "username", false);
+            username = ComponentUtil.addTextLoginField(this, "username");
             username.required();
 
-            password = ComponentUtil.addTextPasswordField(this, "password", false);
+            password = ComponentUtil.addTextPasswordField(this, "password");
             password.required();
             password.getField().setResetPassword(false);
 

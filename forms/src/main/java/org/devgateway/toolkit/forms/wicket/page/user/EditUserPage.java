@@ -111,7 +111,7 @@ public class EditUserPage extends AbstractEditPage<Person> {
 
         super.onInitialize();
 
-        username = ComponentUtil.addTextField(editForm, "username", false);
+        username = ComponentUtil.addTextField(editForm, "username");
         username.required();
         username.getField().add(new UsernamePatternValidator());
         StringValue idPerson = getPageParameters().get(WebConstants.PARAM_ID);
@@ -123,13 +123,13 @@ public class EditUserPage extends AbstractEditPage<Person> {
         editForm.add(username);
         MetaDataRoleAuthorizationStrategy.authorize(username, Component.ENABLE, SecurityConstants.Roles.ROLE_ADMIN);
 
-        firstName = ComponentUtil.addTextField(editForm, "firstName", false);
+        firstName = ComponentUtil.addTextField(editForm, "firstName");
         firstName.required();
 
-        lastName = ComponentUtil.addTextField(editForm, "lastName", false);
+        lastName = ComponentUtil.addTextField(editForm, "lastName");
         lastName.required();
 
-        email = ComponentUtil.addTextField(editForm, "email", false);
+        email = ComponentUtil.addTextField(editForm, "email");
         email.required()
                 .getField().add(RfcCompliantEmailAddressValidator.getInstance());
         if (!idPerson.isNull()) {
@@ -138,20 +138,20 @@ public class EditUserPage extends AbstractEditPage<Person> {
             email.getField().add(new UniqueEmailAddressValidator());
         }
 
-        title = ComponentUtil.addTextField(editForm, "title", false);
+        title = ComponentUtil.addTextField(editForm, "title");
 
-        group = ComponentUtil.addSelect2ChoiceField(editForm, "group", groupService, false);
+        group = ComponentUtil.addSelect2ChoiceField(editForm, "group", groupService);
         group.required();
         MetaDataRoleAuthorizationStrategy.authorize(group, Component.RENDER, SecurityConstants.Roles.ROLE_ADMIN);
 
-        roles = ComponentUtil.addSelect2MultiChoiceField(editForm, "roles", roleService, false);
+        roles = ComponentUtil.addSelect2MultiChoiceField(editForm, "roles", roleService);
         roles.required();
         MetaDataRoleAuthorizationStrategy.authorize(roles, Component.RENDER, SecurityConstants.Roles.ROLE_ADMIN);
 
-        enabled = ComponentUtil.addCheckToggle(editForm, "enabled", false);
+        enabled = ComponentUtil.addCheckToggle(editForm, "enabled");
         MetaDataRoleAuthorizationStrategy.authorize(enabled, Component.RENDER, SecurityConstants.Roles.ROLE_ADMIN);
 
-        changePasswordNextSignIn = ComponentUtil.addCheckToggle(editForm, "changePasswordNextSignIn", false);
+        changePasswordNextSignIn = ComponentUtil.addCheckToggle(editForm, "changePasswordNextSignIn");
         MetaDataRoleAuthorizationStrategy.authorize(changePasswordNextSignIn, Component.RENDER,
                 SecurityConstants.Roles.ROLE_ADMIN);
 
@@ -167,13 +167,13 @@ public class EditUserPage extends AbstractEditPage<Person> {
         };
         editForm.add(changeProfilePassword);
 
-        plainPassword = ComponentUtil.addTextPasswordField(editForm, "plainPassword", false);
+        plainPassword = ComponentUtil.addTextPasswordField(editForm, "plainPassword");
         plainPassword.required();
         // stop resetting the password fields each time they are rendered
         plainPassword.getField().setResetPassword(false);
         plainPassword.getField().add(new PasswordPatternValidator());
 
-        plainPasswordCheck = ComponentUtil.addTextPasswordField(editForm, "plainPasswordCheck", false);
+        plainPasswordCheck = ComponentUtil.addTextPasswordField(editForm, "plainPasswordCheck");
         plainPasswordCheck.required();
         plainPasswordCheck.getField().setResetPassword(false);
 
