@@ -18,6 +18,8 @@ public class ChangePasswordPage extends EditUserPage {
     protected void onInitialize() {
         super.onInitialize();
 
+        editForm.getModelObject().setChangeProfilePassword(true);
+
         username.setVisibilityAllowed(false);
         firstName.setVisibilityAllowed(false);
         lastName.setVisibilityAllowed(false);

@@ -31,12 +31,12 @@ public class AuditorAwareImpl implements AuditorAware<String> {
     @Override
     public Optional<String> getCurrentAuditor() {
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
-            return null;
+            return Optional.empty();
         }
 
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
-            return null;
+            return Optional.empty();
         }
 
         final Object principal = authentication.getPrincipal();
@@ -44,7 +44,6 @@ public class AuditorAwareImpl implements AuditorAware<String> {
             return Optional.of(((Person) principal).getUsername());
         }
 
-        return null;
+        return Optional.empty();
     }
-
 }
