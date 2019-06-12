@@ -16,6 +16,8 @@ public class Marker implements Serializable {
 
     private final Integer size;
 
+    private final List<Integer> sizes;
+
     private final Line line;
 
     public Marker(final MarkerBuilder markerBuilder) {
@@ -23,6 +25,7 @@ public class Marker implements Serializable {
         this.colors = markerBuilder.colors;
         this.opacity = markerBuilder.opacity;
         this.size = markerBuilder.size;
+        this.sizes = markerBuilder.sizes;
         this.line = markerBuilder.line;
     }
 
@@ -34,6 +37,8 @@ public class Marker implements Serializable {
         private Double opacity;
 
         private Integer size;
+
+        private List<Integer> sizes;
 
         private Line line;
 
@@ -54,6 +59,11 @@ public class Marker implements Serializable {
 
         public MarkerBuilder setSize(final Integer size) {
             this.size = size;
+            return this;
+        }
+
+        public MarkerBuilder setSizes(final List<Integer> sizes) {
+            this.sizes = sizes;
             return this;
         }
 

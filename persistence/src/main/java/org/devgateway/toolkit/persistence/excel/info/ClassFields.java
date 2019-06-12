@@ -11,4 +11,6 @@ import java.util.Iterator;
  */
 public interface ClassFields {
     Iterator<Field> getFields();
+
+    Class getClazz();
 }

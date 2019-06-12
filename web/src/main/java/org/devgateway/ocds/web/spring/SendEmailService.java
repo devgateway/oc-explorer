@@ -34,14 +34,6 @@ public class SendEmailService {
 
     private SimpleMailMessage templateMessage;
 
-    public SimpleMailMessage getTemplateMessage() {
-        return templateMessage;
-    }
-
-    public void setTemplateMessage(final SimpleMailMessage templateMessage) {
-        this.templateMessage = templateMessage;
-    }
-
     /**
      * Send a reset password email. This is UNSAFE because passwords are sent in clear text.
      * Nevertheless some customers will ask for these emails to be sent, so ...
@@ -50,22 +42,16 @@ public class SendEmailService {
      * @param newPassword
      */
     public void sendEmailResetPassword(final Person person, final String newPassword) {
-        sendEmail("Recover your password", "Dear " + person.getFirstName() + " " + person.getLastName()
-                + ",\n\n"
-                + "These are your new login credentials for E-Procurement Toolkit.\n\n" + "Username: "
-                + person.getUsername() + "\n" + "Password: " + newPassword + "\n\n"
-                + "At login, you will be prompted to change your password to one of your choice.\n\n" + "Thank you,\n"
-                + "DG Team", person.getEmail());
-    }
-
-    public void sendEmail(final String subject, final String text, final String to) {
-        SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setTo(to);
+        final SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setTo(person.getEmail());
         msg.setFrom("support@developmentgateway.org");
-        msg.setSubject(subject);
-        msg.setText(text);
+        msg.setSubject("Recover your password");
+        msg.setText("Dear " + person.getFirstName() + " " + person.getLastName() + ",\n\n"
+                + "These are your new login credentials for DGToolkit.\n\n" + "Username: " + person.getUsername() + "\n"
+                + "Password: " + newPassword + "\n\n"
+                + "At login, you will be prompted to change your password to one of your choice.\n\n" + "Thank you,\n"
+                + "DG Team");
         try {
-            LOGGER.info("Sending email " + msg);
             javaMailSenderImpl.send(msg);
         } catch (MailException e) {
             e.printStackTrace();

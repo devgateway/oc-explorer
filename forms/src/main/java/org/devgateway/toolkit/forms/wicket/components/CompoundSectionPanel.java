@@ -7,11 +7,10 @@ import org.apache.wicket.model.ResourceModel;
 
 /**
  * @author mpostelnicu Forced {@link CompoundPropertyModel} model over
- *         {@link GenericPanel} to ease sub-field referencing
+ * {@link GenericPanel} to ease sub-field referencing
  * @see CompoundSectionPanel#onInitialize()
  */
 public class CompoundSectionPanel<T> extends GenericPanel<T> {
-
     private static final long serialVersionUID = 1L;
 
     protected IModel<String> title;
@@ -46,8 +45,9 @@ public class CompoundSectionPanel<T> extends GenericPanel<T> {
     /**
      * The default {@link CompoundPropertyModel}, for this {@link CompoundSectionPanel}
      * This can be overriden to provide for example, custom binding
-     * @see CompoundPropertyModel#bind(String)
+     *
      * @return
+     * @see CompoundPropertyModel#bind(String)
      */
     public IModel<T> getCompoundSectionModel() {
         return new CompoundPropertyModel<>(getModel());

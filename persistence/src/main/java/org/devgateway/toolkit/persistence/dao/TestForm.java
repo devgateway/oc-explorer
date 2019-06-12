@@ -1,21 +1,20 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2015 Development Gateway, Inc and others.
- *
+ * <p>
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the MIT License (MIT)
  * which accompanies this distribution, and is available at
  * https://opensource.org/licenses/MIT
- *
+ * <p>
  * Contributors:
  * Development Gateway - initial API and implementation
- *******************************************************************************/
+ */
 /**
  *
  */
 package org.devgateway.toolkit.persistence.dao;
 
 import org.devgateway.toolkit.persistence.dao.categories.Group;
-import org.devgateway.toolkit.persistence.dao.categories.Role;
 import org.devgateway.toolkit.persistence.excel.annotation.ExcelExport;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -28,7 +27,9 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -83,8 +84,12 @@ public class TestForm extends AbstractAuditableEntity implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<FileMetadata> fileInput;
 
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @OneToMany(mappedBy = "testForm", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OrderColumn(name = "index")
+    private List<TestFormChild> testFormChildren = new ArrayList<>();
+
     public TestForm() {
-        // TODO Auto-generated constructor stub
     }
 
     @Override
@@ -194,5 +199,13 @@ public class TestForm extends AbstractAuditableEntity implements Serializable {
 
     public void setColorPicker(final String colorPicker) {
         this.colorPicker = colorPicker;
+    }
+
+    public List<TestFormChild> getTestFormChildren() {
+        return testFormChildren;
+    }
+
+    public void setTestFormChildren(final List<TestFormChild> testFormChildren) {
+        this.testFormChildren = testFormChildren;
     }
 }

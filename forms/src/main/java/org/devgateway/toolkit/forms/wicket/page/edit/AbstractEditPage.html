@@ -7,11 +7,13 @@
             <form wicket:id="editForm" role="form">
                 <wicket:child/>
 
-                <div class="form-group form-actions">
-                    <button wicket:id="save" type="button" class="btn btn-green btn-form-action">Save</button>
-                    <button wicket:id="delete" type="button" class="btn btn-form-action">Delete</button>
-                    <span wicket:id="extraButtons"></span>
-                    <button wicket:id="cancel" type="button" class="btn btn-grey btn-form-action">Cancel</button>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <button wicket:id="save" type="button" class="btn btn-green btn-form-action">Save</button>
+                        <button wicket:id="delete" type="button" class="btn btn-form-action">Delete</button>
+                        <span wicket:id="extraButtons"></span>
+                        <button wicket:id="cancel" type="button" class="btn btn-grey btn-form-action">Cancel</button>
+                    </div>
                 </div>
             </form>
         </div>

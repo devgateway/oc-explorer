@@ -14,11 +14,16 @@ package org.devgateway.toolkit.forms.service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import nl.dries.wicket.hibernate.dozer.DozerModel;
+import nl.dries.wicket.hibernate.dozer.SessionFinder;
 import org.hibernate.Session;
 import org.springframework.stereotype.Component;
 
 import nl.dries.wicket.hibernate.dozer.DozerModel;
 import nl.dries.wicket.hibernate.dozer.SessionFinder;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  * Spring Service allowing access to hibernate session. This is needed by

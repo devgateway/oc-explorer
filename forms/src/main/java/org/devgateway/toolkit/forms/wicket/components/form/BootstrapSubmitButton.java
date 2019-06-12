@@ -46,7 +46,7 @@ public abstract class BootstrapSubmitButton extends LaddaAjaxButton {
     }
 
     @Override
-    protected abstract void onSubmit(AjaxRequestTarget target, Form<?> form);
+    protected abstract void onSubmit(AjaxRequestTarget target);
 
     @Override
     protected void onInitialize() {

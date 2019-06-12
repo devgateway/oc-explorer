@@ -9,6 +9,13 @@ html {
      * suddenly the content doesn't fit above the fold.
      */
     overflow-y: scroll;
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 50px !important;
 }
 
 .mainHeader.with-navbar-default .navbar-default {
@@ -47,7 +54,12 @@ html {
      * Add some spacing around the footer.
      */
     margin-top: 2em;
-    margin-bottom: 2em;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 50px;
+    background-color: #222;
 }
 
 /* file upload
@@ -61,3 +73,105 @@ html {
     overflow-x: auto;
     white-space: nowrap;
 }
+
+/* Edit Entity Styles
+-------------------------------------------------- */
+.revision-data-div {
+    width: 50em;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.autosave {
+    display: block;
+    margin-bottom: 12px;
+}
+
+hr.edit-separator {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(220, 220, 220, 0), rgba(220, 220, 220, 0.75), rgba(220, 220, 220, 0));
+}
+
+.checkbox {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+/* List View Styles
+-------------------------------------------------- */
+.section-bordered {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px dashed #00589e;
+}
+
+.pane {
+    padding: 20px 0;
+    margin-bottom: 0;
+}
+
+.pane.title {
+    overflow: hidden;
+}
+
+.pane.title h4 {
+    font-weight: bold;
+    color: #00589e;
+    float: left;
+}
+
+.pane .count {
+    font-weight: bold;
+    color: #858585;
+    float: left;
+    padding-left: 10px;
+    line-height: 40px;
+}
+
+.pane .show-all {
+    float: right;
+    font-size: 12px;
+    line-height: 40px;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.accordion-toggle .show-all {
+    font-size: 12px;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.show-all:hover {
+    color: #66b558;
+}
+
+.select2.select2-container {
+    width: 100% !important;
+}
+
+.list-wrapper .accordion-toggle .form-group {
+    margin-bottom: 0;
+}
+
+.list-wrapper .list-number {
+    float: left;
+    color: #00589e;
+    font-size: 14px;
+    font-weight: bold;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+}
+
+.section-title {
+    color: #2e6da4;
+    font-size: 12pt;
+    font-weight: bold !important;
+}
+
+/*
+-------------------------------------------------- */

@@ -1,16 +1,16 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2015 Development Gateway, Inc and others.
- *
+ * <p>
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the MIT License (MIT)
  * which accompanies this distribution, and is available at
  * https://opensource.org/licenses/MIT
- *
+ * <p>
  * Contributors:
  * Development Gateway - initial API and implementation
- *******************************************************************************/
+ */
 /**
- * 
+ *
  */
 package org.devgateway.toolkit.forms.wicket.components;
 
@@ -18,6 +18,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
+import org.devgateway.toolkit.forms.wicket.components.util.ComponentUtil;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
@@ -59,14 +60,10 @@ public class TooltipLabel extends Label {
         add(AttributeModifier.append("class", "fa fa-question-circle"));
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.wicket.Component#onConfigure()
-     */
     @Override
     protected void onConfigure() {
         super.onConfigure();
+
         helpModelText = new StringResourceModel(fieldId + ".help", this);
         helpModelText.setDefaultValue("");
 

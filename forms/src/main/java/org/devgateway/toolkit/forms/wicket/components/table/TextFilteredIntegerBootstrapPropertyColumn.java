@@ -9,27 +9,24 @@ import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFor
 /**
  * A TextFilteredPropertyColumn that uses TextFieldBootstrapFormComponent as a
  * filter.
- *
+ * <p>
  * Created by octavian on 15.04.2016.
  *
- * @param <T>
- *            The column's model object type
- * @param <F>
- *            Filter's model object type
- * @param <S>
- *            the type of the sort property
+ * @param <T> The column's model object type
+ * @param <F> Filter's model object type
+ * @param <S> the type of the sort property
  */
 public class TextFilteredIntegerBootstrapPropertyColumn<T, F, S> extends TextFilteredPropertyColumn<T, F, S> {
 
     private static final long serialVersionUID = 3974619896912467712L;
 
     public TextFilteredIntegerBootstrapPropertyColumn(final IModel<String> displayModel, final S sortProperty,
-            final String propertyExpression) {
+                                                      final String propertyExpression) {
         super(displayModel, sortProperty, propertyExpression);
     }
 
     public TextFilteredIntegerBootstrapPropertyColumn(final IModel<String> displayModel,
-            final String propertyExpression) {
+                                                      final String propertyExpression) {
         super(displayModel, propertyExpression);
     }
 

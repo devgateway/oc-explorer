@@ -23,11 +23,13 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.editor.SummernoteC
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.editor.SummernoteStoredImageResourceReference;
 import de.agilecoders.wicket.less.BootstrapLess;
 import de.agilecoders.wicket.webjars.WicketWebjars;
+import nl.dries.wicket.hibernate.dozer.DozerRequestCycleListener;
 import nl.dries.wicket.hibernate.dozer.SessionFinderHolder;
 import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Page;
+import org.apache.wicket.ajax.AjaxNewWindowNotifyingBehavior;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.devutils.diskstore.DebugDiskDataStore;
@@ -39,7 +41,6 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.request.resource.caching.FilenameWithVersionResourceCachingStrategy;
 import org.apache.wicket.request.resource.caching.NoOpResourceCachingStrategy;
 import org.apache.wicket.request.resource.caching.version.CachingResourceVersion;
-import org.apache.wicket.serialize.java.DeflatedJavaSerializer;
 import org.apache.wicket.settings.RequestCycleSettings.RenderStrategy;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.file.Folder;
@@ -49,6 +50,7 @@ import org.devgateway.toolkit.forms.wicket.converters.NonNumericFilteredBigDecim
 import org.devgateway.toolkit.forms.wicket.page.Homepage;
 import org.devgateway.toolkit.forms.wicket.page.user.LoginPage;
 import org.devgateway.toolkit.forms.wicket.styles.BaseStyles;
+import org.nustaq.serialization.FSTConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -58,6 +60,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.wicketstuff.annotation.scan.AnnotatedMountScanner;
+import org.wicketstuff.pageserializer.fast2.Fast2WicketSerializer;
 import org.wicketstuff.select2.ApplicationSettings;
 
 import java.math.BigDecimal;
@@ -70,7 +73,7 @@ import java.math.BigDecimal;
  * @author Stefan Kloe, mpostelnicu
  */
 @EnableScheduling
-@SpringBootApplication
+@SpringBootApplication(exclude = {org.springframework.boot.autoconfigure.gson.GsonAutoConfiguration.class})
 @ComponentScan("org.devgateway")
 @PropertySource("classpath:/org/devgateway/toolkit/forms/application.properties")
 @EnableCaching
@@ -79,7 +82,7 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
 
     public static final String STORAGE_ID = "fileStorage";
 
-    private static final String BASE_PACKAGE_FOR_PAGES = "org.devgateway";
+    private static final String BASE_PACKAGE_FOR_PAGES = BasePage.class.getPackage().getName();
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -142,13 +145,6 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
         WicketWebjars.install(this);
 
         final IBootstrapSettings settings = new BootstrapSettings();
-        // specify an empty bootstrap css resource so that we can have more
-        // control when do we load the bootstrap styles.
-        // By default all pages will load bootstrap.css file and there are
-        // situations (like print page) when we don't need this styles.
-        // The boostrap.css file is loaded as dependency in MainCss Instance
-        // settings.setCssResourceReference(EmptyCss.INSTANCE);
-
         settings.useCdnResources(false);
 
         // use the default bootstrap theme
@@ -168,23 +164,38 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
         // -Dwicket.configuration=deployment
         // The default is Development, so this code is not used
         if (usesDeploymentConfig()) {
-            getResourceSettings().setCachingStrategy(new FilenameWithVersionResourceCachingStrategy(
-                    "-v-",
+            getResourceSettings().setCachingStrategy(new FilenameWithVersionResourceCachingStrategy("-v-",
                     new CachingResourceVersion(new Adler32ResourceVersion())
             ));
-
             getResourceSettings().setJavaScriptCompressor(
                     new GoogleClosureJavaScriptCompressor(CompilationLevel.SIMPLE_OPTIMIZATIONS));
             getResourceSettings().setCssCompressor(new YuiCssCompressor());
+            getResourceSettings().setUseMinifiedResources(true);
 
-            getFrameworkSettings().setSerializer(new DeflatedJavaSerializer(getApplicationKey()));
+            // getFrameworkSettings().setSerializer(new DeflatedJavaSerializer(getApplicationKey()));
+            final FSTConfiguration fstConfiguration = Fast2WicketSerializer.getDefaultFSTConfiguration();
+            getFrameworkSettings().setSerializer(new Fast2WicketSerializer(fstConfiguration));
 
             getMarkupSettings().setStripComments(true);
+            getMarkupSettings().setCompressWhitespace(true);
+            getMarkupSettings().setStripWicketTags(true);
         } else {
             getResourceSettings().setCachingStrategy(new NoOpResourceCachingStrategy());
+
+            final FSTConfiguration fstConfiguration = Fast2WicketSerializer.getDefaultFSTConfiguration();
+            getFrameworkSettings().setSerializer(new Fast2WicketSerializer(fstConfiguration));
         }
 
         getRequestCycleSettings().setRenderStrategy(RenderStrategy.ONE_PASS_RENDER);
+        // be sure that we have added Dozer Listener
+        getRequestCycleListeners().add(new DozerRequestCycleListener());
+
+        // additional safety guard for opening in the session the same pages
+        Application.get().getComponentInitializationListeners().add(component -> {
+            if (component instanceof WebPage) {
+                component.add(new AjaxNewWindowNotifyingBehavior());
+            }
+        });
     }
 
     @Override
@@ -221,11 +232,7 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
         new AnnotatedMountScanner().scanPackage(BASE_PACKAGE_FOR_PAGES).mount(this);
 
         getApplicationSettings().setUploadProgressUpdatesEnabled(true);
-
         getApplicationSettings().setAccessDeniedPage(Homepage.class);
-
-        // deactivate ajax debug mode
-        // getDebugSettings().setAjaxDebugModeEnabled(false);
 
         configureBootstrap();
         configureSummernote();

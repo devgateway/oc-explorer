@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.components.table;
 
-import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.link.AbstractLink;
@@ -25,8 +24,6 @@ import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
  */
 
 public class AjaxBootstrapNavigator extends AjaxPagingNavigator {
-    protected static Logger logger = Logger.getLogger(AjaxBootstrapNavigator.class);
-
     private static final long serialVersionUID = -5572869834775798502L;
 
     private boolean hideFastPagination;
@@ -45,7 +42,7 @@ public class AjaxBootstrapNavigator extends AjaxPagingNavigator {
     }
 
     public AjaxBootstrapNavigator(final String id, final IPageable pageable, final IPagingLabelProvider labelProvider,
-            final boolean hideFastPagination) {
+                                  final boolean hideFastPagination) {
         this(id, pageable, labelProvider);
 
         this.hideFastPagination = hideFastPagination;
@@ -77,22 +74,20 @@ public class AjaxBootstrapNavigator extends AjaxPagingNavigator {
 
     @Override
     protected PagingNavigation newNavigation(final String id, final IPageable pageable,
-            final IPagingLabelProvider labelProvider) {
+                                             final IPagingLabelProvider labelProvider) {
         return new BootstrapPagingNavigation(id, pageable, labelProvider);
     }
 
     @Override
     protected AbstractLink newPagingNavigationIncrementLink(final String id, final IPageable pageable,
-            final int increment) {
-        AbstractLink link = super.newPagingNavigationIncrementLink(id, pageable, increment);
-        // TODO:disable link
+                                                            final int increment) {
+        final AbstractLink link = super.newPagingNavigationIncrementLink(id, pageable, increment);
         return link;
     }
 
     @Override
     protected AbstractLink newPagingNavigationLink(final String id, final IPageable pageable, final int pageNumber) {
-        AbstractLink link = super.newPagingNavigationLink(id, pageable, pageNumber);
-        // TODO:disable link
+        final AbstractLink link = super.newPagingNavigationLink(id, pageable, pageNumber);
         return link;
     }
 }

@@ -1,16 +1,16 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2015 Development Gateway, Inc and others.
- *
+ * <p>
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the MIT License (MIT)
  * which accompanies this distribution, and is available at
  * https://opensource.org/licenses/MIT
- *
+ * <p>
  * Contributors:
  * Development Gateway - initial API and implementation
- *******************************************************************************/
+ */
 /**
- * 
+ *
  */
 package org.devgateway.toolkit.forms.wicket.components.form;
 
@@ -27,16 +27,14 @@ import javax.persistence.EntityManager;
 
 /**
  * @author mpostelnicu
- * 
+ *
  */
 public class Select2ChoiceBootstrapFormComponent<TYPE>
         extends GenericEnablingBootstrapFormComponent<TYPE, Select2Choice<TYPE>> {
     private static final long serialVersionUID = -3430670677135618576L;
 
-    private Boolean isFloatedInput = false;
-
     public Select2ChoiceBootstrapFormComponent(final String id, final IModel<String> labelModel,
-            final IModel<TYPE> model, final ChoiceProvider<TYPE> choiceProvider) {
+                                               final IModel<TYPE> model, final ChoiceProvider<TYPE> choiceProvider) {
         super(id, labelModel, model);
         provider(choiceProvider);
     }
@@ -47,12 +45,12 @@ public class Select2ChoiceBootstrapFormComponent<TYPE>
     }
 
     public Select2ChoiceBootstrapFormComponent(final String id, final IModel<String> labelModel,
-            final ChoiceProvider<TYPE> choiceProvider) {
+                                               final ChoiceProvider<TYPE> choiceProvider) {
         this(id, labelModel, null, choiceProvider);
     }
 
     public Select2ChoiceBootstrapFormComponent(final String id, final ChoiceProvider<TYPE> choiceProvider,
-            final IModel<TYPE> model) {
+                                               final IModel<TYPE> model) {
         super(id, model);
         provider(choiceProvider);
     }
@@ -74,7 +72,7 @@ public class Select2ChoiceBootstrapFormComponent<TYPE>
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.devgateway.toolkit.forms.wicket.components.form.
      * GenericBootstrapFormComponent#onConfigure()
      */
@@ -93,23 +91,6 @@ public class Select2ChoiceBootstrapFormComponent<TYPE>
                                     final EntityManager entityManager,
                                     final IModel<? extends GenericPersistable> owningEntityModel) {
         throw new NotImplementedException("");
-    }
-
-    @Override
-    protected void onComponentTag(final ComponentTag tag) {
-        super.onComponentTag(tag);
-
-        if (isFloatedInput) {
-            Attributes.addClass(tag, "floated-input");
-        }
-    }
-
-    public Boolean getIsFloatedInput() {
-        return isFloatedInput;
-    }
-
-    public void setIsFloatedInput(final Boolean isFloatedInput) {
-        this.isFloatedInput = isFloatedInput;
     }
 
     @Override

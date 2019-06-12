@@ -14,7 +14,6 @@ package org.devgateway.toolkit.persistence.dao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.devgateway.ocds.persistence.dao.UserDashboard;
 import org.devgateway.toolkit.persistence.dao.categories.Group;
-import org.devgateway.toolkit.persistence.dao.categories.Role;
 import org.devgateway.toolkit.persistence.excel.annotation.ExcelExport;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -24,8 +23,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Collection;
@@ -36,6 +37,7 @@ import java.util.Set;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @Audited
+@Table(indexes = {@Index(columnList = "username")})
 public class Person extends AbstractAuditableEntity implements Serializable, UserDetails, Labelable {
     private static final long serialVersionUID = 109780377848343674L;
 
@@ -47,6 +49,8 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
 
     @ExcelExport
     private String lastName;
+
+    private String title;
 
     @ExcelExport
     private String email;
@@ -69,13 +73,6 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
     @ManyToOne(fetch = FetchType.EAGER)
     private Group group;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    private UserDashboard defaultDashboard;
-
-
-    @ManyToMany(fetch = FetchType.EAGER,  mappedBy = "users")
-    private Set<UserDashboard> dashboards = new HashSet<>();
-
     @Transient
     private Collection<? extends GrantedAuthority> authorities;
 
@@ -87,14 +84,20 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
     @JsonIgnore
     private String plainPasswordCheck;
 
-    // flag if user want to change password
-    @Transient
-    @JsonIgnore
-    private boolean changePass;
+    private Boolean changePasswordNextSignIn;
+
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Group group;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<Role> roles;
+
+    // flag if user/admin want to change password in profile account
+    @Transient
+    @JsonIgnore
+    private boolean changeProfilePassword;
 
     public Boolean getEnabled() {
         return enabled;
@@ -109,33 +112,39 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
         return username;
     }
 
-    public void setUsername(final String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(final String email) {
-        this.email = email;
-    }
-
     @Override
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(final String password) {
-        this.password = password;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
     }
 
-    public Group getGroup() {
-        return group;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public void setGroup(final Group group) {
-        this.group = group;
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.enabled;
+    }
+
+    public void setUsername(final String username) {
+        this.username = username;
     }
 
     public String getFirstName() {
@@ -154,72 +163,24 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
         this.lastName = lastName;
     }
 
-    /**
-     * @return the authorities
-     */
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+    public String getTitle() {
+        return title;
     }
 
-    /**
-     * @param authorities
-     *            the authorities to set
-     */
-    public void setAuthorities(final Collection<? extends GrantedAuthority> authorities) {
-        this.authorities = authorities;
+    public void setTitle(final String title) {
+        this.title = title;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.springframework.security.core.userdetails.UserDetails#
-     * isAccountNonExpired()
-     */
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
+    public String getEmail() {
+        return email;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.springframework.security.core.userdetails.UserDetails#
-     * isAccountNonLocked()
-     */
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
+    public void setEmail(final String email) {
+        this.email = email;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.springframework.security.core.userdetails.UserDetails#
-     * isCredentialsNonExpired()
-     */
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.springframework.security.core.userdetails.UserDetails#isEnabled()
-     */
-    @Override
-    public boolean isEnabled() {
-        return this.enabled;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(final String country) {
-        this.country = country;
+    public void setPassword(final String password) {
+        this.password = password;
     }
 
     public String getPlainPassword() {
@@ -238,40 +199,20 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
         this.plainPasswordCheck = plainPasswordCheck;
     }
 
-    public boolean getChangePass() {
-        return changePass;
+    public Boolean getChangePasswordNextSignIn() {
+        return changePasswordNextSignIn;
     }
 
-    public void setChangePass(final boolean changePass) {
-        this.changePass = changePass;
+    public void setChangePasswordNextSignIn(final Boolean changePasswordNextSignIn) {
+        this.changePasswordNextSignIn = changePasswordNextSignIn;
     }
 
-    public String getTitle() {
-        return title;
+    public Group getGroup() {
+        return group;
     }
 
-    public void setTitle(final String title) {
-        this.title = title;
-    }
-
-    public void setEnabled(final boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public Boolean getChangePassword() {
-        return changePassword;
-    }
-
-    public void setChangePassword(final Boolean changePassword) {
-        this.changePassword = changePassword;
-    }
-
-    public String getSecret() {
-        return secret;
-    }
-
-    public void setSecret(final String secret) {
-        this.secret = secret;
+    public void setGroup(final Group group) {
+        this.group = group;
     }
 
     public List<Role> getRoles() {
@@ -280,6 +221,26 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
 
     public void setRoles(final List<Role> roles) {
         this.roles = roles;
+    }
+
+    public void setAuthorities(final Collection<? extends GrantedAuthority> authorities) {
+        this.authorities = authorities;
+    }
+
+    public boolean getChangeProfilePassword() {
+        return changeProfilePassword;
+    }
+
+    public void setChangeProfilePassword(final boolean changeProfilePassword) {
+        this.changeProfilePassword = changeProfilePassword;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(final Boolean enabled) {
+        this.enabled = enabled;
     }
 
     @Override

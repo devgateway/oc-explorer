@@ -14,9 +14,7 @@
  */
 package org.devgateway.toolkit.forms.wicket.components.form;
 
-import de.agilecoders.wicket.core.util.Attributes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.ColorPickerTextField;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.model.IModel;
 
 /**
@@ -24,8 +22,6 @@ import org.apache.wicket.model.IModel;
  * 
  */
 public class ColorPickerBootstrapFormComponent extends GenericBootstrapFormComponent<String, ColorPickerTextField> {
-
-    private Boolean isFloatedInput = false;
 
     public ColorPickerBootstrapFormComponent(final String id, final IModel<String> labelModel,
                                              final IModel<String> model) {
@@ -47,23 +43,4 @@ public class ColorPickerBootstrapFormComponent extends GenericBootstrapFormCompo
     protected ColorPickerTextField inputField(final String id, final IModel<String> model) {
         return new ColorPickerTextField(id, initFieldModel());
     }
-
-    @Override
-    protected void onComponentTag(final ComponentTag tag) {
-        super.onComponentTag(tag);
-
-        if (getIsFloatedInput()) {
-            Attributes.addClass(tag, "floated-input");
-        }
-    }
-
-
-    public Boolean getIsFloatedInput() {
-        return isFloatedInput;
-    }
-
-    public void setIsFloatedInput(final Boolean isFloatedInput) {
-        this.isFloatedInput = isFloatedInput;
-    }
-
 }

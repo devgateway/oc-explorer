@@ -18,7 +18,9 @@ public class ChangePasswordPage extends EditUserPage {
     protected void onInitialize() {
         super.onInitialize();
 
-        userName.setVisibilityAllowed(false);
+        editForm.getModelObject().setChangeProfilePassword(true);
+
+        username.setVisibilityAllowed(false);
         firstName.setVisibilityAllowed(false);
         lastName.setVisibilityAllowed(false);
         email.setVisibilityAllowed(false);
@@ -26,8 +28,8 @@ public class ChangePasswordPage extends EditUserPage {
         group.setVisibilityAllowed(false);
         roles.setVisibilityAllowed(false);
         enabled.setVisibilityAllowed(false);
-        changePassword.setVisibilityAllowed(false);
-        changePass.setVisibilityAllowed(false);
+        changePasswordNextSignIn.setVisibilityAllowed(false);
+        changeProfilePassword.setVisibilityAllowed(false);
     }
 
     @Override

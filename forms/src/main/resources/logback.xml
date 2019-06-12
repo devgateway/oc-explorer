@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <!-- keep console log colors configured in spring boot -->
-    <include resource="org/springframework/boot/logging/logback/base.xml" />
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_DIR}/logger.log</file>
@@ -20,22 +22,20 @@
         </rollingPolicy>
     </appender>
 
-    <logger name="org.hibernate.tool.hbm2ddl" level="WARN" />
-    <logger name="org.hibernate.cache.ehcache" level="ERROR" />
+    <logger name="org.hibernate.tool.hbm2ddl" level="WARN"/>
+    <logger name="org.hibernate.cache.ehcache" level="ERROR"/>
 
-    <logger name="org.apache.wicket.resource" level="WARN" />
-    <logger name="org.apache.wicket.Localizer" level="ERROR" />
-    <logger name="net.sf.ehcache.pool.sizeof.SizeOf" level="ERROR" />
+    <logger name="org.apache.wicket.resource" level="WARN"/>
+    <logger name="org.apache.wicket.Localizer" level="ERROR"/>
+    <logger name="net.sf.ehcache.pool.sizeof.SizeOf" level="ERROR"/>
 
-    <logger name="org.pentaho.reporting.libraries.fonts" level="WARN" />
-    <logger name="org.pentaho.reporting.engine.classic" level="WARN" />
-    <logger name="com.google.javascript.jscomp" level="ERROR" />
-
-
+    <logger name="org.pentaho.reporting.libraries.fonts" level="WARN"/>
+    <logger name="org.pentaho.reporting.engine.classic" level="WARN"/>
+    <logger name="com.google.javascript.jscomp" level="ERROR"/>
 
     <!-- Setting the root level of logging to INFO -->
     <root level="INFO">
-        <appender-ref ref="CONSOLE" />
-        <appender-ref ref="FILE" />
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
     </root>
 </configuration>

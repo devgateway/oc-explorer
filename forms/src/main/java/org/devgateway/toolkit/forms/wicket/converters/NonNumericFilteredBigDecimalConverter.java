@@ -14,10 +14,10 @@
  */
 package org.devgateway.toolkit.forms.wicket.converters;
 
+import org.apache.wicket.util.convert.converter.BigDecimalConverter;
+
 import java.math.BigDecimal;
 import java.util.Locale;
-
-import org.apache.wicket.util.convert.converter.BigDecimalConverter;
 
 /**
  * @author mpostelnicu
@@ -29,7 +29,7 @@ import org.apache.wicket.util.convert.converter.BigDecimalConverter;
  *         of the text being typed. Example: you type 'afefw@#123456' and when
  *         the textfield loses focus it will refresh to show '123,456' (the
  *         comma is the decimal separator applied by
- *         {@link BigDecimalConverter#convertToString(BigDecimal, Locale)} but
+ *         {@link BigDecimalConverter#convertToObject(String, Locale)} but
  *         that is done only after the {@link BigDecimal} was read by
  *         convertInput()
  */

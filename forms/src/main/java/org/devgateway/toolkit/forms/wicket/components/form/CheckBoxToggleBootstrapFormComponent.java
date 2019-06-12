@@ -11,16 +11,13 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.components.form;
 
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkbox.bootstraptoggle.BootstrapToggle;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkbox.bootstraptoggle.BootstrapToggleConfig;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
-
-import de.agilecoders.wicket.core.util.Attributes;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkbox.bootstraptoggle.BootstrapToggle;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkbox.bootstraptoggle.BootstrapToggleConfig;
 
 /**
  * @author mpostelnicu
@@ -30,9 +27,8 @@ public class CheckBoxToggleBootstrapFormComponent
         extends GenericEnablingBootstrapFormComponent<Boolean, BootstrapToggle> {
     private static final long serialVersionUID = -4032850928243673675L;
 
-    private Boolean isFloatedInput = false;
-
     private BootstrapToggleConfig config;
+
     private CheckBox wrappedCheckbox;
 
     public CheckBoxToggleBootstrapFormComponent(final String id, final IModel<String> labelModel,
@@ -50,15 +46,6 @@ public class CheckBoxToggleBootstrapFormComponent
 
     public CheckBoxToggleBootstrapFormComponent(final String id) {
         super(id);
-    }
-
-    @Override
-    protected void onComponentTag(final ComponentTag tag) {
-        super.onComponentTag(tag);
-
-        if (isFloatedInput) {
-            Attributes.addClass(tag, "floated-input");
-        }
     }
 
     @Override
@@ -99,14 +86,6 @@ public class CheckBoxToggleBootstrapFormComponent
     @Override
     public String getUpdateEvent() {
         return "change";
-    }
-
-    public Boolean getIsFloatedInput() {
-        return isFloatedInput;
-    }
-
-    public void setIsFloatedInput(final Boolean isFloatedInput) {
-        this.isFloatedInput = isFloatedInput;
     }
 
     @Override
