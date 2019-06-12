@@ -15,7 +15,11 @@ import org.hibernate.envers.Audited;
 import org.springframework.data.domain.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.EntityListeners;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.PreUpdate;
+import java.time.ZonedDateTime;
+import java.util.Optional;
 
 /**
  * 
@@ -131,5 +135,7 @@ public abstract class AbstractAuditableEntity extends GenericPersistable
     public void setLastModifiedDate(final ZonedDateTime lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
+
+
 
 }

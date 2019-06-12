@@ -38,7 +38,7 @@ import java.util.Set;
 @Entity
 @Audited
 @Table(indexes = {@Index(columnList = "username")})
-public class Person extends AbstractAuditableEntity implements Serializable, UserDetails, Labelable {
+public class Person extends AbstractAuditableEntity implements Serializable, UserDetails {
     private static final long serialVersionUID = 109780377848343674L;
 
     @ExcelExport
@@ -58,24 +58,6 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
     @JsonIgnore
     private String password;
 
-    private String country;
-
-    private String title;
-
-    private Boolean changePassword;
-
-    private Boolean enabled = true;
-
-    @JsonIgnore
-    private String secret;
-
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Group group;
-
-    @Transient
-    private Collection<? extends GrantedAuthority> authorities;
-
     @Transient
     @JsonIgnore
     private String plainPassword;
@@ -94,18 +76,16 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<Role> roles;
 
+    @Transient
+    private Collection<? extends GrantedAuthority> authorities;
+
     // flag if user/admin want to change password in profile account
     @Transient
     @JsonIgnore
     private boolean changeProfilePassword;
 
-    public Boolean getEnabled() {
-        return enabled;
-    }
+    private Boolean enabled = true;
 
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
 
     @Override
     public String getUsername() {
@@ -253,13 +233,6 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
         return null;
     }
 
-    public UserDashboard getDefaultDashboard() {
-        return defaultDashboard;
-    }
-
-    public void setDefaultDashboard(UserDashboard defaultDashboard) {
-        this.defaultDashboard = defaultDashboard;
-    }
 
     @Override
     public void setLabel(String label) {
@@ -272,11 +245,4 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
       return username;
     }
 
-    public Set<UserDashboard> getDashboards() {
-        return dashboards;
-    }
-
-    public void setDashboards(Set<UserDashboard> dashboards) {
-        this.dashboards = dashboards;
-    }
 }
