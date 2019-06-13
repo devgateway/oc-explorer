@@ -3,8 +3,8 @@
  */
 package org.devgateway.ocds.web.rest.controller.request;
 
-import cz.jirutka.validator.collection.constraints.EachRange;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.Range;
 
 import java.util.TreeSet;
 
@@ -18,8 +18,8 @@ public class YearFilterPagingRequest extends DefaultFilterPagingRequest {
             + MIN_REQ_YEAR + " and the maximum allowed is " + MAX_REQ_YEAR
             + ".It will check if the startDate and endDate are within the year range. "
             + "To check which fields are used to read start/endDate from, have a look at each endpoint definition.")
-    @EachRange(min = MIN_REQ_YEAR, max = MAX_REQ_YEAR)
-    protected TreeSet<Integer> year;
+
+    protected TreeSet<@Range(min = MIN_REQ_YEAR, max = MAX_REQ_YEAR) Integer> year;
 
     @ApiModelProperty(value = "This parameter will filter the content based on month. "
             + "The minimum month allowed is "
@@ -27,8 +27,8 @@ public class YearFilterPagingRequest extends DefaultFilterPagingRequest {
             + "This parameter does nothing if used without the year parameter, as filtering and aggregating by month "
             + "makes no sense without filtering by year. This parameter is also ignored when using multiple year "
             + "parameters, so it only works if and only if the year parameter has one value.")
-    @EachRange(min = MIN_MONTH, max = MAX_MONTH)
-    protected TreeSet<Integer> month;
+
+    protected TreeSet<@Range(min = MIN_MONTH, max = MAX_MONTH) Integer> month;
         
     @ApiModelProperty(value = "When true, this parameter will add an extra layer of monthly grouping of all results."
             + " The default is false")
