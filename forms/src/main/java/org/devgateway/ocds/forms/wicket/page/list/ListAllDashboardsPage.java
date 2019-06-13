@@ -62,7 +62,7 @@ public class ListAllDashboardsPage extends AbstractListPage<UserDashboard> {
 
     public ListAllDashboardsPage(final PageParameters pageParameters) {
         super(pageParameters);
-        this.jpaRepository = userDashboardRepository;
+        this.jpaService = userDashboardRepository;
         this.editPageClass = EditUserDashboardPage.class;
         columns.add(new PropertyColumn<UserDashboard, String>(
                 new Model<String>((new StringResourceModel("name", ListAllDashboardsPage.this, null)).getString()),

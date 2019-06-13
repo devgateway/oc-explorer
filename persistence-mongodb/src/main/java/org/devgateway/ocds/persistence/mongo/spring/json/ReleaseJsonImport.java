@@ -1,10 +1,11 @@
 package org.devgateway.ocds.persistence.mongo.spring.json;
 
-import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.json2object.JsonToObject;
 import org.devgateway.ocds.persistence.mongo.spring.json2object.ReleaseJsonToObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
@@ -18,7 +19,7 @@ import java.io.IOException;
  */
 @Transactional
 public class ReleaseJsonImport implements JsonImport<Release> {
-    private static Logger logger = Logger.getLogger(ReleaseJsonImport.class);
+    private static Logger logger = LoggerFactory.getLogger(ReleaseJsonImport.class);
 
     private final ReleaseRepository releaseRepository;
 

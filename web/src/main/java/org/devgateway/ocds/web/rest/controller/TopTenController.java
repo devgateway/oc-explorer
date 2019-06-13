@@ -14,6 +14,7 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
@@ -99,7 +100,7 @@ public class TopTenController extends GenericOCDSController {
                         .andOperator(getDefaultFilterCriteria(filter))),
                 unwind("awards"),
                 match(getYearFilterCriteria(filter.awardFiltering(), MongoConstants.FieldNames.AWARDS_DATE)),
-                new CustomOperation(new BasicDBObject("$project", project)),
+                new CustomOperation(new Document("$project", project)),
                 sort(Direction.DESC, MongoConstants.FieldNames.AWARDS_VALUE_AMOUNT), limit(10)
         );
 
@@ -134,7 +135,7 @@ public class TopTenController extends GenericOCDSController {
                                 filter,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
                         ))),
-                new CustomOperation(new BasicDBObject("$project", project)),
+                new CustomOperation(new Document("$project", project)),
                 sort(Direction.DESC, MongoConstants.FieldNames.TENDER_VALUE_AMOUNT), limit(10)
         );
 

@@ -3,7 +3,6 @@ package org.devgateway.ocds.web.rest.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.fge.jackson.JsonLoader;
 import com.github.fge.jsonschema.core.report.ProcessingMessage;
-import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.OcdsSchemaValidatorService;
@@ -14,6 +13,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @since 6/1/16
  */
 public class ReleaseExportTest extends AbstractWebTest {
-    private static Logger logger = Logger.getLogger(ReleaseExportTest.class);
+    private static Logger logger = LoggerFactory.getLogger(ReleaseExportTest.class);
 
     @Autowired
     private ReleaseRepository releaseRepository;

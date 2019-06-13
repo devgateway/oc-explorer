@@ -14,10 +14,10 @@ package org.devgateway.toolkit.persistence.repository;
 import java.util.List;
 
 import org.devgateway.toolkit.persistence.dao.Person;
-import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.devgateway.toolkit.persistence.repository.norepository.BaseJpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 /**

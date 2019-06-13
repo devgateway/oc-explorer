@@ -22,16 +22,13 @@ import java.time.ZonedDateTime;
 import java.util.Optional;
 
 /**
- * 
  * @author mpostelnicu
- *
  */
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class AbstractAuditableEntity extends GenericPersistable
         implements Auditable<String, Long, ZonedDateTime> {
     private static final long serialVersionUID = 4031407178647451427L;
-
 
     @Audited
     private String createdBy;
@@ -44,8 +41,6 @@ public abstract class AbstractAuditableEntity extends GenericPersistable
 
     @Audited
     private ZonedDateTime lastModifiedDate;
-
-
 
     /**
      * Forces the envers to see this object as modified, thus enabling creation
@@ -102,6 +97,13 @@ public abstract class AbstractAuditableEntity extends GenericPersistable
         this.createdBy = createdBy;
     }
 
+    /**
+     * Gets create audit date.
+     */
+    @Override
+    public Optional<ZonedDateTime> getCreatedDate() {
+        return Optional.of(createdDate);
+    }
 
     /**
      * Sets create audit date.
@@ -127,6 +129,13 @@ public abstract class AbstractAuditableEntity extends GenericPersistable
         this.lastModifiedBy = lastModifiedBy;
     }
 
+    /**
+     * Gets last modified audit date.
+     */
+    @Override
+    public Optional<ZonedDateTime> getLastModifiedDate() {
+        return Optional.of(lastModifiedDate);
+    }
 
     /**
      * Sets last modified audit date.
@@ -135,7 +144,5 @@ public abstract class AbstractAuditableEntity extends GenericPersistable
     public void setLastModifiedDate(final ZonedDateTime lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
-
-
 
 }

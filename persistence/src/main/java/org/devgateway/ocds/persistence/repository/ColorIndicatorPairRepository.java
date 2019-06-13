@@ -13,7 +13,7 @@ package org.devgateway.ocds.persistence.repository;
 
 import java.util.List;
 import org.devgateway.ocds.persistence.dao.ColorIndicatorPair;
-import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepository;
+import org.devgateway.toolkit.persistence.repository.norepository.TextSearchableRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -33,13 +33,16 @@ public interface ColorIndicatorPairRepository extends TextSearchableRepository<C
     @Override
     List<ColorIndicatorPair> findAll();
 
+
+
     @Override
     Page<ColorIndicatorPair> findAll(Pageable pageable);
+
 
     @Override
     @RestResource(exported = false)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    void delete(Long id);
+    void deleteById(Long id);
 
     @Query("select e from #{#entityName} e where (firstIndicator=:firstIndicator and "
             + "secondIndicator=:secondIndicator ) or (firstIndicator=:secondIndicator and "

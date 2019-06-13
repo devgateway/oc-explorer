@@ -20,6 +20,7 @@ import org.devgateway.toolkit.web.security.SecurityConstants;
 import org.wicketstuff.annotation.mount.MountPath;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author idobre
@@ -99,12 +100,13 @@ public class EditAdminSettingsPage extends AbstractEditPage<AdminSettings> {
     }
 
     private void addCacheClearLink() {
-        IndicatingAjaxFallbackLink link = new IndicatingAjaxFallbackLink("clearCache") {
+        IndicatingAjaxFallbackLink link = new IndicatingAjaxFallbackLink<Void>("clearCache") {
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional optional) {
                 cacheManager.getCacheNames().forEach(c -> cacheManager.getCache(c).clear());
             }
+
         };
         editForm.add(link);
     }

@@ -14,6 +14,7 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
@@ -198,7 +199,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                                 filter.awardFiltering(),
                                 MongoConstants.FieldNames.AWARDS_DATE
                         ))),
-                new CustomOperation(new BasicDBObject("$project", project)),
+                new CustomOperation(new Document("$project", project)),
                 group(getYearlyMonthlyGroupingFields(filter)).avg("$awardLengthDays").as(Keys.AVERAGE_AWARD_DAYS),
                 transformYearlyGrouping(filter).andInclude(Keys.AVERAGE_AWARD_DAYS),
                 getSortByYearMonth(filter), skip(filter.getSkip()),

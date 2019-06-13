@@ -29,9 +29,9 @@ import static org.mockito.Mockito.when;
  */
 @Transactional
 public abstract class AbstractSpringDataRestControllerTest extends AbstractWebTest {
-    private PersistentEntityResourceAssembler persistentEntityResourceAssembler;
+    protected PersistentEntityResourceAssembler persistentEntityResourceAssembler;
 
-    private PageRequest pageRequest;
+    protected PageRequest pageRequest;
 
     @Autowired
     private WebApplicationContext context;

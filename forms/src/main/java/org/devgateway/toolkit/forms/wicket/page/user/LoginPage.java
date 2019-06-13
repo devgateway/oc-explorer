@@ -111,22 +111,6 @@ public class LoginPage extends BasePage {
 
         private TextFieldBootstrapFormComponent<String> usernameField;
         private PasswordFieldBootstrapFormComponent passwordField;
-        
-        protected void retrieveReferrerFromSavedRequestIfPresent() {
-            StringValue referrerParam = RequestCycle.get().getRequest().getRequestParameters()
-                    .getParameterValue("referrer");
-            if (!referrerParam.isEmpty()) {
-                referrer = referrerParam.toString();
-            } else {
-
-                HttpServletRequest request = ((HttpServletRequest) getRequest().getContainerRequest());
-                SavedRequest savedRequest = (SavedRequest) request.getSession()
-                        .getAttribute("SPRING_SECURITY_SAVED_REQUEST");
-                if (savedRequest != null) {
-                    referrer = savedRequest.getRedirectUrl();
-                }
-            }
-        }
 
         LoginForm(final String id) {
             super(id);

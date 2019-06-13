@@ -24,10 +24,14 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.lang.Classes;
 import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
+import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
+import org.apache.wicket.validation.validator.EmailAddressValidator;
+import org.apache.wicket.validation.validator.RangeValidator;
 import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.forms.exceptions.NullJpaServiceException;
 import org.devgateway.toolkit.forms.exceptions.NullListPageClassException;
@@ -36,14 +40,16 @@ import org.devgateway.toolkit.forms.wicket.components.ComponentUtil;
 import org.devgateway.toolkit.forms.wicket.components.form.BootstrapCancelButton;
 import org.devgateway.toolkit.forms.wicket.components.form.BootstrapDeleteButton;
 import org.devgateway.toolkit.forms.wicket.components.form.BootstrapSubmitButton;
+import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.DateFieldBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.DateTimeFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.GenericBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.SummernoteBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.TextAreaFieldBootstrapFormComponent;
+import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.page.BasePage;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
-import org.devgateway.toolkit.persistence.dao.Labelable;
-import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepository;
 import org.devgateway.toolkit.persistence.service.BaseJpaService;
-import org.devgateway.toolkit.reporting.spring.util.ReportsCacheService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -112,9 +118,6 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
     private EntityManager entityManager;
 
     @SpringBean(required = false)
-    protected ReportsCacheService reportsCacheService;
-
-    @SpringBean(required = false)
     private MarkupCacheService markupCacheService;
 
     public EditForm getEditForm() {
@@ -126,10 +129,6 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
     }
 
     public void flushReportingCaches() {
-        if (reportsCacheService != null) {
-            reportsCacheService.flushCache();
-        }
-
         if (markupCacheService != null) {
             markupCacheService.flushMarkupCache();
             markupCacheService.clearPentahoReportsCache();
@@ -515,13 +514,13 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
         return field;
     }
 
-    public <E extends GenericPersistable & Labelable> Select2ChoiceBootstrapFormComponent<E>
-    addSelect2ChoiceField(final String name, final TextSearchableRepository<E, Long> repository) {
-        GenericPersistableJpaRepositoryTextChoiceProvider<E> choiceProvider =
-                new GenericPersistableJpaRepositoryTextChoiceProvider<>(repository);
-        Select2ChoiceBootstrapFormComponent<E> component =
-                new Select2ChoiceBootstrapFormComponent<>(name, choiceProvider);
-        editForm.add(component);
-        return component;
-    }
+//    public <E extends GenericPersistable & Labelable & SerializableConsumer> Select2ChoiceBootstrapFormComponent<E>
+//    addSelect2ChoiceField(final String name, final TextSearchableRepository<E, Long> repository) {
+//        GenericPersistableJpaTextChoiceProvider<E> choiceProvider =
+//                new GenericPersistableJpaTextChoiceProvider<E>(repository);
+//        Select2ChoiceBootstrapFormComponent<E> component =
+//                new Select2ChoiceBootstrapFormComponent<>(name, choiceProvider);
+//        editForm.add(component);
+//        return component;
+//    }
 }

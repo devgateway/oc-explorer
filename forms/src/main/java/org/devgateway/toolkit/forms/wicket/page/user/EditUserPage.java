@@ -84,8 +84,8 @@ public class EditUserPage extends AbstractEditPage<Person> {
 
     protected TextFieldBootstrapFormComponent<String> email;
 
-    protected Select2ChoiceBootstrapFormComponent<Group> group = new Select2ChoiceBootstrapFormComponent<>("group",
-            new LabelPersistableJpaRepositoryTextChoiceProvider<>(groupRepository));
+    protected Select2ChoiceBootstrapFormComponent<Group> group = new Select2ChoiceBootstrapFormComponent<Group>("group",
+            new LabelPersistableJpaRepositoryTextChoiceProvider<Group>(groupService));
 
     protected TextFieldBootstrapFormComponent<String> title;
 
@@ -330,7 +330,4 @@ public class EditUserPage extends AbstractEditPage<Person> {
         }
     }
 
-    protected boolean isChangePassPage() {
-        return false;
-    }
 }

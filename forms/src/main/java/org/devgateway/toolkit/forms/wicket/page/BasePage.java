@@ -17,19 +17,6 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.dropdown.MenuBook
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.dropdown.MenuDivider;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.html.HtmlTag;
-import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
-import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton;
-import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarComponents;
-import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarDropDownButton;
-import de.agilecoders.wicket.core.markup.html.references.RespondJavaScriptReference;
-import de.agilecoders.wicket.core.markup.html.themes.bootstrap.BootstrapCssReference;
-import de.agilecoders.wicket.core.util.CssClassNames;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeCssReference;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeIconType;
-import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.dropdown.MenuBookmarkablePageLink;
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
-import de.agilecoders.wicket.core.markup.html.bootstrap.html.HtmlTag;
 import de.agilecoders.wicket.core.markup.html.bootstrap.image.GlyphIconType;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton;
@@ -40,11 +27,9 @@ import de.agilecoders.wicket.core.markup.html.themes.bootstrap.BootstrapCssRefer
 import de.agilecoders.wicket.core.util.CssClassNames;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeCssReference;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeIconType;
-import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -67,8 +52,6 @@ import org.devgateway.ocds.forms.wicket.page.list.ListAllColorIndicatorPage;
 import org.devgateway.ocds.forms.wicket.page.list.ListAllDashboardsPage;
 import org.devgateway.ocds.forms.wicket.page.list.ListMyDashboardsPage;
 import org.devgateway.toolkit.forms.WebConstants;
-import org.devgateway.toolkit.web.security.SecurityConstants;
-import org.devgateway.toolkit.web.security.SecurityUtil;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListGroupPage;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListTestFormPage;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListUserPage;
@@ -77,6 +60,8 @@ import org.devgateway.toolkit.forms.wicket.page.user.LogoutPage;
 import org.devgateway.toolkit.forms.wicket.styles.BaseStyles;
 import org.devgateway.toolkit.forms.wicket.styles.MainCss;
 import org.devgateway.toolkit.persistence.dao.Person;
+import org.devgateway.toolkit.web.security.SecurityConstants;
+import org.devgateway.toolkit.web.security.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -322,42 +307,6 @@ public abstract class BasePage extends GenericWebPage<Void> {
                         new StringResourceModel("navbar.jminix", this, null))
                         .setIconType(FontAwesomeIconType.bug));
 
-                final MenuBookmarkablePageLink<HALRedirectPage> halBrowserLink =
-                        new MenuBookmarkablePageLink<HALRedirectPage>(HALRedirectPage.class, null,
-                                new StringResourceModel("navbar.halbrowser", this, null)) {
-                            private static final long serialVersionUID = 1L;
-
-                // MenuBookmarkablePageLink<HALRedirectPage> halBrowserLink =
-                // new MenuBookmarkablePageLink<HALRedirectPage>(
-                // HALRedirectPage.class, null, new StringResourceModel(
-                // "navbar.halbrowser", this, null)) {
-                // private static final long serialVersionUID = 1L;
-                //
-                // @Override
-                // protected void onComponentTag(ComponentTag tag) {
-                // super.onComponentTag(tag);
-                // tag.put("target", "_blank");
-                // }
-                // };
-                // halBrowserLink.setIconType(FontAwesomeIconType.rss).setEnabled(true);
-
-                // list.add(halBrowserLink);
-
-                final MenuBookmarkablePageLink<UIRedirectPage> uiBrowserLink =
-                        new MenuBookmarkablePageLink<UIRedirectPage>(
-                                UIRedirectPage.class, null, new StringResourceModel("navbar.ui", this, null)) {
-                            private static final long serialVersionUID = 1L;
-
-                            @Override
-                            protected void onComponentTag(final ComponentTag tag) {
-                                super.onComponentTag(tag);
-                                tag.put("target", "_blank");
-                            }
-                        };
-                uiBrowserLink.setIconType(FontAwesomeIconType.dashboard).setEnabled(true);
-                list.add(uiBrowserLink);
-
-                list.add(new MenuDivider());
 
                 list.add(new MenuBookmarkablePageLink<Void>(EditAdminSettingsPage.class,
                         new StringResourceModel("navbar.adminSettings", BasePage.this, null))
@@ -367,12 +316,9 @@ public abstract class BasePage extends GenericWebPage<Void> {
                         new StringResourceModel("navbar.allDashboard", BasePage.this, null))
                         .setIconType(FontAwesomeIconType.filter));
 
-                list.add(uiBrowserLink);
-
                 return list;
             }
         };
-
         adminMenu.setIconType(FontAwesomeIconType.cog);
         MetaDataRoleAuthorizationStrategy.authorize(adminMenu, Component.RENDER, SecurityConstants.Roles.ROLE_ADMIN);
 

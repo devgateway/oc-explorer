@@ -12,17 +12,18 @@
 package org.devgateway.ocds.web.spring;
 
 import org.apache.commons.lang.BooleanUtils;
-import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.spring.ExcelImportService;
 import org.devgateway.ocds.persistence.mongo.spring.ImportResult;
 import org.devgateway.ocds.web.util.SettingsUtils;
 import org.devgateway.toolkit.persistence.dao.AdminSettings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 //@Service
 public class ScheduledExcelImportService {
 
-    private static final Logger LOGGER = Logger.getLogger(ScheduledExcelImportService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ScheduledExcelImportService.class);
 
     @Autowired
     private ExcelImportService excelImportService;

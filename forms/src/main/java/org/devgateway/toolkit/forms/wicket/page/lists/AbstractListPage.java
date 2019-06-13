@@ -99,8 +99,8 @@ public abstract class AbstractListPage<T extends GenericPersistable & Serializab
         return new ActionPanel(id, model);
     }
 
-    public SortableJpaRepositoryDataProvider<T> getProvider() {
-        return new SortableJpaRepositoryDataProvider<>(jpaRepository);
+    public SortableJpaServiceDataProvider<T> getProvider() {
+        return new SortableJpaServiceDataProvider<>(jpaService);
     }
 
     @Override

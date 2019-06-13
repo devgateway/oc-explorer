@@ -1,7 +1,8 @@
 package org.devgateway.ocds.web.rest.controller.excelchart;
 
 import com.mongodb.DBObject;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 @Service
 @CacheConfig(keyGenerator = "genericExcelChartKeyGenerator", cacheNames = "excelChartHelper")
 public class ExcelChartHelper {
-    private static Logger logger = Logger.getLogger(ExcelChartHelper.class);
+    private static Logger logger = LoggerFactory.getLogger(ExcelChartHelper.class);
 
     /**
      * Collects categories from a List of DBObjects.

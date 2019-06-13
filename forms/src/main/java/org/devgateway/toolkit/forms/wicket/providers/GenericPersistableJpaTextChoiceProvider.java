@@ -14,7 +14,6 @@
  */
 package org.devgateway.toolkit.forms.wicket.providers;
 
-import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
 import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
@@ -27,10 +26,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -47,7 +42,6 @@ public class GenericPersistableJpaTextChoiceProvider<T extends GenericPersistabl
 
     private static final Logger logger = LoggerFactory.getLogger(GenericPersistableJpaTextChoiceProvider.class);
 
-    protected static final Logger logger = Logger.getLogger(AbstractJpaRepositoryTextChoiceProvider.class);
     private T newObject;
 
 

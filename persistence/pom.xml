@@ -22,7 +22,6 @@
         <dozer.hibernate.model.version>0.3.7-19022019</dozer.hibernate.model.version>
         <commons.lang3.version>3.2.1</commons.lang3.version>
         <guava.version>24.1-jre</guava.version>
-        <commons-beanutils.version>1.9.3</commons-beanutils.version>
         <hibernate-validator.version>6.0.14.Final</hibernate-validator.version>
     </properties>
 

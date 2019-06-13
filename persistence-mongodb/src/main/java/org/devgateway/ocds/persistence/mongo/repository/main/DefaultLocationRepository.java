@@ -20,7 +20,7 @@ public interface DefaultLocationRepository extends MongoRepository<DefaultLocati
 
     @Override
     @CacheEvict(allEntries = true)
-    <S extends DefaultLocation> List<S> save(Iterable<S> entites);
+    <S extends DefaultLocation> List<S> saveAll(Iterable<S> entites);
 
     @Override
     @CacheEvict(allEntries = true)

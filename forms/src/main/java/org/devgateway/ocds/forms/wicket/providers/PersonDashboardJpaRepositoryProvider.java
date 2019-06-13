@@ -9,6 +9,8 @@ import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvid
 import org.devgateway.ocds.persistence.dao.UserDashboard;
 import org.devgateway.ocds.persistence.repository.UserDashboardRepository;
 import org.devgateway.toolkit.forms.WebConstants;
+import org.devgateway.toolkit.forms.wicket.providers.SortableJpaServiceDataProvider;
+import org.devgateway.toolkit.persistence.service.PersonService;
 import org.devgateway.toolkit.web.security.SecurityUtil;
 import org.devgateway.toolkit.forms.wicket.providers.SortableJpaRepositoryDataProvider;
 import org.devgateway.toolkit.persistence.repository.PersonRepository;
@@ -19,18 +21,18 @@ import org.springframework.data.domain.PageRequest;
  * @author mpost
  *
  */
-public class PersonDashboardJpaRepositoryProvider extends SortableJpaRepositoryDataProvider<UserDashboard> {
+public class PersonDashboardJpaRepositoryProvider extends SortableJpaServiceDataProvider<UserDashboard> {
 
     private static final long serialVersionUID = -490237568464403107L;
 
     private UserDashboardRepository userDashboardRepository;
 
-    private PersonRepository personRepository;
+    private PersonService personService;
 
     public PersonDashboardJpaRepositoryProvider(UserDashboardRepository jpaRepository,
-            PersonRepository personRepository) {
+            PersonService personService) {
         super(jpaRepository);
-        this.personRepository = personRepository;
+        this.personService = personService;
         userDashboardRepository = (UserDashboardRepository) jpaRepository;
     }
 
@@ -48,7 +50,7 @@ public class PersonDashboardJpaRepositoryProvider extends SortableJpaRepositoryD
 
     @Override
     public long size() {
-        return personRepository.getOne(SecurityUtil.getCurrentAuthenticatedPerson().getId()).getDashboards().size();
+        return personService.getOne(SecurityUtil.getCurrentAuthenticatedPerson().getId()).getDashboards().size();
     }
 
 }

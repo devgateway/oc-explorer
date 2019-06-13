@@ -38,7 +38,7 @@ import java.util.Set;
 @Entity
 @Audited
 @Table(indexes = {@Index(columnList = "username")})
-public class Person extends AbstractAuditableEntity implements Serializable, UserDetails {
+public class Person extends AbstractAuditableEntity implements Serializable, UserDetails, Labelable {
     private static final long serialVersionUID = 109780377848343674L;
 
     @ExcelExport
@@ -75,6 +75,14 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
     @ManyToMany(fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<Role> roles;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private UserDashboard defaultDashboard;
+
+
+    @ManyToMany(fetch = FetchType.EAGER,  mappedBy = "users")
+    private Set<UserDashboard> dashboards = new HashSet<>();
+
 
     @Transient
     private Collection<? extends GrantedAuthority> authorities;
@@ -245,4 +253,23 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
       return username;
     }
 
+    public UserDashboard getDefaultDashboard() {
+        return defaultDashboard;
+    }
+
+    public void setDefaultDashboard(UserDashboard defaultDashboard) {
+        this.defaultDashboard = defaultDashboard;
+    }
+
+    public Set<UserDashboard> getDashboards() {
+        return dashboards;
+    }
+
+    public void setDashboards(Set<UserDashboard> dashboards) {
+        this.dashboards = dashboards;
+    }
+
+    public boolean isChangeProfilePassword() {
+        return changeProfilePassword;
+    }
 }

@@ -32,6 +32,8 @@
         <maven-checkstyle-plugin.version>3.0.0</maven-checkstyle-plugin.version>
         <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
         <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+        <poi.version>3.17</poi.version>
+        <commons-beanutils.version>1.9.3</commons-beanutils.version>
     </properties>
 
     <modules>

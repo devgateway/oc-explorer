@@ -13,6 +13,7 @@ import de.flapdoodle.embed.mongo.distribution.Feature;
 import de.flapdoodle.embed.mongo.distribution.IFeatureAwareVersion;
 import org.devgateway.toolkit.persistence.mongo.spring.MongoTemplateConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.mongo.MongoClientFactory;
 import org.springframework.boot.autoconfigure.mongo.MongoProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,6 +55,11 @@ public class MongoTemplateTestConfig {
         @Override
         public boolean enabled(Feature feature) {
             return features.contains(feature);
+        }
+
+        @Override
+        public EnumSet<Feature> getFeatures() {
+            return features;
         }
 
         @Override
@@ -111,8 +117,10 @@ public class MongoTemplateTestConfig {
         properties.setDatabase(originalUri);
         properties.setUri(null);
 
+        MongoClientFactory mcf=new MongoClientFactory(properties, environment);
+
         MongoTemplate template = new MongoTemplate(
-                new SimpleMongoDbFactory(properties.createMongoClient(this.options, environment),
+                new SimpleMongoDbFactory(mcf.createMongoClient(this.options),
                         properties.getDatabase()));
         ((MappingMongoConverter) template.getConverter()).setCustomConversions(customConversions);
         return template;
@@ -138,8 +146,11 @@ public class MongoTemplateTestConfig {
         properties.setPort(net.getPort());
         properties.setDatabase(originalUri + MongoTemplateConfig.SHADOW_POSTFIX);
         properties.setUri(null);
+
+        MongoClientFactory mcf=new MongoClientFactory(properties, environment);
+
         MongoTemplate template = new MongoTemplate(
-                new SimpleMongoDbFactory(properties.createMongoClient(this.options, environment),
+                new SimpleMongoDbFactory(mcf.createMongoClient(this.options),
                         properties.getDatabase()));
         ((MappingMongoConverter) template.getConverter()).setCustomConversions(customConversions);
         return template;

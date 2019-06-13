@@ -14,6 +14,7 @@ package org.devgateway.ocds.web.rest.controller.selector;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
@@ -47,7 +48,7 @@ public class ProcurementMethodSearchController extends GenericOCDSController {
 
         DBObject project = new BasicDBObject(MongoConstants.FieldNames.TENDER_PROC_METHOD, 1);
 
-        Aggregation agg = newAggregation(new CustomOperation(new BasicDBObject("$project", project)),
+        Aggregation agg = newAggregation(new CustomOperation(new Document("$project", project)),
                 group(ref(MongoConstants.FieldNames.TENDER_PROC_METHOD)));
 
         return releaseAgg(agg);

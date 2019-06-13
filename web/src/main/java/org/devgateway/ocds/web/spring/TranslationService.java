@@ -1,6 +1,14 @@
 package org.devgateway.ocds.web.spring;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.reflections.Reflections;
+import org.reflections.scanners.ResourcesScanner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
@@ -8,12 +16,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
-import org.apache.log4j.Logger;
-import org.reflections.Reflections;
-import org.reflections.scanners.ResourcesScanner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 /**
  * Created by mpostelnicu on 2/15/17.
@@ -23,7 +25,7 @@ public class TranslationService {
 
     private static final String TRANSLATION_PKG_NAME = "public.languages";
 
-    protected static Logger logger = Logger.getLogger(TranslationService.class);
+    protected static Logger logger = LoggerFactory.getLogger(TranslationService.class);
 
 
     @Autowired
