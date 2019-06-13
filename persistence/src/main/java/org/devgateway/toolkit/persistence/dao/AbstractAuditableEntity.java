@@ -86,7 +86,7 @@ public abstract class AbstractAuditableEntity extends GenericPersistable
      */
     @Override
     public Optional<String> getCreatedBy() {
-        return Optional.of(createdBy);
+        return Optional.ofNullable(createdBy);
     }
 
     /**
@@ -102,7 +102,7 @@ public abstract class AbstractAuditableEntity extends GenericPersistable
      */
     @Override
     public Optional<ZonedDateTime> getCreatedDate() {
-        return Optional.of(createdDate);
+        return Optional.ofNullable(createdDate);
     }
 
     /**
@@ -118,7 +118,7 @@ public abstract class AbstractAuditableEntity extends GenericPersistable
      */
     @Override
     public Optional<String> getLastModifiedBy() {
-        return Optional.of(lastModifiedBy);
+        return Optional.ofNullable(lastModifiedBy);
     }
 
     /**
@@ -134,7 +134,7 @@ public abstract class AbstractAuditableEntity extends GenericPersistable
      */
     @Override
     public Optional<ZonedDateTime> getLastModifiedDate() {
-        return Optional.of(lastModifiedDate);
+        return Optional.ofNullable(lastModifiedDate);
     }
 
     /**

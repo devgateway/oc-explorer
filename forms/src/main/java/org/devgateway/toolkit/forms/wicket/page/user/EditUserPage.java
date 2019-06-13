@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.page.user;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -201,8 +202,10 @@ public class EditUserPage extends AbstractEditPage<Person> {
             plainPassword.setVisibilityAllowed(true);
             plainPasswordCheck.setVisibilityAllowed(true);
         } else {
-            plainPassword.setVisibilityAllowed(editForm.getModelObject().getChangePasswordNextSignIn());
-            plainPasswordCheck.setVisibilityAllowed(editForm.getModelObject().getChangePasswordNextSignIn());
+            plainPassword.setVisibilityAllowed(
+                    BooleanUtils.isTrue(editForm.getModelObject().getChangePasswordNextSignIn()));
+            plainPasswordCheck.setVisibilityAllowed(
+                    BooleanUtils.isTrue(editForm.getModelObject().getChangePasswordNextSignIn()));
         }
 
         editForm.add(new EqualPasswordInputValidator(plainPassword.getField(), plainPasswordCheck.getField()));
