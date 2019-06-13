@@ -37,6 +37,7 @@
         <closure.compiler.version>v20190121</closure.compiler.version>
         <yuicompressor.version>2.4.8</yuicompressor.version>
         <wicket-datetime.version>8.0.0-M7</wicket-datetime.version>
+        <cglib.version>3.1</cglib.version>
     </properties>
 
     <dependencies>

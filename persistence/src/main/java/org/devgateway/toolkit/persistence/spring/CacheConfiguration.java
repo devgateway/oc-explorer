@@ -30,7 +30,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import javax.management.MBeanServer;
 import java.time.ZonedDateTime;
 import java.util.Optional;
-import javax.management.MBeanServer;
 
 /**
  * @author mpostelnicu

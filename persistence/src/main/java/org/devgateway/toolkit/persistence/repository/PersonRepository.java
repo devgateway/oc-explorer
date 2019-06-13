@@ -14,7 +14,10 @@ package org.devgateway.toolkit.persistence.repository;
 import org.devgateway.toolkit.persistence.dao.Person;
 import org.devgateway.toolkit.persistence.repository.norepository.BaseJpaRepository;
 import org.devgateway.toolkit.persistence.repository.norepository.TextSearchableRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -32,6 +35,7 @@ public interface PersonRepository extends BaseJpaRepository<Person, Long>, TextS
 
     Person findByEmail(String email);
 
-    Person findBySecret(String secret);
-
+    @Override
+    @Query("select p from Person p where lower(p.firstName) like %:name% or lower(p.lastName) like %:name%")
+    Page<Person> searchText(@Param("name")  String name, Pageable page);
 }

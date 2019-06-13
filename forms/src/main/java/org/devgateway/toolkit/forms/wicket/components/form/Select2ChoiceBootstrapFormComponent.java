@@ -14,9 +14,7 @@
  */
 package org.devgateway.toolkit.forms.wicket.components.form;
 
-import de.agilecoders.wicket.core.util.Attributes;
 import org.apache.commons.lang3.NotImplementedException;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.model.IModel;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.wicketstuff.select2.ChoiceProvider;

@@ -5,10 +5,12 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 
+import java.util.Optional;
+
 @NoRepositoryBean
 public interface GenericOrganizationRepository<T extends Organization> extends MongoRepository<T, String> {
 
-    T findOne(String id);
+    Optional<T> findById(String s);
 
     T findByIdOrNameAllIgnoreCase(String id, String name);
     

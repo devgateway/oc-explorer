@@ -16,6 +16,7 @@ package org.devgateway.toolkit.forms.wicket.page.user;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapForm;
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
@@ -29,7 +30,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.time.Duration;
 import org.devgateway.toolkit.forms.WebConstants;
-import org.devgateway.toolkit.web.security.SecurityUtil;
 import org.devgateway.toolkit.forms.wicket.SSAuthenticatedWebSession;
 import org.devgateway.toolkit.forms.wicket.components.form.PasswordFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFormComponent;
@@ -38,8 +38,8 @@ import org.devgateway.toolkit.forms.wicket.page.BasePage;
 import org.devgateway.toolkit.forms.wicket.page.Homepage;
 import org.devgateway.toolkit.persistence.dao.Person;
 import org.devgateway.toolkit.persistence.service.PersonService;
+import org.devgateway.toolkit.web.security.SecurityUtil;
 import org.springframework.security.web.savedrequest.SavedRequest;
-import org.devgateway.toolkit.persistence.repository.PersonRepository;
 import org.wicketstuff.annotation.mount.MountPath;
 
 import javax.servlet.http.HttpServletRequest;
@@ -154,7 +154,7 @@ public class LoginPage extends BasePage {
 
                     if (session.signIn(name, pass)) {
                         Person user = SecurityUtil.getCurrentAuthenticatedPerson();
-                        if (user.getChangePasswordNextSignIn()) {
+                        if (BooleanUtils.isTrue(user.getChangePasswordNextSignIn())) {
                             final PageParameters pageParam = new PageParameters();
                             pageParam.add(WebConstants.PARAM_ID, user.getId());
                             setResponsePage(ChangePasswordPage.class, pageParam);

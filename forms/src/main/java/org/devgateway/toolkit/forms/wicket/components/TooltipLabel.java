@@ -14,14 +14,13 @@
  */
 package org.devgateway.toolkit.forms.wicket.components;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.devgateway.toolkit.forms.wicket.components.util.ComponentUtil;
-
-import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
-import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
 
 /**
  * @author mpostelnicu

@@ -27,7 +27,8 @@ public class PersonDashboardJpaRepositoryProvider extends SortableJpaServiceData
 
     private PersonService personService;
 
-    public PersonDashboardJpaRepositoryProvider(UserDashboardService userDashboardService, PersonService personService) {
+    public PersonDashboardJpaRepositoryProvider(UserDashboardService userDashboardService,
+                                                PersonService personService) {
         super(userDashboardService);
         this.personService = personService;
         this.userDashboardService = userDashboardService;
@@ -47,7 +48,8 @@ public class PersonDashboardJpaRepositoryProvider extends SortableJpaServiceData
 
     @Override
     public long size() {
-        return personService.findById(SecurityUtil.getCurrentAuthenticatedPerson().getId()).get().getDashboards().size();
+        return personService.findById(SecurityUtil.getCurrentAuthenticatedPerson().getId()).get()
+                .getDashboards().size();
     }
 
 }

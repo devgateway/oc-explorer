@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.devgateway.toolkit.web.security;
 
-import java.security.Principal;
-import java.util.List;
 import org.devgateway.toolkit.persistence.dao.AdminSettings;
 import org.devgateway.toolkit.persistence.dao.Person;
 import org.devgateway.toolkit.persistence.dao.Role;
@@ -21,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.security.Principal;
+import java.util.List;
 
 public final class SecurityUtil {
 

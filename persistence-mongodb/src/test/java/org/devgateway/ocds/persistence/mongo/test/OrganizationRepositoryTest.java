@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Optional;
 
 public class OrganizationRepositoryTest extends AbstractMongoTest {
 
@@ -61,8 +62,8 @@ public class OrganizationRepositoryTest extends AbstractMongoTest {
 
     @Test
     public void testOrganizationSaveAndFind() {
-        final Organization foundOrg = organizationRepository.findOne(ORG_ID);
-        Assert.assertNotNull(foundOrg);
+        Optional<Organization> org = organizationRepository.findById(ORG_ID);
+        Assert.assertFalse(org.isPresent());
 
         final Organization foundOrg2 = organizationRepository.findByIdOrNameAndTypes(ORG_ID,
                 Organization.OrganizationType.procuringEntity);
