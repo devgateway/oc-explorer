@@ -1,6 +1,6 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import com.mongodb.DBObject;
+import org.bson.Document;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,10 +21,10 @@ public class TendersByItemClassificationTest extends AbstractEndPointControllerT
 
     @Test
     public void tendersByItemClassification() throws Exception {
-        final List<DBObject> numberOfTendersByItem = tendersByItemClassification
+        final List<Document> numberOfTendersByItem = tendersByItemClassification
                 .tendersByItemClassification(new YearFilterPagingRequest());
 
-        final DBObject first = numberOfTendersByItem.get(0);
+        final Document first = numberOfTendersByItem.get(0);
         String id = (String) first.get(Fields.UNDERSCORE_ID);
         String description = (String) first.get(TendersByItemClassification.Keys.DESCRIPTION);
         int totalTenders = (int) first.get(TendersByItemClassification.Keys.TOTAL_TENDERS);
@@ -34,7 +34,7 @@ public class TendersByItemClassificationTest extends AbstractEndPointControllerT
         Assert.assertEquals(1, totalTenders);
         Assert.assertEquals(9000.0, totalTenderAmount,0);
 
-        final DBObject second = numberOfTendersByItem.get(1);
+        final Document second = numberOfTendersByItem.get(1);
         id = (String) second.get(Fields.UNDERSCORE_ID);
         description = (String) second.get(TendersByItemClassification.Keys.DESCRIPTION);
         totalTenders = (int) second.get(TendersByItemClassification.Keys.TOTAL_TENDERS);

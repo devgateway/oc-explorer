@@ -2,6 +2,7 @@ package org.devgateway.ocds.web.rest.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.DBObject;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.repository.main.FlaggedReleaseRepository;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.ocds.web.spring.ReleaseFlaggingService;
@@ -55,7 +56,7 @@ public class CorruptionRiskDashboardTablesControllerTest extends AbstractEndPoin
 
     @Test
     public void corruptionRiskOverviewTableTest() throws Exception {
-        final List<DBObject> result = corruptionRiskDashboardTablesController
+        final List<Document> result = corruptionRiskDashboardTablesController
                 .corruptionRiskOverviewTable(new YearFilterPagingRequest());
         Assert.assertEquals(1, result.size());
         Assert.assertEquals("[ocds-endpoint-001] procuringEntity name",

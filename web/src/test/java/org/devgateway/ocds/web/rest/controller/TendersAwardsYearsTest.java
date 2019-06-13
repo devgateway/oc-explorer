@@ -1,6 +1,6 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import com.mongodb.DBObject;
+import org.bson.Document;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,17 +20,17 @@ public class TendersAwardsYearsTest extends AbstractEndPointControllerTest {
 
     @Test
     public void tendersAwardsYears() throws Exception {
-        final List<DBObject> response = tendersAwardsYears.tendersAwardsYears();
+        final List<Document> response = tendersAwardsYears.tendersAwardsYears();
 
-        final DBObject first = response.get(0);
+        final Document first = response.get(0);
         int year = (int) first.get(Fields.UNDERSCORE_ID);
         Assert.assertEquals(2014, year);
 
-        final DBObject second = response.get(1);
+        final Document second = response.get(1);
         year = (int) second.get(Fields.UNDERSCORE_ID);
         Assert.assertEquals(2015, year);
 
-        final DBObject third = response.get(2);
+        final Document third = response.get(2);
         year = (int) third.get(Fields.UNDERSCORE_ID);
         Assert.assertEquals(2016, year);
     }

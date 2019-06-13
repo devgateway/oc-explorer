@@ -1,16 +1,15 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import com.mongodb.BasicDBObject;
+import org.bson.Document;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author idobre
@@ -24,10 +23,10 @@ public class FundingByLocationControllerTest extends AbstractEndPointControllerT
 
     @Test
     public void fundingByTenderDeliveryLocation() throws Exception {
-        final List<DBObject> fundingByTenderDeliveryLocation = fundingByLocationController
+        final List<Document> fundingByTenderDeliveryLocation = fundingByLocationController
                 .fundingByTenderDeliveryLocation(new YearFilterPagingRequest());
 
-        final DBObject first = fundingByTenderDeliveryLocation.get(0);
+        final Document first = fundingByTenderDeliveryLocation.get(0);
         int year = (int) first.get(FundingByLocationController.Keys.YEAR);
         BasicDBObject deliveryLocation = (BasicDBObject) first
                 .get(FundingByLocationController.Keys.ITEMS_DELIVERY_LOCATION);
@@ -46,10 +45,10 @@ public class FundingByLocationControllerTest extends AbstractEndPointControllerT
 
     @Test
     public void qualityFundingByTenderDeliveryLocation() throws Exception {
-        final List<DBObject> qualityFundingByTenderDeliveryLocation = fundingByLocationController
+        final List<Document> qualityFundingByTenderDeliveryLocation = fundingByLocationController
                 .qualityFundingByTenderDeliveryLocation(new YearFilterPagingRequest());
 
-        final DBObject first = qualityFundingByTenderDeliveryLocation.get(0);
+        final Document first = qualityFundingByTenderDeliveryLocation.get(0);
         int totalTendersWithStartDate = (int) first.get(FundingByLocationController.Keys.TOTAL_TENDERS_WITH_START_DATE);
         int totalTendersWithStartDateAndLocation = (int) first
                 .get(FundingByLocationController.Keys.TOTAL_TENDERS_WITH_START_DATE_AND_LOCATION);

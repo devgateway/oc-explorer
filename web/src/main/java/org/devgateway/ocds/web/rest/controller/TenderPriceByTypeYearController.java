@@ -3,6 +3,7 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
@@ -46,7 +47,7 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
             + MongoConstants.FieldNames.TENDER_VALUE_AMOUNT)
     @RequestMapping(value = "/api/tenderPriceByProcurementMethod", method = {RequestMethod.POST,
             RequestMethod.GET}, produces = "application/json")
-    public List<DBObject> tenderPriceByProcurementMethod(
+    public List<Document> tenderPriceByProcurementMethod(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();

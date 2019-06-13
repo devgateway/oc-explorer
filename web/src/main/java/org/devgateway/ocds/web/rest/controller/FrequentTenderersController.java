@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.devgateway.ocds.web.rest.controller;
 
-import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
@@ -57,7 +57,7 @@ public class FrequentTenderersController extends GenericOCDSController {
             + "You can use all the filters that are available along with pagination options.")
     @RequestMapping(value = "/api/frequentTenderers", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> frequentTenderers(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> frequentTenderers(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         Aggregation agg = newAggregation(
                 match(where("tender.tenderers.1").exists(true).and("awards.suppliers.0").exists(true)
@@ -99,7 +99,7 @@ public class FrequentTenderersController extends GenericOCDSController {
     @RequestMapping(value = "/api/activeAwardsCount",
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> activeAwardsCount(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> activeAwardsCount(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         Aggregation agg = newAggregation(
                 match(where(MongoConstants.FieldNames.AWARDS_STATUS).is(Award.Status.active.toString())

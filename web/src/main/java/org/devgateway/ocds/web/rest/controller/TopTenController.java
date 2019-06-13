@@ -12,7 +12,6 @@
 package org.devgateway.ocds.web.rest.controller;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
 import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.Award;
@@ -84,7 +83,7 @@ public class TopTenController extends GenericOCDSController {
     @RequestMapping(value = "/api/topTenLargestAwards", method = {RequestMethod.POST,
             RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> topTenLargestAwards(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> topTenLargestAwards(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         BasicDBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
@@ -121,7 +120,7 @@ public class TopTenController extends GenericOCDSController {
             + "tender.procuringEntity.name")
     @RequestMapping(value = "/api/topTenLargestTenders", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> topTenLargestTenders(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> topTenLargestTenders(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         BasicDBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
@@ -150,7 +149,7 @@ public class TopTenController extends GenericOCDSController {
     @RequestMapping(value = "/api/topTenSuppliers", method = {RequestMethod.POST,
             RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> topTenLargestSuppliers(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> topTenLargestSuppliers(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         BasicDBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);

@@ -61,7 +61,7 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
             + "tender.tenderPeriod.startDate.")
     @RequestMapping(value = "/api/countTendersByYear",
             method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
-    public List<DBObject> countTendersByYear(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> countTendersByYear(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
         addYearlyMonthlyProjection(filter, project, ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE));
@@ -93,7 +93,7 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
             + "The year is calculated from the awards.date field.")
     @RequestMapping(value = "/api/countAwardsByYear",
             method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
-    public List<DBObject> countAwardsByYear(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> countAwardsByYear(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project0 = new BasicDBObject();
         project0.put("awards", 1);

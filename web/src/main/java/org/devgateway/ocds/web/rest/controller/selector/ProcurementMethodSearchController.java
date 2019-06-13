@@ -44,7 +44,7 @@ public class ProcurementMethodSearchController extends GenericOCDSController {
             + "These are taken from tender.procurementMethod")
     @RequestMapping(value = "/api/ocds/procurementMethod/all", method = { RequestMethod.POST,
             RequestMethod.GET }, produces = "application/json")
-    public List<DBObject> procurementMethods() {
+    public List<Document> procurementMethods() {
 
         DBObject project = new BasicDBObject(MongoConstants.FieldNames.TENDER_PROC_METHOD, 1);
 

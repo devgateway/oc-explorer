@@ -2,6 +2,7 @@ package org.devgateway.ocds.web.rest.controller.flags;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.flags.FlagsConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomGroupingOperation;
@@ -73,7 +74,7 @@ public abstract class AbstractFlagCrosstabController extends AbstractFlagControl
         return project2;
     }
 
-    protected List<DBObject> flagStats(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    protected List<Document> flagStats(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
 
         DBObject projectPrepare = getProjectPrepare(filter);

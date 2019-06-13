@@ -1,6 +1,6 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import com.mongodb.DBObject;
+import org.bson.Document;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,10 +20,10 @@ public class TenderPercentagesControllerTest extends AbstractEndPointControllerT
 
     @Test
     public void percentTendersCancelled() throws Exception {
-        final List<DBObject> percentTendersCancelled = tenderPercentagesController
+        final List<Document> percentTendersCancelled = tenderPercentagesController
                 .percentTendersCancelled(new YearFilterPagingRequest());
 
-        final DBObject first = percentTendersCancelled.get(0);
+        final Document first = percentTendersCancelled.get(0);
         int year = (int) first.get(TenderPercentagesController.Keys.YEAR);
         int totalTenders = (int) first.get(TenderPercentagesController.Keys.TOTAL_TENDERS);
         int totalCancelled = (int) first.get(TenderPercentagesController.Keys.TOTAL_CANCELLED);
@@ -33,7 +33,7 @@ public class TenderPercentagesControllerTest extends AbstractEndPointControllerT
         Assert.assertEquals(0, totalCancelled);
         Assert.assertEquals(0.0, percentCancelled, 0);
 
-        final DBObject second = percentTendersCancelled.get(1);
+        final Document second = percentTendersCancelled.get(1);
         year = (int) second.get(TenderPercentagesController.Keys.YEAR);
         totalTenders = (int) second.get(TenderPercentagesController.Keys.TOTAL_TENDERS);
         totalCancelled = (int) second.get(TenderPercentagesController.Keys.TOTAL_CANCELLED);
@@ -46,10 +46,10 @@ public class TenderPercentagesControllerTest extends AbstractEndPointControllerT
 
     @Test
     public void percentTendersWithTwoOrMoreTenderers() throws Exception {
-        final List<DBObject> percentTendersWithTwoOrMoreTenderers = tenderPercentagesController
+        final List<Document> percentTendersWithTwoOrMoreTenderers = tenderPercentagesController
                 .percentTendersWithTwoOrMoreTenderers(new YearFilterPagingRequest());
 
-        final DBObject first = percentTendersWithTwoOrMoreTenderers.get(0);
+        final Document first = percentTendersWithTwoOrMoreTenderers.get(0);
         int year = (int) first.get(TenderPercentagesController.Keys.YEAR);
         int totalTenders = (int) first.get(TenderPercentagesController.Keys.TOTAL_TENDERS);
         int totalTendersWithTwoOrMoreTenderers = (int) first
@@ -60,7 +60,7 @@ public class TenderPercentagesControllerTest extends AbstractEndPointControllerT
         Assert.assertEquals(1, totalTendersWithTwoOrMoreTenderers);
         Assert.assertEquals(100.0, percentTenders, 0);
 
-        final DBObject second = percentTendersWithTwoOrMoreTenderers.get(1);
+        final Document second = percentTendersWithTwoOrMoreTenderers.get(1);
         year = (int) second.get(TenderPercentagesController.Keys.YEAR);
         totalTenders = (int) second.get(TenderPercentagesController.Keys.TOTAL_TENDERS);
         totalTendersWithTwoOrMoreTenderers = (int) second
@@ -74,10 +74,10 @@ public class TenderPercentagesControllerTest extends AbstractEndPointControllerT
 
     @Test
     public void percentTendersAwarded() throws Exception {
-        final List<DBObject> percentTendersAwarded = tenderPercentagesController
+        final List<Document> percentTendersAwarded = tenderPercentagesController
                 .percentTendersAwarded(new YearFilterPagingRequest());
 
-        final DBObject first = percentTendersAwarded.get(0);
+        final Document first = percentTendersAwarded.get(0);
         int year = (int) first.get(TenderPercentagesController.Keys.YEAR);
         int totalTendersWithOneOrMoreTenderers = (int) first
                 .get(TenderPercentagesController.Keys.TOTAL_TENDERS_WITH_ONE_OR_MORE_TENDERERS);
@@ -89,7 +89,7 @@ public class TenderPercentagesControllerTest extends AbstractEndPointControllerT
         Assert.assertEquals(1, totalTendersWithTwoOrMoreTenderers);
         Assert.assertEquals(100.0, percentTenders, 0);
 
-        final DBObject second = percentTendersAwarded.get(1);
+        final Document second = percentTendersAwarded.get(1);
         year = (int) second.get(TenderPercentagesController.Keys.YEAR);
         totalTendersWithOneOrMoreTenderers = (int) second
                 .get(TenderPercentagesController.Keys.TOTAL_TENDERS_WITH_ONE_OR_MORE_TENDERERS);
@@ -104,10 +104,10 @@ public class TenderPercentagesControllerTest extends AbstractEndPointControllerT
 
     @Test
     public void percentTendersUsingEBid() throws Exception {
-        final List<DBObject> percentTendersUsingEBid = tenderPercentagesController
+        final List<Document> percentTendersUsingEBid = tenderPercentagesController
                 .percentTendersUsingEBid(new YearFilterPagingRequest());
 
-        final DBObject first = percentTendersUsingEBid.get(0);
+        final Document first = percentTendersUsingEBid.get(0);
         int year = (int) first.get(TenderPercentagesController.Keys.YEAR);
         int totalTenders = (int) first
                 .get(TenderPercentagesController.Keys.TOTAL_TENDERS);
@@ -119,7 +119,7 @@ public class TenderPercentagesControllerTest extends AbstractEndPointControllerT
         Assert.assertEquals(1, totalTendersUsingEbid);
         Assert.assertEquals(100.0, percentageTendersUsingEbid, 0);
 
-        final DBObject second = percentTendersUsingEBid.get(1);
+        final Document second = percentTendersUsingEBid.get(1);
         year = (int) second.get(TenderPercentagesController.Keys.YEAR);
         totalTenders = (int) second
                 .get(TenderPercentagesController.Keys.TOTAL_TENDERS);
@@ -134,10 +134,10 @@ public class TenderPercentagesControllerTest extends AbstractEndPointControllerT
 
     @Test
     public void percentTendersWithLinkedProcurementPlan() throws Exception {
-        final List<DBObject> percentTendersWithLinkedProcurementPlan = tenderPercentagesController
+        final List<Document> percentTendersWithLinkedProcurementPlan = tenderPercentagesController
                 .percentTendersWithLinkedProcurementPlan(new YearFilterPagingRequest());
 
-        final DBObject first = percentTendersWithLinkedProcurementPlan.get(0);
+        final Document first = percentTendersWithLinkedProcurementPlan.get(0);
         int year = (int) first.get(TenderPercentagesController.Keys.YEAR);
         int totalTendersWithLinkedProcurementPlan = (int) first
                 .get(TenderPercentagesController.Keys.TOTAL_TENDERS_WITH_LINKED_PROCUREMENT_PLAN);
@@ -149,7 +149,7 @@ public class TenderPercentagesControllerTest extends AbstractEndPointControllerT
         Assert.assertEquals(1, totalTenders);
         Assert.assertEquals(100.0, percentTenders, 0);
 
-        final DBObject second = percentTendersWithLinkedProcurementPlan.get(1);
+        final Document second = percentTendersWithLinkedProcurementPlan.get(1);
         year = (int) second.get(TenderPercentagesController.Keys.YEAR);
         totalTendersWithLinkedProcurementPlan = (int) second
                 .get(TenderPercentagesController.Keys.TOTAL_TENDERS_WITH_LINKED_PROCUREMENT_PLAN);

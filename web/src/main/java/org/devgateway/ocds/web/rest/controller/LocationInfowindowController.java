@@ -1,8 +1,8 @@
 package org.devgateway.ocds.web.rest.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.persistence.mongo.spring.json.Views;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
@@ -36,7 +36,7 @@ public class LocationInfowindowController extends GenericOCDSController {
     @RequestMapping(value = "/api/tendersByLocation", method = {RequestMethod.POST,
             RequestMethod.GET}, produces = "application/json")
     @JsonView(Views.Public.class)
-    public List<DBObject> tendersByLocation(
+    public List<Document> tendersByLocation(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         Aggregation agg = newAggregation(
@@ -59,7 +59,7 @@ public class LocationInfowindowController extends GenericOCDSController {
     @RequestMapping(value = "/api/planningByLocation", method = {RequestMethod.POST,
             RequestMethod.GET}, produces = "application/json")
     @JsonView(Views.Public.class)
-    public List<DBObject> planningByLocation(
+    public List<Document> planningByLocation(
             @ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
         Aggregation agg = newAggregation(
@@ -79,7 +79,7 @@ public class LocationInfowindowController extends GenericOCDSController {
     @RequestMapping(value = "/api/awardsByLocation", method = {RequestMethod.POST,
             RequestMethod.GET}, produces = "application/json")
     @JsonView(Views.Public.class)
-    public List<DBObject> awardsByLocation(
+    public List<Document> awardsByLocation(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         Aggregation agg = newAggregation(

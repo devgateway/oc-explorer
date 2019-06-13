@@ -3,8 +3,8 @@
  */
 package org.devgateway.ocds.web.rest.controller.selector;
 
-import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
@@ -36,7 +36,7 @@ public class TendersAwardsValueIntervals extends GenericOCDSController {
     @ApiOperation(value = "Returns the min and max of tender.value.amount")
     @RequestMapping(value = "/api/tenderValueInterval", method = {RequestMethod.POST,
             RequestMethod.GET}, produces = "application/json")
-    public List<DBObject> tenderValueInterval(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> tenderValueInterval(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         Aggregation agg = Aggregation.newAggregation(
                 match(where(MongoConstants.FieldNames.TENDER_VALUE_AMOUNT).exists(true).
@@ -59,7 +59,7 @@ public class TendersAwardsValueIntervals extends GenericOCDSController {
     @ApiOperation(value = "Returns the min and max of awards.value.amount")
     @RequestMapping(value = "/api/awardValueInterval", method = {RequestMethod.POST,
             RequestMethod.GET}, produces = "application/json")
-    public List<DBObject> awardValueInterval(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> awardValueInterval(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         Aggregation agg = Aggregation.newAggregation(
                 unwind("awards"),

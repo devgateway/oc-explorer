@@ -1,7 +1,7 @@
 package org.devgateway.ocds.web.rest.controller.flags.crosstab;
 
-import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.flags.FlagsConstants;
 import org.devgateway.ocds.web.rest.controller.flags.AbstractFlagCrosstabController;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
@@ -32,7 +32,7 @@ public class FlagI077CrosstabController extends AbstractFlagCrosstabController {
     @ApiOperation(value = "Crosstab for flag i077")
     @RequestMapping(value = "/api/flags/i077/crosstab",
             method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
-    public List<DBObject> flagStats(@ModelAttribute @Valid YearFilterPagingRequest filter) {
+    public List<Document> flagStats(@ModelAttribute @Valid YearFilterPagingRequest filter) {
         return super.flagStats(filter);
     }
 }

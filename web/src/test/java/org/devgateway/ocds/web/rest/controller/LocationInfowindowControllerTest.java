@@ -1,11 +1,12 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import com.mongodb.DBObject;
-import java.util.List;
+import org.bson.Document;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * @author mpostelnicu
@@ -18,26 +19,26 @@ public class LocationInfowindowControllerTest extends AbstractEndPointController
 
     @Test
     public void tendersByLocation() throws Exception {
-        final List<DBObject> tendersByLocation = locationInfowindowController.tendersByLocation(
+        final List<Document> tendersByLocation = locationInfowindowController.tendersByLocation(
                 new YearFilterPagingRequest());
         Assert.assertEquals(1, tendersByLocation.size());
-        final DBObject first = tendersByLocation.get(0);
+        final Document first = tendersByLocation.get(0);
     }
 
     @Test
     public void awardsByLocation() throws Exception {
-        final List<DBObject> awardsByLocation = locationInfowindowController.awardsByLocation(
+        final List<Document> awardsByLocation = locationInfowindowController.awardsByLocation(
                 new YearFilterPagingRequest());
         Assert.assertEquals(1, awardsByLocation.size());
-        final DBObject first = awardsByLocation.get(0);
+        final Document first = awardsByLocation.get(0);
     }
 
     @Test
     public void planningByLocation() throws Exception {
-        final List<DBObject> planningByLocation = locationInfowindowController.planningByLocation(
+        final List<Document> planningByLocation = locationInfowindowController.planningByLocation(
                 new YearFilterPagingRequest());
         Assert.assertEquals(1, planningByLocation.size());
-        final DBObject first = planningByLocation.get(0);
+        final Document first = planningByLocation.get(0);
     }
 
 }

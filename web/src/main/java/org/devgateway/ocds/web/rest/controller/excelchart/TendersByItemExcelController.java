@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
+import org.bson.Document;
 import org.devgateway.ocds.web.rest.controller.TendersByItemClassification;
 import org.devgateway.ocds.web.rest.controller.request.LangYearFilterPagingRequest;
 import org.devgateway.toolkit.web.excelcharts.ChartType;
@@ -43,7 +45,7 @@ public class TendersByItemExcelController extends ExcelChartOCDSController {
         final String chartTitle = translationService.getValue(filter.getLanguage(), "charts:bidsByItem:title");
 
         // fetch the data that will be displayed in the chart
-        final List<DBObject> numberOfTendersByItem =
+        final List<Document> numberOfTendersByItem =
                 tendersByItemClassification.tendersByItemClassification(filter);
 
         final List<?> categories = excelChartHelper.getCategoriesFromDBObject(

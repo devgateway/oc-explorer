@@ -53,7 +53,7 @@ public class TotalCancelledTendersByYearController extends GenericOCDSController
             + "The tender status has to be 'cancelled'. The year is retrieved from tender.tenderPeriod.startDate.")
     @RequestMapping(value = "/api/totalCancelledTendersByYear", method = { RequestMethod.POST, RequestMethod.GET },
             produces = "application/json")
-    public List<DBObject> totalCancelledTendersByYear(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> totalCancelledTendersByYear(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
 
         DBObject project = new BasicDBObject();

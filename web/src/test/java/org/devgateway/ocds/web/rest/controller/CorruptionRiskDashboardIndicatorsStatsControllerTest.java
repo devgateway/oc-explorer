@@ -1,7 +1,7 @@
 package org.devgateway.ocds.web.rest.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.DBObject;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.flags.FlagType;
 import org.devgateway.ocds.persistence.mongo.repository.main.FlaggedReleaseRepository;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
@@ -56,7 +56,7 @@ public class CorruptionRiskDashboardIndicatorsStatsControllerTest extends Abstra
 
     @Test
     public void totalFlagsByIndicatorTypeTest() throws Exception {
-        final List<DBObject> result = corruptionRiskDashboardIndicatorsStatsController
+        final List<Document> result = corruptionRiskDashboardIndicatorsStatsController
                 .totalFlaggedIndicatorsByIndicatorType(new YearFilterPagingRequest());
         Assert.assertEquals(1, result.size());
         Assert.assertEquals(FlagType.RIGGING.toString(), result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.TYPE));
@@ -65,7 +65,7 @@ public class CorruptionRiskDashboardIndicatorsStatsControllerTest extends Abstra
 
     @Test
     public void totalEligibleIndicatorsByIndicatorTypeTest() throws Exception {
-        final List<DBObject> result = corruptionRiskDashboardIndicatorsStatsController
+        final List<Document> result = corruptionRiskDashboardIndicatorsStatsController
                 .totalEligibleIndicatorsByIndicatorType(new YearFilterPagingRequest());
         Assert.assertEquals(3, result.size());
         Assert.assertEquals(FlagType.COLLUSION.toString(), result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController
@@ -88,7 +88,7 @@ public class CorruptionRiskDashboardIndicatorsStatsControllerTest extends Abstra
 
     @Test
     public void totalFlaggedIndicatorsByIndicatorTypeByYearTest() throws Exception {
-        final List<DBObject> result = corruptionRiskDashboardIndicatorsStatsController
+        final List<Document> result = corruptionRiskDashboardIndicatorsStatsController
                 .totalFlaggedIndicatorsByIndicatorTypeByYear(new YearFilterPagingRequest());
         Assert.assertEquals(1, result.size());
         Assert.assertEquals(FlagType.RIGGING.toString(), result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.TYPE));
@@ -98,7 +98,7 @@ public class CorruptionRiskDashboardIndicatorsStatsControllerTest extends Abstra
 
     @Test
     public void totalEligibleIndicatorsByIndicatorTypeByYearTest() throws Exception {
-        final List<DBObject> result = corruptionRiskDashboardIndicatorsStatsController
+        final List<Document> result = corruptionRiskDashboardIndicatorsStatsController
                 .totalEligibleIndicatorsByIndicatorTypeByYear(new YearFilterPagingRequest());
         Assert.assertEquals(6, result.size());
         Assert.assertEquals(FlagType.COLLUSION.toString(), result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController
@@ -115,7 +115,7 @@ public class CorruptionRiskDashboardIndicatorsStatsControllerTest extends Abstra
 
     @Test
     public void totalFlaggedProjectsByIndicatorTypeByYearTest() throws Exception {
-        final List<DBObject> result = corruptionRiskDashboardIndicatorsStatsController
+        final List<Document> result = corruptionRiskDashboardIndicatorsStatsController
                 .totalFlaggedProjectsByIndicatorTypeByYear(new YearFilterPagingRequest());
         Assert.assertEquals(1, result.size());
         Assert.assertEquals(FlagType.RIGGING.toString(), result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.TYPE));
@@ -126,7 +126,7 @@ public class CorruptionRiskDashboardIndicatorsStatsControllerTest extends Abstra
 
     @Test
     public void totalEligibleProjectsByIndicatorTypeByYearTest() throws Exception {
-        final List<DBObject> result = corruptionRiskDashboardIndicatorsStatsController
+        final List<Document> result = corruptionRiskDashboardIndicatorsStatsController
                 .totalEligibleProjectsByIndicatorTypeByYear(new YearFilterPagingRequest());
         Assert.assertEquals(6, result.size());
 
@@ -165,7 +165,7 @@ public class CorruptionRiskDashboardIndicatorsStatsControllerTest extends Abstra
 
     @Test
     public void totalProjectsByYearTest() throws Exception {
-        final List<DBObject> result = corruptionRiskDashboardIndicatorsStatsController
+        final List<Document> result = corruptionRiskDashboardIndicatorsStatsController
                 .totalProjectsByYear(new YearFilterPagingRequest());
         Assert.assertEquals(2, result.size());
 
@@ -179,7 +179,7 @@ public class CorruptionRiskDashboardIndicatorsStatsControllerTest extends Abstra
 
     @Test
     public void percentTotalProjectsFlaggedByYearTest() throws Exception {
-        final List<DBObject> result = corruptionRiskDashboardIndicatorsStatsController
+        final List<Document> result = corruptionRiskDashboardIndicatorsStatsController
                 .percentTotalProjectsFlaggedByYear(new YearFilterPagingRequest());
         Assert.assertEquals(1, result.size());
 
@@ -195,7 +195,7 @@ public class CorruptionRiskDashboardIndicatorsStatsControllerTest extends Abstra
 
     @Test
     public void percentTotalProjectsEligibleByYearTest() throws Exception {
-        final List<DBObject> result = corruptionRiskDashboardIndicatorsStatsController
+        final List<Document> result = corruptionRiskDashboardIndicatorsStatsController
                 .percentTotalProjectsEligibleByYear(new YearFilterPagingRequest());
         Assert.assertEquals(6, result.size());
 
@@ -235,7 +235,7 @@ public class CorruptionRiskDashboardIndicatorsStatsControllerTest extends Abstra
 
     @Test
     public void percentOfEligibleProjectsFlaggedByYearTest() throws Exception {
-        final List<DBObject> result = corruptionRiskDashboardIndicatorsStatsController
+        final List<Document> result = corruptionRiskDashboardIndicatorsStatsController
                 .percentOfEligibleProjectsFlaggedByYear(new YearFilterPagingRequest());
         Assert.assertEquals(6, result.size());
 
@@ -264,7 +264,7 @@ public class CorruptionRiskDashboardIndicatorsStatsControllerTest extends Abstra
     @Test
     public void totalFlagsTest() throws Exception {
 
-        final List<DBObject> result = corruptionRiskDashboardIndicatorsStatsController.totalFlags(new
+        final List<Document> result = corruptionRiskDashboardIndicatorsStatsController.totalFlags(new
                 YearFilterPagingRequest());
 
         Assert.assertEquals(2,

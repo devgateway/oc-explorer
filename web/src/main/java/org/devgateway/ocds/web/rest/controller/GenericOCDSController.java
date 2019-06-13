@@ -7,6 +7,7 @@ import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.apache.commons.lang3.ArrayUtils;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
@@ -87,12 +88,12 @@ public abstract class GenericOCDSController {
                 .getMappedResults();
     }
 
-    protected List<DBObject> releaseAgg(Aggregation agg) {
-        return releaseAgg(agg, DBObject.class);
+    protected List<Document> releaseAgg(Aggregation agg) {
+        return releaseAgg(agg, Document.class);
     }
 
-    protected List<DBObject> releaseAgg(Aggregation agg, AggregationOptions options) {
-        return releaseAgg(agg, options, DBObject.class);
+    protected List<Document> releaseAgg(Aggregation agg, AggregationOptions options) {
+        return releaseAgg(agg, options, Document.class);
     }
 
     protected <Z> List<Z> releaseAgg(Aggregation agg, Class<Z> clazz) {

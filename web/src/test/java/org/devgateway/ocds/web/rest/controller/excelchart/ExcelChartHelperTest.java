@@ -1,7 +1,6 @@
 package org.devgateway.ocds.web.rest.controller.excelchart;
 
-import com.mongodb.DBObject;
-import com.mongodb.util.JSON;
+import org.bson.Document;
 import org.devgateway.toolkit.web.AbstractWebTest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,11 +31,11 @@ public class ExcelChartHelperTest extends AbstractWebTest {
     @Test
     public void getCategoriesValuesFromDBObject() throws Exception {
         final ExcelChartHelper excelChartHelper = new ExcelChartHelper();
-        final List<DBObject> testDBObject = new ArrayList<>();
-        testDBObject.add((DBObject) JSON.parse("{'yearTest': 2015, 'amountTest': 1000}"));
-        testDBObject.add((DBObject) JSON.parse("{'yearTest': 2016, 'amountTest': 2000}"));
-        testDBObject.add((DBObject) JSON.parse("{'yearTest': 2017}"));
-        testDBObject.add((DBObject) JSON.parse("{'amountTest': 3000}"));
+        final List<Document> testDBObject = new ArrayList<>();
+        testDBObject.add(Document.parse("{'yearTest': 2015, 'amountTest': 1000}"));
+        testDBObject.add(Document.parse("{'yearTest': 2016, 'amountTest': 2000}"));
+        testDBObject.add(Document.parse("{'yearTest': 2017}"));
+        testDBObject.add(Document.parse("{'amountTest': 3000}"));
 
 
         final List<?> categories = excelChartHelper.getCategoriesFromDBObject("yearTest", testDBObject);

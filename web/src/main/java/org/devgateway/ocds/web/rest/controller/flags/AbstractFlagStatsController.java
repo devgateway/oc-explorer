@@ -2,6 +2,7 @@ package org.devgateway.ocds.web.rest.controller.flags;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import org.bson.Document;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomGroupingOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
@@ -93,7 +94,7 @@ public abstract class AbstractFlagStatsController extends AbstractFlagController
         return project2;
     }
 
-    public List<DBObject> flagStats(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> flagStats(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
         DBObject projectPrepare = getProjectPrepare(filter);
         DBObject group = getGroup(filter);
         DBObject projectPercentage = getProjectPercentage(filter);

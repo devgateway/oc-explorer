@@ -14,6 +14,7 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
@@ -58,7 +59,7 @@ public class TendersByItemClassification extends GenericOCDSController {
             + "The tender date is taken from tender.tenderPeriod.startDate.")
     @RequestMapping(value = "/api/tendersByItemClassification", method = { RequestMethod.POST,
             RequestMethod.GET }, produces = "application/json")
-    public List<DBObject> tendersByItemClassification(
+    public List<Document> tendersByItemClassification(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();

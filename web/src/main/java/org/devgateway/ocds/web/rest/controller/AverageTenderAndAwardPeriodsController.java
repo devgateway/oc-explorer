@@ -69,7 +69,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
             + "between tender.tenderPeriod.endDate and tender.tenderPeriod.startDate")
     @RequestMapping(value = "/api/averageTenderPeriod", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> averageTenderPeriod(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> averageTenderPeriod(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject tenderLengthDays = new BasicDBObject(
                 "$divide",
@@ -111,7 +111,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
             + "showing the percentage of tenders that have start and end dates vs the total tenders in the system")
     @RequestMapping(value = "/api/qualityAverageTenderPeriod",
             method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
-    public List<DBObject> qualityAverageTenderPeriod(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+    public List<Document> qualityAverageTenderPeriod(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
@@ -168,7 +168,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
             + "between tender.tenderPeriod.endDate and tender.tenderPeriod.startDate. The award has to be active.")
     @RequestMapping(value = "/api/averageAwardPeriod", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> averageAwardPeriod(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> averageAwardPeriod(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject awardLengthDays = new BasicDBObject("$divide", Arrays.asList(
                 new BasicDBObject("$subtract", Arrays.asList(
@@ -214,7 +214,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
             + "showing the percentage of awards that have start and end dates vs the total tenders in the system")
     @RequestMapping(value = "/api/qualityAverageAwardPeriod",
             method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
-    public List<DBObject> qualityAverageAwardPeriod(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+    public List<Document> qualityAverageAwardPeriod(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);

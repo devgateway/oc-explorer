@@ -1,11 +1,12 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import com.mongodb.DBObject;
-import java.util.List;
+import org.bson.Document;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * @author mpostelnicu
@@ -19,7 +20,7 @@ public class FrequentTenderersControllerTest extends AbstractEndPointControllerT
 
     @Test
     public void frequentTenderersTest() throws Exception {
-        final List<DBObject> frequentTenderers = frequentTenderersController
+        final List<Document> frequentTenderers = frequentTenderersController
                 .frequentTenderers(new YearFilterPagingRequest());
 
         Assert.assertEquals(0, frequentTenderers.size());
@@ -27,7 +28,7 @@ public class FrequentTenderersControllerTest extends AbstractEndPointControllerT
 
     @Test
     public void activeAwardsCountTest() throws Exception {
-        final List<DBObject> frequentTenderers = frequentTenderersController
+        final List<Document> frequentTenderers = frequentTenderersController
                 .activeAwardsCount(new YearFilterPagingRequest());
 
         Assert.assertEquals(2, frequentTenderers.size());

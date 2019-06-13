@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.devgateway.ocds.web.rest.controller;
 
-import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.cache.annotation.CacheConfig;
@@ -52,7 +52,7 @@ public class CorruptionRiskDashboardTablesController extends GenericOCDSControll
     @RequestMapping(value = "/api/corruptionRiskOverviewTable",
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> corruptionRiskOverviewTable(
+    public List<Document> corruptionRiskOverviewTable(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
 
@@ -78,7 +78,7 @@ public class CorruptionRiskDashboardTablesController extends GenericOCDSControll
     @RequestMapping(value = "/api/corruptionRiskOverviewTable/count",
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> corruptionRiskOverviewTableCount(
+    public List<Document> corruptionRiskOverviewTableCount(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         Aggregation agg = newAggregation(
