@@ -102,7 +102,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable & Serializab
      * This is a wrapper model that ensures we can easily edit the properties of
      * the entity
      */
-    private CompoundPropertyModel<T> compoundModel;
+    protected CompoundPropertyModel<T> compoundModel;
 
     /**
      * generic submit button for the form

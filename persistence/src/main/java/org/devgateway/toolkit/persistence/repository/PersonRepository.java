@@ -11,20 +11,19 @@
  *******************************************************************************/
 package org.devgateway.toolkit.persistence.repository;
 
-import java.util.List;
-
 import org.devgateway.toolkit.persistence.dao.Person;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.devgateway.toolkit.persistence.repository.norepository.BaseJpaRepository;
+import org.devgateway.toolkit.persistence.repository.norepository.TextSearchableRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author mpostelnicu
  */
 @Transactional
-public interface PersonRepository extends BaseJpaRepository<Person, Long> {
+public interface PersonRepository extends BaseJpaRepository<Person, Long>, TextSearchableRepository<Person, Long> {
 
     @Query("select p from Person p where p.username = ?1")
     List<Person> findByName(String username);

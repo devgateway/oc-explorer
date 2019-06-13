@@ -17,14 +17,14 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.devgateway.ocds.forms.wicket.page.list.ListAllDashboardsPage;
 import org.devgateway.ocds.forms.wicket.providers.LabelPersistableJpaRepositoryTextChoiceProvider;
 import org.devgateway.ocds.persistence.dao.UserDashboard;
-import org.devgateway.ocds.persistence.repository.UserDashboardRepository;
-import org.devgateway.toolkit.web.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.components.form.Select2MultiChoiceBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.TextAreaFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.persistence.dao.Person;
-import org.devgateway.toolkit.persistence.repository.PersonRepository;
+import org.devgateway.toolkit.persistence.service.PersonService;
+import org.devgateway.toolkit.persistence.service.UserDashboardService;
+import org.devgateway.toolkit.web.security.SecurityConstants;
 import org.wicketstuff.annotation.mount.MountPath;
 
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_ADMIN)
@@ -33,20 +33,15 @@ public class EditUserDashboardPage extends AbstractEditPage<UserDashboard> {
 
     private static final long serialVersionUID = -6069250112046118104L;
 
-    @Override
-    protected UserDashboard newInstance() {
-        return new UserDashboard();
-    }
+    @SpringBean
+    private UserDashboardService userDashboardService;
 
     @SpringBean
-    private UserDashboardRepository userDashboardRepository;
-
-    @SpringBean
-    private PersonRepository personRepository;
+    private PersonService personService;
 
     public EditUserDashboardPage(final PageParameters parameters) {
         super(parameters);
-        this.jpaRepository = userDashboardRepository;
+        this.jpaService = userDashboardService;
         this.listPageClass = ListAllDashboardsPage.class;
 
     }
@@ -67,13 +62,13 @@ public class EditUserDashboardPage extends AbstractEditPage<UserDashboard> {
 
         Select2MultiChoiceBootstrapFormComponent<Person> defaultDashboardUsers =
                 new Select2MultiChoiceBootstrapFormComponent<>("defaultDashboardUsers",
-                        new LabelPersistableJpaRepositoryTextChoiceProvider<>(personRepository));
+                        new LabelPersistableJpaRepositoryTextChoiceProvider<Person>(personService));
         defaultDashboardUsers.setEnabled(false);
         editForm.add(defaultDashboardUsers);
 
         Select2MultiChoiceBootstrapFormComponent<Person> users =
                 new Select2MultiChoiceBootstrapFormComponent<>("users",
-                        new LabelPersistableJpaRepositoryTextChoiceProvider<>(personRepository));
+                        new LabelPersistableJpaRepositoryTextChoiceProvider<>(personService));
         editForm.add(users);
 
         

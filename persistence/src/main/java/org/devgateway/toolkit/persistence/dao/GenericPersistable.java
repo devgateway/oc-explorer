@@ -16,10 +16,12 @@ package org.devgateway.toolkit.persistence.dao;
 
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
+import java.io.Serializable;
+
 /**
  * @author mpostelnicu
  *
  */
-public class GenericPersistable extends AbstractPersistable<Long> {
+public class GenericPersistable extends AbstractPersistable<Long> implements Serializable {
 
 }

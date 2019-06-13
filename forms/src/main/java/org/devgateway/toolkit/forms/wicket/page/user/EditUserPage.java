@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.page.user;
 
-import java.util.List;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -29,11 +27,8 @@ import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.devgateway.ocds.forms.wicket.providers.LabelPersistableJpaRepositoryTextChoiceProvider;
 import org.devgateway.ocds.persistence.dao.UserDashboard;
-import org.devgateway.ocds.persistence.repository.UserDashboardRepository;
-import org.devgateway.toolkit.forms.WebConstants;
-import org.devgateway.toolkit.web.security.SecurityConstants;
-import org.devgateway.toolkit.web.security.SecurityUtil;
 import org.devgateway.ocds.web.spring.SendEmailService;
+import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxToggleBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.PasswordFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.Select2ChoiceBootstrapFormComponent;
@@ -43,12 +38,16 @@ import org.devgateway.toolkit.forms.wicket.components.util.ComponentUtil;
 import org.devgateway.toolkit.forms.wicket.page.Homepage;
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListUserPage;
+import org.devgateway.toolkit.forms.wicket.providers.GenericPersistableJpaTextChoiceProvider;
 import org.devgateway.toolkit.persistence.dao.Person;
 import org.devgateway.toolkit.persistence.dao.Role;
 import org.devgateway.toolkit.persistence.dao.categories.Group;
 import org.devgateway.toolkit.persistence.service.PersonService;
 import org.devgateway.toolkit.persistence.service.RoleService;
+import org.devgateway.toolkit.persistence.service.UserDashboardService;
 import org.devgateway.toolkit.persistence.service.category.GroupService;
+import org.devgateway.toolkit.web.security.SecurityConstants;
+import org.devgateway.toolkit.web.security.SecurityUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.wicketstuff.annotation.mount.MountPath;
 
@@ -67,7 +66,7 @@ public class EditUserPage extends AbstractEditPage<Person> {
     private RoleService roleService;
 
     @SpringBean
-    private UserDashboardRepository userDashboardRepository;
+    private UserDashboardService userDashboardService;
 
 
     @SpringBean
@@ -85,15 +84,13 @@ public class EditUserPage extends AbstractEditPage<Person> {
     protected TextFieldBootstrapFormComponent<String> email;
 
     protected Select2ChoiceBootstrapFormComponent<Group> group = new Select2ChoiceBootstrapFormComponent<Group>("group",
-            new LabelPersistableJpaRepositoryTextChoiceProvider<Group>(groupService));
+            new LabelPersistableJpaRepositoryTextChoiceProvider<>(groupService));
 
     protected TextFieldBootstrapFormComponent<String> title;
 
     protected Select2ChoiceBootstrapFormComponent<UserDashboard> defaultDashboard =
             new Select2ChoiceBootstrapFormComponent<>("defaultDashboard",
-                    new GenericPersistableJpaRepositoryTextChoiceProvider<>(userDashboardRepository));
-
-    protected Select2ChoiceBootstrapFormComponent<Group> group;
+                    new GenericPersistableJpaTextChoiceProvider<UserDashboard>(userDashboardService));
 
     protected Select2MultiChoiceBootstrapFormComponent<Role> roles;
 
@@ -247,7 +244,7 @@ public class EditUserPage extends AbstractEditPage<Person> {
 
                 ensureDefaultDashboardIsAlsoAssignedDashboard(person);
 
-                jpaRepository.save(person);
+                jpaService.save(person);
                 if (!SecurityUtil.isCurrentUserAdmin()) {
                     setResponsePage(Homepage.class);
                 } else {

@@ -81,7 +81,7 @@ public abstract class AbstractListPage<T extends GenericPersistable & Serializab
 
     private SortableJpaServiceDataProvider<T> dataProvider;
 
-    private BootstrapBookmarkablePageLink<T> editPageLink;
+    protected BootstrapBookmarkablePageLink<T> editPageLink;
 
     protected Form excelForm;
 

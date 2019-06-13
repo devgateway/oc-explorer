@@ -18,8 +18,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.devgateway.ocds.forms.wicket.page.edit.EditColorIndicatorPairPage;
 import org.devgateway.ocds.persistence.dao.ColorIndicatorPair;
-import org.devgateway.ocds.persistence.repository.ColorIndicatorPairRepository;
 import org.devgateway.toolkit.forms.wicket.page.lists.AbstractListPage;
+import org.devgateway.toolkit.persistence.service.ColorIndicatorPairService;
 import org.devgateway.toolkit.web.security.SecurityConstants;
 import org.wicketstuff.annotation.mount.MountPath;
 
@@ -28,13 +28,13 @@ import org.wicketstuff.annotation.mount.MountPath;
 public class ListAllColorIndicatorPage extends AbstractListPage<ColorIndicatorPair> {
 
     @SpringBean
-    protected ColorIndicatorPairRepository colorIndicatorPairRepository;
+    protected ColorIndicatorPairService colorIndicatorPairService;
 
 
 
     public ListAllColorIndicatorPage(final PageParameters pageParameters) {
         super(pageParameters);
-        this.jpaRepository = colorIndicatorPairRepository;
+        this.jpaService = colorIndicatorPairService;
         this.editPageClass = EditColorIndicatorPairPage.class;
         columns.add(new PropertyColumn<ColorIndicatorPair, String>(new Model<String>("First Indicator"),
                 "firstIndicator", "firstIndicator"));

@@ -17,7 +17,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.devgateway.ocds.forms.wicket.providers.PersonDashboardJpaRepositoryProvider;
 import org.devgateway.ocds.persistence.dao.UserDashboard;
 import org.devgateway.toolkit.forms.wicket.providers.SortableJpaServiceDataProvider;
-import org.devgateway.toolkit.persistence.repository.PersonRepository;
+import org.devgateway.toolkit.persistence.service.PersonService;
 import org.devgateway.toolkit.web.security.SecurityConstants;
 import org.wicketstuff.annotation.mount.MountPath;
 
@@ -31,12 +31,12 @@ public class ListMyDashboardsPage extends ListAllDashboardsPage {
     private static final long serialVersionUID = 8105049572554654046L;
 
     @SpringBean
-    private PersonRepository personRepository;
+    private PersonService personService;
 
     
     @Override
     public SortableJpaServiceDataProvider<UserDashboard> getProvider() {
-        return new PersonDashboardJpaRepositoryProvider(userDashboardRepository, personRepository);
+        return new PersonDashboardJpaRepositoryProvider(userDashboardService, personService);
     }
 
     public ListMyDashboardsPage(final PageParameters pageParameters) {
