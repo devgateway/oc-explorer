@@ -12,3 +12,5 @@ npm-debug.log
 .idea
 rebel.xml
 /logs/
+/LOG_DIR_IS_UNDEFINED
+/derby.log
