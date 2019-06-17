@@ -202,10 +202,10 @@ public class EditUserPage extends AbstractEditPage<Person> {
             plainPassword.setVisibilityAllowed(true);
             plainPasswordCheck.setVisibilityAllowed(true);
         } else {
-            plainPassword.setVisibilityAllowed(
-                    BooleanUtils.isTrue(editForm.getModelObject().getChangePasswordNextSignIn()));
-            plainPasswordCheck.setVisibilityAllowed(
-                    BooleanUtils.isTrue(editForm.getModelObject().getChangePasswordNextSignIn()));
+            plainPassword.setVisibilityAllowed(BooleanUtils.toBoolean(
+                    editForm.getModelObject().getChangePasswordNextSignIn()));
+            plainPasswordCheck.setVisibilityAllowed(BooleanUtils.toBoolean(
+                    editForm.getModelObject().getChangePasswordNextSignIn()));
         }
 
         editForm.add(new EqualPasswordInputValidator(plainPassword.getField(), plainPasswordCheck.getField()));
