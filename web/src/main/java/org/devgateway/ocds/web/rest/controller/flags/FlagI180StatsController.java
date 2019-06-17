@@ -1,7 +1,7 @@
 package org.devgateway.ocds.web.rest.controller.flags;
 
-import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.flags.FlagsConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.cache.annotation.CacheConfig;
@@ -31,7 +31,7 @@ public class FlagI180StatsController extends AbstractFlagStatsController {
     @ApiOperation(value = "Stats for flag i180")
     @RequestMapping(value = "/api/flags/i180/stats",
             method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
-    public List<DBObject> flagStats(@ModelAttribute @Valid YearFilterPagingRequest filter) {
+    public List<Document> flagStats(@ModelAttribute @Valid YearFilterPagingRequest filter) {
         return super.flagStats(filter);
     }
 }

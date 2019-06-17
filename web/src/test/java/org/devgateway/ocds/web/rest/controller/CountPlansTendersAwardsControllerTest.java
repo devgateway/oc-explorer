@@ -1,13 +1,12 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import java.util.List;
-
+import org.bson.Document;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.mongodb.DBObject;
+import java.util.List;
 
 /**
  * @author idobre
@@ -21,16 +20,16 @@ public class CountPlansTendersAwardsControllerTest extends AbstractEndPointContr
 
     @Test
     public void countTendersByYear() throws Exception {
-        final List<DBObject> countTendersByYear = countPlansTendersAwardsController
+        final List<Document> countTendersByYear = countPlansTendersAwardsController
                 .countTendersByYear(new YearFilterPagingRequest());
 
-        final DBObject first = countTendersByYear.get(0);
+        final Document first = countTendersByYear.get(0);
         int year = (int) first.get(CountPlansTendersAwardsController.Keys.YEAR);
         int count = (int) first.get(CountPlansTendersAwardsController.Keys.COUNT);
         Assert.assertEquals(2014, year);
         Assert.assertEquals(1, count);
 
-        final DBObject second = countTendersByYear.get(1);
+        final Document second = countTendersByYear.get(1);
         year = (int) second.get(CountPlansTendersAwardsController.Keys.YEAR);
         count = (int) second.get(CountPlansTendersAwardsController.Keys.COUNT);
         Assert.assertEquals(2015, year);
@@ -39,16 +38,16 @@ public class CountPlansTendersAwardsControllerTest extends AbstractEndPointContr
 
     @Test
     public void countAwardsByYear() throws Exception {
-        final List<DBObject> countAwardsByYear = countPlansTendersAwardsController
+        final List<Document> countAwardsByYear = countPlansTendersAwardsController
                 .countAwardsByYear(new YearFilterPagingRequest());
 
-        final DBObject first = countAwardsByYear.get(0);
+        final Document first = countAwardsByYear.get(0);
         int year = (int) first.get(CountPlansTendersAwardsController.Keys.YEAR);
         int count = (int) first.get(CountPlansTendersAwardsController.Keys.COUNT);
         Assert.assertEquals(2015, year);
         Assert.assertEquals(1, count);
 
-        final DBObject second = countAwardsByYear.get(1);
+        final Document second = countAwardsByYear.get(1);
         year = (int) second.get(CountPlansTendersAwardsController.Keys.YEAR);
         count = (int) second.get(CountPlansTendersAwardsController.Keys.COUNT);
         Assert.assertEquals(2016, year);

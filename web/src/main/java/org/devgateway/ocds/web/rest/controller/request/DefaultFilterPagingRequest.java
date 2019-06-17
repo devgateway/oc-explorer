@@ -3,10 +3,10 @@
  */
 package org.devgateway.ocds.web.rest.controller.request;
 
-import cz.jirutka.validator.collection.constraints.EachPattern;
-import cz.jirutka.validator.collection.constraints.EachRange;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.Range;
 
+import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
 import java.util.TreeSet;
 
@@ -22,29 +22,29 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
             + "http://standard.open-contracting.org/latest/en/schema/codelists/#award-status")
     private TreeSet<String> awardStatus;
 
-    @EachPattern(regexp = "^[a-zA-Z0-9\\-]*$")
-    @ApiModelProperty(value = "This corresponds to the tender.items.classification._id")
-    private TreeSet<String> bidTypeId;
 
-    @EachPattern(regexp = "^[a-zA-Z0-9\\-]*$")
+    @ApiModelProperty(value = "This corresponds to the tender.items.classification._id")
+    private TreeSet<@Pattern(regexp = "^[a-zA-Z0-9\\-]*$") String> bidTypeId;
+
+
     @ApiModelProperty(value =
             "This corresponds the negated bidTypeId filter, matches elements that are NOT in the TreeSet of Ids")
-    private TreeSet<String> notBidTypeId;
+    private TreeSet<@Pattern(regexp = "^[a-zA-Z0-9\\-]*$") String> notBidTypeId;
 
-    @EachPattern(regexp = "^[a-zA-Z0-9\\-]*$")
+
     @ApiModelProperty(value = "This is the id of the organization/procuring entity. "
             + "Corresponds to the OCDS Organization.identifier")
-    private TreeSet<String> procuringEntityId;
+    private TreeSet<@Pattern(regexp = "^[a-zA-Z0-9\\-]*$") String> procuringEntityId;
 
-    @EachPattern(regexp = "^[a-zA-Z0-9\\-]*$")
+
     @ApiModelProperty(value = "This corresponds the negated procuringEntityId filter,"
             + " matches elements that are NOT in the TreeSet of Ids")
-    private TreeSet<String> notProcuringEntityId;
+    private TreeSet<@Pattern(regexp = "^[a-zA-Z0-9\\-]*$") String> notProcuringEntityId;
 
-    @EachPattern(regexp = "^[a-zA-Z0-9\\-]*$")
+
     @ApiModelProperty(value = "This is the id of the organization/supplier entity. "
             + "Corresponds to the OCDS Organization.identifier")
-    private TreeSet<String> supplierId;
+    private TreeSet<@Pattern(regexp = "^[a-zA-Z0-9\\-]*$") String> supplierId;
 
     @ApiModelProperty(value = "This is the new bidder format bids.details.tenderers._id")
     private TreeSet<String> bidderId;
@@ -71,16 +71,16 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
             + "Use /api/awardValueInterval to get the maximum allowed.")
     private BigDecimal maxAwardValue;
 
-    @EachPattern(regexp = "^[a-zA-Z0-9]*$")
+
     @ApiModelProperty(value = "This will filter releases that were flagged with a specific flag type "
             + ", by flags.flaggedStats.type, so it can filter by FRAUD, RIGGING, etc...")
-    private TreeSet<String> flagType;
+    private TreeSet<@Pattern(regexp = "^[a-zA-Z0-9]*$") String> flagType;
 
     @ApiModelProperty(value = "This will filter releases based on the count of the flags PER RELEASE, which is stored "
             + "in flags.totalFlagged. 0 (zero) is not allowed here, if you want to see all the releases where there "
             + "are no flags, just completely omit this filter.")
-    @EachRange(min = 1)
-    private TreeSet<Integer> totalFlagged;
+
+    private TreeSet<@Range(min = 1) Integer> totalFlagged;
 
     @ApiModelProperty(value = "Filters after tender.submissionMethod='electronicSubmission', also known as"
             + " eBids")

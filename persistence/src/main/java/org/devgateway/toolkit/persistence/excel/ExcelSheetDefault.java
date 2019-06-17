@@ -1,11 +1,13 @@
 package org.devgateway.toolkit.persistence.excel;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.devgateway.toolkit.persistence.excel.service.TranslateService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -24,11 +26,13 @@ import java.util.StringJoiner;
  * @since 13/11/2017
  */
 public class ExcelSheetDefault extends AbstractExcelSheet {
-    private static final Logger logger = Logger.getLogger(ExcelSheetDefault.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExcelSheetDefault.class);
 
     private static final String PARENTSHEET = "parentSheet";
     private static final String PARENTID = "parentID";
     private static final String PARENTROWNUMBER = "parentRowNumber";
+
+    private final TranslateService translateService;
 
     private final Sheet excelSheet;
 
@@ -49,13 +53,13 @@ public class ExcelSheetDefault extends AbstractExcelSheet {
      * {@link #excelSheetName} would be the name of the excel
      * and the recommended value is {@link Class#getSimpleName} toLowerCase.
      *
-     * @param workbook
-     * @param excelSheetName
      */
-    public ExcelSheetDefault(final Workbook workbook, final String excelSheetName) {
+    public ExcelSheetDefault(final Workbook workbook, final TranslateService translateService,
+                             final String excelSheetName) {
         super(workbook);
 
         this.excelSheetName = excelSheetName;
+        this.translateService = translateService;
         this.headerPrefix = new Stack<>();
 
         // it's possible that this sheet was created by other object
@@ -80,12 +84,10 @@ public class ExcelSheetDefault extends AbstractExcelSheet {
      * Constructor used to print an Object in a separate sheet
      * but with the additional possibility to create a link back to Object's Parent sheet.
      *
-     * @param workbook
-     * @param excelSheetName
-     * @param parentInfo
      */
-    ExcelSheetDefault(final Workbook workbook, final String excelSheetName, final Map<String, Object> parentInfo) {
-        this(workbook, excelSheetName);
+    ExcelSheetDefault(final Workbook workbook, final TranslateService translateService,
+                      final String excelSheetName, final Map<String, Object> parentInfo) {
+        this(workbook, translateService, excelSheetName);
 
         this.parentInfo = parentInfo;
     }
@@ -113,13 +115,13 @@ public class ExcelSheetDefault extends AbstractExcelSheet {
                 switch (fieldType) {
                     case basic:
                         int coll = getFreeColl(row);
-                        writeHeaderLabel(field, row, coll);
+                        writeHeaderLabel(clazz, field, row, coll);
                         writeCell(getFieldValue(field, object), row, coll);
 
                         break;
 
                     case object:
-                        headerPrefix.push(ExcelFieldService.getFieldName(field));
+                        headerPrefix.push(ExcelFieldService.getFieldName(clazz, field, translateService));
                         Class fieldClass = ExcelFieldService.getFieldClass(field);
 
                         if (ExcelFieldService.isCollection(field)) {
@@ -142,7 +144,7 @@ public class ExcelSheetDefault extends AbstractExcelSheet {
                         info.put(PARENTID, ExcelFieldService.getObjectID(object));
                         info.put(PARENTROWNUMBER, row.getRowNum() + 1);
 
-                        final ExcelSheet objectSepareteSheet = new ExcelSheetDefault(workbook,
+                        final ExcelSheet objectSepareteSheet = new ExcelSheetDefault(workbook, this.translateService,
                                 fieldClass.getSimpleName().toLowerCase(), info);
                         final List<Object> newObjects = new ArrayList();
                         final Object value = getFieldValue(field, object);
@@ -156,7 +158,7 @@ public class ExcelSheetDefault extends AbstractExcelSheet {
                         }
 
                         coll = getFreeColl(row);
-                        writeHeaderLabel(field, row, coll);
+                        writeHeaderLabel(clazz, field, row, coll);
                         final int rowNumber = objectSepareteSheet.writeSheetGetLink(fieldClass, newObjects);
                         if (rowNumber != -1) {
                             writeCellLink(field.getName(), row, coll,
@@ -172,7 +174,7 @@ public class ExcelSheetDefault extends AbstractExcelSheet {
                         break;
                 }
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                logger.error(e);
+                logger.error("writeRow Error!", e);
             }
         }
     }
@@ -215,7 +217,7 @@ public class ExcelSheetDefault extends AbstractExcelSheet {
                             }
                         }
 
-                        writeHeaderLabel(field, row, coll);
+                        writeHeaderLabel(clazz, field, row, coll);
                         writeCell(flattenValue.toString(), row, coll);
                         break;
 
@@ -224,7 +226,7 @@ public class ExcelSheetDefault extends AbstractExcelSheet {
                             logger.error("Unsupported operation for field: '" + field.getName() + "'! You can not "
                                     + "flatten an array of objects that contains other array of objects");
                         } else {
-                            headerPrefix.push(ExcelFieldService.getFieldName(field));
+                            headerPrefix.push(ExcelFieldService.getFieldName(clazz, field, translateService));
                             final Class fieldClass = ExcelFieldService.getFieldClass(field);
                             final List<Object> newObjects = new ArrayList();
 
@@ -251,7 +253,7 @@ public class ExcelSheetDefault extends AbstractExcelSheet {
                         break;
                 }
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                logger.error(e);
+                logger.error("writeRowFlattenObject error!", e);
             }
         }
     }
@@ -290,7 +292,7 @@ public class ExcelSheetDefault extends AbstractExcelSheet {
         } else {
             row = excelSheet.getRow(0);
         }
-        writeHeaderCell("No objects returned.", row, 0);
+        writeHeaderCell("There are no records to export", row, 0);
     }
 
     /**
@@ -331,9 +333,10 @@ public class ExcelSheetDefault extends AbstractExcelSheet {
     /**
      * Functions that check if the header cell is empty, if yes then add the field label.
      */
-    private void writeHeaderLabel(final Field field, final Row row, final int coll) {
+    private void writeHeaderLabel(final Class clazz, final Field field, final Row row, final int coll) {
         if (!headerWasWritten) {
-            writeHeaderLabel(getHeaderPrefix() + ExcelFieldService.getFieldName(field), row, coll);
+            writeHeaderLabel(getHeaderPrefix()
+                    + ExcelFieldService.getFieldName(clazz, field, translateService), row, coll);
         }
     }
 

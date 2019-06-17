@@ -1,14 +1,11 @@
 package org.devgateway.ocds.web.rest.controller.excelchart;
 
-import com.mongodb.DBObject;
-import com.mongodb.util.JSON;
-import org.apache.log4j.Logger;
+import org.bson.Document;
 import org.devgateway.toolkit.web.AbstractWebTest;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +15,7 @@ import java.util.List;
  * @since 9/14/16
  */
 public class ExcelChartHelperTest extends AbstractWebTest {
-    private static Logger logger = Logger.getLogger(ExcelChartHelperTest.class);
+    private static Logger logger = LoggerFactory.getLogger(ExcelChartHelperTest.class);
 
 //    @Autowired
 //    private CacheManager cacheManager;
@@ -34,11 +31,11 @@ public class ExcelChartHelperTest extends AbstractWebTest {
     @Test
     public void getCategoriesValuesFromDBObject() throws Exception {
         final ExcelChartHelper excelChartHelper = new ExcelChartHelper();
-        final List<DBObject> testDBObject = new ArrayList<>();
-        testDBObject.add((DBObject) JSON.parse("{'yearTest': 2015, 'amountTest': 1000}"));
-        testDBObject.add((DBObject) JSON.parse("{'yearTest': 2016, 'amountTest': 2000}"));
-        testDBObject.add((DBObject) JSON.parse("{'yearTest': 2017}"));
-        testDBObject.add((DBObject) JSON.parse("{'amountTest': 3000}"));
+        final List<Document> testDBObject = new ArrayList<>();
+        testDBObject.add(Document.parse("{'yearTest': 2015, 'amountTest': 1000}"));
+        testDBObject.add(Document.parse("{'yearTest': 2016, 'amountTest': 2000}"));
+        testDBObject.add(Document.parse("{'yearTest': 2017}"));
+        testDBObject.add(Document.parse("{'amountTest': 3000}"));
 
 
         final List<?> categories = excelChartHelper.getCategoriesFromDBObject("yearTest", testDBObject);

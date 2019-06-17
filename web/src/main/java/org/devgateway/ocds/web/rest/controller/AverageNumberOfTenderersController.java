@@ -14,6 +14,7 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
@@ -56,7 +57,7 @@ public class AverageNumberOfTenderersController extends GenericOCDSController {
 
     @RequestMapping(value = "/api/averageNumberOfTenderersYearly",
             method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
-    public List<DBObject> averageNumberOfTenderersYearly(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> averageNumberOfTenderersYearly(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
         addYearlyMonthlyProjection(filter, project, ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE));
@@ -83,7 +84,7 @@ public class AverageNumberOfTenderersController extends GenericOCDSController {
 
     @RequestMapping(value = "/api/averageNumberOfTenderers",
             method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
-    public List<DBObject> averageNumberOfTenderers(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> averageNumberOfTenderers(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
         addYearlyMonthlyProjection(filter, project, ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE));

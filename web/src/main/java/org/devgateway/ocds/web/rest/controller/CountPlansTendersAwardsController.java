@@ -14,6 +14,7 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
@@ -60,7 +61,7 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
             + "tender.tenderPeriod.startDate.")
     @RequestMapping(value = "/api/countTendersByYear",
             method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
-    public List<DBObject> countTendersByYear(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> countTendersByYear(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
         addYearlyMonthlyProjection(filter, project, ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE));
@@ -70,7 +71,7 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
                         andOperator(getYearDefaultFilterCriteria(filter,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE
                         ))),
-                new CustomOperation(new BasicDBObject("$project", project)),
+                new CustomOperation(new Document("$project", project)),
                 group(getYearlyMonthlyGroupingFields(filter)).count().as(Keys.COUNT),
                 transformYearlyGrouping(filter).andInclude(Keys.COUNT),
                 getSortByYearMonth(filter),
@@ -92,7 +93,7 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
             + "The year is calculated from the awards.date field.")
     @RequestMapping(value = "/api/countAwardsByYear",
             method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
-    public List<DBObject> countAwardsByYear(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> countAwardsByYear(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project0 = new BasicDBObject();
         project0.put("awards", 1);
@@ -102,11 +103,11 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
 
         Aggregation agg = Aggregation.newAggregation(match(where("awards.0").exists(true).
                         andOperator(getDefaultFilterCriteria(filter))),
-                new CustomOperation(new BasicDBObject("$project", project0)),
+                new CustomOperation(new Document("$project", project0)),
                 unwind("awards"), match(where(MongoConstants.FieldNames.AWARDS_DATE).exists(true).
                         andOperator(
                                 getYearFilterCriteria(filter.awardFiltering(), MongoConstants.FieldNames.AWARDS_DATE))),
-                new CustomOperation(new BasicDBObject("$project", project)),
+                new CustomOperation(new Document("$project", project)),
                 group(getYearlyMonthlyGroupingFields(filter)).count().as(Keys.COUNT),
                 transformYearlyGrouping(filter).andInclude(Keys.COUNT),
                 getSortByYearMonth(filter),

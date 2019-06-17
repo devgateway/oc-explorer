@@ -48,7 +48,7 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
                 .getResource("json/fictional-example/ocds-213czf-000-00001-01-planning.json").getFile());
         final JsonImportPackage releasePackageJsonImport = new ReleasePackageJsonImport(releaseRepository, file);
         final Collection<Release> releases = releasePackageJsonImport.importObjects();
-        final Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-01-planning");
+        final Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-01-planning").get();
 
         Assert.assertEquals(1, releases.size());
         Assert.assertNotNull(importedRelease);
@@ -63,7 +63,7 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
                 .getResource("json/fictional-example/ocds-213czf-000-00001-02-tender.json").getFile());
         final ReleasePackageJsonImport releasePackageJsonImport = new ReleasePackageJsonImport(releaseRepository, file);
         final Collection<Release> releases = releasePackageJsonImport.importObjects();
-        final Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-02-tender");
+        final Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-02-tender").get();
 
         Assert.assertEquals(1, releases.size());
         Assert.assertNotNull(importedRelease);
@@ -78,7 +78,7 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
                 .getResource("json/fictional-example/ocds-213czf-000-00001-03-tenderAmendment.json").getFile());
         final ReleasePackageJsonImport releasePackageJsonImport = new ReleasePackageJsonImport(releaseRepository, file);
         final Collection<Release> releases = releasePackageJsonImport.importObjects();
-        final Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-03-tenderAmendment");
+        final Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-03-tenderAmendment").get();
 
         Assert.assertEquals(1, releases.size());
         Assert.assertNotNull(importedRelease);
@@ -94,7 +94,7 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
                 .getFile());
         final ReleasePackageJsonImport releasePackageJsonImport = new ReleasePackageJsonImport(releaseRepository, file);
         final Collection<Release> releases = releasePackageJsonImport.importObjects();
-        final Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-04-award");
+        final Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-04-award").get();
 
         Assert.assertEquals(1, releases.size());
         Assert.assertNotNull(importedRelease);
@@ -110,7 +110,7 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
                 .getResource("json/fictional-example/ocds-213czf-000-00001-05-contract.json").getFile());
         final ReleasePackageJsonImport releasePackageJsonImport = new ReleasePackageJsonImport(releaseRepository, file);
         final Collection<Release> releases = releasePackageJsonImport.importObjects();
-        final Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-05-contract");
+        final Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-05-contract").get();
 
         Assert.assertEquals(1, releases.size());
         Assert.assertNotNull(importedRelease);
@@ -126,7 +126,7 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
                 .getResource("json/fictional-example/ocds-213czf-000-00001-06-implementation.json").getFile());
         final ReleasePackageJsonImport releasePackageJsonImport = new ReleasePackageJsonImport(releaseRepository, file);
         final Collection<Release> releases = releasePackageJsonImport.importObjects();
-        final Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-06-implementation");
+        final Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-06-implementation").get();
 
         Assert.assertEquals(1, releases.size());
         Assert.assertNotNull(importedRelease);

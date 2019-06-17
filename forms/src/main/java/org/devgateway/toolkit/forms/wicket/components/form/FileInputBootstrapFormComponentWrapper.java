@@ -14,12 +14,11 @@ package org.devgateway.toolkit.forms.wicket.components.form;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
-import de.agilecoders.wicket.core.markup.html.bootstrap.image.GlyphIconType;
 import de.agilecoders.wicket.core.markup.html.bootstrap.image.IconBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInput;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.FileInputConfig;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeIconType;
 import de.agilecoders.wicket.jquery.Key;
-import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
@@ -35,7 +34,6 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
@@ -44,13 +42,13 @@ import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.util.lang.Objects;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
-import org.devgateway.toolkit.web.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.components.ComponentUtil;
 import org.devgateway.toolkit.forms.wicket.components.util.CustomDownloadLink;
 import org.devgateway.toolkit.forms.wicket.events.EditingDisabledEvent;
 import org.devgateway.toolkit.forms.wicket.events.EditingEnabledEvent;
 import org.devgateway.toolkit.persistence.dao.FileContent;
 import org.devgateway.toolkit.persistence.dao.FileMetadata;
+import org.devgateway.toolkit.web.security.SecurityConstants;
 import org.springframework.util.ObjectUtils;
 
 import java.io.IOException;
@@ -63,16 +61,14 @@ import java.util.List;
 /**
  * @author idobre
  * @since 11/13/14
- *
- *        Multi upload file component that acts as a form component
+ * <p>
+ * Multi upload file component that acts as a form component
  */
 
 public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPanel<T> {
     private static final long serialVersionUID = 1L;
 
-    protected static Logger logger = Logger.getLogger(FileInputBootstrapFormComponentWrapper.class);
-
-    protected Collection<FileMetadata> filesModel;
+    private Collection<FileMetadata> filesModel;
 
     private int maxFiles = 0;
 
@@ -85,11 +81,12 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
 
     private WebMarkupContainer pendingFiles;
 
-    protected BootstrapFileInput bootstrapFileInput;
+    private BootstrapFileInput bootstrapFileInput;
 
-    protected Boolean visibleOnlyToAdmin = false;
+    private Boolean visibleOnlyToAdmin = false;
 
     private Boolean disableDeleteButton = false;
+
     private boolean requireAtLeastOneItem = false;
 
     public FileInputBootstrapFormComponentWrapper(final String id, final IModel<T> model) {
@@ -97,7 +94,7 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
 
         setOutputMarkupId(true);
         setRenderBodyOnly(true); // we need this because bootstrap is adding
-                                 // unnecessary classes to the component
+        // unnecessary classes to the component
     }
 
     public FileInputBootstrapFormComponentWrapper<T> maxFiles(final int maxFiles) {
@@ -150,8 +147,8 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
         alreadyUploadedFiles
                 .add(new Label("uploadedFilesTitle", new StringResourceModel("uploadedFilesTitle", this, null)));
 
-        AbstractReadOnlyModel<List<FileMetadata>> alreadyUploadedFilesModel =
-                new AbstractReadOnlyModel<List<FileMetadata>>() {
+        IModel<List<FileMetadata>> alreadyUploadedFilesModel =
+                new IModel<List<FileMetadata>>() {
                     private static final long serialVersionUID = 1L;
 
                     @Override
@@ -224,7 +221,7 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
                         target.add(alreadyUploadedFiles);
                     }
                 };
-                delete.add(new IconBehavior(GlyphIconType.remove));
+                delete.add(new IconBehavior(FontAwesomeIconType.trash));
                 delete.add(new TooltipBehavior(new StringResourceModel("removeUploadedFileTooltip",
                         FileInputBootstrapFormComponentWrapper.this, null), TOOLTIP_CONFIG));
 
@@ -273,6 +270,8 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
 
             @Override
             protected void onConfigure() {
+                super.onConfigure();
+
                 if (filesModel != null && filesModel.size() > 0) {
                     for (FileMetadata file : filesModel) {
                         if (file.isNew()) {
@@ -293,7 +292,7 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
 
         pendingFiles.add(new Label("pendingFilesTitle", new StringResourceModel("pendingFilesTitle", this, null)));
 
-        AbstractReadOnlyModel<List<FileMetadata>> pendingFilesModel = new AbstractReadOnlyModel<List<FileMetadata>>() {
+        IModel<List<FileMetadata>> pendingFilesModel = new IModel<List<FileMetadata>>() {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -331,7 +330,7 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
                         target.add(pendingFiles);
                     }
                 };
-                delete.add(new IconBehavior(GlyphIconType.remove));
+                delete.add(new IconBehavior(FontAwesomeIconType.trash));
                 delete.add(new TooltipBehavior(new StringResourceModel("removeUploadedFileTooltip",
                         FileInputBootstrapFormComponentWrapper.this, null), TOOLTIP_CONFIG));
 

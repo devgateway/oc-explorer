@@ -1,13 +1,12 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import java.util.List;
-
+import org.bson.Document;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.mongodb.DBObject;
+import java.util.List;
 
 /**
  * @author idobre
@@ -21,7 +20,7 @@ public class TotalCancelledTendersByYearControllerTest extends AbstractEndPointC
 
     @Test
     public void totalCancelledTendersByYear() throws Exception {
-        final List<DBObject> totalCancelledTendersByYear = totalCancelledTendersByYearController
+        final List<Document> totalCancelledTendersByYear = totalCancelledTendersByYearController
                 .totalCancelledTendersByYear(new YearFilterPagingRequest());
 
         Assert.assertEquals(0, totalCancelledTendersByYear.size());

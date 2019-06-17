@@ -1,6 +1,5 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.json.JsonImportPackage;
@@ -10,6 +9,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 
@@ -23,7 +24,7 @@ import java.util.List;
  * Class that imports some test releases from 'endpoint-data-test.json' file and is used to test each endpoint.
  */
 public abstract class AbstractEndPointControllerTest extends AbstractWebTest {
-    protected static Logger logger = Logger.getLogger(AbstractEndPointControllerTest.class);
+    protected static Logger logger = LoggerFactory.getLogger(AbstractEndPointControllerTest.class);
 
     @Autowired
     private ReleaseRepository releaseRepository;

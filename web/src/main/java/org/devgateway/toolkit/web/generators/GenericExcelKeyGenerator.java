@@ -11,12 +11,12 @@ import java.lang.reflect.Method;
 /**
  * @author idobre
  * @since 16/11/2017
- *
+ * <p>
  * {@link KeyGenerator} that uses some parameters to create a key.
  * This KeyGenerator is used for Excel File Generator.
  */
 public class GenericExcelKeyGenerator implements KeyGenerator {
-    private final Logger logger = LoggerFactory.getLogger(GenericExcelKeyGenerator.class);
+    private static final Logger logger = LoggerFactory.getLogger(GenericExcelKeyGenerator.class);
 
     private final ObjectMapper objectMapper;
 

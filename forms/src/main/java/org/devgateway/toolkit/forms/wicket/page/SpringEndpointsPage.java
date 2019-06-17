@@ -26,16 +26,10 @@ import org.devgateway.toolkit.web.security.SecurityConstants;
 public class SpringEndpointsPage extends BasePage {
 
     /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
-
-    /**
      * @param parameters
      */
     public SpringEndpointsPage(final PageParameters parameters) {
         super(parameters);
-        // TODO Auto-generated constructor stub
     }
 
 }

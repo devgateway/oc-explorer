@@ -11,8 +11,9 @@
  *******************************************************************************/
 package org.devgateway.ocds.web.spring;
 
-import org.apache.log4j.Logger;
 import org.devgateway.toolkit.persistence.dao.Person;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -27,20 +28,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class SendEmailService {
 
-    private static final Logger LOGGER = Logger.getLogger(SendEmailService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SendEmailService.class);
 
     @Autowired
     private JavaMailSender javaMailSenderImpl;
 
     private SimpleMailMessage templateMessage;
-
-    public SimpleMailMessage getTemplateMessage() {
-        return templateMessage;
-    }
-
-    public void setTemplateMessage(final SimpleMailMessage templateMessage) {
-        this.templateMessage = templateMessage;
-    }
 
     /**
      * Send a reset password email. This is UNSAFE because passwords are sent in clear text.
@@ -50,12 +43,21 @@ public class SendEmailService {
      * @param newPassword
      */
     public void sendEmailResetPassword(final Person person, final String newPassword) {
-        sendEmail("Recover your password", "Dear " + person.getFirstName() + " " + person.getLastName()
-                + ",\n\n"
-                + "These are your new login credentials for E-Procurement Toolkit.\n\n" + "Username: "
-                + person.getUsername() + "\n" + "Password: " + newPassword + "\n\n"
+        final SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setTo(person.getEmail());
+        msg.setFrom("support@developmentgateway.org");
+        msg.setSubject("Recover your password");
+        msg.setText("Dear " + person.getFirstName() + " " + person.getLastName() + ",\n\n"
+                + "These are your new login credentials for DGToolkit.\n\n" + "Username: " + person.getUsername() + "\n"
+                + "Password: " + newPassword + "\n\n"
                 + "At login, you will be prompted to change your password to one of your choice.\n\n" + "Thank you,\n"
-                + "DG Team", person.getEmail());
+                + "DG Team");
+        try {
+            javaMailSenderImpl.send(msg);
+        } catch (MailException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void sendEmail(final String subject, final String text, final String to) {

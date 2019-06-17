@@ -11,17 +11,13 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.components.form;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.ButtonGroup;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkbox.bootstrapcheckbox.BootstrapCheckBoxPicker;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkbox.bootstrapcheckbox.BootstrapCheckBoxPickerConfig;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeIconType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.model.IModel;
-
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.ButtonGroup;
-import de.agilecoders.wicket.core.util.Attributes;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkbox.bootstrapcheckbox.BootstrapCheckBoxPicker;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkbox
-        .bootstrapcheckbox.BootstrapCheckBoxPickerConfig;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeIconType;
 
 /**
  * @author mpostelnicu
@@ -30,8 +26,6 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeIc
 public class CheckBoxPickerBootstrapFormComponent
         extends GenericEnablingBootstrapFormComponent<Boolean, BootstrapCheckBoxPicker> {
     private static final long serialVersionUID = -4032850928243673675L;
-
-    private Boolean isFloatedInput = false;
 
     private BootstrapCheckBoxPickerConfig config;
 
@@ -50,15 +44,6 @@ public class CheckBoxPickerBootstrapFormComponent
 
     public CheckBoxPickerBootstrapFormComponent(final String id) {
         super(id);
-    }
-
-    @Override
-    protected void onComponentTag(final ComponentTag tag) {
-        super.onComponentTag(tag);
-
-        if (isFloatedInput) {
-            Attributes.addClass(tag, "floated-input");
-        }
     }
 
     @Override
@@ -84,14 +69,6 @@ public class CheckBoxPickerBootstrapFormComponent
     @Override
     public String getUpdateEvent() {
         return "click";
-    }
-
-    public Boolean getIsFloatedInput() {
-        return isFloatedInput;
-    }
-
-    public void setIsFloatedInput(final Boolean isFloatedInput) {
-        this.isFloatedInput = isFloatedInput;
     }
 
     @Override

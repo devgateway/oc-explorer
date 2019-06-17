@@ -12,8 +12,8 @@
 package org.devgateway.ocds.web.rest.controller;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
@@ -72,7 +72,7 @@ public class PercentageAmountAwardedController extends GenericOCDSController {
             + " It has a different signification than for other endpoints.")
     @RequestMapping(value = "/api/percentageAmountAwarded",
             method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
-    public List<DBObject> percentTendersCancelled(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> percentTendersCancelled(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
         Assert.notEmpty(filter.getProcuringEntityId(), "Must provide at least one procuringEntity!");
         Assert.notEmpty(filter.getSupplierId(), "Must provide at least one supplierId!");
         Aggregation agg = newAggregation(

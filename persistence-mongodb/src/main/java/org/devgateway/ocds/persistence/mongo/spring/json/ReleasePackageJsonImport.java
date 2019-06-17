@@ -1,11 +1,12 @@
 package org.devgateway.ocds.persistence.mongo.spring.json;
 
-import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.ReleasePackage;
 import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.json2object.JsonToObject;
 import org.devgateway.ocds.persistence.mongo.spring.json2object.ReleasePackageJsonToObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +19,7 @@ import java.util.Set;
  * @since 6/1/16
  */
 public class ReleasePackageJsonImport implements JsonImportPackage<ReleasePackage, Release> {
-    private static Logger logger = Logger.getLogger(ReleaseJsonImport.class);
+    private static Logger logger = LoggerFactory.getLogger(ReleaseJsonImport.class);
 
     private final ReleaseRepository releaseRepository;
 

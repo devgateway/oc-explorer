@@ -23,19 +23,22 @@ import org.devgateway.ocds.web.cache.generators.GenericExcelChartKeyGenerator;
 import org.devgateway.ocds.web.cache.generators.GenericPagingRequestKeyGenerator;
 import org.devgateway.ocds.web.rest.serializers.GeoJsonPointSerializer;
 import org.devgateway.toolkit.web.generators.GenericExcelKeyGenerator;
+import org.devgateway.toolkit.web.generators.GenericKeyGenerator;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
 @Configuration
-public class MvcConfig extends WebMvcConfigurerAdapter {
+public class MvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(final ViewControllerRegistry registry) {
@@ -70,16 +73,28 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         return new GenericExcelChartKeyGenerator(objectMapper);
     }
 
-    @Bean(destroyMethod = "exitWhenFinished")
-    public FileCleaningTracker fileCleaningTracker() {
-        return new FileCleaningTracker();
-    }
-
 
     @Bean(name = "genericExcelKeyGenerator")
     public KeyGenerator genericExcelKeyGenerator(final ObjectMapper objectMapper) {
         objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         return new GenericExcelKeyGenerator(objectMapper);
+    }
+
+    @Bean(destroyMethod = "exitWhenFinished")
+    public FileCleaningTracker fileCleaningTracker() {
+        return new FileCleaningTracker();
+    }
+
+
+    @Bean(name = "genericKeyGenerator")
+    public KeyGenerator genericKeyGenerator(final ObjectMapper objectMapper) {
+        objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        return new GenericKeyGenerator(objectMapper);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

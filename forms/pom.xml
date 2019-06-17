@@ -30,11 +30,15 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <wicket.version>7.12.0</wicket.version>
-        <wicket.bootstrap.version>0.10.18</wicket.bootstrap.version>
-        <zt.zip.version>1.12</zt.zip.version>
-        <wicket.webjars.version>0.5.7</wicket.webjars.version>
-        <closure.compiler.version>v20180402</closure.compiler.version>
+        <wicket.version>8.5.0</wicket.version>
+        <wicket.bootstrap.version>2.0.10</wicket.bootstrap.version>
+        <zt.zip.version>1.13</zt.zip.version>
+        <wicket.webjars.version>2.0.15</wicket.webjars.version>
+        <closure.compiler.version>v20190528</closure.compiler.version>
+        <cglib.version>3.1</cglib.version>
+        <yuicompressor.version>2.4.8</yuicompressor.version>
+        <wicket-datetime.version>8.0.0-M7</wicket-datetime.version>
+        <cglib.version>3.1</cglib.version>
     </properties>
 
     <dependencies>
@@ -61,15 +65,6 @@
             <artifactId>web</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-
-        <!--
-        Uncomment this if you are planning to use Spring Boot DevTools (if you don't use JRebel)
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-        </dependency>
-         -->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -104,6 +99,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-rest-hal-browser</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-remoting</artifactId>
         </dependency>
@@ -123,7 +123,7 @@
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
-            <version>3.1</version>
+            <version>${cglib.version}</version>
         </dependency>
 
         <dependency>
@@ -131,7 +131,6 @@
             <artifactId>closure-compiler</artifactId>
             <version>${closure.compiler.version}</version>
         </dependency>
-
 
         <dependency>
             <groupId>de.agilecoders.wicket.webjars</groupId>
@@ -146,10 +145,11 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.wicket</groupId>
+            <groupId>org.wicketstuff</groupId>
             <artifactId>wicket-datetime</artifactId>
             <version>${wicket.version}</version>
         </dependency>
+
 
         <dependency>
             <groupId>org.apache.wicket</groupId>
@@ -203,7 +203,7 @@
         <dependency>
             <groupId>com.yahoo.platform.yui</groupId>
             <artifactId>yuicompressor</artifactId>
-            <version>2.4.8</version>
+            <version>${yuicompressor.version}</version>
         </dependency>
 
         <dependency>
@@ -226,6 +226,12 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
             <version>${poi.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wicketstuff</groupId>
+            <artifactId>wicketstuff-serializer-fast2</artifactId>
+            <version>${wicket.version}</version>
         </dependency>
     </dependencies>
 
@@ -325,6 +331,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>

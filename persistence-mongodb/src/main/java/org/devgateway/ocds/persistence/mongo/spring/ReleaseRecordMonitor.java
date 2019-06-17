@@ -7,12 +7,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.devgateway.ocds.persistence.mongo.Record;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.repository.main.RecordRepository;
 import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -36,7 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Deprecated
 public class ReleaseRecordMonitor {
 
-    protected static Logger logger = Logger.getLogger(ReleaseRecordMonitor.class);
+    protected static Logger logger = LoggerFactory.getLogger(ReleaseRecordMonitor.class);
 
     @Autowired
     private RecordRepository recordRepository;

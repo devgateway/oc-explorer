@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.page;
 
-import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -22,8 +21,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class Header extends Panel {
     private static final long serialVersionUID = 1L;
-
-    protected static Logger logger = Logger.getLogger(Header.class);
 
     public Header(final String markupId) {
         this(markupId, null);

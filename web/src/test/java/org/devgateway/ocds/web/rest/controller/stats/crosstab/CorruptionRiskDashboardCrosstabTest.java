@@ -3,7 +3,7 @@
  */
 package org.devgateway.ocds.web.rest.controller.stats.crosstab;
 
-import com.mongodb.DBObject;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.flags.FlagsConstants;
 import org.devgateway.ocds.web.rest.controller.AbstractEndPointControllerTest;
 import org.devgateway.ocds.web.rest.controller.flags.crosstab.FlagI007CrosstabController;
@@ -56,7 +56,7 @@ public class CorruptionRiskDashboardCrosstabTest extends AbstractEndPointControl
 
     @Test
     public void testI007CrossTab() {
-        List<DBObject> flagStats = flagI007CrosstabController.flagStats(new YearFilterPagingRequest());
+        List<Document> flagStats = flagI007CrosstabController.flagStats(new YearFilterPagingRequest());
         Assert.assertEquals(1,
                 flagStats.get(0).get(flagI007CrosstabController.
                         getFlagDesignation(FlagsConstants.I007_VALUE)));
@@ -68,7 +68,7 @@ public class CorruptionRiskDashboardCrosstabTest extends AbstractEndPointControl
 
     @Test
     public void testI019CrossTab() {
-        List<DBObject> flagStats = flagI019CrosstabController.flagStats(new YearFilterPagingRequest());
+        List<Document> flagStats = flagI019CrosstabController.flagStats(new YearFilterPagingRequest());
         Assert.assertEquals(1,
                 flagStats.get(0).get(flagI019CrosstabController.
                         getFlagDesignation(FlagsConstants.I007_VALUE)));
@@ -81,21 +81,21 @@ public class CorruptionRiskDashboardCrosstabTest extends AbstractEndPointControl
 
     @Test
     public void testI038CrossTab() {
-        List<DBObject> flagStats = flagI038CrosstabController.flagStats(new YearFilterPagingRequest());
+        List<Document> flagStats = flagI038CrosstabController.flagStats(new YearFilterPagingRequest());
         Assert.assertEquals(0,flagStats.size());
     }
 
 
     @Test
     public void testI077CrossTab() {
-        List<DBObject> flagStats = flagI077CrosstabController.flagStats(new YearFilterPagingRequest());
+        List<Document> flagStats = flagI077CrosstabController.flagStats(new YearFilterPagingRequest());
         Assert.assertEquals(0,flagStats.size());
     }
 
 
     @Test
     public void test180CrossTab() {
-        List<DBObject> flagStats = flagI180CrosstabController.flagStats(new YearFilterPagingRequest());
+        List<Document> flagStats = flagI180CrosstabController.flagStats(new YearFilterPagingRequest());
         Assert.assertEquals(0,flagStats.size());
     }
 

@@ -32,7 +32,7 @@ public class OrganizationSearchController extends AbstractOrganizationSearchCont
             RequestMethod.GET }, produces = "application/json")
     @ApiOperation(value = "Finds organization entity by the given id")
     public Organization byId(@PathVariable final String id) {
-        return organizationRepository.findOne(id);
+        return organizationRepository.findById(id).orElse(null);
     }
     
     @RequestMapping(value = "/api/ocds/organization/ids",

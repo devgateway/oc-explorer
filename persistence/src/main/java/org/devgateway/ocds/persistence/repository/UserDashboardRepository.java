@@ -14,7 +14,7 @@ package org.devgateway.ocds.persistence.repository;
 import java.util.List;
 
 import org.devgateway.ocds.persistence.dao.UserDashboard;
-import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepository;
+import org.devgateway.toolkit.persistence.repository.norepository.TextSearchableRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -57,7 +57,7 @@ public interface UserDashboardRepository extends TextSearchableRepository<UserDa
     @Override
     @RestResource(exported = false)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    void delete(Long id);
+    void deleteById(Long id);
 
     @Override
     @RestResource(exported = false)

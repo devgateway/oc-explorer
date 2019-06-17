@@ -1,6 +1,7 @@
 package org.devgateway.toolkit.forms.wicket.components.charts;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author idobre
@@ -8,6 +9,10 @@ import java.io.Serializable;
  */
 public class Yaxis implements Serializable {
     private final String title;
+
+    private final Font titlefont;
+
+    private final Font tickfont;
 
     private final Integer tickangle;
 
@@ -17,19 +22,37 @@ public class Yaxis implements Serializable {
 
     private final Boolean autorange;
 
+    private final String rangemode;
+
+    private final List<Number> range;
+
+    private final Number dtick;
+
     private final String type;
+
+    private final String ticksuffix;
 
     public Yaxis(final YaxisBuilder yaxisBuilder) {
         this.title = yaxisBuilder.title;
+        this.titlefont = yaxisBuilder.titlefont;
+        this.tickfont = yaxisBuilder.tickfont;
         this.tickangle = yaxisBuilder.tickangle;
         this.zeroline = yaxisBuilder.zeroline;
         this.gridwidth = yaxisBuilder.gridwidth;
         this.autorange = yaxisBuilder.autorange;
+        this.rangemode = yaxisBuilder.rangemode;
+        this.range = yaxisBuilder.range;
+        this.dtick = yaxisBuilder.dtick;
         this.type = yaxisBuilder.type;
+        this.ticksuffix = yaxisBuilder.ticksuffix;
     }
 
     public static class YaxisBuilder {
         private String title;
+
+        private Font titlefont;
+
+        private Font tickfont;
 
         private Integer tickangle;
 
@@ -39,10 +62,28 @@ public class Yaxis implements Serializable {
 
         private Boolean autorange;
 
+        private String rangemode;
+
+        private List<Number> range;
+
+        private Number dtick;
+
         private String type;
+
+        private String ticksuffix;
 
         public YaxisBuilder setTitle(final String title) {
             this.title = title;
+            return this;
+        }
+
+        public YaxisBuilder setTitlefont(final Font titlefont) {
+            this.titlefont = titlefont;
+            return this;
+        }
+
+        public YaxisBuilder setTickfont(final Font tickfont) {
+            this.tickfont = tickfont;
             return this;
         }
 
@@ -66,8 +107,28 @@ public class Yaxis implements Serializable {
             return this;
         }
 
+        public YaxisBuilder setRangemode(final String rangemode) {
+            this.rangemode = rangemode;
+            return this;
+        }
+
+        public YaxisBuilder setRange(final List<Number> range) {
+            this.range = range;
+            return this;
+        }
+
+        public YaxisBuilder setDtick(final Number dtick) {
+            this.dtick = dtick;
+            return this;
+        }
+
         public YaxisBuilder setType(final String type) {
             this.type = type;
+            return this;
+        }
+
+        public YaxisBuilder setTicksuffix(final String ticksuffix) {
+            this.ticksuffix = ticksuffix;
             return this;
         }
 

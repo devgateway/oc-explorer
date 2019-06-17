@@ -1,13 +1,7 @@
 package org.devgateway.ocds.web.rest.controller.excelchart;
 
-import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+import org.bson.Document;
 import org.devgateway.ocds.web.rest.controller.TenderPercentagesController;
 import org.devgateway.ocds.web.rest.controller.request.LangYearFilterPagingRequest;
 import org.devgateway.toolkit.web.excelcharts.ChartType;
@@ -16,6 +10,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author idobre
@@ -42,7 +43,7 @@ public class TenderPercentagesExcelController extends ExcelChartOCDSController {
         final String chartTitle = translationService.getValue(filter.getLanguage(),
                 "charts:cancelledPercents:title");
         // fetch the data that will be displayed in the chart
-        final List<DBObject> totalCancelledTenders = tenderPercentagesController.percentTendersCancelled(filter);
+        final List<Document> totalCancelledTenders = tenderPercentagesController.percentTendersCancelled(filter);
 
         final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),
                 totalCancelledTenders);
@@ -81,7 +82,7 @@ public class TenderPercentagesExcelController extends ExcelChartOCDSController {
         final String chartTitle = translationService.getValue(filter.getLanguage(), "charts:percentEBid:title");
 
         // fetch the data that will be displayed in the chart
-        final List<DBObject> totalCancelledTenders = tenderPercentagesController.percentTendersUsingEBid(filter);
+        final List<Document> totalCancelledTenders = tenderPercentagesController.percentTendersUsingEBid(filter);
 
         final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),
                 totalCancelledTenders);
@@ -121,7 +122,7 @@ public class TenderPercentagesExcelController extends ExcelChartOCDSController {
         final String chartTitle = translationService.getValue(filter.getLanguage(), "charts:nrEBid:title");
 
         // fetch the data that will be displayed in the chart
-        final List<DBObject> totalCancelledTenders = tenderPercentagesController.percentTendersUsingEBid(filter);
+        final List<Document> totalCancelledTenders = tenderPercentagesController.percentTendersUsingEBid(filter);
 
         final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),
                 totalCancelledTenders);
@@ -164,7 +165,7 @@ public class TenderPercentagesExcelController extends ExcelChartOCDSController {
 
 
         // fetch the data that will be displayed in the chart
-        final List<DBObject> percentTendersWithLinkedProcurementPlan = tenderPercentagesController
+        final List<Document> percentTendersWithLinkedProcurementPlan = tenderPercentagesController
                 .percentTendersWithLinkedProcurementPlan(filter);
 
         final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),

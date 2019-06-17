@@ -1,16 +1,16 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2015 Development Gateway, Inc and others.
- *
+ * <p>
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the MIT License (MIT)
  * which accompanies this distribution, and is available at
  * https://opensource.org/licenses/MIT
- *
+ * <p>
  * Contributors:
  * Development Gateway - initial API and implementation
- *******************************************************************************/
+ */
 /**
- * 
+ *
  */
 package org.devgateway.toolkit.forms.wicket.components;
 
@@ -38,23 +38,24 @@ public final class ComponentUtil {
     /**
      * Trivial method to set the child {@link GenericBootstrapFormComponent}
      * required when added to the parent {@link WebMarkupContainer}
-     * 
+     *
      * @param requiredFlag
      *            the {@link FormComponent#setRequired(boolean)}
      * @param parent
      * @param child
-     * 
+     *
      * @return the parent
      */
     public static MarkupContainer addRequiredFlagBootstrapFormComponent(final boolean requiredFlag,
-            final WebMarkupContainer parent, final GenericBootstrapFormComponent<?, ?> child) {
+                                                                        final WebMarkupContainer parent,
+                                                                    final GenericBootstrapFormComponent<?, ?> child) {
         return parent.add(requiredFlag ? child.required() : child);
     }
 
     /**
      * Returns true if the {@link WebConstants#PARAM_VIEW_MODE} is used as a
      * parameter
-     * 
+     *
      * @return
      */
     public static boolean isViewMode() {

@@ -11,14 +11,15 @@
  *******************************************************************************/
 package org.devgateway.toolkit.web.security;
 
-import java.security.Principal;
-import java.util.List;
 import org.devgateway.toolkit.persistence.dao.AdminSettings;
 import org.devgateway.toolkit.persistence.dao.Person;
-import org.devgateway.toolkit.persistence.dao.categories.Role;
+import org.devgateway.toolkit.persistence.dao.Role;
 import org.devgateway.toolkit.persistence.repository.AdminSettingsRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.security.Principal;
+import java.util.List;
 
 public final class SecurityUtil {
 
@@ -29,7 +30,7 @@ public final class SecurityUtil {
     /**
      * returns the principal object. In our case the principal should be
      * {@link Person}
-     * 
+     *
      * @return the principal or null
      * @see Principal
      */
@@ -37,7 +38,7 @@ public final class SecurityUtil {
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
             return null;
         }
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
             return null;
         }
@@ -68,7 +69,7 @@ public final class SecurityUtil {
 
     /**
      * Returns true if the user has ROLE_ADMIN
-     * 
+     *
      * @param p
      * @return
      */
@@ -76,7 +77,7 @@ public final class SecurityUtil {
         if (p == null || p.getRoles() == null) {
             return false;
         }
-        for (Role r : p.getRoles()) {
+        for (final Role r : p.getRoles()) {
             if (r.getAuthority().equalsIgnoreCase(SecurityConstants.Roles.ROLE_ADMIN)) {
                 return true;
             }
@@ -85,7 +86,7 @@ public final class SecurityUtil {
     }
 
     public static boolean isCurrentUserAdmin() {
-        Person p = getCurrentAuthenticatedPerson();
+        final Person p = getCurrentAuthenticatedPerson();
         return isUserAdmin(p);
     }
 

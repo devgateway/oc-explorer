@@ -3,7 +3,6 @@ package org.devgateway.ocds.persistence.mongo.excel;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.DefaultLocation;
 import org.devgateway.ocds.persistence.mongo.Location;
 import org.devgateway.ocds.persistence.mongo.Release;
@@ -11,6 +10,8 @@ import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSeparet
 import org.devgateway.ocds.persistence.mongo.info.ClassFields;
 import org.devgateway.ocds.persistence.mongo.info.ClassFieldsDefault;
 import org.devgateway.ocds.persistence.mongo.info.ClassFieldsExcelExport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
@@ -28,7 +29,7 @@ import java.util.Map;
  * @since 6/16/16
  */
 public final class OCDSObjectUtil {
-    private static final Logger LOGGER = Logger.getLogger(OCDSObjectUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OCDSObjectUtil.class);
 
     private static Map<Field, Class> fieldsClassCache;
 
@@ -97,7 +98,7 @@ public final class OCDSObjectUtil {
                 try {
                     fieldClass = Class.forName(genericListType.getActualTypeArguments()[0].getTypeName());
                 } catch (ClassNotFoundException e) {
-                    LOGGER.error(e);
+                    LOGGER.error(e.getMessage());
                 }
             } else {
                 fieldClass = field.getType();

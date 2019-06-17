@@ -24,10 +24,10 @@ import java.util.List;
  *
  *        Examples of usage:
  *
- *        private static final List<?> categories = Arrays.asList( "cat 1", "cat
+ *        private static final List categories = Arrays.asList( "cat 1", "cat
  *        2", "cat 3" );
  *
- *        private static final List<List<? extends Number>> values =
+ *        private static final List values =
  *        Arrays.asList( Arrays.asList(5, 7, 10), Arrays.asList(20, 12, 10) );
  *
  *        final ExcelChart excelChart = new ExcelChartDefault("line chart",

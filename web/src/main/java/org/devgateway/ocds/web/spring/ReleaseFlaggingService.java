@@ -3,7 +3,6 @@
  */
 package org.devgateway.ocds.web.spring;
 
-import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.ReleaseFlags;
@@ -17,6 +16,8 @@ import org.devgateway.ocds.web.flags.release.ReleaseFlagI085Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI171Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI180Processor;
 import org.devgateway.toolkit.persistence.mongo.spring.MongoUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -40,7 +41,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 public class ReleaseFlaggingService {
 
 
-    protected static Logger logger = Logger.getLogger(ReleaseFlaggingService.class);
+    protected static Logger logger = LoggerFactory.getLogger(ReleaseFlaggingService.class);
     @Autowired
     private MongoTemplate mongoTemplate;
     @Autowired

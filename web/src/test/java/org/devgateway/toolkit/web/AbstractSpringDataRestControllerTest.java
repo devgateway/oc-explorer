@@ -29,15 +29,14 @@ import static org.mockito.Mockito.when;
  */
 @Transactional
 public abstract class AbstractSpringDataRestControllerTest extends AbstractWebTest {
-
     protected PersistentEntityResourceAssembler persistentEntityResourceAssembler;
 
     protected PageRequest pageRequest;
 
     @Autowired
-    protected WebApplicationContext context;
+    private WebApplicationContext context;
 
-    protected MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     /**
      * http://stackoverflow.com/a/36960968 

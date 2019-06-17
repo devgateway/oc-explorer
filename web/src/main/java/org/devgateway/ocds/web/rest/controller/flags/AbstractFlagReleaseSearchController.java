@@ -1,7 +1,7 @@
 package org.devgateway.ocds.web.rest.controller.flags;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.mongodb.DBObject;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.persistence.mongo.spring.json.Views;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
@@ -36,7 +36,7 @@ public abstract class AbstractFlagReleaseSearchController extends AbstractFlagCo
 
 
     @JsonView(Views.Internal.class)
-    public List<DBObject> releaseFlagSearch(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> releaseFlagSearch(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
         Aggregation agg = newAggregation(
                 match(where("flags.flaggedStats.0").exists(true).and(getFlagProperty()).is(true)
                         .andOperator(getYearDefaultFilterCriteria(filter,
@@ -55,7 +55,7 @@ public abstract class AbstractFlagReleaseSearchController extends AbstractFlagCo
     }
 
     @JsonView(Views.Internal.class)
-    public List<DBObject> releaseFlagCount(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> releaseFlagCount(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
         Aggregation agg = newAggregation(
                 match(where("flags.flaggedStats.0").exists(true).and(getFlagProperty()).is(true)
                         .andOperator(getYearDefaultFilterCriteria(filter,

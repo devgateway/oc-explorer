@@ -11,7 +11,8 @@
     Development Gateway - initial API and implementation
  -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>persistence-mongodb</artifactId>
@@ -24,9 +25,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <start-class>org.devgateway.toolkit.persistence.spring.PersistenceApplication</start-class>
         <java.version>1.8</java.version>
-        <joda.time.version>2.7</joda.time.version>
-        <jadira.usertype.version>5.0.0.GA</jadira.usertype.version>
-        <ehcache.version>2.6.11</ehcache.version>
         <json.schema.validator.version>2.2.6</json.schema.validator.version>
         <json.patch.version>1.9</json.patch.version>
     </properties>
@@ -98,9 +96,21 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.fge</groupId>
             <artifactId>json-schema-validator</artifactId>
             <version>${json.schema.validator.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.mail</groupId>
+                    <artifactId>mailapi</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -129,6 +139,7 @@
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
+            <version>${commons-beanutils.version}</version>
         </dependency>
 
         <dependency>
@@ -234,6 +245,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>

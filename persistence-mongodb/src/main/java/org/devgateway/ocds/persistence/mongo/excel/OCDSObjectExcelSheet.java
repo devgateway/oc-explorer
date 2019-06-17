@@ -2,12 +2,13 @@ package org.devgateway.ocds.persistence.mongo.excel;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -30,7 +31,7 @@ import java.util.StringJoiner;
  * @since 6/7/16
  */
 public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
-    private static final Logger LOGGER = Logger.getLogger(OCDSObjectExcelSheet.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OCDSObjectExcelSheet.class);
 
     private final Sheet excelSheet;
 
@@ -209,7 +210,7 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
                         break;
                 }
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                LOGGER.error(e);
+                LOGGER.error(e.getMessage());
             }
         }
     }
@@ -299,7 +300,7 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
                         break;
                 }
             }  catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                LOGGER.error(e);
+                LOGGER.error(e.getMessage());
             }
         }
     }

@@ -1,6 +1,6 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import com.mongodb.DBObject;
+import org.bson.Document;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,16 +20,16 @@ public class TenderPriceByTypeYearControllerTest extends AbstractEndPointControl
 
     @Test
     public void tenderPriceByProcurementMethod() throws Exception {
-        final List<DBObject> tenderPriceByProcurementMethod = tenderPriceByTypeYearController
+        final List<Document> tenderPriceByProcurementMethod = tenderPriceByTypeYearController
                 .tenderPriceByProcurementMethod(new YearFilterPagingRequest());
 
-        final DBObject first = tenderPriceByProcurementMethod.get(0);
+        final Document first = tenderPriceByProcurementMethod.get(0);
         String procurementMethod = (String) first.get(TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD);
         Number totalTenderAmount = (Number) first.get(TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
         Assert.assertEquals("selective", procurementMethod);
         Assert.assertEquals(600000.0, totalTenderAmount.doubleValue(), 0);
 
-        final DBObject second = tenderPriceByProcurementMethod.get(1);
+        final Document second = tenderPriceByProcurementMethod.get(1);
         procurementMethod = (String) second.get(TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD);
         totalTenderAmount = (Number) second.get(TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
         Assert.assertEquals("open", procurementMethod);

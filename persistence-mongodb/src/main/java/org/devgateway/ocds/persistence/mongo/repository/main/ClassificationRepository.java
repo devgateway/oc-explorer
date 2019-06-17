@@ -7,17 +7,19 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @CacheConfig(cacheNames = "classifications")
 public interface ClassificationRepository extends MongoRepository<Classification, String> {
 
+
     @Cacheable
     @Override
-    Classification findOne(String id);
+    Optional<Classification> findById(String s);
 
     @Override
     @CacheEvict(allEntries = true)
-    <S extends Classification> List<S> save(Iterable<S> entites);
+    <S extends Classification> List<S> saveAll(Iterable<S> entites);
 
     @Override
     @CacheEvict(allEntries = true)

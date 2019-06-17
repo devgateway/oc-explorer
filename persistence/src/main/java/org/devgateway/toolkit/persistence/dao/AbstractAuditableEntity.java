@@ -11,59 +11,46 @@
  *******************************************************************************/
 package org.devgateway.toolkit.persistence.dao;
 
-import javax.persistence.EntityListeners;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.PreUpdate;
-
-import org.hibernate.annotations.Type;
 import org.hibernate.envers.Audited;
-import org.joda.time.DateTime;
 import org.springframework.data.domain.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.EntityListeners;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.PreUpdate;
+import java.time.ZonedDateTime;
+import java.util.Optional;
 
 /**
- * 
  * @author mpostelnicu
- *
  */
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class AbstractAuditableEntity extends GenericPersistable implements Auditable<String, Long> {
-
-    /**
-     *
-     */
+public abstract class AbstractAuditableEntity extends GenericPersistable
+        implements Auditable<String, Long, ZonedDateTime> {
     private static final long serialVersionUID = 4031407178647451427L;
 
     @Audited
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @JsonIgnore
-    private DateTime lastUpdated;
+    private String createdBy;
 
     @Audited
-    @JsonIgnore
+    private ZonedDateTime createdDate;
+
+    @Audited
     private String lastModifiedBy;
 
     @Audited
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @JsonIgnore
-    private DateTime created;
-
-    @Audited
-    @JsonIgnore
-    private String createdBy;
+    private ZonedDateTime lastModifiedDate;
 
     /**
      * Forces the envers to see this object as modified, thus enabling creation
      * of a revision record. This is invoked by children entities, if the entity
      * has OneToMany relationships
-     * 
+     *
      * @see AbstractAuditableEntity#ensureParentUpdated()
      */
     public void touch() {
-        setLastModifiedDate(new DateTime());
+        setLastModifiedDate(ZonedDateTime.now());
 
         // force update of all parents, because PreUpdate does not always get
         // invoked if there is nothing to update
@@ -75,17 +62,17 @@ public abstract class AbstractAuditableEntity extends GenericPersistable impleme
     /**
      * Override this in subclasses and return the parent entity, or null if no
      * parent entity exists
-     * 
+     *
      * @return
      */
     public abstract AbstractAuditableEntity getParent();
 
     /**
-     * @see http ://stackoverflow.com/questions/10697945/hibernate-envers-track-
-     *      revisions -in-the-owning-side-of-a-onetomany-relation updates parent
-     *      timestamp when child is updated. Useful for forcing envers to
-     *      generate a revision for parents when it generates a revision for
-     *      children
+     * stackoverflow.com/questions/10697945/hibernate-envers-track-
+     * revisions -in-the-owning-side-of-a-onetomany-relation updates parent
+     * timestamp when child is updated. Useful for forcing envers to
+     * generate a revision for parents when it generates a revision for
+     * children
      */
     @PreUpdate
     public void ensureParentUpdated() {
@@ -98,8 +85,8 @@ public abstract class AbstractAuditableEntity extends GenericPersistable impleme
      * Gets created by audit user.
      */
     @Override
-    public String getCreatedBy() {
-        return createdBy;
+    public Optional<String> getCreatedBy() {
+        return Optional.ofNullable(createdBy);
     }
 
     /**
@@ -114,25 +101,24 @@ public abstract class AbstractAuditableEntity extends GenericPersistable impleme
      * Gets create audit date.
      */
     @Override
-    @JsonIgnore
-    public DateTime getCreatedDate() {
-        return created;
+    public Optional<ZonedDateTime> getCreatedDate() {
+        return Optional.ofNullable(createdDate);
     }
 
     /**
      * Sets create audit date.
      */
     @Override
-    public void setCreatedDate(final DateTime creationDate) {
-        this.created = creationDate;
+    public void setCreatedDate(final ZonedDateTime creationDate) {
+        this.createdDate = creationDate;
     }
 
     /**
      * Gets last modified by audit user.
      */
     @Override
-    public String getLastModifiedBy() {
-        return lastModifiedBy;
+    public Optional<String> getLastModifiedBy() {
+        return Optional.ofNullable(lastModifiedBy);
     }
 
     /**
@@ -147,17 +133,16 @@ public abstract class AbstractAuditableEntity extends GenericPersistable impleme
      * Gets last modified audit date.
      */
     @Override
-    @JsonIgnore
-    public DateTime getLastModifiedDate() {
-        return lastUpdated;
+    public Optional<ZonedDateTime> getLastModifiedDate() {
+        return Optional.ofNullable(lastModifiedDate);
     }
 
     /**
      * Sets last modified audit date.
      */
     @Override
-    public void setLastModifiedDate(final DateTime lastModifiedDate) {
-        this.lastUpdated = lastModifiedDate;
+    public void setLastModifiedDate(final ZonedDateTime lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
     }
 
 }

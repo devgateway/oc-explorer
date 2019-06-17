@@ -18,12 +18,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <start-class>org.devgateway.toolkit.persistence.spring.PersistenceApplication</start-class>
         <java.version>1.8</java.version>
-        <joda.time.version>2.9.7</joda.time.version>
-        <jadira.usertype.version>5.0.0.GA</jadira.usertype.version>
-        <ehcache.version>2.6.11</ehcache.version>
-        <dozer.hibernate.model.version>0.3.5-06032016</dozer.hibernate.model.version>
+        <ehcache.version>2.10.6</ehcache.version>
+        <dozer.hibernate.model.version>0.3.8</dozer.hibernate.model.version>
         <commons.lang3.version>3.2.1</commons.lang3.version>
         <guava.version>24.1-jre</guava.version>
+        <hibernate-validator.version>6.0.16.Final</hibernate-validator.version>
     </properties>
 
     <parent>
@@ -49,10 +48,6 @@
             <artifactId>spring-boot-starter-data-rest</artifactId>
         </dependency>
 
-        <!-- Uncomment this if you are planning to use Spring Boot DevTools (if
-            you don't use JRebel) <dependency> <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId> </dependency> -->
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -77,7 +72,7 @@
 
         <dependency>
             <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache-core</artifactId>
+            <artifactId>ehcache</artifactId>
             <version>${ehcache.version}</version>
         </dependency>
 
@@ -140,7 +135,7 @@
         </dependency>
 
         <dependency>
-            <groupId>dozer-hibernate-model</groupId>
+            <groupId>nl.dries.wicket.hibernate</groupId>
             <artifactId>dozer-hibernate-model</artifactId>
             <version>${dozer.hibernate.model.version}</version>
         </dependency>
@@ -157,44 +152,29 @@
             <version>${derby.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <version>1.1.0.Final</version>
-        </dependency>
+        <!-- This is used just in case we need bean validation -->
+        <!--<dependency>-->
+        <!--<groupId>javax.validation</groupId>-->
+        <!--<artifactId>validation-api</artifactId>-->
+        <!--<version>2.0.1.Final</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+        <!--<groupId>javax.el</groupId>-->
+        <!--<artifactId>javax.el-api</artifactId>-->
+        <!--<version>3.0.1-b06</version>-->
+        <!--</dependency>-->
 
         <dependency>
-            <groupId>javax.el</groupId>
-            <artifactId>javax.el-api</artifactId>
-            <version>2.2.5</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
+            <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validator.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version>${liquibase.version}</version><!--$NO-MVN-MAN-VER$-->
-        </dependency>
-
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jadira.usertype</groupId>
-            <artifactId>usertype.core</artifactId>
-            <version>${jadira.usertype.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>hibernate-entitymanager</artifactId>
-                    <groupId>org.hibernate</groupId>
-                </exclusion>
-            </exclusions>
+            <version>${liquibase.version}</version>
         </dependency>
 
         <dependency>
@@ -212,6 +192,7 @@
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
+            <version>${commons-beanutils.version}</version>
         </dependency>
 
         <dependency>
@@ -259,15 +240,18 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <compilerArgument>-proc:none</compilerArgument>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.bsc.maven</groupId>
                 <artifactId>maven-processor-plugin</artifactId>
+                <version>3.3.3</version>
                 <executions>
                     <execution>
                         <id>process</id>

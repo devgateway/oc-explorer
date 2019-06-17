@@ -14,6 +14,7 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
@@ -71,7 +72,7 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
     @RequestMapping(value = "/api/totalFlaggedIndicatorsByIndicatorType",
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> totalFlaggedIndicatorsByIndicatorType(
+    public List<Document> totalFlaggedIndicatorsByIndicatorType(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         return totalIndicatorsByIndicatorType(FLAGGED_STATS, filter);
@@ -82,7 +83,7 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
     @RequestMapping(value = "/api/totalEligibleIndicatorsByIndicatorType",
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> totalEligibleIndicatorsByIndicatorType(
+    public List<Document> totalEligibleIndicatorsByIndicatorType(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         return totalIndicatorsByIndicatorType(ELIGIBLE_STATS, filter);
@@ -93,7 +94,7 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
             + "cannot be reproduced by just summing up all types in flaggedStats!")
     @RequestMapping(value = "/api/totalFlags", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> totalFlags(final YearFilterPagingRequest filter) {
+    public List<Document> totalFlags(final YearFilterPagingRequest filter) {
 
         Aggregation agg = newAggregation(
                 match(getYearDefaultFilterCriteria(filter,
@@ -108,7 +109,7 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
 
 
 
-    private List<DBObject> totalIndicatorsByIndicatorType(String statsProperty,
+    private List<Document> totalIndicatorsByIndicatorType(String statsProperty,
                                                           final YearFilterPagingRequest filter) {
 
         Aggregation agg = newAggregation(
@@ -133,7 +134,7 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
     @RequestMapping(value = "/api/totalFlaggedIndicatorsByIndicatorTypeByYear",
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> totalFlaggedIndicatorsByIndicatorTypeByYear(
+    public List<Document> totalFlaggedIndicatorsByIndicatorTypeByYear(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         return totalIndicatorsByIndicatorTypeByYear(FLAGGED_STATS, filter);
@@ -144,14 +145,14 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
     @RequestMapping(value = "/api/totalEligibleIndicatorsByIndicatorTypeByYear",
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> totalEligibleIndicatorsByIndicatorTypeByYear(
+    public List<Document> totalEligibleIndicatorsByIndicatorTypeByYear(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         return totalIndicatorsByIndicatorTypeByYear(ELIGIBLE_STATS, filter);
     }
 
 
-    private List<DBObject> totalIndicatorsByIndicatorTypeByYear(String statsProperty,
+    private List<Document> totalIndicatorsByIndicatorTypeByYear(String statsProperty,
                                                                 final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
@@ -180,7 +181,7 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
             + " of projects flagged.")
     @RequestMapping(value = "/api/totalFlaggedProjectsByIndicatorTypeByYear",
             method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
-    public List<DBObject> totalFlaggedProjectsByIndicatorTypeByYear(
+    public List<Document> totalFlaggedProjectsByIndicatorTypeByYear(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
         return totalProjectsByIndicatorTypeByYear(FLAGGED_STATS, filter);
     }
@@ -190,13 +191,13 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
             + " of projects eligible.")
     @RequestMapping(value = "/api/totalEligibleProjectsByIndicatorTypeByYear",
             method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
-    public List<DBObject> totalEligibleProjectsByIndicatorTypeByYear(
+    public List<Document> totalEligibleProjectsByIndicatorTypeByYear(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
         return totalProjectsByIndicatorTypeByYear(ELIGIBLE_STATS, filter);
     }
 
 
-    private List<DBObject> totalProjectsByIndicatorTypeByYear(String statsProperty,
+    private List<Document> totalProjectsByIndicatorTypeByYear(String statsProperty,
                                                               final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
@@ -226,7 +227,7 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
     @ApiOperation(value = "Count total projects by year/month.")
     @RequestMapping(value = "/api/totalProjectsByYear",
             method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
-    public List<DBObject> totalProjectsByYear(final YearFilterPagingRequest filter) {
+    public List<Document> totalProjectsByYear(final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
         addYearlyMonthlyProjection(filter, project1, ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE));
@@ -254,7 +255,7 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
      * @param month
      * @return
      */
-    private List<DBObject> findByYearAndTypeAndMonth(List<DBObject> source, Integer year, String type, Integer month) {
+    private List<Document> findByYearAndTypeAndMonth(List<Document> source, Integer year, String type, Integer month) {
         return source.stream().filter(o -> year.equals(o.get(Keys.YEAR))
                 && (type == null || type.equals(o.get(Keys.TYPE)))
                 && (month == null || month.equals(o.get(Keys.MONTH)))).collect(Collectors.toList());
@@ -263,13 +264,13 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
     @ApiOperation(value = "Percent of total projects flagged (denominator is total projects)")
     @RequestMapping(value = "/api/percentTotalProjectsFlaggedByYear",
             method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
-    public List<DBObject> percentTotalProjectsFlaggedByYear(final YearFilterPagingRequest filter) {
+    public List<Document> percentTotalProjectsFlaggedByYear(final YearFilterPagingRequest filter) {
 
         //get the total projects flagged by year
-        List<DBObject> totalFlaggedProjects = totalFlaggedProjectsByIndicatorTypeByYear(filter);
+        List<Document> totalFlaggedProjects = totalFlaggedProjectsByIndicatorTypeByYear(filter);
 
         //denominator total projects eligible by year
-        List<DBObject> totalProjectsByYear = totalProjectsByYear(filter);
+        List<Document> totalProjectsByYear = totalProjectsByYear(filter);
 
         totalFlaggedProjects.forEach(e -> {
             findByYearAndTypeAndMonth(totalProjectsByYear, (Integer) e.get(Keys.YEAR), null,
@@ -289,25 +290,22 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
     @ApiOperation(value = "Percent of total projects eligible (denominator is total projects)")
     @RequestMapping(value = "/api/percentTotalProjectsEligibleByYear",
             method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
-    public List<DBObject> percentTotalProjectsEligibleByYear(final YearFilterPagingRequest filter) {
+    public List<Document> percentTotalProjectsEligibleByYear(final YearFilterPagingRequest filter) {
 
         //get the total projects eligible by year
-        List<DBObject> totalEligibleProjects = totalEligibleProjectsByIndicatorTypeByYear(filter);
+        List<Document> totalEligibleProjects = totalEligibleProjectsByIndicatorTypeByYear(filter);
 
         //denominator total projects eligible by year
-        List<DBObject> totalProjectsByYear = totalProjectsByYear(filter);
+        List<Document> totalProjectsByYear = totalProjectsByYear(filter);
 
-        totalEligibleProjects.forEach(e -> {
-            findByYearAndTypeAndMonth(totalProjectsByYear, (Integer) e.get(Keys.YEAR), null,
-                    (Integer) e.get(Keys.MONTH))
-                    .forEach(f -> {
-                        e.put(Keys.PROJECT_COUNT, f.get(Keys.PROJECT_COUNT));
-                        e.put(Keys.PERCENT, (BigDecimal.valueOf((Integer) e.get(Keys.ELIGIBLE_PROJECT_COUNT))
-                                .setScale(BIGDECIMAL_SCALE)
-                                .divide(BigDecimal.valueOf((Integer) f.get(Keys.PROJECT_COUNT)),
-                                        BigDecimal.ROUND_HALF_UP).multiply(ONE_HUNDRED)));
-                    });
-        });
+        totalEligibleProjects.forEach(e -> findByYearAndTypeAndMonth(totalProjectsByYear, (Integer) e.get(Keys.YEAR),
+                null, (Integer) e.get(Keys.MONTH)).forEach(f -> {
+                    e.put(Keys.PROJECT_COUNT, f.get(Keys.PROJECT_COUNT));
+                    e.put(Keys.PERCENT, (BigDecimal.valueOf((Integer) e.get(Keys.ELIGIBLE_PROJECT_COUNT))
+                            .setScale(BIGDECIMAL_SCALE)
+                            .divide(BigDecimal.valueOf((Integer) f.get(Keys.PROJECT_COUNT)),
+                                    BigDecimal.ROUND_HALF_UP).multiply(ONE_HUNDRED)));
+                }));
 
         return totalEligibleProjects;
     }
@@ -316,13 +314,13 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
     @ApiOperation(value = "Percent of eligible projects flagged (denominator is number of eligible projects)")
     @RequestMapping(value = "/api/percentOfEligibleProjectsFlaggedByYear",
             method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
-    public List<DBObject> percentOfEligibleProjectsFlaggedByYear(final YearFilterPagingRequest filter) {
+    public List<Document> percentOfEligibleProjectsFlaggedByYear(final YearFilterPagingRequest filter) {
 
         //get the total projects eligible by year
-        List<DBObject> totalFlaggedProjects = totalFlaggedProjectsByIndicatorTypeByYear(filter);
+        List<Document> totalFlaggedProjects = totalFlaggedProjectsByIndicatorTypeByYear(filter);
 
         //denominator total projects eligible by year
-        List<DBObject> totalEligibleProjectsByYear = totalEligibleProjectsByIndicatorTypeByYear(filter);
+        List<Document> totalEligibleProjectsByYear = totalEligibleProjectsByIndicatorTypeByYear(filter);
 
         //because this is reversed, we may end up with empty percentages on the eligible side, so we need to add zeros
         totalEligibleProjectsByYear.forEach(e -> {

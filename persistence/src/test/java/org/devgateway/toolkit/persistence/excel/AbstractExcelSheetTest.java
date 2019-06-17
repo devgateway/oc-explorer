@@ -58,9 +58,9 @@ public class AbstractExcelSheetTest {
         excelSheet.writeCell("text", row, 2);
         excelSheet.writeCell(1, row, 3);
 
-        Assert.assertEquals(CellType.BLANK, row.getCell(0).getCellTypeEnum());
+        Assert.assertEquals(CellType.BLANK, row.getCell(0).getCellType());
         Assert.assertEquals("Yes", row.getCell(1).getStringCellValue());
-        Assert.assertEquals(CellType.STRING, row.getCell(2).getCellTypeEnum());
-        Assert.assertEquals(CellType.NUMERIC, row.getCell(3).getCellTypeEnum());
+        Assert.assertEquals(CellType.STRING, row.getCell(2).getCellType());
+        Assert.assertEquals(CellType.NUMERIC, row.getCell(3).getCellType());
     }
 }

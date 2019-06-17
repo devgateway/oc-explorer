@@ -14,6 +14,7 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
@@ -40,9 +41,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -90,7 +91,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
             + MongoConstants.FieldNames.TENDER_PERIOD_START_DATE)
     @RequestMapping(value = "/api/costEffectivenessAwardAmount",
             method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
-    public List<DBObject> costEffectivenessAwardAmount(
+    public List<Document> costEffectivenessAwardAmount(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
@@ -159,7 +160,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
             + "are taken into account. The year is calculated from tenderPeriod.startDate")
     @RequestMapping(value = "/api/costEffectivenessTenderAmount",
             method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
-    public List<DBObject> costEffectivenessTenderAmount(
+    public List<Document> costEffectivenessTenderAmount(
             @ModelAttribute @Valid final GroupingFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
@@ -248,7 +249,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
     }
 
 
-    private String getYearMonthlyKey(GroupingFilterPagingRequest filter, DBObject db) {
+    private String getYearMonthlyKey(GroupingFilterPagingRequest filter, Document db) {
         return filter.getMonthly() ? db.get(Keys.YEAR) + "-" + db.get(Keys.MONTH) : db.get(Keys.YEAR).toString();
     }
 
@@ -258,22 +259,22 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
             + "Responds to the same filters.")
     @RequestMapping(value = "/api/costEffectivenessTenderAwardAmount", method = {RequestMethod.POST,
             RequestMethod.GET}, produces = "application/json")
-    public List<DBObject> costEffectivenessTenderAwardAmount(
+    public ArrayList<Document> costEffectivenessTenderAwardAmount(
             @ModelAttribute @Valid final GroupingFilterPagingRequest filter) {
 
-        Future<List<DBObject>> costEffectivenessAwardAmountFuture = controllerLookupService
-                .asyncInvoke(new AsyncBeanParamControllerMethodCallable<List<DBObject>, GroupingFilterPagingRequest>() {
+        Future<List<Document>> costEffectivenessAwardAmountFuture = controllerLookupService
+                .asyncInvoke(new AsyncBeanParamControllerMethodCallable<List<Document>, GroupingFilterPagingRequest>() {
                     @Override
-                    public List<DBObject> invokeControllerMethod(GroupingFilterPagingRequest filter) {
+                    public List<Document> invokeControllerMethod(GroupingFilterPagingRequest filter) {
                         return costEffectivenessAwardAmount(filter);
                     }
                 }, filter);
 
 
-        Future<List<DBObject>> costEffectivenessTenderAmountFuture = controllerLookupService
-                .asyncInvoke(new AsyncBeanParamControllerMethodCallable<List<DBObject>, GroupingFilterPagingRequest>() {
+        Future<List<Document>> costEffectivenessTenderAmountFuture = controllerLookupService
+                .asyncInvoke(new AsyncBeanParamControllerMethodCallable<List<Document>, GroupingFilterPagingRequest>() {
                     @Override
-                    public List<DBObject> invokeControllerMethod(GroupingFilterPagingRequest filter) {
+                    public List<Document> invokeControllerMethod(GroupingFilterPagingRequest filter) {
                         return costEffectivenessTenderAmount(filter);
                     }
                 }, filter);
@@ -283,7 +284,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
         //controllerLookupService.waitTillDone(costEffectivenessAwardAmountFuture, costEffectivenessTenderAmountFuture);
 
 
-        LinkedHashMap<Object, DBObject> response = new LinkedHashMap<>();
+        LinkedHashMap<Object, Document> response = new LinkedHashMap<>();
 
         try {
 
@@ -291,7 +292,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                     .forEach(dbobj -> response.put(getYearMonthlyKey(filter, dbobj), dbobj));
             costEffectivenessTenderAmountFuture.get().forEach(dbobj -> {
                 if (response.containsKey(getYearMonthlyKey(filter, dbobj))) {
-                    Map<?, ?> map = dbobj.toMap();
+                    HashMap<String, Object> map = new HashMap<>(dbobj);
                     map.remove(Keys.YEAR);
                     if (filter.getMonthly()) {
                         map.remove(Keys.MONTH);
@@ -306,7 +307,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
             throw new RuntimeException(e);
         }
 
-        Collection<DBObject> respCollection = response.values();
+        Collection<Document> respCollection = response.values();
 
         respCollection.forEach(dbobj -> {
 

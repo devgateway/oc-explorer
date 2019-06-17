@@ -14,6 +14,7 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
@@ -64,7 +65,7 @@ public class FundingByLocationController extends GenericOCDSController {
             + "It responds to all filters. The year is calculated based on tender.tenderPeriod.startDate")
     @RequestMapping(value = "/api/fundingByTenderDeliveryLocation", method = { RequestMethod.POST,
             RequestMethod.GET }, produces = "application/json")
-    public List<DBObject> fundingByTenderDeliveryLocation(
+    public List<Document> fundingByTenderDeliveryLocation(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
@@ -97,7 +98,7 @@ public class FundingByLocationController extends GenericOCDSController {
             + "Filters out stub tenders, therefore tender.tenderPeriod.startDate has to exist.")
     @RequestMapping(value = "/api/qualityFundingByTenderDeliveryLocation", method = { RequestMethod.POST,
             RequestMethod.GET }, produces = "application/json")
-    public List<DBObject> qualityFundingByTenderDeliveryLocation(
+    public List<Document> qualityFundingByTenderDeliveryLocation(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();

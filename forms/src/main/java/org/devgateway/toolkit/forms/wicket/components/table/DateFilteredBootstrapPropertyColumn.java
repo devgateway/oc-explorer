@@ -1,6 +1,5 @@
 package org.devgateway.toolkit.forms.wicket.components.table;
 
-import java.util.Date;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterForm;
@@ -8,10 +7,12 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.TextF
 import org.apache.wicket.model.IModel;
 import org.devgateway.toolkit.forms.wicket.components.form.DateFieldBootstrapFormComponent;
 
+import java.util.Date;
+
 /**
  * A TextFilteredPropertyColumn that uses DateFieldBootstrapFormComponent as a
  * filter.
- *
+ * <p>
  * Created by mpostelnicu
  */
 public class DateFilteredBootstrapPropertyColumn<T, S> extends TextFilteredPropertyColumn<T, Date, S> {

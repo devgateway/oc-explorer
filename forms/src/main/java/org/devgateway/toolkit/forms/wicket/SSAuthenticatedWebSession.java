@@ -46,7 +46,7 @@ public class SSAuthenticatedWebSession extends AuthenticatedWebSession {
 
     private static final long serialVersionUID = 7496424885650965870L;
 
-    protected final Logger log = LoggerFactory.getLogger(getClass());
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     private AuthenticationException ae;
 

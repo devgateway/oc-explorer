@@ -16,14 +16,23 @@
     // listen for the onchange event
     $('body').on('change.bs.fileinput', 'input[type=file]', function (event) {
         event.stopPropagation();
-        // find the file submit button and trigger 'click' event
-        var fileSubmit = $(this).closest('.input-group-btn').find('.fileinput-upload-button');
-        setTimeout(function() {fileSubmit.trigger( 'click' );}, 1000);
 
-        // add loading image
-        $(this).closest('.file-input').find('.file-preview').addClass('loading');
+        // check if we have errors first
+        if (!$(this).closest('.file-input').find('.file-error-message').is(":visible")) {
+            // find the file submit button and trigger 'click' event
+            var fileSubmit = $(this).closest('.input-group-btn').find('.fileinput-upload-button');
+            setTimeout(function () {
+                fileSubmit.trigger('click');
+            }, 1000);
 
-        // disable the upload button
-        $(this).closest('.file-input').find('.fileinput-upload-button').prop("disabled", true);
+            // add loading image
+            $(this).closest('.file-input').find('.file-preview').addClass('loading');
+
+            // disable the upload button
+            $(this).closest('.file-input').find('.fileinput-upload-button').show();
+            $(this).closest('.file-input').find('.fileinput-upload-button').prop("disabled", true);
+        } else {
+            $(this).closest('.file-input').find('.fileinput-upload-button').hide();
+        }
     });
 })();

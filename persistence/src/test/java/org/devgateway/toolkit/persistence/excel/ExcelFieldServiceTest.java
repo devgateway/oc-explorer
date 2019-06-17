@@ -113,9 +113,9 @@ public class ExcelFieldServiceTest {
         final Iterator<Field> fields = classFields.getFields();
 
         final Field firstField = fields.next();      // get first element
-        Assert.assertEquals("Check field name", "valid", ExcelFieldService.getFieldName(firstField));
+        Assert.assertEquals("Check field name", "valid", ExcelFieldService.getFieldName(null, firstField, null));
 
         final Field secondField = fields.next();      // get second element
-        Assert.assertEquals("Check field name", "money", ExcelFieldService.getFieldName(secondField));
+        Assert.assertEquals("Check field name", "money", ExcelFieldService.getFieldName(null, secondField, null));
     }
 }

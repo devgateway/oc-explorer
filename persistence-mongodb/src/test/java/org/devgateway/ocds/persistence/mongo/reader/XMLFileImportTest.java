@@ -51,7 +51,7 @@ public class XMLFileImportTest extends AbstractMongoTest {
         final List<Release> releases = releaseRepository.findAll();
         Assert.assertNotNull(releases);
 
-        final Release release = releaseRepository.findById("xmlimport-123");
+        final Release release = releaseRepository.findById("xmlimport-123").get();
         Assert.assertNotNull(release);
         Assert.assertEquals("check field", release.getLanguage(), "en");
     }

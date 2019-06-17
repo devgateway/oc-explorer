@@ -1,13 +1,7 @@
 package org.devgateway.ocds.web.rest.controller.excelchart;
 
-import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+import org.bson.Document;
 import org.devgateway.ocds.web.rest.controller.CountPlansTendersAwardsController;
 import org.devgateway.ocds.web.rest.controller.request.LangYearFilterPagingRequest;
 import org.devgateway.toolkit.web.excelcharts.ChartType;
@@ -16,6 +10,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author idobre
@@ -41,8 +42,8 @@ public class ProcurementActivityByYearController extends ExcelChartOCDSControlle
         final String chartTitle = translationService.getValue(filter.getLanguage(), "charts:overview:title");
 
         // fetch the data that will be displayed in the chart (we have multiple sources for this dashboard)
-        final List<DBObject> countAwardsByYear = countPlansTendersAwardsController.countAwardsByYear(filter);
-        final List<DBObject> countTendersByYear = countPlansTendersAwardsController.countTendersByYear(filter);
+        final List<Document> countAwardsByYear = countPlansTendersAwardsController.countAwardsByYear(filter);
+        final List<Document> countTendersByYear = countPlansTendersAwardsController.countTendersByYear(filter);
 
         final List<?> categories = excelChartHelper.getCategoriesFromDBObject(
                 getExportYearMonthXAxis(filter),

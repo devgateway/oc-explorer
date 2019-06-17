@@ -13,7 +13,7 @@ package org.devgateway.toolkit.forms;
 
 import org.devgateway.toolkit.forms.wicket.FormsWebApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 /**
  * Allows the app to deployed as Servlet 3.0 WAR

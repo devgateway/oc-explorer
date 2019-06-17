@@ -14,6 +14,7 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
@@ -66,7 +67,7 @@ public class TenderPercentagesController extends GenericOCDSController {
             + " total number of tenders and total number of cancelled tenders for each year.")
     @RequestMapping(value = "/api/percentTendersCancelled",
             method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
-    public List<DBObject> percentTendersCancelled(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> percentTendersCancelled(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
         addYearlyMonthlyProjection(filter, project1, ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE));
@@ -112,7 +113,7 @@ public class TenderPercentagesController extends GenericOCDSController {
             + "This endpoint uses tender.tenderPeriod.startDate to calculate the tender year.")
     @RequestMapping(value = "/api/percentTendersWithTwoOrMoreTenderers",
             method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
-    public List<DBObject> percentTendersWithTwoOrMoreTenderers(@ModelAttribute
+    public List<Document> percentTendersWithTwoOrMoreTenderers(@ModelAttribute
                                                                @Valid final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
@@ -161,7 +162,7 @@ public class TenderPercentagesController extends GenericOCDSController {
             + "This endpoint uses tender.tenderPeriod.startDate to calculate the tender year.")
     @RequestMapping(value = "/api/percentTendersAwardedWithTwoOrMoreTenderers",
             method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
-    public List<DBObject> percentTendersAwarded(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> percentTendersAwarded(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
         addYearlyMonthlyProjection(filter, project1, ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE));
@@ -227,7 +228,7 @@ public class TenderPercentagesController extends GenericOCDSController {
             + "tender.submissionMethod='electronicSubmission")
     @RequestMapping(value = "/api/percentTendersUsingEBid", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> percentTendersUsingEBid(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> percentTendersUsingEBid(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
         addYearlyMonthlyProjection(filter, project1, ref(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE));
@@ -288,7 +289,7 @@ public class TenderPercentagesController extends GenericOCDSController {
             + "This endpoint uses tender.tenderPeriod.startDate to calculate the tender year.")
     @RequestMapping(value = "/api/percentTendersWithLinkedProcurementPlan",
             method = {RequestMethod.POST, RequestMethod.GET}, produces = "application/json")
-    public List<DBObject> percentTendersWithLinkedProcurementPlan(@ModelAttribute
+    public List<Document> percentTendersWithLinkedProcurementPlan(@ModelAttribute
                                                                   @Valid final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();

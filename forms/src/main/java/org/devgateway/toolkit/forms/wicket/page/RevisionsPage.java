@@ -11,14 +11,7 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.page;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -33,10 +26,15 @@ import org.hibernate.envers.DefaultRevisionEntity;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
 import org.wicketstuff.annotation.mount.MountPath;
+import org.wicketstuff.datetime.markup.html.basic.DateLabel;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author mpostelnicu
- *
  */
 @MountPath(value = "/revisions")
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_ADMIN)

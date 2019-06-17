@@ -1,6 +1,6 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import com.mongodb.DBObject;
+import org.bson.Document;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,16 +20,16 @@ public class AverageNumberOfTenderersControllerTest extends AbstractEndPointCont
 
     @Test
     public void averageNumberOfTenderers() throws Exception {
-        final List<DBObject> averageNumberOfTenderers = averageNumberOfTenderersController
+        final List<Document> averageNumberOfTenderers = averageNumberOfTenderersController
                 .averageNumberOfTenderersYearly(new YearFilterPagingRequest());
 
-        final DBObject sec = averageNumberOfTenderers.get(1);
+        final Document sec = averageNumberOfTenderers.get(1);
         int year = (int) sec.get(AverageNumberOfTenderersController.Keys.YEAR);
         double averageNoTenderers = (double) sec.get(AverageNumberOfTenderersController.Keys.AVERAGE_NO_OF_TENDERERS);
         Assert.assertEquals(2015, year);
         Assert.assertEquals(5.5, averageNoTenderers, 0);
 
-        final DBObject first = averageNumberOfTenderers.get(0);
+        final Document first = averageNumberOfTenderers.get(0);
         year = (int) first.get(AverageNumberOfTenderersController.Keys.YEAR);
         averageNoTenderers = (double) first.get(AverageNumberOfTenderersController.Keys.AVERAGE_NO_OF_TENDERERS);
         Assert.assertEquals(2014, year);

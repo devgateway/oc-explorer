@@ -12,7 +12,9 @@
 package org.devgateway.toolkit.forms.wicket.page;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapBookmarkablePageLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.dropdown.MenuBookmarkablePageLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.dropdown.MenuDivider;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.html.HtmlTag;
 import de.agilecoders.wicket.core.markup.html.bootstrap.image.GlyphIconType;
@@ -25,11 +27,9 @@ import de.agilecoders.wicket.core.markup.html.themes.bootstrap.BootstrapCssRefer
 import de.agilecoders.wicket.core.util.CssClassNames;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeCssReference;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeIconType;
-import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -45,14 +45,13 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.resource.JQueryResourceReference;
 import org.apache.wicket.util.string.StringValue;
 import org.devgateway.ocds.forms.wicket.page.list.ListAllColorIndicatorPage;
 import org.devgateway.ocds.forms.wicket.page.list.ListAllDashboardsPage;
 import org.devgateway.ocds.forms.wicket.page.list.ListMyDashboardsPage;
 import org.devgateway.toolkit.forms.WebConstants;
-import org.devgateway.toolkit.web.security.SecurityConstants;
-import org.devgateway.toolkit.web.security.SecurityUtil;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListGroupPage;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListTestFormPage;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListUserPage;
@@ -61,6 +60,10 @@ import org.devgateway.toolkit.forms.wicket.page.user.LogoutPage;
 import org.devgateway.toolkit.forms.wicket.styles.BaseStyles;
 import org.devgateway.toolkit.forms.wicket.styles.MainCss;
 import org.devgateway.toolkit.persistence.dao.Person;
+import org.devgateway.toolkit.web.security.SecurityConstants;
+import org.devgateway.toolkit.web.security.SecurityUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,13 +77,13 @@ import java.util.Locale;
 public abstract class BasePage extends GenericWebPage<Void> {
     private static final long serialVersionUID = -4179591658828697452L;
 
-    protected static Logger logger = Logger.getLogger(BasePage.class);
+    protected static final Logger logger = LoggerFactory.getLogger(BasePage.class);
 
-    protected TransparentWebMarkupContainer mainContainer;
+    private TransparentWebMarkupContainer mainContainer;
 
-    protected Header mainHeader;
+    private Header mainHeader;
 
-    protected Footer mainFooter;
+    private Footer mainFooter;
 
     protected Label pageTitle;
 
@@ -138,8 +141,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
     /**
      * Construct.
      *
-     * @param parameters
-     *            current page parameters
+     * @param parameters current page parameters
      */
     public BasePage(final PageParameters parameters) {
         super(parameters);
@@ -186,7 +188,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
     }
 
     protected NotificationPanel createFeedbackPanel() {
-        NotificationPanel notificationPanel = new NotificationPanel("feedback");
+        final NotificationPanel notificationPanel = new NotificationPanel("feedback");
         notificationPanel.setOutputMarkupId(true);
         return notificationPanel;
     }
@@ -209,27 +211,27 @@ public abstract class BasePage extends GenericWebPage<Void> {
                             .getDisplayName())));
                 }
 
-                return list;
-            }
-        };
-        languageDropDown.setIconType(GlyphIconType.flag);
+                        return list;
+                    }
+                };
+        languageDropDown.setIconType(FontAwesomeIconType.flag);
         return languageDropDown;
     }
 
 
     protected NavbarButton<LogoutPage> newLogoutMenu() {
         // logout menu
-        NavbarButton<LogoutPage> logoutMenu = new NavbarButton<LogoutPage>(LogoutPage.class,
-                new StringResourceModel("navbar.logout", this, null));
-        logoutMenu.setIconType(GlyphIconType.logout);
+        final NavbarButton<LogoutPage> logoutMenu =
+                new NavbarButton<LogoutPage>(LogoutPage.class, new StringResourceModel("navbar.logout", this, null));
+        logoutMenu.setIconType(FontAwesomeIconType.sign_out);
         MetaDataRoleAuthorizationStrategy.authorize(logoutMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
 
         return logoutMenu;
     }
 
     protected NavbarButton<EditUserPage> newAccountMenu() {
-        PageParameters pageParametersForAccountPage = new PageParameters();
-        Person person = SecurityUtil.getCurrentAuthenticatedPerson();
+        final PageParameters pageParametersForAccountPage = new PageParameters();
+        final Person person = SecurityUtil.getCurrentAuthenticatedPerson();
         // account menu
         Model<String> account = null;
         if (person != null) {
@@ -237,9 +239,9 @@ public abstract class BasePage extends GenericWebPage<Void> {
             pageParametersForAccountPage.add(WebConstants.PARAM_ID, person.getId());
         }
 
-        NavbarButton<EditUserPage> accountMenu = new NavbarButton<>(EditUserPage.class, pageParametersForAccountPage,
-                account);
-        accountMenu.setIconType(GlyphIconType.user);
+        final NavbarButton<EditUserPage> accountMenu =
+                new NavbarButton<>(EditUserPage.class, pageParametersForAccountPage, account);
+        accountMenu.setIconType(FontAwesomeIconType.user);
         MetaDataRoleAuthorizationStrategy.authorize(accountMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
         return accountMenu;
     }
@@ -247,14 +249,13 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
     protected NavbarButton<Homepage> newHomeMenu() {
         // home
-        NavbarButton<Homepage> homeMenu = new NavbarButton<>(Homepage.class, this.getPageParameters(),
-                new ResourceModel("home"));
-        homeMenu.setIconType(GlyphIconType.home);
+        NavbarButton<Homepage> homeMenu = new NavbarButton<>(Homepage.class, Model.of("Home"));
+        homeMenu.setIconType(FontAwesomeIconType.home);
         MetaDataRoleAuthorizationStrategy.authorize(homeMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
         return homeMenu;
     }
 
-    
+
     protected NavbarButton<ListMyDashboardsPage> newMyDashboardsMenu() {
         // home
         NavbarButton<ListMyDashboardsPage> menu = new NavbarButton<>(ListMyDashboardsPage.class,
@@ -264,7 +265,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
                 SecurityConstants.Roles.ROLE_PROCURING_ENTITY);
         return menu;
     }
-    
+
     protected NavbarDropDownButton newAdminMenu() {
 
         // admin menu
@@ -273,22 +274,30 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
             @Override
             protected List<AbstractLink> newSubMenuButtons(final String arg0) {
-                List<AbstractLink> list = new ArrayList<>();
+                final List<AbstractLink> list = new ArrayList<>();
+                list.add(new MenuBookmarkablePageLink<ListTestFormPage>(ListUserPage.class, null,
+                        new StringResourceModel("navbar.users", this, null))
+                        .setIconType(FontAwesomeIconType.users));
+
                 list.add(new MenuBookmarkablePageLink<ListGroupPage>(ListGroupPage.class, null,
                         new StringResourceModel("navbar.groups", this, null)).setIconType(FontAwesomeIconType.tags));
 
-                list.add(new
-                        MenuBookmarkablePageLink<ListTestFormPage>(ListTestFormPage.class, null,
-                        new StringResourceModel("navbar.testcomponents", this, null)).
-                        setIconType(FontAwesomeIconType.android));
-
-                list.add(new MenuBookmarkablePageLink<ListUserPage>(ListUserPage.class, null,
-                        new StringResourceModel("navbar.users", this, null)).setIconType(FontAwesomeIconType.users));
+                list.add(new MenuBookmarkablePageLink<ListTestFormPage>(ListTestFormPage.class, null,
+                        new StringResourceModel("navbar.testcomponents", this, null))
+                        .setIconType(FontAwesomeIconType.android));
 
                 list.add(new MenuBookmarkablePageLink<ListUserPage>(ListAllColorIndicatorPage.class, null,
                         new StringResourceModel("navbar.colorindicators", this, null))
                         .setIconType(FontAwesomeIconType.paint_brush));
 
+                list.add(new MenuDivider());
+
+                final BootstrapBookmarkablePageLink swagger = new MenuBookmarkablePageLink<Void>(SwaggerPage.class,
+                        new StringResourceModel("navbar.swagger", BasePage.this, null))
+                        .setIconType(FontAwesomeIconType.code);
+                MetaDataRoleAuthorizationStrategy.authorize(swagger, Component.RENDER,
+                        SecurityConstants.Roles.ROLE_ADMIN);
+                list.add(swagger);
 
                 list.add(new MenuBookmarkablePageLink<SpringEndpointsPage>(SpringEndpointsPage.class, null,
                         new StringResourceModel("navbar.springendpoints", this, null))
@@ -299,49 +308,18 @@ public abstract class BasePage extends GenericWebPage<Void> {
                         .setIconType(FontAwesomeIconType.bug));
 
 
-                // MenuBookmarkablePageLink<HALRedirectPage> halBrowserLink =
-                // new MenuBookmarkablePageLink<HALRedirectPage>(
-                // HALRedirectPage.class, null, new StringResourceModel(
-                // "navbar.halbrowser", this, null)) {
-                // private static final long serialVersionUID = 1L;
-                //
-                // @Override
-                // protected void onComponentTag(ComponentTag tag) {
-                // super.onComponentTag(tag);
-                // tag.put("target", "_blank");
-                // }
-                // };
-                // halBrowserLink.setIconType(FontAwesomeIconType.rss).setEnabled(true);
-
-                // list.add(halBrowserLink);
-
-                MenuBookmarkablePageLink<UIRedirectPage> uiBrowserLink = new MenuBookmarkablePageLink<UIRedirectPage>(
-                        UIRedirectPage.class, null, new StringResourceModel("navbar.ui", this, null)) {
-                    private static final long serialVersionUID = 1L;
-
-                    @Override
-                    protected void onComponentTag(final ComponentTag tag) {
-                        super.onComponentTag(tag);
-                        tag.put("target", "_blank");
-                    }
-                };
-                uiBrowserLink.setIconType(FontAwesomeIconType.dashboard).setEnabled(true);
-
                 list.add(new MenuBookmarkablePageLink<Void>(EditAdminSettingsPage.class,
                         new StringResourceModel("navbar.adminSettings", BasePage.this, null))
                         .setIconType(FontAwesomeIconType.briefcase));
-                
+
                 list.add(new MenuBookmarkablePageLink<Void>(ListAllDashboardsPage.class,
                         new StringResourceModel("navbar.allDashboard", BasePage.this, null))
                         .setIconType(FontAwesomeIconType.filter));
 
-                list.add(uiBrowserLink);
-
                 return list;
             }
         };
-
-        adminMenu.setIconType(GlyphIconType.cog);
+        adminMenu.setIconType(FontAwesomeIconType.cog);
         MetaDataRoleAuthorizationStrategy.authorize(adminMenu, Component.RENDER, SecurityConstants.Roles.ROLE_ADMIN);
 
         return adminMenu;
@@ -350,8 +328,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
     /**
      * creates a new {@link Navbar} instance
      *
-     * @param markupId
-     *            The components markup id.
+     * @param markupId The components markup id.
      * @return a new {@link Navbar} instance
      */
     protected Navbar newNavbar(final String markupId) {
@@ -365,7 +342,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
         navbar.setPosition(Navbar.Position.TOP);
         navbar.setInverted(true);
 
-        navbar.addComponents(NavbarComponents.transform(Navbar.ComponentPosition.RIGHT, newHomeMenu(), 
+        navbar.addComponents(NavbarComponents.transform(Navbar.ComponentPosition.RIGHT, newHomeMenu(),
                 newMyDashboardsMenu(),
                 newAdminMenu(),
                 newAccountMenu(), newLogoutMenu()));
@@ -387,6 +364,9 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
         // Load Scripts.
         response.render(RespondJavaScriptReference.headerItem());
-        response.render(JavaScriptHeaderItem.forReference(JQueryResourceReference.get()));
+        response.render(JavaScriptHeaderItem.forReference(JQueryResourceReference.getV2()));
+
+        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(BaseStyles.class,
+                "assets/js/fileupload.js")));
     }
 }

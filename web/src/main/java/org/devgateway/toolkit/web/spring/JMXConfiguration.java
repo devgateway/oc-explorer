@@ -17,14 +17,14 @@ public class JMXConfiguration {
 
     @Bean
     public MiniConsoleApplication miniConsoleApplication() {
-        MiniConsoleApplication mca = new MiniConsoleApplication();
+        final MiniConsoleApplication mca = new MiniConsoleApplication();
         mca.setServerConnectionProvider(jMiniXConnectionProvider());
         return mca;
     }
 
     @Bean
     public ServletRegistrationBean jminiXServletRegistration(final MiniConsoleApplication miniConsoleApplication) {
-        ServletRegistrationBean registration = new ServletRegistrationBean(new SpringMiniConsoleServlet());
+        final ServletRegistrationBean registration = new ServletRegistrationBean(new SpringMiniConsoleServlet());
         registration.addUrlMappings("/jminix/*");
         return registration;
     }

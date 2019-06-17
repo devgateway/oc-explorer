@@ -21,12 +21,12 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.devgateway.ocds.forms.wicket.page.list.ListAllColorIndicatorPage;
 import org.devgateway.ocds.persistence.dao.ColorIndicatorPair;
 import org.devgateway.ocds.persistence.mongo.flags.FlagsConstants;
-import org.devgateway.ocds.persistence.repository.ColorIndicatorPairRepository;
 import org.devgateway.toolkit.forms.wicket.components.form.ColorPickerBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.Select2ChoiceBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.forms.wicket.providers.GenericChoiceProvider;
 import org.devgateway.toolkit.persistence.repository.PersonRepository;
+import org.devgateway.toolkit.persistence.service.ColorIndicatorPairService;
 import org.devgateway.toolkit.web.security.SecurityConstants;
 import org.wicketstuff.annotation.mount.MountPath;
 
@@ -36,13 +36,8 @@ public class EditColorIndicatorPairPage extends AbstractEditPage<ColorIndicatorP
 
     private static final long serialVersionUID = -6069250112046118104L;
 
-    @Override
-    protected ColorIndicatorPair newInstance() {
-        return new ColorIndicatorPair();
-    }
-
     @SpringBean
-    private ColorIndicatorPairRepository colorIndicatorPairRepository;
+    private ColorIndicatorPairService colorIndicatorPairService;
 
     @SpringBean
     private PersonRepository personRepository;
@@ -53,7 +48,7 @@ public class EditColorIndicatorPairPage extends AbstractEditPage<ColorIndicatorP
 
     public EditColorIndicatorPairPage(final PageParameters parameters) {
         super(parameters);
-        this.jpaRepository = colorIndicatorPairRepository;
+        this.jpaService = colorIndicatorPairService;
         this.listPageClass = ListAllColorIndicatorPage.class;
 
     }
@@ -118,7 +113,7 @@ public class EditColorIndicatorPairPage extends AbstractEditPage<ColorIndicatorP
         @Override
         public void validate(Form<?> form) {
             if (firstIndicator.getField().getValue() != null && secondIndicator.getField().getValue() != null) {
-                ColorIndicatorPair indicator = colorIndicatorPairRepository.
+                ColorIndicatorPair indicator = colorIndicatorPairService.
                         findByFirstIndicatorAndSecondIndicator(firstIndicator.getField().getValue(),
                                 secondIndicator.getField().getValue());
 

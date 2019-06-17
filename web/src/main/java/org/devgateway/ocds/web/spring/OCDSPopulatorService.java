@@ -1,7 +1,6 @@
 package org.devgateway.ocds.web.spring;
 
 import com.mongodb.DBObject;
-import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.Classification;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.Identifiable;
@@ -10,6 +9,8 @@ import org.devgateway.ocds.persistence.mongo.repository.main.ClassificationRepos
 import org.devgateway.ocds.persistence.mongo.repository.main.FlaggedReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.repository.main.OrganizationRepository;
 import org.devgateway.toolkit.persistence.mongo.spring.MongoUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -21,6 +22,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -36,7 +38,7 @@ public class OCDSPopulatorService {
 
     private ConcurrentHashMap<String, String> orgNameId;
 
-    protected static Logger logger = Logger.getLogger(OCDSPopulatorService.class);
+    protected static Logger logger = LoggerFactory.getLogger(OCDSPopulatorService.class);
     @Autowired
     private FlaggedReleaseRepository releaseRepository;
     @Autowired
@@ -129,22 +131,24 @@ public class OCDSPopulatorService {
 
     public <T extends Identifiable, ID extends Serializable> T getSavedOrgEntityFromEntity(T t,
                                                                                            MongoRepository<T, ID>
+
                                                                                                    repository) {
-        T newOrg = repository.findOne((ID) orgNameId.get((String) t.getIdProperty()));
-        if (newOrg == null) {
+
+        Optional<T> newOrg = repository.findById((ID) orgNameId.get((String) t.getIdProperty()));
+        if (!newOrg.isPresent()) {
             throw new RuntimeException("An unidentified element was used inline");
         }
-        return newOrg;
+        return newOrg.get();
     }
 
     public <T extends Identifiable, ID extends Serializable> T getSavedEntityFromEntity(T t,
                                                                                         MongoRepository<T, ID>
                                                                                                 repository) {
-        T newOrg = repository.findOne((ID) t.getIdProperty());
-        if (newOrg == null) {
+        Optional<T> newOrg = repository.findById((ID) t.getIdProperty());
+        if (!newOrg.isPresent()) {
             throw new RuntimeException("An unidentified element was used inline");
         }
-        return newOrg;
+        return newOrg.get();
     }
 
 

@@ -15,14 +15,11 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationMessa
 import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapForm;
 import de.agilecoders.wicket.core.util.Attributes;
 import nl.dries.wicket.hibernate.dozer.DozerModel;
-import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -35,7 +32,7 @@ import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.devgateway.toolkit.forms.WebConstants;
-import org.devgateway.toolkit.forms.exceptions.NullJpaRepositoryException;
+import org.devgateway.toolkit.forms.exceptions.NullJpaServiceException;
 import org.devgateway.toolkit.forms.exceptions.NullListPageClassException;
 import org.devgateway.toolkit.forms.util.MarkupCacheService;
 import org.devgateway.toolkit.forms.wicket.components.ComponentUtil;
@@ -46,29 +43,27 @@ import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxBootstrapForm
 import org.devgateway.toolkit.forms.wicket.components.form.DateFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.DateTimeFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.GenericBootstrapFormComponent;
-import org.devgateway.toolkit.forms.wicket.components.form.Select2ChoiceBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.SummernoteBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.TextAreaFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.page.BasePage;
-import org.devgateway.toolkit.forms.wicket.providers.GenericPersistableJpaRepositoryTextChoiceProvider;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
-import org.devgateway.toolkit.persistence.dao.Labelable;
-import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepository;
+import org.devgateway.toolkit.persistence.service.BaseJpaService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.persistence.EntityManager;
 import java.io.Serializable;
 
 /**
  * @author mpostelnicu Page used to make editing easy, extend to get easy access
- *         to one entity for editing
+ * to one entity for editing
  */
-public abstract class AbstractEditPage<T extends GenericPersistable> extends BasePage {
-    protected static Logger logger = Logger.getLogger(AbstractEditPage.class);
-
+public abstract class AbstractEditPage<T extends GenericPersistable & Serializable> extends BasePage {
     private static final long serialVersionUID = -5928614890244382103L;
+
+    private static final Logger logger = LoggerFactory.getLogger(AbstractEditPage.class);
 
     /**
      * Factory method for the new instance of the entity being editing. This
@@ -76,13 +71,15 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
      *
      * @return
      */
-    protected abstract T newInstance();
+    private T newInstance() {
+        return jpaService.newInstance();
+    }
 
     /**
      * The repository used to fetch and save the entity, this is initialized in
      * subclasses
      */
-    protected JpaRepository<T, Long> jpaRepository;
+    protected BaseJpaService<T> jpaService;
 
     /**
      * The page that is responsible for listing the entities (used here as a
@@ -117,10 +114,10 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
     protected BootstrapDeleteButton deleteButton;
 
     @SpringBean
-    protected EntityManager entityManager;
+    private EntityManager entityManager;
 
     @SpringBean(required = false)
-    protected MarkupCacheService markupCacheService;
+    private MarkupCacheService markupCacheService;
 
     public EditForm getEditForm() {
         return editForm;
@@ -133,8 +130,8 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
     public void flushReportingCaches() {
         if (markupCacheService != null) {
             markupCacheService.flushMarkupCache();
-            markupCacheService.clearReportsCache();
-            markupCacheService.clearReportsApiCache();
+            markupCacheService.clearPentahoReportsCache();
+            markupCacheService.clearAllCaches();
         }
     }
 
@@ -151,13 +148,12 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
      * we can see the errors
      *
      * @author mpostelnicu
-     *
      */
     public class GenericBootstrapValidationVisitor implements IVisitor<GenericBootstrapFormComponent<?, ?>, Void> {
 
-        protected AjaxRequestTarget target;
+        private AjaxRequestTarget target;
 
-        protected GenericBootstrapFormComponent<?, ?> lastInvalidVisitedObject;
+        private GenericBootstrapFormComponent<?, ?> lastInvalidVisitedObject;
 
         public GenericBootstrapValidationVisitor(final AjaxRequestTarget target) {
             this.target = target;
@@ -188,7 +184,6 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
         }
 
     }
-
 
 
     public class EditForm extends BootstrapForm<T> {
@@ -229,7 +224,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
                 private static final long serialVersionUID = -249084359200507749L;
 
                 @Override
-                protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+                protected void onSubmit(final AjaxRequestTarget target) {
                     setResponsePage(listPageClass);
                 }
             });
@@ -241,30 +236,33 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
      * further by subclasses
      *
      * @author mpostelnicu
-     *
      */
     public class SaveEditPageButton extends BootstrapSubmitButton {
         private static final long serialVersionUID = 9075809391795974349L;
 
         private boolean redirect = true;
 
-        protected boolean redirectToSelf = false;
+        private boolean redirectToSelf = false;
 
         public SaveEditPageButton(final String id, final IModel<String> model) {
             super(id, model);
         }
 
         @Override
-        protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+        protected void onSubmit(final AjaxRequestTarget target) {
             // save the object and go back to the list page
             T saveable = editForm.getModelObject();
 
             // saves the entity and flushes the changes
-            jpaRepository.saveAndFlush(saveable);
+            jpaService.saveAndFlush(saveable);
 
             // clears session and detaches all entities that are currently
             // attached
             entityManager.clear();
+
+            // we flush the mondrian/wicket/reports cache to ensure it gets
+            // rebuilt
+            flushReportingCaches();
 
             // only redirect if redirect is true
             if (redirectToSelf) {
@@ -300,7 +298,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
         }
 
         @Override
-        protected void onError(final AjaxRequestTarget target, final Form<?> form) {
+        protected void onError(final AjaxRequestTarget target) {
             // make all errors visible
             GenericBootstrapValidationVisitor genericBootstrapValidationVisitor = getBootstrapValidationVisitor(target);
             editForm.visitChildren(GenericBootstrapFormComponent.class, genericBootstrapValidationVisitor);
@@ -323,16 +321,14 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
         }
 
         /**
-         * @param redirect
-         *            the redirect to set
+         * @param redirect the redirect to set
          */
         public void setRedirect(final boolean redirect) {
             this.redirect = redirect;
         }
 
         /**
-         * @param redirectToSelf
-         *            the redirectToSelf to set
+         * @param redirectToSelf the redirectToSelf to set
          */
         public void setRedirectToSelf(final boolean redirectToSelf) {
             this.redirectToSelf = redirectToSelf;
@@ -354,10 +350,13 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
         }
 
         @Override
-        protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+        protected void onSubmit(final AjaxRequestTarget target) {
             T deleteable = editForm.getModelObject();
             try {
-                jpaRepository.delete(deleteable);
+                jpaService.delete(deleteable);
+
+                // we flush the mondrian/wicket/reports cache to ensure it gets rebuilt
+                flushReportingCaches();
             } catch (DataIntegrityViolationException e) {
                 error(new NotificationMessage(
                         new StringResourceModel("delete_error_message", AbstractEditPage.this, null))
@@ -370,7 +369,8 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
         }
 
         @Override
-        protected void onError(final AjaxRequestTarget target, final Form<?> form) {
+        protected void onError(final AjaxRequestTarget target) {
+            super.onError(target);
             target.add(feedbackPanel);
         }
     }
@@ -431,9 +431,9 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
     protected void onInitialize() {
         super.onInitialize();
 
-        // we cant do anything if we dont have a jparepository here
-        if (jpaRepository == null) {
-            throw new NullJpaRepositoryException();
+        // we cant do anything if we dont have a jpaService here
+        if (jpaService == null) {
+            throw new NullJpaServiceException();
         }
 
         // we dont like receiving null list pages
@@ -444,11 +444,11 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
         IModel<T> model = null;
 
         if (entityId != null) {
-            model = new DozerModel<>(jpaRepository.findOne(entityId));
+            model = new DozerModel<>(jpaService.findById(entityId).orElse(null));
         } else {
             T instance = newInstance();
             if (instance != null) {
-                model = new Model<>(instance);
+                model = new DozerModel<>(instance);
             }
         }
 
@@ -513,13 +513,13 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
         return field;
     }
 
-    public <E extends GenericPersistable & Labelable> Select2ChoiceBootstrapFormComponent<E> addSelect2ChoiceField(
-            final String name, final TextSearchableRepository<E, Long> repository) {
-        GenericPersistableJpaRepositoryTextChoiceProvider<E> choiceProvider
-                = new GenericPersistableJpaRepositoryTextChoiceProvider<>(repository);
-        Select2ChoiceBootstrapFormComponent<E> component = new Select2ChoiceBootstrapFormComponent<>(name,
-                choiceProvider);
-        editForm.add(component);
-        return component;
-    }
+//    public <E extends GenericPersistable & Labelable & SerializableConsumer> Select2ChoiceBootstrapFormComponent<E>
+//    addSelect2ChoiceField(final String name, final TextSearchableRepository<E, Long> repository) {
+//        GenericPersistableJpaTextChoiceProvider<E> choiceProvider =
+//                new GenericPersistableJpaTextChoiceProvider<E>(repository);
+//        Select2ChoiceBootstrapFormComponent<E> component =
+//                new Select2ChoiceBootstrapFormComponent<>(name, choiceProvider);
+//        editForm.add(component);
+//        return component;
+//    }
 }

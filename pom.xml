@@ -9,7 +9,8 @@
     Contributors:
     Development Gateway - initial API and implementation
  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.devgateway.ocds</groupId>
     <artifactId>oce</artifactId>
@@ -21,14 +22,18 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <liquibase.version>3.6.1</liquibase.version>
-        <spring.boot.version>1.5.19.RELEASE</spring.boot.version>
+        <liquibase.version>3.6.3</liquibase.version>
+        <spring.boot.version>2.1.5.RELEASE</spring.boot.version>
         <derby.version>10.14.2.0</derby.version>
-        <poi.version>3.17</poi.version>
         <pentaho.poi.version>3.17</pentaho.poi.version>
         <commons.lang3.version>3.5</commons.lang3.version>
         <docker.image.prefix>devgateway/toolkit</docker.image.prefix>
         <docker-maven-plugin.version>0.4.13</docker-maven-plugin.version>
+        <maven-checkstyle-plugin.version>3.0.0</maven-checkstyle-plugin.version>
+        <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
+        <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+        <poi.version>3.17</poi.version>
+        <commons-beanutils.version>1.9.3</commons-beanutils.version>
     </properties>
 
     <modules>
@@ -83,6 +88,14 @@
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
+        </repository>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-devgateway-dozer-hibernate-model</id>
+            <name>bintray</name>
+            <url>https://dl.bintray.com/devgateway/dozer-hibernate-model</url>
         </repository>
     </repositories>
 
@@ -142,7 +155,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.17</version>
+                <version>${maven-checkstyle-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>validate</id>
@@ -166,7 +179,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
+                <version>${maven-release-plugin.version}</version>
                 <configuration>
                     <tagNameFormat>@{project.version}</tagNameFormat>
                 </configuration>
@@ -176,7 +189,7 @@
                         <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
+                <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <parallel>classes</parallel>
                     <useUnlimitedThreads>true</useUnlimitedThreads>
@@ -191,8 +204,8 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                        <source>1.8</source>
+                        <target>1.8</target>
                     </configuration>
                 </plugin>
             </plugins>

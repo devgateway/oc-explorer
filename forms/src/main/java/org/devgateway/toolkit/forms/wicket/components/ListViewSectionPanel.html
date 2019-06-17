@@ -4,26 +4,58 @@
 </head>
 <body>
 <wicket:panel>
-    <div class="panel panel-default" wicket:id="listWrapper">
-        <div class="panel-heading">
-            <h4 wicket:id="panelTitle">[[title]]</h4>
+    <div class="row list-wrapper" wicket:id="listWrapper">
+        <div class="col-md-12">
+            <div class="pane title">
+                <h4 wicket:id="panelTitle">[[title]]</h4>
+                <span class="count"><span wicket:id="totalEntries">[[totalEntries]]</span> Total Entries</span>
+                <a wicket:id="showHideAllEntries">
+                    <span class="show-all">show/hide all entries</span>
+                </a>
+            </div>
         </div>
 
-        <div class="panel-body">
-            <table class="table table-hover table-fixed">
-                <tr wicket:id="list">
-                    <wicket:child />
+        <div class="col-md-12" wicket:id="list">
+            <div class="panel-group" wicket:id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <span wicket:id="headerNo" class="list-number"></span>
+                            </div>
 
-                    <td class="col-md-2">
-                        <button wicket:id="remove" type="button" class="btn btn-red l-float">Remove</button>
-                    </td>
-                </tr>
-            </table>
+                            <a class="accordion-toggle col-md-11" wicket:id="accordionToggle">
+                                <div class="row">
+                                    <div wicket:id="headerField" class="col-md-11 header-field"></div>
+
+                                    <div class="col-md-1">
+                                        <span class="show-all pull-right"
+                                              wicket:id="showDetailsLink">show details</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div wicket:id="hideableContainer" class="panel-body panel-collapse collapse">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button wicket:id="remove" type="button" class="btn btn-red pull-right">Remove</button>
+                            </div>
+                        </div>
+
+                        <wicket:child/>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="form-group">
-        <button wicket:id="newButton" class="btn btn-blue l-float" type="button">[[+ ADD another element]]</button>
+    <div class="row">
+        <div class="col-md-12">
+            <button wicket:id="newButton" class="btn btn-blue pull-left" type="button">[[+ ADD another element]]
+            </button>
+        </div>
     </div>
 </wicket:panel>
 </body>

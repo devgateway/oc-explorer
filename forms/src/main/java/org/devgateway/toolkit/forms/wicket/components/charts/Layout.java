@@ -16,6 +16,10 @@ public final class Layout implements Serializable {
 
     private final String title;
 
+    private final String hovermode;
+
+    private final Font titlefont;
+
     private final List<Annotation> annotations;
 
     private final Font font;
@@ -30,11 +34,21 @@ public final class Layout implements Serializable {
 
     private final Double bargap;
 
+    private final Margin margin;
+
+    private final Polar polar;
+
+    private final Integer zoom;
+
+    private final Geo geo;
+
     public Layout(final LayoutBuilder layoutBuilder) {
         this.width = layoutBuilder.width;
         this.height = layoutBuilder.height;
         this.barmode = layoutBuilder.barmode;
         this.title = layoutBuilder.title;
+        this.hovermode = layoutBuilder.hovermode;
+        this.titlefont = layoutBuilder.titlefont;
         this.annotations = layoutBuilder.annotations;
         this.font = layoutBuilder.font;
         this.showlegend = layoutBuilder.showlegend;
@@ -42,6 +56,10 @@ public final class Layout implements Serializable {
         this.xaxis = layoutBuilder.xaxis;
         this.yaxis = layoutBuilder.yaxis;
         this.bargap = layoutBuilder.bargap;
+        this.margin = layoutBuilder.margin;
+        this.polar = layoutBuilder.polar;
+        this.zoom = layoutBuilder.zoom;
+        this.geo = layoutBuilder.geo;
     }
 
     public static class LayoutBuilder {
@@ -52,6 +70,10 @@ public final class Layout implements Serializable {
         private String barmode;
 
         private String title;
+
+        private String hovermode;
+
+        private Font titlefont;
 
         private List<Annotation> annotations;
 
@@ -66,6 +88,14 @@ public final class Layout implements Serializable {
         private Yaxis yaxis;
 
         private Double bargap;
+
+        private Margin margin;
+
+        private Polar polar;
+
+        private Integer zoom;
+
+        private Geo geo;
 
         public LayoutBuilder setWidth(final Integer width) {
             this.width = width;
@@ -84,6 +114,16 @@ public final class Layout implements Serializable {
 
         public LayoutBuilder setTitle(final String title) {
             this.title = title;
+            return this;
+        }
+
+        public LayoutBuilder setHovermode(final String hovermode) {
+            this.hovermode = hovermode;
+            return this;
+        }
+
+        public LayoutBuilder setTitlefont(final Font titlefont) {
+            this.titlefont = titlefont;
             return this;
         }
 
@@ -119,6 +159,26 @@ public final class Layout implements Serializable {
 
         public LayoutBuilder setBargap(final Double bargap) {
             this.bargap = bargap;
+            return this;
+        }
+
+        public LayoutBuilder setMargin(final Margin margin) {
+            this.margin = margin;
+            return this;
+        }
+
+        public LayoutBuilder setPolar(final Polar polar) {
+            this.polar = polar;
+            return this;
+        }
+
+        public LayoutBuilder setZoom(final Integer zoom) {
+            this.zoom = zoom;
+            return this;
+        }
+
+        public LayoutBuilder setGeo(final Geo geo) {
+            this.geo = geo;
             return this;
         }
 

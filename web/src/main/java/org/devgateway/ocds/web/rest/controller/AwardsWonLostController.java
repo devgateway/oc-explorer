@@ -12,8 +12,8 @@
 package org.devgateway.ocds.web.rest.controller;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
@@ -106,7 +106,7 @@ public class AwardsWonLostController extends GenericOCDSController {
     @RequestMapping(value = "/api/suppliersByFlags",
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> suppliersByFlags(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> suppliersByFlags(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
         List<AggregationOperation> part = suppliersByFlagsGroupPart(filter);
         part.add(sort(Sort.Direction.DESC, "countFlags"));
         part.add(skip(filter.getSkip()));
@@ -118,7 +118,7 @@ public class AwardsWonLostController extends GenericOCDSController {
     @RequestMapping(value = "/api/procuringEntitiesByFlags",
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> procuringEntitiesByFlags(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> procuringEntitiesByFlags(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
         List<AggregationOperation> part = procuringEntitiesByFlagsGroupPart(filter);
         part.add(sort(Sort.Direction.DESC, "countFlags"));
         part.add(skip(filter.getSkip()));
@@ -130,7 +130,7 @@ public class AwardsWonLostController extends GenericOCDSController {
     @RequestMapping(value = "/api/suppliersByFlags/count",
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> suppliersByFlagsCount(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> suppliersByFlagsCount(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
         List<AggregationOperation> part = suppliersByFlagsGroupPart(filter);
         part.add(group().count().as("count"));
         part.add(project("count").andExclude(Fields.UNDERSCORE_ID));
@@ -141,7 +141,7 @@ public class AwardsWonLostController extends GenericOCDSController {
     @RequestMapping(value = "/api/procuringEntitiesByFlags/count",
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> procuringEntitiesByFlagsCount(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> procuringEntitiesByFlagsCount(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
         List<AggregationOperation> part = procuringEntitiesByFlagsGroupPart(filter);
         part.add(group().count().as("count"));
         part.add(project("count").andExclude(Fields.UNDERSCORE_ID));
@@ -154,7 +154,7 @@ public class AwardsWonLostController extends GenericOCDSController {
     @RequestMapping(value = "/api/procuringEntitiesTendersCount",
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> procuringEntitiesTendersCount(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> procuringEntitiesTendersCount(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
         Assert.notEmpty(filter.getProcuringEntityId(), "procuringEntityId must not be empty!");
         Aggregation agg = newAggregation(
                 match(getYearDefaultFilterCriteria(filter, TENDER_PERIOD_START_DATE)),
@@ -169,7 +169,7 @@ public class AwardsWonLostController extends GenericOCDSController {
     @RequestMapping(value = "/api/procuringEntitiesAwardsCount",
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> procuringEntitiesAwardsCount(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> procuringEntitiesAwardsCount(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
         Assert.notEmpty(filter.getProcuringEntityId(), "procuringEntityId must not be empty!");
         Aggregation agg = newAggregation(
                 match(getYearDefaultFilterCriteria(filter, TENDER_PERIOD_START_DATE)),
@@ -273,7 +273,7 @@ public class AwardsWonLostController extends GenericOCDSController {
     @RequestMapping(value = "/api/procurementsByTenderStatus",
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> procurementsByTenderStatus(@ModelAttribute @Valid final YearFilterPagingRequest
+    public List<Document> procurementsByTenderStatus(@ModelAttribute @Valid final YearFilterPagingRequest
                                                              filter) {
         Assert.notEmpty(filter.getProcuringEntityId(), "procuringEntityId must not be empty!");
 
@@ -297,7 +297,7 @@ public class AwardsWonLostController extends GenericOCDSController {
     @RequestMapping(value = "/api/procurementsByProcurementMethod",
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> procurementsByProcurementMethod(@ModelAttribute @Valid final YearFilterPagingRequest
+    public List<Document> procurementsByProcurementMethod(@ModelAttribute @Valid final YearFilterPagingRequest
                                                                   filter) {
         Assert.notEmpty(filter.getProcuringEntityId(), "procuringEntityId must not be empty!");
 
@@ -322,7 +322,7 @@ public class AwardsWonLostController extends GenericOCDSController {
     @RequestMapping(value = "/api/buyersForProcuringEntities",
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> buyersProcuringEntities(@ModelAttribute @Valid final YearFilterPagingRequest
+    public List<Document> buyersProcuringEntities(@ModelAttribute @Valid final YearFilterPagingRequest
                                                           filter) {
         Assert.notEmpty(filter.getProcuringEntityId(), "procuringEntityId must not be empty!");
 
@@ -348,7 +348,7 @@ public class AwardsWonLostController extends GenericOCDSController {
     @RequestMapping(value = "/api/supplierWinsPerProcuringEntity",
             method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
-    public List<DBObject> procurementsWonLostPerProcuringEntity(@ModelAttribute @Valid final YearFilterPagingRequest
+    public List<Document> procurementsWonLostPerProcuringEntity(@ModelAttribute @Valid final YearFilterPagingRequest
                                                                         filter) {
 
         Assert.isTrue(

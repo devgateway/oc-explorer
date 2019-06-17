@@ -19,7 +19,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.devgateway.toolkit.web.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.page.user.EditUserPageElevated;
 import org.devgateway.toolkit.persistence.dao.Person;
-import org.devgateway.toolkit.persistence.repository.PersonRepository;
+import org.devgateway.toolkit.persistence.service.PersonService;
 import org.wicketstuff.annotation.mount.MountPath;
 
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_ADMIN)
@@ -29,15 +29,17 @@ public class ListUserPage extends AbstractListPage<Person> {
     private static final long serialVersionUID = 3529738250403399032L;
 
     @SpringBean
-    protected PersonRepository userRepository;
+    private PersonService personService;
 
     public ListUserPage(final PageParameters pageParameters) {
         super(pageParameters);
-        this.jpaRepository = userRepository;
+
+        this.jpaService = personService;
+
         this.editPageClass = EditUserPageElevated.class;
-        columns.add(new PropertyColumn<Person, String>(new Model<String>("Name"), "username", "username"));
-        columns.add(new PropertyColumn<Person, String>(new Model<String>("Group"), "group", "group"));
-        columns.add(new PropertyColumn<Person, String>(new Model<String>("Roles"), "roles", "roles"));
+        columns.add(new PropertyColumn<>(new Model<>("Name"), "username", "username"));
+        columns.add(new PropertyColumn<>(new Model<>("Group"), "group", "group"));
+        columns.add(new PropertyColumn<>(new Model<>("Roles"), "roles", "roles"));
     }
 
     @Override

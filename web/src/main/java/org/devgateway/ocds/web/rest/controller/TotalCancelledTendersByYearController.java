@@ -14,6 +14,7 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.bson.Document;
 import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
@@ -52,7 +53,7 @@ public class TotalCancelledTendersByYearController extends GenericOCDSController
             + "The tender status has to be 'cancelled'. The year is retrieved from tender.tenderPeriod.startDate.")
     @RequestMapping(value = "/api/totalCancelledTendersByYear", method = { RequestMethod.POST, RequestMethod.GET },
             produces = "application/json")
-    public List<DBObject> totalCancelledTendersByYear(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<Document> totalCancelledTendersByYear(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
 
         DBObject project = new BasicDBObject();
@@ -64,7 +65,7 @@ public class TotalCancelledTendersByYearController extends GenericOCDSController
                         .and(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true)
                         .andOperator(getYearDefaultFilterCriteria(filter,
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
-                new CustomOperation(new BasicDBObject("$project", project)),
+                new CustomOperation(new Document("$project", project)),
                 getYearlyMonthlyGroupingOperation(filter).
                 sum(ref(MongoConstants.FieldNames.TENDER_VALUE_AMOUNT)).as(Keys.TOTAL_CANCELLED_TENDERS_AMOUNT),
                 transformYearlyGrouping(filter).andInclude(Keys.TOTAL_CANCELLED_TENDERS_AMOUNT),

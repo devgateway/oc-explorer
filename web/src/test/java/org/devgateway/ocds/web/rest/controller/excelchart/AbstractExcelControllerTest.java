@@ -1,8 +1,5 @@
 package org.devgateway.ocds.web.rest.controller.excelchart;
 
-import java.io.File;
-import java.util.List;
-import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.json.JsonImportPackage;
@@ -16,9 +13,14 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.mock.web.MockHttpServletResponse;
+
+import java.io.File;
+import java.util.List;
 
 /**
  * @author idobre
@@ -28,7 +30,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
  * and is used to test each excel chart endpoint.
  */
 public abstract class AbstractExcelControllerTest extends AbstractWebTest {
-    protected static Logger logger = Logger.getLogger(AbstractExcelControllerTest.class);
+    protected static Logger logger = LoggerFactory.getLogger(AbstractExcelControllerTest.class);
 
     protected MockHttpServletResponse mockHttpServletResponse;
 

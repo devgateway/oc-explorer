@@ -45,7 +45,7 @@ public class ReleaseJsonImportTest extends AbstractMongoTest {
                 + "}";
         final JsonImport releaseJsonImport = new ReleaseJsonImport(releaseRepository, jsonRelease);
         final Release release = (Release) releaseJsonImport.importObject();
-        final Release releaseById = releaseRepository.findById(release.getId());
+        final Release releaseById = releaseRepository.findById(release.getId()).get();
 
         Assert.assertNotNull("Check if we have something in the database", releaseById);
         Assert.assertEquals("Check if the releases are the same", release, releaseById);

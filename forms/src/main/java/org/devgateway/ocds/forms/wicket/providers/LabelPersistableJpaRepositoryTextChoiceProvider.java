@@ -14,20 +14,20 @@
  */
 package org.devgateway.ocds.forms.wicket.providers;
 
-import java.util.Collection;
-
 import org.apache.wicket.model.IModel;
-import org.devgateway.toolkit.forms.wicket.providers.AbstractJpaRepositoryTextChoiceProvider;
+import org.devgateway.toolkit.forms.wicket.providers.GenericPersistableJpaTextChoiceProvider;
 import org.devgateway.toolkit.persistence.dao.GenericPersistable;
 import org.devgateway.toolkit.persistence.dao.Labelable;
-import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepository;
+import org.devgateway.toolkit.persistence.service.TextSearchableService;
+
+import java.util.Collection;
 
 /**
  * @author mpostelnicu
  *
  */
 public class LabelPersistableJpaRepositoryTextChoiceProvider<T extends GenericPersistable & Labelable>
-        extends AbstractJpaRepositoryTextChoiceProvider<T> {
+        extends GenericPersistableJpaTextChoiceProvider<T> {
 
     /**
      * 
@@ -35,18 +35,18 @@ public class LabelPersistableJpaRepositoryTextChoiceProvider<T extends GenericPe
     private static final long serialVersionUID = -9109118476966448737L;
 
     public LabelPersistableJpaRepositoryTextChoiceProvider(
-            final TextSearchableRepository<T, Long> textSearchableRepository) {
+            final TextSearchableService<T> textSearchableRepository) {
         super(textSearchableRepository);
     }
 
     public LabelPersistableJpaRepositoryTextChoiceProvider(
-            final TextSearchableRepository<T, Long> textSearchableRepository,
+            final TextSearchableService<T> textSearchableRepository,
             final IModel<Collection<T>> restrictedToItemsModel) {
         super(textSearchableRepository, restrictedToItemsModel);
     }
 
     public LabelPersistableJpaRepositoryTextChoiceProvider(
-            final TextSearchableRepository<T, Long> textSearchableRepository, final Class<T> clazz,
+            final TextSearchableService<T> textSearchableRepository, final Class<T> clazz,
             final Boolean addNewElements) {
         super(textSearchableRepository, clazz, addNewElements);
     }

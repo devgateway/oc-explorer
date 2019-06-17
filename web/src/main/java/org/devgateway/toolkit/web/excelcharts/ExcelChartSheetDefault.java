@@ -6,7 +6,6 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Chart;
 import org.apache.poi.ss.usermodel.ClientAnchor;
-import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
@@ -18,6 +17,7 @@ import org.apache.poi.ss.usermodel.charts.ChartLegend;
 import org.apache.poi.ss.usermodel.charts.DataSources;
 import org.apache.poi.ss.usermodel.charts.LegendPosition;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFDrawing;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -176,7 +176,7 @@ public final class ExcelChartSheetDefault implements ExcelChartSheet {
      */
     @Override
     public Chart createChartAndLegend() {
-        final Drawing drawing = excelSheet.createDrawingPatriarch();
+        final XSSFDrawing drawing = (XSSFDrawing) excelSheet.createDrawingPatriarch();
         final ClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 0, 5, 15, 25);
         final Chart chart = drawing.createChart(anchor);
 
