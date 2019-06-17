@@ -16,6 +16,7 @@ package org.devgateway.toolkit.forms.wicket.page.user;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.form.BootstrapForm;
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
@@ -148,7 +149,7 @@ public class LoginPage extends BasePage {
 
                     if (session.signIn(name, pass)) {
                         Person user = SecurityUtil.getCurrentAuthenticatedPerson();
-                        if (user.getChangePasswordNextSignIn()) {
+                        if (BooleanUtils.isTrue(user.getChangePasswordNextSignIn())) {
                             final PageParameters pageParam = new PageParameters();
                             pageParam.add(WebConstants.PARAM_ID, user.getId());
                             setResponsePage(ChangePasswordPage.class, pageParam);
