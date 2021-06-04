@@ -22,7 +22,7 @@
         <dozer.hibernate.model.version>0.3.8</dozer.hibernate.model.version>
         <commons.lang3.version>3.2.1</commons.lang3.version>
         <guava.version>24.1-jre</guava.version>
-        <hibernate-validator.version>6.0.16.Final</hibernate-validator.version>
+        <hibernate-validator.version>6.0.20.Final</hibernate-validator.version>
     </properties>
 
     <parent>
